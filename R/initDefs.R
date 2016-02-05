@@ -11,14 +11,11 @@ init.defs <- function(id="id") {
              varname="",
              formula="",
              variance=0,
-             min=0,
-             max=0,
              dist="",
              link="",
              cMethod="",
              nIperC = 0,
              nClust = 0,
              nTrt = 0,
-             varcat="",
              missType="")
 }

@@ -4,7 +4,7 @@
 \alias{genunif}
 \title{Internal function called by generate - returns Uniform data}
 \usage{
-genunif(n, min, max)
+genunif(n, formula)
 }
 \arguments{
 \item{n}{The number of observations required in the data set}

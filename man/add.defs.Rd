@@ -5,8 +5,8 @@
 \title{Add single row to definitions table}
 \usage{
 add.defs(dtDefs, id = "", varname = "", formula = "", variance = 0,
-  min = 0, max = 0, dist = "Normal", link = "identity", cMethod = "",
-  nIperC = 0, nClust = 0, nTrt = 0, varcat = "", missType = "")
+  dist = "Normal", link = "identity", cMethod = "", nIperC = 0,
+  nClust = 0, nTrt = 0, missType = "")
 }
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
@@ -16,10 +16,6 @@ add.defs(dtDefs, id = "", varname = "", formula = "", variance = 0,
 \item{formula}{test}
 
 \item{variance}{test}
-
-\item{min}{test}
-
-\item{max}{test}
 
 \item{dist}{test}
 
@@ -32,8 +28,6 @@ add.defs(dtDefs, id = "", varname = "", formula = "", variance = 0,
 \item{nClust}{test}
 
 \item{nTrt}{test}
-
-\item{varcat}{test}
 
 \item{missType}{test}
 
