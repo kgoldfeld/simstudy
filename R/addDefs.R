@@ -16,7 +16,7 @@
 #' @export
 
 
-add.defs = function(dtDefs,
+addDefs <- function(dtDefs,
                     id = "",
                     varname = "",
                     formula = "",

@@ -6,17 +6,17 @@
 #' @export
 #'
 
-addDt <- function(dtDefs,dtOld) {
-  
+addColumns <- function(dtDefs,dtOld) {
+
   dtDefs <- dtDefs[-1, ]
-  
+
   iter = nrow(dtDefs)
   n = nrow(dtOld)
   for (i in (1 : iter)) {
     dtOld <- generate(dtDefs[i,], n, dtOld)
   }
-  
+
   data.table::data.table(dtOld)
-  
+
 }
 

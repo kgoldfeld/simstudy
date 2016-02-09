@@ -36,22 +36,23 @@ vignette: >
 
 ```{r, echo = FALSE, message = FALSE}
 library(simstudy)
+library(ggplot2)
 ```
 
 Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, and to create data sets with **missing** data.
 
 ## Defining the data
 
-A data set *definition* is created as a data.table (a high powered data.frame) by calling two functions: `init.defs` and `add.defs`.
+A data set *definition* is created as a data.table (a high powered data.frame) by calling two functions: `initDefs` and `addDefs`.
 
 ```{r, tidy = TRUE}
-def <- init.defs(id="idnum")
-def <- add.defs(def, varname = "nr", dist = "Nonrandom", formula=7)
-def <- add.defs(def,varname="x1",dist="Uniform",formula="10, 20")
-def <- add.defs(def,varname="y1",formula="nr + x1 * 2",variance=8)
-def <- add.defs(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log")
-def <- add.defs(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
-def <- add.defs(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
+def <- initDefs(id="idnum")
+def <- addDefs(def, varname = "nr", dist = "Nonrandom", formula=7)
+def <- addDefs(def,varname="x1",dist="Uniform",formula="10, 20")
+def <- addDefs(def,varname="y1",formula="nr + x1 * 2",variance=8)
+def <- addDefs(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log")
+def <- addDefs(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
+def <- addDefs(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
 ```
 <br>
 
@@ -64,9 +65,9 @@ knitr::kable(def)
 \newline
 <br>
 
-The call to `init.defs` creates a new data.table with a single row. `init.defs` takes a single string argument representing the name of the `id` field; the default is 'id'.\
+The call to `initDefs` creates a new data.table with a single row. `initDefs` takes a single string argument representing the name of the `id` field; the default is 'id'.\
 
-A row is added to the table `def` each time the function `add.defs` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `add.defs` the user defines a variable name, a distribution (the default is 'Normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
+A row is added to the table `def` each time the function `addDefs` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `addDefs` the user defines a variable name, a distribution (the default is 'Normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
 
 The possible distributions include **normal**, **Poisson**, **zero-truncated Poisson**, **binary**, **uniform**, **categorical**, and **deterministic/non-random**. For all of these distributions, key parameters defining the distribution are entered in the `formula`, `variance`, and `link` fields. 
 
@@ -80,13 +81,71 @@ For a uniformly distributed variable, The formula is a string with the format "a
 
 For a cateogrical variable with $k$ categories, the formula is a string of  probabilities that sum to 1: "$p_1$, $p_2$, ..., $p_k$". $p_1$ is the probability of the random variable falling category 1, $p_2$ is the probablity of category 2, etc. The probabilities cannot be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.\
 
-Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as `nr`.\
-
+Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as `nr`.
 
 ## Generating the data
 
+After the data set definitions have been created, a new data set with $n$ observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set defitions in **`def`**, and then stored in the object **`dt`**:\
+
 ```{r, tidy = TRUE}
-dt <- gendt(def,1000)
+dt <- genData(def,1000)
+dt
+```
+<br>
+
+New data can be added to an existing data set with a call to function **`addColumns`**. A new data definition is provided along with the name of the existing data set:\
+
+```{r, tidy = TRUE}
+addef <- initDefs(id="idnum")
+addef <- addDefs(addef, varname = "zExtra", dist = "Normal", formula = '3 + y1', variance = 2)
+
+dt <- addColumns(addef, dt)
 dt
 ```
 
+## Longitudinal data
+
+To simulate longitudinal data, we start with a 'cross-sectional' data set and convert it to time-dependendent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome `Y` once before and twice after intervention `T` in a randomized trial:\
+
+```{r, tidy = TRUE}
+tdef <- initDefs()
+tdef <- addDefs(tdef, varname = "T", dist="Binary", formula = 0.5)
+tdef <- addDefs(tdef, varname = "Y0", dist = "Normal", formula = 10, variance = 1)
+tdef <- addDefs(tdef, varname = "Y1", dist = "Normal", formula = "Y0 + 5 + 5 * T", variance = 1)
+tdef <- addDefs(tdef, varname = "Y2", dist = "Normal", formula = "Y0 + 10 + 5 * T", variance = 1)
+
+dtTrial <- genData(tdef, 500)
+dtTrial
+```
+<br>
+The data in longitudinal form is created with a call to **`addPeriods`**. If the cross-sectional data includes time dependent data, then the number of periods `nPeriods` must be the same as the number of time dependent columns. If a variable is not declared as one of the `timevars`, it will be repeated each time period. In this example, the treatment indicator `T` is not specified as a time dependent variable. (Note: if there are two time-dependent variables, it is best to create two data sets and merge them. This will be shown later in the vignette).\
+
+```{r, tidy = TRUE}
+dtTime <- addPeriods(dtTrial, nPeriods = 3, idvars = "id", timevars = c("Y0", "Y1", "Y2"), timevarName = "Y")
+dtTime
+```
+<br>
+This is what the longitudinal data look like:\
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6, fig.height = 3}
+
+avg <- dtTime[,.(Y=mean(Y)), keyby = .(T, period)]
+
+ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
+  geom_point(aes(color=factor(T)), size = 1) +
+#  geom_smooth(aes(group=T, color = factor(T)), se = FALSE, method = "lm") +
+  geom_line(data=avg, aes(x = factor(period), y = Y, group = T, color= factor(T)), size=1, lty = 1) +
+  xlab("Period") +
+  scale_color_manual(values=c("#769e39","#61399e"), 
+                     labels = c("Ctrl", "Trt")) +
+  theme(legend.title=element_blank())
+```
+
+## Clustered data
+
+## Missing data
+
+## Other topics
+
+* Merge data
+* Correlated data

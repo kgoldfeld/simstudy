@@ -6,7 +6,7 @@
 #' @export
 #'
 
-gendt <- function(dtDefs, n) {
+genData <- function(dtDefs, n) {
 
   dfSimulate <- data.frame(c(1:n))     # initialize simulated data with ids
   names(dfSimulate) <- dtDefs[1, id]   # name first column the value of "id"

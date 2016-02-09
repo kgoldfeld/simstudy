@@ -5,7 +5,7 @@
 #' @export
 #'
 
-init.defs <- function(id="id") {
+initDefs <- function(id="id") {
 
   data.table::data.table(id=id,
              varname="",
