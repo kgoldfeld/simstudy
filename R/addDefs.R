@@ -1,48 +1,41 @@
 #' Add single row to definitions table
 #'
 #' @param dtDefs Definition data.table to be modified
-#' @param id Name of field that contains idnetifier
 #' @param varName test
 #' @param formula test
 #' @param variance test
 #' @param dist test
 #' @param link test
-#' @param cMethod test
-#' @param nIperC test
-#' @param nClust test
 #' @param nTrt test
+#' @param cMethod test
 #' @param missType test
 #' @return A data.table named dtName that is an updated data defnitions table
 #' @export
 
-
 addDefs <- function(dtDefs,
-                    id = "",
                     varname = "",
                     formula = "",
                     variance = 0,
                     dist = "Normal",
                     link = "identity",
-                    cMethod = "",
-                    nIperC = 0,
-                    nClust = 0,
                     nTrt = 0,
+                    cMethod = "",
                     missType = "") {
 
-  dt.new <- data.table::data.table(id,
-                                   varname,
+  dt.new <- data.table::data.table(varname,
                                    formula,
                                    variance,
                                    dist,
                                    link,
-                                   cMethod,
-                                   nIperC,
-                                   nClust,
                                    nTrt,
+                                   cMethod,
                                    missType)
 
   l = list(dtDefs,dt.new)
 
-  data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
+  defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
+  attr(defNew, "id") <- attr(dtDefs, "id")
+
+  return(defNew)
 
 }

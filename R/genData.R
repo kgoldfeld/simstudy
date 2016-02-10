@@ -9,8 +9,7 @@
 genData <- function(dtDefs, n) {
 
   dfSimulate <- data.frame(c(1:n))     # initialize simulated data with ids
-  names(dfSimulate) <- dtDefs[1, id]   # name first column the value of "id"
-  dtDefs <- dtDefs[-1, ]           # first row of data defs is no longer needed
+  names(dfSimulate) <- attr(dtDefs, "id") # name first column attribute "id"
   iter <- nrow(dtDefs)       # generate a column of data for each row of dtDefs
 
   for (i in (1:iter)) {

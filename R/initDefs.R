@@ -7,15 +7,9 @@
 
 initDefs <- function(id="id") {
 
-  data.table::data.table(id=id,
-             varname="",
-             formula="",
-             variance=0,
-             dist="",
-             link="",
-             cMethod="",
-             nIperC = 0,
-             nClust = 0,
-             nTrt = 0,
-             missType="")
+  dt <- data.table::data.table()
+  attr(dt,"id") <- id
+
+  return(dt)
+
 }

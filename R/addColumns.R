@@ -8,8 +8,6 @@
 
 addColumns <- function(dtDefs,dtOld) {
 
-  dtDefs <- dtDefs[-1, ]
-
   iter = nrow(dtDefs)
   n = nrow(dtOld)
   for (i in (1 : iter)) {

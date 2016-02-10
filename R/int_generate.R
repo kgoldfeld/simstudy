@@ -24,8 +24,6 @@ generate <- function(args, n, dfSim) {
     newColumn <- gengamma(n, args$formula, args$variance, dfSim)
   } else if (args$dist == "Nonrandom") {
     newColumn <- gendeterm(n, args$formula, dfSim)
-  } else if (args$dist == "Cluster") {
-    newColumn <- genclust(args$cMethod, args$nIperC, args$nClust)
   } else if (args$dist == "Rx") {
     newColumn <- genRx(n, args$formula, args$link, args$cMethod,
                        args$nTrt, dfSim)

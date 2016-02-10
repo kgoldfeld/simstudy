@@ -4,14 +4,12 @@
 \alias{addDefs}
 \title{Add single row to definitions table}
 \usage{
-addDefs(dtDefs, id = "", varname = "", formula = "", variance = 0,
-  dist = "Normal", link = "identity", cMethod = "", nIperC = 0,
-  nClust = 0, nTrt = 0, missType = "")
+addDefs(dtDefs, varname = "", formula = "", variance = 0,
+  dist = "Normal", link = "identity", nTrt = 0, cMethod = "",
+  missType = "")
 }
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
-
-\item{id}{Name of field that contains idnetifier}
 
 \item{formula}{test}
 
@@ -21,13 +19,9 @@ addDefs(dtDefs, id = "", varname = "", formula = "", variance = 0,
 
 \item{link}{test}
 
-\item{cMethod}{test}
-
-\item{nIperC}{test}
-
-\item{nClust}{test}
-
 \item{nTrt}{test}
+
+\item{cMethod}{test}
 
 \item{missType}{test}
 
