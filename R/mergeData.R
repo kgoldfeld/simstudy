@@ -1,4 +1,4 @@
-#### Merge two data tables - more general #### 
+#### Merge two data tables - more general ####
 
 #' Merge two data tables
 #'
@@ -9,10 +9,16 @@
 #' @export
 
 mergeData <- function(dt1, dt2, idvars) {
-  
+
+  oldkey = data.table::key(dt1)
+
   setkeyv(dt1, idvars)
   setkeyv(dt2, idvars)
-  
-  dt1[dt2]
-  
+
+  dtmerge <- dt1[dt2]
+  data.table::setkey(dtmerge)
+
+  return(dtmerge)
+
+
 }

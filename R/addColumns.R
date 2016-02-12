@@ -8,13 +8,18 @@
 
 addColumns <- function(dtDefs,dtOld) {
 
+  oldkey <- data.table::key(dtOld)
+
   iter = nrow(dtDefs)
   n = nrow(dtOld)
   for (i in (1 : iter)) {
     dtOld <- generate(dtDefs[i,], n, dtOld)
   }
 
-  data.table::data.table(dtOld)
+  dtOld <- data.table::data.table(dtOld)
+  data.table::setkeyv(dtOld, oldkey)
+
+  return(dtOld)
 
 }
 

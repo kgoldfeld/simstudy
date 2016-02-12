@@ -21,9 +21,11 @@ Depends:
 License: GPL-3
 LazyData: TRUE
 Imports:
-    data.table
+    data.table,
+    Rcpp
 RoxygenNote: 5.0.1
 Suggests: testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+LinkingTo: Rcpp
