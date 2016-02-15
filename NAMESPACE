@@ -3,6 +3,7 @@
 export(addColumns)
 export(addPeriods)
 export(defData)
+export(defMiss)
 export(defRead)
 export(genCluster)
 export(genCorData)

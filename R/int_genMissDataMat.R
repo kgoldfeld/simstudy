@@ -9,21 +9,21 @@
 #' @return A missing data matrix of 0/1, where 1 indicates missing
 
 genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
-  
+
   dtMissP <- dtTemp[, idvars, with = FALSE]
-  
+
   Expression <- parse(text = as.character(missDefs[, varname]))
   Formula <- parse(text = as.character(missDefs[, formula]))
-  
+
   if (missDefs[, link] != "Logit") {
     dtMissP[, eval(Expression) := dtName[, eval(Formula)]]
   } else {
     dtMissP[, eval(Expression) := dtName[, loProb(eval(Formula))]]
   }
   matMiss <- dtMissP[, idvars, with = FALSE]
-  matMiss[, eval(Expression) := rbinom(nrow(dtMissP), 1, 
+  matMiss[, eval(Expression) := rbinom(nrow(dtMissP), 1,
                                        dtMissP[, eval(Expression)])]
-  
+
   return(matMiss)
-  
+
 }

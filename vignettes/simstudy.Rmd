@@ -41,6 +41,12 @@ library(gridExtra)
 
 set.seed(3333)
 
+plotcolors <- c("#B84226", "#1B8445", "#1C5974")
+
+cbbPalette <- c("#EA846C", "#EAAF6C", "#487C93", 
+                "#4EA872", "#811900", "#814400", 
+                "#043A51", "#00260F")
+
 ggtheme <- function(panelback = "white") {
   
   ggplot2::theme(
@@ -61,7 +67,7 @@ splotfunc <- function(dt, ptitle) {
   dtplot <- dt[,.N,keyby=.(male, over65, rxGrp)][, .(rxGrp, grp = male * 2 + over65 * 1, N)]
   ggplot(dtplot, aes(factor(grp), N)) +
     geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position = "dodge", stat="identity") +
-    scale_fill_manual(values = c("#971f5d", "#5d971f", "#1f5d97")) +
+    scale_fill_manual(values = plotcolors) +
     ggtitle(ptitle) +
     theme(legend.position = "none") +
     ggtheme() +
@@ -74,7 +80,7 @@ aplotfunc <- function(dt, ptitle) {
   dtplot <- dt[,.N,keyby=.(rxGrp)]
   ggplot(dtplot, aes(factor(rxGrp), N)) +
     geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position="dodge", stat="identity", width=.5) +
-    scale_fill_manual(values = c("#971f5d", "#5d971f", "#1f5d97")) +
+    scale_fill_manual(values = plotcolors) +
     ggtitle(ptitle) +
     theme(legend.position = "none") +
     ggtheme() +
@@ -97,16 +103,12 @@ def <- defData(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log
 def <- defData(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
 def <- defData(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
 ```
-<br>
 
 Following initialization and the subsequent five calls to `add.defs`, these are the contents of the data.table `def`:
 
 ```{r,  echo=FALSE}
 knitr::kable(def)
 ```
-
-\newline
-<br>
 
 The call to `initDefs` creates a new data.table with a single row. `initDefs` takes a single string argument representing the name of the `id` field; the default is 'id'.\
 
@@ -128,15 +130,14 @@ Non-random variables are defined by the formula. Since these variables are deter
 
 ## Generating the data
 
-After the data set definitions have been created, a new data set with $n$ observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set defitions in **`def`**, and then stored in the object **`dt`**:\
+After the data set definitions have been created, a new data set with $n$ observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set defitions in **`def`**, and then stored in the object **`dt`**:
 
 ```{r, tidy = TRUE}
 dt <- genData(def,1000)
 dt
 ```
-<br>
 
-New data can be added to an existing data set with a call to function **`addColumns`**. A new data definition is provided along with the name of the existing data set:\
+New data can be added to an existing data set with a call to function **`addColumns`**. A new data definition is provided along with the name of the existing data set:
 
 ```{r, tidy = TRUE}
 addef <- defData(varname = "zExtra", dist = "Normal", formula = '3 + y1', 
@@ -150,9 +151,12 @@ dt
 
 Treatment assignment can be accomplished through the original data generation process, using `defData` and `genData`. However, the functions `trtAssign` and `trtObserve` provide more options to generate treatment assignment.
 
+### Assigned treatment
+
 Treatment assignment can simulate how treatment is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.
 
 First, create the data definition:
+
 ```{r, tidy = TRUE}
 def <- defData(varname = "male", dist = "Binary", formula = .5 , id="cid")
 def <- defData(def, varname = "over65", dist = "Binary", formula = "-1.7 + .8*male", link="Logit")
@@ -167,14 +171,17 @@ study1 <- trtAssign(dtstudy , n=3, allocEqual = TRUE, strata = c("male","over65"
 
 study1
 ```
+
 *Balanced treatment assignment (without stratification)*
 ```{r, tidy = TRUE}
 study2 <- trtAssign(dtstudy , n=3, allocEqual = TRUE, grpName = "rxGrp")
 ```
+
 *Random (unbalanced) treatment assignment*
 ```{r, tidy = TRUE}
 study3 <- trtAssign(dtstudy , n=3, allocEqual = FALSE, grpName = "rxGrp")
 ```
+
 *Comparison of three treatment assignment mechanisms*
 ```{r, tidy = TRUE, echo = FALSE, fig.width = 4, fig.height = 6}
 p1 <- splotfunc(study1, "Balanced within strata")
@@ -188,21 +195,86 @@ p3a <- aplotfunc(study3, "")
 
 grid.arrange(p1, p1a, p2, p2a, p3, p3a, ncol=2)
 ```
-<br>
 
-If exposure or treatment is observed (rather than randomly assigned), use `trtObserved` to generate groups. There may be any number of possible exposure or treatment groups.
+### Observed treatment
+
+If exposure or treatment is observed (rather than randomly assigned), use `trtObserved` to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:
 
 ```{r, tidy = TRUE}
-formula1 <- c("-2 + 2*male + .25*over65", "-1 - 1*male - .25*over65")
+formula1 <- c("-2 + 2*male - .5*over65", "-1 + 2*male + .5*over65")
 dtExp <- trtObserve(dtstudy, formulas = formula1, logit.link = TRUE, grpName = "exposure")
+```
 
-# plot something here
-dtExp[, table(exposure), keyby=.(male, over65)]
+Here are the exposure distributions by gender and age:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5}
+dtplot1 <- dtExp[,.N,keyby=.(male,exposure)]
+p1 <- ggplot(data = dtplot1, aes(x=factor(male), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("Female", "Male")) +
+  ylab("Number exposed")+
+  ggtitle("Gender")
+
+dtplot2 <- dtExp[,.N,keyby=.(over65,exposure)]
+p2 <- ggplot(data = dtplot2, aes(x=factor(over65), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("65 or younger", "Over 65")) +
+  ylab("Number exposed") +
+  ggtitle("Age")
+
+grid.arrange(p1,p2,nrow=1)
+
+```
+
+Here is a second case of three exposures where the exposure is indepdendent of any covariates. Note that specifying the formula as `c(.35, .45)` is the same as specifying it is `c(.35, .45, .20)`. Also, when referring to probabilities, the identity link is used:
+
+```{r, tidy = TRUE}
+formula2 <- c(.35, .45)
+dtExp2 <- trtObserve(dtstudy, formulas = formula2, logit.link = FALSE, grpName = "exposure")
+```
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5}
+dtplot1a <- dtExp2[,.N,keyby=.(male,exposure)]
+p1a <- ggplot(data = dtplot1a, aes(x=factor(male), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("Female", "Male")) +
+  ylab("Number exposed")+
+  ggtitle("Gender")
+
+dtplot2a <- dtExp2[,.N,keyby=.(over65,exposure)]
+p2a <- ggplot(data = dtplot2a, aes(x=factor(over65), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("65 or younger", "Over 65")) +
+  ylab("Number exposed") +
+  ggtitle("Age")
+
+grid.arrange(p1a,p2a,nrow=1)
+
 ```
 
 ## Longitudinal data
 
-To simulate longitudinal data, we start with a 'cross-sectional' data set and convert it to time-dependendent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome `Y` once before and twice after intervention `T` in a randomized trial:\
+To simulate longitudinal data, we start with a 'cross-sectional' data set and convert it to time-dependendent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome `Y` once before and twice after intervention `T` in a randomized trial:
 
 ```{r, tidy = TRUE}
 tdef <- defData(varname = "T", dist="Binary", formula = 0.5)
@@ -213,31 +285,101 @@ tdef <- defData(tdef, varname = "Y2", dist = "Normal", formula = "Y0 + 10 + 5 * 
 dtTrial <- genData(tdef, 500)
 dtTrial
 ```
-<br>
-The data in longitudinal form is created with a call to **`addPeriods`**. If the cross-sectional data includes time dependent data, then the number of periods `nPeriods` must be the same as the number of time dependent columns. If a variable is not declared as one of the `timevars`, it will be repeated each time period. In this example, the treatment indicator `T` is not specified as a time dependent variable. (Note: if there are two time-dependent variables, it is best to create two data sets and merge them. This will be shown later in the vignette).\
+
+The data in longitudinal form is created with a call to **`addPeriods`**. If the cross-sectional data includes time dependent data, then the number of periods `nPeriods` must be the same as the number of time dependent columns. If a variable is not declared as one of the `timevars`, it will be repeated each time period. In this example, the treatment indicator `T` is not specified as a time dependent variable. (Note: if there are two time-dependent variables, it is best to create two data sets and merge them. This will be shown later in the vignette).
 
 ```{r, tidy = TRUE}
 dtTime <- addPeriods(dtTrial, nPeriods = 3, idvars = "id", timevars = c("Y0", "Y1", "Y2"), timevarName = "Y")
 dtTime
 ```
-<br>
-This is what the longitudinal data look like:\
+
+This is what the longitudinal data look like:
 
 ```{r, tidy = TRUE, echo = FALSE, fig.width = 6, fig.height = 3}
 
 avg <- dtTime[,.(Y=mean(Y)), keyby = .(T, period)]
 
 ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
-  geom_point(aes(color=factor(T)), size = 1) +
-#  geom_smooth(aes(group=T, color = factor(T)), se = FALSE, method = "lm") +
-  geom_line(data=avg, aes(x = factor(period), y = Y, group = T, color= factor(T)), size=1, lty = 1) +
+  geom_jitter(aes(color=factor(T)), size = .5, alpha = .8, width = .25) +
+  geom_line(data=avg, aes(x = factor(period), y = Y, group = T, color= factor(T)), size=1) +
   xlab("Period") +
-  scale_color_manual(values=c("#769e39","#61399e"), 
+  scale_color_manual(values = plotcolors[1:2], 
                      labels = c("Ctrl", "Trt")) +
-  theme(legend.title=element_blank())
+  theme(legend.title=element_blank()) +
+  ggtheme("grey90") +
+  theme(legend.key=element_rect(fill=NA))
 ```
 
 ## Clustered data
+
+The function `genCluster` generates multilevel or clustered data based on a previously generated data set that is one "level" up from the clustered data. For example, if there is a data set that contains school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)
+
+In the example here, we do in fact generate school, classe, and student level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides *random effects* at each of these levels.
+
+We start by definining the school level data:
+
+```{r, tidy = TRUE}
+gen.school <- defData(varname="s0", dist = "Normal", 
+                      formula = 0, variance = 3, id = "idSchool"
+)
+gen.school <- defData(gen.school, varname = "nClasses", 
+                      dist = "NoZeroPoisson", formula = 3
+)
+
+dtSchool <- genData(gen.school, 8)
+dtSchool <- trtAssign(dtSchool, n = 2)
+
+dtSchool
+
+```
+
+The classroom level data are generated with a call to `genCluster`, and then school level data is added by a call to `addColumns`:
+
+```{r, tidy = TRUE}
+gen.class <- defData(varname = "c0", dist = "Normal", formula = 0, 
+                     variance = 2)
+gen.class <- defData(gen.class, varname = "nStudents", dist = "NoZeroPoisson", formula = 20
+)
+
+dtClass <- genCluster(dtSchool, "idSchool", numIndsVar = "nClasses",level1ID = "idClass")
+dtClass <- addColumns(gen.class, dtClass)
+
+head(dtClass, 10)
+```
+
+Finally, the student level data are added using the same process:
+
+```{r, tidy = TRUE}
+gen.student <- defData(varname="Male", dist="Binary", formula=0.5)
+gen.student <- defData(gen.student, varname="age", dist = "Uniform", formula="9.5, 10.5")
+gen.student <- defData(gen.student, varname="test", dist = "Normal",
+                       formula = "50 - 5*Male + s0 + c0 + 8 * (trtGrp==2)",                           variance = 2)
+dtStudent <- genCluster(dtClass,cLevelVar="idClass", numIndsVar = "nStudents",                        level1ID = "idChild")
+
+dtStudent <- addColumns(gen.student, dtStudent)
+```
+
+This is what the clustered data look like. Each classroom is represented by a box, and each school is representing by a color. The intervention group is highlighted by dark outlines:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 7, fig.height = 3}
+ggplot(data=dtStudent,aes(x=factor(idClass),y=test,group=idClass)) +
+  geom_boxplot(aes(color=factor(trtGrp), fill = factor(idSchool)))+
+  xlab("Classes")+
+  ylab("Test scores") +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  scale_fill_manual(values = cbbPalette, guide = FALSE) +
+  scale_color_manual(values = c("grey80", "#000000"),
+                    labels = c("Ctrl", "Rx"),
+                    guide = guide_legend(title = NULL,
+                                         override.aes = list(shape = 1,
+                                                             keywidth=8
+                                                             )
+                                         )
+                    ) +
+  theme(legend.key=element_rect(fill=NA)) +
+  ggtheme()
+```
 
 ## Missing data
 

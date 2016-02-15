@@ -4,7 +4,7 @@
 \alias{genMiss}
 \title{Generate missing data}
 \usage{
-genMiss(dtName, missDefs, idvars, nPeriods = 0, periodvar = "")
+genMiss(dtName, missDefs, idvars, repeated = FALSE, periodvar = "period")
 }
 \arguments{
 \item{dtName}{Name of complete data set}
@@ -13,7 +13,7 @@ genMiss(dtName, missDefs, idvars, nPeriods = 0, periodvar = "")
 
 \item{idvars}{Index variables}
 
-\item{nPeriods}{Number of periods (if longitudinal data)}
+\item{repeated}{Indicator for longitudinal data}
 
 \item{periodvar}{Name of variable that contains period}
 }
