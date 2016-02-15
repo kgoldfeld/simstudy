@@ -3,6 +3,8 @@
 
 #' Multinomial
 #'
+#' @export
+#'
 vecMultinom <- function(probs) {
     .Call('simstudy_vecMultinom', PACKAGE = 'simstudy', probs)
 }

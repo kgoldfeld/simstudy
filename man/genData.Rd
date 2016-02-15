@@ -7,12 +7,12 @@
 genData(dtDefs, n)
 }
 \arguments{
-\item{dtDefs}{name of definitions data.table/data.frame}
+\item{dtDefs}{name of definitions data.table/data.frame.}
 
-\item{n}{the number (integer) of observations required in the data set}
+\item{n}{the number (integer) of observations required in the data set.}
 }
 \value{
-A data.table that contains the simulated data
+A data.table that contains the simulated data.
 }
 \description{
 Calling function to simulate data

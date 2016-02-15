@@ -3,6 +3,8 @@ using namespace Rcpp;
 
 //' Multinomial
 //'
+//' @export
+//'
 // [[Rcpp::export]]
 
 int vecMultinom(NumericVector probs) {

@@ -1,6 +1,9 @@
 .Rproj.user
 .Rhistory
 .RData
-src/*.o
-src/*.so
-src/*.dll
+.Rbuildignore
+.gitignore
+Working code/
+Demo/
+simstudy.Rproj
+inst/doc

@@ -37,22 +37,65 @@ vignette: >
 ```{r, echo = FALSE, message = FALSE}
 library(simstudy)
 library(ggplot2)
+library(gridExtra)
+
+set.seed(3333)
+
+ggtheme <- function(panelback = "white") {
+  
+  ggplot2::theme(
+    panel.background = element_rect(fill = panelback),
+    panel.grid = element_blank(),
+    axis.ticks =  element_line(colour = "black"),
+    panel.margin =unit(0.25, "lines"),  # requires package grid
+    panel.border = element_rect(fill = NA, colour="gray90"), 
+    plot.title = element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size = 8)
+  )  
+  
+}
+
+splotfunc <- function(dt, ptitle) {
+
+  dtplot <- dt[,.N,keyby=.(male, over65, rxGrp)][, .(rxGrp, grp = male * 2 + over65 * 1, N)]
+  ggplot(dtplot, aes(factor(grp), N)) +
+    geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position = "dodge", stat="identity") +
+    scale_fill_manual(values = c("#971f5d", "#5d971f", "#1f5d97")) +
+    ggtitle(ptitle) +
+    theme(legend.position = "none") +
+    ggtheme() +
+    xlab("Strata") +
+    ylim(0,80)
+}
+
+aplotfunc <- function(dt, ptitle) {
+
+  dtplot <- dt[,.N,keyby=.(rxGrp)]
+  ggplot(dtplot, aes(factor(rxGrp), N)) +
+    geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position="dodge", stat="identity", width=.5) +
+    scale_fill_manual(values = c("#971f5d", "#5d971f", "#1f5d97")) +
+    ggtitle(ptitle) +
+    theme(legend.position = "none") +
+    ggtheme() +
+    xlab("Treatment group") +
+    ylim(0,150)
+}
 ```
 
-Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, and to create data sets with **missing** data.
+Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, and to create data sets with **missing** data.
 
 ## Defining the data
 
-A data set *definition* is created as a data.table (a high powered data.frame) by calling two functions: `initDefs` and `addDefs`.
+A data set *definition* is created as a data.table (a high powered data.frame) by repeated calls to function `defData`, or with a single call to `defRead` to read in an external set of data set definitions. Here, we illustrate building the definitions internally:
 
 ```{r, tidy = TRUE}
-def <- initDefs(id="idnum")
-def <- addDefs(def, varname = "nr", dist = "Nonrandom", formula=7)
-def <- addDefs(def,varname="x1",dist="Uniform",formula="10, 20")
-def <- addDefs(def,varname="y1",formula="nr + x1 * 2",variance=8)
-def <- addDefs(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log")
-def <- addDefs(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
-def <- addDefs(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
+def <- defData(varname = "nr", dist = "Nonrandom", formula=7, id = "idnum")
+def <- defData(def,varname="x1",dist="Uniform",formula="10, 20")
+def <- defData(def,varname="y1",formula="nr + x1 * 2",variance=8)
+def <- defData(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log")
+def <- defData(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
+def <- defData(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
 ```
 <br>
 
@@ -67,7 +110,7 @@ knitr::kable(def)
 
 The call to `initDefs` creates a new data.table with a single row. `initDefs` takes a single string argument representing the name of the `id` field; the default is 'id'.\
 
-A row is added to the table `def` each time the function `addDefs` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `addDefs` the user defines a variable name, a distribution (the default is 'Normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
+A row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `defData` the user defines a variable name, a distribution (the default is 'Normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
 
 The possible distributions include **normal**, **Poisson**, **zero-truncated Poisson**, **binary**, **uniform**, **categorical**, and **deterministic/non-random**. For all of these distributions, key parameters defining the distribution are entered in the `formula`, `variance`, and `link` fields. 
 
@@ -96,11 +139,65 @@ dt
 New data can be added to an existing data set with a call to function **`addColumns`**. A new data definition is provided along with the name of the existing data set:\
 
 ```{r, tidy = TRUE}
-addef <- initDefs(id="idnum")
-addef <- addDefs(addef, varname = "zExtra", dist = "Normal", formula = '3 + y1', variance = 2)
+addef <- defData(varname = "zExtra", dist = "Normal", formula = '3 + y1', 
+                 variance = 2, id="idnum")
 
 dt <- addColumns(addef, dt)
 dt
+```
+
+## Generating the treatment/exposure
+
+Treatment assignment can be accomplished through the original data generation process, using `defData` and `genData`. However, the functions `trtAssign` and `trtObserve` provide more options to generate treatment assignment.
+
+Treatment assignment can simulate how treatment is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.
+
+First, create the data definition:
+```{r, tidy = TRUE}
+def <- defData(varname = "male", dist = "Binary", formula = .5 , id="cid")
+def <- defData(def, varname = "over65", dist = "Binary", formula = "-1.7 + .8*male", link="Logit")
+def <- defData(def, varname = "z", dist = "Normal", formula = 10, variance = 2)
+
+dtstudy <- genData(def, 330)
+```
+
+*Balanced treatment assignment, stratified by gender and age category*
+```{r, tidy = TRUE}
+study1 <- trtAssign(dtstudy , n=3, allocEqual = TRUE, strata = c("male","over65"), grpName = "rxGrp")
+
+study1
+```
+*Balanced treatment assignment (without stratification)*
+```{r, tidy = TRUE}
+study2 <- trtAssign(dtstudy , n=3, allocEqual = TRUE, grpName = "rxGrp")
+```
+*Random (unbalanced) treatment assignment*
+```{r, tidy = TRUE}
+study3 <- trtAssign(dtstudy , n=3, allocEqual = FALSE, grpName = "rxGrp")
+```
+*Comparison of three treatment assignment mechanisms*
+```{r, tidy = TRUE, echo = FALSE, fig.width = 4, fig.height = 6}
+p1 <- splotfunc(study1, "Balanced within strata")
+p1a <- aplotfunc(study1, "")
+
+p2 <- splotfunc(study2, "Balanced without strata")
+p2a <- aplotfunc(study2, "")
+
+p3 <- splotfunc(study3, "Random allocation")
+p3a <- aplotfunc(study3, "")
+
+grid.arrange(p1, p1a, p2, p2a, p3, p3a, ncol=2)
+```
+<br>
+
+If exposure or treatment is observed (rather than randomly assigned), use `trtObserved` to generate groups. There may be any number of possible exposure or treatment groups.
+
+```{r, tidy = TRUE}
+formula1 <- c("-2 + 2*male + .25*over65", "-1 - 1*male - .25*over65")
+dtExp <- trtObserve(dtstudy, formulas = formula1, logit.link = TRUE, grpName = "exposure")
+
+# plot something here
+dtExp[, table(exposure), keyby=.(male, over65)]
 ```
 
 ## Longitudinal data
@@ -108,11 +205,10 @@ dt
 To simulate longitudinal data, we start with a 'cross-sectional' data set and convert it to time-dependendent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome `Y` once before and twice after intervention `T` in a randomized trial:\
 
 ```{r, tidy = TRUE}
-tdef <- initDefs()
-tdef <- addDefs(tdef, varname = "T", dist="Binary", formula = 0.5)
-tdef <- addDefs(tdef, varname = "Y0", dist = "Normal", formula = 10, variance = 1)
-tdef <- addDefs(tdef, varname = "Y1", dist = "Normal", formula = "Y0 + 5 + 5 * T", variance = 1)
-tdef <- addDefs(tdef, varname = "Y2", dist = "Normal", formula = "Y0 + 10 + 5 * T", variance = 1)
+tdef <- defData(varname = "T", dist="Binary", formula = 0.5)
+tdef <- defData(tdef, varname = "Y0", dist = "Normal", formula = 10, variance = 1)
+tdef <- defData(tdef, varname = "Y1", dist = "Normal", formula = "Y0 + 5 + 5 * T", variance = 1)
+tdef <- defData(tdef, varname = "Y2", dist = "Normal", formula = "Y0 + 10 + 5 * T", variance = 1)
 
 dtTrial <- genData(tdef, 500)
 dtTrial
@@ -149,3 +245,4 @@ ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
 
 * Merge data
 * Correlated data
+* Treatment/exposure assignment
