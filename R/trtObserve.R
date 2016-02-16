@@ -45,6 +45,9 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
   data.table::setkeyv(dtnew, key(dt))
 
   dtnew <- dtnew[dt]
+
+  if (length(formulas) == 1) dtnew[grpExp == 2, grpExp := 0]
+
   data.table::setnames(dtnew, "grpExp", grpName)
 
   dtnew

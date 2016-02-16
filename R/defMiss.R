@@ -3,19 +3,17 @@
 #' @param dtDefs Definition data.table to be modified
 #' @param varName test
 #' @param formula test
-#' @param variance test
-#' @param dist test
-#' @param link test
+#' @param logit.link test
 #' @param missType test
 #' @return A data.table named dtName that is an updated data defnitions table
 #' @export
 
 defMiss <- function(dtDefs = NULL,
-                    varname = "",
-                    formula = "",
-                    link = "identity",
+                    varname,
+                    formula,
+                    logit.link = FALSE,
                     baseline=FALSE,
-                    monotonic=TRUE) {
+                    monotonic=FALSE) {
 
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
@@ -23,7 +21,7 @@ defMiss <- function(dtDefs = NULL,
 
   dt.new <- data.table::data.table(varname,
                                    formula,
-                                   link,
+                                   logit.link,
                                    baseline,
                                    monotonic)
 

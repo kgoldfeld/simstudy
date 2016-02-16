@@ -4,21 +4,17 @@
 \alias{defMiss}
 \title{Add single row to definitions table}
 \usage{
-defMiss(dtDefs = NULL, varname = "", formula = "", link = "identity",
-  baseline = FALSE, monotonic = TRUE)
+defMiss(dtDefs = NULL, varname, formula, logit.link = FALSE,
+  baseline = FALSE, monotonic = FALSE)
 }
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
 
 \item{formula}{test}
 
-\item{link}{test}
+\item{logit.link}{test}
 
 \item{varName}{test}
-
-\item{variance}{test}
-
-\item{dist}{test}
 
 \item{missType}{test}
 }

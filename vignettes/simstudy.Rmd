@@ -37,6 +37,7 @@ vignette: >
 ```{r, echo = FALSE, message = FALSE}
 library(simstudy)
 library(ggplot2)
+library(grid)
 library(gridExtra)
 
 set.seed(3333)
@@ -167,19 +168,19 @@ dtstudy <- genData(def, 330)
 
 *Balanced treatment assignment, stratified by gender and age category*
 ```{r, tidy = TRUE}
-study1 <- trtAssign(dtstudy , n=3, allocEqual = TRUE, strata = c("male","over65"), grpName = "rxGrp")
+study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"), grpName = "rxGrp")
 
 study1
 ```
 
 *Balanced treatment assignment (without stratification)*
 ```{r, tidy = TRUE}
-study2 <- trtAssign(dtstudy , n=3, allocEqual = TRUE, grpName = "rxGrp")
+study2 <- trtAssign(dtstudy , n=3, balanced = TRUE, grpName = "rxGrp")
 ```
 
 *Random (unbalanced) treatment assignment*
 ```{r, tidy = TRUE}
-study3 <- trtAssign(dtstudy , n=3, allocEqual = FALSE, grpName = "rxGrp")
+study3 <- trtAssign(dtstudy , n=3, balanced = FALSE, grpName = "rxGrp")
 ```
 
 *Comparison of three treatment assignment mechanisms*
@@ -240,6 +241,7 @@ Here is a second case of three exposures where the exposure is indepdendent of a
 
 ```{r, tidy = TRUE}
 formula2 <- c(.35, .45)
+
 dtExp2 <- trtObserve(dtstudy, formulas = formula2, logit.link = FALSE, grpName = "exposure")
 ```
 
@@ -303,7 +305,7 @@ ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
   geom_jitter(aes(color=factor(T)), size = .5, alpha = .8, width = .25) +
   geom_line(data=avg, aes(x = factor(period), y = Y, group = T, color= factor(T)), size=1) +
   xlab("Period") +
-  scale_color_manual(values = plotcolors[1:2], 
+  scale_color_manual(values = plotcolors[c(3,1)], 
                      labels = c("Ctrl", "Trt")) +
   theme(legend.title=element_blank()) +
   ggtheme("grey90") +
@@ -382,6 +384,236 @@ ggplot(data=dtStudent,aes(x=factor(idClass),y=test,group=idClass)) +
 ```
 
 ## Missing data
+
+After generating a complete data set, it is possible to generate missing data based on any type of missing mechanism: (1) *missing completely at random* (MCAR), where the probability of a subject missing data is independent of any covariates, measured or unmeasured, (2) *missing at random* (MAR), where the probability of subject missing data is a function of observed data, and (3) *not missing at random* (NMAR), where the probability of missing data is related to unmeasured data.
+
+For longitudinal data or repeated measures, missingness is *monotonic* when missingness at time `t` implies that data are missing for a variable for that subject at all times `T > t` as well. If a value is considered be a baseline measure (i.e. is measure only once), if it is missing, it will be missing for all subsequent time periods.
+
+Function `defMiss` defines the parameters of missingness, and `genMiss` generates a data set of indicators for each field. The indicators are set to a value of 1 if the data are missing, 0 otherwise. A call to function `genObs` creates a data set that reflects what would have been observed had data been missing.
+
+These possibilities are illustrated with some examples. First, a new data set of 100 observations with a treatment indicator is generated. In this example, variables labeled `x1`, `x2`, and `x3` are observed, but `latent` is, as the name suggests, not observed, and represents the propensity for an individual to have missing data:
+
+```{r, tidy = TRUE}
+def1 <- defData(varname = "z", dist = "Binary", formula = .5)
+def1 <- defData(def1, varname = "x1", dist="Normal", formula = "0 + 10*z", variance = 2)
+def1 <- defData(def1, varname = "x2", dist="Normal", formula = "0 + 10*z", variance = 2)
+def1 <- defData(def1, varname = "x3", dist="Normal", formula = "0 + 10*z", variance = 2)
+
+dt <- genData(def1, 1200)
+dt <- trtObserve(dt, formulas = .5, logit.link = FALSE, grpName = "Exp")
+dt
+```
+
+The missing data mechanisms are defined next. In this example, `x1` is MCAR, `x2` is MAR because it's missingness depends on `x1`, and `x3` is NMAR, because its missingness depends on `latent`.
+
+```{r, tidy = TRUE}
+defM <- defMiss(varname = "x1", formula = .3, logit.link = FALSE)
+defM <- defMiss(defM, varname = "x2", formula = ".05 + z * 0.25", logit.link = FALSE)
+defM <- defMiss(defM, varname = "x3", formula = "-1.0 +  x3 + z*.5", logit.link = TRUE)
+
+missMat <- genMiss(dt, defM, idvars = "id")
+dtObs <- genObs(dt, missMat, idvars = "id")
+```
+
+The missing data matrix shows that observations 1, 2, and 4 have missing values for `x2`, whereas observation 116 is missing `x1`. None of these shown here, and indeed no observations at all are missing data for `Exp` or `latent`, which is actually not observed:
+
+```{r, tidy = TRUE}
+missMat
+dtObs
+```
+
+```{r tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 4}
+
+marginalObs <- dtObs[,.(x1 = round(mean(x1, na.rm=TRUE),1), 
+         x2 = round(mean(x2, na.rm=TRUE),1), 
+         x3 = round(mean(x3, na.rm=TRUE),1))]
+
+marginalAct <- dt[,.(x1 = round(mean(x1, na.rm=TRUE),1), 
+      x2 = round(mean(x2, na.rm=TRUE),1), 
+      x3 = round(mean(x3, na.rm=TRUE),1))]
+
+rbind(marginalAct, marginalObs)
+
+
+marginalObs <- dtObs[z==0,.(x1 = round(mean(x1, na.rm=TRUE),1), 
+         x2 = round(mean(x2, na.rm=TRUE),1), 
+         x3 = round(mean(x3, na.rm=TRUE),1))]
+
+marginalAct <- dt[z==0,.(x1 = round(mean(x1, na.rm=TRUE),1), 
+      x2 = round(mean(x2, na.rm=TRUE),1), 
+      x3 = round(mean(x3, na.rm=TRUE),1))]
+
+rbind(marginalAct, marginalObs)
+
+
+marginalObs <- dtObs[z==1,.(x1 = round(mean(x1, na.rm=TRUE),1), 
+         x2 = round(mean(x2, na.rm=TRUE),1), 
+         x3 = round(mean(x3, na.rm=TRUE),1))]
+
+marginalAct <- dt[z==1,.(x1 = round(mean(x1, na.rm=TRUE),1), 
+      x2 = round(mean(x2, na.rm=TRUE),1), 
+      x3 = round(mean(x3, na.rm=TRUE),1))]
+
+rbind(marginalAct, marginalObs)
+
+
+dtCombined <- mergeData(dt, missMat, idvars="id")
+
+x1a <- ggplot(data=dtCombined, aes(x=x1, y = factor(i.x1))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+x1b <- ggplot(data=dtCombined, aes(x=x2, y = factor(i.x1))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+x1c <-ggplot(data=dtCombined, aes(x=x3, y = factor(i.x1))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+
+x2a <- ggplot(data=dtCombined, aes(x=x1, y = factor(i.x2))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+x2b <- ggplot(data=dtCombined, aes(x=x2, y = factor(i.x2))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+x2c <- ggplot(data=dtCombined, aes(x=x3, y = factor(i.x2))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+
+x3a <- ggplot(data=dtCombined, aes(x=x1, y = factor(i.x3))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+x3b <- ggplot(data=dtCombined, aes(x=x2, y = factor(i.x3))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+x3c <- ggplot(data=dtCombined, aes(x=x3, y = factor(i.x3))) + 
+  geom_jitter(width = .3, height = .1, size = .5) +
+  xlim(-8, 8) +
+  ggtheme()
+
+
+grid.arrange(x1a, x2a, x3a, x1b, x2b, x3b, x1c, x2c, x3c, nrow = 3)
+
+
+#dtObs[, round(.SD[is.na(x1),.N]/.SD[,.N], 2), keyby = mp]
+#dtObs[, round(.SD[is.na(x2),.N]/.SD[,.N], 2), keyby = mp]
+```
+
+```{r tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 6}
+# Longitudinal
+
+dt <- genData(def1, 120)
+dt <- trtObserve(dt, formulas = .5, logit.link = FALSE, grpName = "Exp")
+
+
+tddef <- defData(varname = "z1", dist = "Normal",
+                 formula = "10 + period*2 + 2*T", variance = 2)
+tddef <- defData(tddef, varname = "z2", dist = "Poisson", formula = 5)
+
+dtTime <- addPeriods(dt, nPeriods = 4)
+dtTime <- addColumns(tddef, dtTime)
+
+defTM <- defMiss(varname = "z1",
+                 formula = "-1.5 - 1.5 * Exp",
+                 logit.link = TRUE,
+                 baseline = FALSE,
+                 monotonic = TRUE
+)
+
+defTM <- defMiss(defTM,
+                 varname = "z2",
+                 formula = "-2 + 1.2 * Exp",
+                 logit.link = TRUE,
+                 baseline = FALSE,
+                 monotonic = FALSE
+)
+
+defTM <- defMiss(defTM,
+                 varname = "x1",
+                 formula = .20,
+                 baseline = TRUE
+)
+
+missMatT <- genMiss(dtTime, defTM, idvars = c("id","Exp"),
+                    repeated = TRUE, periodvar = "period")
+
+# missingness pattern plot
+
+ggmissing <- function(dtPlot,varSelect=NULL,varLevel=NULL, idvar = "id",
+                      periodvar = "period", missvar,
+                      pcolor="#738e75", title = NULL) {
+
+  dtP <- copy(dtPlot)
+
+  if (! is.null(varSelect)) dtP <- dtP[eval(parse(text=varSelect)) == varLevel]
+
+  xp <- ggplot(data=dtP, aes(y = factor(eval(parse(text=idvar))),
+                             x = eval(parse(text=periodvar)))) +
+    geom_tile(aes(fill=factor(eval(parse(text=missvar)))),
+                  color="white") +
+    ggtheme()+
+    theme(axis.text=element_blank(),
+          axis.ticks=element_blank(),
+          axis.title=element_blank(),
+          legend.position="none",
+          plot.title=element_text(size=7)
+    ) +
+    scale_fill_manual(values=c("grey80",pcolor))
+
+  if (is.null(title)) {
+    return(xp)
+  } else {
+    return(xp + ggtitle(title))
+  }
+}
+
+xp10 <- ggmissing(missMatT, varSelect="Exp", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="z1", pcolor="#1C5974",
+                 title = "z1: monotonic missing under control")
+
+xp11 <- ggmissing(missMatT, varSelect="Exp", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="z1", pcolor="#B84226",
+                 title = "z1: monotonic missing under treatment")
+
+xp20 <- ggmissing(missMatT, varSelect="Exp", varLevel = 0, idvar = "id",
+                  periodvar = "period", missvar="z2", pcolor="#1C5974",
+                  title = "z2: monotonic missing under control")
+
+xp21 <- ggmissing(missMatT, varSelect="Exp", varLevel = 1, idvar = "id",
+                  periodvar = "period", missvar="z2", pcolor="#B84226",
+                  title = "z2: missing under treatment")
+
+xp30 <- ggmissing(missMatT, varSelect="Exp", varLevel = 0, idvar = "id",
+                  periodvar = "period", missvar="x1", pcolor="#1C5974",
+                  title = "x1: baseline missing under control")
+
+xp31 <- ggmissing(missMatT, varSelect="Exp", varLevel = 1, idvar = "id",
+                  periodvar = "period", missvar="x1", pcolor="#B84226",
+                  title = "x1: baseline missing under treatment")
+
+grid.arrange(xp30, xp10, xp20, xp31, xp11, xp21,
+             nrow = 2,
+             bottom = textGrob("Periods", gp = gpar(cex=.8)),
+             left = textGrob("ID", gp = gpar(cex = .8), rot = 90)
+)
+
+
+```
 
 ## Other topics
 

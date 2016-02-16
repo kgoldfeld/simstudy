@@ -4,20 +4,20 @@
 \alias{trtAssign}
 \title{Assign treatment}
 \usage{
-trtAssign(dtx, n = 2, allocEqual = TRUE, strata = NULL,
+trtAssign(dtName, nTrt = 2, balanced = TRUE, strata = NULL,
   grpName = "trtGrp")
 }
 \arguments{
-\item{allocEqual}{indicator for treatment assignment process}
+\item{dtName}{data table}
+
+\item{nTrt}{number of treatment groups}
+
+\item{balanced}{indicator for treatment assignment process}
 
 \item{strata}{vector of strings representing strativying variables}
 
 \item{grpName}{string representing variable name for treatment or
 exposure group}
-
-\item{dt}{data table}
-
-\item{nTrt}{number of treatment groups}
 }
 \value{
 An integer (group) ranging from 1 to length of the

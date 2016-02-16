@@ -15,7 +15,7 @@ genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
   Expression <- parse(text = as.character(missDefs[, varname]))
   Formula <- parse(text = as.character(missDefs[, formula]))
 
-  if (missDefs[, link] != "Logit") {
+  if (! missDefs[, logit.link]) {
     dtMissP[, eval(Expression) := dtName[, eval(Formula)]]
   } else {
     dtMissP[, eval(Expression) := dtName[, loProb(eval(Formula))]]

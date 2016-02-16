@@ -2,9 +2,9 @@
 
 #' Assign treatment
 #'
-#' @param dt data table
+#' @param dtName data table
 #' @param nTrt number of treatment groups
-#' @param allocEqual indicator for treatment assignment process
+#' @param balanced indicator for treatment assignment process
 #' @param strata vector of strings representing strativying variables
 #' @param grpName string representing variable name for treatment or
 #' exposure group
@@ -12,12 +12,12 @@
 #' probability vector
 #' @export
 
-trtAssign <- function(dtx, n = 2, allocEqual = TRUE,
+trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
                        strata = NULL, grpName = "trtGrp") {
 
-  dt <- copy(dtx)
+  dt <- copy(dtName)
 
-  if (allocEqual) {
+  if (balanced) {
 
     if (is.null(strata)) {
       dt[, stratum := 1]
@@ -31,23 +31,35 @@ trtAssign <- function(dtx, n = 2, allocEqual = TRUE,
     for (i in (1 : nStrata)) {
       dts <- dt[stratum == i]
       data.table::setnames(dts, key(dts), "id")
-      grpExps <- dts[, .(id, grpExp = sample(rep(c(1 : n), each = ceiling(nrow(dts) / n)),
-                                             nrow(dts),
-                                             replace = FALSE)
-      )
+      grpExps <- dts[,
+                     .(id, grpExp = sample(rep(c(1 : nTrt),
+                                               each = ceiling(nrow(dts) / nTrt)),
+                                           nrow(dts),
+                                           replace = FALSE)
+                     )
       ]
+
       grpExp <- data.table::rbindlist(list(grpExp, grpExps))
     }
 
     data.table::setnames(grpExp, "id", key(dt))
     data.table::setkeyv(grpExp,key(dt))
 
-    dt <- grpExp[dtx]
+    dt <- grpExp[dtName]
+
+    if (nTrt==2) dt[grpExp == 2, grpExp := 0]
+
     data.table::setnames(dt, "grpExp", grpName)
 
-  } else { # allocEqual is FALSE - strata are not relevant
+  } else { # balanced is FALSE - strata are not relevant
 
-    dt <- trtObserve(dt, formulas = rep(1 / n, n), logit.link = FALSE, grpName)
+    if (nTrt == 2) {
+      formula <- .5
+    } else {
+      formula <- rep(1 / nTrt, nTrt)
+    }
+
+    dt <- trtObserve(dt, formulas = formula, logit.link = FALSE, grpName)
 
   }
 
