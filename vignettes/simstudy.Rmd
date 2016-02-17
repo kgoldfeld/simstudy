@@ -44,9 +44,8 @@ set.seed(3333)
 
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
-cbbPalette <- c("#EA846C", "#EAAF6C", "#487C93", 
-                "#4EA872", "#811900", "#814400", 
-                "#043A51", "#00260F")
+cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
+                "#B87326","#B8A526", "#6CA723", "#1C5974") 
 
 ggtheme <- function(panelback = "white") {
   
@@ -380,11 +379,11 @@ head(dtClass, 10)
 
 Finally, the student level data are added using the same process:
 
-```{r, tidy = TRUE}
+```{r, tidy = TRUE, tidy.opts= list(width.cutoff = 60)}
 gen.student <- defData(varname="Male", dist="Binary", formula=0.5)
 gen.student <- defData(gen.student, varname="age", dist = "Uniform", formula="9.5, 10.5")
 gen.student <- defData(gen.student, varname="test", dist = "Normal",
-                       formula = "50 - 5*Male + s0 + c0 + 8 * (trtGrp==2)",                           variance = 2)
+                       formula = "50 - 5*Male + s0 + c0 + 8 * trtGrp",                           variance = 2)
 dtStudent <- genCluster(dtClass,cLevelVar="idClass", numIndsVar = "nStudents",                        level1ID = "idChild")
 
 dtStudent <- addColumns(gen.student, dtStudent)
