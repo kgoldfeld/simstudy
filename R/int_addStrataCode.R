@@ -1,10 +1,10 @@
 #### Add strata code - internal function ####
 
-#' Assign treatment
-#'
-#' @param dt data table
-#' @param strata vector of string names representing strata
-#' @return An integer (group) ranging from 1 to length of the probability vector
+# Assign treatment
+#
+# @param dt data table
+# @param strata vector of string names representing strata
+# @return An integer (group) ranging from 1 to length of the probability vector
 
 addStrataCode <- function(dt, strata) {
 

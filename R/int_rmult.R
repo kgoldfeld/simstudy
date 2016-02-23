@@ -1,9 +1,9 @@
 #### Multinomial data generationa ####
 
-#' Internal function genExposure - returns categorical data
-#'
-#' @param p a vector of probabilities
-#' @return An integer (group) ranging from 1 to length of the probability vector
+# Internal function genExposure - returns categorical data
+#
+# @param p a vector of probabilities
+# @return An integer (group) ranging from 1 to length of the probability vector
 
 rmult <- function (p) {
   nums = length(p)

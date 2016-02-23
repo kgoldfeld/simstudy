@@ -1,5 +1,8 @@
 #' Add single row to definitions table
 #'
+#' @useDynLib simstudy
+#' @importFrom Rcpp sourceCpp
+#'
 #' @param dtDefs Definition data.table to be modified
 #' @param varName test
 #' @param formula test

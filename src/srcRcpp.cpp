@@ -1,10 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Multinomial
-//'
-//' @export
-//'
 // [[Rcpp::export]]
 
 int vecMultinom(NumericVector probs) {
@@ -24,9 +20,6 @@ int vecMultinom(NumericVector probs) {
 
 }
 
-//' Matrix Multinomial
-//'
-//' @export
 // [[Rcpp::export]]
 
 Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix) {

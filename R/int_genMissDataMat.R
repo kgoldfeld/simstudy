@@ -1,12 +1,12 @@
 #### Generate missing data matrix ####
 
-#' Internal function called by genMiss - returns a missing data matrix
-#'
-#' @param dtName Name of complete data set
-#' @param dtTemp Name of data set with unique ids only
-#' @param idvars To be filled in
-#' @param missDefs To be filled in
-#' @return A missing data matrix of 0/1, where 1 indicates missing
+# Internal function called by genMiss - returns a missing data matrix
+#
+# @param dtName Name of complete data set
+# @param dtTemp Name of data set with unique ids only
+# @param idvars To be filled in
+# @param missDefs To be filled in
+# @return A missing data matrix of 0/1, where 1 indicates missing
 
 genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
 

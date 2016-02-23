@@ -1,13 +1,13 @@
-#' Internal function called by gendt
-#'
-#' @useDynLib simstudy
-#' @importFrom Rcpp sourceCpp
-#'
-#' @param args One row from data definitions data.table
-#' @param n The number of observations required in the data set
-#' @param dt Incomplete simulated data.table
-#' @return A data.frame with the updated simulated data
-#' @keywords internal
+# Internal function called by gendt
+#
+# @useDynLib simstudy
+# @importFrom Rcpp sourceCpp
+#
+# @param args One row from data definitions data.table
+# @param n The number of observations required in the data set
+# @param dt Incomplete simulated data.table
+# @return A data.frame with the updated simulated data
+# @keywords internal
 
 generate <- function(args, n, dfSim) {
 
