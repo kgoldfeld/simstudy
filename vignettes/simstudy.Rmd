@@ -153,13 +153,13 @@ Variables defined with a **uniform**, **categorical**, or **deterministic/non-ra
 
 For a uniformly distributed variable, The formula is a string with the format "a, b", where *a* and *b* are scalars (i.e. not functions of other defined variables). The uniform distribution typically has two parameters - the minimum and the maximum. In this case, *a* represents the minimum and *b* represents the maximum.\
 
-For a cateogrical variable with <span class="inlinecode">$k$</span> categories, the formula is a string of  probabilities that sum to 1: "<span class="inlinecode">$p_1, p_2, ..., p_k$</span>". <span class="inlinecode">$p_1$</span> is the probability of the random variable falling category 1, <span class="inlinecode">$p_2$</span> is the probablity of category 2, etc. The probabilities cannot be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.\
+For a cateogrical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1, p_2, ..., p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probablity of category 2, etc. The probabilities cannot be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.\
 
 Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as `nr`.
 
 ## Generating the data
 
-After the data set definitions have been created, a new data set with <span class="inlinecode">$n$</span> observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set defitions in **`def`**, and then stored in the object **`dt`**:
+After the data set definitions have been created, a new data set with \(n\) observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set defitions in **`def`**, and then stored in the object **`dt`**:
 
 ```{r, tidy = TRUE}
 dt <- genData(def,1000)
