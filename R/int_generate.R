@@ -23,8 +23,8 @@ generate <- function(args, n, dfSim) {
     newColumn <- genunif(n, args$formula)
   } else if (args$dist=="Categorical") {  # Not of function of data, yet
     newColumn <- gencat(n, args$formula)
-  } else if (args$dist == "Gamma") {  # Not of function of data, yet
-    newColumn <- gengamma(n, args$formula, args$variance, dfSim)
+  } else if (args$dist == "Gamma") {
+    newColumn <- gengamma(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "Nonrandom") {
     newColumn <- gendeterm(n, args$formula, dfSim)
   }

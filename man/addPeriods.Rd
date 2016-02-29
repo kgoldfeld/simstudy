@@ -4,7 +4,7 @@
 \alias{addPeriods}
 \title{Create longitudinal/panel data}
 \usage{
-addPeriods(dtName, nPeriods, idvars = "id", timevars = NULL,
+addPeriods(dtName, nPeriods = NULL, idvars = "id", timevars = NULL,
   timevarName = "timevar")
 }
 \arguments{
@@ -20,7 +20,7 @@ repeated during each time period}
 \item{timevarName}{Name of new time dependent varialbe}
 }
 \value{
-An updated data.table that that has multiple rows 
+An updated data.table that that has multiple rows
 per observation in dtName
 }
 \description{

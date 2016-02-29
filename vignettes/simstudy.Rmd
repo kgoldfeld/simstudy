@@ -37,10 +37,12 @@ vignette: >
 ```{r, echo = FALSE, message = FALSE}
 library(simstudy)
 library(ggplot2)
+library(scales)
 library(grid)
 library(gridExtra)
+library(survival)
 
-set.seed(3333)
+set.seed(33333)
 
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
@@ -116,13 +118,182 @@ ggmissing <- function(dtPlot,varSelect=NULL,varLevel=NULL, idvar = "id",
   }
 }
 
+ggsurv_m <- function(
+  s,
+  CI         = 'def',
+  plot.cens  = TRUE,
+  surv.col   = 'gg.def',
+  cens.col   = 'gg.def',
+  lty.est    = 1,
+  lty.ci     = 2,
+  cens.shape = 3,
+  back.white = FALSE,
+  xlab       = 'Time',
+  ylab       = 'Survival',
+  main       = '',
+  strata     = length(s$strata),
+  labels     = NULL
+) {
+  
+  s <- fit
+  
+  n <- s$strata
+  
+  strataEqualNames <- unlist(strsplit(names(s$strata), '='))
+  groups <- factor(
+    strataEqualNames[seq(2, 2 * strata, by = 2)],
+    levels = strataEqualNames[seq(2, 2 * strata, by = 2)]
+  )
+  
+  gr.name <-  strataEqualNames[1]
+  gr.df   <- vector('list', strata)
+  n.ind   <- cumsum(c(0,n))
+  
+  for (i in 1:strata) {
+    indI <- (n.ind[i]+1):n.ind[i+1]
+    gr.df[[i]] <- data.frame(
+      time  = c(0, s$time[ indI ]),
+      surv  = c(1, s$surv[ indI ]),
+      up    = c(1, s$upper[ indI ]),
+      low   = c(1, s$lower[ indI ]),
+      cens  = c(0, s$n.censor[ indI ]),
+      group = rep(groups[i], n[i] + 1)
+    )
+  }
+  
+  dat      <- do.call(rbind, gr.df)
+  dat.cens <- subset(dat, cens != 0)
+  
+  pl <- ggplot(dat, aes(x = time, y = surv, group = group)) +
+    geom_step(aes(col = group, lty = group)) +
+    xlab(xlab) +
+    ylab(ylab) +
+    ggtitle(main)
+  
+  pl <- if(surv.col[1] != 'gg.def'){
+    scaleValues <- if (length(surv.col) == 1) {
+      rep(surv.col, strata)
+    } else{
+      surv.col
+    }
+    pl + scale_colour_manual(name = gr.name, values = scaleValues, labels=labels)
+    
+  } else {
+    pl + scale_colour_discrete(name = gr.name, labels=labels)
+  }
+  
+  lineScaleValues <- if (length(lty.est) == 1) {
+    rep(lty.est, strata)
+  } else {
+    lty.est
+  }
+  pl <- pl + scale_linetype_manual(name = gr.name, values = lineScaleValues)
+
+  if(identical(CI,TRUE)) {
+    if(length(surv.col) > 1 || length(lty.est) > 1){
+      stop('Either surv.col or lty.est should be of length 1 in order to plot 95% CI with multiple strata')
+    }
+
+    stepLty <- if ((length(surv.col) > 1 | surv.col == 'gg.def')[1]) {
+      lty.ci
+    } else {
+      surv.col
+    }
+    pl <- pl +
+      geom_step(aes(y = up, lty = group), lty = stepLty) +
+      geom_step(aes(y = low,lty = group), lty = stepLty)
+  }
+
+  if (identical(plot.cens, TRUE) ){
+    if (nrow(dat.cens) == 0) {
+      stop('There are no censored observations')
+    }
+    if (length(cens.col) == 1) {
+      col <- ifelse(cens.col == 'gg.def', 'red', cens.col)
+      pl <- pl + geom_point(
+        data    = dat.cens,
+        mapping = aes(y = surv),
+        shape   = cens.shape,
+        col     = col
+      )
+
+    } else if (length(cens.col) > 0) {
+      # if(!(identical(cens.col,surv.col) || is.null(cens.col))) {
+      #   warning ("Color scales for survival curves and censored points don't match.\nOnly one color scale can be used. Defaulting to surv.col")
+      # }
+
+
+      if (! identical(cens.col, "gg.def")) {
+        if (length(cens.col) != strata) {
+          warning("Color scales for censored points don't match the number of groups. Defaulting to ggplot2 default color scale")
+          cens.col <- "gg.def"
+        }
+      }
+
+      if (identical(cens.col, "gg.def")) {
+        pl <- pl + geom_point(
+          data = dat.cens,
+          mapping = aes(y=surv, col = group),
+          shape = cens.shape,
+          show.legend = FALSE
+        )
+      } else {
+
+        uniqueGroupVals = unique(dat.cens$group)
+        if (length(cens.shape) == 1) {
+          cens.shape = rep(cens.shape, strata)
+        }
+
+        if (length(cens.shape) != strata) {
+          warning("The length of the censored shapes does not match the number of groups (or 1). Defaulting shape = 3 (+)")
+          cens.shape = rep(3, strata)
+        }
+        for (i in seq_along(uniqueGroupVals)) {
+          groupVal = uniqueGroupVals[i]
+          dtGroup <- subset(dat.cens, group == groupVal)
+
+          pl <- pl + geom_point(
+            data = dtGroup,
+            mapping = aes(y=surv),
+            color = I(cens.col[i]),
+            shape = cens.shape[i],
+            show.legend = FALSE
+          )
+
+        }
+      }
+
+    }
+  }
+
+  if(identical(back.white, TRUE)) {
+    pl <- pl + theme_bw()
+  }
+  
+  pl
+}
+
 ```
 
-Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, and to create data sets with **missing** data.
+Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to generate **survival** data, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, and to create data sets with **missing** data.
 
 ## Defining the data
 
-A data set *definition* is created as a data.table (a high powered data.frame) by repeated calls to function `defData`, or with a single call to `defRead` to read in an external set of data set definitions. Here, we illustrate building the definitions internally:
+The key to simulating data in `simstudy` is the creation of series of data defintion tables that look like this:
+
+```{r,  echo=FALSE}
+def <- defData(varname = "nr", dist = "Nonrandom", formula=7, id = "idnum")
+def <- defData(def,varname="x1",dist="Uniform",formula="10, 20")
+def <- defData(def,varname="y1",formula="nr + x1 * 2",variance=8)
+def <- defData(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log")
+def <- defData(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
+def <- defData(def,varname="g1", dist="Gamma", formula = "5+xCat", variance = 1, link = "Log")
+def <- defData(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
+
+knitr::kable(def)
+```
+
+These *definition* tables can be generated two ways. One option is to to use any external editor that allows the creation of `csv` files, which can be read in with a calls to `defRead`. An  alternative is to make repeated calls to the function `defData`. Here, we illustrate the R code that builds this definition table internally:
 
 ```{r, tidy = TRUE}
 def <- defData(varname = "nr", dist = "Nonrandom", formula=7, id = "idnum")
@@ -130,22 +301,16 @@ def <- defData(def,varname="x1",dist="Uniform",formula="10, 20")
 def <- defData(def,varname="y1",formula="nr + x1 * 2",variance=8)
 def <- defData(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log")
 def <- defData(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
+def <- defData(def,varname="g1", dist="Gamma", formula = "5+xCat", variance = 1, link = "Log")
 def <- defData(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
 ```
 
-Following initialization and the subsequent five calls to `add.defs`, these are the contents of the data.table `def`:
+The first call to `defData` without a definition name (in this example the definition name is *def*) creates a **new** data.table with a single row. An additional row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `defData` the user defines a variable name, a distribution (the default is 'Normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
 
-```{r,  echo=FALSE}
-knitr::kable(def)
-```
+The possible distributions include **normal**, **Gamma**, **Poisson**, **zero-truncated Poisson**, **binary**, **uniform**, **categorical**, and **deterministic/non-random**. For all of these distributions, key parameters defining the distribution are entered in the `formula`, `variance`, and `link` fields. 
 
-The call to `initDefs` creates a new data.table with a single row. `initDefs` takes a single string argument representing the name of the `id` field; the default is 'id'.\
+In the case of the **normal** and **Gamma** distributions, the formula specifies the mean. The formula can be a scalar value (number) or a string that represents a function of previously defined variables in the data set definition (or, as we will see later, in a previously generated data set). In the example, the mean of `y1`, a normally distributed value, is declared as a linear function of `nr` and `x1`, and the mean of `g1` is a function of the category defined by `xCat`. The `variance` field is defined only for normal and Gamma random variables, and can only be defined as a scalar value. In the case of Gamma random variables, the value entered in variance field is really a dispersion value $d$, where the actual variance will be $d \times mean^2$.\
 
-A row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `defData` the user defines a variable name, a distribution (the default is 'Normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
-
-The possible distributions include **normal**, **Poisson**, **zero-truncated Poisson**, **binary**, **uniform**, **categorical**, and **deterministic/non-random**. For all of these distributions, key parameters defining the distribution are entered in the `formula`, `variance`, and `link` fields. 
-
-In the case of the **normal** distribution, the formula specifies the mean. The formula can be a scalar value (number) or a string that represents a function of previously defined variables in the data set definition (or, as we will see later, in a previously generated data set). In the example, the mean of `y1`, a normally distributed value, is declared as a linear function of `nr` and `x1`. The `variance` field is defined only for normal random variables, and can only be defined as a scalar value.\
 
 In the case of the **Poisson**, **zero-truncated Poisson**, and **binary** distributions, the formula also specifies the mean. The variance is not a valid parameter in these cases, but the `link` field is. The default link is 'identity' but a 'Log' link is available for the Poisson distributions and a "Logit" link is available for the binary outcomes. In this example, `y2` is defined as Poisson random variable with a mean that is function of `nr` and `x1` on the log scale. For binary variables, which take a value of 0 or 1, the formula represents probability (with the 'identity' link) or log odds (with the 'Logit' link) of the variable having a value of 1. In the example, `a1` has been defined as a binary random variable with a log odds that is a function of `xCat`.\
 
@@ -299,8 +464,82 @@ p2a <- ggplot(data = dtplot2a, aes(x=factor(over65), y=N)) +
   ggtitle("Age")
 
 grid.arrange(p1a,p2a,nrow=1)
+```
+
+## Survival data
+
+Time-to-event data, including both survival and censoring times, are created using functions `defSurv` and `genSurv`. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the `formula` field. Positive coeffecients are associated with longer survival times (and lower hazard rates). Finally, the *shape* of the distribution can be specified. A `shape` value of 1 reflects the *exponential* distribution.
+
+```{r, tidy = TRUE}
+
+# Baseline data definitions
+
+def <- defData(varname = "x1", formula = .5, dist = "Binary")
+def <- defData(def,varname = "x2", formula = .5, dist = "Binary")
+def <- defData(def,varname = "grp", formula = .5, dist = "Binary")
+
+# Survival data definitions
+
+sdef <- defSurv(varname = "survTime", formula = "1.5*x1", scale = "grp*50 + (1-grp)*25", shape = "grp*1 + (1-grp)*1.5")
+sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
+
+sdef
 
 ```
+
+The data are generated with calls to `genData` and `genSurv`:
+
+```{r, tidy = TRUE}
+
+# Baseline data definitions
+
+dtSurv <- genData(def, 300)
+dtSurv <- genSurv(dtSurv, sdef)
+
+head(dtSurv)
+
+# A comparison of survival by group and x1
+
+dtSurv[,round(mean(survTime),1), keyby = .(grp,x1)]
+
+```
+
+Observed survival times and censoring indicators can be generated by defining new fields:
+
+```{r, tidy = TRUE}
+
+cdef <- defData(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="Nonrandom")
+cdef <- defData(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="Nonrandom")
+
+dtSurv <- addColumns(cdef, dtSurv)
+
+head(dtSurv)
+
+# estimate proportion of censoring by x1 and gropu
+
+dtSurv[,round(1-mean(status),2), keyby = .(grp,x1)]
+```
+
+Here is a Kaplan-Meier plot of the data by the four groups:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5}
+fit <- survfit(Surv(obsTime, status) ~ x1+grp, data=dtSurv)
+# ggsurvplot(fit, palette = cbbPalette, font.tickslab = c(8), font.x = 10, font.y = 10,
+#            legend = c(0.8, 0.8))
+
+ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette, 
+         labels = c("grp=0 & x1=0","grp=1 & x1=0","grp=0 & x1=1","grp=1 & x1=1")) +
+  ggplot2::guides(linetype = FALSE) +
+  ggtheme("grey95") +
+  theme(legend.position=c(.8,.8), 
+        legend.title = element_blank(),
+        legend.key = element_rect(fill="grey95" , color = "grey95"),
+        legend.background = element_rect(fill="grey95"),
+        legend.key.width = unit(1, "cm")) +
+  guides(colour = guide_legend(override.aes = list(size=1)))
+
+```
+
 
 ## Longitudinal data
 
@@ -340,7 +579,53 @@ ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
   theme(legend.key=element_rect(fill=NA))
 ```
 
-## Clustered data
+### Longitudinal data with varying observation and interval times
+
+It is also possible to generate longitudinal data with varying number of measurement periods as well as varying time intervals between each measurement period. This is done by defining specific variables in the data set that define the number of observations per subject and the average interval time between each observation. `nCount` defines the number of measurements for an individual; `mInterval` specifies the average time between intervals for an subject; and `vInterval` specifies the variance of those interval times. If `vInterval` is set to 0 or is not defined, the interval for a subject is deterimined entirley by the mean interval. If `vInterval` is greater than 0, time intervals are generated using a gamma distribution with mean and dispersion specified.
+
+In this simple example, the cross-sectional data generates individuals with a different number of measurements observations and different times between each observation. Data for two of these individuals is printed:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "xbase", dist = "Normal", formula = 20, variance = 3)
+def <- defData(def,varname = "nCount", dist = "NoZeroPoisson", formula = 6)
+def <- defData(def, varname = "mInterval", dist = "Gamma", formula = 30, variance = .01)
+def <- defData(def, varname = "vInterval", dist = "Nonrandom", formula = .07)
+
+dt <- genData(def,200)
+dt[id %in% c(8,121)]                # View individual 120
+```
+
+The resulting longitudinal data for these two subjects can be inspected after a call to `addPeriods`. Notice that no parameters need to be set since all information resides in the data set itself:
+
+```{r, tidy = TRUE}
+dtPeriod <- addPeriods(dt)
+dtPeriod[id %in% c(8,121)]           # View individual 120
+```
+
+If a time sensitive measurement is added to the data set ...
+
+```{r, tidy = TRUE}
+def2 <- defData(varname = "Y", dist = "Normal", formula = "15 + .1 * time", variance = 5)
+dtPeriod <- addColumns(def2, dtPeriod)
+```
+
+... a plot of a five randomly selected individuals looks like this:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6, fig.height = 3}
+
+sampledID <- sample(1:nrow(dt), 5)
+dtSample <- dtPeriod[id %in% sampledID]
+
+ggplot(data = dtSample, aes(x = time, y = Y, group=id)) +
+  geom_point(aes(color = factor(id))) +
+  geom_line(aes(color = factor(id))) +
+  xlab("Day") +
+  scale_color_manual(values = cbbPalette) +
+  theme(legend.position = "none") +
+  ggtheme("grey90")
+```
+
+## Clustered data  
 
 The function `genCluster` generates multilevel or clustered data based on a previously generated data set that is one "level" up from the clustered data. For example, if there is a data set that contains school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)
 
