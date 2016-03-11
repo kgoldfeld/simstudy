@@ -26,6 +26,11 @@ Imports:
 RoxygenNote: 5.0.1
 Suggests: testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    ggplot2,
+    scales,
+    grid,
+    gridExtra,
+    survival
 VignetteBuilder: knitr
 LinkingTo: Rcpp
