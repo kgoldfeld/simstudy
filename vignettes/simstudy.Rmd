@@ -293,7 +293,7 @@ def <- defData(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link=
 knitr::kable(def)
 ```
 
-These *definition* tables can be generated two ways. One option is to to use any external editor that allows the creation of `csv` files, which can be read in with a calls to `defRead`. An  alternative is to make repeated calls to the function `defData`. Here, we illustrate the R code that builds this definition table internally:
+These *definition* tables can be generated two ways. One option is to to use any external editor that allows the creation of `csv` files, which can be read in with a call to `defRead`. An  alternative is to make repeated calls to the function `defData`. Here, we illustrate the R code that builds this definition table internally:
 
 ```{r, tidy = TRUE}
 def <- defData(varname = "nr", dist = "Nonrandom", formula=7, id = "idnum")
@@ -305,7 +305,7 @@ def <- defData(def,varname="g1", dist="Gamma", formula = "5+xCat", variance = 1,
 def <- defData(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
 ```
 
-The first call to `defData` without a definition name (in this example the definition name is *def*) creates a **new** data.table with a single row. An additional row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `defData` the user defines a variable name, a distribution (the default is 'Normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
+The first call to `defData` without specifying a definition name (in this example the definition name is *def*) creates a **new** data.table with a single row. An additional row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `defData` the user defines a variable name, a distribution (the default is 'Normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
 
 The possible distributions include **normal**, **Gamma**, **Poisson**, **zero-truncated Poisson**, **binary**, **uniform**, **categorical**, and **deterministic/non-random**. For all of these distributions, key parameters defining the distribution are entered in the `formula`, `variance`, and `link` fields. 
 
@@ -318,7 +318,7 @@ Variables defined with a **uniform**, **categorical**, or **deterministic/non-ra
 
 For a uniformly distributed variable, The formula is a string with the format "a, b", where *a* and *b* are scalars (i.e. not functions of other defined variables). The uniform distribution typically has two parameters - the minimum and the maximum. In this case, *a* represents the minimum and *b* represents the maximum.\
 
-For a cateogrical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1, p_2, ..., p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probablity of category 2, etc. The probabilities cannot be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.\
+For a categorical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1, p_2, ..., p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probablity of category 2, etc. The probabilities cannot be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.\
 
 Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as `nr`.
 
@@ -331,7 +331,7 @@ dt <- genData(def,1000)
 dt
 ```
 
-New data can be added to an existing data set with a call to function **`addColumns`**. A new data definition is provided along with the name of the existing data set:
+New data can be added to an existing data set with a call to function **`addColumns`**. The new data definitions are created with a call to **`defData`** and then included as an argument in the call to **`addColumns`**:
 
 ```{r, tidy = TRUE}
 addef <- defData(varname = "zExtra", dist = "Normal", formula = '3 + y1', 
@@ -354,12 +354,12 @@ First, create the data definition:
 ```{r, tidy = TRUE}
 def <- defData(varname = "male", dist = "Binary", formula = .5 , id="cid")
 def <- defData(def, varname = "over65", dist = "Binary", formula = "-1.7 + .8*male", link="Logit")
-def <- defData(def, varname = "z", dist = "Normal", formula = 10, variance = 2)
+def <- defData(def, varname = "baseDBP", dist = "Normal", formula = 70, variance = 40)
 
 dtstudy <- genData(def, 330)
 ```
 
-*Balanced treatment assignment, stratified by gender and age category*
+*Balanced treatment assignment, stratified by gender and age category (not blood pressure)*
 ```{r, tidy = TRUE}
 study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"), grpName = "rxGrp")
 
@@ -430,7 +430,7 @@ grid.arrange(p1,p2,nrow=1)
 
 ```
 
-Here is a second case of three exposures where the exposure is indepdendent of any covariates. Note that specifying the formula as `c(.35, .45)` is the same as specifying it is `c(.35, .45, .20)`. Also, when referring to probabilities, the identity link is used:
+Here is a second case of three exposures where the exposure is independent of any covariates. Note that specifying the formula as `c(.35, .45)` is the same as specifying it is `c(.35, .45, .20)`. Also, when referring to probabilities, the identity link is used:
 
 ```{r, tidy = TRUE}
 formula2 <- c(.35, .45)
@@ -515,7 +515,7 @@ dtSurv <- addColumns(cdef, dtSurv)
 
 head(dtSurv)
 
-# estimate proportion of censoring by x1 and gropu
+# estimate proportion of censoring by x1 and group
 
 dtSurv[,round(1-mean(status),2), keyby = .(grp,x1)]
 ```
@@ -543,7 +543,7 @@ ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette,
 
 ## Longitudinal data
 
-To simulate longitudinal data, we start with a 'cross-sectional' data set and convert it to time-dependendent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome `Y` once before and twice after intervention `T` in a randomized trial:
+To simulate longitudinal data, we start with a 'cross-sectional' data set and convert it to a time-dependent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome `Y` once before and twice after intervention `T` in a randomized trial:
 
 ```{r, tidy = TRUE}
 tdef <- defData(varname = "T", dist="Binary", formula = 0.5)
@@ -581,9 +581,9 @@ ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
 
 ### Longitudinal data with varying observation and interval times
 
-It is also possible to generate longitudinal data with varying number of measurement periods as well as varying time intervals between each measurement period. This is done by defining specific variables in the data set that define the number of observations per subject and the average interval time between each observation. `nCount` defines the number of measurements for an individual; `mInterval` specifies the average time between intervals for an subject; and `vInterval` specifies the variance of those interval times. If `vInterval` is set to 0 or is not defined, the interval for a subject is deterimined entirley by the mean interval. If `vInterval` is greater than 0, time intervals are generated using a gamma distribution with mean and dispersion specified.
+It is also possible to generate longitudinal data with varying numbers of measurement periods as well as varying time intervals between each measurement period. This is done by defining specific variables in the data set that define the number of observations per subject and the average interval time between each observation. `nCount` defines the number of measurements for an individual; `mInterval` specifies the average time between intervals for an subject; and `vInterval` specifies the variance of those interval times. If `vInterval` is set to 0 or is not defined, the interval for a subject is deterimined entirely by the mean interval. If `vInterval` is greater than 0, time intervals are generated using a gamma distribution with mean and dispersion specified.
 
-In this simple example, the cross-sectional data generates individuals with a different number of measurements observations and different times between each observation. Data for two of these individuals is printed:
+In this simple example, the cross-sectional data generates individuals with a different number of measurement observations and different times between each observation. Data for two of these individuals is printed:
 
 ```{r, tidy = TRUE}
 def <- defData(varname = "xbase", dist = "Normal", formula = 20, variance = 3)
@@ -592,14 +592,14 @@ def <- defData(def, varname = "mInterval", dist = "Gamma", formula = 30, varianc
 def <- defData(def, varname = "vInterval", dist = "Nonrandom", formula = .07)
 
 dt <- genData(def,200)
-dt[id %in% c(8,121)]                # View individual 120
+dt[id %in% c(8,121)]                # View individuals 8 and 121
 ```
 
 The resulting longitudinal data for these two subjects can be inspected after a call to `addPeriods`. Notice that no parameters need to be set since all information resides in the data set itself:
 
 ```{r, tidy = TRUE}
 dtPeriod <- addPeriods(dt)
-dtPeriod[id %in% c(8,121)]           # View individual 120
+dtPeriod[id %in% c(8,121)]  # View individuals 8 and 121 only
 ```
 
 If a time sensitive measurement is added to the data set ...
@@ -629,7 +629,7 @@ ggplot(data = dtSample, aes(x = time, y = Y, group=id)) +
 
 The function `genCluster` generates multilevel or clustered data based on a previously generated data set that is one "level" up from the clustered data. For example, if there is a data set that contains school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)
 
-In the example here, we do in fact generate school, classe, and student level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides *random effects* at each of these levels.
+In the example here, we do in fact generate school, class, and student level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides *random effects* at each of these levels.
 
 We start by definining the school level data:
 
@@ -674,7 +674,7 @@ dtStudent <- genCluster(dtClass,cLevelVar="idClass", numIndsVar = "nStudents",  
 dtStudent <- addColumns(gen.student, dtStudent)
 ```
 
-This is what the clustered data look like. Each classroom is represented by a box, and each school is representing by a color. The intervention group is highlighted by dark outlines:
+This is what the clustered data look like. Each classroom is represented by a box, and each school is represented by a color. The intervention group is highlighted by dark outlines:
 
 ```{r, tidy = TRUE, echo = FALSE, fig.width = 7, fig.height = 3}
 ggplot(data=dtStudent,aes(x=factor(idClass),y=test,group=idClass)) +
@@ -721,7 +721,7 @@ dt[,round(sqrt(diag(var(cbind(V1, V2, V3)))),1)]
 ```{r, tidy=TRUE}
 # generate 3 correlated variables with different location but same standard deviation
 # and compound symmetry (cs) correlation matrix with correlation coefficient = 0.4.
-# Other correlation matrix structures are "indepdent" ("ind") and "auto-regressive" ("ar1").
+# Other correlation matrix structures are "independent" ("ind") and "auto-regressive" ("ar1").
 
 dt <- genCorData(1000, mu=c(4,12,3), sigma = 3, rho = .4, corstr = "cs", 
                 cnames=c("x0","x1","x2"))
@@ -759,7 +759,7 @@ dt[,round(sqrt(diag(var(cbind(a0, a1)))),1)]
 
 After generating a complete data set, it is possible to generate missing data. `defMiss` defines the parameters of missingness. `genMiss` generates a missing data matrix of indicators for each field. Indicators are set to 1 if the data are missing for a subject, 0 otherwise. `genObs` creates a data set that reflects what would have been observed had data been missing; this is a replicate of the orginal data set with "NAs" replacing values where missing data has been generated.
 
-By controlling the parameters of missingness, it is possible to represnt different missing data mechanisms: (1) *missing completely at random* (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measrue (2) *missing at random* (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) *not missing at random* (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with measure.
+By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) *missing completely at random* (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) *missing at random* (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) *not missing at random* (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with measure.
 
 These possibilities are illustrated with an example. A data set of 1000 observations with three "outcome" measures" `x1`, `x2`, and `x3` is defined. This data set also includes two independent predictors, `m` and `u` that largely determine the value of each outcome (subject to random noise).
 
@@ -773,7 +773,7 @@ def1 <- defData(def1, "x3", dist="Normal", formula = "20*m + 20*u", variance = 2
 dtAct <- genData(def1, 1000)
 ```
 
-In this example, the missing data mechanism is different for each outcome. Missingness for `x1` is MCAR, since the probability of missing is fixed. Missingness for `x2` is MAR, since missingness is a function of `m`, a measured predictor of `x2`. And missingness for `x3` is NMAR, since the probability of missing is dependent on `u`, an unmeasured predictor of `x3`:
+In this example, the missing data mechanism is different for each outcome. As defined below, missingness for `x1` is MCAR, since the probability of missing is fixed. Missingness for `x2` is MAR, since missingness is a function of `m`, a measured predictor of `x2`. And missingness for `x3` is NMAR, since the probability of missing is dependent on `u`, an unmeasured predictor of `x3`:
 
 ```{r, tidy = TRUE}
 defM <- defMiss(varname = "x1", formula = .15, logit.link = FALSE)
@@ -834,7 +834,7 @@ showDif(meanActm[m==1, .(x1, x2, x3)], meanObsm[m==1, .(x1, x2, x3)])
 
 Missingness can occur, of course, in the context of longitudinal data. `missDef` provides two additional arguments that are relevant for these types of datas: `baseline` and `monotonic`. In the case of variables that are measured at baseline only, a missing value would be reflected throughout the course of the study. In the case where a variable is time-dependent (i.e it is measured at each time point), it is possible to declare missingness to be  *monotonic*. This means that if a value for this field is missing at time `t`, then values will also be missing at all times `T > t` as well. The call to `genMiss` must set `repeated` to TRUE.
 
-The following two examples an outcome variable `y` that is measured over time, whose value is a function of time and an observed exposure: 
+The following two examples describe an outcome variable `y` that is measured over time, whose value is a function of time and an observed exposure: 
 
 ```{r, tidy = TRUE}
 
@@ -863,7 +863,7 @@ defMlong <- defMiss(defMlong,varname = "y", formula = "-1.5 - 1.5 * rx + .25*per
 missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
 ```
 
-Here is a conceptual plot that shows the pattern of missingness. Each row represents an indiviudal, and each box represents a time period. A box that is colored reflects missing data; a box colored grey reflects observed. The missingness pattern is show for two variables `x1` and `y`:
+Here is a conceptual plot that shows the pattern of missingness. Each row represents an individual, and each box represents a time period. A box that is colored reflects missing data; a box colored grey reflects observed. The missingness pattern is shown for two variables `x1` and `y`:
 
 ```{r tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 6}
 xp10 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
@@ -891,7 +891,7 @@ grid.arrange(xp10, xp20, xp11, xp21,
 
 ```
 
-In the second case, missingness is montonic; once a subject misses a measurement for `y`, there are no subsequent measurements:
+In the second case, missingness is monotonic; once a subject misses a measurement for `y`, there are no subsequent measurements:
 
 ```{r tidy=TRUE}
 # missingness for y is not monotonic
