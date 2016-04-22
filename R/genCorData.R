@@ -88,6 +88,9 @@ genCorData <- function(n, mu, sigma, corMatrix = NULL,  rho, corstr = "ind",
   dtid <- data.table(1:nrow(dt))
   setnames(dtid,idname)
 
-  cbind(dtid, dt)
+  dt <- cbind(dtid, dt)
+  setkeyv(dt, idname)
+
+  return(dt)
 
 }
