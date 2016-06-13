@@ -19,10 +19,10 @@ generate <- function(args, n, dfSim) {
     newColumn <- genpoisTrunc(n, args$formula, args$link, dfSim)
   } else if (args$dist == "Binary") {
     newColumn <- genbinom(n, args$formula, args$link, dfSim)
-  } else if (args$dist=="Uniform") {      # Uniform cannot be function of data
-    newColumn <- genunif(n, args$formula)
-  } else if (args$dist=="Categorical") {  # Not of function of data, yet
-    newColumn <- gencat(n, args$formula)
+  } else if (args$dist=="Uniform") {
+    newColumn <- genunif(n, args$formula, dfSim)
+  } else if (args$dist=="Categorical") {
+    newColumn <- gencat(n, args$formula, dfSim)
   } else if (args$dist == "Gamma") {
     newColumn <- gengamma(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "Nonrandom") {

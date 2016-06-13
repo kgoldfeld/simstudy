@@ -4,12 +4,15 @@
 \alias{genData}
 \title{Calling function to simulate data}
 \usage{
-genData(dtDefs, n)
+genData(n, dtDefs = NULL, id = "id")
 }
 \arguments{
-\item{dtDefs}{name of definitions data.table/data.frame.}
+\item{n}{the number of observations required in the data set.}
 
-\item{n}{the number (integer) of observations required in the data set.}
+\item{dtDefs}{name of definitions data.table/data.frame. If no definitions are provided
+a data set with ids only is generated.}
+
+\item{id}{The string defining the id of the record}
 }
 \value{
 A data.table that contains the simulated data.

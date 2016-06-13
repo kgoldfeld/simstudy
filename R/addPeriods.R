@@ -5,7 +5,7 @@
 #' @param idvars Names of index variables (in a string vector) that will be
 #' repeated during each time period
 #' @param timevars Names of time dependent variables. Defaults to NULL.
-#' @param timevarName Name of new time dependent varialbe
+#' @param timevarName Name of new time dependent variable
 #' @return An updated data.table that that has multiple rows
 #' per observation in dtName
 #' @export

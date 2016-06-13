@@ -14,7 +14,7 @@ genObs(dtName, dtMiss, idvars)
 \item{idvars}{Index variables that cannot be missing}
 }
 \value{
-A data table that represents observed data, including 
+A data table that represents observed data, including
 missing data
 }
 \description{

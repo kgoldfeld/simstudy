@@ -8,6 +8,16 @@
 
 addColumns <- function(dtDefs,dtOld) {
 
+  for (i in 1:nrow(dtDefs)) {
+    if (i == 1) {
+      chkVars <- names(dtOld)
+    } else {
+      chkVars <- c(dtDefs[1:(i-1), varname] , names(dtOld))
+    }
+
+    evalDef(dtDefs[i, varname], dtDefs[i,formula], dtDefs[i,dist], chkVars)
+  }
+
   oldkey <- data.table::key(dtOld)
 
   iter = nrow(dtDefs)

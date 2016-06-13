@@ -13,13 +13,20 @@
 
 trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 
+  if (missing(dt)) {
+    stop("Data table argument is missing", call. = FALSE)
+  }
+  if (grpName %in% names(dt)) {
+    stop("Group name has previously been defined in data table", call. = FALSE)
+  }
+
   ncols = ncol(dt)
 
   ncat <- length(formulas)
   def = NULL
 
   for (i in 1:ncat) {
-    def <- defData(def,
+    def <- defDataAdd(def,
                    varname = paste0("e",i),
                    dist = "Nonrandom",
                    formula = formulas[i]

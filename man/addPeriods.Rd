@@ -17,7 +17,7 @@ repeated during each time period}
 
 \item{timevars}{Names of time dependent variables. Defaults to NULL.}
 
-\item{timevarName}{Name of new time dependent varialbe}
+\item{timevarName}{Name of new time dependent variable}
 }
 \value{
 An updated data.table that that has multiple rows

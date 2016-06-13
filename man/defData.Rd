@@ -4,28 +4,32 @@
 \alias{defData}
 \title{Add single row to definitions table}
 \usage{
-defData(dtDefs = NULL, varname = "", formula = "", variance = 0,
-  dist = "Normal", link = "identity", id = "id")
+defData(dtDefs = NULL, varname, formula, variance = 0, dist = "Normal",
+  link = "identity", id = "id")
 }
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
 
-\item{formula}{test}
+\item{formula}{An R expression for mean (string)}
 
-\item{variance}{test}
+\item{variance}{Number}
 
-\item{dist}{test}
+\item{dist}{Distribution. For possibilities, see details}
 
-\item{link}{test}
+\item{link}{The link function for the mean, see details}
 
-\item{id}{test}
+\item{id}{A string indicating the field name for the unique record identifier}
 
-\item{varName}{test}
+\item{varName}{Name (string) of new variable}
 }
 \value{
 A data.table named dtName that is an updated data defnitions table
 }
 \description{
 Add single row to definitions table
+}
+\details{
+The possible data distributions include ""Normal", "Poisson",
+"NoZeroPoisson", "Binary", "Uniform", "Categorical", "Gamma", and "Nonrandom."
 }
 

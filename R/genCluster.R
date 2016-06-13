@@ -18,6 +18,15 @@
 
 genCluster <- function(dtClust,cLevelVar,numIndsVar, level1ID, allLevel2 = TRUE) {
 
+  #### Check missing arguments
+
+  if (missing(dtClust)) stop("argument 'dtClust' is missing", call. = FALSE)
+  if (missing(cLevelVar)) stop("argument 'cLevelVar' is missing", call. = FALSE)
+  if (missing(numIndsVar)) stop("argument 'numIndsVar' is missing", call. = FALSE)
+  if (missing(level1ID)) stop("argument 'level1ID' is missing", call. = FALSE)
+
+  ####
+
   dt <- dtClust[,.(id2 = get(cLevelVar), n = get(numIndsVar))][,.(id2 = rep(id2, n))]
 
   dt[, eval(cLevelVar) := id2]

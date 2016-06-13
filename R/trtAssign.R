@@ -15,6 +15,13 @@
 trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
                        strata = NULL, grpName = "trtGrp") {
 
+  if (missing(dtName)) {
+    stop("Data table argument is missing", call. = FALSE)
+  }
+  if (grpName %in% names(dtName)) {
+    stop("Group name has previously been defined in data table", call. = FALSE)
+  }
+
   dt <- copy(dtName)
 
   if (balanced) {

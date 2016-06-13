@@ -218,7 +218,7 @@ ggsurv_m <- function(
       )
 
     } else if (length(cens.col) > 0) {
-      # if(!(identical(cens.col,surv.col) || is.null(cens.col))) {
+    # if(!(identical(cens.col,surv.col) || is.null(cens.col))) {
       #   warning ("Color scales for survival curves and censored points don't match.\nOnly one color scale can be used. Defaulting to surv.col")
       # }
 
@@ -283,10 +283,10 @@ The key to simulating data in `simstudy` is the creation of series of data defin
 
 ```{r,  echo=FALSE}
 def <- defData(varname = "nr", dist = "Nonrandom", formula=7, id = "idnum")
-def <- defData(def,varname="x1",dist="Uniform",formula="10, 20")
+def <- defData(def,varname="x1",dist="Uniform",formula="10;20")
 def <- defData(def,varname="y1",formula="nr + x1 * 2",variance=8)
 def <- defData(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log")
-def <- defData(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
+def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5",dist="Categorical")
 def <- defData(def,varname="g1", dist="Gamma", formula = "5+xCat", variance = 1, link = "Log")
 def <- defData(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
 
@@ -297,10 +297,10 @@ These *definition* tables can be generated two ways. One option is to to use any
 
 ```{r, tidy = TRUE}
 def <- defData(varname = "nr", dist = "Nonrandom", formula=7, id = "idnum")
-def <- defData(def,varname="x1",dist="Uniform",formula="10, 20")
+def <- defData(def,varname="x1",dist="Uniform",formula="10;20")
 def <- defData(def,varname="y1",formula="nr + x1 * 2",variance=8)
 def <- defData(def,varname="y2",dist="Poisson",formula="nr - 0.2 * x1",link="Log")
-def <- defData(def,varname="xCat",formula = "0.3, 0.2, 0.5",dist="Categorical")
+def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5",dist="Categorical")
 def <- defData(def,varname="g1", dist="Gamma", formula = "5+xCat", variance = 1, link = "Log")
 def <- defData(def, varname = "a1", dist = "Binary" , formula="-3 + xCat", link="Logit")
 ```
@@ -316,9 +316,9 @@ In the case of the **Poisson**, **zero-truncated Poisson**, and **binary** distr
 
 Variables defined with a **uniform**, **categorical**, or **deterministic/non-random** distribution are specified using the formula only. The `variance` and `link` fields are not used in these cases.\
 
-For a uniformly distributed variable, The formula is a string with the format "a, b", where *a* and *b* are scalars (i.e. not functions of other defined variables). The uniform distribution typically has two parameters - the minimum and the maximum. In this case, *a* represents the minimum and *b* represents the maximum.\
+For a uniformly distributed variable, The formula is a string with the format "a;b", where *a* and *b* are scalars or functions of previously defined variables. The uniform distribution has two parameters - the minimum and the maximum. In this case, *a* represents the minimum and *b* represents the maximum.\
 
-For a categorical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1, p_2, ..., p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probablity of category 2, etc. The probabilities cannot be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.\
+For a categorical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1 ; p_2 ; ... ; p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probablity of category 2, etc. The probabilities can be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.\
 
 Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as `nr`.
 
@@ -327,15 +327,15 @@ Non-random variables are defined by the formula. Since these variables are deter
 After the data set definitions have been created, a new data set with \(n\) observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set defitions in **`def`**, and then stored in the object **`dt`**:
 
 ```{r, tidy = TRUE}
-dt <- genData(def,1000)
+dt <- genData(1000, def)
 dt
 ```
 
 New data can be added to an existing data set with a call to function **`addColumns`**. The new data definitions are created with a call to **`defData`** and then included as an argument in the call to **`addColumns`**:
 
 ```{r, tidy = TRUE}
-addef <- defData(varname = "zExtra", dist = "Normal", formula = '3 + y1', 
-                 variance = 2, id="idnum")
+addef <- defDataAdd(varname = "zExtra", dist = "Normal", formula = '3 + y1', 
+                 variance = 2)
 
 dt <- addColumns(addef, dt)
 dt
@@ -356,7 +356,7 @@ def <- defData(varname = "male", dist = "Binary", formula = .5 , id="cid")
 def <- defData(def, varname = "over65", dist = "Binary", formula = "-1.7 + .8*male", link="Logit")
 def <- defData(def, varname = "baseDBP", dist = "Normal", formula = 70, variance = 40)
 
-dtstudy <- genData(def, 330)
+dtstudy <- genData(330, def)
 ```
 
 *Balanced treatment assignment, stratified by gender and age category (not blood pressure)*
@@ -493,7 +493,7 @@ The data are generated with calls to `genData` and `genSurv`:
 
 # Baseline data definitions
 
-dtSurv <- genData(def, 300)
+dtSurv <- genData(300, def)
 dtSurv <- genSurv(dtSurv, sdef)
 
 head(dtSurv)
@@ -508,8 +508,8 @@ Observed survival times and censoring indicators can be generated by defining ne
 
 ```{r, tidy = TRUE}
 
-cdef <- defData(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="Nonrandom")
-cdef <- defData(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="Nonrandom")
+cdef <- defDataAdd(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="Nonrandom")
+cdef <- defDataAdd(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="Nonrandom")
 
 dtSurv <- addColumns(cdef, dtSurv)
 
@@ -551,7 +551,7 @@ tdef <- defData(tdef, varname = "Y0", dist = "Normal", formula = 10, variance = 
 tdef <- defData(tdef, varname = "Y1", dist = "Normal", formula = "Y0 + 5 + 5 * T", variance = 1)
 tdef <- defData(tdef, varname = "Y2", dist = "Normal", formula = "Y0 + 10 + 5 * T", variance = 1)
 
-dtTrial <- genData(tdef, 500)
+dtTrial <- genData( 500, tdef)
 dtTrial
 ```
 
@@ -591,7 +591,7 @@ def <- defData(def,varname = "nCount", dist = "NoZeroPoisson", formula = 6)
 def <- defData(def, varname = "mInterval", dist = "Gamma", formula = 30, variance = .01)
 def <- defData(def, varname = "vInterval", dist = "Nonrandom", formula = .07)
 
-dt <- genData(def,200)
+dt <- genData(200, def)
 dt[id %in% c(8,121)]                # View individuals 8 and 121
 ```
 
@@ -605,7 +605,7 @@ dtPeriod[id %in% c(8,121)]  # View individuals 8 and 121 only
 If a time sensitive measurement is added to the data set ...
 
 ```{r, tidy = TRUE}
-def2 <- defData(varname = "Y", dist = "Normal", formula = "15 + .1 * time", variance = 5)
+def2 <- defDataAdd(varname = "Y", dist = "Normal", formula = "15 + .1 * time", variance = 5)
 dtPeriod <- addColumns(def2, dtPeriod)
 ```
 
@@ -641,7 +641,7 @@ gen.school <- defData(gen.school, varname = "nClasses",
                       dist = "NoZeroPoisson", formula = 3
 )
 
-dtSchool <- genData(gen.school, 8)
+dtSchool <- genData(8, gen.school)
 dtSchool <- trtAssign(dtSchool, n = 2)
 
 dtSchool
@@ -651,9 +651,9 @@ dtSchool
 The classroom level data are generated with a call to `genCluster`, and then school level data is added by a call to `addColumns`:
 
 ```{r, tidy = TRUE}
-gen.class <- defData(varname = "c0", dist = "Normal", formula = 0, 
+gen.class <- defDataAdd(varname = "c0", dist = "Normal", formula = 0, 
                      variance = 2)
-gen.class <- defData(gen.class, varname = "nStudents", dist = "NoZeroPoisson", formula = 20
+gen.class <- defDataAdd(gen.class, varname = "nStudents", dist = "NoZeroPoisson", formula = 20
 )
 
 dtClass <- genCluster(dtSchool, "idSchool", numIndsVar = "nClasses",level1ID = "idClass")
@@ -665,9 +665,9 @@ head(dtClass, 10)
 Finally, the student level data are added using the same process:
 
 ```{r, tidy = TRUE, tidy.opts= list(width.cutoff = 60)}
-gen.student <- defData(varname="Male", dist="Binary", formula=0.5)
-gen.student <- defData(gen.student, varname="age", dist = "Uniform", formula="9.5, 10.5")
-gen.student <- defData(gen.student, varname="test", dist = "Normal",
+gen.student <- defDataAdd(varname="Male", dist="Binary", formula=0.5)
+gen.student <- defDataAdd(gen.student, varname="age", dist = "Uniform", formula="9.5; 10.5")
+gen.student <- defDataAdd(gen.student, varname="test", dist = "Normal",
                        formula = "50 - 5*Male + s0 + c0 + 8 * trtGrp",                           variance = 2)
 dtStudent <- genCluster(dtClass,cLevelVar="idClass", numIndsVar = "nStudents",                        level1ID = "idChild")
 
@@ -740,7 +740,7 @@ The new data generated by `genCorData` can be merged with an existing data set. 
 
 # define and generate the original data set
 def <- defData(varname = "x", dist = "Normal", formula = 0, variance = 1, id = "cid")
-dt <- genData(def, 1000)
+dt <- genData(1000, def)
 
 # add new correlate fields a0 and a1 to "dt"
 dt <- addCorData(dt, idname="cid", mu=c(0,0), sigma = c(2,.2), rho = -0.2, 
@@ -770,7 +770,7 @@ def1 <- defData(def1, "x1", dist="Normal", formula = "20*m + 20*u", variance = 2
 def1 <- defData(def1, "x2", dist="Normal", formula = "20*m + 20*u", variance = 2)
 def1 <- defData(def1, "x3", dist="Normal", formula = "20*m + 20*u", variance = 2)
 
-dtAct <- genData(def1, 1000)
+dtAct <- genData(1000, def1)
 ```
 
 In this example, the missing data mechanism is different for each outcome. As defined below, missingness for `x1` is MCAR, since the probability of missing is fixed. Missingness for `x2` is MAR, since missingness is a function of `m`, a measured predictor of `x2`. And missingness for `x3` is NMAR, since the probability of missing is dependent on `u`, an unmeasured predictor of `x3`:
@@ -840,12 +840,12 @@ The following two examples describe an outcome variable `y` that is measured ove
 
 # use baseline definitions from previous example
 
-dtAct <- genData(def1, 120)
+dtAct <- genData(120, def1)
 dtAct <- trtObserve(dtAct, formulas = .5, logit.link = FALSE, grpName = "rx")
 
 # add longitudinal data
 
-defLong <- defData(varname = "y", dist = "Normal", formula = "10 + period*2 + 2 * rx", variance = 2)
+defLong <- defDataAdd(varname = "y", dist = "Normal", formula = "10 + period*2 + 2 * rx", variance = 2)
 
 dtTime <- addPeriods(dtAct, nPeriods = 4)
 dtTime <- addColumns(defLong, dtTime)
