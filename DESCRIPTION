@@ -4,9 +4,9 @@ Title: Simulation of Study Data
 Version: 0.1.1
 Date: 2016-06-17
 Authors@R: person("Keith", "Goldfeld", email = "Keith.Goldfeld@nyumc.org",
-                  role = c("aut", "cre"))
+                  role = c("aut"))
 Author: Keith Goldfeld [aut]
-Mainainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
+Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
 Description: A collection of functions that allow users to generate simulated
     data sets in order to explore modeling techniques or better understand data
     generating processes. The user specifies a set of relationships between
