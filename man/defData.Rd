@@ -10,6 +10,8 @@ defData(dtDefs = NULL, varname, formula, variance = 0, dist = "Normal",
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
 
+\item{varname}{Name (string) of new variable}
+
 \item{formula}{An R expression for mean (string)}
 
 \item{variance}{Number}
@@ -19,8 +21,6 @@ defData(dtDefs = NULL, varname, formula, variance = 0, dist = "Normal",
 \item{link}{The link function for the mean, see details}
 
 \item{id}{A string indicating the field name for the unique record identifier}
-
-\item{varName}{Name (string) of new variable}
 }
 \value{
 A data.table named dtName that is an updated data defnitions table

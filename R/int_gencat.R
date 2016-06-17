@@ -9,6 +9,12 @@
 
 gencat <- function(n, formula, dfSim) {
 
+  # 'declare var
+
+  V1 = NULL
+
+  #
+
   pstr <- unlist(strsplit(as.character(formula),split=";", fixed=TRUE))
   idname <- names(dfSim)[1]
 

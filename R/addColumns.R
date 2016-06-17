@@ -8,10 +8,14 @@
 
 addColumns <- function(dtDefs,dtOld) {
 
+  varname = NULL # "declares" varname to avoid global NOTE
+
   for (i in 1:nrow(dtDefs)) {
     if (i == 1) {
       chkVars <- names(dtOld)
-    } else {
+
+    } else { # check all previously defined vars
+
       chkVars <- c(dtDefs[1:(i-1), varname] , names(dtOld))
     }
 

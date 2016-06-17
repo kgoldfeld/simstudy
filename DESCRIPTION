@@ -1,8 +1,8 @@
 Package: simstudy
 Type: Package
 Title: Simulation of Study Data
-Version: 0.0.0.9001
-Date: 2016-01-04
+Version: 0.1.1
+Date: 2016-06-17
 Authors@R: person("Keith", "Goldfeld", email = "Keith.Goldfeld@nyumc.org",
                   role = c("aut", "cre"))
 Author: Keith Goldfeld [aut]
@@ -16,13 +16,12 @@ Description: A collection of functions that allow users to generate simulated
     generated using various mechanisms (MCAR, MAR, NMAR).
 Depends:
     R (>= 3.2.2),
-    data.table,
-    mvnfast
+    data.table
 License: GPL-3
 LazyData: TRUE
 Imports:
-    data.table,
-    Rcpp
+    Rcpp,
+    mvnfast
 RoxygenNote: 5.0.1
 Suggests: testthat,
     knitr,

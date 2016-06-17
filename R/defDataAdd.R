@@ -2,7 +2,7 @@
 #' existing data.table
 #'
 #' @param dtDefs Definition data.table to be modified
-#' @param varName Name (string) of new variable
+#' @param varname Name (string) of new variable
 #' @param formula An R expression for mean (string)
 #' @param variance Number
 #' @param dist Distribution. For possibilities, see details

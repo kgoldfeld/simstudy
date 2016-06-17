@@ -15,6 +15,13 @@
 trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
                        strata = NULL, grpName = "trtGrp") {
 
+  # 'declare' vars
+
+  stratum = NULL
+  id = NULL
+
+  #
+
   if (missing(dtName)) {
     stop("Data table argument is missing", call. = FALSE)
   }
@@ -39,7 +46,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
       dts <- dt[stratum == i]
       data.table::setnames(dts, key(dts), "id")
       grpExps <- dts[,
-                     .(id, grpExp = sample(rep(c(1 : nTrt),
+                     list(id, grpExp = sample(rep(c(1 : nTrt),
                                                each = ceiling(nrow(dts) / nTrt)),
                                            nrow(dts),
                                            replace = FALSE)

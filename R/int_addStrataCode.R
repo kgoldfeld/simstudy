@@ -8,6 +8,12 @@
 
 addStrataCode <- function(dt, strata) {
 
+  # 'Declare' var
+
+  stratum = NULL
+
+  #
+
   dtWork <- copy(dt)
 
   strataOnly <- dtWork[, eval(strata) , with=FALSE]

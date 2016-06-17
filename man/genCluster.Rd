@@ -13,14 +13,14 @@ genCluster(dtClust, cLevelVar, numIndsVar, level1ID, allLevel2 = TRUE)
 
 \item{cLevelVar}{Variable name (string) of cluster id in dtClust}
 
+\item{numIndsVar}{Variable name (string) of number of observations
+per cluster in dtClust}
+
+\item{level1ID}{Name of id field in new level "1" data set}
+
 \item{allLevel2}{Indicator: if set to TRUE (default), the returned data set
 includes all of the Level 2 data columns. If FALSE, the returned data set
 only includes the Levels 1 and 2 ids.}
-
-\item{numIndVar}{Variable name (string) of number of observations
-per cluster in dtClust}
-
-\item{level2ID}{Name of id field in new level "1" data set}
 }
 \value{
 A simulated data table with level "1" data

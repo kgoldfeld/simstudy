@@ -2,7 +2,7 @@
 % Please edit documentation in R/defMiss.R
 \name{defMiss}
 \alias{defMiss}
-\title{Add single row to definitions table}
+\title{Add single row to definitions table for missing data}
 \usage{
 defMiss(dtDefs = NULL, varname, formula, logit.link = FALSE,
   baseline = FALSE, monotonic = FALSE)
@@ -10,18 +10,24 @@ defMiss(dtDefs = NULL, varname, formula, logit.link = FALSE,
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
 
-\item{formula}{test}
+\item{varname}{Name of variable with missingness}
 
-\item{logit.link}{test}
+\item{formula}{Formula to describe pattern of missingness}
 
-\item{varName}{test}
+\item{logit.link}{Indicator set to TRUE when the probability of missingness
+is based on a logit model.}
 
-\item{missType}{test}
+\item{baseline}{Indicator is set to TRUE if the variable is a baseline
+measure and should be missing throughout an entire observation period. This
+is applicable to repeated measures/longitudinal data.}
+
+\item{monotonic}{Indicator set to TRUE if missingness at time t is followed
+by missingness at all follow-up times > t.}
 }
 \value{
 A data.table named dtName that is an updated data defnitions table
 }
 \description{
-Add single row to definitions table
+Add single row to definitions table for missing data
 }
 

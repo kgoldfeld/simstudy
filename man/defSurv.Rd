@@ -9,14 +9,14 @@ defSurv(dtDefs = NULL, varname, formula = 0, scale, shape = 1)
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
 
+\item{varname}{Variable name}
+
 \item{formula}{Covariates predicting survival}
 
 \item{scale}{Scale parameter for the Weibull distribution.}
 
 \item{shape}{The shape of the Weibull distribution. Shape = 1 for
 an exponential distriubtion}
-
-\item{varName}{Variable name}
 }
 \value{
 A data.table named dtName that is an updated data defnitions table

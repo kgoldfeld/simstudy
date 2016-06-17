@@ -9,6 +9,12 @@
 
 genSurv <- function(dtName, survDefs) {
 
+  # 'declare
+
+  varname = NULL
+
+  #
+
   dtSurv = copy(dtName)
 
   for (i in (1 : nrow(survDefs))) {
@@ -18,7 +24,7 @@ genSurv <- function(dtName, survDefs) {
     survPred = dtSurv[, eval(parse(text = survDefs[i, formula]))]
 
     u <- runif(n = nrow(dtSurv))
-    newColumn <- dtSurv[, .(survx = round(- log(u) / ((1/scale) * exp(-survPred)) ^ (1 / shape),0)), ]
+    newColumn <- dtSurv[, list(survx = round(- log(u) / ((1/scale) * exp(-survPred)) ^ (1 / shape),0)), ]
 
     dtSurv <- data.table::data.table(dtSurv, newColumn)
 

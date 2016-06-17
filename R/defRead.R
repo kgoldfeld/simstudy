@@ -8,6 +8,12 @@
 
 defRead <- function(filen, id = "id") {
 
+  # 'declare var
+
+  varname = NULL
+
+  #
+
   if (! file.exists(filen)) stop("No such file")
 
   read.df <- utils::read.csv(filen, header=TRUE, as.is = TRUE) # do not read as factors

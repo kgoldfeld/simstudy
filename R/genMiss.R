@@ -13,6 +13,16 @@
 genMiss <- function(dtName, missDefs, idvars,
                     repeated = FALSE, periodvar = "period") {
 
+  # 'declare'
+
+  varname = NULL
+  period = NULL
+  baseline = NULL
+  monotonic = NULL
+  fmiss = NULL
+
+  #
+
   setkeyv(dtName, idvars)
 
   if (! repeated) {
@@ -56,7 +66,7 @@ genMiss <- function(dtName, missDefs, idvars,
 
         if (missDefs[i, monotonic]) { # monotonic missing
 
-          dt.fmiss <- dtMiss[eval(parse(text=missDefs[i, varname])) == 1, .(fmiss = min(period)), keyby = eval(idvars)]
+          dt.fmiss <- dtMiss[eval(parse(text=missDefs[i, varname])) == 1, list(fmiss = min(period)), keyby = eval(idvars)]
           data.table::setkeyv(dtMiss, idvars)
           dtMiss <- dt.fmiss[dtMiss]
           dtMiss[period > fmiss, eval(missDefs[i, varname]) := 1]

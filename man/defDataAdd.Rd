@@ -11,6 +11,8 @@ defDataAdd(dtDefs = NULL, varname, formula, variance = 0, dist = "Normal",
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
 
+\item{varname}{Name (string) of new variable}
+
 \item{formula}{An R expression for mean (string)}
 
 \item{variance}{Number}
@@ -18,8 +20,6 @@ defDataAdd(dtDefs = NULL, varname, formula, variance = 0, dist = "Normal",
 \item{dist}{Distribution. For possibilities, see details}
 
 \item{link}{The link function for the mean, see details}
-
-\item{varName}{Name (string) of new variable}
 }
 \value{
 A data.table named dtName that is an updated data defnitions table

@@ -1,7 +1,7 @@
 #' Add single row to survival definitions
 #'
 #' @param dtDefs Definition data.table to be modified
-#' @param varName Variable name
+#' @param varname Variable name
 #' @param formula Covariates predicting survival
 #' @param scale Scale parameter for the Weibull distribution.
 #' @param shape The shape of the Weibull distribution. Shape = 1 for

@@ -1,10 +1,15 @@
-#' Add single row to definitions table
+#' Add single row to definitions table for missing data
 #'
 #' @param dtDefs Definition data.table to be modified
-#' @param varName test
-#' @param formula test
-#' @param logit.link test
-#' @param missType test
+#' @param varname Name of variable with missingness
+#' @param formula Formula to describe pattern of missingness
+#' @param logit.link Indicator set to TRUE when the probability of missingness
+#' is based on a logit model.
+#' @param baseline Indicator is set to TRUE if the variable is a baseline
+#' measure and should be missing throughout an entire observation period. This
+#' is applicable to repeated measures/longitudinal data.
+#' @param monotonic Indicator set to TRUE if missingness at time t is followed
+#' by missingness at all follow-up times > t.
 #' @return A data.table named dtName that is an updated data defnitions table
 #' @export
 

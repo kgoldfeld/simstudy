@@ -14,6 +14,16 @@
 addPeriods <-  function(dtName, nPeriods = NULL, idvars = "id",
                          timevars = NULL, timevarName = "timevar") {
 
+  # "Declare" vars that exist in dtName
+
+  nCount = NULL
+  period = NULL
+  vInterval = NULL
+  mInterval = NULL
+  timeElapsed = NULL
+
+  #
+
   dtX1 <- copy(dtName)
 
   if (!is.null(nPeriods) & !is.null(timevars)) {
@@ -35,13 +45,13 @@ addPeriods <-  function(dtName, nPeriods = NULL, idvars = "id",
 
   if (!is.null(nPeriods)) { # same number for each subject
 
-    dtTimes1 <- dtX1[, .(period = (0 : (nPeriods - 1))), keyby = idvars]
+    dtTimes1 <- dtX1[, list(period = (0 : (nPeriods - 1))), keyby = idvars]
 
   } else {
 
     if ("nCount" %in% names(dtX1)) { # specified for each subject
 
-      dtTimes1 <- dtX1[, .(period = (0 : (nCount - 1))), keyby = idvars]
+      dtTimes1 <- dtX1[, list(period = (0 : (nCount - 1))), keyby = idvars]
 
     } else {  # not specified for each subject or for all
 

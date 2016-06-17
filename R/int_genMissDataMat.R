@@ -10,6 +10,13 @@
 
 genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
 
+  # 'declare vars
+
+  varname = NULL
+  logit.link = NULL
+
+  #
+
   dtMissP <- dtTemp[, idvars, with = FALSE]
 
   Expression <- parse(text = as.character(missDefs[, varname]))
