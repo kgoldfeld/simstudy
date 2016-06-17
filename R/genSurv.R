@@ -12,6 +12,7 @@ genSurv <- function(dtName, survDefs) {
   # 'declare
 
   varname = NULL
+  formula = NULL
 
   #
 
@@ -23,7 +24,7 @@ genSurv <- function(dtName, survDefs) {
     scale = dtSurv[, eval(parse(text = survDefs[i, scale]))]
     survPred = dtSurv[, eval(parse(text = survDefs[i, formula]))]
 
-    u <- runif(n = nrow(dtSurv))
+    u <- stats::runif(n = nrow(dtSurv))
     newColumn <- dtSurv[, list(survx = round(- log(u) / ((1/scale) * exp(-survPred)) ^ (1 / shape),0)), ]
 
     dtSurv <- data.table::data.table(dtSurv, newColumn)

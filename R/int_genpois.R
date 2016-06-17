@@ -17,7 +17,7 @@ genpois <- function(n,formula,link,dtSim) {
     mean = with(dtSim,eval(parse(text = as.character(formula))))
   }
 
-  return(rpois(n,mean))
+  return(stats::rpois(n,mean))
 
 }
 

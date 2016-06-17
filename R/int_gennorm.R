@@ -14,6 +14,6 @@ gennorm <- function(n,formula,variance,link,dtSim) {
   mean <- with(dtSim, eval(parse(text = as.character(formula))))
   v <- with(dtSim, eval(parse(text = as.character(variance))))
   # v <- as.numeric(as.character(variance))
-  newColumn <- rnorm(n, mean, sqrt(v))
+  newColumn <- stats::rnorm(n, mean, sqrt(v))
   return(newColumn)
 }

@@ -14,6 +14,7 @@ genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
 
   varname = NULL
   logit.link = NULL
+  formula = NULL
 
   #
 
@@ -28,7 +29,7 @@ genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
     dtMissP[, eval(Expression) := dtName[, loProb(eval(Formula))]]
   }
   matMiss <- dtMissP[, idvars, with = FALSE]
-  matMiss[, eval(Expression) := rbinom(nrow(dtMissP), 1,
+  matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1,
                                        dtMissP[, eval(Expression)])]
 
   return(matMiss)

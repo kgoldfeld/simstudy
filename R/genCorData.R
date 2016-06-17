@@ -45,7 +45,7 @@ genCorData <- function(n, mu, sigma, corMatrix = NULL,  rho, corstr = "ind",
       stop("Length of mean vector mismatched with correlation matrix")
     }
 
-    if (! isSymmetric(C)) {
+    if (! isSymmetric(corMatrix)) {
       stop("Correlation matrix not symmetric")
     }
 

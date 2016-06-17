@@ -21,6 +21,7 @@ addPeriods <-  function(dtName, nPeriods = NULL, idvars = "id",
   vInterval = NULL
   mInterval = NULL
   timeElapsed = NULL
+  time = NULL
 
   #
 

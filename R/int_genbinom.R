@@ -16,7 +16,7 @@ genbinom <- function(n,formula,link,dtSim) {
   } else {
     p <- with(dtSim, eval(parse(text = as.character(formula))))
   }
-  return(rbinom(n,1,p))
+  return(stats::rbinom(n,1,p))
 
 }
 

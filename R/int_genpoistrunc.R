@@ -18,10 +18,11 @@ genpoisTrunc <- function(n,formula,link,dtSim) {
     mean = with(dtSim,eval(parse(text = as.character(formula))))
   }
 
-  u <- runif(n, min = 0, max = 1)
+  u <- stats::runif(n, min = 0, max = 1)
 
-  x <- qpois(ppois(0,lambda = mean) + u * (ppois(Inf, lambda = mean) -
-                      ppois(0, lambda = mean)), lambda = mean)
+  x <- stats::qpois(stats::ppois(0,lambda = mean) +
+                      u * (stats::ppois(Inf, lambda = mean) -
+                      stats::ppois(0, lambda = mean)), lambda = mean)
 
   return(x)
 

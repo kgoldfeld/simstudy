@@ -20,7 +20,7 @@ genPosSkew <- function(n, mean, dispersion = 0) {
     shape <- (mean^2)/variance
     rate <- mean/variance
 
-    new <- rgamma(n, shape = shape, rate = rate)
+    new <- stats::rgamma(n, shape = shape, rate = rate)
 
   }
 

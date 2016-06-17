@@ -8,7 +8,13 @@
 
 addColumns <- function(dtDefs,dtOld) {
 
-  varname = NULL # "declares" varname to avoid global NOTE
+  # "declares" varname to avoid global NOTE
+
+  varname = NULL
+  formula = NULL
+  dist = NULL
+
+  #
 
   for (i in 1:nrow(dtDefs)) {
     if (i == 1) {

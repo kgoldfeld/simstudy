@@ -11,6 +11,8 @@ defRead <- function(filen, id = "id") {
   # 'declare var
 
   varname = NULL
+  formula = NULL
+  dist = NULL
 
   #
 

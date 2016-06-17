@@ -13,6 +13,6 @@ genunif <- function(n, formula, dtSim) {
   rangeMin = with(dtSim,eval(parse(text = as.character(range[1]))))
   rangeMax = with(dtSim,eval(parse(text = as.character(range[2]))))
 
-  return(runif(n, rangeMin, rangeMax))
+  return(stats::runif(n, rangeMin, rangeMax))
 
 }

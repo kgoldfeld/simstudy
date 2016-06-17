@@ -22,7 +22,7 @@ gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
   shape <- (mean^2)/variance
   rate <- mean/variance
 
-  new <- rgamma(n, shape = shape, rate = rate)
+  new <- stats::rgamma(n, shape = shape, rate = rate)
 
   return(new)
 
