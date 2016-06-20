@@ -10,7 +10,7 @@
 
 genbinom <- function(n,formula,link,dtSim) {
 
-  if (link=="Logit") {
+  if (link=="logit") {
     logit <- with(dtSim, eval(parse(text = as.character(formula))))
     p <- 1 / (1 + exp(-logit))
   } else {

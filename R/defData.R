@@ -12,15 +12,15 @@
 #' @param link The link function for the mean, see details
 #' @param id A string indicating the field name for the unique record identifier
 #' @return A data.table named dtName that is an updated data defnitions table
-#' @details The possible data distributions include ""Normal", "Poisson",
-#' "NoZeroPoisson", "Binary", "Uniform", "Categorical", "Gamma", and "Nonrandom."
+#' @details The possible data distributions include ""normal", "poisson",
+#' "noZeroPoisson", "binary", "uniform", "categorical", "gamma", and "nonrandom."
 #' @export
 
 defData <- function(dtDefs = NULL,
                     varname,
                     formula,
                     variance = 0,
-                    dist = "Normal",
+                    dist = "normal",
                     link = "identity",
                     id="id") {
 

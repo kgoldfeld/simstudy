@@ -10,7 +10,7 @@
 
 genpois <- function(n,formula,link,dtSim) {
 
-  if (link=="Log") {
+  if (link=="log") {
     logmean <- with(dtSim,eval(parse(text = as.character(formula))))
     mean = exp(logmean)
   } else {

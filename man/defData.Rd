@@ -4,7 +4,7 @@
 \alias{defData}
 \title{Add single row to definitions table}
 \usage{
-defData(dtDefs = NULL, varname, formula, variance = 0, dist = "Normal",
+defData(dtDefs = NULL, varname, formula, variance = 0, dist = "normal",
   link = "identity", id = "id")
 }
 \arguments{
@@ -29,7 +29,7 @@ A data.table named dtName that is an updated data defnitions table
 Add single row to definitions table
 }
 \details{
-The possible data distributions include ""Normal", "Poisson",
-"NoZeroPoisson", "Binary", "Uniform", "Categorical", "Gamma", and "Nonrandom."
+The possible data distributions include ""normal", "poisson",
+"noZeroPoisson", "binary", "uniform", "categorical", "gamma", and "nonrandom."
 }
 

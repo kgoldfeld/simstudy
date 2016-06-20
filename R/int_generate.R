@@ -11,21 +11,21 @@
 
 generate <- function(args, n, dfSim) {
 
-  if (args$dist=="Normal") {
+  if (args$dist=="normal") {
     newColumn <- gennorm(n, args$formula, args$variance, args$link, dfSim)
-  } else if (args$dist == "Poisson") {
+  } else if (args$dist == "poisson") {
     newColumn <- genpois(n, args$formula, args$link, dfSim)
-  } else if (args$dist == "NoZeroPoisson") {
+  } else if (args$dist == "noZeroPoisson") {
     newColumn <- genpoisTrunc(n, args$formula, args$link, dfSim)
-  } else if (args$dist == "Binary") {
+  } else if (args$dist == "binary") {
     newColumn <- genbinom(n, args$formula, args$link, dfSim)
-  } else if (args$dist=="Uniform") {
+  } else if (args$dist=="uniform") {
     newColumn <- genunif(n, args$formula, dfSim)
-  } else if (args$dist=="Categorical") {
+  } else if (args$dist=="categorical") {
     newColumn <- gencat(n, args$formula, dfSim)
-  } else if (args$dist == "Gamma") {
+  } else if (args$dist == "gamma") {
     newColumn <- gengamma(n, args$formula, args$variance, args$link, dfSim)
-  } else if (args$dist == "Nonrandom") {
+  } else if (args$dist == "nonrandom") {
     newColumn <- gendeterm(n, args$formula, dfSim)
   }
 

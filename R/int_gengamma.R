@@ -8,7 +8,7 @@
 
 gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
 
-  if (link == "Log") {
+  if (link == "log") {
     logmean <- with(dtSim,eval(parse(text = as.character(formula))))
     mean <- exp(logmean)
   } else {

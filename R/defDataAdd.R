@@ -14,7 +14,7 @@ defDataAdd <- function(dtDefs = NULL,
                        varname,
                        formula,
                        variance = 0,
-                       dist = "Normal",
+                       dist = "normal",
                        link = "identity") {
 
   if (is.null(dtDefs)) {

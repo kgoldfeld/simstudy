@@ -5,7 +5,7 @@
 \title{Add single row to definitions table that will be used to add data to an
 existing data.table}
 \usage{
-defDataAdd(dtDefs = NULL, varname, formula, variance = 0, dist = "Normal",
+defDataAdd(dtDefs = NULL, varname, formula, variance = 0, dist = "normal",
   link = "identity")
 }
 \arguments{

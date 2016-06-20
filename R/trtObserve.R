@@ -28,7 +28,7 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
   for (i in 1:ncat) {
     def <- defDataAdd(def,
                    varname = paste0("e",i),
-                   dist = "Nonrandom",
+                   dist = "nonrandom",
                    formula = formulas[i]
     )
   }
