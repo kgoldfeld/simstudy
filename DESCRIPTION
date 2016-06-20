@@ -7,13 +7,13 @@ Authors@R: person("Keith", "Goldfeld", email = "Keith.Goldfeld@nyumc.org",
                   role = c("aut","cre"))
 Author: Keith Goldfeld [aut, cre]
 Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
-Description: A collection of functions that allow users to generate simulated
-    data sets in order to explore modeling techniques or better understand data
-    generating processes. The user specifies a set of relationships between
-    covariates, and generates data based on these specifications. The final data
-    sets can represent data from randomized control trials, repeated measure
-    (longitudinal) designs, and cluster randomized trials. Missingness can be
-    generated using various mechanisms (MCAR, MAR, NMAR).
+Description: Simulates data sets in order to explore modeling techniques or
+    better understand data generating processes. The user specifies a set of
+    relationships between covariates, and generates data based on these
+    specifications. The final data sets can represent data from randomized
+    control trials, repeated measure (longitudinal) designs, and cluster
+    randomized trials. Missingness can be generated using various
+    mechanisms (MCAR, MAR, NMAR).
 Depends:
     R (>= 3.2.2),
     data.table
