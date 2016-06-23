@@ -6,13 +6,18 @@
 #' repeated during each time period
 #' @param timevars Names of time dependent variables. Defaults to NULL.
 #' @param timevarName Name of new time dependent variable
+#' @param timeid Variable name for new index field. Defaults to "timevar"
 #' @return An updated data.table that that has multiple rows
 #' per observation in dtName
 #' @export
 #'
 
-addPeriods <-  function(dtName, nPeriods = NULL, idvars = "id",
-                         timevars = NULL, timevarName = "timevar") {
+addPeriods <-  function(dtName,
+                        nPeriods = NULL,
+                        idvars = "id",
+                        timevars = NULL,
+                        timevarName = "timevar",
+                        timeid = "timeID") {
 
   # "Declare" vars that exist in dtName
 
@@ -67,6 +72,13 @@ addPeriods <-  function(dtName, nPeriods = NULL, idvars = "id",
   dtTimes1 <- dtTimes1[dtX1]
   data.table::setkeyv(dtTimes1, c(idvars, "period"))
 
+  # Create code for final index assignment
+
+  cmd <- quote(dtTimes1[, x] )
+  pmd <- quote(x := 1:.N)
+  pmd[[2]] <-  parse(text=timeid)[[1]]
+  cmd[[4]] <- pmd
+
   # do extra manipulation based on situation
 
   if (!is.null(nPeriods)) {
@@ -91,9 +103,19 @@ addPeriods <-  function(dtName, nPeriods = NULL, idvars = "id",
       dtTimes2[, period := as.integer(period) - 1]
       data.table::setkeyv(dtTimes2, c(idvars, "period"))
 
-      return(dtTimes1[dtTimes2])
+      dtTimes1 <- dtTimes1[dtTimes2]
+
+      eval(cmd)
+      data.table::setkeyv(dtTimes1, timeid)
+
+      return(dtTimes1)
+
+      return(dtTimes1)
 
     } else {
+
+      eval(cmd)
+      data.table::setkeyv(dtTimes1, timeid)
 
       return(dtTimes1)
 
@@ -110,6 +132,9 @@ addPeriods <-  function(dtName, nPeriods = NULL, idvars = "id",
 
       dtTimes1[,time := round(cumsum(timeElapsed)), keyby=idvars]
       dtTimes1[, c("timeElapsed","nCount", "mInterval", "vInterval") := NULL]
+
+      eval(cmd)
+      data.table::setkeyv(dtTimes1, timeid)
 
       return(dtTimes1)
 

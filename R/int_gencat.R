@@ -5,9 +5,10 @@
 # @param n The number of observations required in the data set
 # @param formula String that specifies the probabilities, each separated by ";"
 # @param dfSim Incomplete simulated data set
+# @param idkey Key of incomplete data set
 # @return A data.frame column with the updated simulated data
 
-gencat <- function(n, formula, dfSim) {
+gencat <- function(n, formula, dfSim, idname) {
 
   # 'declare var
 
@@ -16,7 +17,6 @@ gencat <- function(n, formula, dfSim) {
   #
 
   pstr <- unlist(strsplit(as.character(formula),split=";", fixed=TRUE))
-  idname <- names(dfSim)[1]
 
   dtSim <- data.table::data.table(dfSim)
 

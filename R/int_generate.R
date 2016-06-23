@@ -9,7 +9,7 @@
 # @return A data.frame with the updated simulated data
 # @keywords internal
 
-generate <- function(args, n, dfSim) {
+generate <- function(args, n, dfSim, idname) {
 
   if (args$dist=="normal") {
     newColumn <- gennorm(n, args$formula, args$variance, args$link, dfSim)
@@ -22,7 +22,7 @@ generate <- function(args, n, dfSim) {
   } else if (args$dist=="uniform") {
     newColumn <- genunif(n, args$formula, dfSim)
   } else if (args$dist=="categorical") {
-    newColumn <- gencat(n, args$formula, dfSim)
+    newColumn <- gencat(n, args$formula, dfSim, idname)
   } else if (args$dist == "gamma") {
     newColumn <- gengamma(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "nonrandom") {

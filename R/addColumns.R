@@ -33,7 +33,7 @@ addColumns <- function(dtDefs,dtOld) {
   iter = nrow(dtDefs)
   n = nrow(dtOld)
   for (i in (1 : iter)) {
-    dtOld <- generate(dtDefs[i,], n, dtOld)
+    dtOld <- generate(dtDefs[i,], n, dtOld, oldkey)
   }
 
   dtOld <- data.table::data.table(dtOld)

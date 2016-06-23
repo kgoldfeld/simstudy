@@ -30,13 +30,21 @@ defRead <- function(filen, id = "id") {
 
   # check validity of data set
 
-  if (is.na(as.numeric(read.dt[1, formula]))) {
-    stop("First defined formula must be numeric", call. = FALSE)
+  suppressWarnings(test <- as.numeric(unlist(strsplit(as.character(read.dt[1, formula]),
+                                                      split=";",
+                                                      fixed = TRUE)))
+  )
+
+  if (sum(is.na(test))) {
+    stop("First defined formula must be scalar", call. = FALSE)
   }
 
-  for (i in 2:nrow(read.dt)) {
-    evalDef(read.dt[i,varname], read.dt[i,formula], read.dt[i,dist], read.dt[1:(i-1), varname])
+  if (nrow(read.dt) > 1){
+    for (i in 2:nrow(read.dt)) {
+      evalDef(read.dt[i,varname], read.dt[i,formula], read.dt[i,dist], read.dt[1:(i-1), varname])
+    }
   }
+
 
   attr(read.dt,"id") <- id
   return(read.dt)

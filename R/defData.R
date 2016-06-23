@@ -33,8 +33,16 @@ defData <- function(dtDefs = NULL,
 
   if (is.null(dtDefs)) {
 
-    if (is.na(as.numeric(formula))) {
-      stop("First defined formula must be numeric", call. = FALSE)
+    # warnings are suppressed because we want to test for NAs
+
+    suppressWarnings(test <- as.numeric(unlist(strsplit(as.character(formula),
+                                           split=";",
+                                           fixed = TRUE)))
+    )
+
+
+    if (sum(is.na(test))) {
+      stop("First defined formula must be scalar", call. = FALSE)
     }
 
     dtDefs <- data.table::data.table()

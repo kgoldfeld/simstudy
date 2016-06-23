@@ -1,8 +1,8 @@
 Package: simstudy
 Type: Package
 Title: Simulation of Study Data
-Version: 0.1.1
-Date: 2016-06-17
+Version: 0.1.9002
+Date: 2016-06-23
 Authors@R: person("Keith", "Goldfeld", email = "Keith.Goldfeld@nyumc.org",
                   role = c("aut","cre"))
 Author: Keith Goldfeld [aut, cre]

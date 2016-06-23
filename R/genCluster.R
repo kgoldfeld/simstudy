@@ -38,13 +38,16 @@ genCluster <- function(dtClust,
 
   ####
 
-  dt <- dtClust[,list(id2 = get(cLevelVar), n = get(numIndsVar))][,list(id2 = rep(id2, n))]
+  dt <- dtClust[,list(id2 = get(cLevelVar),
+                      n = get(numIndsVar))][,list(id2 = rep(id2, n))]
 
   dt[, eval(cLevelVar) := id2]
   dt[, id2 := NULL]
-  dt[, eval(level1ID) := (1 : nrow(dt))]
+  dt[, eval(level1ID) := (1 : .N)]
 
   if (allLevel2) dt <- mergeData(dtClust, dt, cLevelVar)
+
+  data.table::setkeyv(dt, level1ID)
 
   return(dt)
 

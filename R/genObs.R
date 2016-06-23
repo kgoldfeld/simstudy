@@ -31,7 +31,7 @@ genObs <- function(dtName, dtMiss, idvars) {
 
   for (i in names(dtTemp)) {
     selectV <- as.vector(dtMiss[, i, with = FALSE] == 1)
-    dtTemp[selectV, i:=NA, with = FALSE]
+    dtTemp[selectV, i:= as.integer(NA), with = FALSE]
   }
 
   return(cbind(dtName[, idvars, with = FALSE], dtTemp))
