@@ -27,22 +27,21 @@ gencat <- function(n, formula, dfSim) {
 
   # build command based on parameters "ps"
 
-  cmd  <- quote(dtSim[ , x , keyby = y])
-  mcmd <- quote(x %*% c(1:nparam)) # x is 2
-  tcmd <- quote(t(x)) # x is 2
-  pcmd <- quote(stats::rmultinom(1, 1, x))
+  cmd  <- quote(x[, 1]) # x is [[2]]
+  mcmd <- quote(x %*% c(1:nparam)) # x is [[2]]
+  tcmd <- quote(t(x)) # x is [[2]]
+  pcmd <- quote(stats::rmultinom(nrow(dtSim), 1, x)) # x is [[4]]
 
   pcmd[[4]] <- parse(text=ps)[[1]]
   tcmd[[2]] <- pcmd
   mcmd[[2]] <- tcmd
-  cmd[[4]]  <- mcmd
-  cmd[[5]]  <- parse(text=idname)[[1]]
+  cmd[[2]]  <- mcmd
 
   # if (!all(apply(p,1,sum) == 1)) {
   #   stop("Sums for cumulative probabilities in categorical distribution not 1")
   # }
 
-  new <- eval(cmd)[,V1]
+  new <- eval(cmd)
 
   return(new)
 }
