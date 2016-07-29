@@ -9,39 +9,20 @@
 
 gencat <- function(n, formula, dfSim) {
 
-  # 'declare var
+    # parse formula
 
-  V1 = NULL
+    pstr <- unlist(strsplit(as.character(formula), split = ";", fixed = TRUE))
 
-  #
+    # build command and parameters
 
-  pstr <- unlist(strsplit(as.character(formula),split=";", fixed=TRUE))
-  idname <- names(dfSim)[1]
+    cmd <- substitute(
+      (t(stats::rmultinom(nsamp, 1, probs)) %*% c(1:nparam))[,1],
+      list(nsamp  = n,
+           probs  = as.numeric(pstr),
+           nparam = length(pstr))
+    )
 
-  dtSim <- data.table::data.table(dfSim)
+    # evaluate and return
 
-  ps <- paste0(pstr, collapse=",")
-  ps <- paste0("c(", ps, ")")
-
-  nparam = length(pstr)
-
-  # build command based on parameters "ps"
-
-  cmd  <- quote(x[, 1]) # x is [[2]]
-  mcmd <- quote(x %*% c(1:nparam)) # x is [[2]]
-  tcmd <- quote(t(x)) # x is [[2]]
-  pcmd <- quote(stats::rmultinom(nrow(dtSim), 1, x)) # x is [[4]]
-
-  pcmd[[4]] <- parse(text=ps)[[1]]
-  tcmd[[2]] <- pcmd
-  mcmd[[2]] <- tcmd
-  cmd[[2]]  <- mcmd
-
-  # if (!all(apply(p,1,sum) == 1)) {
-  #   stop("Sums for cumulative probabilities in categorical distribution not 1")
-  # }
-
-  new <- eval(cmd)
-
-  return(new)
+    return(eval(cmd))
 }
