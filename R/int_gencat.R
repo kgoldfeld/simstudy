@@ -13,6 +13,8 @@ gencat <- function(n, formula, dfSim) {
 
     pstr <- unlist(strsplit(as.character(formula), split = ";", fixed = TRUE))
 
+    print("Generating categories")
+
     # build command and parameters
 
     cmd <- substitute(
