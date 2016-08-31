@@ -22,7 +22,7 @@ generate <- function(args, n, dfSim, idname) {
   } else if (args$dist=="uniform") {
     newColumn <- genunif(n, args$formula, dfSim)
   } else if (args$dist=="categorical") {
-    newColumn <- gencat(n, args$formula, dfSim, idname)
+    newColumn <- gencat(n, args$formula, args$link, dfSim)
   } else if (args$dist == "gamma") {
     newColumn <- gengamma(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "nonrandom") {

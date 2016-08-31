@@ -8,41 +8,47 @@
 # @param idkey Key of incomplete data set
 # @return A data.frame column with the updated simulated data
 
-gencat <- function(n, formula, dfSim, idname) {
 
-  # 'declare var
+gencat <- function(n, formula, link, dfSim) {
 
-  V1 = NULL
+    # parse formula
 
-  #
+    pstr <- unlist(strsplit(as.character(formula), split = ";", fixed = TRUE))
 
-  pstr <- unlist(strsplit(as.character(formula),split=";", fixed=TRUE))
+    dtSim <- data.table::data.table(dfSim)
 
-  dtSim <- data.table::data.table(dfSim)
+    # create matrix of probabilities
 
-  ps <- paste0(pstr, collapse=",")
-  ps <- paste0("c(", ps, ")")
+    ncols = ncol(dtSim)
 
-  nparam = length(pstr)
+    ncat <- length(pstr)
+    deftemp = NULL
 
-  # build command based on parameters "ps"
+    for (i in 1:ncat) {
+      deftemp <- defDataAdd(deftemp,
+                        varname = paste0("e",i),
+                        dist = "nonrandom",
+                        formula = pstr[i]
+      )
+    }
 
-  cmd  <- quote(dtSim[ , x , keyby = y])
-  mcmd <- quote(x %*% c(1:nparam)) # x is 2
-  tcmd <- quote(t(x)) # x is 2
-  pcmd <- quote(stats::rmultinom(1, 1, x))
+    dtnew <-addColumns(deftemp, dtSim)
 
-  pcmd[[4]] <- parse(text=ps)[[1]]
-  tcmd[[2]] <- pcmd
-  mcmd[[2]] <- tcmd
-  cmd[[4]]  <- mcmd
-  cmd[[5]]  <- parse(text=idname)[[1]]
+    dtmatrix <- as.matrix(dtnew[,
+                                .SD,
+                                .SDcols = c((ncols + 1) : (ncols + ncat))])
 
-  # if (!all(apply(p,1,sum) == 1)) {
-  #   stop("Sums for cumulative probabilities in categorical distribution not 1")
-  # }
+    if (link == "logit") {
+     dtmatrix <- exp(dtmatrix)
+     dtmatrix <- dtmatrix  / (1 + rowSums(dtmatrix))
+    }
 
-  new <- eval(cmd)[,V1]
+    dtmatrix <- cbind(dtmatrix, 1 - rowSums(dtmatrix))
 
-  return(new)
+    # generate random numbers
+
+    newColumn <- matMultinom(dtmatrix)
+
+    return(newColumn)
+
 }
