@@ -7,24 +7,46 @@
 # @param dfSim Incomplete simulated data set
 # @return A data.frame column with the updated simulated data
 
-gencat <- function(n, formula, dfSim) {
+gencat <- function(n, formula, link, dfSim) {
 
     # parse formula
 
     pstr <- unlist(strsplit(as.character(formula), split = ";", fixed = TRUE))
 
-    print("Generating categories")
+    dtSim <- data.table::data.table(dfSim)
 
-    # build command and parameters
+    # create matrix of probabilities
 
-    cmd <- substitute(
-      (t(stats::rmultinom(nsamp, 1, probs)) %*% c(1:nparam))[,1],
-      list(nsamp  = n,
-           probs  = as.numeric(pstr),
-           nparam = length(pstr))
-    )
+    ncols = ncol(dtSim)
 
-    # evaluate and return
+    ncat <- length(pstr)
+    deftemp = NULL
 
-    return(eval(cmd))
+    for (i in 1:ncat) {
+      deftemp <- defDataAdd(deftemp,
+                        varname = paste0("e",i),
+                        dist = "nonrandom",
+                        formula = pstr[i]
+      )
+    }
+
+    dtnew <-addColumns(deftemp, dtSim)
+
+    dtmatrix <- as.matrix(dtnew[,
+                                .SD,
+                                .SDcols = c((ncols + 1) : (ncols + ncat))])
+
+    if (link == "logit") {
+     dtmatrix <- exp(dtmatrix)
+     dtmatrix <- dtmatrix  / (1 + rowSums(dtmatrix))
+    }
+
+    dtmatrix <- cbind(dtmatrix, 1 - rowSums(dtmatrix))
+
+    # generate random numbers
+
+    newColumn <- matMultinom(dtmatrix)
+
+    return(newColumn)
+
 }
