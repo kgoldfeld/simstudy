@@ -30,8 +30,10 @@ genObs <- function(dtName, dtMiss, idvars) {
   dtTemp <- dtName[, !idvars, with = FALSE]
 
   for (i in names(dtTemp)) {
+
     selectV <- as.vector(dtMiss[, i, with = FALSE] == 1)
-    dtTemp[selectV, i:= as.integer(NA), with = FALSE]
+    # dtTemp[selectV, i:= as.integer(NA), with = FALSE]  # old version - remove warning
+    dtTemp[selectV, (i) := as.integer(NA)]
   }
 
   return(cbind(dtName[, idvars, with = FALSE], dtTemp))

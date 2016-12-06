@@ -1,7 +1,7 @@
 #' Add single row to definitions table
 #'
 #' @useDynLib simstudy
-#' @importFrom Rcpp sourceCpp
+#' @importFrom Rcpp sourceCpp evalCpp
 #' @import data.table
 #'
 #' @param dtDefs Definition data.table to be modified

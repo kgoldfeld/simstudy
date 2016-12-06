@@ -21,16 +21,24 @@ genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
   dtMissP <- dtTemp[, idvars, with = FALSE]
 
   Expression <- parse(text = as.character(missDefs[, varname]))
+  ColName <- as.character(missDefs[, varname]) # new data.table (changed 2016-12-05)
   Formula <- parse(text = as.character(missDefs[, formula]))
 
   if (! missDefs[, logit.link]) {
-    dtMissP[, eval(Expression) := dtName[, eval(Formula)]]
+    # dtMissP[, eval(Expression) := dtName[, eval(Formula)]] # old data.table
+
+    dtMissP[, (ColName) := dtName[, eval(Formula)]]
+
   } else {
-    dtMissP[, eval(Expression) := dtName[, loProb(eval(Formula))]]
+    # dtMissP[, eval(Expression) := dtName[, loProb(eval(Formula))]] # old data.table
+    dtMissP[, (ColName) := dtName[, loProb(eval(Formula))]]
   }
   matMiss <- dtMissP[, idvars, with = FALSE]
-  matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1,
-                                       dtMissP[, eval(Expression)])]
+  # matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1,
+  #                                     dtMissP[, eval(Expression)])] # old data.table
+
+  matMiss[, (ColName) := stats::rbinom(nrow(dtMissP), 1,
+                                              dtMissP[, eval(Expression)])]
 
   return(matMiss)
 
