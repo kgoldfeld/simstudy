@@ -20,6 +20,9 @@
 #' @return A data.table with n rows and the k + 1 columns, where k is the number of
 #' means in the vector mu.
 #' @examples
+#' #' mu <- c(3, 8, 15)
+#' sigma <- c(1, 2, 3)
+#'
 #' dtcor1 <- genCorData(1000, mu = mu, sigma = sigma, rho = .7, corstr = "cs")
 #' dtcor2 <- genCorData(1000, mu = mu, sigma = sigma, corMatrix = corMat)
 #'
