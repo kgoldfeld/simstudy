@@ -40,4 +40,17 @@ means in the vector mu.
 \description{
 Create correlated data
 }
+\examples{
+dtcor1 <- genCorData(1000, mu = mu, sigma = sigma, rho = .7, corstr = "cs")
+dtcor2 <- genCorData(1000, mu = mu, sigma = sigma, corMatrix = corMat)
+
+dtcor1
+dtcor2
+
+round(var(dtcor1[,.(V1, V2, V3)]), 3)
+round(cor(dtcor1[,.(V1, V2, V3)]), 2)
+
+round(var(dtcor2[,.(V1, V2, V3)]), 3)
+round(cor(dtcor2[,.(V1, V2, V3)]), 2)
+}
 

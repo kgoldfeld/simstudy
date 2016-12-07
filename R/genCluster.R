@@ -1,9 +1,9 @@
 #### Cluster group assignment ####
 
-#' Simulate data set that is one level down in a multilevel data context. The
+#' @title  Simulate clustered data
+#' @description Simulate data set that is one level down in a multilevel data context. The
 #' level "2" data set must contain a field that specifies the number of
 #' individual records in a particular cluster.
-#'
 #' @param dtClust Name of existing data set that contains the level "2" data
 #' @param cLevelVar Variable name (string) of cluster id in dtClust
 #' @param numIndsVar Variable name (string) of number of observations
@@ -13,6 +13,20 @@
 #' includes all of the Level 2 data columns. If FALSE, the returned data set
 #' only includes the Levels 1 and 2 ids.
 #' @return A simulated data table with level "1" data
+#' @examples
+#' gen.school <- defData(varname="s0", dist = "normal",
+#'  formula = 0, variance = 3, id = "idSchool"
+#' )
+#' gen.school <- defData(gen.school, varname = "nClasses",
+#'                      dist = "noZeroPoisson", formula = 3
+#' )
+#'
+#' dtSchool <- genData(3, gen.school)#'
+#' dtSchool
+#'
+#' dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
+#'                       numIndsVar = "nClasses", level1ID = "idClass")
+#' dtClass
 #' @export
 
 

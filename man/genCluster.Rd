@@ -2,9 +2,7 @@
 % Please edit documentation in R/genCluster.R
 \name{genCluster}
 \alias{genCluster}
-\title{Simulate data set that is one level down in a multilevel data context. The
-level "2" data set must contain a field that specifies the number of
-individual records in a particular cluster.}
+\title{Simulate clustered data}
 \usage{
 genCluster(dtClust, cLevelVar, numIndsVar, level1ID, allLevel2 = TRUE)
 }
@@ -29,5 +27,20 @@ A simulated data table with level "1" data
 Simulate data set that is one level down in a multilevel data context. The
 level "2" data set must contain a field that specifies the number of
 individual records in a particular cluster.
+}
+\examples{
+gen.school <- defData(varname="s0", dist = "normal",
+ formula = 0, variance = 3, id = "idSchool"
+)
+gen.school <- defData(gen.school, varname = "nClasses",
+                     dist = "noZeroPoisson", formula = 3
+)
+
+dtSchool <- genData(3, gen.school)#'
+dtSchool
+
+dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
+                      numIndsVar = "nClasses", level1ID = "idClass")
+dtClass
 }
 

@@ -19,10 +19,20 @@
 #' @param idname The name of the index id name. Defaults to "id."
 #' @return A data.table with n rows and the k + 1 columns, where k is the number of
 #' means in the vector mu.
+#' @examples
+#' dtcor1 <- genCorData(1000, mu = mu, sigma = sigma, rho = .7, corstr = "cs")
+#' dtcor2 <- genCorData(1000, mu = mu, sigma = sigma, corMatrix = corMat)
+#'
+#' dtcor1
+#' dtcor2
+#'
+#' round(var(dtcor1[,.(V1, V2, V3)]), 3)
+#' round(cor(dtcor1[,.(V1, V2, V3)]), 2)
+#'
+#' round(var(dtcor2[,.(V1, V2, V3)]), 3)
+#' round(cor(dtcor2[,.(V1, V2, V3)]), 2)
 #' @export
 #'
-
-# dtName must contain id for now
 
 genCorData <- function(n, mu, sigma, corMatrix = NULL,  rho, corstr = "ind",
                        cnames=NULL, idname = "id") {
