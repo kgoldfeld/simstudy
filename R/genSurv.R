@@ -14,7 +14,9 @@
 #'
 #' # Survival data definitions
 #'
-#' sdef <- defSurv(varname = "survTime", formula = "1.5*x1", scale = "grp*50 + (1-grp)*25", shape = "grp*1 + (1-grp)*1.5")
+#' sdef <- defSurv(varname = "survTime", formula = "1.5*x1",
+#'                 scale = "grp*50 + (1-grp)*25", shape = "grp*1 + (1-grp)*1.5")
+#'
 #' sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
 #'
 #' sdef

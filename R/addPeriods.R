@@ -18,10 +18,12 @@
 #' dtTrial <- genData( 5, tdef)
 #' dtTrial
 #'
-#' dtTime <- addPeriods(dtTrial, nPeriods = 3, idvars = "id", timevars = c("Y0", "Y1", "Y2"), timevarName = "Y")
+#' dtTime <- addPeriods(dtTrial, nPeriods = 3, idvars = "id",
+#'                      timevars = c("Y0", "Y1", "Y2"), timevarName = "Y")
 #' dtTime
 #'
-#' # Varying # of periods and intervals - need to have variables called nCount and mInterval
+#' # Varying # of periods and intervals - need to have variables
+#' # called nCount and mInterval
 #'
 #' def <- defData(varname = "xbase", dist = "normal", formula = 20, variance = 3)
 #' def <- defData(def,varname = "nCount", dist = "noZeroPoisson", formula = 6)
