@@ -47,4 +47,3 @@ dtSum
 \seealso{
 \code{\link{trtAssign}}
 }
-

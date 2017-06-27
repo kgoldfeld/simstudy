@@ -1,8 +1,8 @@
 Package: simstudy
 Type: Package
 Title: Simulation of Study Data
-Version: 0.1.2
-Date: 2016-12-06
+Version: 0.1.3
+Date: 2017-06-31
 Authors@R: person("Keith", "Goldfeld", email = "Keith.Goldfeld@nyumc.org",
                   role = c("aut","cre"))
 Author: Keith Goldfeld [aut, cre]
@@ -22,7 +22,7 @@ LazyData: TRUE
 Imports:
     Rcpp,
     mvnfast
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
     rmarkdown,

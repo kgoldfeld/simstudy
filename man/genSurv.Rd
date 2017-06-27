@@ -44,4 +44,3 @@ dtSurv <- genSurv(dtSurv, sdef)
 head(dtSurv)
 
 }
-

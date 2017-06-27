@@ -26,7 +26,7 @@ generate <- function(args, n, dfSim, idname) {
   } else if (args$dist == "gamma") {
     newColumn <- gengamma(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "nonrandom") {
-    newColumn <- gendeterm(n, args$formula, dfSim)
+    newColumn <- gendeterm(n, args$formula, args$link, dfSim)
   }
 
   # Create data frame

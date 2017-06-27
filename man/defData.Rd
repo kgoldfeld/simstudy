@@ -42,4 +42,3 @@ def <- defData(def, varname="xGamma", dist="gamma", formula = "5+xCat", variance
 def <- defData(def, varname = "xBin", dist = "binary" , formula="-3 + xCat", link="logit")
 def
 }
-

@@ -55,4 +55,3 @@ dt[id \%in\% c(8,121)]
 dtPeriod <- addPeriods(dt)
 dtPeriod[id \%in\% c(8,121)]  # View individuals 8 and 121 only
 }
-

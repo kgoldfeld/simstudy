@@ -81,6 +81,7 @@ addPeriods <-  function(dtName,
 
   } else {
 
+
     if ("nCount" %in% names(dtX1)) { # specified for each subject
 
       dtTimes1 <- dtX1[, list(period = (0 : (nCount - 1))), keyby = idvars]
@@ -147,7 +148,7 @@ addPeriods <-  function(dtName,
 
     }
 
-  } else {
+  } else { # is.null(nPeriods) == TRUE
 
     if (all(c("nCount", "mInterval") %in% names(dtX1))) {
 

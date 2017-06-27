@@ -56,4 +56,3 @@ dt5[, .N, keyby = .(Group)]
 \seealso{
 \code{\link{trtObserve}}
 }
-

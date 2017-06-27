@@ -43,4 +43,3 @@ dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
                       numIndsVar = "nClasses", level1ID = "idClass")
 dtClass
 }
-

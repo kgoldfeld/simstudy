@@ -51,4 +51,3 @@ dtObs
 \seealso{
 \code{\link{defMiss}}, \code{\link{genObs}}
 }
-

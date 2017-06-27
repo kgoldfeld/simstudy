@@ -62,4 +62,3 @@ corMat <- matrix(c(1, .2, .8, .2, 1, .6, .8, .6, 1), nrow = 3)
 dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, corMatrix = corMat)
 round(cor(dtAdd[,.(V1, V2, V3)]), 2)
 }
-

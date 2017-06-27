@@ -1,4 +1,4 @@
-#### Gamma distribution - not yet implemented ####
+#### Gamma distribution ####
 
 # Internal function called by generate - returns gamma data
 #
@@ -17,12 +17,9 @@ gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
 
   d <- as.numeric(as.character(dispersion))
 
-  variance = d*(mean^2)
 
-  shape <- (mean^2)/variance
-  rate <- mean/variance
-
-  new <- stats::rgamma(n, shape = shape, rate = rate)
+  sr <- gammaGetShapeRate(mean = mean, dispersion = d)
+  new <- stats::rgamma(n, shape = sr$shape, rate = sr$rate)
 
   return(new)
 

@@ -39,7 +39,7 @@
 #' @export
 #'
 
-genCorData <- function(n, mu, sigma, corMatrix = NULL,  rho, corstr = "ind",
+genCorData <- function(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
                        cnames=NULL, idname = "id") {
 
   nvars <- length(mu)

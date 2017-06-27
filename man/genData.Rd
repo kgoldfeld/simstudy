@@ -36,4 +36,3 @@ def
 genData(5, def)
 
 }
-
