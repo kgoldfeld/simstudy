@@ -11,7 +11,7 @@
 #' @param dist Distribution. For possibilities, see details
 #' @param link The link function for the mean, see details
 #' @param id A string indicating the field name for the unique record identifier
-#' @return A data.table named dtName that is an updated data defnitions table
+#' @return A data.table named dtName that is an updated data definitions table
 #' @details The possible data distributions include ""normal", "poisson",
 #' "noZeroPoisson", "binary", "uniform", "categorical", "gamma", and "nonrandom."
 #' @examples
