@@ -1,6 +1,6 @@
 #' Add single row to definitions table
 #'
-#' @useDynLib simstudy
+#' @useDynLib simstudy, .registration = TRUE
 #' @importFrom Rcpp sourceCpp evalCpp
 #' @import data.table
 #'
