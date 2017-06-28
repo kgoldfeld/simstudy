@@ -27,3 +27,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"simstudy_vecMultinom", (DL_FUNC) &simstudy_vecMultinom, 1},
+    {"simstudy_matMultinom", (DL_FUNC) &simstudy_matMultinom, 1},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_simstudy(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

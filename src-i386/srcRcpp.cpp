@@ -1,4 +1,3 @@
-
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -36,3 +35,5 @@ Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix) {
   return(ans);
 
 }
+
+

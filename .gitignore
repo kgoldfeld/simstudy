@@ -8,3 +8,4 @@ Demo/
 simstudy.Rproj
 inst/doc
 cran-comments.md
+/revdep/.cache.rds
