@@ -43,7 +43,7 @@ by commas. If no string is provided, the default names will be V#, where #
 represents the column.}
 }
 \value{
-TBA
+data.table with added column(s) of correlated data
 }
 \description{
 Create multivariate (correlated) data - for general distributions

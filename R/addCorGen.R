@@ -23,9 +23,9 @@
 #' @param cnames Explicit column names. A single string with names separated
 #' by commas. If no string is provided, the default names will be V#, where #
 #' represents the column.
-#' @return TBA
+#' @return Original data.table with added column(s) of correlated data
 #' @examples
-#' #' # Wide example
+#' # Wide example
 #'
 #' def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
 #' def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist="nonrandom", link = "log")

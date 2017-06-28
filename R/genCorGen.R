@@ -24,7 +24,7 @@
 #' @param cnames Explicit column names. A single string with names separated
 #' by commas. If no string is provided, the default names will be V#, where #
 #' represents the column.
-#' @return TBA
+#' @return data.table with added column(s) of correlated data
 #' @examples
 #' l <- c(8, 10, 12)
 #'
