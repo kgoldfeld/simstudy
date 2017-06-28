@@ -8,6 +8,7 @@ Check these declarations against the C/Fortran source code.
 */
 
 /* .Call calls */
+
 extern SEXP simstudy_vecMultinom(SEXP probsSEXP);
 extern SEXP simstudy_matMultinom(SEXP probmatrixSEXP);
 
@@ -22,5 +23,5 @@ static const R_CallMethodDef R_CallDef[] = {
 void R_init_simstudy(DllInfo *dll)
 {
   R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
-  R_useDynamicSymbols(dll, TRUE);
+  R_useDynamicSymbols(dll, FALSE);
 }

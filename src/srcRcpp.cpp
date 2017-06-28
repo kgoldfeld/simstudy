@@ -36,4 +36,3 @@ Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix) {
 
 }
 
-
