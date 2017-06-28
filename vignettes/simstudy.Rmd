@@ -396,7 +396,7 @@ grid.arrange(p1, p1a, p2, p2a, p3, p3a, ncol=2)
 
 ### Observed treatment
 
-If exposure or treatment is observed (rather than randomly assigned), use `trtObserved` to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:
+If exposure or treatment is observed (rather than randomly assigned), use `trtObserve` to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:
 
 ```{r, tidy = TRUE}
 formula1 <- c("-2 + 2*male - .5*over65", "-1 + 2*male + .5*over65")
