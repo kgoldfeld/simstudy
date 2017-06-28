@@ -41,14 +41,15 @@
 #'
 #' # Long example
 #'
-#' library(gee)
-#'
 #' def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
 #' def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
 #'
-#' def2 <- defDataAdd(varname = "lambda", formula = ".5+.5*period + .1*xbase", dist="nonrandom", link = "log")
-#' def2 <- defDataAdd(def2, varname = "p", formula = "-3+.2*period + .3*xbase", dist="nonrandom", link = "logit")
-#' def2 <- defDataAdd(def2, varname = "gammaMu", formula = ".2*period + .3*xbase", dist="nonrandom", link = "log")
+#' def2 <- defDataAdd(varname = "lambda", formula = ".5+.5*period + .1*xbase",
+#'                    dist="nonrandom", link = "log")
+#' def2 <- defDataAdd(def2, varname = "p", formula = "-3+.2*period + .3*xbase",
+#'                    dist="nonrandom", link = "logit")
+#' def2 <- defDataAdd(def2, varname = "gammaMu", formula = ".2*period + .3*xbase",
+#'                    dist="nonrandom", link = "log")
 #' def2 <- defDataAdd(def2, varname = "gammaDis", formula = 1, dist="nonrandom")
 #' def2 <- defDataAdd(def2, varname = "normMu", formula = "5+period + .5*xbase", dist="nonrandom")
 #' def2 <- defDataAdd(def2, varname = "normVar", formula = 4, dist="nonrandom")
@@ -60,43 +61,47 @@
 #' dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
 #' dtLong <- addColumns(def2, dtLong)
 #'
-# Poisson distribution
+#' # Poisson distribution
 #'
 #' dtX3 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
 #'                   dist = "poisson", param1 = "lambda", cnames = "NewPois")
+#' dtX3
 #'
-#' geefit <- gee::gee(NewPois ~ period + xbase, data = dtX3, id = cid, family = poisson, corstr = "exchangeable")
-#' round(summary(geefit)$working.correlation, 2)
-#'
-# Binomial distribution
+#' # Binomial distribution
 #'
 #' dtX4 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
 #'                   dist = "binary", param1 = "p", cnames = "NewBin")
 #'
-#' geefit <- gee::gee(NewBin ~ period + xbase, data = dtX4, id = cid, family = binomial, corstr = "exchangeable")
-#' round(summary(geefit)$working.correlation, 2)
+#' dtX4
 #'
-# Gamma distribution
+#' # Gamma distribution
 #'
 #' dtX6 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
 #'                   dist = "gamma", param1 = "gammaMu", param2 = "gammaDis",
 #'                   cnames = "NewGamma")
 #'
-#' geefit <- gee::gee(NewGamma ~ period + xbase, data = dtX6, id = cid, family = Gamma (link = "log"), corstr = "AR-M")
-#' round(summary(geefit)$working.correlation, 2)
+#' dtX6
 #'
-# Normal distribution
+#' # Normal distribution
 #'
 #' dtX7 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
 #'                   dist = "normal", param1 = "normMu", param2 = "normVar",
 #'                   cnames = "NewNorm")
 #'
-#' geefit <- gee::gee(NewNorm ~ period + xbase, data = dtX7, id = cid, family = gaussian, corstr = "AR-M")
-#' summary(geefit)$working.correlation
+#'
 #' @export
 #'
 addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL) {
+
+  # "Declare" vars to avoid R CMD warning
+
+  id <- NULL
+  N <- NULL
+  U <- NULL
+  Unew <- NULL
+  X <- NULL
+  timeID <- NULL
 
   ## Need to check if wide or long
 
@@ -138,7 +143,7 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
 
   ####
 
-  maxN <- dtTemp[,.N, by = id][,max(N)]
+  maxN <- dtTemp[, .N, by = id][,max(N)]
   if (maxN == 1) wide <- TRUE
   else wide <- FALSE
 
@@ -165,24 +170,6 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
   n <- length(unique(dtTemp[, id])) # should check if n's are correct
   dtM <- genQuantU(nvars, n, rho, corstr, corMatrix)
 
-  # mu <- rep(0, nvars)
-
-  #
-  # if (is.null(corMatrix)) {
-  #
-  #   dt <- genCorData(n, mu, sigma = 1, rho = rho, corstr = corstr )
-  #
-  # } else {
-  #
-  #   dt <- genCorData(n, mu, sigma = 1, corMatrix = corMatrix )
-  #
-  # }
-  #
-  # dtM <- melt(dt, id.vars = "id", variable.factor = TRUE, value.name = "Y", variable.name = "seq")
-  # dtM[, period := as.integer(seq) - 1]
-  # setkey(dtM, "id")
-  # dtM[, seqid := .I]
-  # dtM[, Unew := pnorm(Y)]
 
   xid = "id"
   if (wide == TRUE) {
@@ -195,30 +182,30 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
 
   if (dist == "poisson") {
     setnames(dtTemp, param1, "param1")
-    dtTemp[, X := qpois(p = U, lambda = param1)]
+    dtTemp[, X := stats::qpois(p = U, lambda = param1)]
   } else if (dist == "binary") {
     setnames(dtTemp, param1, "param1")
-    dtTemp[, X := qbinom(p = U, size = 1, prob = param1)]
+    dtTemp[, X := stats::qbinom(p = U, size = 1, prob = param1)]
   } else if (dist == "uniform") {
     setnames(dtTemp, param1, "param1")
     setnames(dtTemp, param2, "param2")
-    dtTemp[, X := qunif(p = U, min = param1, max = param2)]
+    dtTemp[, X := stats::qunif(p = U, min = param1, max = param2)]
   } else if (dist == "gamma") {
     setnames(dtTemp, param1, "param1")
     setnames(dtTemp, param2, "param2")
     sr <- gammaGetShapeRate(dtTemp$param1, dtTemp$param2)
     dtTemp[, param1 := sr[[1]]]
     dtTemp[, param2 := sr[[2]]]
-    dtTemp[, X := qgamma(p = U, shape = param1, rate = param2)]
+    dtTemp[, X := stats::qgamma(p = U, shape = param1, rate = param2)]
   } else if (dist == "normal") {
     setnames(dtTemp, param1, "param1")
     setnames(dtTemp, param2, "param2")
-    dtTemp[, X := qnorm(p = U, mean = param1, sd = sqrt(param2))]
+    dtTemp[, X := stats::qnorm(p = U, mean = param1, sd = sqrt(param2))]
   }
 
   if (wide == TRUE) {
 
-    dtTemp <- dtTemp[, .(id, seq, X)]
+    dtTemp <- dtTemp[, list(id, seq, X)]
     dWide <- dcast(dtTemp, id ~ seq, value.var="X")
     dtTemp <- dtOld[dWide]
 
@@ -228,7 +215,7 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
 
   } else {
 
-    dtTemp <- dtTemp[,.(timeID, X)]
+    dtTemp <- dtTemp[, list(timeID, X)]
     dtTemp <- dtOld[dtTemp]
 
     if (!is.null(cnames)) setnames(dtTemp, "X", cnames)

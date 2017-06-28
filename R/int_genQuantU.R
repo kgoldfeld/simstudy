@@ -11,6 +11,15 @@
 
 genQuantU <- function(nvars, n, rho, corstr, corMatrix) {
 
+  # "Declare" vars to avoid R CMD warning
+
+  seqid <- NULL
+  period <- NULL
+  Unew <- NULL
+  Y <- NULL
+
+  ####
+
   mu <- rep(0, nvars)
   if (is.null(corMatrix)) {
 
@@ -26,7 +35,7 @@ genQuantU <- function(nvars, n, rho, corstr, corMatrix) {
   dtM[, period := as.integer(seq) - 1]
   setkey(dtM, "id")
   dtM[, seqid := .I]
-  dtM[, Unew := pnorm(Y)]
+  dtM[, Unew := stats::pnorm(Y)]
 
 }
 

@@ -42,6 +42,7 @@ library(grid)
 library(gridExtra)
 library(survival)
 library(knitr)
+library(gee)
 
 set.seed(33333)
 
@@ -858,7 +859,7 @@ dtX3
 We can fit a generalized estimating equation (GEE) model and examine the coefficients and the working correlation matrix. They match closely to the data generating parameters:
 
 ```{r}
-geefit <- gee::gee(NewPois ~ period + xbase, data = dtX3, id = cid, family = poisson, corstr = "exchangeable")
+geefit <- gee(NewPois ~ period + xbase, data = dtX3, id = cid, family = poisson, corstr = "exchangeable")
 round(summary(geefit)$working.correlation, 2)
 
 ```

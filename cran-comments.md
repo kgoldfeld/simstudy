@@ -1,8 +1,8 @@
-## Resubmission
+## Resubmission 2017JUN28
 
-This is a resubmission of version 0.1.2. In this version, I have added examples to each of the functions in the package. 
+This is a resubmission of version 0.1.3. 
 
-I did get a note from win_build:
+I did get a note from win_build (the same note I received during the last submission for version 0.1.2):
 
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Keith Goldfeld <Keith.Goldfeld@nyumc.org>'

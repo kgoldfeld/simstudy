@@ -33,16 +33,29 @@
 #' genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE)
 #' genCorGen(1000, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE)
 #'
-#' genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs", cnames = "new_var")
-#' genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE, cnames = "a, b, c")
+#' genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs",
+#'           cnames = "new_var")
+#' genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs",
+#'           wide = TRUE, cnames = "a, b, c")
 #'
 #' genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", rho = .3, corstr = "cs")
-#' genCorGen(1000, nvars = 3, params1 = l, params2 = c(1,1,1), dist = "gamma", rho = .3, corstr = "cs", wide = TRUE)
+#' genCorGen(1000, nvars = 3, params1 = l, params2 = c(1,1,1), dist = "gamma", rho = .3,
+#'           corstr = "cs", wide = TRUE)
 #'
 #' @export
 #'
 genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
                       corMatrix = NULL, wide = FALSE, cnames = NULL) {
+
+  # "Declare" vars to avoid R CMD warning
+
+  param1 <- NULL
+  seqid <- NULL
+  X <- NULL
+  Unew <- NULL
+  param2 <- NULL
+  id <- NULL
+  period <- NULL
 
   #### Check args
 
@@ -94,44 +107,32 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 
   dtM <- genQuantU(nvars, n, rho, corstr, corMatrix)
 
-  # if (is.null(corMatrix)) {
-  #   dt <- genCorData(n, mu, sigma = 1, rho = rho, corstr = corstr )
-  # } else {
-  #   dt <- genCorData(n, mu, sigma = 1, corMatrix = corMatrix )
-  # }
-  #
-  # dtM <- melt(dt, id.vars = "id", variable.factor = TRUE, value.name = "Y", variable.name = "seq")
-  # dtM[, period := as.integer(seq) - 1]
-  # setkey(dtM, "id")
-  # dtM[, seqid := .I]
-  # dtM[, U := pnorm(Y)]
-
   if (dist == "binary") {
     dtM[, param1 := params1[seq], keyby = seqid]
-    dtM[, X := qbinom(p = Unew, 1, prob = param1)]
+    dtM[, X := stats::qbinom(p = Unew, 1, prob = param1)]
   } else if (dist == "poisson") {
     dtM[, param1 := params1[seq], keyby = seqid]
-    dtM[, X := qpois(p = Unew, lambda = param1)]
+    dtM[, X := stats::qpois(p = Unew, lambda = param1)]
   } else if (dist == "uniform") {
     dtM[, param1 := params1[seq], keyby = seqid]
     dtM[, param2 := params2[seq], keyby = seqid]
-    dtM[, X := qunif(p = Unew, min = param1, max = param2)]
+    dtM[, X := stats::qunif(p = Unew, min = param1, max = param2)]
   } else if (dist == "gamma") {
     sr <- gammaGetShapeRate(params1, params2)
     dtM[, param1 := sr[[1]][seq]]
     dtM[, param2 := sr[[2]][seq]]
-    dtM[, X := qgamma(p = Unew, shape = param1, rate = param2)]
+    dtM[, X := stats::qgamma(p = Unew, shape = param1, rate = param2)]
   } else if (dist == "normal") {
     dtM[, param1 := params1[seq], keyby = seqid]
     dtM[, param2 := params2[seq], keyby = seqid]
-    dtM[, X := qnorm(p = Unew, mean = param1, sd = sqrt(param2))]
+    dtM[, X := stats::qnorm(p = Unew, mean = param1, sd = sqrt(param2))]
   }
 
   setkey(dtM, id)
 
   if (wide == FALSE) {
 
-    dFinal <- dtM[, .(id, period, X)]
+    dFinal <- dtM[, list(id, period, X)]
     if (!is.null(cnames)) setnames(dFinal, "X", cnames)
 
   } else {

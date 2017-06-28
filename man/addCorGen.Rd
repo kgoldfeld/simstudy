@@ -64,14 +64,15 @@ dtX2 <- addCorGen(dtOld = dtX1, idvar = "cid", nvars = 4, rho = .4, corstr = "ar
 
 # Long example
 
-library(gee)
-
 def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
 def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
 
-def2 <- defDataAdd(varname = "lambda", formula = ".5+.5*period + .1*xbase", dist="nonrandom", link = "log")
-def2 <- defDataAdd(def2, varname = "p", formula = "-3+.2*period + .3*xbase", dist="nonrandom", link = "logit")
-def2 <- defDataAdd(def2, varname = "gammaMu", formula = ".2*period + .3*xbase", dist="nonrandom", link = "log")
+def2 <- defDataAdd(varname = "lambda", formula = ".5+.5*period + .1*xbase",
+                   dist="nonrandom", link = "log")
+def2 <- defDataAdd(def2, varname = "p", formula = "-3+.2*period + .3*xbase",
+                   dist="nonrandom", link = "logit")
+def2 <- defDataAdd(def2, varname = "gammaMu", formula = ".2*period + .3*xbase",
+                   dist="nonrandom", link = "log")
 def2 <- defDataAdd(def2, varname = "gammaDis", formula = 1, dist="nonrandom")
 def2 <- defDataAdd(def2, varname = "normMu", formula = "5+period + .5*xbase", dist="nonrandom")
 def2 <- defDataAdd(def2, varname = "normVar", formula = 4, dist="nonrandom")
@@ -83,33 +84,32 @@ dt <- genData(1000, def)
 dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
 dtLong <- addColumns(def2, dtLong)
 
+# Poisson distribution
 
 dtX3 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
                   dist = "poisson", param1 = "lambda", cnames = "NewPois")
+dtX3
 
-geefit <- gee::gee(NewPois ~ period + xbase, data = dtX3, id = cid, family = poisson, corstr = "exchangeable")
-round(summary(geefit)$working.correlation, 2)
-
+# Binomial distribution
 
 dtX4 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
                   dist = "binary", param1 = "p", cnames = "NewBin")
 
-geefit <- gee::gee(NewBin ~ period + xbase, data = dtX4, id = cid, family = binomial, corstr = "exchangeable")
-round(summary(geefit)$working.correlation, 2)
+dtX4
 
+# Gamma distribution
 
 dtX6 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
                   dist = "gamma", param1 = "gammaMu", param2 = "gammaDis",
                   cnames = "NewGamma")
 
-geefit <- gee::gee(NewGamma ~ period + xbase, data = dtX6, id = cid, family = Gamma (link = "log"), corstr = "AR-M")
-round(summary(geefit)$working.correlation, 2)
+dtX6
 
+# Normal distribution
 
 dtX7 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
                   dist = "normal", param1 = "normMu", param2 = "normVar",
                   cnames = "NewNorm")
 
-geefit <- gee::gee(NewNorm ~ period + xbase, data = dtX7, id = cid, family = gaussian, corstr = "AR-M")
-summary(geefit)$working.correlation
+
 }
