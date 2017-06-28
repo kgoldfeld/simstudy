@@ -47,7 +47,7 @@ gencat <- function(n, formula, link, dfSim) {
 
     # generate random numbers
 
-    newColumn <- simstudy::matMultinom(dtmatrix)
+    newColumn <- matMultinom(dtmatrix)
 
     return(newColumn)
 
