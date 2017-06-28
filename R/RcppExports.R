@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 vecMultinom <- function(probs) {
-    .Call('simstudy_vecMultinom', PACKAGE = 'simstudy', probs)
+    .Call(simstudy_vecMultinom, probs)
 }
 
 matMultinom <- function(probmatrix) {
-    .Call('simstudy_matMultinom', PACKAGE = 'simstudy', probmatrix)
+    .Call(simstudy_matMultinom, probmatrix)
 }
 
