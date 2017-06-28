@@ -1,4 +1,4 @@
-#include <R.h>
+// #include <R.h>
 #include <Rinternals.h> // for SEXP
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
@@ -23,5 +23,5 @@ static const R_CallMethodDef R_CallDef[] = {
 void R_init_simstudy(DllInfo *dll)
 {
   R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
-  R_useDynamicSymbols(dll, FALSE);
+  // R_useDynamicSymbols(dll, FALSE);
 }
