@@ -34,7 +34,7 @@ specifies the minimum.}
 
 \item{param2}{A string that represents the column in dtOld that contains a possible second
 parameter for the distribution. For the normal distribution, this will be the variance;
-for the gamma distribtuion, this will be the dispersion; and for the uniform distribution,
+for the gamma distribution, this will be the dispersion; and for the uniform distribution,
 this will be the maximum.}
 
 \item{cnames}{Explicit column names. A single string with names separated

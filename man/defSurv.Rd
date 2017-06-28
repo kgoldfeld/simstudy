@@ -16,10 +16,10 @@ defSurv(dtDefs = NULL, varname, formula = 0, scale, shape = 1)
 \item{scale}{Scale parameter for the Weibull distribution.}
 
 \item{shape}{The shape of the Weibull distribution. Shape = 1 for
-an exponential distriubtion}
+an exponential distribution}
 }
 \value{
-A data.table named dtName that is an updated data defnitions table
+A data.table named dtName that is an updated data definitions table
 }
 \description{
 Add single row to survival definitions

@@ -7,7 +7,7 @@
 gammaGetShapeRate(mean, dispersion)
 }
 \arguments{
-\item{mean}{The mean of a gamm distribution}
+\item{mean}{The mean of a gamma distribution}
 
 \item{dispersion}{The dispersion parameter of a gamma distribution}
 }
@@ -20,7 +20,7 @@ Convert gamma mean and dispersion parameters to shape and rate parameters
 \details{
 In simstudy, users specify the gamma distribution as a function of two parameters - a mean
 and dispersion. In this case, the variance of the specified distribution is (mean^2)*dispersion.
-The base R function rgamma uses the shape and rate parameters to specify the gamma distrbution.
+The base R function rgamma uses the shape and rate parameters to specify the gamma distribution.
 This function converts the mean and dispersion into the shape and rate.
 }
 \examples{

@@ -25,7 +25,7 @@ is applicable to repeated measures/longitudinal data.}
 by missingness at all follow-up times > t.}
 }
 \value{
-A data.table named dtName that is an updated data defnitions table
+A data.table named dtName that is an updated data definitions table
 }
 \description{
 Add single row to definitions table for missing data

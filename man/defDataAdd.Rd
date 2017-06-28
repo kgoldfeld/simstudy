@@ -22,7 +22,7 @@ defDataAdd(dtDefs = NULL, varname, formula, variance = 0, dist = "normal",
 \item{link}{The link function for the mean, see details}
 }
 \value{
-A data.table named dtName that is an updated data defnitions table
+A data.table named dtName that is an updated data definitions table
 }
 \description{
 Add single row to definitions table that will be used to add data to an

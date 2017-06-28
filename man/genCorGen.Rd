@@ -13,11 +13,11 @@ genCorGen(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 \item{nvars}{Number of variables}
 
 \item{params1}{A single vector specifying the mean of the distribution. The vector is of
-length 1 if the mean is the same across all obseravtions, otherwise the vector is of length
+length 1 if the mean is the same across all observations, otherwise the vector is of length
 nvars. In the case of the uniform distribution the vector specifies the minimum.}
 
 \item{params2}{A single vector specifying a possible second parameter for the distribution.
-For the normal distribution, this will be the variance; for the gamma distribtuion, this
+For the normal distribution, this will be the variance; for the gamma distribution, this
 will be the dispersion; and for the uniform distribution, this will be the maximum. The
 vector is of length 1 if the mean is the same across all obseravtions, otherwise the vector
 is of length nvars.}
