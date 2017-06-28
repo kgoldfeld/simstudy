@@ -10,7 +10,7 @@
 #' is applicable to repeated measures/longitudinal data.
 #' @param monotonic Indicator set to TRUE if missingness at time t is followed
 #' by missingness at all follow-up times > t.
-#' @return A data.table named dtName that is an updated data defnitions table
+#' @return A data.table named dtName that is an updated data definitions table
 #' @seealso \code{\link{genMiss}}, \code{\link{genObs}}
 #' @examples
 #' def1 <- defData(varname = "m", dist = "binary", formula = .5)

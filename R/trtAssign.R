@@ -5,7 +5,7 @@
 #' @param dtName data table
 #' @param nTrt number of treatment groups
 #' @param balanced indicator for treatment assignment process
-#' @param strata vector of strings representing strativying variables
+#' @param strata vector of strings representing stratifying variables
 #' @param grpName string representing variable name for treatment or
 #' exposure group
 #' @return An integer (group) ranging from 1 to length of the

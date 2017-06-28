@@ -5,8 +5,8 @@
 #' @param formula Covariates predicting survival
 #' @param scale Scale parameter for the Weibull distribution.
 #' @param shape The shape of the Weibull distribution. Shape = 1 for
-#' an exponential distriubtion
-#' @return A data.table named dtName that is an updated data defnitions table
+#' an exponential distribution
+#' @return A data.table named dtName that is an updated data definitions table
 #' @examples
 #' # Baseline data definitions
 #'

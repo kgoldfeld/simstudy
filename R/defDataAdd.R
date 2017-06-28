@@ -7,7 +7,7 @@
 #' @param variance Number
 #' @param dist Distribution. For possibilities, see details
 #' @param link The link function for the mean, see details
-#' @return A data.table named dtName that is an updated data defnitions table
+#' @return A data.table named dtName that is an updated data definitions table
 #' @examples
 #' # New data set
 #'
