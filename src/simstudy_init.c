@@ -22,5 +22,5 @@ static const R_CallMethodDef R_CallDef[] = {
 void R_init_simstudy(DllInfo *dll)
 {
   R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
-  // R_useDynamicSymbols(info, TRUE); // Not in R docs
+  R_useDynamicSymbols(dll, TRUE);
 }
