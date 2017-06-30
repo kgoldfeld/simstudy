@@ -1,4 +1,4 @@
-## Resubmission 2017JUN28
+## Resubmission 2017JUN30
 
 This is a resubmission of version 0.1.3. 
 
@@ -14,3 +14,24 @@ Possibly mis-spelled words in DESCRIPTION:
   covariates (12:27)
   
 These are all spelled correctly.
+
+I am getting note with respect to registering the Rcpp function. I've take all the steps to get rid of the note, and looking at the object, it appears to contradict the note, in that it is registered.
+
+$name
+[1] "simstudy_matMultinom"
+
+$address
+<pointer: 0x000000000a160c80>
+attr(,"class")
+[1] "RegisteredNativeSymbol"
+
+$dll
+DLL name: simstudy
+Filename: C:/R Packages/simstudy/libs/x64/simstudy.dll
+Dynamic lookup: FALSE
+
+$numParameters
+[1] 1
+
+attr(,"class")
+[1] "CallRoutine"      "NativeSymbolInfo"
