@@ -5,17 +5,6 @@
 
 using namespace Rcpp;
 
-// vecMultinom
-int vecMultinom(NumericVector probs);
-RcppExport SEXP simstudy_vecMultinom(SEXP probsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type probs(probsSEXP);
-    rcpp_result_gen = Rcpp::wrap(vecMultinom(probs));
-    return rcpp_result_gen;
-END_RCPP
-}
 // matMultinom
 Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix);
 RcppExport SEXP simstudy_matMultinom(SEXP probmatrixSEXP) {

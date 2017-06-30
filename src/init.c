@@ -17,12 +17,12 @@ Check these declarations against the C/Fortran source code.
 */
 
 /* .Call calls */
-extern SEXP simstudy_vecMultinom(SEXP probsSEXP);
+// extern SEXP simstudy_vecMultinom(SEXP probsSEXP);
 extern SEXP simstudy_matMultinom(SEXP probmatrixSEXP);
 
 static const R_CallMethodDef CallMethods[] = {
   {"simstudy_matMultinom", (DL_FUNC) &simstudy_matMultinom, 1},
-  {"simstudy_vecMultinom", (DL_FUNC) &simstudy_vecMultinom, 1},
+  // {"simstudy_vecMultinom", (DL_FUNC) &simstudy_vecMultinom, 1},
   {NULL, NULL, 0}
 };
 

@@ -1,8 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-
 int vecMultinom(NumericVector probs) {
 
   int k = probs.size();
