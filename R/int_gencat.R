@@ -47,7 +47,7 @@ gencat <- function(n, formula, link, dfSim) {
 
     # generate random numbers
 
-    newColumn <- .Call("simstudy_matMultinom", dtmatrix, PACKAGE = "simstudy")
+    newColumn <- .Call(simstudy_matMultinom, dtmatrix, PACKAGE = "simstudy")
 
     return(newColumn)
 

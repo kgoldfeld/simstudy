@@ -18,6 +18,8 @@ int vecMultinom(NumericVector probs) {
 
   return(total);
 
+  // ?
+
 }
 
 // [[Rcpp::export]]
