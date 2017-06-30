@@ -1,9 +1,5 @@
 #' Add single row to definitions table
 #'
-#' @useDynLib simstudy, .registration = TRUE
-#' @importFrom Rcpp sourceCpp evalCpp
-#' @import data.table
-#'
 #' @param dtDefs Definition data.table to be modified
 #' @param varname Name (string) of new variable
 #' @param formula An R expression for mean (string)
