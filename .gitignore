@@ -1,11 +1,13 @@
 .Rproj.user
 .Rhistory
 .RData
-.Rbuildignore
 .gitignore
 Working code/
 Demo/
 simstudy.Rproj
 inst/doc
 cran-comments.md
-/revdep/.cache.rds
+revdep/.cache.rds
+src/*.o
+src/*.so
+src/*.dll

@@ -15,13 +15,9 @@ int vecMultinom(NumericVector probs) {
   }
 
   return(total);
-
-  // ?
-
 }
 
 // [[Rcpp::export]]
-
 Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix) {
 
   int rows = probmatrix.nrow();
@@ -33,6 +29,5 @@ Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix) {
   }
 
   return(ans);
-
 }
 
