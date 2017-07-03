@@ -1,6 +1,8 @@
 ## Resubmission 2017JUN30
 
-This is a resubmission of version 0.1.3. 
+This is a resubmission of version 0.1.3.
+
+Developed with R Version 3.4.1.
 
 I did get a note from win_build (the same note I received during the last submission for version 0.1.2):
 
