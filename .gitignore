@@ -2,12 +2,11 @@
 .Rhistory
 .RData
 .gitignore
-Working code/
+Working-code/
 Demo/
 simstudy.Rproj
 inst/doc
 cran-comments.md
-revdep/.cache.rds
 src/*.o
 src/*.so
 src/*.dll
