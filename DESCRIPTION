@@ -14,7 +14,8 @@ Description: Simulates data sets in order to explore modeling techniques or
     mechanisms (MCAR, MAR, NMAR).
 Depends:
     R (>= 3.2.2),
-    data.table
+    data.table,
+    curl
 License: GPL-3
 LazyData: TRUE
 Imports:
