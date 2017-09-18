@@ -19,16 +19,16 @@ Read external csv data set definitions for adding columns
 # Create temporary external "csv" files
 
 test1 <- c("varname,formula,variance,dist,link",
-           "x, 0.3;0.4;0.3, 0, categorical, identity"
+           "x,0.3;0.4;0.3,0,categorical,identity"
           )
 
 tfcsv1 <- tempfile()
 writeLines(test1, tfcsv1)
 
-test2 <- c("varname,formula,variance,dist,link",
-           "x == 1, 0.4, 0, binary,identity",
-           "x == 2, 0.6, 0, binary,identity",
-           "x >= 3, 0.8, 0, binary,identity"
+test2 <- c("condition,formula,variance,dist,link",
+           "x == 1, 0.4,0,binary,identity",
+           "x == 2, 0.6,0,binary,identity",
+           "x >= 3, 0.8,0,binary,identity"
           )
 
 tfcsv2 <- tempfile()

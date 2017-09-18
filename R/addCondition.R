@@ -16,9 +16,12 @@
 #'
 #' # Define conditions
 #'
-#' defC <- defCondition(condition = "x == 1", formula = "5 + 2*y-.5*y^2", variance = 1,dist = "normal")
-#' defC <- defCondition(defC, condition = "x == 2", formula = "3 - 3*y + y^2", variance = 2, dist="normal")
-#' defC <- defCondition(defC, condition = "x == 3", formula = "abs(y)", dist="poisson")
+#' defC <- defCondition(condition = "x == 1", formula = "5 + 2*y-.5*y^2",
+#'                      variance = 1,dist = "normal")
+#' defC <- defCondition(defC, condition = "x == 2",
+#'                      formula = "3 - 3*y + y^2", variance = 2, dist="normal")
+#' defC <- defCondition(defC, condition = "x == 3",
+#'                      formula = "abs(y)", dist="poisson")
 #'
 #' # Add column
 #'
@@ -36,6 +39,14 @@
 
 
 addCondition <- function(condDefs, dtOld, newvar) {
+
+  # 'declare' vars
+
+  varname = NULL
+  formula = NULL
+  dist = NULL
+
+  # Checks
 
   if (missing(condDefs)) stop("argument 'condDefs' is missing", call. = FALSE)
   if (missing(dtOld)) stop("argument 'dtOld' is missing", call. = FALSE)
@@ -58,8 +69,8 @@ addCondition <- function(condDefs, dtOld, newvar) {
 
   for (i in 1:nrow(condDefs)) {
 
-    simstudy:::evalDef(newvar, cDefs[i,formula], cDefs[i,dist], chkVars)
-    simstudy:::evalDef(newvar, cDefs[i,condition], cDefs[i,dist], chkVars)
+    evalDef(newvar, cDefs[i,formula], cDefs[i,dist], chkVars)
+    evalDef(newvar, cDefs[i,condition], cDefs[i,dist], chkVars)
 
   }
 
@@ -80,10 +91,10 @@ addCondition <- function(condDefs, dtOld, newvar) {
     dtTemp <- dtOld[eval(parse(text = condition) )]
     n = nrow(dtTemp)
 
-    dtTemp <- simstudy:::generate(cDefs[i,], n, dtTemp, oldkey)
+    dtTemp <- generate(cDefs[i,], n, dtTemp, oldkey)
 
     dtTemp <- data.table::data.table(dtTemp)
-    dtTemp <- dtTemp[, .(get(oldkey), get(newvar))]
+    dtTemp <- dtTemp[, list(get(oldkey), get(newvar))]
 
     dtNew <- rbind(dtNew, dtTemp)
 

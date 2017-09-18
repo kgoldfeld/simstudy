@@ -30,9 +30,12 @@ dt <- genData(1000, def)
 
 # Define conditions
 
-defC <- defCondition(condition = "x == 1", formula = "5 + 2*y-.5*y^2", variance = 1,dist = "normal")
-defC <- defCondition(defC, condition = "x == 2", formula = "3 - 3*y + y^2", variance = 2, dist="normal")
-defC <- defCondition(defC, condition = "x == 3", formula = "abs(y)", dist="poisson")
+defC <- defCondition(condition = "x == 1", formula = "5 + 2*y-.5*y^2",
+                     variance = 1,dist = "normal")
+defC <- defCondition(defC, condition = "x == 2",
+                     formula = "3 - 3*y + y^2", variance = 2, dist="normal")
+defC <- defCondition(defC, condition = "x == 3",
+                     formula = "abs(y)", dist="poisson")
 
 # Add column
 
