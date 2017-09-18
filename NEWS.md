@@ -16,3 +16,12 @@
 * Modified "nonrandom" data generation to allow "log"" and "logit"" link options.
 * Added function genCorGen - generate a new data.table with correlated data from various distributions.
 * Added function addCorData - add correlated data from various distributions to existing data.tables.
+
+# simstudy 0.1.4
+
+* Added error check to verify that specified distributions are valid
+* Added function genFactor - converts an existing (non-double) field in a data.table to a factor
+* Added function genDummy - creates dummy variables from an integer or factor field in a data.table
+* Added function defCondition - define distribution conditional on existing fields
+* Added function defReadCond - read in conditional definitions from external csv file
+* Added function addCondition - genaration data based on conditional definition

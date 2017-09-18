@@ -11,6 +11,10 @@
 
 generate <- function(args, n, dfSim, idname) {
 
+  if (! args$dist %in% c("normal","poisson","noZeroPoisson","binary","uniform","categorical","gamma","nonrandom")) {
+    stop(paste(args$dist, "not a valid distribution. Please check spelling."), call. = FALSE)
+  }
+
   if (args$dist=="normal") {
     newColumn <- gennorm(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "poisson") {
