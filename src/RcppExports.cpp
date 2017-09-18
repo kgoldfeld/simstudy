@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // matMultinom
 Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix);
-RcppExport SEXP simstudy_matMultinom(SEXP probmatrixSEXP) {
+RcppExport SEXP _simstudy_matMultinom(SEXP probmatrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"simstudy_matMultinom", (DL_FUNC) &simstudy_matMultinom, 1},
+    {"_simstudy_matMultinom", (DL_FUNC) &_simstudy_matMultinom, 1},
     {NULL, NULL, 0}
 };
 

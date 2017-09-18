@@ -45,8 +45,8 @@ defData <- function(dtDefs = NULL,
     # warnings are suppressed because we want to test for NAs
 
     suppressWarnings(test <- as.numeric(unlist(strsplit(as.character(formula),
-                                           split=";",
-                                           fixed = TRUE)))
+                                                        split=";",
+                                                        fixed = TRUE)))
     )
 
 

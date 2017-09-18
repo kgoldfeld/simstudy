@@ -67,7 +67,7 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 
   dtmatrix <- cbind(dtmatrix, 1 - apply(dtmatrix, 1, sum))
 
-  grpExp <- .Call(simstudy_matMultinom, dtmatrix, PACKAGE = "simstudy")
+  grpExp <- .Call(`_simstudy_matMultinom`, dtmatrix, PACKAGE = "simstudy")
 
   dtnew <- cbind(dt[, .SD, .SDcols = key(dt)], grpExp)
   data.table::setkeyv(dtnew, key(dt))
