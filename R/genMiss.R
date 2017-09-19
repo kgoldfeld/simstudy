@@ -53,7 +53,7 @@ genMiss <- function(dtName, missDefs, idvars,
   if (! repeated) {
 
     dtMiss <- dtName[, c(idvars), with = FALSE]
-    names(dtMiss) <- c(idvars)
+    # names(dtMiss) <- c(idvars) # removed 2017919 - possible error in CRAN check
 
     for (i in (1 : nrow(missDefs))) {
       dtTemp = copy(dtName)
@@ -67,7 +67,8 @@ genMiss <- function(dtName, missDefs, idvars,
   } else { # repeated
 
     dtMiss <- dtName[, c(idvars, periodvar), with = FALSE]
-    names(dtMiss) <- c(idvars, "period")
+    colnames <- c(idvars, "period")
+    setnames(dtMiss, colnames)
 
     nPeriods <- dtMiss[,max(period)] + 1
 

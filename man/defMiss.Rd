@@ -47,7 +47,7 @@ defM
 
 # Generate missing data matrix
 
-missMat <- genMiss(dtAct, defM, idvars = "id")
+missMat <- genMiss(dtName = dtAct, missDefs = defM, idvars = "id")
 missMat
 
 # Generate observed data from actual data and missing data matrix
