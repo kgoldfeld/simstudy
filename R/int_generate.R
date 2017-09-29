@@ -11,7 +11,8 @@
 
 generate <- function(args, n, dfSim, idname) {
 
-  if (! args$dist %in% c("normal","poisson","noZeroPoisson","binary","uniform","categorical","gamma","nonrandom")) {
+  if (! args$dist %in% c("normal","poisson","noZeroPoisson","binary","uniform", "uniformInt",
+                         "categorical", "gamma", "negBinomial","nonrandom")) {
     stop(paste(args$dist, "not a valid distribution. Please check spelling."), call. = FALSE)
   }
 
@@ -25,10 +26,14 @@ generate <- function(args, n, dfSim, idname) {
     newColumn <- genbinom(n, args$formula, args$link, dfSim)
   } else if (args$dist=="uniform") {
     newColumn <- genunif(n, args$formula, dfSim)
+  } else if (args$dist=="uniformInt") {
+    newColumn <- genUnifInt(n, args$formula, dfSim)
   } else if (args$dist=="categorical") {
     newColumn <- gencat(n, args$formula, args$link, dfSim)
   } else if (args$dist == "gamma") {
     newColumn <- gengamma(n, args$formula, args$variance, args$link, dfSim)
+  } else if (args$dist == "negBinomial") {
+    newColumn <- gennegbinom(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "nonrandom") {
     newColumn <- gendeterm(n, args$formula, args$link, dfSim)
   }

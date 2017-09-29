@@ -23,15 +23,15 @@ evalDef <- function(newvar, newform, newdist, defVars) {
 
   # Check number of arguments for distrubtion
 
-  if (newdist == "uniform" & nparam != 2) {
-      stop("Uniform requires min and max", call. = FALSE)
+  if (newdist %in% c("uniform","uniformInt") & nparam != 2) {
+      stop("Uniform (continuous & integer) requires min and max", call. = FALSE)
   }
 
   if (newdist == "categorical" & nparam < 2) {
     stop("Categorical distribution requires 2 or more probabilities", call. = FALSE)
   }
 
-  if (!(newdist %in% c("uniform", "categorical")) & nparam != 1) {
+  if (!(newdist %in% c("uniform", "categorical", "uniformInt")) & nparam != 1) {
     stop("Only one parameter is permitted", call. = FALSE)
   }
 
@@ -71,7 +71,9 @@ evalDef <- function(newvar, newform, newdist, defVars) {
   # Make sure that distribution is allowed
 
   if (!(newdist %in% c("normal","binary","poisson","noZeroPoisson",
-                       "uniform","categorical","gamma","nonrandom"))) {
+                       "uniform","categorical","gamma","nonrandom",
+                       "uniformInt", "negBinomial"
+  ))) {
 
     stop(paste0("'",newdist,"' distribution is not a valid option"), call. = FALSE)
 

@@ -13,7 +13,8 @@
 #' @param id A string indicating the field name for the unique record identifier
 #' @return A data.table named dtName that is an updated data definitions table
 #' @details The possible data distributions include ""normal", "poisson",
-#' "noZeroPoisson", "binary", "uniform", "categorical", "gamma", and "nonrandom."
+#' "noZeroPoisson", "binary", "uniform", "uniformInt", "categorical",
+#' "gamma", "negBinomial", and "nonrandom."
 #' @examples
 #' def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")
 #' def <- defData(def, varname="xUni", dist="uniform", formula="10;20")
@@ -40,15 +41,12 @@ defData <- function(dtDefs = NULL,
 
   #### No missing arguments
 
-  if (is.null(dtDefs)) {
+  if (is.null(dtDefs)) { # checking that initial formula has no variables ...
 
     # warnings are suppressed because we want to test for NAs
 
-    suppressWarnings(test <- as.numeric(unlist(strsplit(as.character(formula),
-                                                        split=";",
-                                                        fixed = TRUE)))
-    )
-
+    elements <- unlist(strsplit(as.character(formula), split=";", fixed = TRUE))
+    suppressWarnings( test <- as.numeric(elements) )
 
     if (sum(is.na(test))) {
       stop("First defined formula must be scalar", call. = FALSE)

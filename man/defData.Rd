@@ -30,7 +30,8 @@ Add single row to definitions table
 }
 \details{
 The possible data distributions include ""normal", "poisson",
-"noZeroPoisson", "binary", "uniform", "categorical", "gamma", and "nonrandom."
+"noZeroPoisson", "binary", "uniform", "uniformInt", "categorical",
+"gamma", "negBinomial", and "nonrandom."
 }
 \examples{
 def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")
