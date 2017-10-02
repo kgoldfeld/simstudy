@@ -72,7 +72,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
 
   if (!(newdist %in% c("normal","binary","poisson","noZeroPoisson",
                        "uniform","categorical","gamma","nonrandom",
-                       "uniformInt", "negBinomial"
+                       "uniformInt", "negBinomial", "exponential"
   ))) {
 
     stop(paste0("'",newdist,"' distribution is not a valid option"), call. = FALSE)

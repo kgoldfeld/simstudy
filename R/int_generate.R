@@ -12,7 +12,7 @@
 generate <- function(args, n, dfSim, idname) {
 
   if (! args$dist %in% c("normal","poisson","noZeroPoisson","binary","uniform", "uniformInt",
-                         "categorical", "gamma", "negBinomial","nonrandom")) {
+                         "categorical", "gamma", "negBinomial","nonrandom","exponential")) {
     stop(paste(args$dist, "not a valid distribution. Please check spelling."), call. = FALSE)
   }
 
@@ -30,6 +30,8 @@ generate <- function(args, n, dfSim, idname) {
     newColumn <- genUnifInt(n, args$formula, dfSim)
   } else if (args$dist=="categorical") {
     newColumn <- gencat(n, args$formula, args$link, dfSim)
+  } else if (args$dist == "exponential") {
+    newColumn <- genexp(n, args$formula, args$link, dfSim)
   } else if (args$dist == "gamma") {
     newColumn <- gengamma(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "negBinomial") {
