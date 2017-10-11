@@ -4,12 +4,14 @@
 \alias{genSurv}
 \title{Generate survival data}
 \usage{
-genSurv(dtName, survDefs)
+genSurv(dtName, survDefs, digits = 3)
 }
 \arguments{
 \item{dtName}{Name of complete data set}
 
 \item{survDefs}{Definitions of survival}
+
+\item{digits}{Number of digits for rounding}
 }
 \value{
 Original matrix with survival time

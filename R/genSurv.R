@@ -4,6 +4,7 @@
 #' @description Survival data is added to an existing data set.
 #' @param dtName Name of complete data set
 #' @param survDefs Definitions of survival
+#' @param digits Number of digits for rounding
 #' @return Original matrix with survival time
 #' @examples
 #' # Baseline data definitions
@@ -33,7 +34,7 @@
 #'
 #' @export
 
-genSurv <- function(dtName, survDefs) {
+genSurv <- function(dtName, survDefs, digits = 3) {
 
   # 'declare
 
@@ -51,7 +52,8 @@ genSurv <- function(dtName, survDefs) {
     survPred = dtSurv[, eval(parse(text = survDefs[i, formula]))]
 
     u <- stats::runif(n = nrow(dtSurv))
-    newColumn <- dtSurv[, list(survx = round(- log(u) / ((1/scale) * exp(-survPred)) ^ (1 / shape),0)), ]
+
+    newColumn <- dtSurv[, list(survx = round( (- (log(u) / ((1/scale) * exp(survPred)))) ^ (shape), digits) ), ]
 
     dtSurv <- data.table::data.table(dtSurv, newColumn)
 

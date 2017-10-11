@@ -470,7 +470,7 @@ p2a <- ggplot(data = dtplot2a, aes(x=factor(over65), y=N)) +
 grid.arrange(p1a,p2a,nrow=1)
 ```
 
-## Survival data
+## Survival data (updated 10-11-2017)
 
 Time-to-event data, including both survival and censoring times, are created using functions `defSurv` and `genSurv`. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the `formula` field. Positive coeffecients are associated with longer survival times (and lower hazard rates). Finally, the *shape* of the distribution can be specified. A `shape` value of 1 reflects the *exponential* distribution.
 
