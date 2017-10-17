@@ -33,7 +33,7 @@
 #'                 knots = knots, degree = 3,
 #'                 noise.var = .025)
 #'
-#' Plot with smoothed line
+#' # Plot with smoothed line
 #'
 #' ggplot(data = dt, aes(x=age, y=weight)) +
 #'   geom_point(color = "grey55", size = 1) +
