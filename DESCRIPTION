@@ -29,6 +29,7 @@ Suggests: testthat,
     grid,
     gridExtra,
     survival,
-    gee
+    gee,
+    splines
 VignetteBuilder: knitr
 LinkingTo: Rcpp

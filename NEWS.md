@@ -36,3 +36,4 @@
 # simstudy 0.1.6
 
 * Fixed function genSurv
+* Added spline generating functions
