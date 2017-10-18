@@ -36,7 +36,7 @@ genbasisdt <- function(x, knots, degree, theta) {
 
   ###
 
-  basis <- bs(x = x, knots = knots, degree = degree,
+  basis <- splines::bs(x = x, knots = knots, degree = degree,
               Boundary.knots = c(0,1), intercept = TRUE)
 
   y.spline <- basis %*% theta

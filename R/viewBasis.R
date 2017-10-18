@@ -18,6 +18,13 @@
 
 viewBasis <- function(knots, degree) {
 
+  # 'declare vars'
+
+  value <- NULL
+  basis <- NULL
+
+  #
+
   x <- seq(0, 1, length.out = 1000)
   reqparam <- length(knots) + degree + 1
   theta1 <- rep(1, reqparam)
@@ -30,12 +37,12 @@ viewBasis <- function(knots, degree) {
                              variable.name = "basis",
                              variable.factor = TRUE)
 
-  ggplot2::ggplot(data=dtmelt, aes(x = x, y = value, group = basis)) +
-    geom_line(aes(color = basis), size = 1) +
-    theme(legend.position = "none") +
-    scale_x_continuous(limits = c(0, 1),
+  ggplot2::ggplot(data=dtmelt, ggplot2::aes(x = x, y = value, group = basis)) +
+    ggplot2::geom_line(ggplot2::aes(color = basis), size = 1) +
+    ggplot2::theme(legend.position = "none",
+                   panel.grid.minor = ggplot2::element_blank()) +
+    ggplot2::scale_x_continuous(limits = c(0, 1),
                        breaks = c(0, knots, 1)) +
-    theme(panel.grid.minor = element_blank()) +
-    scale_color_brewer(palette = "Dark2")
+    ggplot2::scale_color_brewer(palette = "Dark2")
 
 }

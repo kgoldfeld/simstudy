@@ -27,6 +27,14 @@
 
 viewSplines <- function(knots, degree, theta) {
 
+  # 'declare'
+
+  Spline <- 0
+  index <- 0
+  y.spline <- 0
+
+  #
+
   x <- seq(0, 1, length.out = 1000)
 
   matTheta <- as.matrix(theta)
@@ -47,15 +55,15 @@ viewSplines <- function(knots, degree, theta) {
   dx[, Spline := factor(index)]
 
 
-  p <- ggplot(data = dx) +
-    geom_line(aes(x = x, y = y.spline, color = Spline), size = 1) +
-    scale_y_continuous(limits = c(0, 1)) +
-    scale_x_continuous(limits = c(0, 1), breaks = knots) +
-    theme(panel.grid.minor = element_blank()) +
-    scale_color_brewer(palette="Dark2")
+  p <- ggplot2::ggplot(data = dx) +
+    ggplot2::geom_line(ggplot2::aes(x = x, y = y.spline, color = Spline), size = 1) +
+    ggplot2::scale_y_continuous(limits = c(0, 1)) +
+    ggplot2::scale_x_continuous(limits = c(0, 1), breaks = knots) +
+    ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
+    ggplot2::scale_color_brewer(palette="Dark2")
 
   if (length(levels(factor(dx$index))) == 1) {
-    p <- p + theme(legend.position = "none")
+    p <- p + ggplot2::theme(legend.position = "none")
   }
 
   p

@@ -50,16 +50,10 @@ set.seed(234)
 dt <- genData(1000, ddef)
 
 dt <- genSpline(dt = dt, newvar = "weight",
-                predictor = "ager", theta = theta1,
+                predictor = "age", theta = theta1,
                 knots = knots, degree = 3,
                 noise.var = .025)
 
-# Plot with smoothed line
-
-ggplot(data = dt, aes(x=age, y=weight)) +
-  geom_point(color = "grey55", size = 1) +
-  geom_smooth(se=FALSE, color="red", size = 1, method = "auto") +
-  geom_vline(xintercept = quantile(dt$age, knots)) +
-  theme(panel.grid.minor = element_blank())
+dt
 
 }
