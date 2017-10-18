@@ -8,7 +8,7 @@ genSpline(dt, newvar, predictor, theta, knots = c(0.25, 0.5, 0.75),
   degree = 3, newrange = NULL, noise.var = 0)
 }
 \arguments{
-\item{dt}{data.table that will be modifeid}
+\item{dt}{data.table that will be modified}
 
 \item{newvar}{Name of new variable to be created}
 

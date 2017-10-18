@@ -1,6 +1,6 @@
 #' Generate spline curves
 #'
-#' @param dt data.table that will be modifeid
+#' @param dt data.table that will be modified
 #' @param newvar Name of new variable to be created
 #' @param predictor Name of field in old data.table that is predicting new value
 #' @param theta A vector or matrix of values between 0 and 1. Each column of the matrix
