@@ -1,6 +1,6 @@
-## Resubmission 2017OCT18
+## Resubmission 2017NOV02
 
-This is a resubmission of version 0.1.6
+This is a resubmission of version 0.1.7
 
 Developed with R Version 3.4.2.
 
