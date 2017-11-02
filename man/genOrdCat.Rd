@@ -10,7 +10,7 @@ genOrdCat(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE)
 \item{dtName}{Name of complete data set}
 
 \item{adjVar}{Adjustment variable  name in dtName - determines
-logistic shift. This is specfied assuming a cumulative logit
+logistic shift. This is specified assuming a cumulative logit
 link.}
 
 \item{baseprobs}{Baseline probability expressed as a vector of

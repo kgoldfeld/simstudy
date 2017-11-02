@@ -4,7 +4,7 @@
 #' @description Ordinal categorical data is added to an existing data set.
 #' @param dtName Name of complete data set
 #' @param adjVar Adjustment variable  name in dtName - determines
-#' logistic shift. This is specfied assuming a cumulative logit
+#' logistic shift. This is specified assuming a cumulative logit
 #' link.
 #' @param baseprobs Baseline probability expressed as a vector of
 #' probabilities. The values must sum to <= 1. If sum(baseprobs) < 1,
