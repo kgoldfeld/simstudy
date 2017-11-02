@@ -37,3 +37,10 @@
 
 * Fixed function genSurv
 * Added spline generating functions
+
+# simstudy 0.1.7
+
+* Added function genOrdCat - creates ordinal categorical data
+* Added function genFormula - creates a linear formula in the form of a string
+* Added function updateDef - modify existing data definition table (to be used in genData())
+* Added function updateDefData - modify existing data def table (to be used in addColumns())
