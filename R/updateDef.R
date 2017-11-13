@@ -66,7 +66,7 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
   rowvar <- which(changevar == xdef$varname)
 
   if (!is.null(newformula)) {
-    xdef[rowvar, formula := newformula ]
+    xdef[rowvar, formula := as.character(newformula) ]
   }
 
   if (!is.null(newvariance)) {
@@ -90,6 +90,10 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
   if (!remove) { # check changed row
 
     prevVars <- xdef$varname[1 : (rowvar - 1)]
+    if (rowvar == 1) prevVars = ""
+
+    print(prevVars)
+
     evalDef(xdef[rowvar, varname], xdef[rowvar, formula], xdef[rowvar, dist], prevVars)
 
   } else if (remove & (rowvar <= nrow(xdef)) ){  # check all rows after deleted row
