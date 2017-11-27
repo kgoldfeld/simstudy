@@ -92,8 +92,6 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
     prevVars <- xdef$varname[1 : (rowvar - 1)]
     if (rowvar == 1) prevVars = ""
 
-    print(prevVars)
-
     evalDef(xdef[rowvar, varname], xdef[rowvar, formula], xdef[rowvar, dist], prevVars)
 
   } else if (remove & (rowvar <= nrow(xdef)) ){  # check all rows after deleted row
