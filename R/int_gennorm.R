@@ -9,11 +9,19 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column  with the updated simulated data
 
-gennorm <- function(n,formula,variance,link,dtSim) {
+getNormalMean <- function(dtSim, formula) {
 
   mean <- with(dtSim, eval(parse(text = as.character(formula))))
+
+  return(mean)
+
+}
+
+gennorm <- function(n,formula,variance,link,dtSim) {
+
+  mean <- getNormalMean(dtSim, formula)
   v <- with(dtSim, eval(parse(text = as.character(variance))))
-  # v <- as.numeric(as.character(variance))
-  newColumn <- stats::rnorm(n, mean, sqrt(v))
-  return(newColumn)
+
+  return(stats::rnorm(n, mean, sqrt(v)))
+
 }

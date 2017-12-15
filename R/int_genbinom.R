@@ -8,7 +8,7 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column  with the updated simulated data
 
-genbinom <- function(n,formula,link,dtSim) {
+getBinaryMean <- function(dtSim, formula, link) {
 
   if (link=="logit") {
     logit <- with(dtSim, eval(parse(text = as.character(formula))))
@@ -16,6 +16,15 @@ genbinom <- function(n,formula,link,dtSim) {
   } else {
     p <- with(dtSim, eval(parse(text = as.character(formula))))
   }
+
+  return(p)
+
+}
+
+genbinom <- function(n,formula,link,dtSim) {
+
+  mean <- getBinaryMean(dtSim, formula, link)
+
   return(stats::rbinom(n,1,p))
 
 }

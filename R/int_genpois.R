@@ -8,7 +8,8 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column with the updated simulated data
 
-genpois <- function(n,formula,link,dtSim) {
+
+getPoissonMean <- function(dtSim, formula, link) {
 
   if (link=="log") {
     logmean <- with(dtSim,eval(parse(text = as.character(formula))))
@@ -16,6 +17,15 @@ genpois <- function(n,formula,link,dtSim) {
   } else {
     mean = with(dtSim,eval(parse(text = as.character(formula))))
   }
+
+  return(mean)
+
+}
+
+
+genpois <- function(n,formula,link,dtSim) {
+
+  mean <- getPoissonMean(dtSim, formula, link)
 
   return(stats::rpois(n,mean))
 

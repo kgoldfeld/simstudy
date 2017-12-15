@@ -6,7 +6,7 @@
 # @param formula String that specifies the probabilities
 # @return A data.frame column with the updated simulated data
 
-gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
+getGammaMean <- function(dtSim, formula, link) {
 
   if (link == "log") {
     logmean <- with(dtSim,eval(parse(text = as.character(formula))))
@@ -14,6 +14,11 @@ gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
   } else {
     mean <- with(dtSim,eval(parse(text = as.character(formula))))
   }
+}
+
+gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
+
+  mean <- getGammaMean(dtSim, formula, link)
 
   d <- as.numeric(as.character(dispersion))
 

@@ -37,5 +37,6 @@ genQuantU <- function(nvars, n, rho, corstr, corMatrix) {
   dtM[, seqid := .I]
   dtM[, Unew := stats::pnorm(Y)]
 
-}
+  return(dtM[, -"Y"])
 
+}
