@@ -4,7 +4,8 @@
 \alias{genCorFlex}
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
-genCorFlex(n, defs, rho, corstr, corMatrix = NULL)
+genCorFlex(n, defs, rho = 0, tau = NULL, corstr = "cs",
+  corMatrix = NULL)
 }
 \arguments{
 \item{n}{Number of observations}
@@ -15,13 +16,18 @@ caveats for each of the distributions. (See defData).}
 
 \item{rho}{Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.}
 
+\item{tau}{Correlation based on Kendall's tau. If tau is specified, then it is
+used as the correlation even if rho is specfied. If tau is NULL, then the specified
+value of rho is used, or rho defaults to 0.}
+
 \item{corstr}{Correlation structure of the variance-covariance matrix
 defined by sigma and rho. Options include "cs" for a compound symmetry structure
-and "ar1" for an autoregressive structure.}
+and "ar1" for an autoregressive structure. Defaults to "cs".}
 
 \item{corMatrix}{Correlation matrix can be entered directly. It must be symmetrical and
 positive semi-definite. It is not a required field; if a matrix is not provided, then a
-structure and correlation coefficient rho must be specified.}
+structure and correlation coefficient rho must be specified. This is only used if tau
+is not specified.}
 }
 \value{
 data.table with added column(s) of correlated data
@@ -39,9 +45,10 @@ def <- defData(def, varname = "xUnif2", formula = "23;28", dist = "uniform")
 def <- defData(def, varname = "xUnif3", formula = "100;150", dist = "uniform")
 def <- defData(def, varname = "xGamma2", formula = 150, variance = 0.003, dist = "gamma")
 
-dt <- genCorFlex(100000, def, rho = 0.3 , corstr = "cs")
+dt <- genCorFlex(10000, def, tau = 0.3 , corstr = "cs")
 
 cor(dt[,-"id"])
+cor(dt[,-"id"], method = "kendall")
 var(dt[,-"id"])
 apply(dt[,-"id"], 2, mean)
 

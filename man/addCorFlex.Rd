@@ -4,18 +4,22 @@
 \alias{addCorFlex}
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
-addCorFlex(dt, defs, rho, corstr, corMatrix = NULL)
+addCorFlex(dt, defs, rho = 0, tau = NULL, corstr = "cs",
+  corMatrix = NULL)
 }
 \arguments{
 \item{dt}{Data table that will be updated.}
 
-\item{defs}{Field definition table created by function `defDataAdd`.}
+\item{defs}{Field definition table created by function `defDataAdd`.
+@param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.}
 
-\item{rho}{Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.}
+\item{tau}{Correlation based on Kendall's tau. If tau is specified, then it is
+used as the correlation even if rho is specfied. If tau is NULL, then the specified
+value of rho is used, or rho defaults to 0.}
 
 \item{corstr}{Correlation structure of the variance-covariance matrix
 defined by sigma and rho. Options include "cs" for a compound symmetry structure
-and "ar1" for an autoregressive structure.}
+and "ar1" for an autoregressive structure. Defaults to "cs".}
 
 \item{corMatrix}{Correlation matrix can be entered directly. It must be symmetrical and
 positive semi-definite. It is not a required field; if a matrix is not provided, then a

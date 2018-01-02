@@ -5,12 +5,16 @@
 #' must be scalar. Definition specifies distribution, mean, and variance, with all
 #' caveats for each of the distributions. (See defData).
 #' @param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.
+#' @param tau Correlation based on Kendall's tau. If tau is specified, then it is
+#' used as the correlation even if rho is specfied. If tau is NULL, then the specified
+#' value of rho is used, or rho defaults to 0.
 #' @param corstr Correlation structure of the variance-covariance matrix
 #' defined by sigma and rho. Options include "cs" for a compound symmetry structure
-#' and "ar1" for an autoregressive structure.
+#' and "ar1" for an autoregressive structure. Defaults to "cs".
 #' @param corMatrix Correlation matrix can be entered directly. It must be symmetrical and
 #' positive semi-definite. It is not a required field; if a matrix is not provided, then a
-#' structure and correlation coefficient rho must be specified.
+#' structure and correlation coefficient rho must be specified. This is only used if tau
+#' is not specified.
 #' @return data.table with added column(s) of correlated data
 #' @examples
 #' def <- defData(varname = "xNorm", formula = 0, variance = 4, dist = "normal")
@@ -22,15 +26,16 @@
 #' def <- defData(def, varname = "xUnif3", formula = "100;150", dist = "uniform")
 #' def <- defData(def, varname = "xGamma2", formula = 150, variance = 0.003, dist = "gamma")
 #'
-#' dt <- genCorFlex(100000, def, rho = 0.3 , corstr = "cs")
+#' dt <- genCorFlex(10000, def, tau = 0.3 , corstr = "cs")
 #'
 #' cor(dt[,-"id"])
+#' cor(dt[,-"id"], method = "kendall")
 #' var(dt[,-"id"])
 #' apply(dt[,-"id"], 2, mean)
 #'
 #' @export
 #'
-genCorFlex <- function(n, defs, rho, corstr, corMatrix = NULL) {
+genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NULL) {
 
   # "Declare" vars to avoid R CMD warning
 
@@ -89,6 +94,12 @@ genCorFlex <- function(n, defs, rho, corstr, corMatrix = NULL) {
   ### Check for non-scalar values in definitions
 
   if (corDefs[is.na(formula), .N] > 0) stop("Non-scalar values in definitions")
+
+  ### Convert tau to rho
+
+  if (!is.null(tau)) {
+    rho <- sin(tau * pi/2)
+  }
 
   ### Start generating data (first, using copula)
 

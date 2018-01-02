@@ -2,10 +2,13 @@
 #'
 #' @param dt Data table that will be updated.
 #' @param defs Field definition table created by function `defDataAdd`.
-#' @param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.
+#'  @param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.
+#' @param tau Correlation based on Kendall's tau. If tau is specified, then it is
+#' used as the correlation even if rho is specfied. If tau is NULL, then the specified
+#' value of rho is used, or rho defaults to 0.
 #' @param corstr Correlation structure of the variance-covariance matrix
 #' defined by sigma and rho. Options include "cs" for a compound symmetry structure
-#' and "ar1" for an autoregressive structure.
+#' and "ar1" for an autoregressive structure. Defaults to "cs".
 #' @param corMatrix Correlation matrix can be entered directly. It must be symmetrical and
 #' positive semi-definite. It is not a required field; if a matrix is not provided, then a
 #' structure and correlation coefficient rho must be specified.
@@ -44,7 +47,7 @@
 #' cor(di[, .(A, B, C, D)])
 #' @export
 #'
-addCorFlex <- function(dt, defs, rho, corstr, corMatrix = NULL) {
+addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = NULL) {
 
   # "Declare" vars to avoid R CMD warning
 
@@ -79,6 +82,14 @@ addCorFlex <- function(dt, defs, rho, corstr, corMatrix = NULL) {
   nvars <- nrow(corDefs)
 
   ### Start generating data (first, using copula)
+
+  ### Convert tau to rho
+
+  if (!is.null(tau)) {
+    rho <- sin(tau * pi/2)
+  }
+
+  ###
 
   dx <- simstudy:::genQuantU(nvars, n, rho, corstr, corMatrix=NULL)
 
