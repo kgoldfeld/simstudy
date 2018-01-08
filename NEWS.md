@@ -48,3 +48,5 @@
 # simstudy 0.1.8
 
 * Fixed function updateDef
+* Added function genCorFlex - generate correlated data from variables that have different marginal distributions
+* Added function genCorFlex - generate correlated data from variables that have different marginal distributions, can be dependent on previously defined data
