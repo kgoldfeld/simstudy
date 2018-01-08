@@ -26,7 +26,7 @@
 #' def <- defData(def, varname = "xUnif3", formula = "100;150", dist = "uniform")
 #' def <- defData(def, varname = "xGamma2", formula = 150, variance = 0.003, dist = "gamma")
 #'
-#' dt <- genCorFlex(10000, def, tau = 0.3 , corstr = "cs")
+#' dt <- genCorFlex(1000, def, tau = 0.3 , corstr = "cs")
 #'
 #' cor(dt[,-"id"])
 #' cor(dt[,-"id"], method = "kendall")
@@ -46,6 +46,8 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
   id <- NULL
   period <- NULL
   dist <- NULL
+  formula <- NULL
+  variance <- NULL
 
   #### Check args
 
@@ -103,13 +105,13 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
 
   ### Start generating data (first, using copula)
 
-  dx <- simstudy:::genQuantU(nvars, n, rho, corstr, corMatrix=NULL)
+  dx <- genQuantU(nvars, n, rho, corstr, corMatrix=NULL)
 
   dx[, dist := corDefs[, dist]]
   dx[, param1 := corDefs[, formula]]
   dx[, param2 := corDefs[, variance]]
 
-  dFinal <- dx[period == 0, .(id)]
+  dFinal <- dx[period == 0, list(id)]
 
   for (i in 1:nvars) {
 
@@ -117,19 +119,19 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
     type <- corDefs[i, dist]
 
     if (type == "binary") {
-      V <- dTemp[, qbinom(Unew, 1, param1)]
+      V <- dTemp[, stats::qbinom(Unew, 1, param1)]
 
     } else if (type == "poisson") {
-      V <- dTemp[, qpois(Unew, param1)]
+      V <- dTemp[, stats::qpois(Unew, param1)]
 
     } else if (type == "uniform") {
-      V <- dTemp[, qunif(Unew, param1, param2)]
+      V <- dTemp[, stats::qunif(Unew, param1, param2)]
 
     } else if (type == "gamma") {
-      V <- dTemp[,qgamma(Unew, param1, param2)]
+      V <- dTemp[, stats::qgamma(Unew, param1, param2)]
 
     } else if (type == "normal") {
-      V <- dTemp[, qnorm(Unew, param1, sqrt(param2))]
+      V <- dTemp[, stats::qnorm(Unew, param1, sqrt(param2))]
     }
 
     dFinal <- cbind(dFinal, V)

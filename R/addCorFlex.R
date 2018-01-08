@@ -2,7 +2,7 @@
 #'
 #' @param dt Data table that will be updated.
 #' @param defs Field definition table created by function `defDataAdd`.
-#'  @param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.
+#' @param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.
 #' @param tau Correlation based on Kendall's tau. If tau is specified, then it is
 #' used as the correlation even if rho is specfied. If tau is NULL, then the specified
 #' value of rho is used, or rho defaults to 0.
@@ -14,9 +14,9 @@
 #' structure and correlation coefficient rho must be specified.
 #' @return data.table with added column(s) of correlated data
 #' @examples
-#' defC <- defData(varname = "nInds", formula = 300, dist = "noZeroPoisson", id = "idClust")
+#' defC <- defData(varname = "nInds", formula = 50, dist = "noZeroPoisson", id = "idClust")
 #'
-#' dc <- genData(20, defC)
+#' dc <- genData(10, defC)
 #' #### Normal only
 #'
 #' dc <- addCorData(dc, mu = c(0,0,0,0), sigma = c(2, 2, 2, 2), rho = .2,
@@ -40,11 +40,11 @@
 #' # Check correlations by cluster
 #'
 #' for (i in 1:nrow(dc)) {
-#'   print(cor(di[idClust == i, .(A, B, C, D)]))
+#'   print(cor(di[idClust == i, list(A, B, C, D)]))
 #' }
 #'
 #' # Check global correlations - should not be as correlated
-#' cor(di[, .(A, B, C, D)])
+#' cor(di[, list(A, B, C, D)])
 #' @export
 #'
 addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = NULL) {
@@ -58,6 +58,9 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
   id <- NULL
   period <- NULL
   dist <- NULL
+  formula <- NULL
+  link <- NULL
+  variance <- NULL
 
   #### Check args
 
@@ -91,9 +94,9 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
   ###
 
-  dx <- simstudy:::genQuantU(nvars, n, rho, corstr, corMatrix=NULL)
+  dx <- genQuantU(nvars, n, rho, corstr, corMatrix=NULL)
 
-  dFinal <- dx[period == 0, .(id)]
+  dFinal <- dx[period == 0, list(id)]
 
   for (i in 1:nvars) {
 
@@ -106,19 +109,19 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
     if (iDist == "binary") {
 
-      param1 <- simstudy:::getBinaryMean(dTemp, formula = iFormula, link = iLink )
+      param1 <- getBinaryMean(dTemp, formula = iFormula, link = iLink )
 
-      V <- dTemp[, qbinom(Unew, 1, param1)]
+      V <- dTemp[, stats::qbinom(Unew, 1, param1)]
 
     } else if (iDist == "poisson") {
 
-      param1 <- simstudy:::getPoissonMean(dTemp, formula = iFormula, link = iLink )
+      param1 <- getPoissonMean(dTemp, formula = iFormula, link = iLink )
 
-      V <- dTemp[, qpois(Unew, param1)]
+      V <- dTemp[, stats::qpois(Unew, param1)]
 
     } else if (iDist == "gamma") {
 
-      mn <- simstudy:::getGammaMean(dTemp, formula = iFormula, link = iLink )
+      mn <- getGammaMean(dTemp, formula = iFormula, link = iLink )
 
       ### Gamma parameters need to be transformed
 
@@ -126,14 +129,14 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
       param1 <- sr[[1]]
       param2 <- sr[[2]]
 
-      V <- dTemp[,qgamma(Unew, param1, param2)]
+      V <- dTemp[, stats::qgamma(Unew, param1, param2)]
 
     } else if (iDist == "normal") {
 
-      param1 <- simstudy:::getNormalMean(dTemp, formula = iFormula)
+      param1 <- getNormalMean(dTemp, formula = iFormula)
       param2 <- sqrt(corDefs[i, variance])
 
-      V <- dTemp[, qnorm(Unew, param1, param2)]
+      V <- dTemp[, stats::qnorm(Unew, param1, param2)]
 
     }
 

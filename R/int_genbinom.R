@@ -23,9 +23,9 @@ getBinaryMean <- function(dtSim, formula, link) {
 
 genbinom <- function(n,formula,link,dtSim) {
 
-  mean <- getBinaryMean(dtSim, formula, link)
+  p <- getBinaryMean(dtSim, formula, link)
 
-  return(stats::rbinom(n,1,p))
+  return(stats::rbinom(n, 1, p))
 
 }
 

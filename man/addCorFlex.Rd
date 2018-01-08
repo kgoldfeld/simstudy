@@ -10,8 +10,9 @@ addCorFlex(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 \arguments{
 \item{dt}{Data table that will be updated.}
 
-\item{defs}{Field definition table created by function `defDataAdd`.
-@param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.}
+\item{defs}{Field definition table created by function `defDataAdd`.}
+
+\item{rho}{Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.}
 
 \item{tau}{Correlation based on Kendall's tau. If tau is specified, then it is
 used as the correlation even if rho is specfied. If tau is NULL, then the specified
@@ -32,9 +33,9 @@ data.table with added column(s) of correlated data
 Create multivariate (correlated) data - for general distributions
 }
 \examples{
-defC <- defData(varname = "nInds", formula = 300, dist = "noZeroPoisson", id = "idClust")
+defC <- defData(varname = "nInds", formula = 50, dist = "noZeroPoisson", id = "idClust")
 
-dc <- genData(20, defC)
+dc <- genData(10, defC)
 #### Normal only
 
 dc <- addCorData(dc, mu = c(0,0,0,0), sigma = c(2, 2, 2, 2), rho = .2,
@@ -58,9 +59,9 @@ di <- addCorFlex(di, defI, rho = 0.4, corstr = "cs")
 # Check correlations by cluster
 
 for (i in 1:nrow(dc)) {
-  print(cor(di[idClust == i, .(A, B, C, D)]))
+  print(cor(di[idClust == i, list(A, B, C, D)]))
 }
 
 # Check global correlations - should not be as correlated
-cor(di[, .(A, B, C, D)])
+cor(di[, list(A, B, C, D)])
 }
