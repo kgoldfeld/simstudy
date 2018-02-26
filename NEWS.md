@@ -51,3 +51,8 @@
 * Fixed bug in internal function genbinom
 * Added function genCorFlex - generate correlated data from variables that have different marginal distributions
 * Added function genCorFlex - generate correlated data from variables that have different marginal distributions, can be dependent on previously defined data
+
+# simstudy 0.1.9
+
+* Added function catProbs - to be used to generate categorical data
+
