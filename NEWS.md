@@ -57,4 +57,5 @@
 * Added function catProbs - to be used to generate categorical data
 * Added binomial distribution
 * Added ability to specify formula in variance
+* Added function genMultiFac - generates multi-factorial design data
 
