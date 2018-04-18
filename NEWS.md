@@ -55,4 +55,6 @@
 # simstudy 0.1.9
 
 * Added function catProbs - to be used to generate categorical data
+* Added binomial distribution
+* Added ability to specify formula in variance
 
