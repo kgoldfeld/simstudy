@@ -1,32 +1,34 @@
-#' Generate multi-factorial data
+#' Add multi-factorial data
 #'
-#' @param each Number of replications for each combination of factors. Must be specified.
-#' @param nFactors Number of factors (columns) to generate. Defaults to 2.
-#' @param coding String value to specify if "dummy" or "effect" coding is used.
-#' Defaults to "dummy".
+#' @param dtOld data.table that is to be modified
+#' @param nFactors Number of factors (columns) to generate.
 #' @param levels Vector or scalar. If a vector is specified, it must be
 #' the same length as nFatctors. Each value of the vector represents the
 #' number of levels of eahc corresponding factor. If a scalar is specified,
 #' each factor will have the same number of levels. The default is 2 levels
 #' for each factor.
+#' @param coding String value to specify if "dummy" or "effect" coding is used.
+#' Defaults to "dummy".
 #' @param colNames A vector of strings, with a length of nFactors. The strings
 #' represent the name for each factor.
 #' @param idName A string that specifies the id of the record. Defaults to "id".
-#' @return A data.table that contains the added simulated data. Each column contains
+#' @return A data.table that contains the added simulated data. Each new column contains
 #' an integer.
 #' @examples
-#' genMultiFac(5)
-#' genMultiFac(3, nFactors = 2, levels = c(2, 3))
-#' genMultiFac(1, nFactors = 3, coding = "effect", 
-#'    colNames = c("Fac1","Fac2", "Fac3"), id = "block")
 #' @export
 #'
 
-genMultiFac <- function(each, nFactors = 2, coding = "dummy", levels = 2, colNames = NULL, idName = "id") {
-  
+addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames = NULL) {
   
   if (nFactors < 2) stop("Must specify at least 2 factors")
   if (length(levels) > 1 & (length(levels) != nFactors)) stop("Number of levels does not match factors")
+  
+  if (length(levels) == 1) {
+    combos <- prod(rep(levels, nFactors))
+  } else combos <- prod(levels)
+  
+  each <- ceiling(nrow(dtOld)/combos)
+  extra <- nrow(dtOld) %% combos
   
   x <- list()
   
@@ -54,17 +56,32 @@ genMultiFac <- function(each, nFactors = 2, coding = "dummy", levels = 2, colNam
     
   }
   
-  dt <- data.table(as.data.frame(lapply(expand.grid(x), function(x) rep(x, each = each))))
+  dnew <- data.table(as.data.frame(lapply(expand.grid(x), 
+                                        function(x) rep(x, each = each))))
+  dnew[, count := c(1:each)]
+  neworder <- sample(1:nrow(dnew),nrow(dnew), replace = FALSE)
+  dnew <- dnew[neworder]
   
-  if (!is.null(colNames)) setnames(dt, colNames)
+  if (extra > 0) {
+    
+    full <- dnew[count < each]
+    partial <- dnew[count == each][1:extra]
+    
+    all <- rbind(full, partial)  
+    
+  } else {
+    
+    all <- copy(dnew)
+    
+  }
   
-  origNames <- copy(names(dt))
+  all <- all[,-"count"]
   
-  dt[ , (idName) := 1:.N]
+  if (!is.null(colNames)) setnames(all, colNames)
   
-  setcolorder(dt, c(idName, origNames) )
-  setkeyv(dt, idName)
+  origNames <- copy(names(all))
+  dreturn <- cbind(dtOld, all)
   
-  return(dt[])
+  return(dreturn[])
   
 }
