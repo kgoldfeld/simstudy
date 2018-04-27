@@ -135,16 +135,14 @@ addPeriods <-  function(dtName,
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
-      return(dtTimes1)
-
-      return(dtTimes1)
+      return(dtTimes1[])
 
     } else {
 
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
-      return(dtTimes1)
+      return(dtTimes1[])
 
     }
 
@@ -163,7 +161,7 @@ addPeriods <-  function(dtName,
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
-      return(dtTimes1)
+      return(dtTimes1[])
 
     } else {
 

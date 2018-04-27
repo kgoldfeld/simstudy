@@ -70,7 +70,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
 
   # Make sure that distribution is allowed
 
-  if (!(newdist %in% c("normal","binary","poisson","noZeroPoisson",
+  if (!(newdist %in% c("normal","binary", "binomial","poisson","noZeroPoisson",
                        "uniform","categorical","gamma","nonrandom",
                        "uniformInt", "negBinomial", "exponential"
   ))) {
