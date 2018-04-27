@@ -55,4 +55,10 @@
 # simstudy 0.1.9
 
 * Added function catProbs - to be used to generate categorical data
+* Added binomial distribution
+* Added ability to specify formula in variance
+* Added function genMultiFac - generates multi-factorial design data
+* Added function addMultiFac - adds multi-factorial design data
+* Fixed bug in function genCorFlex
+* Fixed bug in function addCondition
 

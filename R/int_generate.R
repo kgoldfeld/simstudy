@@ -11,8 +11,10 @@
 
 generate <- function(args, n, dfSim, idname) {
 
-  if (! args$dist %in% c("normal","poisson","noZeroPoisson","binary","uniform", "uniformInt",
-                         "categorical", "gamma", "negBinomial","nonrandom","exponential")) {
+  if (! args$dist %in% c("normal", "poisson", "noZeroPoisson", "binary", 
+                         "binomial","uniform", "uniformInt",
+                         "categorical", "gamma", "negBinomial",
+                         "nonrandom", "exponential")) {
     stop(paste(args$dist, "not a valid distribution. Please check spelling."), call. = FALSE)
   }
 
@@ -23,7 +25,10 @@ generate <- function(args, n, dfSim, idname) {
   } else if (args$dist == "noZeroPoisson") {
     newColumn <- genpoisTrunc(n, args$formula, args$link, dfSim)
   } else if (args$dist == "binary") {
-    newColumn <- genbinom(n, args$formula, args$link, dfSim)
+    args$variance = 1
+    newColumn <- genbinom(n, args$formula, args$variance, args$link, dfSim)
+  } else if (args$dist == "binomial") {                     # added 040918
+    newColumn <- genbinom(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist=="uniform") {
     newColumn <- genunif(n, args$formula, dfSim)
   } else if (args$dist=="uniformInt") {
