@@ -15,6 +15,17 @@
 #' @return A data.table that contains the added simulated data. Each new column contains
 #' an integer.
 #' @examples
+#' defD <-defData(varname = "x", formula = 0, variance = 1)
+#'
+#' DT <- genData(360, defD)
+#' DT <- addMultiFac(DT, nFactors = 3, levels = c(2, 3, 3), colNames = c("A", "B", "C"))
+#' DT
+#' DT[, .N, keyby = .(A, B, C)]
+#' 
+#' DT <- genData(300, defD)
+#' DT <- addMultiFac(DT, nFactors = 3, levels = 2)
+#' DT[, .N, keyby = .(Var1, Var2, Var3)]
+#'
 #' @export
 #'
 
@@ -22,6 +33,13 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
   
   if (nFactors < 2) stop("Must specify at least 2 factors")
   if (length(levels) > 1 & (length(levels) != nFactors)) stop("Number of levels does not match factors")
+  
+  if (is.null(colNames)) {
+    cn <- paste0("Var", 1:nFactors)
+    if (any(cn %in% names(dtOld))) stop("Default column name(s) already in use")
+  } else {
+    if (any(colNames %in% names(dtOld))) stop("At least one column name already in use")
+  }
   
   if (length(levels) == 1) {
     combos <- prod(rep(levels, nFactors))

@@ -59,5 +59,6 @@
 * Added ability to specify formula in variance
 * Added function genMultiFac - generates multi-factorial design data
 * Added function addMultiFac - adds multi-factorial design data
-* Fixed bug in genCorFlex
+* Fixed bug in function genCorFlex
+* Fixed bug in function addCondition
 
