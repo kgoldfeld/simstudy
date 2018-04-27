@@ -51,12 +51,12 @@ addCondition <- function(condDefs, dtOld, newvar) {
   if (missing(condDefs)) stop("argument 'condDefs' is missing", call. = FALSE)
   if (missing(dtOld)) stop("argument 'dtOld' is missing", call. = FALSE)
   if (missing(newvar)) stop("argument 'newvar' is missing", call. = FALSE)
-
-  if (!exists(deparse(substitute(condDefs)))) {
-    stop(paste("definitons", deparse(substitute(condDefs)), "not found"), call. = FALSE)
+        
+  if (!exists(deparse(substitute(condDefs)), envir = parent.frame())) {
+    stop(paste("definitions", deparse(substitute(condDefs)), "not found"), call. = FALSE)
   }
 
-  if (!exists(deparse(substitute(dtOld)))) {
+  if (!exists(deparse(substitute(dtOld)), envir = parent.frame())) {
     stop(paste("data table", deparse(substitute(dtOld)), "not found"), call. = FALSE)
   }
 
