@@ -71,6 +71,6 @@ defData <- function(dtDefs = NULL,
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
   attr(defNew, "id") <- attr(dtDefs, "id")
 
-  return(defNew)
+  return(defNew[])
 
 }

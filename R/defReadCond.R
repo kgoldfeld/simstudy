@@ -53,6 +53,6 @@ defReadCond <- function(filen) {
 
   }
 
-  return(read.dt)
+  return(read.dt[])
 
 }

@@ -55,7 +55,6 @@ genData <- function(n, dtDefs = NULL, id = "id") {
 
   }
 
-
-  return(dt)
+  return(dt[])
 
 }

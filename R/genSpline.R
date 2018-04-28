@@ -47,7 +47,7 @@ genSpline <- function(dt, newvar, predictor, theta,
 
   # Check arguments
 
-  if (!exists(deparse(substitute(dt)))) {
+  if (!exists(deparse(substitute(dt)),  envir = parent.frame())) {
     stop("Data table does not exist.")
   }
 
@@ -111,6 +111,6 @@ genSpline <- function(dt, newvar, predictor, theta,
   dt[, newy := newy]
   data.table::setnames(dt, "newy", newvar)
 
-  return(dt)
+  return(dt[])
 
 }

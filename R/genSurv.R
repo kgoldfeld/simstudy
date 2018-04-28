@@ -61,6 +61,6 @@ genSurv <- function(dtName, survDefs, digits = 3) {
 
   }
 
-  return(dtSurv)
+  return(dtSurv[])
 
 }

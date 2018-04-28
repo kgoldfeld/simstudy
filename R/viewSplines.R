@@ -66,6 +66,6 @@ viewSplines <- function(knots, degree, theta) {
     p <- p + ggplot2::theme(legend.position = "none")
   }
 
-  p
+  return(p)
 
 }

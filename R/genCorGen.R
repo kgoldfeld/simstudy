@@ -144,6 +144,6 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
     }
   }
 
-  return(dFinal)
+  return(dFinal[])
 
 }

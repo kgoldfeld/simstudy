@@ -41,7 +41,7 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 
   # Check if data table exists
 
-  if (!exists(deparse(substitute(dtName)))) {
+  if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
     stop(paste("data table", deparse(substitute(dtName)), "not found"), call. = FALSE)
   }
 

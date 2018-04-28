@@ -104,6 +104,6 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 
   }
 
-  return(dt)
+  return(dt[])
 
 }

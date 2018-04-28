@@ -40,7 +40,7 @@ genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FA
 
   # Check if data table exists
 
-  if (!exists(deparse(substitute(dtName)))) {
+  if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
     stop(paste("data table", deparse(substitute(dtName)), "not found"), call. = FALSE)
   }
 
@@ -76,6 +76,6 @@ genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FA
 
   if (replace == TRUE) dtName[, (varname) := NULL]
 
-  return(dtName)
+  return(dtName[])
 
 }

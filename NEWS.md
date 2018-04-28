@@ -60,5 +60,6 @@
 * Added function genMultiFac - generates multi-factorial design data
 * Added function addMultiFac - adds multi-factorial design data
 * Fixed bug in function genCorFlex
+* Fixed bug in numerous functions related to error checking and scoping
 * Fixed bug in function addCondition
 

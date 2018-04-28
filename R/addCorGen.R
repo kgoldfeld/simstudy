@@ -222,5 +222,5 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
 
   }
 
-  return(dtTemp)
+  return(dtTemp[])
 }

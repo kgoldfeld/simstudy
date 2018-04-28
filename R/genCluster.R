@@ -63,7 +63,7 @@ genCluster <- function(dtClust,
 
   data.table::setkeyv(dt, level1ID)
 
-  return(dt)
+  return(dt[])
 
 }
 

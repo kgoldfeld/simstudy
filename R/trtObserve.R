@@ -78,6 +78,6 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 
   data.table::setnames(dtnew, "grpExp", grpName)
 
-  dtnew
+  return(dtnew[])
 
 }

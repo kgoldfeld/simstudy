@@ -55,7 +55,7 @@ addColumns <- function(dtDefs,dtOld) {
   dtOld <- data.table::data.table(dtOld)
   data.table::setkeyv(dtOld, oldkey)
 
-  return(dtOld)
+  return(dtOld[])
 
 }
 

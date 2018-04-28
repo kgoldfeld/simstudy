@@ -139,6 +139,6 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
 
   }
 
-  return(dFinal)
+  return(dFinal[])
 
 }

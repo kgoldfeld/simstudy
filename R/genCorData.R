@@ -106,6 +106,6 @@ genCorData <- function(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
   dt <- cbind(dtid, dt)
   setkeyv(dt, idname)
 
-  return(dt)
+  return(dt[])
 
 }

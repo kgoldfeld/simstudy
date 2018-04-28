@@ -147,6 +147,6 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
   dFinal <- dtCopy[dFinal]
 
-  return(dFinal)
+  return(dFinal[])
 
 }

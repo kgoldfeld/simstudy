@@ -62,6 +62,6 @@ addCorData <- function(dtOld, idname, mu, sigma, corMatrix = NULL,
 
   dtTemp <- mergeData(dtTemp, dtNew, idname)
 
-  return(dtTemp)
+  return(dtTemp[])
 
 }

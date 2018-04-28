@@ -45,7 +45,7 @@ genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE
 
   # Check arguments
 
-  if (!exists(deparse(substitute(dtName)))) {
+  if (!exists(deparse(substitute(dtName)),  envir = parent.frame())) {
     stop("Data table does not exist.")
   }
 
@@ -101,6 +101,6 @@ genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE
     data.table::setnames(dt, "cat", catVar)
   }
 
-  return(dt)
+  return(dt[])
 
 }

@@ -52,8 +52,8 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
 
   # Check args
 
-  if (!exists(deparse(substitute(dtDefs)))) {
-    stop("Data table does not exist.")
+  if (!exists(deparse(substitute(dtDefs)), envir = parent.frame())) {
+    stop("Data definition does not exist.")
   }
 
   if (!(changevar %in% dtDefs[, varname])) {

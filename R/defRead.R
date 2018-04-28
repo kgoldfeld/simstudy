@@ -69,6 +69,6 @@ defRead <- function(filen, id = "id") {
 
 
   attr(read.dt,"id") <- id
-  return(read.dt)
+  return(read.dt[])
 
 }

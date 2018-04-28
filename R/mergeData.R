@@ -30,6 +30,6 @@ mergeData <- function(dt1, dt2, idvars) {
   dtmerge <- dt1[dt2]
   data.table::setkeyv(dtmerge, oldkey)
 
-  return(dtmerge)
+  return(dtmerge[])
 
 }
