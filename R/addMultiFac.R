@@ -30,6 +30,12 @@
 
 addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames = NULL) {
   
+  # 'declare' vars
+  
+  count <- NULL
+  
+  ###
+  
   if (nFactors < 2) stop("Must specify at least 2 factors")
   if (length(levels) > 1 & (length(levels) != nFactors)) stop("Number of levels does not match factors")
   
