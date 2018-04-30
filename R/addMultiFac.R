@@ -11,7 +11,6 @@
 #' Defaults to "dummy".
 #' @param colNames A vector of strings, with a length of nFactors. The strings
 #' represent the name for each factor.
-#' @param idName A string that specifies the id of the record. Defaults to "id".
 #' @return A data.table that contains the added simulated data. Each new column contains
 #' an integer.
 #' @examples

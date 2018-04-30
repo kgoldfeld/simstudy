@@ -23,8 +23,6 @@ Defaults to "dummy".}
 
 \item{colNames}{A vector of strings, with a length of nFactors. The strings
 represent the name for each factor.}
-
-\item{idName}{A string that specifies the id of the record. Defaults to "id".}
 }
 \value{
 A data.table that contains the added simulated data. Each new column contains
