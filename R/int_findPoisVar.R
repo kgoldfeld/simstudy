@@ -7,6 +7,12 @@
 
 findPoisVar <- function(j) {
   
+  # 'declare' var
+  
+  y <- NULL
+  
+  ##
+  
   a <- seq(0, 20, by  = 0.01)
   dx <- data.table::data.table(a = a, y = exp(3*a/2) - exp(a/2))
   
