@@ -59,6 +59,7 @@
 * Added ability to specify formula in variance
 * Added function genMultiFac - generates multi-factorial design data
 * Added function addMultiFac - adds multi-factorial design data
+* Added function iccRE - generates required random effect variance for specified intra-class coefficients (ICCs)
 * Fixed bug in function genCorFlex
 * Fixed bug in numerous functions related to error checking and scoping
 * Fixed bug in function addCondition
