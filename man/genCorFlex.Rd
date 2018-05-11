@@ -17,7 +17,7 @@ caveats for each of the distributions. (See defData).}
 \item{rho}{Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.}
 
 \item{tau}{Correlation based on Kendall's tau. If tau is specified, then it is
-used as the correlation even if rho is specfied. If tau is NULL, then the specified
+used as the correlation even if rho is specified. If tau is NULL, then the specified
 value of rho is used, or rho defaults to 0.}
 
 \item{corstr}{Correlation structure of the variance-covariance matrix

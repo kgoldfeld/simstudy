@@ -6,7 +6,7 @@
 #' caveats for each of the distributions. (See defData).
 #' @param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.
 #' @param tau Correlation based on Kendall's tau. If tau is specified, then it is
-#' used as the correlation even if rho is specfied. If tau is NULL, then the specified
+#' used as the correlation even if rho is specified. If tau is NULL, then the specified
 #' value of rho is used, or rho defaults to 0.
 #' @param corstr Correlation structure of the variance-covariance matrix
 #' defined by sigma and rho. Options include "cs" for a compound symmetry structure

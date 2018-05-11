@@ -14,7 +14,7 @@ addMultiFac(dtOld, nFactors, levels = 2, coding = "dummy",
 
 \item{levels}{Vector or scalar. If a vector is specified, it must be
 the same length as nFatctors. Each value of the vector represents the
-number of levels of eahc corresponding factor. If a scalar is specified,
+number of levels of each corresponding factor. If a scalar is specified,
 each factor will have the same number of levels. The default is 2 levels
 for each factor.}
 
