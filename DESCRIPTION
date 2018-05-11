@@ -31,7 +31,6 @@ Suggests: testthat,
     survival,
     gee,
     splines,
-    ordinal,
     formatR,
     mgcv
 VignetteBuilder: knitr
