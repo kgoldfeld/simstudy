@@ -94,7 +94,7 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
   ###
 
-  dx <- genQuantU(nvars, n, rho, corstr, corMatrix=NULL)
+  dx <- genQuantU(nvars, n, rho, corstr, corMatrix)
 
   dFinal <- dx[period == 0, list(id)]
 
