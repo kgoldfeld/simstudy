@@ -23,7 +23,7 @@ an additional category is added with probability 1 - sum(baseprobs).}
 as a factor. If asFactor == FALSE, new field is returned as an integer.}
 }
 \value{
-Original matrix with added categorical field
+Original data.table with added categorical field
 }
 \description{
 Ordinal categorical data is added to an existing data set.

@@ -67,4 +67,6 @@
 # simstudy 0.1.10
 
 * Added function genCorMat - generate an n x n correlation matrix
+* Added function genCorOrdCat - generate correlated ordinal categorical data
+* Modified function genOrdCat - allows adjVar = NULL
 * Fixed bug in function addCorFlex

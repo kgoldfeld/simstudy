@@ -12,7 +12,7 @@
 #' @param catVar Name of the new categorical field. Defaults to "cat"
 #' @param asFactor If asFactor == TRUE (default), new field is returned
 #' as a factor. If asFactor == FALSE, new field is returned as an integer.
-#' @return Original matrix with added categorical field
+#' @return Original data.table with added categorical field
 #' @examples
 #' #### Set definitions
 #'
@@ -76,11 +76,13 @@ genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE
                   byrow = TRUE
   )
 
+  if (! is.null(adjVar)) {
+    z <- dt[, adjVar, with=FALSE][[1]]
+    matlp <- matlp - z
+  }
+  
 
-  z <- dt[, adjVar, with=FALSE][[1]]
-  matlpInd <- matlp - z
-
-  matcump <- 1 / (1 + exp(-matlpInd))
+  matcump <- 1 / (1 + exp(-matlp))
   matcump <- cbind(0, matcump)
 
   p <- t(t(matcump)[-1,] - t(matcump)[-(length(baseprobs) + 1),])
