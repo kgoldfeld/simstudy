@@ -26,6 +26,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
   if (newdist %in% c("uniform","uniformInt") & nparam != 2) {
       stop("Uniform (continuous & integer) requires min and max", call. = FALSE)
   }
+  
 
   if (newdist == "categorical" & nparam < 2) {
     stop("Categorical distribution requires 2 or more probabilities", call. = FALSE)
@@ -71,7 +72,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
   # Make sure that distribution is allowed
 
   if (!(newdist %in% c("normal","binary", "binomial","poisson","noZeroPoisson",
-                       "uniform","categorical","gamma","nonrandom",
+                       "uniform","categorical","gamma","beta","nonrandom",
                        "uniformInt", "negBinomial", "exponential"
   ))) {
 
