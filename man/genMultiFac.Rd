@@ -4,8 +4,8 @@
 \alias{genMultiFac}
 \title{Generate multi-factorial data}
 \usage{
-genMultiFac(nFactors, each, levels = 2, coding = "dummy", colNames = NULL,
-  idName = "id")
+genMultiFac(nFactors, each, levels = 2, coding = "dummy",
+  colNames = NULL, idName = "id")
 }
 \arguments{
 \item{nFactors}{Number of factors (columns) to generate.}

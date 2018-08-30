@@ -4,8 +4,8 @@
 \alias{addCorData}
 \title{Add correlated data to existing data.table}
 \usage{
-addCorData(dtOld, idname, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
-  cnames = NULL)
+addCorData(dtOld, idname, mu, sigma, corMatrix = NULL, rho,
+  corstr = "ind", cnames = NULL)
 }
 \arguments{
 \item{dtOld}{Data table that is the new columns will be appended to.}
