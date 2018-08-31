@@ -109,9 +109,9 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
     if (iDist == "binary") {
 
-      param1 <- getBinaryMean(dTemp, formula = iFormula, link = iLink )
+      params <- getBinaryMean(dTemp, formula = iFormula, Size = 1, link = iLink )
 
-      V <- dTemp[, stats::qbinom(Unew, 1, param1)]
+      V <- dTemp[, stats::qbinom(Unew, 1, params[[1]])]
 
     } else if (iDist == "poisson") {
 
