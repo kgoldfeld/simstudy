@@ -4,7 +4,8 @@
 \alias{genFactor}
 \title{Create factor variable from an existing (non-double) variable}
 \usage{
-genFactor(dtName, varname, labels = NULL, prefix = "f", replace = FALSE)
+genFactor(dtName, varname, labels = NULL, prefix = "f",
+  replace = FALSE)
 }
 \arguments{
 \item{dtName}{Data table with column}
