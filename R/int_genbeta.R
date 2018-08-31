@@ -22,13 +22,13 @@ getBetaMean <- function(dtSim, formula, link ) {
   
 }
 
-genbeta <- function(n, formula, dispersion, link="identity", dtSim) {
+genbeta <- function(n, formula, precision, link="identity", dtSim) {
   
   mean <- getBetaMean(dtSim, formula, link)
   
-  d <- as.numeric(as.character(dispersion))
+  d <- as.numeric(as.character(precision))
   
-  sr <- betaGetShapes(mean = mean, dispersion = d)
+  sr <- betaGetShapes(mean = mean, precision = d)
   new <- stats::rbeta(n, shape = sr$shape1, shape2 = sr$shape2)
   
   return(new)
