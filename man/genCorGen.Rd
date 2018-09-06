@@ -5,7 +5,8 @@
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
 genCorGen(n, nvars, params1, params2 = NULL, dist, rho, corstr,
-  corMatrix = NULL, wide = FALSE, cnames = NULL)
+  corMatrix = NULL, wide = FALSE, cnames = NULL, method = "copula",
+  idname = "id")
 }
 \arguments{
 \item{n}{Number of observations}
@@ -41,6 +42,13 @@ will be its own record (i.e. the data will be in long form). Defaults to FALSE.}
 \item{cnames}{Explicit column names. A single string with names separated
 by commas. If no string is provided, the default names will be V#, where #
 represents the column.}
+
+\item{method}{Two methods are available to generate correlated data. (1) "copula" uses 
+the multivariate Gaussian copula method that is applied to all other distributions; this
+applies to all available distributions. (2) "ep" uses an algorithm developed by 
+Emrich and Piedmonte.}
+
+\item{idname}{Character value that specifies the name of the id variable.}
 }
 \value{
 data.table with added column(s) of correlated data
@@ -64,5 +72,8 @@ genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs
 genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", rho = .3, corstr = "cs")
 genCorGen(1000, nvars = 3, params1 = l, params2 = c(1,1,1), dist = "gamma", rho = .3,
           corstr = "cs", wide = TRUE)
+          
+genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", corMatrix = genCorMat(3), method = "ep")
+genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", corMatrix = genCorMat(3), method = "copula")
 
 }

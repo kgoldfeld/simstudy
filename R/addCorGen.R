@@ -170,7 +170,6 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
   n <- length(unique(dtTemp[, id])) # should check if n's are correct
   dtM <- genQuantU(nvars, n, rho, corstr, corMatrix)
 
-
   xid = "id"
   if (wide == TRUE) {
     dtTemp <- dtM[dtTemp[, c(xid, param1, param2), with = FALSE]]

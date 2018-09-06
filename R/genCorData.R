@@ -43,32 +43,17 @@ genCorData <- function(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
                        cnames=NULL, idname = "id") {
 
   nvars <- length(mu)
-
-  if (is.null(corMatrix)) {
-
-    corMatrix <- diag(nvars) # do not modify if indepdendent
-
-    if (corstr == "cs") {
-      corMatrix <- rho^(row(corMatrix) != col(corMatrix))
-    } else if (corstr == "ar1") {
-      corMatrix <- rho^abs(row(corMatrix)-col(corMatrix))
+  
+  if (! is.null(cnames)) {
+    
+    nnames <- trimws(unlist(strsplit(cnames, split = ",")))
+    
+    if (length(nnames) != nvars) {
+      stop("Invalid number of variable names")
     }
-
-  } else if (! is.null(corMatrix)) { # check if positive definite/symmetric
-
-    if (nvars != length(diag(corMatrix))) {
-      stop("Length of mean vector mismatched with correlation matrix")
-    }
-
-    if (! isSymmetric(corMatrix)) {
-      stop("Correlation matrix not symmetric")
-    }
-
-    if (! all(eigen(corMatrix)$values > 0)) {
-      stop("Correlation matrix not positive definite")
-    }
-
   }
+  
+  corMatrix <- .buildCorMat(nvars, corMatrix, corstr, rho)
 
   if (length(sigma) == 1) {
 
@@ -87,18 +72,10 @@ genCorData <- function(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
 
   }
 
-
   dt <- data.table(mvnfast::rmvn(n = n , mu = mu, sigma = varMatrix))
 
-  if (length(cnames)) {
-
-    if (length(cnames) != nvars) {
-      stop("Invalid number of variable names")
-    }
-
-    nnames <- trimws(unlist(strsplit(cnames, split = ",")))
-    setnames(dt, nnames)
-  }
+  
+  if (! is.null(cnames)) setnames(dt, nnames)
 
   dtid <- data.table(1:nrow(dt))
   setnames(dtid,idname)

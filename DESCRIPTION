@@ -21,6 +21,7 @@ Imports:
     Rcpp,
     mvnfast
 RoxygenNote: 6.1.0
+Encoding: UTF-8
 Suggests: testthat,
     knitr,
     rmarkdown,

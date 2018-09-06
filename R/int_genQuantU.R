@@ -7,9 +7,10 @@
 # @param rho Correlation coefficient
 # @param corstr Correlation structure
 # @param corMatrix Correlation matrix
+# @param idname Name of id variable
 # @return A data.frame column with correlated uniforms
 
-genQuantU <- function(nvars, n, rho, corstr, corMatrix) {
+genQuantU <- function(nvars, n, rho, corstr, corMatrix, idname = "id") {
 
   # "Declare" vars to avoid R CMD warning
 
@@ -23,17 +24,18 @@ genQuantU <- function(nvars, n, rho, corstr, corMatrix) {
   mu <- rep(0, nvars)
   if (is.null(corMatrix)) {
 
-    dt <- genCorData(n, mu, sigma = 1, rho = rho, corstr = corstr )
+    dt <- genCorData(n, mu, sigma = 1, rho = rho, corstr = corstr, idname = idname )
 
   } else {
 
-    dt <- genCorData(n, mu, sigma = 1, corMatrix = corMatrix )
+    dt <- genCorData(n, mu, sigma = 1, corMatrix = corMatrix, idname = idname )
 
   }
 
-  dtM <- melt(dt, id.vars = "id", variable.factor = TRUE, value.name = "Y", variable.name = "seq")
+  dtM <- melt(dt, id.vars = idname, variable.factor = TRUE, value.name = "Y", variable.name = "seq")
+  
   dtM[, period := as.integer(seq) - 1]
-  setkey(dtM, "id")
+  setkeyv(dtM, idname)
   dtM[, seqid := .I]
   dtM[, Unew := stats::pnorm(Y)]
 

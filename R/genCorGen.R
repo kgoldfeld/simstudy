@@ -24,6 +24,12 @@
 #' @param cnames Explicit column names. A single string with names separated
 #' by commas. If no string is provided, the default names will be V#, where #
 #' represents the column.
+#' @param method Two methods are available to generate correlated data. (1) "copula" uses 
+#' the multivariate Gaussian copula method that is applied to all other distributions; this
+#' applies to all available distributions. (2) "ep" uses an algorithm developed by 
+#' Emrich and Piedmonte.
+#' @param idname Character value that specifies the name of the id variable.
+#' 
 #' @return data.table with added column(s) of correlated data
 #' @examples
 #' l <- c(8, 10, 12)
@@ -41,11 +47,15 @@
 #' genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", rho = .3, corstr = "cs")
 #' genCorGen(1000, nvars = 3, params1 = l, params2 = c(1,1,1), dist = "gamma", rho = .3,
 #'           corstr = "cs", wide = TRUE)
+#'           
+#' genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", corMatrix = genCorMat(3), method = "ep")
+#' genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", corMatrix = genCorMat(3), method = "copula")
 #'
 #' @export
 #'
 genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
-                      corMatrix = NULL, wide = FALSE, cnames = NULL) {
+                      corMatrix = NULL, wide = FALSE, cnames = NULL, method = "copula",
+                      idname = "id") {
 
   # "Declare" vars to avoid R CMD warning
 
@@ -100,39 +110,56 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
                   ", not equal to number of correlated variables: ", nvars))
     }
   }
+  
+  if (!(method %in% c("copula", "ep"))) {
+    stop(paste(method, "is not a valid method"))
+  }
+  
+  if (dist != "binary" & method == "ep") {
+    stop("Method `ep` applies only to binary data generation")
+  }
 
   ####
 
-  mu <- rep(0, nvars)
+  if (method == "copula") {
+    
+    mu <- rep(0, nvars)
+    
+    dtM <- genQuantU(nvars, n, rho, corstr, corMatrix)
 
-  dtM <- genQuantU(nvars, n, rho, corstr, corMatrix)
-
-  if (dist == "binary") {
-    dtM[, param1 := params1[seq], keyby = seqid]
-    dtM[, X := stats::qbinom(p = Unew, 1, prob = param1)]
-  } else if (dist == "poisson") {
-    dtM[, param1 := params1[seq], keyby = seqid]
-    dtM[, X := stats::qpois(p = Unew, lambda = param1)]
-  } else if (dist == "uniform") {
-    dtM[, param1 := params1[seq], keyby = seqid]
-    dtM[, param2 := params2[seq], keyby = seqid]
-    dtM[, X := stats::qunif(p = Unew, min = param1, max = param2)]
-  } else if (dist == "gamma") {
-    sr <- gammaGetShapeRate(params1, params2)
-    dtM[, param1 := sr[[1]][seq]]
-    dtM[, param2 := sr[[2]][seq]]
-    dtM[, X := stats::qgamma(p = Unew, shape = param1, rate = param2)]
-  } else if (dist == "normal") {
-    dtM[, param1 := params1[seq], keyby = seqid]
-    dtM[, param2 := params2[seq], keyby = seqid]
-    dtM[, X := stats::qnorm(p = Unew, mean = param1, sd = sqrt(param2))]
+    if (dist == "binary") {
+      dtM[, param1 := params1[seq], keyby = seqid]
+      dtM[, X := stats::qbinom(p = Unew, 1, prob = param1)]
+    } else if (dist == "poisson") {
+      dtM[, param1 := params1[seq], keyby = seqid]
+      dtM[, X := stats::qpois(p = Unew, lambda = param1)]
+    } else if (dist == "uniform") {
+      dtM[, param1 := params1[seq], keyby = seqid]
+      dtM[, param2 := params2[seq], keyby = seqid]
+      dtM[, X := stats::qunif(p = Unew, min = param1, max = param2)]
+    } else if (dist == "gamma") {
+      sr <- gammaGetShapeRate(params1, params2)
+      dtM[, param1 := sr[[1]][seq]]
+      dtM[, param2 := sr[[2]][seq]]
+      dtM[, X := stats::qgamma(p = Unew, shape = param1, rate = param2)]
+    } else if (dist == "normal") {
+      dtM[, param1 := params1[seq], keyby = seqid]
+      dtM[, param2 := params2[seq], keyby = seqid]
+      dtM[, X := stats::qnorm(p = Unew, mean = param1, sd = sqrt(param2))]
+    }
+    
+  } else if (method == "ep") {
+    
+    corMatrix <- .buildCorMat(nvars, corMatrix, corstr, rho)
+    dtM <-.genBinEP(n, params1, corMatrix)
   }
-
-  setkey(dtM, id)
+  
+  setkey(dtM, "id")
 
   if (wide == FALSE) {
 
     dFinal <- dtM[, list(id, period, X)]
+
     if (!is.null(cnames)) setnames(dFinal, "X", cnames)
 
   } else {
@@ -143,6 +170,8 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
       setnames(dFinal, paste0("V",1:nvars), nnames)
     }
   }
+  
+  setnames(dFinal, "id", idname)
 
   return(dFinal[])
 

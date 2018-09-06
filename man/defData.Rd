@@ -4,8 +4,8 @@
 \alias{defData}
 \title{Add single row to definitions table}
 \usage{
-defData(dtDefs = NULL, varname, formula, variance = 0, dist = "normal",
-  link = "identity", id = "id")
+defData(dtDefs = NULL, varname, formula, variance = 0,
+  dist = "normal", link = "identity", id = "id")
 }
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
