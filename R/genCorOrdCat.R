@@ -94,7 +94,7 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
   
   N <- nrow(dtName)
   nq <- nrow(baseprobs)
-  zs <- genQuantU(nq, N, rho = rho, corstr, corMatrix = NULL)
+  zs <- .genQuantU(nq, N, rho = rho, corstr, corMatrix = NULL)
   zs[, logisZ := qlogis(p = zs$Unew)]
   cprop <- t(apply(baseprobs, 1, cumsum))
   quant <- t(apply(cprop, 1, stats::qlogis))

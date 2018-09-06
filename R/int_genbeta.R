@@ -1,12 +1,12 @@
 #### Beta distribution ####
 
-# Internal function called by generate - returns exp data
+# Internal function called by .generate - returns exp data
 #
 # @param n The number of observations required in the data set
 # @param formula String that specifies the mean (lambda)
 # @return A data.frame column with the updated simulated data
 
-getBetaMean <- function(dtSim, formula, link ) {
+.getBetaMean <- function(dtSim, formula, link ) {
   
   if (link == "logit") {
     
@@ -22,9 +22,9 @@ getBetaMean <- function(dtSim, formula, link ) {
   
 }
 
-genbeta <- function(n, formula, precision, link="identity", dtSim) {
+.genbeta <- function(n, formula, precision, link="identity", dtSim) {
   
-  mean <- getBetaMean(dtSim, formula, link)
+  mean <- .getBetaMean(dtSim, formula, link)
   
   d <- as.numeric(as.character(precision))
   

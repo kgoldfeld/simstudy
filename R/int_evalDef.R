@@ -1,4 +1,4 @@
-#### evalDef ####
+#### .evalDef ####
 
 # Internal function to check new data definition
 #
@@ -8,7 +8,7 @@
 # @return Nothing is returned if all tests are passed. If a test fails,
 # execution is halted.
 
-evalDef <- function(newvar, newform, newdist, defVars) {
+.evalDef <- function(newvar, newform, newdist, defVars) {
 
   # Check if previously defined
 
@@ -42,7 +42,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
 
     newExpress <- try(parse(text = test[i]), silent = TRUE)
 
-    if (is.error(newExpress)) {
+    if (.iserror(newExpress)) {
       stop("Equation not in proper form", call. = FALSE)
     }
     # Check to makes sure all vars have been previously defined in data.table
@@ -63,7 +63,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
     if (length(equvars) > 0) {
       for (i in 1:length(equvars)) eval(parse(text = paste(equvars[i],"<- 1")))
       formtest <- try(eval(newExpress), silent = TRUE)
-      if (is.error(formtest)) {
+      if (.iserror(formtest)) {
         stop("Formula includes unrecognized function", call. = FALSE)
       }
     }

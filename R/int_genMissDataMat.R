@@ -8,7 +8,7 @@
 # @param missDefs To be filled in
 # @return A missing data matrix of 0/1, where 1 indicates missing
 
-genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
+.genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
 
   # 'declare vars
 
@@ -30,8 +30,8 @@ genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
     dtMissP[, (ColName) := dtName[, eval(Formula)]]
 
   } else {
-    # dtMissP[, eval(Expression) := dtName[, loProb(eval(Formula))]] # old data.table
-    dtMissP[, (ColName) := dtName[, loProb(eval(Formula))]]
+    # dtMissP[, eval(Expression) := dtName[, .loProb(eval(Formula))]] # old data.table
+    dtMissP[, (ColName) := dtName[, .loProb(eval(Formula))]]
   }
   matMiss <- dtMissP[, idvars, with = FALSE]
   # matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1,

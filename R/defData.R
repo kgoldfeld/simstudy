@@ -57,7 +57,7 @@ defData <- function(dtDefs = NULL,
 
   } else {
 
-    evalDef(varname, formula, dist, dtDefs[,varname])
+    .evalDef(varname, formula, dist, dtDefs[,varname])
   }
 
   dt.new <- data.table::data.table(varname,

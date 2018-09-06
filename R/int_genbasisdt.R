@@ -1,4 +1,4 @@
-#### genbasisdt ####
+#### .genbasisdt ####
 
 # Internal function called by viewSplines, viewBasis,
 # and genSplines - function returns a list object
@@ -10,7 +10,7 @@
 # a matrix of basis values (basis functions), the knots, and degree
 
 
-genbasisdt <- function(x, knots, degree, theta) {
+.genbasisdt <- function(x, knots, degree, theta) {
 
   ### check arguments
 

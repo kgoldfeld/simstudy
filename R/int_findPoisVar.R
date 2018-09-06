@@ -1,11 +1,11 @@
-#### findPoisVar ####
+#### .findPoisVar ####
 
 # Internal function to find variance associated with ICC
 #
 # @param j Value of function
 # @return inverse of Poisson ICC function
 
-findPoisVar <- function(j) {
+.findPoisVar <- function(j) {
   
   # 'declare' var
   

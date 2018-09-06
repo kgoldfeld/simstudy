@@ -63,7 +63,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
     if (is.null(strata)) {
       dt[, stratum := 1]
     } else {
-      dt <- addStrataCode(dt, strata)
+      dt <- .addStrataCode(dt, strata)
     }
 
     nStrata = length(dt[,unique(stratum)])

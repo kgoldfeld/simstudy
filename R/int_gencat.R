@@ -1,6 +1,6 @@
 #### Categorical ####
 
-# Internal function called by generate - returns categorical data
+# Internal function called by .generate - returns categorical data
 #
 # @param n The number of observations required in the data set
 # @param formula String that specifies the probabilities, each separated by ";"
@@ -9,7 +9,7 @@
 # @return A data.frame column with the updated simulated data
 
 
-gencat <- function(n, formula, link, dfSim) {
+.gencat <- function(n, formula, link, dfSim) {
 
     # parse formula
 
@@ -45,7 +45,7 @@ gencat <- function(n, formula, link, dfSim) {
 
     dtmatrix <- cbind(dtmatrix, 1 - rowSums(dtmatrix))
 
-    # generate random numbers
+    # .generate random numbers
 
     newColumn <- .Call(`_simstudy_matMultinom`, dtmatrix, PACKAGE = "simstudy")
 

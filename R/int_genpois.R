@@ -1,6 +1,6 @@
 #### Poisson ####
 
-# Internal function called by generate - returns Poisson count data
+# Internal function called by .generate - returns Poisson count data
 #
 # @param n The number of observations required in the data set
 # @param formula String that specifies the formula for the mean
@@ -9,7 +9,7 @@
 # @return A data.frame column with the updated simulated data
 
 
-getPoissonMean <- function(dtSim, formula, link) {
+.getPoissonMean <- function(dtSim, formula, link) {
 
   if (link=="log") {
     logmean <- with(dtSim,eval(parse(text = as.character(formula))))
@@ -23,9 +23,9 @@ getPoissonMean <- function(dtSim, formula, link) {
 }
 
 
-genpois <- function(n,formula,link,dtSim) {
+.genpois <- function(n,formula,link,dtSim) {
 
-  mean <- getPoissonMean(dtSim, formula, link)
+  mean <- .getPoissonMean(dtSim, formula, link)
 
   return(stats::rpois(n,mean))
 

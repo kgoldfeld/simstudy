@@ -152,7 +152,7 @@ addPeriods <-  function(dtName,
 
       if (!("vInterval" %in% names(dtX1))) dtTimes1[, vInterval := 0]
 
-      dtTimes1[,timeElapsed := genPosSkew(1, mInterval, vInterval), keyby = c(idvars,"period")]
+      dtTimes1[,timeElapsed := .genPosSkew(1, mInterval, vInterval), keyby = c(idvars,"period")]
       dtTimes1[period == 0, timeElapsed := 0]
 
       dtTimes1[,time := round(cumsum(timeElapsed)), keyby=idvars]

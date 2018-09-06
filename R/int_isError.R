@@ -1,4 +1,4 @@
-#### is.error ####
+#### .iserror ####
 
 # Internal function
 #
@@ -6,7 +6,7 @@
 # @return TRUE or FALSE
 #
 
-is.error <- function(tryobject) {
+.iserror <- function(tryobject) {
   if (class(tryobject)[1] == "try-error") {
     return (TRUE)
   } else {

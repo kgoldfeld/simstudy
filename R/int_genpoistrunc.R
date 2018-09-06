@@ -1,6 +1,6 @@
 #### Poisson ####
 
-# Internal function called by generate - returns Poisson count data
+# Internal function called by .generate - returns Poisson count data
 # truncated at 1
 #
 # @param n The number of observations required in the data set
@@ -9,7 +9,7 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column with the updated simulated data
 
-genpoisTrunc <- function(n,formula,link,dtSim) {
+.genpoisTrunc <- function(n,formula,link,dtSim) {
 
   if (link=="log") {
     logmean <- with(dtSim,eval(parse(text = as.character(formula))))

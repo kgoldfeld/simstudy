@@ -1,12 +1,12 @@
 #### Negative binomial distribution ####
 
-# Internal function called by generate - returns negative binomial data
+# Internal function called by .generate - returns negative binomial data
 #
 # @param n The number of observations required in the data set
 # @param formula String that specifies the mean
 # @return A data.frame column with the updated simulated data
 
-gennegbinom <- function(n, formula, dispersion, link="identity", dtSim) {
+.gennegbinom <- function(n, formula, dispersion, link="identity", dtSim) {
 
   if (link == "log") {
     logmean <- with(dtSim,eval(parse(text = as.character(formula))))

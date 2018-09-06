@@ -10,7 +10,7 @@
 # @param idname Name of id variable
 # @return A data.frame column with correlated uniforms
 
-genQuantU <- function(nvars, n, rho, corstr, corMatrix, idname = "id") {
+.genQuantU <- function(nvars, n, rho, corstr, corMatrix, idname = "id") {
 
   # "Declare" vars to avoid R CMD warning
 

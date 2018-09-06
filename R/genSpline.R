@@ -94,7 +94,7 @@ genSpline <- function(dt, newvar, predictor, theta,
 
   qknots <- stats::quantile(x = x.normalize, probs = knots)
 
-  sdata <- genbasisdt(x.normalize, qknots, degree, theta) # Call internal function
+  sdata <- .genbasisdt(x.normalize, qknots, degree, theta) # Call internal function
 
   if (is.null(newrange)) {
 

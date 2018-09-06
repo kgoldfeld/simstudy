@@ -44,7 +44,7 @@ viewSplines <- function(knots, degree, theta) {
 
   for (i in 1:ncols) {
 
-    sdata <- genbasisdt(x, knots, degree, matTheta[, i])
+    sdata <- .genbasisdt(x, knots, degree, matTheta[, i])
     dxi <- sdata$dt
     dxi[, index := i]
 

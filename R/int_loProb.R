@@ -5,7 +5,7 @@
 # @param logodds Log odds
 # @return Probability
 
-loProb <- function (logodds) {
+.loProb <- function (logodds) {
 
   exp(logodds)/(1 + exp(logodds))
 

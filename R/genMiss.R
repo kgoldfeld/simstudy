@@ -57,7 +57,7 @@ genMiss <- function(dtName, missDefs, idvars,
 
     for (i in (1 : nrow(missDefs))) {
       dtTemp = copy(dtName)
-      mat1 <- genMissDataMat(dtName, dtTemp, idvars, missDefs[i,])
+      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, missDefs[i,])
       vec1 <- mat1[, missDefs[i, varname], with = FALSE]
 
       dtMiss <- cbind(dtMiss, vec1)
@@ -77,7 +77,7 @@ genMiss <- function(dtName, missDefs, idvars,
       if (missDefs[i, baseline]) {
 
         dtTemp <- dtName[period == 0]
-        mat1 <- genMissDataMat(dtName[period == 0], dtTemp, idvars, missDefs[i,])
+        mat1 <- .genMissDataMat(dtName[period == 0], dtTemp, idvars, missDefs[i,])
         vec1 <- addPeriods(mat1, nPeriods, idvars)[, missDefs[i, varname],
                                                    with=FALSE]
 
@@ -86,7 +86,7 @@ genMiss <- function(dtName, missDefs, idvars,
       } else { # not just baseline can be missing
 
         dtTemp = copy(dtName)
-        mat1 <- genMissDataMat(dtName, dtTemp, idvars, missDefs[i,])
+        mat1 <- .genMissDataMat(dtName, dtTemp, idvars, missDefs[i,])
         vec1 <- mat1[, missDefs[i, varname], with = FALSE]
         dtMiss <- cbind(dtMiss, vec1)
 

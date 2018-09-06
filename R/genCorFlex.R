@@ -105,7 +105,7 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
 
   ### Start generating data (first, using copula)
 
-  dx <- genQuantU(nvars, n, rho, corstr, corMatrix)
+  dx <- .genQuantU(nvars, n, rho, corstr, corMatrix)
 
   dx[, dist := corDefs[, dist]]
   dx[, param1 := corDefs[, formula]]

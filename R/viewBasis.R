@@ -29,7 +29,7 @@ viewBasis <- function(knots, degree) {
   reqparam <- length(knots) + degree + 1
   theta1 <- rep(1, reqparam)
 
-  sdata <- genbasisdt(x, knots, degree, theta1)
+  sdata <- .genbasisdt(x, knots, degree, theta1)
 
   dtbasis <- as.data.table(sdata$basis)
   dtbasis[, x := x]

@@ -46,7 +46,7 @@ genData <- function(n, dtDefs = NULL, id = "id") {
     iter <- nrow(dtDefs)       # generate a column of data for each row of dtDefs
 
     for (i in (1 : iter)) {
-      dfSimulate <- generate(dtDefs[i, ],n,dfSimulate, idname)
+      dfSimulate <- .generate(dtDefs[i, ],n,dfSimulate, idname)
     }
 
     dt <- data.table::data.table(dfSimulate)

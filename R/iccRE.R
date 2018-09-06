@@ -39,7 +39,7 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
     
     if (is.null(lambda)) stop("Specify a value for lambda")
     
-    vars <- unlist(lapply(ICC, function(x) findPoisVar(1/lambda * x / (1-x))))
+    vars <- unlist(lapply(ICC, function(x) .findPoisVar(1/lambda * x / (1-x))))
     
   } else if (dist == "binary") {
     

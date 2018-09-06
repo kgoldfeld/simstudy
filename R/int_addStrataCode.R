@@ -6,7 +6,7 @@
 # @param strata vector of string names representing strata
 # @return An integer (group) ranging from 1 to length of the probability vector
 
-addStrataCode <- function(dt, strata) {
+.addStrataCode <- function(dt, strata) {
 
   # 'Declare' var
 

@@ -94,7 +94,7 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
   ###
 
-  dx <- genQuantU(nvars, n, rho, corstr, corMatrix)
+  dx <- .genQuantU(nvars, n, rho, corstr, corMatrix)
 
   dFinal <- dx[period == 0, list(id)]
 
@@ -109,19 +109,19 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
     if (iDist == "binary") {
 
-      params <- getBinaryMean(dTemp, formula = iFormula, Size = 1, link = iLink )
+      params <- .getBinaryMean(dTemp, formula = iFormula, Size = 1, link = iLink )
 
       V <- dTemp[, stats::qbinom(Unew, 1, params[[1]])]
 
     } else if (iDist == "poisson") {
 
-      param1 <- getPoissonMean(dTemp, formula = iFormula, link = iLink )
+      param1 <- .getPoissonMean(dTemp, formula = iFormula, link = iLink )
 
       V <- dTemp[, stats::qpois(Unew, param1)]
 
     } else if (iDist == "gamma") {
 
-      mn <- getGammaMean(dTemp, formula = iFormula, link = iLink )
+      mn <- .getGammaMean(dTemp, formula = iFormula, link = iLink )
 
       ### Gamma parameters need to be transformed
 
@@ -133,7 +133,7 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
     } else if (iDist == "normal") {
 
-      param1 <- getNormalMean(dTemp, formula = iFormula)
+      param1 <- .getNormalMean(dTemp, formula = iFormula)
       param2 <- sqrt(corDefs[i, variance])
 
       V <- dTemp[, stats::qnorm(Unew, param1, param2)]

@@ -125,7 +125,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
     
     mu <- rep(0, nvars)
     
-    dtM <- genQuantU(nvars, n, rho, corstr, corMatrix)
+    dtM <- .genQuantU(nvars, n, rho, corstr, corMatrix)
 
     if (dist == "binary") {
       dtM[, param1 := params1[seq], keyby = seqid]

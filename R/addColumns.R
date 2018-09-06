@@ -41,7 +41,7 @@ addColumns <- function(dtDefs,dtOld) {
       chkVars <- c(dtDefs[1:(i-1), varname] , names(dtOld))
     }
 
-    evalDef(dtDefs[i, varname], dtDefs[i,formula], dtDefs[i,dist], chkVars)
+    .evalDef(dtDefs[i, varname], dtDefs[i,formula], dtDefs[i,dist], chkVars)
   }
 
   oldkey <- data.table::key(dtOld)
@@ -49,7 +49,7 @@ addColumns <- function(dtDefs,dtOld) {
   iter = nrow(dtDefs)
   n = nrow(dtOld)
   for (i in (1 : iter)) {
-    dtOld <- generate(dtDefs[i,], n, dtOld, oldkey)
+    dtOld <- .generate(dtDefs[i,], n, dtOld, oldkey)
   }
 
   dtOld <- data.table::data.table(dtOld)

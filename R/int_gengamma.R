@@ -1,12 +1,12 @@
 #### Gamma distribution ####
 
-# Internal function called by generate - returns gamma data
+# Internal function called by .generate - returns gamma data
 #
 # @param n The number of observations required in the data set
 # @param formula String that specifies the probabilities
 # @return A data.frame column with the updated simulated data
 
-getGammaMean <- function(dtSim, formula, link) {
+.getGammaMean <- function(dtSim, formula, link) {
 
   if (link == "log") {
     logmean <- with(dtSim,eval(parse(text = as.character(formula))))
@@ -16,9 +16,9 @@ getGammaMean <- function(dtSim, formula, link) {
   }
 }
 
-gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
+.gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
 
-  mean <- getGammaMean(dtSim, formula, link)
+  mean <- .getGammaMean(dtSim, formula, link)
 
   d <- as.numeric(as.character(dispersion))
 
