@@ -5,7 +5,8 @@
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
 addCorGen(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL, dist,
-  param1, param2 = NULL, cnames = NULL)
+  param1, param2 = NULL, cnames = NULL, method = "copula",
+  formSpec = NULL, periodvar = "period")
 }
 \arguments{
 \item{dtOld}{If an existing data.table is specified, then wide will be set to TRUE and n
@@ -26,7 +27,7 @@ and "ar1" for an autoregressive structure.}
 positive semi-definite. It is not a required field; if a matrix is not provided, then a
 structure and correlation coefficient rho must be specified.}
 
-\item{dist}{A string indicating "binary", "poisson" or "gamma".}
+\item{dist}{A string indicating "normal", "binary", "poisson" or "gamma".}
 
 \item{param1}{A string that represents the column in dtOld that contains the parameter
 for the mean of the distribution. In the case of the uniform distribution the column
@@ -40,6 +41,18 @@ this will be the maximum.}
 \item{cnames}{Explicit column names. A single string with names separated
 by commas. If no string is provided, the default names will be V#, where #
 represents the column.}
+
+\item{method}{Two methods are available to generate correlated data. (1) "copula" uses 
+the multivariate Gaussian copula method that is applied to all other distributions; this
+applies to all available distributions. (2) "ep" uses an algorithm developed by 
+Emrich and Piedmonte.}
+
+\item{formSpec}{The formula (as a string) that was used to generate the binary
+outcome in the `defDataAdd` statement. This is only necessary when method "ep" is
+requested.}
+
+\item{periodvar}{A string value that indicates the name of the field that indexes
+the repeated measurement for an individual unit. The value defaults to "period".}
 }
 \value{
 Original data.table with added column(s) of correlated data
@@ -90,7 +103,7 @@ dtX3 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "
                   dist = "poisson", param1 = "lambda", cnames = "NewPois")
 dtX3
 
-# Binomial distribution
+# Binomial distribution - copula method
 
 dtX4 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
                   dist = "binary", param1 = "p", cnames = "NewBin")
@@ -111,5 +124,21 @@ dtX7 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "
                   dist = "normal", param1 = "normMu", param2 = "normVar",
                   cnames = "NewNorm")
 
+# Binary outcome - ep method
+
+probform <- "-2 + .3*period"
+
+def1 <- defDataAdd(varname = "p", formula = probform, 
+                   dist = "nonrandom", link = "logit")
+
+dx <- genData(100)
+dx <- addPeriods(dx, nPeriods = 4)
+dx <- addColumns(def1, dx)
+
+dg <- myCorGen(dx,nvars = 4,   
+              corMatrix = NULL, rho = .3, corstr = "cs", 
+              dist = "binary", param1 = "p", 
+              method = "ep", formSpec = probform, 
+              periodvar = "period")
 
 }

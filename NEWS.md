@@ -70,6 +70,6 @@
 * Added function genCorOrdCat - generate correlated ordinal categorical data
 * Added beta distribution option to function defData (and associated functions)
 * Added function betaGetShapes
-* Implmented Emrich and Piedmonte algorithm for correlated binary data for function genCorGen (not for addCorGen)
+* Implmented Emrich and Piedmonte algorithm for correlated binary data for function genCorGen and addCorGen
 * Modified function genOrdCat - allows adjVar = NULL
 * Fixed bug in function addCorFlex
