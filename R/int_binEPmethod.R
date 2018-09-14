@@ -42,7 +42,7 @@
     corr <- diag(2)
     corr[1,2] <-  corr[2,1] <- test
     
-    est <- mvtnorm::pmvnorm(lower = rep(-Inf, 2), upper = c(qnorm(p1), qnorm(p2)), mean = c(0,0), corr = corr)
+    est <- mvtnorm::pmvnorm(lower = rep(-Inf, 2), upper = c(stats::qnorm(p1), stats::qnorm(p2)), mean = c(0,0), corr = corr)
     
     if (round(est, 5) == round(target, 5)) {
       found <- TRUE
@@ -86,7 +86,7 @@
   }
   
   normvars <- mvnfast::rmvn(n, mu = rep(0, length(p)), sigma = phicorr)
-  z <- matrix(rep(qnorm(p), nrow(normvars)), nrow = nrow(normvars), byrow = TRUE)
+  z <- matrix(rep(stats::qnorm(p), nrow(normvars)), nrow = nrow(normvars), byrow = TRUE)
   binvars <- matrix(as.integer(normvars < z), nrow = nrow(z))
   
   dtX <- data.table(binvars)

@@ -45,7 +45,7 @@
 #' dtX1 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
 #'                     dist = "poisson", param1 = "lambda")
 #'
-#' dtX2 <- addCorGen(dtOld = dtX1, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
+#' dtX2 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
 #'                     dist = "binary", param1 = "p")
 #'
 #' # Long example
@@ -108,7 +108,7 @@
 #' dx <- addPeriods(dx, nPeriods = 4)
 #' dx <- addColumns(def1, dx)
 #'
-#' dg <- myCorGen(dx,nvars = 4,   
+#' dg <- addCorGen(dx,nvars = 4,   
 #'               corMatrix = NULL, rho = .3, corstr = "cs", 
 #'               dist = "binary", param1 = "p", 
 #'               method = "ep", formSpec = probform, 
@@ -116,7 +116,7 @@
 #'
 #' @export
 #'
-addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
+addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL,
                       method = "copula", formSpec = NULL, periodvar = "period") {
   
@@ -255,7 +255,7 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
       listvar <- c(.Vars, periodvar, param1)
     
       dperms <- dtTemp[, .N, keyby = listvar]
-      dcombos <- dperms[ , .SD[1, .(N = N)], keyby = .Vars]
+      dcombos <- dperms[ , .SD[1, list(N = N)], keyby = .Vars]
     
       setkeyv(dperms, c(.Vars, periodvar))
     
@@ -272,7 +272,8 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
                                         dist = "binary", rho = rho, corstr = corstr, 
                                         method = method))
       } else { # covariates
-      
+        
+
         if (numcombos > 200) {
           cat(paste0("\nNumber of covariate combinations is large: ", numcombos, 
                        ". Data generation might be slow.\n\n"))
@@ -291,6 +292,7 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
         }
     }
     
+
     dres <- rbindlist(dres)
 
     setkeyv(dres, c(.Vars, periodvar, "id"))
@@ -304,18 +306,23 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
   
   
   if (wide == TRUE) {
-    
+   
     dtTemp <- dtTemp[, list(id, seq, X)]
+
+    
     dWide <- dcast(dtTemp, id ~ seq, value.var="X")
-    dtTemp <- dtOld[dWide]
+    dtTemp <- dtTemp[dWide]
     
     if (!is.null(cnames)) {
       setnames(dtTemp, paste0("V",1:nvars), nnames)
     }
     
+
   } else if (wide == FALSE) {
     
     if (method == "copula") {
+      
+      
       dtTempLong <- dtTemp[, list(timeID, X)]
       
       setkey(dtTempLong, timeID)
@@ -330,6 +337,7 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
   }
   
   setnames(dtTemp, "id", idvar)
+
 
   return(dtTemp[])
 }

@@ -20,9 +20,9 @@ genCorMat <- function(nvars, cors = NULL) {
   
   if (is.null(cors)) {
     
-    ev = runif(nvars, 0, 10)
+    ev = stats::runif(nvars, 0, 10)
     
-    Z <- matrix(ncol=nvars, rnorm(nvars^2))
+    Z <- matrix(ncol=nvars, stats::rnorm(nvars^2))
     
     decomp <- qr(Z)
     Q <- qr.Q(decomp) 
@@ -32,7 +32,7 @@ genCorMat <- function(nvars, cors = NULL) {
     O <- Q %*% diag(ph)
     Z <- t(O) %*% diag(ev) %*% O
     
-    cm <- cov2cor(Z)
+    cm <- stats::cov2cor(Z)
     
   } else {
     

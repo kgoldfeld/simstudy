@@ -53,6 +53,7 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
   # "declares" to avoid global NOTE
   
   logisZ <- NULL
+  period <- NULL
   
   # Check arguments
   
@@ -95,12 +96,14 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
   N <- nrow(dtName)
   nq <- nrow(baseprobs)
   zs <- .genQuantU(nq, N, rho = rho, corstr, corMatrix = NULL)
-  zs[, logisZ := qlogis(p = zs$Unew)]
+  zs[, logisZ := stats::qlogis(p = zs$Unew)]
   cprop <- t(apply(baseprobs, 1, cumsum))
   quant <- t(apply(cprop, 1, stats::qlogis))
-  cat <- list()
+  
+  mycat <- list()
+  
   for ( i in 1:nq ) {
-    iLogisZ <- zs[period==i-1, logisZ]
+    iLogisZ <- zs[period == i-1, logisZ]
     matlp <- matrix(rep(quant[i, ], nrow(dtName)),
                     ncol = ncol(cprop),
                     byrow = TRUE
@@ -111,11 +114,11 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
     }
     locateGrp <- (iLogisZ > cbind(-Inf, matlp))
     assignGrp <- apply(locateGrp, 1, sum)
-    cat[[i]] <- data.table(id = dtName[, idname, with=FALSE][[1]],
+    mycat[[i]] <- data.table(id = dtName[, idname, with=FALSE][[1]],
                            var = paste0(prefix,i),
                            cat = assignGrp )
   }
-  dcat <- rbindlist(cat)
+  dcat <- rbindlist(mycat)
   cats <- dcast(dcat, id ~ var, value.var = "cat" )
   
   setnames(cats, "id", idname)
