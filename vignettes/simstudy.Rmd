@@ -60,6 +60,8 @@ odds <- function(p) {
   return(p/(1-p))
 }
 
+# 
+
 ggtheme <- function(panelback = "white") {
   
   ggplot2::theme(
@@ -319,7 +321,7 @@ def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5",dist="categorical")
 def <- defData(def,varname="g1", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
 def <- defData(def,varname="b1", dist="beta", formula = "1+0.3*xCat", variance = 1, link = "logit")
 def <- defData(def, varname = "a1", dist = "binary" , formula="-3 + xCat", link="logit")
-def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit")
+def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit") 
 ```
 
 The first call to `defData` without specifying a definition name (in this example the definition name is *def*) creates a **new** data.table with a single row. An additional row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `defData` the user defines a variable name, a distribution (the default is 'normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
