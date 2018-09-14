@@ -4,8 +4,8 @@
 \alias{addCorGen}
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
-addCorGen(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL, dist,
-  param1, param2 = NULL, cnames = NULL, method = "copula",
+addCorGen(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
+  dist, param1, param2 = NULL, cnames = NULL, method = "copula",
   formSpec = NULL, periodvar = "period")
 }
 \arguments{
@@ -72,7 +72,7 @@ dt <- genData(500, def)
 dtX1 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
                     dist = "poisson", param1 = "lambda")
 
-dtX2 <- addCorGen(dtOld = dtX1, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
+dtX2 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
                     dist = "binary", param1 = "p")
 
 # Long example
@@ -135,7 +135,7 @@ dx <- genData(100)
 dx <- addPeriods(dx, nPeriods = 4)
 dx <- addColumns(def1, dx)
 
-dg <- myCorGen(dx,nvars = 4,   
+dg <- addCorGen(dx,nvars = 4,   
               corMatrix = NULL, rho = .3, corstr = "cs", 
               dist = "binary", param1 = "p", 
               method = "ep", formSpec = probform, 

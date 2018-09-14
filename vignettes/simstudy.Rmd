@@ -45,6 +45,7 @@ library(survival)
 library(knitr)
 library(gee)
 library(splines)
+library(ordinal)
 
 set.seed(33333)
 
@@ -54,6 +55,10 @@ plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
 cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
                 "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+odds <- function(p) {
+  return(p/(1-p))
+}
 
 ggtheme <- function(panelback = "white") {
   
@@ -821,7 +826,6 @@ dt
 The Poisson distribution has a single parameter, lambda:
 
 ```{r}
-
 dtX1 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 3, rho = .1, corstr = "cs",
                     dist = "poisson", param1 = "lambda", cnames = "a, b, c")
 dtX1
