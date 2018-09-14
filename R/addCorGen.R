@@ -203,7 +203,7 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
   
   if (method == "copula") {
     n <- length(unique(dtTemp[, id])) # should check if n's are correct
-    dtM <- simstudy:::.genQuantU(nvars, n, rho, corstr, corMatrix)
+    dtM <- .genQuantU(nvars, n, rho, corstr, corMatrix)
     
     xid = "id"
     if (wide == TRUE) {
@@ -248,7 +248,7 @@ addCorGen <- function(dtOld, nvars, idvar, rho, corstr, corMatrix = NULL,
       }
     
       newExpress <- try(parse(text = formSpec), silent = TRUE)
-      if (simstudy:::.iserror(newExpress)) stop("!")
+      if (.iserror(newExpress)) stop("!")
     
       .Vars = all.vars(newExpress)
       .Vars <- .Vars[.Vars != periodvar]
