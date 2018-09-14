@@ -1310,8 +1310,7 @@ dT <- genOrdCat(dT, adjVar = "z", baseprobs, catVar = "r")
 Estimating the parameters of the model using function `clm`, we can recover the original parameters quite well.
 
 ```{r ordinal}
-library(ordinal)
-clmFit <- clm(r ~ exposed, data = dT)
+clmFit <- ordinal::clm(r ~ exposed, data = dT)
 summary(clmFit)
 ```
 
