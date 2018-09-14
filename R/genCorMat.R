@@ -1,6 +1,6 @@
 #' Create a correlation matrix
 #'
-#' @param nvars number of rows and columns (i.e. number of variatbles) for correlation matrix
+#' @param nvars number of rows and columns (i.e. number of variables) for correlation matrix
 #' @param cors vector of correlations. 
 #' @return correlation matrix of size nvars x nvars
 #' @details If the vector cors is not specified, a random correlation matrix is generated with no assumptions.

@@ -12,7 +12,7 @@
 #' @param baseprobs A matrix of baseline probabilities. The row values must sum to 1. 
 #' The number of rows represents the number of new categorical variables. The number
 #' of columns represents the number of possible responses - if an particular category
-#' has fewer possible responses, assign zero probability to non-relevent columns.
+#' has fewer possible responses, assign zero probability to non-relevant columns.
 #' @param prefix A string.The names of the new variables will be a concatenation of
 #' the prefix and a sequence of integers indicating the variable number.
 #' @param rho Correlation coefficient, -1 < rho < 1. Use if corMatrix is not provided.

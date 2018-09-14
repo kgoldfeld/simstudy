@@ -7,7 +7,7 @@
 genCorMat(nvars, cors = NULL)
 }
 \arguments{
-\item{nvars}{number of rows and columns (i.e. number of variatbles) for correlation matrix}
+\item{nvars}{number of rows and columns (i.e. number of variables) for correlation matrix}
 
 \item{cors}{vector of correlations.}
 }
