@@ -1017,7 +1017,7 @@ grid.arrange(xp10, xp20, xp11, xp21,
 In the second case, missingness is monotonic; once a subject misses a measurement for `y`, there are no subsequent measurements:
 
 ```{r tidy=TRUE}
-# missingness for y is not monotonic
+# missingness for y is monotonic
 
 defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
 defMlong <- defMiss(defMlong,varname = "y", formula = "-1.8 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = TRUE)

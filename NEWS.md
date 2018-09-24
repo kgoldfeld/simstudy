@@ -73,3 +73,5 @@
 * Implmented Emrich and Piedmonte algorithm for correlated binary data for function genCorGen and addCorGen
 * Modified function genOrdCat - allows adjVar = NULL
 * Fixed bug in function addCorFlex
+
+# simstudy 0.1.11
