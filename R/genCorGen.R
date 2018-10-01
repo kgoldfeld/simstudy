@@ -72,7 +72,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 
   #### Check args
 
-  if ( !(dist %in% c("poisson", "binary", "gamma", "uniform", "negbinom", "normal"))) {
+  if ( !(dist %in% c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))) {
     stop("Distribution not properly specified.")
   }
 
@@ -88,7 +88,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
     stop(paste0("Too many parameter vectors (", nparams, ") for " , dist))
   }
 
-  if ( ((nparams < 2) & (dist %in% c("gamma", "uniform", "normal")))) {
+  if ( ((nparams < 2) & (dist %in% c("gamma", "uniform", "normal", "negBinomial")))) {
     stop(paste0("Too few parameter vectors (", nparams, ") for " , dist))
   }
 
@@ -136,6 +136,11 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
     } else if (dist == "poisson") {
       dtM[, param1 := params1[seq], keyby = seqid]
       dtM[, X := stats::qpois(p = Unew, lambda = param1)]
+    } else if (dist == "negBinomial") {
+      sp <- negbinomGetSizeProb(params1, params2)
+      dtM[, param1 := sp[[1]][seq]]
+      dtM[, param2 := sp[[2]][seq]]
+      dtM[, X := stats::qnbinom(p=Unew, size = param1,  prob = param2)]
     } else if (dist == "uniform") {
       dtM[, param1 := params1[seq], keyby = seqid]
       dtM[, param2 := params2[seq], keyby = seqid]
