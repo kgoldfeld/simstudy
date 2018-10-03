@@ -124,9 +124,9 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   
   id <- NULL
   N <- NULL
-  U <- NULL
+  .U <- NULL
   Unew <- NULL
-  X <- NULL
+  .XX <- NULL
   timeID <- NULL
   
   ## Need to check if wide or long
@@ -135,7 +135,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   
   #### Check args
   
-  if ( !(dist %in% c("poisson", "binary", "gamma", "uniform", "negbinom", "normal"))) {
+  if ( !(dist %in% c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))) {
     stop("Distribution not properly specified.")
   }
   
@@ -159,7 +159,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     stop(paste0("Too many parameters (", nparams, ") for " , dist))
   }
   
-  if ( ((nparams < 2) & (dist %in% c("gamma", "uniform", "normal")))) {
+  if ( ((nparams < 2) & (dist %in% c("gamma", "uniform", "normal", "negBinomial")))) {
     stop(paste0("Too few parameters (", nparams, ") for " , dist))
   }
   
@@ -176,6 +176,8 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   setnames(dtTemp, idvar, "id")
 
   ####
+  
+  # wide(ness) is determined by incoming data structure.
   
   maxN <- dtTemp[, .N, by = id][,max(N)]
   if (maxN == 1) wide <- TRUE
@@ -208,33 +210,42 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     xid = "id"
     if (wide == TRUE) {
       dtTemp <- dtM[dtTemp[, c(xid, param1, param2), with = FALSE]]
-      dtTemp[, U := Unew]
+      dtTemp[, .U := Unew]
     } else {
-      dtTemp[, U :=  dtM$Unew]
+      dtTemp[, .U :=  dtM$Unew]
       dtTemp[, seq :=  dtM$seq]
     }
     
+    print(head(dtTemp))
+    
     if (dist == "poisson") {
-      setnames(dtTemp, param1, "param1")
-      dtTemp[, X := stats::qpois(p = U, lambda = param1)]
+      setnames(dtTemp, param1, ".param1")
+      dtTemp[, .XX := stats::qpois(p = .U, lambda = .param1)]
     } else if (dist == "binary") {
-      setnames(dtTemp, param1, "param1")
-      dtTemp[, X := stats::qbinom(p = U, size = 1, prob = param1)]
+      setnames(dtTemp, param1, ".param1")
+      dtTemp[, .XX := stats::qbinom(p = .U, size = 1, prob = .param1)]
+    } else if (dist == "negBinomial") {
+      setnames(dtTemp, param1, ".param1")
+      setnames(dtTemp, param2, ".param2")
+      sp <- negbinomGetSizeProb(dtTemp$.param1, dtTemp$.param2)
+      dtTemp[, .param1 := sp[[1]]]
+      dtTemp[, .param2 := sp[[2]]]
+      dtTemp[, .XX := stats::qnbinom(p=.U, size = .param1,  prob = .param2)]
     } else if (dist == "uniform") {
-      setnames(dtTemp, param1, "param1")
-      setnames(dtTemp, param2, "param2")
-      dtTemp[, X := stats::qunif(p = U, min = param1, max = param2)]
+      setnames(dtTemp, param1, ".param1")
+      setnames(dtTemp, param2, ".param2")
+      dtTemp[, .XX := stats::qunif(p = .U, min = .param1, max = .param2)]
     } else if (dist == "gamma") {
-      setnames(dtTemp, param1, "param1")
-      setnames(dtTemp, param2, "param2")
-      sr <- gammaGetShapeRate(dtTemp$param1, dtTemp$param2)
-      dtTemp[, param1 := sr[[1]]]
-      dtTemp[, param2 := sr[[2]]]
-      dtTemp[, X := stats::qgamma(p = U, shape = param1, rate = param2)]
+      setnames(dtTemp, param1, ".param1")
+      setnames(dtTemp, param2, ".param2")
+      sr <- gammaGetShapeRate(dtTemp$.param1, dtTemp$.param2)
+      dtTemp[, .param1 := sr[[1]]]
+      dtTemp[, .param2 := sr[[2]]]
+      dtTemp[, .XX := stats::qgamma(p = .U, shape = .param1, rate = .param2)]
     } else if (dist == "normal") {
-      setnames(dtTemp, param1, "param1")
-      setnames(dtTemp, param2, "param2")
-      dtTemp[, X := stats::qnorm(p = U, mean = param1, sd = sqrt(param2))]
+      setnames(dtTemp, param1, ".param1")
+      setnames(dtTemp, param2, ".param2")
+      dtTemp[, .XX := stats::qnorm(p = .U, mean = .param1, sd = sqrt(.param2))]
     } 
     
   } else if (method == "ep") {
@@ -294,45 +305,51 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     
 
     dres <- rbindlist(dres)
-
+    
     setkeyv(dres, c(.Vars, periodvar, "id"))
     
     setkeyv(dtTemp, c(.Vars, periodvar, "id"))
-    dtTemp[, X := dres[, X]]
+    dtTemp[, .XX := dres[, X]]
     
     setkeyv(dtTemp, c("id", periodvar))
 
   }
   
-  
+
   if (wide == TRUE) {
    
-    dtTemp <- dtTemp[, list(id, seq, X)]
+    dtTemp <- dtTemp[, list(id, seq, .XX)]
 
     
-    dWide <- dcast(dtTemp, id ~ seq, value.var="X")
+    dWide <- dcast(dtTemp, id ~ seq, value.var=".XX")
+    dtTemp <- copy(dtOld)
+    
     dtTemp <- dtTemp[dWide]
     
     if (!is.null(cnames)) {
       setnames(dtTemp, paste0("V",1:nvars), nnames)
     }
     
+    setnames(dtTemp, idvar, "id")       
+    
 
   } else if (wide == FALSE) {
     
     if (method == "copula") {
-      
-      
-      dtTempLong <- dtTemp[, list(timeID, X)]
+     
+      dtTempLong <- dtTemp[, list(timeID, .XX)]
+      dtTemp <- copy(dtOld)
       
       setkey(dtTempLong, timeID)
       setkey(dtTemp, timeID)
       
       dtTemp <- dtTemp[dtTempLong]
       
+      setnames(dtTemp, idvar, "id")       
     }
     
-    if (!is.null(cnames)) setnames(dtTemp, "X", cnames)
+    if (!is.null(cnames)) setnames(dtTemp, ".XX", cnames)
+    else setnames(dtTemp,".XX", "X")
 
   }
   

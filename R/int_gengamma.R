@@ -14,6 +14,8 @@
   } else {
     mean <- with(dtSim,eval(parse(text = as.character(formula))))
   }
+  
+  return(mean)
 }
 
 .gengamma <- function(n, formula, dispersion, link="identity", dtSim) {

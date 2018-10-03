@@ -70,9 +70,9 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
 
   ###
 
-  if (!all(defs[,dist] %in% c("normal", "gamma", "binary", "poisson"))) {
+  if (!all(defs[,dist] %in% c("normal", "gamma", "binary", "poisson", "negBinomial"))) {
 
-    stop("Only implemented for the following distributions: binary, normal, poisson, and gamma")
+    stop("Only implemented for the following distributions: binary, normal, poisson, gamma, and negative binomial")
 
   }
 
@@ -130,6 +130,18 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix =
       param2 <- sr[[2]]
 
       V <- dTemp[, stats::qgamma(Unew, param1, param2)]
+      
+    } else if (iDist == "negBinomial") {
+        
+      mn <- .getNBmean(dTemp, formula = iFormula, link = iLink )
+        
+      ### NB parameters need to be transformed
+        
+      sp <-  negbinomGetSizeProb(mn, corDefs[i, variance])
+      param1 <- sp[[1]]
+      param2 <- sp[[2]]
+        
+      V <- dTemp[, stats::qnbinom(Unew, param1, param2)]
 
     } else if (iDist == "normal") {
 

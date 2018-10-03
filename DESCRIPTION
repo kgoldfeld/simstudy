@@ -1,8 +1,8 @@
 Package: simstudy
 Type: Package
 Title: Simulation of Study Data
-Version: 0.1.10
-Date: 2018-09-14
+Version: 0.1.11
+Date: 2018-10-03
 Author: Keith Goldfeld [aut, cre]
 Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
 Description: Simulates data sets in order to explore modeling techniques or

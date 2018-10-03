@@ -25,6 +25,7 @@
 #' def <- defData(def, varname = "xUnif2", formula = "23;28", dist = "uniform")
 #' def <- defData(def, varname = "xUnif3", formula = "100;150", dist = "uniform")
 #' def <- defData(def, varname = "xGamma2", formula = 150, variance = 0.003, dist = "gamma")
+#' def <- defData(def, varname = "xNegBin", formula = 5, variance = .8, dist = "negBinom")
 #'
 #' dt <- genCorFlex(1000, def, tau = 0.3 , corstr = "cs")
 #'
@@ -53,9 +54,9 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
 
   ## Other checks? ##
 
-  if (!all(defs[,dist] %in% c("normal", "gamma", "uniform", "binary", "poisson"))) {
+  if (!all(defs[,dist] %in% c("normal", "gamma", "uniform", "binary", "poisson", "negBinomial"))) {
 
-    stop("Only implemented for the following distributions: binary, uniform, normal, poisson, and gamma")
+    stop("Only implemented for the following distributions: binary, uniform, normal, poisson, gamma, and negative binomial")
 
   }
 
@@ -90,8 +91,14 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
   ### Gamma parameters need to be transformed
 
   sr1 <- corDefs[dist=="gamma" , gammaGetShapeRate(formula, variance)[[1]] ]
-  sr2 <- corDefs[dist=="gamma",  gammaGetShapeRate(formula, variance)[[2]] ]
+  sr2 <- corDefs[dist=="gamma" , gammaGetShapeRate(formula, variance)[[2]] ]
   corDefs[dist == "gamma", `:=`(formula = sr1, variance = sr2)]
+  
+  ### negBinomial parameters need to be transformed
+  
+  sp1 <- corDefs[dist=="negBinomial" , negbinomGetSizeProb(formula, variance)[[1]] ]
+  sp2 <- corDefs[dist=="negBinomial" ,  negbinomGetSizeProb(formula, variance)[[2]] ]
+  corDefs[dist == "negBinomial", `:=`(formula = sp1, variance = sp2)]
 
   ### Check for non-scalar values in definitions
 
@@ -132,6 +139,9 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
 
     } else if (type == "normal") {
       V <- dTemp[, stats::qnorm(Unew, param1, sqrt(param2))]
+      
+    } else if (type == "negBinomial") {
+      V <- dTemp[, stats::qnbinom(Unew, param1, param2)]
     }
 
     dFinal <- cbind(dFinal, V)
