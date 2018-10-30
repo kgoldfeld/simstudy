@@ -41,19 +41,28 @@ genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FA
   # Check if data table exists
 
   if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
-    stop(paste("data table", deparse(substitute(dtName)), "not found"), call. = FALSE)
+    stop(paste("data table", deparse(substitute(dtName)), "not found"), 
+         call. = FALSE)
   }
 
   # Check if field exists, extract, and verify it is not double
 
   if (!(varname %in% names(dtName))) {
-    stop(paste("variable", varname, "not found in data table", deparse(substitute(dtName))), call. = FALSE)
+    stop(paste("variable", varname, "not found in data table", 
+               deparse(substitute(dtName))), 
+         call. = FALSE)
   }
 
   xcol <- dtName[, get(varname)]
 
   if (is.double(xcol)) {
-    stop(paste("variable", varname, "is of type 'double'"), call. = FALSE)
+    
+    if (!all(xcol == as.integer(xcol))) {
+      stop(paste("variable", varname, "is of type 'double'"), 
+           call. = FALSE)
+    }
+      
+    xcol <- as.integer(xcol)
   }
 
   # Create new field name (check to see if it exists)
@@ -61,7 +70,9 @@ genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FA
   fname <- make.names(paste0(prefix, varname))
 
   if (fname %in% names(dtName)) {
-    stop(paste("variable", fname, "already exists in data table", deparse(substitute(dtName))), call. = FALSE)
+    stop(paste("variable", fname, 
+               "already exists in data table", deparse(substitute(dtName))), 
+         call. = FALSE)
   }
 
   # Create new column as factor
@@ -76,6 +87,6 @@ genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FA
 
   if (replace == TRUE) dtName[, (varname) := NULL]
 
-  return(dtName[])
+  dtName[]
 
 }

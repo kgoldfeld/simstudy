@@ -77,3 +77,4 @@
 # simstudy 0.1.11
 
 * Added negative binomial option to genCorGen, addCorGen, genCorFlex, and addCorFlex
+* Fixed bug in function genFactor
