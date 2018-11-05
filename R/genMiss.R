@@ -40,45 +40,58 @@ genMiss <- function(dtName, missDefs, idvars,
 
   # 'declare'
 
-  varname = NULL
-  period = NULL
-  baseline = NULL
-  monotonic = NULL
-  fmiss = NULL
+  varname <- NULL
+  period <- NULL
+  baseline <- NULL
+  monotonic <- NULL
+  fmiss <- NULL
+  includesLags <- FALSE
 
   #
 
   setkeyv(dtName, idvars)
+  tmDefs <- copy(missDefs)
 
   if (! repeated) {
 
     dtMiss <- dtName[, c(idvars), with = FALSE]
     # names(dtMiss) <- c(idvars) # removed 2017919 - possible error in CRAN check
 
-    for (i in (1 : nrow(missDefs))) {
+    for (i in (1 : nrow(tmDefs))) {
       dtTemp = copy(dtName)
-      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, missDefs[i,])
-      vec1 <- mat1[, missDefs[i, varname], with = FALSE]
+      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i,])
+      vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
 
       dtMiss <- cbind(dtMiss, vec1)
 
     }
 
   } else { # repeated
+    
+    includesLags <- .checkLags(tmDefs[, formula])
 
+    if (includesLags) {
+      
+      lags <- .addLags(dtName, tmDefs[, formula])
+      
+      tmDefs[, formula := lags[[2]]]
+      dtName <- lags[[1]]
+      
+    }
+    
     dtMiss <- dtName[, c(idvars, periodvar), with = FALSE]
     colnames <- c(idvars, "period")
     setnames(dtMiss, colnames)
 
     nPeriods <- dtMiss[,max(period)] + 1
 
-    for (i in (1 : nrow(missDefs))) {
+    for (i in (1 : nrow(tmDefs))) {
 
-      if (missDefs[i, baseline]) {
+      if (tmDefs[i, baseline]) {
 
         dtTemp <- dtName[period == 0]
-        mat1 <- .genMissDataMat(dtName[period == 0], dtTemp, idvars, missDefs[i,])
-        vec1 <- addPeriods(mat1, nPeriods, idvars)[, missDefs[i, varname],
+        mat1 <- .genMissDataMat(dtName[period == 0], dtTemp, idvars, tmDefs[i,])
+        vec1 <- addPeriods(mat1, nPeriods, idvars)[, tmDefs[i, varname],
                                                    with=FALSE]
 
         dtMiss <- cbind(dtMiss, vec1)
@@ -86,16 +99,16 @@ genMiss <- function(dtName, missDefs, idvars,
       } else { # not just baseline can be missing
 
         dtTemp = copy(dtName)
-        mat1 <- .genMissDataMat(dtName, dtTemp, idvars, missDefs[i,])
-        vec1 <- mat1[, missDefs[i, varname], with = FALSE]
+        mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i,])
+        vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
         dtMiss <- cbind(dtMiss, vec1)
 
-        if (missDefs[i, monotonic]) { # monotonic missing
+        if (tmDefs[i, monotonic]) { # monotonic missing
 
-          dt.fmiss <- dtMiss[eval(parse(text=missDefs[i, varname])) == 1, list(fmiss = min(period)), keyby = eval(idvars)]
+          dt.fmiss <- dtMiss[eval(parse(text=tmDefs[i, varname])) == 1, list(fmiss = min(period)), keyby = eval(idvars)]
           data.table::setkeyv(dtMiss, idvars)
           dtMiss <- dt.fmiss[dtMiss]
-          dtMiss[period > fmiss, eval(missDefs[i, varname]) := 1]
+          dtMiss[period > fmiss, eval(tmDefs[i, varname]) := 1]
           dtMiss[,fmiss := NULL]
 
         }
@@ -107,7 +120,12 @@ genMiss <- function(dtName, missDefs, idvars,
   addon <- data.table(matrix(0, nrow = dims[1], ncol = dims[2]))
   names(addon) <- names(dtName[, !names(dtMiss), with = FALSE])
 
-
-  return(cbind(dtMiss, addon))
+  dtbind <- cbind(dtMiss, addon)
+  
+  if (includesLags) {
+    dtbind[, (lags[[3]]) := NULL]
+  }
+  
+  dtbind[]
 
 }
