@@ -27,6 +27,13 @@
 
 .addLags <- function(olddt, formsdt) {
   
+  # "Declare" vars to avoid R CMD warning
+  
+  id <- NULL
+  N <- NULL
+  
+  ##
+  
   lagdt <- copy(olddt)
   lagforms <- copy(formsdt)
   origNames <- copy(names(olddt))

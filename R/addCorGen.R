@@ -127,7 +127,10 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   .U <- NULL
   Unew <- NULL
   .XX <- NULL
+  X <- NULL
   timeID <- NULL
+  .param1 <- NULL
+  .param2 <- NULL
   
   ## Need to check if wide or long
   
@@ -216,8 +219,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       dtTemp[, seq :=  dtM$seq]
     }
     
-    print(head(dtTemp))
-    
+
     if (dist == "poisson") {
       setnames(dtTemp, param1, ".param1")
       dtTemp[, .XX := stats::qpois(p = .U, lambda = .param1)]

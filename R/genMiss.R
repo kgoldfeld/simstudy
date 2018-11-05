@@ -38,15 +38,19 @@
 genMiss <- function(dtName, missDefs, idvars,
                     repeated = FALSE, periodvar = "period") {
 
-  # 'declare'
-
+  # "Declare" vars to avoid R CMD warning
+  
   varname <- NULL
   period <- NULL
   baseline <- NULL
   monotonic <- NULL
   fmiss <- NULL
+  formula <- NULL
+  
+  # initialize
+  
   includesLags <- FALSE
-
+  
   #
 
   setkeyv(dtName, idvars)

@@ -44,7 +44,7 @@ def <- defData(def, varname = "xPois", formula = 15, dist = "poisson")
 def <- defData(def, varname = "xUnif2", formula = "23;28", dist = "uniform")
 def <- defData(def, varname = "xUnif3", formula = "100;150", dist = "uniform")
 def <- defData(def, varname = "xGamma2", formula = 150, variance = 0.003, dist = "gamma")
-def <- defData(def, varname = "xNegBin", formula = 5, variance = .8, dist = "negBinom")
+def <- defData(def, varname = "xNegBin", formula = 5, variance = .8, dist = "negBinomial")
 
 dt <- genCorFlex(1000, def, tau = 0.3 , corstr = "cs")
 
