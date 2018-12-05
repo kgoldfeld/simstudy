@@ -12,9 +12,10 @@
 #' @param link The link function for the mean, see details
 #' @param id A string indicating the field name for the unique record identifier
 #' @return A data.table named dtName that is an updated data definitions table
-#' @details The possible data distributions include ""normal", "poisson",
-#' "noZeroPoisson", "binary", "uniform", "uniformInt", "categorical",
-#' "gamma", "negBinomial", and "nonrandom."
+#' @details The possible data distributions include "normal", "poisson", 
+#' "noZeroPoisson", "negBinomial" "binary", "binomial", "beta", "uniform", 
+#' "uniformInt", "categorical", "gamma", "exponential", and "nonrandom."
+#' 
 #' @examples
 #' def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")
 #' def <- defData(def, varname="xUni", dist="uniform", formula="10;20")

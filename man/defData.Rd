@@ -29,9 +29,9 @@ A data.table named dtName that is an updated data definitions table
 Add single row to definitions table
 }
 \details{
-The possible data distributions include ""normal", "poisson",
-"noZeroPoisson", "binary", "uniform", "uniformInt", "categorical",
-"gamma", "negBinomial", and "nonrandom."
+The possible data distributions include "normal", "poisson", 
+"noZeroPoisson", "negBinomial" "binary", "binomial", "beta", "uniform", 
+"uniformInt", "categorical", "gamma", "exponential", and "nonrandom."
 }
 \examples{
 def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")

@@ -30,7 +30,13 @@ catProbs <- function(..., n = 0) {
   if (lp > 0 & n > 0) stop("Specify probabilities or n, not both")
 
   if (lp == 1) {
-    if (p >= 1) stop("Single probability must be less than 1")
+    
+    if (length(p[[1]]) > 1)  {
+      p <- as.list(p[[1]])
+    } else {
+      if (p[[1]] >= 1) stop("Single probability must be less than 1")
+    }
+    
   }
 
   if (lp > 0) {

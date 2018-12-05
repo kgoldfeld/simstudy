@@ -79,3 +79,4 @@
 * Added negative binomial option to genCorGen, addCorGen, genCorFlex, and addCorFlex
 * Fixed bug in function genFactor
 * Added LAG() functionality to missing data generation - updated functions genMiss and added two new internal functions .checkLags and .addLags
+* Function catProbs now accepts a vector of probabilities or weights as an argument.
