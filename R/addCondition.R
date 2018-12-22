@@ -70,7 +70,7 @@ addCondition <- function(condDefs, dtOld, newvar) {
   for (i in 1:nrow(condDefs)) {
 
     .evalDef(newvar, cDefs[i,formula], cDefs[i,dist], chkVars)
-    .evalDef(newvar, cDefs[i,condition], cDefs[i,dist], chkVars)
+    .evalDef(newvar, cDefs[i,condition], "nonrandom", chkVars)
 
   }
 
@@ -90,14 +90,17 @@ addCondition <- function(condDefs, dtOld, newvar) {
 
     dtTemp <- dtOld[eval(parse(text = condition) )]
     n = nrow(dtTemp)
-
-    dtTemp <- .generate(cDefs[i,], n, dtTemp, oldkey)
-
-    dtTemp <- data.table::data.table(dtTemp)
-    dtTemp <- dtTemp[, list(get(oldkey), get(newvar))]
-
-    dtNew <- rbind(dtNew, dtTemp)
-
+    
+    if (n > 0) {
+      
+      dtTemp <- .generate(cDefs[i,], n, dtTemp, oldkey)
+      
+      dtTemp <- data.table::data.table(dtTemp)
+      dtTemp <- dtTemp[, list(get(oldkey), get(newvar))]
+      
+      dtNew <- rbind(dtNew, dtTemp) 
+      
+    }
   }
 
   setnames(dtNew, c(oldkey, newvar))
