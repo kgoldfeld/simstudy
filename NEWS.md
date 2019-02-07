@@ -6,9 +6,9 @@
 
 * Fixed index variable issue related to generating categorical data 
 * Fixed index variable issue related to generating longitudinal data
-* Fixed issue that arised When creating categorical variable in first field
+* Fixed issue that arose when creating categorical variable in first field
 * Increased speed required to generate categorical data with large sample sizes
-* Categorical data can now accomodate probabilities condition on covariates
+* Categorical data can now accommodate probabilities condition on covariates
 * Fix: package data.table 1.10.0 broke genMissDataMat. genMissDataMat has been updated.
 
 # simstudy 0.1.3
@@ -24,7 +24,7 @@
 * Added function genDummy - creates dummy variables from an integer or factor field in a data.table
 * Added function defCondition - define distribution conditional on existing fields
 * Added function defReadCond - read in conditional definitions from external csv file
-* Added function addCondition - genaration data based on conditional definition
+* Added function addCondition - generate data based on conditional definition
 
 # simstudy 0.1.5
 
@@ -70,7 +70,7 @@
 * Added function genCorOrdCat - generate correlated ordinal categorical data
 * Added beta distribution option to function defData (and associated functions)
 * Added function betaGetShapes
-* Implmented Emrich and Piedmonte algorithm for correlated binary data for function genCorGen and addCorGen
+* Implemented Emrich and Piedmonte algorithm for correlated binary data for function genCorGen and addCorGen
 * Modified function genOrdCat - allows adjVar = NULL
 * Fixed bug in function addCorFlex
 

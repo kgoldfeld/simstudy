@@ -7,7 +7,7 @@
 #' represents the weights/coefficients that will be applied to the basis functions
 #' determined by the knots and degree. Each column of theta represents a separate
 #' spline curve.
-#' @param knots A vector of values between 0 and 1, specifying quartile
+#' @param knots A vector of values between 0 and 1, specifying quantile
 #' cut-points for splines. Defaults to c(0.25, 0.50, 0.75).
 #' @param degree Integer specifying polynomial degree of curvature.
 #' @param newrange Range of the spline function , specified as a string
