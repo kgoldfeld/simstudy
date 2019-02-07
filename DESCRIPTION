@@ -27,14 +27,11 @@ Suggests: testthat,
     knitr,
     rmarkdown,
     ggplot2,
-    scales,
     grid,
     gridExtra,
     survival,
-    gee,
     splines,
     formatR,
-    mgcv,
-    ordinal
+    mgcv
 VignetteBuilder: knitr
 LinkingTo: Rcpp
