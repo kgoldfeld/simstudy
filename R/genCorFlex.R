@@ -114,9 +114,9 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr="cs", corMatrix = NU
 
   dx <- .genQuantU(nvars, n, rho, corstr, corMatrix)
 
-  dx[, dist := corDefs[, dist]]
-  dx[, param1 := corDefs[, formula]]
-  dx[, param2 := corDefs[, variance]]
+  dx[, dist := rep(corDefs[, dist], length.out = .N)]
+  dx[, param1 := rep(corDefs[, formula], length.out = .N)]
+  dx[, param2 := rep(corDefs[, variance], length.out = .N)]
 
   dFinal <- dx[period == 0, list(id)]
 

@@ -81,7 +81,7 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
   
   dnew <- data.table(as.data.frame(lapply(expand.grid(x), 
                                         function(x) rep(x, each = each))))
-  dnew[, count := c(1:each)]
+  dnew[, count := rep(c(1:each), length.out = .N)]
   neworder <- sample(1:nrow(dnew),nrow(dnew), replace = FALSE)
   dnew <- dnew[neworder]
   

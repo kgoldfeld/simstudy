@@ -81,3 +81,7 @@
 * Added LAG() functionality to missing data generation - updated functions genMiss and added two new internal functions .checkLags and .addLags
 * Function catProbs now accepts a vector of probabilities or weights as an argument
 * Fixed bugs in function addCondition
+
+# simstudy 0.1.12
+
+* Fixed genCorFlex and addMultiFac to accomodate bug fixes with data.table
