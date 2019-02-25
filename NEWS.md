@@ -84,4 +84,4 @@
 
 # simstudy 0.1.12
 
-* Fixed genCorFlex and addMultiFac to accomodate bug fixes with data.table
+* Fixed genCorFlex and addMultiFac to accomodate bug fixes with package data.table
