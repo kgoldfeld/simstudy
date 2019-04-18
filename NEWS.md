@@ -85,3 +85,8 @@
 # simstudy 0.1.12
 
 * Fixed genCorFlex and addMultiFac to accomodate bug fixes with package data.table
+
+# simstudy 0.1.13
+
+* Added negative binomial distribution as an option to function iccRE
+* Fixed function genCorOrdCat so that it can accept user-specified correlation matrix

@@ -13,10 +13,10 @@
 #' cluster for a normally distributed model. If "normal" distribution is 
 #' specified, either varTotal or varWithin must be specified, but not both.
 #' @param lambda Numeric value that represents the grand mean. Must be specified
-#' when distribution is "poisson".
+#' when distribution is "poisson" or "negative binomial".
 #' @param disp Numeric value that represents the dispersion parameter that is used
-#' to define a gamma distribution with a log link. Must be specified when
-#' distribution is "gamma".
+#' to define a gamma or negative binomial distribution with a log link. Must be 
+#' specified when distribution is "gamma".
 #' @return A vector of values that represents the variances of random effects
 #' at the cluster level that correspond to the ICC vector.
 #' @examples
@@ -30,6 +30,8 @@
 #' iccRE(targetICC, "normal", varWithin = 100)
 #'
 #' iccRE(targetICC, "gamma", disp = .5)
+#' 
+#' iccRE(targetICC, "negBinomial", lambda = 40, disp = .5)
 #' 
 #' @export
 #'
@@ -70,6 +72,13 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
     if (is.null(disp)) stop("Specify dispersion")  
     
     vars <- unlist(lapply(ICC, function(x) (x / (1 - x)) * trigamma(1/disp)))
+  
+  } else if (dist == "negBinomial") {
+    
+    if (is.null(disp)) stop("Specify dispersion")  
+    if (is.null(lambda)) stop("Specify lambda")
+    
+    vars <- unlist(lapply(ICC, function(x) (x / (1 - x)) * trigamma((1/lambda + disp) ^ (-1))))
     
   } else stop("Specify appropriate distribution")
   

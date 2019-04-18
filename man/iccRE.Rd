@@ -25,11 +25,11 @@ cluster for a normally distributed model. If "normal" distribution is
 specified, either varTotal or varWithin must be specified, but not both.}
 
 \item{lambda}{Numeric value that represents the grand mean. Must be specified
-when distribution is "poisson".}
+when distribution is "poisson" or "negative binomial".}
 
 \item{disp}{Numeric value that represents the dispersion parameter that is used
-to define a gamma distribution with a log link. Must be specified when
-distribution is "gamma".}
+to define a gamma or negative binomial distribution with a log link. Must be 
+specified when distribution is "gamma".}
 }
 \value{
 A vector of values that represents the variances of random effects
@@ -50,5 +50,7 @@ iccRE(targetICC, "normal", varTotal = 100)
 iccRE(targetICC, "normal", varWithin = 100)
 
 iccRE(targetICC, "gamma", disp = .5)
+
+iccRE(targetICC, "negBinomial", lambda = 40, disp = .5)
 
 }
