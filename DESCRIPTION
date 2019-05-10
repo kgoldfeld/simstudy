@@ -2,7 +2,7 @@ Package: simstudy
 Type: Package
 Title: Simulation of Study Data
 Version: 0.1.13
-Date: 2019-05-01
+Date: 2019-05-10
 Author: Keith Goldfeld [aut, cre]
 Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
 Description: Simulates data sets in order to explore modeling techniques or
@@ -13,12 +13,12 @@ Description: Simulates data sets in order to explore modeling techniques or
     randomized trials. Missingness can be generated using various
     mechanisms (MCAR, MAR, NMAR).
 Depends:
-    R (>= 3.2.2),
-    data.table
+    R (>= 3.2.2)
 License: GPL-3
 LazyData: TRUE
 Imports:
     Rcpp,
+    data.table,
     mvnfast,
     mvtnorm
 RoxygenNote: 6.1.1

@@ -194,6 +194,7 @@ dtstudy <- genData(330, def)
 study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"), grpName = "rxGrp")
 
 study1
+
 ```
 
 *Balanced treatment assignment (without stratification)*

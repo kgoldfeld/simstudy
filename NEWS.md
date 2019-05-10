@@ -90,3 +90,4 @@
 
 * Added negative binomial distribution as an option to function iccRE
 * Fixed function genCorOrdCat so that it can accept user-specified correlation matrix
+* Add function trtStepWedge to generate treatment assignment for a stepped-wedge design cluster randomized trial.
