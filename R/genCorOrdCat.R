@@ -40,11 +40,12 @@
 #' dX <- genCorOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
 #'                    prefix = "q", rho = .125, corstr = "cs")
 #'
-#' dM <- melt(dX, id.vars = "id")
+#' dM <- data.table::melt(dX, id.vars = "id")
 #' dProp <- dM[ , prop.table(table(value)), by = variable]
 #' dProp[, response := c(1:4, 1:3, 1:3, 1:3, 1:3)]
 #' 
-#' dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
+#' data.table::dcast(dProp, variable ~ response, 
+#'                   value.var = "V1", fill = 0)
 #'                    
 #' @export
 genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs, 
@@ -118,8 +119,8 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
                            var = paste0(prefix,i),
                            cat = assignGrp )
   }
-  dcat <- rbindlist(mycat)
-  cats <- dcast(dcat, id ~ var, value.var = "cat" )
+  dcat <- data.table::rbindlist(mycat)
+  cats <- data.table::dcast(dcat, id ~ var, value.var = "cat" )
   
   setnames(cats, "id", idname)
   setkeyv(cats, idname)

@@ -29,6 +29,13 @@
 trtStepWedge <- function(dtName, clustID, nWaves, lenWaves, 
                          startPer, perName = "period", grpName = "rx") {
   
+  # 'declare' vars created in data.table
+  
+  rx = NULL
+  period = NULL
+  
+  #
+  
   if (missing(dtName)) {
     stop("Data table argument is missing", call. = FALSE)
   }
