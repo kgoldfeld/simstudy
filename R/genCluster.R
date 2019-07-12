@@ -7,7 +7,8 @@
 #' @param dtClust Name of existing data set that contains the level "2" data
 #' @param cLevelVar Variable name (string) of cluster id in dtClust
 #' @param numIndsVar Variable name (string) of number of observations
-#' per cluster in dtClust
+#' per cluster in dtClust. Can also be a single integer value that will
+#' be used for all clusters.
 #' @param level1ID Name of id field in new level "1" data set
 #' @param allLevel2 Indicator: if set to TRUE (default), the returned data set
 #' includes all of the Level 2 data columns. If FALSE, the returned data set
@@ -26,6 +27,10 @@
 #'
 #' dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
 #'                       numIndsVar = "nClasses", level1ID = "idClass")
+#' dtClass
+#' 
+#' dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
+#'                       numIndsVar = 3, level1ID = "idClass")
 #' dtClass
 #' @export
 
@@ -51,9 +56,17 @@ genCluster <- function(dtClust,
   if (missing(level1ID)) stop("argument 'level1ID' is missing", call. = FALSE)
 
   ####
-
-  dt <- dtClust[,list(id2 = get(cLevelVar),
-                      n = get(numIndsVar))][,list(id2 = rep(id2, n))]
+  
+  if (is.character(numIndsVar)) {
+    dt <- dtClust[,list(id2 = get(cLevelVar),
+                        n = get(numIndsVar))][,list(id2 = rep(id2, n))]
+  } else if (is.numeric(numIndsVar)) {
+    dt <- dtClust[,list(id2 = get(cLevelVar),
+                    n = as.integer(numIndsVar))][,list(id2 = rep(id2, n))]
+  }
+  
+ # dt <- dtClust[,list(id2 = get(cLevelVar),
+ #                     n = get(numIndsVar))][,list(id2 = rep(id2, n))]
 
   dt[, eval(cLevelVar) := id2]
   dt[, id2 := NULL]

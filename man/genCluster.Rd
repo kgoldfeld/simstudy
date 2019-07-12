@@ -12,7 +12,8 @@ genCluster(dtClust, cLevelVar, numIndsVar, level1ID, allLevel2 = TRUE)
 \item{cLevelVar}{Variable name (string) of cluster id in dtClust}
 
 \item{numIndsVar}{Variable name (string) of number of observations
-per cluster in dtClust}
+per cluster in dtClust. Can also be a single integer value that will
+be used for all clusters.}
 
 \item{level1ID}{Name of id field in new level "1" data set}
 
@@ -41,5 +42,9 @@ dtSchool
 
 dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
                       numIndsVar = "nClasses", level1ID = "idClass")
+dtClass
+
+dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
+                      numIndsVar = 3, level1ID = "idClass")
 dtClass
 }

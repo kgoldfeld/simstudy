@@ -1,0 +1,45 @@
+#' Generate event data using longitudinal data, and restrict output to time
+#' until the nth event.
+#'
+#' @param dtName Name of existing data table
+#' @param defEvent 
+#' @param nEvents 
+#' @param perName Variable name for period field. Defaults to "period"
+#' @param id
+#' @return A data.table that stops after "nEvents" are reached.
+#' @examples
+#' defD <- defData(varname = "effect", formula = 0, variance = 1, 
+#'                 dist = "normal")
+#' defE <- defDataAdd(varname = "died", formula = "-2.5 + .3*period + effect", 
+#'                    dist = "binary", link = "logit")
+#' 
+#' d <- genData(1000, defD)
+#' d <- addPeriods(d, 10)
+#' dx <- genNthEvent(d, defEvent = defE, nEvents = 3)
+#' @export
+#'
+
+genNthEvent <- function(dtName, defEvent, nEvents = 1,
+                        perName = "period", id = "id") {
+  
+  dd <- copy(dtName)
+  dd <- addColumns(defEvent, dd)
+  
+  data.table::setnames(dd, c(defEvent$varname, id, perName), 
+                       c(".event", ".id", ".period"))
+  
+  dsd <- dd[dd[.event == 1, .I[nEvents], keyby = .id]$V1]
+  
+  df <- dsd[!is.na(.period), .(.id, .first = .period)]
+  
+  devent <- merge(dd, df, by = ".id")[.period <= .first, ][, .first := NULL]
+  dnone <- merge(dd, df, by = ".id", all.x = TRUE)[is.na(.first)][, .first := NULL]
+  
+  dx <- data.table::rbindlist(list(devent, dnone))
+  data.table::setkeyv(dx, key(dd))
+  
+  data.table::setnames(dx, c(".id",".period",".event"), 
+                       c(id, perName, defEvent$varname))
+  dx[]
+  
+}

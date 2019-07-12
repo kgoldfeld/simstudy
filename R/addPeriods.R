@@ -7,6 +7,7 @@
 #' @param timevars Names of time dependent variables. Defaults to NULL.
 #' @param timevarName Name of new time dependent variable
 #' @param timeid Variable name for new index field. Defaults to "timevar"
+#' @param perName Variable name for period field. Defaults to "period"
 #' @return An updated data.table that that has multiple rows
 #' per observation in dtName
 #' @examples
@@ -43,12 +44,13 @@ addPeriods <-  function(dtName,
                         idvars = "id",
                         timevars = NULL,
                         timevarName = "timevar",
-                        timeid = "timeID") {
+                        timeid = "timeID",
+                        perName = "period") {
 
   # "Declare" vars that exist in dtName
 
   nCount = NULL
-  period = NULL
+  .period = NULL
   vInterval = NULL
   mInterval = NULL
   timeElapsed = NULL
@@ -77,14 +79,14 @@ addPeriods <-  function(dtName,
 
   if (!is.null(nPeriods)) { # same number for each subject
 
-    dtTimes1 <- dtX1[, list(period = (0 : (nPeriods - 1))), keyby = idvars]
+    dtTimes1 <- dtX1[, list(.period = (0 : (nPeriods - 1))), keyby = idvars]
 
   } else {
 
 
     if ("nCount" %in% names(dtX1)) { # specified for each subject
 
-      dtTimes1 <- dtX1[, list(period = (0 : (nCount - 1))), keyby = idvars]
+      dtTimes1 <- dtX1[, list(.period = (0 : (nCount - 1))), keyby = idvars]
 
     } else {  # not specified for each subject or for all
 
@@ -97,7 +99,7 @@ addPeriods <-  function(dtName,
 
   data.table::setkeyv(dtX1, idvars)
   dtTimes1 <- dtTimes1[dtX1]
-  data.table::setkeyv(dtTimes1, c(idvars, "period"))
+  data.table::setkeyv(dtTimes1, c(idvars, ".period"))
 
   # Create code for final index assignment
 
@@ -123,18 +125,19 @@ addPeriods <-  function(dtName,
 
       dtTimes2 <- data.table::melt(dtX2,id.vars=idvars,
                                    value.name = timevarName,
-                                   variable.name = "period",
+                                   variable.name = ".period",
                                    variable.factor = TRUE)
 
-      dtTimes2[, period := factor(period, timevars)]
-      dtTimes2[, period := as.integer(period) - 1]
-      data.table::setkeyv(dtTimes2, c(idvars, "period"))
+      dtTimes2[, .period := factor(.period, timevars)]
+      dtTimes2[, .period := as.integer(.period) - 1]
+      data.table::setkeyv(dtTimes2, c(idvars, ".period"))
 
       dtTimes1 <- dtTimes1[dtTimes2]
 
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
+      data.table::setnames(dtTimes1, old=".period", new = perName)
       return(dtTimes1[])
 
     } else {
@@ -142,6 +145,7 @@ addPeriods <-  function(dtName,
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
+      data.table::setnames(dtTimes1, old=".period", new = perName)
       return(dtTimes1[])
 
     }
@@ -152,8 +156,8 @@ addPeriods <-  function(dtName,
 
       if (!("vInterval" %in% names(dtX1))) dtTimes1[, vInterval := 0]
 
-      dtTimes1[,timeElapsed := .genPosSkew(1, mInterval, vInterval), keyby = c(idvars,"period")]
-      dtTimes1[period == 0, timeElapsed := 0]
+      dtTimes1[,timeElapsed := .genPosSkew(1, mInterval, vInterval), keyby = c(idvars,".period")]
+      dtTimes1[.period == 0, timeElapsed := 0]
 
       dtTimes1[,time := round(cumsum(timeElapsed)), keyby=idvars]
       dtTimes1[, c("timeElapsed","nCount", "mInterval", "vInterval") := NULL]
@@ -161,6 +165,7 @@ addPeriods <-  function(dtName,
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
+      data.table::setnames(dtTimes1, old=".period", new = perName)
       return(dtTimes1[])
 
     } else {

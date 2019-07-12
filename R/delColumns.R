@@ -32,8 +32,8 @@ delColumns <- function(dtOld, vars) {
     stop(paste("All columns not in data table", deparse(substitute(dtOld))), call. = FALSE)
   }
 
-  if (key(dtOld) %in% vars) {
-    stop(paste0("Cannot delete column ",  key(dtOld), " (the index key)"), call. = FALSE)
+  if (any(key(dtOld) %in% vars)) {
+    stop(paste0("Cannot delete the index key"), call. = FALSE)
   }
 
   #### Remove columns

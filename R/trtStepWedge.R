@@ -10,6 +10,9 @@
 #' @param perName string representing name of column of time periods
 #' @param grpName string representing variable name for treatment or
 #' exposure group
+#' @param lag
+#' @param xrName
+#' 
 #' @return A data.table with the added treatment assignment
 #' @seealso \code{\link{trtObserve} \link{trtAssign}}
 #' @examples
@@ -25,16 +28,25 @@
 #'                    lenWaves = 3, startPer = 2)
 #' dp
 #'
+#' dp <- addPeriods(dc, 12, "cluster")
+#' dp <- trtStepWedge(dp, "cluster", nWaves = 2, 
+#'                    lenWaves = 1, startPer = 4, lag = 3)
+#' dp
+#' 
 #' @export
 trtStepWedge <- function(dtName, clustID, nWaves, lenWaves, 
-                         startPer, perName = "period", grpName = "rx") {
+                         startPer, perName = "period", grpName = "rx",
+                         lag = 0, xrName = "xr") {
   
   # 'declare' vars created in data.table
   
   rx = NULL
   period = NULL
+  xr = NULL
   
   #
+  
+  if (lag == 0) xrName <- "xr"  # override - will be deleted from dd
   
   if (missing(dtName)) {
     stop("Data table argument is missing", call. = FALSE)
@@ -50,7 +62,7 @@ trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
   data.table::setnames(dd, perName, "period")
   
   nClust <- length(dd[, unique(get(clustID))])
-  nPer <- length(dd[, unique(get(perName))])
+  nPer <- length(dd[, unique(period)])
   cPerWave <- nClust/nWaves
   
   if (nClust %% nWaves != 0) {
@@ -73,8 +85,12 @@ trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
   
   data.table::setkeyv(dd, clustID)
   dd <- dd[dstart]
-  dd[, rx:= (startTrt <= period) * 1]
-  data.table::setnames(dd, c("period", "rx"), c(perName, grpName))
+  dd[, xr := ( (period >= startTrt) & ( period < (startTrt + lag) ) ) * 1]
+  dd[, rx := ( (startTrt + lag) <= period ) * 1]
+  data.table::setnames(dd, c("period", "rx", "xr"), 
+                       c(perName, grpName, xrName))
+  
+  if (lag == 0) dd[, `:=`(xr = NULL)]
   return(dd[])
   
 }

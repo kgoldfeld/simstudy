@@ -5,7 +5,7 @@
 \title{Assign treatment for stepped-wedge design}
 \usage{
 trtStepWedge(dtName, clustID, nWaves, lenWaves, startPer,
-  perName = "period", grpName = "rx")
+  perName = "period", grpName = "rx", lag = 0, xrName = "xr")
 }
 \arguments{
 \item{dtName}{data table}
@@ -22,6 +22,8 @@ trtStepWedge(dtName, clustID, nWaves, lenWaves, startPer,
 
 \item{grpName}{string representing variable name for treatment or
 exposure group}
+
+\item{xrName}{}
 }
 \value{
 A data.table with the added treatment assignment
@@ -40,6 +42,11 @@ dc <- genData(12, defc)
 dp <- addPeriods(dc, 12, "cluster")
 dp <- trtStepWedge(dp, "cluster", nWaves = 3, 
                    lenWaves = 3, startPer = 2)
+dp
+
+dp <- addPeriods(dc, 12, "cluster")
+dp <- trtStepWedge(dp, "cluster", nWaves = 2, 
+                   lenWaves = 1, startPer = 4, lag = 3)
 dp
 
 }

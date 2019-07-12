@@ -5,7 +5,7 @@
 \title{Create longitudinal/panel data}
 \usage{
 addPeriods(dtName, nPeriods = NULL, idvars = "id", timevars = NULL,
-  timevarName = "timevar", timeid = "timeID")
+  timevarName = "timevar", timeid = "timeID", perName = "period")
 }
 \arguments{
 \item{dtName}{Name of existing data table}
@@ -20,6 +20,8 @@ repeated during each time period}
 \item{timevarName}{Name of new time dependent variable}
 
 \item{timeid}{Variable name for new index field. Defaults to "timevar"}
+
+\item{perName}{Variable name for period field. Defaults to "period"}
 }
 \value{
 An updated data.table that that has multiple rows
