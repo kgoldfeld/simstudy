@@ -94,8 +94,7 @@
 
 # simstudy 0.1.14
 
-* Added function genMarkov to create data.table with individual chains of 
-Markov processes.
+* Added functions genMarkov and addMarkov to create data.table with (or add to existing data.table) individual chains of Markov processes.
 * Added function genNthEvent to create data.table with binary event outcome in a longintudinal setting. 
 * Updated function genCluster so that cluster size can be specified as an integer, and will be constant across all clusters.
 * Updated function addPeriods that period name can be specified.

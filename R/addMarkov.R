@@ -1,9 +1,9 @@
-#### Generate markov chain ####
+#### Add markov chain to existing data set ####
 
-#' @title  Generate Markov chain
+#' @title  Add Markov chain
 #' @description Generate a Markov chain for n individuals or units by
 #' specifying a transition matrix.
-#' @param n number of individual chains to generate
+#' @param dd data.table with a unique identifier
 #' @param transMat Square transition matrix where the sum of each row
 #' must equal 1. The dimensions of the matrix equal the number of possible
 #' states.
@@ -25,16 +25,22 @@
 #' @return A data table with n rows if in wide format, or n by chainLen rows 
 #' if in long format.
 #' @examples
+#' def1 <- defData(varname = "x1", formula = 0, variance = 1, id = "cid")
+#' def1 <- defData(def1, varname = "x2", formula = 0, variance = 1)
+#' 
+#' dd <- genData(23, def1)
+#' 
 #' P <- t(matrix(c( 0.7, 0.2, 0.1,
 #'                  0.5, 0.3, 0.2,
-#'                  0.0, 0.1, 0.9), nrow=3, ncol=3))
-#'                 
-#' xLong <- genMarkov(n = 10, transMat = P, chainLen = 5)
-#' xWide <- genMarkov(n = 10, transMat = P, chainLen = 5, wide = TRUE)
+#'                  0.0, 0.9, 0.2),
+#'               nrow = 3))
+#' 
+#' d1 <- addMarkov(dd, P, chainLen = 3, wide = FALSE, id = "cid")
+#' d2 <- addMarkov(dd, P, chainLen = 5, wide = TRUE, id = "cid)
 #' 
 #' @export
 
-genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
+addMarkov <- function(dd, transMat, chainLen, wide = FALSE, idlab = "id",
                       pername = "period", varname = "state", 
                       widePrefix = "S") {
   
@@ -45,8 +51,8 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
   # check transMat is square matrix and row sums = 1
   
   if (   !is.matrix(transMat)  | 
-       ( length(dim(transMat)) != 2 ) |
-       ( dim(transMat)[1] != dim(transMat)[2] )
+         ( length(dim(transMat)) != 2 ) |
+         ( dim(transMat)[1] != dim(transMat)[2] )
   ) {
     
     stop("Transition matrix needs to be a square matrix")
@@ -62,13 +68,43 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
   
   if (chainLen <= 1) stop("Chain length must be greater than 1")
   
+  # verify id is in data.table dd
+  
+  if (!(idlab %in% names(dd))) stop(paste(idlab, "is not in data table"))
+  
   ####
   
-  dd <- genData(n = n, id = id)
-  dd <- addMarkov(dd, transMat, chainLen, wide, id,
-                  pername, varname, widePrefix)
+  n <- nrow(dd)
   
-  dd[]
+  ids <- dd[, get(idlab)]
+  xmat <- markovChains(n, transMat, chainLen)
+  
+  dx <- data.table::data.table(id = ids, xmat)
+  data.table::setnames(dx, "id", idlab)
+  
+  defnames <- paste0("V",seq(1:chainLen))
+  tempnames <- paste0(".V", seq(1:chainLen))
+  data.table::setnames(dx, defnames, tempnames)
+  
+  dx <- merge(dd, dx, by = idlab)
+  
+  if (wide == TRUE) {
+    
+    defnames <- paste0(".V",seq(1:chainLen))
+    newnames <- paste0(widePrefix, seq(1:chainLen))
+    data.table::setnames(dx, defnames, newnames)
+    
+  } else {           # wide = FALSE, so long format
+    
+    dx <- data.table::melt(dx, id.vars = names(dd), 
+                           value.name = varname, variable.factor = TRUE)
+    
+    dx[, variable := as.integer(variable)]
+    data.table::setnames(dx, "variable", pername)
+    
+  }
+  
+  setkeyv(dx, idlab)
+  dx[]
   
 }
-
