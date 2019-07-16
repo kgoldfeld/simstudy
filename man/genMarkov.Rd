@@ -44,11 +44,14 @@ Generate a Markov chain for n individuals or units by
 specifying a transition matrix.
 }
 \examples{
+
+# Transition matrix P
+
 P <- t(matrix(c( 0.7, 0.2, 0.1,
                  0.5, 0.3, 0.2,
                  0.0, 0.1, 0.9), nrow=3, ncol=3))
                 
-xLong <- genMarkov(n = 10, transMat = P, chainLen = 5)
-xWide <- genMarkov(n = 10, transMat = P, chainLen = 5, wide = TRUE)
+d1 <- genMarkov(n = 10, transMat = P, chainLen = 5)
+d2 <- genMarkov(n = 10, transMat = P, chainLen = 5, wide = TRUE)
 
 }

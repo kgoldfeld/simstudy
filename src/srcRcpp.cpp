@@ -31,10 +31,11 @@ Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix) {
   return(ans);
 }
 
-Rcpp::IntegerVector singleMarkovChain(NumericMatrix P, int chainLen) {
+Rcpp::IntegerVector singleMarkovChain(NumericMatrix P, 
+                                      int chainLen, int state0) {
   
   IntegerVector states(chainLen);
-  states(0) = 1;
+  states(0) = state0;
   
   for(int i = 1; i < chainLen; i++) {
     states(i) = vecMultinom( P(states(i-1) - 1, _) );
@@ -44,12 +45,13 @@ Rcpp::IntegerVector singleMarkovChain(NumericMatrix P, int chainLen) {
 }
 
 // [[Rcpp::export]]
-Rcpp::IntegerMatrix markovChains(int nchains, NumericMatrix P, int chainLen) {
+Rcpp::IntegerMatrix markovChains(int nchains, NumericMatrix P, 
+                                 int chainLen, IntegerVector state0) {
   
   IntegerMatrix stateMat(nchains, chainLen);
   
   for(int k = 0; k < nchains; k++) {
-    stateMat(k, _) = singleMarkovChain(P, chainLen);
+    stateMat(k, _) = singleMarkovChain(P, chainLen, state0(k));
   }
   
   return(stateMat);

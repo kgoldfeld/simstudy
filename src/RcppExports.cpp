@@ -17,22 +17,23 @@ BEGIN_RCPP
 END_RCPP
 }
 // markovChains
-Rcpp::IntegerMatrix markovChains(int nchains, NumericMatrix P, int chainLen);
-RcppExport SEXP _simstudy_markovChains(SEXP nchainsSEXP, SEXP PSEXP, SEXP chainLenSEXP) {
+Rcpp::IntegerMatrix markovChains(int nchains, NumericMatrix P, int chainLen, IntegerVector state0);
+RcppExport SEXP _simstudy_markovChains(SEXP nchainsSEXP, SEXP PSEXP, SEXP chainLenSEXP, SEXP state0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type nchains(nchainsSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type P(PSEXP);
     Rcpp::traits::input_parameter< int >::type chainLen(chainLenSEXP);
-    rcpp_result_gen = Rcpp::wrap(markovChains(nchains, P, chainLen));
+    Rcpp::traits::input_parameter< IntegerVector >::type state0(state0SEXP);
+    rcpp_result_gen = Rcpp::wrap(markovChains(nchains, P, chainLen, state0));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simstudy_matMultinom", (DL_FUNC) &_simstudy_matMultinom, 1},
-    {"_simstudy_markovChains", (DL_FUNC) &_simstudy_markovChains, 3},
+    {"_simstudy_markovChains", (DL_FUNC) &_simstudy_markovChains, 4},
     {NULL, NULL, 0}
 };
 

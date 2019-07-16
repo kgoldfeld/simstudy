@@ -22,27 +22,35 @@
 #' state in the long format. Defaults to "state".
 #' @param widePrefix Character string that represents the variable name 
 #' prefix for the state fields in the wide format. Defaults to "S".
+#' @param start0lab Character string that represents name of the integer 
+#' field containing starting state (State 0) of the chain for each individual.
+#' If it is NULL, starting state defaults to 1. Default is NULL.
 #' @return A data table with n rows if in wide format, or n by chainLen rows 
 #' if in long format.
 #' @examples
-#' def1 <- defData(varname = "x1", formula = 0, variance = 1, id = "cid")
+#' def1 <- defData(varname = "x1", formula = 0, variance = 1)
 #' def1 <- defData(def1, varname = "x2", formula = 0, variance = 1)
+#' def1 <- defData(def1, varname = "S0", formula = ".6;.3;.1", 
+#'                 dist="categorical")
 #' 
-#' dd <- genData(23, def1)
+#' dd <- genData(20, def1)
+#' 
+#' # Transition matrix P
 #' 
 #' P <- t(matrix(c( 0.7, 0.2, 0.1,
 #'                  0.5, 0.3, 0.2,
-#'                  0.0, 0.9, 0.2),
+#'                  0.0, 0.7, 0.3),
 #'               nrow = 3))
-#' 
-#' d1 <- addMarkov(dd, P, chainLen = 3, wide = FALSE, id = "cid")
-#' d2 <- addMarkov(dd, P, chainLen = 5, wide = TRUE, id = "cid)
+#'               
+#' d1 <- addMarkov(dd, P, chainLen = 3)
+#' d2 <- addMarkov(dd, P, chainLen = 5, wide = TRUE)
+#' d3 <- addMarkov(dd, P, chainLen = 5, wide = TRUE, start0lab = "S0")
 #' 
 #' @export
 
 addMarkov <- function(dd, transMat, chainLen, wide = FALSE, idlab = "id",
                       pername = "period", varname = "state", 
-                      widePrefix = "S") {
+                      widePrefix = "S", start0lab = NULL) {
   
   # 'declare' vars created in data.table
   
@@ -76,8 +84,16 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, idlab = "id",
   
   n <- nrow(dd)
   
+  if (is.null(start0lab)) {
+    s0 <- rep(1, n)
+  } else if (!(start0lab %in% names(dd))) {
+      stop(paste("Start state field", start0lab, "does not exist")) 
+  } else {
+      s0 <- dd[, get(start0lab)]
+  }
+  
   ids <- dd[, get(idlab)]
-  xmat <- markovChains(n, transMat, chainLen)
+  xmat <- markovChains(n, transMat, chainLen, s0)
   
   dx <- data.table::data.table(id = ids, xmat)
   data.table::setnames(dx, "id", idlab)

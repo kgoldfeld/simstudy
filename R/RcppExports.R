@@ -5,7 +5,7 @@ matMultinom <- function(probmatrix) {
     .Call(`_simstudy_matMultinom`, probmatrix)
 }
 
-markovChains <- function(nchains, P, chainLen) {
-    .Call(`_simstudy_markovChains`, nchains, P, chainLen)
+markovChains <- function(nchains, P, chainLen, state0) {
+    .Call(`_simstudy_markovChains`, nchains, P, chainLen, state0)
 }
 

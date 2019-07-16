@@ -5,7 +5,8 @@
 \title{Add Markov chain}
 \usage{
 addMarkov(dd, transMat, chainLen, wide = FALSE, idlab = "id",
-  pername = "period", varname = "state", widePrefix = "S")
+  pername = "period", varname = "state", widePrefix = "S",
+  start0lab = NULL)
 }
 \arguments{
 \item{dd}{data.table with a unique identifier}
@@ -32,6 +33,10 @@ state in the long format. Defaults to "state".}
 \item{widePrefix}{Character string that represents the variable name 
 prefix for the state fields in the wide format. Defaults to "S".}
 
+\item{start0lab}{Character string that represents name of the integer 
+field containing starting state (State 0) of the chain for each individual.
+If it is NULL, starting state defaults to 1. Default is NULL.}
+
 \item{id}{Character string that represents name of "id" field. 
 Defaults to "id".}
 }
@@ -42,4 +47,24 @@ if in long format.
 \description{
 Generate a Markov chain for n individuals or units by
 specifying a transition matrix.
+}
+\examples{
+def1 <- defData(varname = "x1", formula = 0, variance = 1)
+def1 <- defData(def1, varname = "x2", formula = 0, variance = 1)
+def1 <- defData(def1, varname = "S0", formula = ".6;.3;.1", 
+                dist="categorical")
+
+dd <- genData(20, def1)
+
+# Transition matrix P
+
+P <- t(matrix(c( 0.7, 0.2, 0.1,
+                 0.5, 0.3, 0.2,
+                 0.0, 0.7, 0.3),
+              nrow = 3))
+              
+d1 <- addMarkov(dd, P, chainLen = 3)
+d2 <- addMarkov(dd, P, chainLen = 5, wide = TRUE)
+d3 <- addMarkov(dd, P, chainLen = 5, wide = TRUE, start0lab = "S0")
+
 }
