@@ -48,7 +48,7 @@
 #' 
 #' @export
 
-addMarkov <- function(dd, transMat, chainLen, wide = FALSE, idlab = "id",
+addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state", 
                       widePrefix = "S", start0lab = NULL) {
   
@@ -78,7 +78,7 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, idlab = "id",
   
   # verify id is in data.table dd
   
-  if (!(idlab %in% names(dd))) stop(paste(idlab, "is not in data table"))
+  if (!(id %in% names(dd))) stop(paste(id, "is not in data table"))
   
   ####
   
@@ -92,17 +92,18 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, idlab = "id",
       s0 <- dd[, get(start0lab)]
   }
   
+  idlab <- id
   ids <- dd[, get(idlab)]
   xmat <- markovChains(n, transMat, chainLen, s0)
   
   dx <- data.table::data.table(id = ids, xmat)
-  data.table::setnames(dx, "id", idlab)
+  data.table::setnames(dx, id, ".id")
   
   defnames <- paste0("V",seq(1:chainLen))
   tempnames <- paste0(".V", seq(1:chainLen))
   data.table::setnames(dx, defnames, tempnames)
   
-  dx <- merge(dd, dx, by = idlab)
+  dx <- merge(dd, dx, by.x = id, by.y = ".id")
   
   if (wide == TRUE) {
     
@@ -120,7 +121,8 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, idlab = "id",
     
   }
   
-  setkeyv(dx, idlab)
+
+  setkeyv(dx, id)
   dx[]
   
 }

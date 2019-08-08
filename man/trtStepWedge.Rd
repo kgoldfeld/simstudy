@@ -23,7 +23,10 @@ trtStepWedge(dtName, clustID, nWaves, lenWaves, startPer,
 \item{grpName}{string representing variable name for treatment or
 exposure group}
 
-\item{xrName}{}
+\item{lag}{integer representing length of transition period}
+
+\item{xrName}{string representing ame of the field that 
+indicates whether the cluster status is in transition status}
 }
 \value{
 A data.table with the added treatment assignment

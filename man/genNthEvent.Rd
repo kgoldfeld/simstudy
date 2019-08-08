@@ -9,16 +9,21 @@ genNthEvent(dtName, defEvent, nEvents = 1, perName = "period",
   id = "id")
 }
 \arguments{
-\item{dtName}{Name of existing data table}
+\item{dtName}{name of existing data table}
 
-\item{defEvent}{}
+\item{defEvent}{data definition table (created with defDataAdd) that
+determines the event generating process.}
 
-\item{nEvents}{}
+\item{nEvents}{maximum number of events that will be generated (the nth
+event).}
 
-\item{perName}{Variable name for period field. Defaults to "period"}
+\item{perName}{variable name for period field. Defaults to "period"}
+
+\item{id}{string representing name of the id 
+field in table specified by dtName}
 }
 \value{
-A data.table that stops after "nEvents" are reached.
+data.table that stops after "nEvents" are reached.
 }
 \description{
 Generate event data using longitudinal data, and restrict output to time
@@ -27,7 +32,7 @@ until the nth event.
 \examples{
 defD <- defData(varname = "effect", formula = 0, variance = 1, 
                 dist = "normal")
-defE <- defDataAdd(varname = "died", formula = "-2.5 + .3*period + effect", 
+defE <- defDataAdd(varname = "died", formula = "-2.5 + 0.3*period + effect", 
                    dist = "binary", link = "logit")
 
 d <- genData(1000, defD)

@@ -1,16 +1,19 @@
 #' Generate event data using longitudinal data, and restrict output to time
 #' until the nth event.
 #'
-#' @param dtName Name of existing data table
-#' @param defEvent 
-#' @param nEvents 
-#' @param perName Variable name for period field. Defaults to "period"
-#' @param id
-#' @return A data.table that stops after "nEvents" are reached.
+#' @param dtName name of existing data table
+#' @param defEvent data definition table (created with defDataAdd) that
+#' determines the event generating process. 
+#' @param nEvents maximum number of events that will be generated (the nth
+#' event).
+#' @param perName variable name for period field. Defaults to "period"
+#' @param id string representing name of the id 
+#' field in table specified by dtName
+#' @return data.table that stops after "nEvents" are reached.
 #' @examples
 #' defD <- defData(varname = "effect", formula = 0, variance = 1, 
 #'                 dist = "normal")
-#' defE <- defDataAdd(varname = "died", formula = "-2.5 + .3*period + effect", 
+#' defE <- defDataAdd(varname = "died", formula = "-2.5 + 0.3*period + effect", 
 #'                    dist = "binary", link = "logit")
 #' 
 #' d <- genData(1000, defD)
@@ -22,6 +25,15 @@
 genNthEvent <- function(dtName, defEvent, nEvents = 1,
                         perName = "period", id = "id") {
   
+  # "Declare" vars to avoid R CMD warning
+  
+  .event <- NULL
+  .id <- NULL
+  .period <- NULL
+  .first <- NULL
+  
+  #
+  
   dd <- copy(dtName)
   dd <- addColumns(defEvent, dd)
   
@@ -30,7 +42,7 @@ genNthEvent <- function(dtName, defEvent, nEvents = 1,
   
   dsd <- dd[dd[.event == 1, .I[nEvents], keyby = .id]$V1]
   
-  df <- dsd[!is.na(.period), .(.id, .first = .period)]
+  df <- dsd[!is.na(.period), list(.id, .first = .period)]
   
   devent <- merge(dd, df, by = ".id")[.period <= .first, ][, .first := NULL]
   dnone <- merge(dd, df, by = ".id", all.x = TRUE)[is.na(.first)][, .first := NULL]

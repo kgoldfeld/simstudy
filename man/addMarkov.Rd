@@ -4,7 +4,7 @@
 \alias{addMarkov}
 \title{Add Markov chain}
 \usage{
-addMarkov(dd, transMat, chainLen, wide = FALSE, idlab = "id",
+addMarkov(dd, transMat, chainLen, wide = FALSE, id = "id",
   pername = "period", varname = "state", widePrefix = "S",
   start0lab = NULL)
 }
@@ -24,6 +24,9 @@ wide format includes all elements of a chain on a single row; the long
 format includes each element of a chain in its own row. The default is
 wide = FALSE, so the long format is returned by default.}
 
+\item{id}{Character string that represents name of "id" field. 
+Defaults to "id".}
+
 \item{pername}{Character string that represents the variable name of the
 chain sequence in the long format. Defaults "period",}
 
@@ -36,9 +39,6 @@ prefix for the state fields in the wide format. Defaults to "S".}
 \item{start0lab}{Character string that represents name of the integer 
 field containing starting state (State 0) of the chain for each individual.
 If it is NULL, starting state defaults to 1. Default is NULL.}
-
-\item{id}{Character string that represents name of "id" field. 
-Defaults to "id".}
 }
 \value{
 A data table with n rows if in wide format, or n by chainLen rows 
