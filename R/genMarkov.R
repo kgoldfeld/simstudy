@@ -57,7 +57,7 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
   
   # check row sums = 1
   
-  if ( !all(apply(transMat, 1, sum) == 1) ) {
+  if ( !all(round(apply(transMat, 1, sum), 5) == 1) ) {
     stop("Rows in transition matrix must sum to 1")
   }
   
