@@ -11,7 +11,7 @@
 #' @param grpName string representing variable name for treatment or
 #' exposure group
 #' @param lag integer representing length of transition period
-#' @param xrName string representing ame of the field that 
+#' @param xrName string representing name of the field that 
 #' indicates whether the cluster status is in transition status
 #' 
 #' @return A data.table with the added treatment assignment

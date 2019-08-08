@@ -25,7 +25,7 @@ exposure group}
 
 \item{lag}{integer representing length of transition period}
 
-\item{xrName}{string representing ame of the field that 
+\item{xrName}{string representing name of the field that 
 indicates whether the cluster status is in transition status}
 }
 \value{
