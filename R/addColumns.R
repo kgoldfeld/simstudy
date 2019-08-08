@@ -1,8 +1,8 @@
 #' Add columns to existing data set
 #'
-#' @param dtDefs Name of definitions for added columns
-#' @param dtOld Name of data table that is to be updated
-#' @return An updated data.table that contains the added simulated data
+#' @param dtDefs name of definitions for added columns
+#' @param dtOld name of data table that is to be updated
+#' @return an updated data.table that contains the added simulated data
 #' @examples
 #' # New data set
 #'

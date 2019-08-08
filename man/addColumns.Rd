@@ -7,12 +7,12 @@
 addColumns(dtDefs, dtOld)
 }
 \arguments{
-\item{dtDefs}{Name of definitions for added columns}
+\item{dtDefs}{name of definitions for added columns}
 
-\item{dtOld}{Name of data table that is to be updated}
+\item{dtOld}{name of data table that is to be updated}
 }
 \value{
-An updated data.table that contains the added simulated data
+an updated data.table that contains the added simulated data
 }
 \description{
 Add columns to existing data set
