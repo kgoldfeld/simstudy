@@ -1,14 +1,9 @@
-## Resubmission 2019MAY16
+## Resubmission 2019AUG09
 
-This is a resubmission of version 0.1.13
+This is a resubmission of version 0.1.14
 
-Developed with R Version 3.6.0.
+Developed with R Version 3.6.1.
 
 I did not get any notes from win_build and all rhub checks passed.
 
-###
-
-There is an "Additional issue" listed on the "CRAN Package Check Results": noLD
-
-The error has been resolved by adding a tolerance argument to the incriminating code.  I rechecked using rhub::check(platform = "debian-gcc-devel-nold"). The check results were "OK".
 
