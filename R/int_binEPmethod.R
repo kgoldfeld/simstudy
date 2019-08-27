@@ -18,7 +18,7 @@
       
       if (d < L | d > U)   {
         LU <- paste0("(", round(L,2) , " ... ", round(U, 2), ")")
-        stopText <- paste("Sepcified correlation", d, "out of range" , LU)
+        stopText <- paste("Specified correlation", d, "out of range" , LU)
         stop(stopText)
       }
 }
