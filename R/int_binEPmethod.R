@@ -10,7 +10,7 @@
 
 .checkBoundsBin <- function(p1, p2, d) {
 
-      l <- (p1*p2) / (1-p1)*(1-p2)
+      l <- (p1*p2) / ((1-p1)*(1-p2))
       L <- max(-sqrt(l), -sqrt(1/l))
       
       u <- (p1*(1-p2)) / (p2*(1-p1))
