@@ -80,10 +80,10 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
     stop("Proability vector is empty")
   }
   
-  baseprobs <- round(baseprobs,3 )
+  baseprobs <- round(baseprobs, 10)
   if (!isTRUE(all.equal(rep(1, nrow(baseprobs)), 
                        apply(baseprobs, 1, sum),
-                       tolerance = .Machine$double.eps^0.25))) {
+                       tolerance = .Machine$double.eps^0.5))) {
     
     stop("Probabilities are not properly specified: each row must sum to one")
   }
