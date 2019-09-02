@@ -16,7 +16,8 @@
       u <- (p1*(1-p2)) / (p2*(1-p1))
       U <- min(sqrt(u), sqrt(1/u))  
       
-      if (d < L | d > U)   {
+      if ((d < L & isTRUE(all.equal(d, L)) == FALSE) | 
+          (d > U & isTRUE(all.equal(d, U)) == FALSE))   {
         LU <- paste0("(", round(L,2) , " ... ", round(U, 2), ")")
         stopText <- paste("Specified correlation", d, "out of range" , LU)
         stop(stopText)
