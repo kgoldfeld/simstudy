@@ -10,6 +10,6 @@ test_that("Correlation boundaries for binary variables are correct", {
   
   expect_silent(.checkBoundsBin(p1, p2, -0.6))
   expect_silent(.checkBoundsBin(p1, p2, 0.4))
-  expect_silent(.checkBoundsBin(p1, p2, round(cor(x1, x2), 5)))
+  expect_silent(.checkBoundsBin(p1, p2, cor(x1, x2)))
   
 })
