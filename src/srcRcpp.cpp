@@ -58,3 +58,31 @@ Rcpp::IntegerMatrix markovChains(int nchains, NumericMatrix P,
   
 }
 
+// [[Rcpp::export]]
+Rcpp::IntegerVector clipVec(IntegerVector id, IntegerVector seq, IntegerVector event) {
+  
+  int uid = unique(id).length();
+  IntegerVector last(uid);
+  
+  int maxperiod = max(seq);
+  int xid;
+  
+  for(int i=0; i<id.length(); ++i) {
+    
+    if (seq[i] == 1) {
+      xid = id[i] - 1;
+    }
+    
+    if (last[xid] == 0) {
+      
+      if (seq[i] < maxperiod) {
+        if (event[i] == 1) last[xid] = seq[i];
+      } else last[xid] = seq[i];
+      
+    }
+    
+  }
+  return last;
+}
+
+

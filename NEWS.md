@@ -101,3 +101,7 @@
 * Updated function trtStepWedge so that a transition period can be included.
 * Fixed bug in function delColumns related to multiple keys.
 
+# simstudy 0.1.15
+
+* Added function dataClip (that uses new rcpp function clipVec) to clip or truncate a longitudinal data set after a certain event has occurred.
+* Fixed bug in addMarkov

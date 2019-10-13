@@ -97,7 +97,7 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
   xmat <- markovChains(n, transMat, chainLen, s0)
   
   dx <- data.table::data.table(id = ids, xmat)
-  data.table::setnames(dx, id, ".id")
+  data.table::setnames(dx, "id", ".id")           # changed 8/19
   
   defnames <- paste0("V",seq(1:chainLen))
   tempnames <- paste0(".V", seq(1:chainLen))

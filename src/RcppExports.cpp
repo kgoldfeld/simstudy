@@ -30,10 +30,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// clipVec
+Rcpp::IntegerVector clipVec(IntegerVector id, IntegerVector seq, IntegerVector event);
+RcppExport SEXP _simstudy_clipVec(SEXP idSEXP, SEXP seqSEXP, SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type id(idSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type event(eventSEXP);
+    rcpp_result_gen = Rcpp::wrap(clipVec(id, seq, event));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simstudy_matMultinom", (DL_FUNC) &_simstudy_matMultinom, 1},
     {"_simstudy_markovChains", (DL_FUNC) &_simstudy_markovChains, 4},
+    {"_simstudy_clipVec", (DL_FUNC) &_simstudy_clipVec, 3},
     {NULL, NULL, 0}
 };
 
