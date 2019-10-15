@@ -103,5 +103,6 @@
 
 # simstudy 0.1.15
 
-* Added function dataClip (that uses new rcpp function clipVec) to clip or truncate a longitudinal data set after a certain event has occurred.
-* Fixed bug in addMarkov
+* Added function trimData (that uses new rcpp function clipVec) to clip or truncate a longitudinal data set after a certain event has occurred.
+* Fixed bug in addMarkov, added trimvalue argument to use trimData function
+* Added trimvalue argument in genMarkov
