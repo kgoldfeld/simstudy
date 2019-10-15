@@ -25,6 +25,8 @@
 #' @param start0lab Character string that represents name of the integer 
 #' field containing starting state (State 0) of the chain for each individual.
 #' If it is NULL, starting state defaults to 1. Default is NULL.
+#' @param trimvalue Integer value indicating end state. If trimvalue is not NULL, 
+#' all records after the first instance of state = trimvalue will be deleted.
 #' @return A data table with n rows if in wide format, or n by chainLen rows 
 #' if in long format.
 #' @examples
@@ -45,16 +47,18 @@
 #' d1 <- addMarkov(dd, P, chainLen = 3)
 #' d2 <- addMarkov(dd, P, chainLen = 5, wide = TRUE)
 #' d3 <- addMarkov(dd, P, chainLen = 5, wide = TRUE, start0lab = "S0")
-#' 
+#' d4 <- addMarkov(dd, P, chainLen = 5, start0lab = "S0", trimvalue = 3)
 #' @export
 
 addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state", 
-                      widePrefix = "S", start0lab = NULL) {
+                      widePrefix = "S", start0lab = NULL, 
+                      trimvalue = NULL) {
   
   # 'declare' vars created in data.table
   
   variable = NULL
+  .e = NULL
   
   # check transMat is square matrix and row sums = 1
   
@@ -110,6 +114,7 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
     defnames <- paste0(".V",seq(1:chainLen))
     newnames <- paste0(widePrefix, seq(1:chainLen))
     data.table::setnames(dx, defnames, newnames)
+    setkeyv(dx, id)
     
   } else {           # wide = FALSE, so long format
     
@@ -118,11 +123,19 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
     
     dx[, variable := as.integer(variable)]
     data.table::setnames(dx, "variable", pername)
+    setkeyv(dx, id)
+    
+    if (!is.null(trimvalue)) {
+      
+      dx[, .e := as.integer(get(varname) == trimvalue)]
+      dx <- trimData(dx, pername, eventvar = ".e", id)
+      dx[, .e := NULL]
+      
+    }
     
   }
   
 
-  setkeyv(dx, id)
   dx[]
   
 }

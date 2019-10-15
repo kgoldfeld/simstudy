@@ -6,7 +6,7 @@
 \usage{
 addMarkov(dd, transMat, chainLen, wide = FALSE, id = "id",
   pername = "period", varname = "state", widePrefix = "S",
-  start0lab = NULL)
+  start0lab = NULL, trimvalue = NULL)
 }
 \arguments{
 \item{dd}{data.table with a unique identifier}
@@ -39,6 +39,9 @@ prefix for the state fields in the wide format. Defaults to "S".}
 \item{start0lab}{Character string that represents name of the integer 
 field containing starting state (State 0) of the chain for each individual.
 If it is NULL, starting state defaults to 1. Default is NULL.}
+
+\item{trimvalue}{Integer value indicating end state. If trimvalue is not NULL, 
+all records after the first instance of state = trimvalue will be deleted.}
 }
 \value{
 A data table with n rows if in wide format, or n by chainLen rows 
@@ -66,5 +69,5 @@ P <- t(matrix(c( 0.7, 0.2, 0.1,
 d1 <- addMarkov(dd, P, chainLen = 3)
 d2 <- addMarkov(dd, P, chainLen = 5, wide = TRUE)
 d3 <- addMarkov(dd, P, chainLen = 5, wide = TRUE, start0lab = "S0")
-
+d4 <- addMarkov(dd, P, chainLen = 5, start0lab = "S0", trimvalue = 3)
 }

@@ -22,6 +22,8 @@
 #' state in the long format. Defaults to "state".
 #' @param widePrefix Character string that represents the variable name 
 #' prefix for the state fields in the wide format. Defaults to "S".
+#' @param trimvalue Integer value indicating end state. If trimvalue is not NULL, 
+#' all records after the first instance of state = trimvalue will be deleted.
 #' @return A data table with n rows if in wide format, or n by chainLen rows 
 #' if in long format.
 #' @examples
@@ -34,12 +36,15 @@
 #'                 
 #' d1 <- genMarkov(n = 10, transMat = P, chainLen = 5)
 #' d2 <- genMarkov(n = 10, transMat = P, chainLen = 5, wide = TRUE)
+#' d3 <- genMarkov(n = 10, transMat = P, chainLen = 5, 
+#'                 pername = "seq", varname = "health", 
+#'                 trimvalue = 3)
 #' 
 #' @export
 
 genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state", 
-                      widePrefix = "S") {
+                      widePrefix = "S", trimvalue = NULL) {
   
   # 'declare' vars created in data.table
   
@@ -69,7 +74,8 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
   
   dd <- genData(n = n, id = id)
   dd <- addMarkov(dd, transMat, chainLen, wide, id,
-                  pername, varname, widePrefix)
+                  pername, varname, widePrefix, start0lab = NULL, 
+                  trimvalue = trimvalue)
   
   dd[]
   

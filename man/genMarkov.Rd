@@ -5,7 +5,8 @@
 \title{Generate Markov chain}
 \usage{
 genMarkov(n, transMat, chainLen, wide = FALSE, id = "id",
-  pername = "period", varname = "state", widePrefix = "S")
+  pername = "period", varname = "state", widePrefix = "S",
+  trimvalue = NULL)
 }
 \arguments{
 \item{n}{number of individual chains to generate}
@@ -34,6 +35,9 @@ state in the long format. Defaults to "state".}
 
 \item{widePrefix}{Character string that represents the variable name 
 prefix for the state fields in the wide format. Defaults to "S".}
+
+\item{trimvalue}{Integer value indicating end state. If trimvalue is not NULL, 
+all records after the first instance of state = trimvalue will be deleted.}
 }
 \value{
 A data table with n rows if in wide format, or n by chainLen rows 
@@ -53,5 +57,8 @@ P <- t(matrix(c( 0.7, 0.2, 0.1,
                 
 d1 <- genMarkov(n = 10, transMat = P, chainLen = 5)
 d2 <- genMarkov(n = 10, transMat = P, chainLen = 5, wide = TRUE)
+d3 <- genMarkov(n = 10, transMat = P, chainLen = 5, 
+                pername = "seq", varname = "health", 
+                trimvalue = 3)
 
 }
