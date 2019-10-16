@@ -1,6 +1,6 @@
-## Resubmission 2019AUG09
+## Resubmission 2019OCT16
 
-This is a resubmission of version 0.1.14
+This is a resubmission of version 0.1.15
 
 Developed with R Version 3.6.1.
 
