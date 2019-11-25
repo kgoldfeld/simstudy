@@ -14,7 +14,7 @@
   if (! args$dist %in% c("normal", "poisson", "noZeroPoisson", "binary", 
                          "binomial","uniform", "uniformInt",
                          "categorical", "gamma", "beta", "negBinomial",
-                         "nonrandom", "exponential")) {
+                         "nonrandom", "exponential", "mixture")) {
     stop(paste(args$dist, "not a valid distribution. Please check spelling."), call. = FALSE)
   }
 
@@ -45,6 +45,8 @@
     newColumn <- .gennegbinom(n, args$formula, args$variance, args$link, dfSim)
   } else if (args$dist == "nonrandom") {
     newColumn <- .gendeterm(n, args$formula, args$link, dfSim)
+  } else if (args$dist == "mixture") {
+    newColumn <- .genmixture(n, args$formula, dfSim)
   }
 
   # Create data frame

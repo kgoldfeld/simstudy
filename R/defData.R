@@ -14,7 +14,8 @@
 #' @return A data.table named dtName that is an updated data definitions table
 #' @details The possible data distributions include "normal", "poisson", 
 #' "noZeroPoisson", "negBinomial" "binary", "binomial", "beta", "uniform", 
-#' "uniformInt", "categorical", "gamma", "exponential", and "nonrandom."
+#' "uniformInt", "categorical", "gamma", "exponential", 
+#' "mixture", and "nonrandom."
 #' 
 #' @examples
 #' def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")

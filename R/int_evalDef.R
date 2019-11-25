@@ -68,12 +68,39 @@
       }
     }
   }
+  
+  # Check equation for mixture
+  
+  if (newdist == "mixture") {
+    
+    fcompress <- gsub(" ", "", newform, fixed = TRUE)  # compress formula
+    
+    if ( regexec("+", fcompress, fixed = TRUE) == -1 ) {
+      stop("Formula requires `+` to separate variables")
+    }
+    
+    fsplit <- strsplit(fcompress, "+", fixed = TRUE)[[1]] # split variables
+    
+    chkb <-unlist(lapply(fsplit, function(x) regexec("|", x, fixed = TRUE)))
+    if (any(chkb == -1)) {
+      stop("Mixture formula not in proper format")
+    }
+    
+    flist <- lapply(fsplit, function(x) unlist(strsplit(x, "|", fixed=TRUE) ))
+    ps <- cumsum(as.numeric(unlist(lapply(flist, function(x) (x[2])))))
+    
+    if (ps[length(ps)] != 1) {
+      stop("Probabilities must sum to 1")
+    }
+
+  }
 
   # Make sure that distribution is allowed
 
   if (!(newdist %in% c("normal","binary", "binomial","poisson","noZeroPoisson",
                        "uniform","categorical","gamma","beta","nonrandom",
-                       "uniformInt", "negBinomial", "exponential"
+                       "uniformInt", "negBinomial", "exponential", 
+                       "mixture"
   ))) {
 
     stop(paste0("'",newdist,"' distribution is not a valid option"), call. = FALSE)
