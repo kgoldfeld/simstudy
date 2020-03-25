@@ -5,8 +5,7 @@
 \title{Generate variance for random effects that produce desired intra-class
 coefficients (ICCs) for clustered data.}
 \usage{
-iccRE(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL,
-  disp = NULL)
+iccRE(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, disp = NULL)
 }
 \arguments{
 \item{ICC}{Vector of values between 0 and 1 that represent the

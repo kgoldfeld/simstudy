@@ -4,8 +4,7 @@
 \alias{addCorFlex}
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
-addCorFlex(dt, defs, rho = 0, tau = NULL, corstr = "cs",
-  corMatrix = NULL)
+addCorFlex(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = NULL)
 }
 \arguments{
 \item{dt}{Data table that will be updated.}

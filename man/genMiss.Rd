@@ -4,8 +4,7 @@
 \alias{genMiss}
 \title{Generate missing data}
 \usage{
-genMiss(dtName, missDefs, idvars, repeated = FALSE,
-  periodvar = "period")
+genMiss(dtName, missDefs, idvars, repeated = FALSE, periodvar = "period")
 }
 \arguments{
 \item{dtName}{Name of complete data set}

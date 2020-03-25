@@ -4,9 +4,17 @@
 \alias{genMarkov}
 \title{Generate Markov chain}
 \usage{
-genMarkov(n, transMat, chainLen, wide = FALSE, id = "id",
-  pername = "period", varname = "state", widePrefix = "S",
-  trimvalue = NULL)
+genMarkov(
+  n,
+  transMat,
+  chainLen,
+  wide = FALSE,
+  id = "id",
+  pername = "period",
+  varname = "state",
+  widePrefix = "S",
+  trimvalue = NULL
+)
 }
 \arguments{
 \item{n}{number of individual chains to generate}

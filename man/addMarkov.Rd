@@ -4,9 +4,18 @@
 \alias{addMarkov}
 \title{Add Markov chain}
 \usage{
-addMarkov(dd, transMat, chainLen, wide = FALSE, id = "id",
-  pername = "period", varname = "state", widePrefix = "S",
-  start0lab = NULL, trimvalue = NULL)
+addMarkov(
+  dd,
+  transMat,
+  chainLen,
+  wide = FALSE,
+  id = "id",
+  pername = "period",
+  varname = "state",
+  widePrefix = "S",
+  start0lab = NULL,
+  trimvalue = NULL
+)
 }
 \arguments{
 \item{dd}{data.table with a unique identifier}

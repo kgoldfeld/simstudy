@@ -4,8 +4,16 @@
 \alias{genCorData}
 \title{Create correlated data}
 \usage{
-genCorData(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
-  cnames = NULL, idname = "id")
+genCorData(
+  n,
+  mu,
+  sigma,
+  corMatrix = NULL,
+  rho,
+  corstr = "ind",
+  cnames = NULL,
+  idname = "id"
+)
 }
 \arguments{
 \item{n}{Number of observations}

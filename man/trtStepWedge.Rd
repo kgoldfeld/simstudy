@@ -4,8 +4,17 @@
 \alias{trtStepWedge}
 \title{Assign treatment for stepped-wedge design}
 \usage{
-trtStepWedge(dtName, clustID, nWaves, lenWaves, startPer,
-  perName = "period", grpName = "rx", lag = 0, xrName = "xr")
+trtStepWedge(
+  dtName,
+  clustID,
+  nWaves,
+  lenWaves,
+  startPer,
+  perName = "period",
+  grpName = "rx",
+  lag = 0,
+  xrName = "xr"
+)
 }
 \arguments{
 \item{dtName}{data table}

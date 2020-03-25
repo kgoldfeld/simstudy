@@ -44,8 +44,9 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 
   # 'declare' vars
 
-  stratum = NULL
-  id = NULL
+  .stratum = NULL
+  .n = NULL
+  grpExp = NULL
 
   #
 
@@ -61,36 +62,19 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   if (balanced) {
 
     if (is.null(strata)) {
-      dt[, stratum := 1]
+      dt[, .stratum := 1]
     } else {
       dt <- .addStrataCode(dt, strata)
     }
-
-    nStrata = length(dt[,unique(stratum)])
-    grpExp = data.table::data.table()
-
-    for (i in (1 : nStrata)) {
-      dts <- dt[stratum == i]
-      data.table::setnames(dts, key(dts), "id")
-      grpExps <- dts[,
-                     list(id, grpExp = sample(rep(c(1 : nTrt),
-                                               each = ceiling(nrow(dts) / nTrt)),
-                                           nrow(dts),
-                                           replace = FALSE)
-                     )
-      ]
-
-      grpExp <- data.table::rbindlist(list(grpExp, grpExps))
-    }
-
-    data.table::setnames(grpExp, "id", key(dt))
-    data.table::setkeyv(grpExp,key(dt))
-
-    dt <- grpExp[dtName]
-
+    
+    dt[, .n := .N, keyby = .stratum]
+    dtrx <- dt[, list(grpExp = .stratSamp(.n[1], nTrt)), keyby = .stratum]
+    dt[, grpExp := dtrx$grpExp]
+    dt[, `:=`(.stratum = NULL, .n = NULL)]
+    
     if (nTrt==2) dt[grpExp == 2, grpExp := 0]
-
     data.table::setnames(dt, "grpExp", grpName)
+    data.table::setkeyv(dt,key(dtName))
 
   } else { # balanced is FALSE - strata are not relevant
 

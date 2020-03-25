@@ -4,8 +4,14 @@
 \alias{defMiss}
 \title{Definitions for missing data}
 \usage{
-defMiss(dtDefs = NULL, varname, formula, logit.link = FALSE,
-  baseline = FALSE, monotonic = FALSE)
+defMiss(
+  dtDefs = NULL,
+  varname,
+  formula,
+  logit.link = FALSE,
+  baseline = FALSE,
+  monotonic = FALSE
+)
 }
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}

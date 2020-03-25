@@ -4,8 +4,15 @@
 \alias{addPeriods}
 \title{Create longitudinal/panel data}
 \usage{
-addPeriods(dtName, nPeriods = NULL, idvars = "id", timevars = NULL,
-  timevarName = "timevar", timeid = "timeID", perName = "period")
+addPeriods(
+  dtName,
+  nPeriods = NULL,
+  idvars = "id",
+  timevars = NULL,
+  timevarName = "timevar",
+  timeid = "timeID",
+  perName = "period"
+)
 }
 \arguments{
 \item{dtName}{Name of existing data table}

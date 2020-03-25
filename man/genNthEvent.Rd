@@ -5,8 +5,7 @@
 \title{Generate event data using longitudinal data, and restrict output to time
 until the nth event.}
 \usage{
-genNthEvent(dtName, defEvent, nEvents = 1, perName = "period",
-  id = "id")
+genNthEvent(dtName, defEvent, nEvents = 1, perName = "period", id = "id")
 }
 \arguments{
 \item{dtName}{name of existing data table}

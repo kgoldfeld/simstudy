@@ -4,8 +4,16 @@
 \alias{genCorOrdCat}
 \title{Generate correlated ordinal categorical data}
 \usage{
-genCorOrdCat(dtName, idname = "id", adjVar = NULL, baseprobs,
-  prefix = "grp", rho, corstr, corMatrix = NULL)
+genCorOrdCat(
+  dtName,
+  idname = "id",
+  adjVar = NULL,
+  baseprobs,
+  prefix = "grp",
+  rho,
+  corstr,
+  corMatrix = NULL
+)
 }
 \arguments{
 \item{dtName}{Name of complete data set}

@@ -110,3 +110,4 @@
 # simstudy 0.1.16
 
 * Added "mixture" distribution that takes a value from an existing column with a specified probability.
+* Modified function `trtAssign` to improve speed performance of stratified sampling with very large numbers of strata.

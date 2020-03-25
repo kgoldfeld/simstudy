@@ -4,8 +4,7 @@
 \alias{addMultiFac}
 \title{Add multi-factorial data}
 \usage{
-addMultiFac(dtOld, nFactors, levels = 2, coding = "dummy",
-  colNames = NULL)
+addMultiFac(dtOld, nFactors, levels = 2, coding = "dummy", colNames = NULL)
 }
 \arguments{
 \item{dtOld}{data.table that is to be modified}

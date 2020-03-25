@@ -4,8 +4,7 @@
 \alias{trtAssign}
 \title{Assign treatment}
 \usage{
-trtAssign(dtName, nTrt = 2, balanced = TRUE, strata = NULL,
-  grpName = "trtGrp")
+trtAssign(dtName, nTrt = 2, balanced = TRUE, strata = NULL, grpName = "trtGrp")
 }
 \arguments{
 \item{dtName}{data table}

@@ -4,8 +4,7 @@
 \alias{genCorFlex}
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
-genCorFlex(n, defs, rho = 0, tau = NULL, corstr = "cs",
-  corMatrix = NULL)
+genCorFlex(n, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = NULL)
 }
 \arguments{
 \item{n}{Number of observations}

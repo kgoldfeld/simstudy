@@ -4,9 +4,20 @@
 \alias{genCorGen}
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
-genCorGen(n, nvars, params1, params2 = NULL, dist, rho, corstr,
-  corMatrix = NULL, wide = FALSE, cnames = NULL, method = "copula",
-  idname = "id")
+genCorGen(
+  n,
+  nvars,
+  params1,
+  params2 = NULL,
+  dist,
+  rho,
+  corstr,
+  corMatrix = NULL,
+  wide = FALSE,
+  cnames = NULL,
+  method = "copula",
+  idname = "id"
+)
 }
 \arguments{
 \item{n}{Number of observations}

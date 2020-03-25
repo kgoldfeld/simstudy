@@ -5,8 +5,14 @@
 \title{Add single row to definitions table of conditions that will be used to add data to an
 existing definitions table}
 \usage{
-defCondition(dtDefs = NULL, condition, formula, variance = 0,
-  dist = "normal", link = "identity")
+defCondition(
+  dtDefs = NULL,
+  condition,
+  formula,
+  variance = 0,
+  dist = "normal",
+  link = "identity"
+)
 }
 \arguments{
 \item{dtDefs}{Name of definition table to be modified. Null if this is a new definition.}

@@ -4,8 +4,15 @@
 \alias{updateDefAdd}
 \title{Update definition table}
 \usage{
-updateDefAdd(dtDefs, changevar, newformula = NULL, newvariance = NULL,
-  newdist = NULL, newlink = NULL, remove = FALSE)
+updateDefAdd(
+  dtDefs,
+  changevar,
+  newformula = NULL,
+  newvariance = NULL,
+  newdist = NULL,
+  newlink = NULL,
+  remove = FALSE
+)
 }
 \arguments{
 \item{dtDefs}{Definition table that will be modified}

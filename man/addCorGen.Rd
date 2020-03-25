@@ -4,9 +4,21 @@
 \alias{addCorGen}
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
-addCorGen(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
-  dist, param1, param2 = NULL, cnames = NULL, method = "copula",
-  formSpec = NULL, periodvar = "period")
+addCorGen(
+  dtOld,
+  nvars,
+  idvar = "id",
+  rho,
+  corstr,
+  corMatrix = NULL,
+  dist,
+  param1,
+  param2 = NULL,
+  cnames = NULL,
+  method = "copula",
+  formSpec = NULL,
+  periodvar = "period"
+)
 }
 \arguments{
 \item{dtOld}{If an existing data.table is specified, then wide will be set to TRUE and n
