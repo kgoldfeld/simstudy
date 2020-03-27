@@ -8,6 +8,8 @@
 #' @param strata vector of strings representing stratifying variables
 #' @param grpName string representing variable name for treatment or
 #' exposure group
+#' @param ratio vector of values indicating relative proportion of group 
+#' assignment
 #' @return An integer (group) ranging from 1 to length of the
 #' probability vector
 #' @seealso \code{\link{trtObserve}}
@@ -36,11 +38,14 @@
 #' dt5 <- trtAssign(dt, nTrt = 5, balanced = TRUE, grpName = "Group")
 #' dt5[, .N, keyby = .(male, Group)]
 #' dt5[, .N, keyby = .(Group)]
+#' 
+#' dt6 <- trtAssign(dt, nTrt = 3, ratio = c(1, 2, 2), grpName = "Group")
+#' dt6[, .N, keyby = .(Group)]
 #'
 #' @export
 
 trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
-                       strata = NULL, grpName = "trtGrp") {
+                       strata = NULL, grpName = "trtGrp", ratio = NULL) {
 
   # 'declare' vars
 
@@ -56,6 +61,11 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   if (grpName %in% names(dtName)) {
     stop("Group name has previously been defined in data table", call. = FALSE)
   }
+  if (!is.null(ratio)) {
+    if (length(ratio) != nTrt) {
+      stop("Number of treatments does not match specified ratio", call. = FALSE)
+    }
+  }
 
   dt <- copy(dtName)
 
@@ -68,21 +78,28 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
     }
     
     dt[, .n := .N, keyby = .stratum]
-    dtrx <- dt[, list(grpExp = .stratSamp(.n[1], nTrt)), keyby = .stratum]
+    dtrx <- dt[, list(grpExp = .stratSamp(.n[1], nTrt, ratio)), keyby = .stratum]
     dt[, grpExp := dtrx$grpExp]
     dt[, `:=`(.stratum = NULL, .n = NULL)]
     
-    if (nTrt==2) dt[grpExp == 2, grpExp := 0]
+    if (nTrt==2) dt[, grpExp := grpExp - 1]
     data.table::setnames(dt, "grpExp", grpName)
     data.table::setkeyv(dt,key(dtName))
 
   } else { # balanced is FALSE - strata are not relevant
 
-    if (nTrt == 2) {
-      formula <- .5
-    } else {
-      formula <- rep(1 / nTrt, nTrt)
+    if (is.null(ratio)) {
+      
+      if (nTrt == 2) {
+        formula <- .5
+      } else {
+        formula <- rep(1 / nTrt, nTrt)
+      }
+      
+    } else { # ratio not null
+      formula <- ratio/sum(ratio)
     }
+    
 
     dt <- trtObserve(dt, formulas = formula, logit.link = FALSE, grpName)
 

@@ -4,7 +4,14 @@
 \alias{trtAssign}
 \title{Assign treatment}
 \usage{
-trtAssign(dtName, nTrt = 2, balanced = TRUE, strata = NULL, grpName = "trtGrp")
+trtAssign(
+  dtName,
+  nTrt = 2,
+  balanced = TRUE,
+  strata = NULL,
+  grpName = "trtGrp",
+  ratio = NULL
+)
 }
 \arguments{
 \item{dtName}{data table}
@@ -17,6 +24,9 @@ trtAssign(dtName, nTrt = 2, balanced = TRUE, strata = NULL, grpName = "trtGrp")
 
 \item{grpName}{string representing variable name for treatment or
 exposure group}
+
+\item{ratio}{vector of values indicating relative proportion of group 
+assignment}
 }
 \value{
 An integer (group) ranging from 1 to length of the
@@ -50,6 +60,9 @@ dt4[, .N, keyby = .(Group)]
 dt5 <- trtAssign(dt, nTrt = 5, balanced = TRUE, grpName = "Group")
 dt5[, .N, keyby = .(male, Group)]
 dt5[, .N, keyby = .(Group)]
+
+dt6 <- trtAssign(dt, nTrt = 3, ratio = c(1, 2, 2), grpName = "Group")
+dt6[, .N, keyby = .(Group)]
 
 }
 \seealso{

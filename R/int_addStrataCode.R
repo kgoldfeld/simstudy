@@ -36,9 +36,13 @@
 # @param ncat Number of treatment categories
 # @return A sample draw from a stratum
 
-.stratSamp <- function(nrow, ncat) {
-  neach <- floor(nrow / ncat)
-  distrx <- rep(c(1:ncat), each = neach)
+.stratSamp <- function(nrow, ncat, ratio) {
+  
+  if (is.null(ratio)) ratio <- rep(1, ncat)
+  
+  neach <- floor(nrow / sum(ratio))
+  distrx <- rep(c(1:ncat), times = (neach * ratio))
   extra <- nrow - length(distrx)
-  sample(c(distrx, sample(1:ncat, extra)))
+  sample(c(distrx, sample(rep(1:ncat, times = ratio), extra)))
+  
 }
