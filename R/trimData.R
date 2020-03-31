@@ -4,7 +4,7 @@
 #' @param seqvar string referencing column that indexes the sequence or period
 #' @param eventvar string referencing event data column
 #' @param idvar string referencing id column
-#' @return an updated data.table removes all rows folloing the first event for each 
+#' @return an updated data.table removes all rows following the first event for each 
 #' individual
 #' @examples
 #' eDef <- defDataAdd(varname = "e", formula = "u==4", dist = "nonrandom")

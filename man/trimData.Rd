@@ -16,7 +16,7 @@ trimData(dtOld, seqvar, eventvar, idvar = "id")
 \item{idvar}{string referencing id column}
 }
 \value{
-an updated data.table removes all rows folloing the first event for each 
+an updated data.table removes all rows following the first event for each 
 individual
 }
 \description{
