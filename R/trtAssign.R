@@ -97,7 +97,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
       }
       
     } else { # ratio not null
-      formula <- ratio/sum(ratio)
+      formula <- round(ratio/sum(ratio), 8)
     }
     
 

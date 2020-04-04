@@ -112,3 +112,7 @@
 * Added "mixture" distribution that takes a value from an existing column with a specified probability.
 * Modified function trtAssign to improve speed performance of stratified sampling with very large numbers of strata.
 * Add argument "ratio" to function trtAssign to allow users to specify more than 1:1 randomization.
+
+# simstudy 0.1.17
+
+* Fixed bug in trtAssign related new ratio argument.
