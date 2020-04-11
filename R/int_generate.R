@@ -26,7 +26,7 @@
     "exponential",
     "mixture",
     "pseudorandom",
-    "pseudorandomSeq",
+    "pseudorandomSeq"
   )) {
     stop(paste(args$dist, "not a valid distribution. Please check spelling. See ?simstudy::distributions"),
          call. = FALSE)

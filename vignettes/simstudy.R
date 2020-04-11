@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE--------------------------------------
+## ---- echo = FALSE, message = FALSE-------------------------------------------
 
 library(simstudy)
 library(ggplot2)
@@ -59,7 +59,7 @@ aplotfunc <- function(dt, ptitle) {
 }
 
 
-## ----  echo=FALSE--------------------------------------------------------
+## ----  echo=FALSE-------------------------------------------------------------
 def <- defData(varname = "nr", dist = "nonrandom", formula=7, id = "idnum")
 def <- defData(def,varname="x1", dist="uniform", formula="10;20")
 def <- defData(def,varname="y1", formula="nr + x1 * 2", variance=8)
@@ -73,7 +73,7 @@ def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", var
 
 knitr::kable(def)
 
-## ---- tidy = TRUE--------------------------------------------------------
+## ---- tidy = TRUE-------------------------------------------------------------
 def <- defData(varname = "nr", dist = "nonrandom", formula=7, id = "idnum")
 def <- defData(def,varname="x1",dist="uniform",formula="10;20")
 def <- defData(def,varname="y1",formula="nr + x1 * 2",variance=8)
@@ -84,34 +84,4 @@ def <- defData(def,varname="g1", dist="gamma", formula = "5+xCat", variance = 1,
 def <- defData(def,varname="b1", dist="beta", formula = "1+0.3*xCat", variance = 1, link = "logit")
 def <- defData(def, varname = "a1", dist = "binary" , formula="-3 + xCat", link="logit")
 def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit") 
-
-## ---- tidy = TRUE--------------------------------------------------------
-dt <- genData(1000, def)
-dt
-
-## ---- tidy = TRUE--------------------------------------------------------
-addef <- defDataAdd(varname = "zExtra", dist = "normal", formula = '3 + y1', 
-                 variance = 2)
-
-dt <- addColumns(addef, dt)
-dt
-
-## ---- tidy = TRUE--------------------------------------------------------
-def <- defData(varname = "male", dist = "binary", formula = .5 , id="cid")
-def <- defData(def, varname = "over65", dist = "binary", formula = "-1.7 + .8*male", link="logit")
-def <- defData(def, varname = "baseDBP", dist = "normal", formula = 70, variance = 40)
-
-dtstudy <- genData(330, def)
-
-## ---- tidy = TRUE--------------------------------------------------------
-study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"), grpName = "rxGrp")
-
-study1
-
-
-## ---- tidy = TRUE--------------------------------------------------------
-study2 <- trtAssign(dtstudy , n=3, balanced = TRUE, grpName = "rxGrp")
-
-## ---- tidy = TRUE--------------------------------------------------------
-study3 <- trtAssign(dtstudy , n=3, balanced = FALSE, grpName = "rxGrp")
 
