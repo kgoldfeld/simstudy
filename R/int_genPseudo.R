@@ -5,7 +5,7 @@
 #'
 #' @param n The number of observations required in the data set
 #' @param formula String that specifies the pool of numbers to be sampled from
-#'   and the number of repetions. "pool;reps" e.g. "1,2,4,5;4"
+#'   and the number of repetions. "pool;reps" e.g. "1+2+4+5;4"
 #' @param link  String \code{"fill"} to indicate if a length mismatch should be
 #'   tolerated, anything else will enforce \code{n = reps * length(vector)}.
 #' @return A data.frame column (aka vector) with the simulated data
@@ -15,7 +15,7 @@
     err <-
       paste(
         "Failed to parse formula.",
-        " Format: \"1,2,3;4\".",
+        " Format: \"1+2+3;4\".",
         " See ?simstudy::distributions . ",
         info
       )
@@ -35,7 +35,7 @@
   suppressWarnings(reps <- as.numeric(args[2]))
   suppressWarnings(pool <-
                      as.numeric(unlist(strsplit(
-                       args[1], split = ",", fixed = T
+                       args[1], split = "+", fixed = T
                      ))))
   
   if (!is.numeric(reps) || is.na(reps))
@@ -45,8 +45,8 @@
     .formulaError("Vector must be numbers seperated by commas")
   
   nOver <- n %% (length(pool) * reps)
-  nTimes <- n %/% (length(pool) * reps)
-  if ((nOver != 0 || nTimes != 1) & tolower(link) != "fill")
+  nTimes <- n %/% length(pool)
+  if ((nOver != 0 || nTimes != reps) & tolower(link) != "fill")
     stop(
       "Length mismatch:\n length(pool) * reps must be the same as the length of the generated data."
     )

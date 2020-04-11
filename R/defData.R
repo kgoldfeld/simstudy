@@ -40,7 +40,7 @@
 #'  repeated \code{reps} times in a completly random order.
 #'  \code{pseudorandomSeq} will also repeat the elements \code{reps} times but
 #'  will randomize in sequences of \code{length(vector)}. E.g. \code{formula =
-#'  "1,2,3;2"} could look like \code{3,1,1,2,3,2} for \code{pseudorandom} but
+#'  "1+2+3;2"} could look like \code{3,1,1,2,3,2} for \code{pseudorandom} but
 #'  something like \code{3,1,2,1,3,2} for \code{pseudorandomSeq}. Both
 #'  distributions expect \code{reps * length(vector) = n} where \code{n} is the
 #'  number of rows in the simulated data. Setting \code{link = "fill"} will
@@ -85,7 +85,7 @@ NULL
 #' def <- defData(def, varname="xCat", formula = "0.3;0.2;0.5", dist="categorical")
 #' def <- defData(def, varname="xGamma", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
 #' def <- defData(def, varname = "xBin", dist = "binary" , formula="-3 + xCat", link="logit")
-#' def <- defData(def, varname = "xPseudo", dist = "pseudorandom", formula = "1,2,3,4;3" , link = "fill")
+#' def <- defData(def, varname = "xPseudo", dist = "pseudorandom", formula = "1+2+3+4;3" , link = "fill")
 #' def
 #'
 #' @seealso \code{\link{distributions}}

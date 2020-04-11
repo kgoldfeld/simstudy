@@ -32,7 +32,7 @@
     stop("Categorical distribution requires 2 or more probabilities", call. = FALSE)
   }
 
-  if (!(newdist %in% c("uniform", "categorical", "uniformInt")) & nparam != 1) {
+  if (!(newdist %in% c("uniform", "categorical", "uniformInt","pseudorandom","pseudorandomSeq")) & nparam != 1) {
     stop("Only one parameter is permitted", call. = FALSE)
   }
 
@@ -100,7 +100,7 @@
   if (!(newdist %in% c("normal","binary", "binomial","poisson","noZeroPoisson",
                        "uniform","categorical","gamma","beta","nonrandom",
                        "uniformInt", "negBinomial", "exponential", 
-                       "mixture"
+                       "mixture", "pseudorandom","pseudorandomSeq"
   ))) {
 
     stop(paste0("'",newdist,"' distribution is not a valid option"), call. = FALSE)
