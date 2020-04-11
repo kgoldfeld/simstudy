@@ -24,7 +24,7 @@ test_that("data is generated correctly", {
   link <- "no"
   
   expect_vector(.genPseudoSeq(6, "1,2,3;2", link), size = 6)
-  expect_length(unique(table(.genPseudoSeq(6, "1,2,3;2", "aa")), 1))
+  expect_length(unique(table(.genPseudoSeq(6, "1,2,3;2", "aa"))), 1)
   expect_vector(.genPseudoSeq(13, "1,2,3;2", "fill"), size = 13)
   expect_vector(.genPseudoSeq(4, "1,2,3;2", "fill"), size = 4)
   expect_error(.genPseudoSeq(13, "1,2,3;2", link), err)

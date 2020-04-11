@@ -10,22 +10,26 @@
 #'   tolerated, anything else will enforce \code{n = reps * length(vector)}.
 #' @return A data.frame column (aka vector) with the simulated data
 #' @keywords internal
-.genPseudoSeq <- function(n, formula,link) {
-  .formulaError <-  function() {
-    stop(
-      "Failed to parse formula. Format: \"1,2,3;4\". See ?simstudy::distributions",
-      call. = F
-    )
+.genPseudoSeq <- function(n, formula, link) {
+  .formulaError <-  function(info = "") {
+    err <-
+      paste(
+        "Failed to parse formula.",
+        " Format: \"1,2,3;4\".",
+        " See ?simstudy::distributions . ",
+        info
+      )
+    stop(err, call. = F)
   }
   
-  if(!is.character(link) | is.na(link))
-      stop("Parameter 'link' needs to be a str.",call. = F)
+  if (!is.character(link) || is.na(link))
+    stop("Parameter 'link' needs to be a String.", call. = F)
   
   args <-
     unlist(strsplit(as.character(formula), split = ";", fixed = TRUE))
   
   if (length(args) != 2)
-    .formulaError()
+    .formulaError("\n Formula expects two arguments seperated by ';'.")
   
   # NA through coercion warning is superflous due to following checks
   suppressWarnings(reps <- as.numeric(args[2]))
@@ -34,21 +38,21 @@
                        args[1], split = ",", fixed = T
                      ))))
   
-  if (!is.numeric(reps) | is.na(reps))
-    .formulaError()
+  if (!is.numeric(reps) || is.na(reps))
+    .formulaError("Repetitionss must be numeric.")
   
   if (!is.vector(pool) | !is.numeric(pool) | any(is.na(pool)))
-    .formulaError()
+    .formulaError("Vector must be numbers seperated by commas")
   
   nOver <- n %% (length(pool) * reps)
   nTimes <- n %/% (length(pool) * reps)
-  if ( (nOver != 0 | nTimes != 1) & tolower(link) != "fill")
+  if ((nOver != 0 || nTimes != 1) & tolower(link) != "fill")
     stop(
-      "Length mismatch:\n length(pool) * reps must be the same as the length of the generated data"
+      "Length mismatch:\n length(pool) * reps must be the same as the length of the generated data."
     )
-  reps <- nTimes + ifelse(nOver != 0,1,0)
-  as.vector(replicate(reps, sample(pool)))[1:n]
+  reps <- nTimes + ifelse(nOver != 0, 1, 0)
   
+  as.vector(replicate(reps, sample(pool)))[1:n]
 }
 
 #' Pseudo-Random
@@ -61,6 +65,6 @@
 #' @return A data.frame column (aka vector) with the simulated data
 #'
 #' @keywords internal
-.genPseudoRandom <- function(n, formula,link) {
-  sample(.genPseudoSeq(n, formula,link))
+.genPseudoRandom <- function(n, formula, link) {
+  sample(.genPseudoSeq(n, formula, link))
 }
