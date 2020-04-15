@@ -3,7 +3,7 @@
 #' Get Distributions
 #'
 #' @return A character vector containing the names of all valid distributions.
-#' @keyword internal
+#' @noRd
 .getDists <-
   function() {
     c(
@@ -24,14 +24,21 @@
     )
   }
 
+
+#' Is Formula Scalar?
+#'
+#' @param formula String or Number
+#'
+#' @return Boolean
+#' @noRd
 .isFormulaScalar <- function(formula) {
-  if(is.character(formula))
-    if(";" %in% strsplit(formula,"")[[1]])
-      res <- F
+  if (is.character(formula))
+    if (";" %in% strsplit(formula, "")[[1]])
+      FALSE
     else
-      res <- is.numeric(eval(parse(text = formula)))
-  else if(is.numeric(formula))
-    res <- T
-  else 
-    res <- F
+      is.numeric(eval(parse(text = formula)))
+    else if (is.numeric(formula))
+      TRUE
+    else
+      FALSE
 }
