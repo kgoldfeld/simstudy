@@ -56,14 +56,23 @@ gen_formula_scalar <-  gen_formula(-100:100)
 gen_formula_choice <-
   function(prev_var) {
     if (length(prev_var) == 0)
-      prev_var <- c(-100:100) 
+      prev_var <- c(-100:100)
+    
     gen.choice(gen_formula(prev_var), gen_formula_scalar)
   }
 
 ## Mixture Generators ----
 gen_n_norm_Probs <- function(n) gen.map(function(p) p/sum(p) ,gen.c(of = n, gen_prob()))
     # atleast 2 vars are required for a correct mixture formula
-gen_mixture <- function(prev_var) gen.and_then(gen.element(2:max(2,length(prev_var))),function(n) gen_mix_parts(prev_var = prev_var,n = n))
+gen_mixture <-
+  function(prev_var) {
+    if(length(prev_var) == 0 | is.numeric(prev_var))
+      return("1 | 1 + 1 | 0")
+    gen.and_then(gen.element(2:max(2, length(prev_var))), function(n) {
+      gen_mix_parts(prev_var = prev_var, n = n)
+    })
+  }
+
 gen_mix_parts <- function(prev_var,n) generate(for (x in 
                                                     list(probs = gen_n_norm_Probs(n),
                                                          vars = gen.c(of = n, gen_prev_var(prev_var))))
@@ -100,7 +109,8 @@ reg[name %in% c("exponential","gamma","negBinomial","noZeroPoisson","poisson")]$
 
 
 ## Generators for complete Data Definitions ----
-gen_varnames <- function(n){ gen.c(of = n, gen_varname)}
+# does it make sense to not shrink? TODO
+gen_varnames <- function(n){ gen.no.shrink(gen.c(of = n, gen_varname))}
 
 gen_dists <-
   function(n) {
