@@ -23,7 +23,9 @@ gen_dist_fst <- gen.no.shrink(gen.element(distributions_noMix))
 # variables as formula argument for many distributions. 
 #
 # Only change gen_const range. 
-gen_prev_var <- function(prev_vars) gen.no.shrink(gen.element(prev_vars)) 
+
+# Shrink varnames?? 
+gen_prev_var <- function(prev_vars) gen.element(prev_vars) 
 gen_const <- gen.element(0:1000)
 gen_constf <- function(x) gen.element(0:1000)
 
@@ -31,7 +33,7 @@ gen_factor <- function(prev_var) gen.choice(gen_prev_var(prev_var),gen_const,gen
 gen_factor_dt <-
   function(prev_var)
     generate(for (x in list(
-      op = gen.element(c(" * ", " / ")),
+      op = gen.element(c(" * ", " / ", " ^ ", " %% ", " %/% ")),
       fac1 = gen_factor(prev_var),
       fac2 = gen_factor(prev_var)
     ))
