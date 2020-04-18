@@ -8,10 +8,10 @@
 # @return Nothing is returned if all tests are passed. If a test fails,
 # execution is halted.
 
-.evalDef <- function(newvar, newform, newdist, defVars) {
+.evalDef <- function(newvar, newform, newdist, defVars ) {
 
   # Check if previously defined
-
+  if(missing(defVars)) defVars <- ""
   if (newvar %in% defVars) {
     stop(paste("Variable name", newvar, "previously defined"), call. = FALSE)
   }
@@ -89,7 +89,12 @@
     flist <- lapply(fsplit, function(x) unlist(strsplit(x, "|", fixed=TRUE) ))
     ps <- cumsum(as.numeric(unlist(lapply(flist, function(x) (x[2])))))
     
-    if (ps[length(ps)] != 1) {
+    form_probs <- sum(as.numeric(unlist(regmatches(
+      newform,
+      gregexpr("[[:blank:]][[:digit:]]+\\.*[[:digit:]]*", str)
+    ))))
+    
+    if (all.equal(form_probs,1)) {
       stop("Probabilities must sum to 1")
     }
 
@@ -107,4 +112,125 @@
 
   }
 
+}
+
+.evalDef2 <- function(newvar, newform, newdist, defVars) {
+  
+  if (!newdist %in% .getDists()) {
+    stop(paste0("'", newdist, "' distribution is not a valid option. See ?distributions."), call. = FALSE)
+  }
+
+  if (missing(defVars)) {
+    warning("Argument 'defVars' missing with no default. Was this intentional?")
+    defVars <- ""
+  }
+
+  if (newvar %in% defVars) {
+    stop(paste("Variable name '", newvar, "' previously defined."), call. = FALSE)
+  }
+
+  if (!is_valid_variable_name(newvar)) {
+    warning(
+      paste(
+        "Variable name '",
+        newvar,
+        "' is not a valid R variable name,\n",
+        "and will be converted to: '",
+        make.names(newvar),
+        "'."
+      ),
+      call. = FALSE
+    )
+    newvar <- make.names(newvar)
+  }
+  
+  if (startsWith(newvar, ".."))
+    stop(
+      paste(
+        "The prefix '..' is reserved to mark variables",
+        "from outside the definition table in formulas."
+      )
+    )
+  
+  
+  switch(newdist,
+         
+         beta = ,
+         
+         binary = ,
+         
+         binomial = ,
+         
+         categorical = ,
+         
+         exponential = ,
+         
+         gamma = ,
+         
+         mixture = ,
+         
+         negBinomial = ,
+         
+         nonrandom = ,
+         
+         normal = ,
+         
+         noZeroPoisson = ,
+         
+         poisson = ,
+         
+         uniform = ,
+         
+         uniformInt = ,
+         
+         stop("Unkown distribution."))
+}
+
+
+
+.isValidArithmeticFormula <- function(formula, defVars) {
+  
+  # This only catches gross errors like trailing operators, does not check
+  # functionnames etc.
+  newExpress <- try(parse(text = formula), silent = TRUE)
+
+  if (.iserror(newExpress)) {
+    stop(paste("Equation: '", formula, "' not in proper form. See ?distributions ."),
+      call. = FALSE
+    )}
+  
+  formFuncs <- all.names(newExpress,unique = T)
+  formVars <- all.vars(newExpress)
+  formFuncs <- formFuncs[!formFuncs %in% formVars]
+  
+  if (any(startsWith(formFuncs, "..")))
+    warning(
+      paste("Functions don't need to be escaped with '..',",
+        "\nunless this is the real name this will cause an error later.",
+        "\nFunctions:",formFuncs[startsWith(formFuncs, "..")]
+      )
+    )
+  
+  dotVarsBol <- startsWith(formVars, "..")
+  inDef <- formVars[!dotVarsBol] %in% defVars
+  unRefVars <- formVars[!inDef & !dotVarsBol]
+  
+  if (!all(inDef)) {
+    
+    stop(paste("Variable(s) referenced not previously defined:",
+               paste(unRefVars, collapse = ", ")
+    ), call. = FALSE)
+  }
+  
+  naFormFuncs <- is.na(mget(formFuncs,ifnotfound = NA,mode = "function",inherits = T))
+  if(any(naFormFuncs))
+    stop(paste("Functions(s) referenced not defined:",
+               paste(formFuncs[naFormFuncs], collapse = ", ")
+    ), call. = FALSE)
+  
+  naDotVars <- is.na(mget(sub("..","",formVars[dotVarsBol]),ifnotfound = NA,mode = "numeric",inherits = T))
+  if(any(naDotVars))
+    stop(paste("Escaped variables referenced not defined (or not numeric):",
+               paste(names(naDotVars), collapse = ", ")
+    ), call. = FALSE)
 }
