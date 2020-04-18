@@ -147,7 +147,7 @@
   if (startsWith(newvar, ".."))
     stop(
       paste(
-        "The prefix '..' is reserved to mark variables",
+        "The prefix '..' is reserved to escape variables",
         "from outside the definition table in formulas."
       )
     )
@@ -262,6 +262,9 @@
 
 .isValidArithmeticFormula <- function(formula, defVars) {
   
+  if(grepl(";",formula,fixed = T))
+    stop("';' are not allowed in arithmetic formulas. See ?distribution")
+  
   # This only catches gross errors like trailing operators, does not check
   # functionnames etc.
   newExpress <- try(parse(text = formula), silent = TRUE)
@@ -285,12 +288,12 @@
   
   dotVarsBol <- startsWith(formVars, "..")
   inDef <- formVars %in% defVars
-  unRefVars <- formVars[!inDef & !dotVarsBol]
+  unRefVars <- !inDef & !dotVarsBol
   
   if (!all(unRefVars)) {
     
     stop(paste("Variable(s) referenced not previously defined:",
-               paste(unRefVars, collapse = ", ")
+               paste(formVars[unRefVars], collapse = ", ")
     ), call. = FALSE)
   }
   
