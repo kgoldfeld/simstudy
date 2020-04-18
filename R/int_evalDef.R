@@ -155,37 +155,109 @@
   
   switch(newdist,
          
+         binary = {
+           .isValidArithmeticFormula(formula, defVars)
+           .isIdLogit(link)
+         }, 
+         
          beta = ,
          
-         binary = ,
-         
-         binomial = ,
-         
-         categorical = ,
-         
-         exponential = ,
-         
-         gamma = ,
-         
-         mixture = ,
-         
-         negBinomial = ,
-         
-         nonrandom = ,
-         
-         normal = ,
+         binomial = {
+           .isValidArithmeticFormula(formula, defVars)
+           .isValidArithmeticFormula(variance, defVars)
+           .isIdLogit(link)
+         }, 
          
          noZeroPoisson = ,
          
          poisson = ,
          
-         uniform = ,
+         exponential = {
+           .isValidArithmeticFormula(formula, defVars)
+           .isIdLog(link)
+         }, 
+
+         gamma = , 
+
+         negBinomial = {
+           .isValidArithmeticFormula(formula, defVars)
+           .isValidArithmeticFormula(variance, defVars)
+           .isIdLog(link)
+         },
          
-         uniformInt = ,
+         nonrandom =  .isValidArithmeticFormula(formula, defVars),
+         
+         normal = {
+           .isValidArithmeticFormula(formula, defVars)
+           .isValidArithmeticFormula(variance, defVars)
+         },
+         
+
+         
+         categorical = ,
+   
+         mixture = {
+           .isValidArithmeticFormula(formula, defVars)
+           .checkMixture(formula, defVars)
+         },
+         
+         uniform = .checkUniform(formula,defVars),
+         
+         uniformInt = .checkUniformInt(formula,defVars),
          
          stop("Unkown distribution."))
 }
 
+
+
+
+
+
+
+.isIdLogit <- function(link) {
+  if (!link %in% c("identity", "logit"))
+    stop(
+      paste(
+        "Invalid link function: '",
+        link,
+        "', must be 'identity' or 'logit'. See ?distributions"
+      )
+    )
+}
+
+.isIdLog <- function(link) {
+  if (!link %in% c("identity", "log"))
+    stop(
+      paste(
+        "Invalid link function: '",
+        link,
+        "', must be 'identity' or 'logit'. See ?distributions"
+      )
+    )
+}
+
+.checkCategorical <- function(formula, variance, defVars){
+  
+}
+
+.checkMixture <- function(formula, defVars){
+  
+}
+
+
+.checkUniform <- function(formula,defVars){
+  
+  c(min,max)
+}
+
+.checkUniformInt <- function(formula, defVars) {
+  range <- .checkUniform(formula, defVars)
+  if (any(!is.integer(range)))
+    stop(paste(
+      "For 'uniformInt' min and max must be integers,",
+      "did you mean to use 'uniform'?"
+    ))
+}
 
 
 .isValidArithmeticFormula <- function(formula, defVars) {
@@ -212,10 +284,10 @@
     )
   
   dotVarsBol <- startsWith(formVars, "..")
-  inDef <- formVars[!dotVarsBol] %in% defVars
+  inDef <- formVars %in% defVars
   unRefVars <- formVars[!inDef & !dotVarsBol]
   
-  if (!all(inDef)) {
+  if (!all(unRefVars)) {
     
     stop(paste("Variable(s) referenced not previously defined:",
                paste(unRefVars, collapse = ", ")
@@ -233,4 +305,6 @@
     stop(paste("Escaped variables referenced not defined (or not numeric):",
                paste(names(naDotVars), collapse = ", ")
     ), call. = FALSE)
+  
+  invisible(formula)
 }
