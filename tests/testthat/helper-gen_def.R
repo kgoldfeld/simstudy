@@ -10,7 +10,52 @@ gen_prob <- function(x) gen.unif(0,1)
 gen_var <- function(x) 0
 gen_id <- gen.element(c("identity"))
 
-gen_varname <- gen.map(function(x) make.names(paste0(x,collapse ="")),gen.and_then(gen.element(1:20), function(x) gen.c(of = x, gen_azAZ09)))
+# Shrink varnames?? 
+gen_name <- function(r) gen.and_then(gen.element(r), function(x) gen.c(of = x, gen_azAZ09)) 
+gen_varname <- gen.map(function(x) make.names(paste0(x,collapse ="")),gen_name(1:20))
+gen_fun_name <- gen.map(function(x) make.names(paste0(x,collapse ="")) , gen_name(2:6))
+
+gen_assign_dotdot <- function(val) {gen.map(function(name){
+  assign(name,val,pos = .GlobalEnv)
+  paste0("..",name)
+} , gen_varname)}
+
+gen_dotdot_num <- gen.and_then(gen.unif(-1000,1000),function(x) gen_assign_dotdot(x)) 
+gen_dotdot_vec <-
+  gen.and_then(gen.and_then(gen.int(20), function(n) {
+    gen.c(of = n, gen.unif(-1000:1000))
+  }), function(val) {
+    gen_assign_dotdot(val)
+  })
+gen_dotdot_vec_ele <-
+  gen.map(function(name) {
+    dv <- get(gsub("..", "", name))
+    paste0(name, "[", sample(1:length(dv), 1), "]")
+  }, gen_dotdot_vec)
+
+gen_dotdot_var <- gen.choice(gen_dotdot_num,gen_dotdot_vec_ele)
+gen_dotdot_chr <- gen.and_then(gen_varname,function(val) gen_assign_dotdot(val))
+
+gen_base_func <- gen.sample(c("log(abs(%s))","exp(%s)","sin(%s)","cos(%s)","log10(abs(%s))","log2(abs(%s))"),1)
+
+gen_arb_fun <-
+  gen.and_then(gen_fun_name, function(name) {
+    gen.map(function(formula) {
+      assign(name, eval(parse(text = paste(
+        "function(p)", formula
+      ))), pos = .GlobalEnv)
+      paste0(name, "(%s)")
+    }, gen_formula("p"))
+  })
+
+## gen vars ala ..var and assign!!
+gen_wrap_fun <-
+  function(inner) {
+    gen.map(function(x)
+      sprintf(x, inner),
+      gen.choice(gen_base_func,gen_arb_fun))
+  }
+
 
 distributions <- .getDists()
 distributions_noMix <- distributions[distributions != "mixture"]
@@ -24,20 +69,28 @@ gen_dist_fst <- gen.no.shrink(gen.element(distributions_noMix))
 #
 # Only change gen_const range. 
 
-# Shrink varnames?? 
+
 gen_prev_var <- function(prev_vars) gen.element(prev_vars) 
 gen_const <- gen.element(0:1000)
 gen_constf <- function(x) gen.element(0:1000)
 
-gen_factor <- function(prev_var) gen.choice(gen_prev_var(prev_var),gen_const,gen_expr_br(prev_var))
-gen_factor_dt <-
-  function(prev_var)
-    generate(for (x in list(
-      op = gen.element(c(" * ", " / ", " ^ ", " %% ", " %/% ")),
-      fac1 = gen_factor(prev_var),
-      fac2 = gen_factor(prev_var)
-    ))
-      list(x$fac1, x$op, x$fac2))
+gen_factor <- function(prev_var) {
+  gen.choice(
+    gen_prev_var(prev_var),
+    gen_const,
+    gen_expr_br(prev_var),
+    gen_expr_fun(prev_var)
+  )
+}
+
+gen_factor_dt <- function(prev_var) {
+  generate(for (x in list(
+    op = gen.element(c(" * ", " / ", " ^ ", " %% ", " %/% ")),
+    fac1 = gen_factor(prev_var),
+    fac2 = gen_factor(prev_var)
+  ))
+    list(x$fac1, x$op, x$fac2))
+}
 
 gen_term <- function(prev_var) gen.choice(gen_factor(prev_var),gen_factor_dt(prev_var))
 gen_term_pm <-
@@ -50,6 +103,7 @@ gen_term_pm <-
       list(x$term1, x$op, x$term2))
 
 gen_expr_br <- function(prev_var) gen.map(function(x) c("(", x , ")") ,gen_expr(prev_var))
+gen_expr_fun <- function(prev_var) gen.and_then(gen_formula(prev_var),function(inner) gen_wrap_fun(inner))
 gen_expr <- function(prev_var) gen.choice(gen_term(prev_var),gen_term_pm(prev_var))
 
 
