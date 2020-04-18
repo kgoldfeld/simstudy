@@ -11,7 +11,7 @@ gen_var <- function(x) 0
 gen_id <- gen.element(c("identity"))
 
 # Shrink varnames?? 
-gen_name <- function(r) gen.and_then(gen.element(r), function(x) gen.c(of = x, gen_azAZ09)) 
+gen_name <- function(r)  gen.and_then(gen.element(r), function(x) gen.c(of = x, gen_azAZ09))
 gen_varname <- gen.map(function(x) make.names(paste0(x,collapse ="")),gen_name(1:20))
 gen_fun_name <- gen.map(function(x) make.names(paste0(x,collapse ="")) , gen_name(2:6))
 
@@ -20,18 +20,23 @@ gen_assign_dotdot <- function(val) {gen.map(function(name){
   paste0("..",name)
 } , gen_varname)}
 
-gen_dotdot_num <- gen.and_then(gen.unif(-1000,1000),function(x) gen_assign_dotdot(x)) 
+gen_dotdot_num <- gen.and_then(gen.unif(from=-1000,to=1000),function(x) gen_assign_dotdot(x)) 
 gen_dotdot_vec <-
   gen.and_then(gen.and_then(gen.int(20), function(n) {
-    gen.c(of = n, gen.unif(-1000:1000))
+    gen.c(of = n, gen.unif(from=-1000,to=1000))
   }), function(val) {
     gen_assign_dotdot(val)
   })
-gen_dotdot_vec_ele <-
-  gen.map(function(name) {
-    dv <- get(gsub("..", "", name))
-    paste0(name, "[", sample(1:length(dv), 1), "]")
-  }, gen_dotdot_vec)
+
+gen_dotdot_vec <-  function(n) {
+    gen.and_then(gen.c(of = n, gen.unif(from = -1000, to = 1000)), function(val) {
+      gen.map(function(name) {
+        paste0(name, "[", sample(1:n, 1), "]")
+      } , gen_assign_dotdot(val))
+    })}
+
+gen_dotdot_vec_ele <- gen.and_then(gen.int(12),gen_dotdot_vec)    
+
 
 gen_dotdot_var <- gen.choice(gen_dotdot_num,gen_dotdot_vec_ele)
 gen_dotdot_chr <- gen.and_then(gen_varname,function(val) gen_assign_dotdot(val))
@@ -77,12 +82,13 @@ gen_constf <- function(x) gen.element(0:1000)
 gen_factor <- function(prev_var) {
   gen.choice(
     gen_prev_var(prev_var),
+    gen_dotdot_var,
     gen_const,
-    gen_expr_br(prev_var),
-    gen_expr_fun(prev_var)
+    
+    gen_expr_br(prev_var)
   )
 }
-
+#gen_expr_fun(prev_var),
 gen_factor_dt <- function(prev_var) {
   generate(for (x in list(
     op = gen.element(c(" * ", " / ", " ^ ", " %% ", " %/% ")),
