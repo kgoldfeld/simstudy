@@ -63,7 +63,7 @@ defRead <- function(filen, id = "id") {
 
   if (nrow(read.dt) > 1){
     for (i in 2:nrow(read.dt)) {
-      .evalDef(read.dt[i,varname], read.dt[i,formula], read.dt[i,dist], read.dt[1:(i-1), varname])
+      .evalDef(newvar = read.dt[i,varname],newform = read.dt[i,formula],newdist = read.dt[i,dist],defVars= read.dt[1:(i-1), varname])
     }
   }
 

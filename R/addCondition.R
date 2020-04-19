@@ -69,8 +69,8 @@ addCondition <- function(condDefs, dtOld, newvar) {
 
   for (i in 1:nrow(condDefs)) {
 
-    .evalDef(newvar, cDefs[i,formula], cDefs[i,dist], chkVars)
-    .evalDef(newvar, cDefs[i,condition], "nonrandom", chkVars)
+    .evalDef(newvar = newvar,newform =  cDefs[i,formula], newdist = cDefs[i,dist],defVars =  chkVars)
+    .evalDef(newvar = newvar, newform = cDefs[i,condition],newdist =  "nonrandom",defVars =  chkVars)
 
   }
 
