@@ -7,7 +7,7 @@
 # @param defVars Existing column names
 # @return Nothing is returned if all tests are passed. If a test fails,
 # execution is halted.
-.evalDef <- function(newvar, newform, newdist, variance, link, defVars) {
+.evalDef <- function(newvar, newform, newdist, variance = 0, link = "identity", defVars) {
   
   if(!is.character(newvar) || length(newvar) != 1 || is.na(newvar)){
     stop("Parameter 'varname' must be single string.", call. = FALSE)
