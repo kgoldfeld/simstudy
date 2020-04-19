@@ -45,22 +45,16 @@ defData <- function(dtDefs = NULL,
 
   if (is.null(dtDefs)) { # checking that initial formula has no variables ...
 
-    # warnings are suppressed because we want to test for NAs
-
-    elements <- unlist(strsplit(as.character(formula), split=";", fixed = TRUE))
-    suppressWarnings( test <- as.numeric(elements) )
-
-    if (sum(is.na(test))) {
-      stop("First defined formula must be scalar", call. = FALSE)
-    }
-
     dtDefs <- data.table::data.table()
     attr(dtDefs,"id") <- id
+    defVars <- ""
 
   } else {
-
-    .evalDef(varname, formula, dist, dtDefs[,varname])
+    defVars <- dtDefs[,varname]
   }
+
+  .evalDef(varname, formula, dist, variance, link, defVars)
+  
 
   dt.new <- data.table::data.table(varname,
                                    formula,
