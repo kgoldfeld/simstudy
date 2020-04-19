@@ -7,12 +7,12 @@
 # @param defVars Existing column names
 # @return Nothing is returned if all tests are passed. If a test fails,
 # execution is halted.
-.evalDef <- function(newvar, newform, newdist, defVars) {
+.evalDef <- function(newvar, newform, newdist, variance, link, defVars) {
   
-  if(!is.character(newvar) || length(newvar) != 1){
+  if(!is.character(newvar) || length(newvar) != 1 || is.na(newvar)){
     stop("Parameter 'varname' must be single string.", call. = FALSE)
   }
-    
+
   if (!newdist %in% .getDists()) {
     stop(paste0("'", newdist, "' distribution is not a valid option. See ?distributions."), call. = FALSE)
   }
@@ -53,14 +53,14 @@
   switch(newdist,
          
          binary = {
-           .isValidArithmeticFormula(formula, defVars)
+           .isValidArithmeticFormula(newform, defVars)
            .isIdLogit(link)
          }, 
          
          beta = ,
          
          binomial = {
-           .isValidArithmeticFormula(formula, defVars)
+           .isValidArithmeticFormula(newform, defVars)
            .isValidArithmeticFormula(variance, defVars)
            .isIdLogit(link)
          }, 
@@ -70,35 +70,35 @@
          poisson = ,
          
          exponential = {
-           .isValidArithmeticFormula(formula, defVars)
+           .isValidArithmeticFormula(newform, defVars)
            .isIdLog(link)
          }, 
 
          gamma = , 
 
          negBinomial = {
-           .isValidArithmeticFormula(formula, defVars)
+           .isValidArithmeticFormula(newform, defVars)
            .isValidArithmeticFormula(variance, defVars)
            .isIdLog(link)
          },
          
-         nonrandom =  .isValidArithmeticFormula(formula, defVars),
+         nonrandom =  .isValidArithmeticFormula(newform, defVars),
          
          normal = {
-           .isValidArithmeticFormula(formula, defVars)
+           .isValidArithmeticFormula(newform, defVars)
            .isValidArithmeticFormula(variance, defVars)
          },
         
-         categorical = .checkCategorical(formula),
+         categorical = .checkCategorical(newform),
    
          mixture = {
-           .isValidArithmeticFormula(formula, defVars)
-           .checkMixture(formula, defVars)
+           .isValidArithmeticFormula(newform)
+           .checkMixture(newform, defVars)
          },
          
-         uniform = .checkUniform(formula),
+         uniform = .checkUniform(newform),
          
-         uniformInt = .checkUniformInt(formula),
+         uniformInt = .checkUniformInt(newform),
          
          stop("Unkown distribution."))
   
@@ -272,7 +272,7 @@
   inDef <- formVars %in% defVars
   unRefVars <- !inDef & !dotVarsBol
   
-  if (!all(unRefVars)) {
+  if (any(unRefVars)) {
     
     stop(paste("Variable(s) referenced not previously defined:",
                paste(formVars[unRefVars], collapse = ", ")
