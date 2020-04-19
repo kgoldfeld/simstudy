@@ -7,114 +7,7 @@
 # @param defVars Existing column names
 # @return Nothing is returned if all tests are passed. If a test fails,
 # execution is halted.
-
-.evalDef <- function(newvar, newform, newdist, defVars ) {
-
-  # Check if previously defined
-  if(missing(defVars)) defVars <- ""
-  if (newvar %in% defVars) {
-    stop(paste("Variable name", newvar, "previously defined"), call. = FALSE)
-  }
-
-  # Check to make sure equation is valid form
-
-  test <- unlist(strsplit(as.character(newform),split=";", fixed = TRUE))
-  nparam <- length(test)
-
-  # Check number of arguments for distrubtion
-
-  if (newdist %in% c("uniform","uniformInt") & nparam != 2) {
-      stop("Uniform (continuous & integer) requires min and max", call. = FALSE)
-  }
-  
-
-  if (newdist == "categorical" & nparam < 2) {
-    stop("Categorical distribution requires 2 or more probabilities", call. = FALSE)
-  }
-
-  if (!(newdist %in% c("uniform", "categorical", "uniformInt")) & nparam != 1) {
-    stop("Only one parameter is permitted", call. = FALSE)
-  }
-
-  # check to make sure that each parameter is a valid equation
-
-  for (i in (1:nparam)) {
-
-    newExpress <- try(parse(text = test[i]), silent = TRUE)
-
-    if (.iserror(newExpress)) {
-      stop("Equation not in proper form", call. = FALSE)
-    }
-    # Check to makes sure all vars have been previously defined in data.table
-
-    equvars <- all.vars(newExpress)
-    inDef <- equvars %in% defVars
-    unRefVars <- equvars[!inDef]
-
-    if (!all(inDef)) {
-
-      stop(paste("Variable(s) referenced not previously defined:",
-                 paste(unRefVars, collapse = ", ")
-      ), call. = FALSE)
-    }
-
-    # Check for bad functions
-
-    if (length(equvars) > 0) {
-      for (i in 1:length(equvars)) eval(parse(text = paste(equvars[i],"<- 1")))
-      formtest <- try(eval(newExpress), silent = TRUE)
-      if (.iserror(formtest)) {
-        stop("Formula includes unrecognized function", call. = FALSE)
-      }
-    }
-  }
-  
-  # Check equation for mixture
-  
-  if (newdist == "mixture") {
-    
-    fcompress <- gsub(" ", "", newform, fixed = TRUE)  # compress formula
-    
-    if ( regexec("+", fcompress, fixed = TRUE) == -1 ) {
-      stop("Formula requires `+` to separate variables")
-    }
-    
-    fsplit <- strsplit(fcompress, "+", fixed = TRUE)[[1]] # split variables
-    
-    chkb <-unlist(lapply(fsplit, function(x) regexec("|", x, fixed = TRUE)))
-    if (any(chkb == -1)) {
-      stop("Mixture formula not in proper format")
-    }
-    
-    flist <- lapply(fsplit, function(x) unlist(strsplit(x, "|", fixed=TRUE) ))
-    ps <- cumsum(as.numeric(unlist(lapply(flist, function(x) (x[2])))))
-    
-    form_probs <- sum(as.numeric(unlist(regmatches(
-      newform,
-      gregexpr("[[:blank:]][[:digit:]]+\\.*[[:digit:]]*", str)
-    ))))
-    
-    if (all.equal(form_probs,1)) {
-      stop("Probabilities must sum to 1")
-    }
-
-  }
-
-  # Make sure that distribution is allowed
-
-  if (!(newdist %in% c("normal","binary", "binomial","poisson","noZeroPoisson",
-                       "uniform","categorical","gamma","beta","nonrandom",
-                       "uniformInt", "negBinomial", "exponential", 
-                       "mixture"
-  ))) {
-
-    stop(paste0("'",newdist,"' distribution is not a valid option"), call. = FALSE)
-
-  }
-
-}
-
-.evalDef2 <- function(newvar, newform, newdist, defVars) {
+.evalDef <- function(newvar, newform, newdist, defVars) {
   
   if(!is.character(newvar) || length(newvar) != 1){
     stop("Parameter 'varname' must be single string.", call. = FALSE)
@@ -203,9 +96,9 @@
            .checkMixture(formula, defVars)
          },
          
-         uniform = .checkUniform(formula,defVars),
+         uniform = .checkUniform(formula),
          
-         uniformInt = .checkUniformInt(formula,defVars),
+         uniformInt = .checkUniformInt(formula),
          
          stop("Unkown distribution."))
   
@@ -238,11 +131,71 @@
 }
 
 .checkCategorical <- function(formula){
+  probs <- unlist(strsplit(formula,split=";",fixed = T))
+  probs <- suppressWarnings(as.numeric(probs))
   
+  if(length(probs) < 2 || any(is.na(probs)))
+    stop(paste0("The formula for 'categorical' must contain atleast", 
+                " two numeric probabilities." ))
+  
+  #all.equal allows for insignificant tolerances due to floats
+  if(!isTRUE(all.equal(sum(probs),1)))
+    stop("Probabilities must sum to 1. See ?distributions")
+  
+  invisible(formula)
 }
 
-.checkMixture <- function(formula, defVars){
+.checkMixture <- function(formula){
   
+  formula <- gsub("[[:blank:]]","",formula)
+  var_pr <- strsplit(formula,"+",fixed=T)
+  var_dt <- strsplit(var_pr[[1]],"|",fixed=T)
+  
+  if (length(unlist(var_dt)) %% 2)
+    stop(
+      paste0(
+        "Mixture formula most contain same amount",
+        " of vars and probabilities!",
+        " See ?distributions"
+      )
+    )
+  
+  formDT <- as.data.table(do.call(rbind,var_dt))
+  names(formDT) <- c("vars","probs")
+  
+  dotProbs <- startsWith(formDT$probs,"..")
+  dotVars <- startsWith(formDT$vars,"..")
+  dotVarArrays <- grepl("\\.\\..+\\[",formDT$vars)
+  dotProbArrays <- grepl("\\.\\..+\\[",formDT$probs)
+  dotProbsNames <- sub("..","",formDT$probs[dotProbs])
+  dotVarNames <- sub("..","",formDT$vars[dotVars & !dotVarArrays])
+  notDotVarProbs <- is.na(suppressWarnings(as.numeric(formDT$probs))) 
+  
+  if (any(dotVarArrays) |
+      any(notDotVarProbs[!dotProbs])) {
+    stop(
+      paste0(
+        "Invalid variable(s): ",
+        paste0(formDT$probs[(notDotVarProbs & !dotProbs) | dotProbArrays],collapse=", "),
+        "\n",
+        "Probabilities can only be numeric or numeric",
+        " ..vars (not arrays). See ?distribution"
+      )
+    )
+  }
+  
+  formDT$probs[dotProbs] <- mget(dotProbsNames)
+  formDT$vars[dotVars & !dotVarArrays] <- mget(dotVarNames)
+  formDT$probs <- suppressWarnings(as.numeric(formDT$probs))
+  
+  if(any(is.na(formDT$probs)))
+    stop(paste0("Probabilites contain 'NA',",
+                " probably through coercion from String."))
+  
+  if(!isTRUE(all.equal(sum(formDT$probs),1)))
+    stop("Probabilities must sum to 1 and not See ?distributions")
+  
+  invisible(formula)
 }
 
 .checkUniform <- function(formula){
@@ -251,7 +204,7 @@
   # We test for NAs so coercion warning can be suppressed.
   range <- suppressWarnings(as.numeric(range))
   
-  if(length(range) != 2 || any(!is.na(range)))
+  if(length(range) != 2 || any(is.na(range)))
     stop(paste(
       "Formula for unifrom distributions must have",
       "the format: 'min;max' \nwhere min/max are numeric. See ?distributions" 
