@@ -116,6 +116,10 @@
 
 .evalDef2 <- function(newvar, newform, newdist, defVars) {
   
+  if(!is.character(newvar) || length(newvar) != 1){
+    stop("Parameter 'varname' must be single string.", call. = FALSE)
+  }
+    
   if (!newdist %in% .getDists()) {
     stop(paste0("'", newdist, "' distribution is not a valid option. See ?distributions."), call. = FALSE)
   }
@@ -124,11 +128,15 @@
     warning("Argument 'defVars' missing with no default. Was this intentional?")
     defVars <- ""
   }
-
-  if (newvar %in% defVars) {
-    stop(paste("Variable name '", newvar, "' previously defined."), call. = FALSE)
-  }
-
+  
+  if (startsWith(newvar, "..")){
+    stop(
+      paste(
+        "The prefix '..' is reserved to escape variables",
+        "from outside the definition table in formulas."
+      )
+    )}
+  
   if (!is_valid_variable_name(newvar)) {
     warning(
       paste(
@@ -144,15 +152,11 @@
     newvar <- make.names(newvar)
   }
   
-  if (startsWith(newvar, ".."))
-    stop(
-      paste(
-        "The prefix '..' is reserved to escape variables",
-        "from outside the definition table in formulas."
-      )
-    )
+  if (newvar %in% defVars) {
+    stop(paste("Variable name '", newvar, "' previously defined."), call. = FALSE)
+  }
   
-  
+ 
   switch(newdist,
          
          binary = {
@@ -191,10 +195,8 @@
            .isValidArithmeticFormula(formula, defVars)
            .isValidArithmeticFormula(variance, defVars)
          },
-         
-
-         
-         categorical = ,
+        
+         categorical = .checkCategorical(formula),
    
          mixture = {
            .isValidArithmeticFormula(formula, defVars)
@@ -206,13 +208,9 @@
          uniformInt = .checkUniformInt(formula,defVars),
          
          stop("Unkown distribution."))
+  
+  invisible(newvar)
 }
-
-
-
-
-
-
 
 .isIdLogit <- function(link) {
   if (!link %in% c("identity", "logit"))
@@ -223,6 +221,7 @@
         "', must be 'identity' or 'logit'. See ?distributions"
       )
     )
+  invisible(link)
 }
 
 .isIdLog <- function(link) {
@@ -234,9 +233,11 @@
         "', must be 'identity' or 'logit'. See ?distributions"
       )
     )
+  
+  invisible(link)
 }
 
-.checkCategorical <- function(formula, variance, defVars){
+.checkCategorical <- function(formula){
   
 }
 
@@ -244,19 +245,47 @@
   
 }
 
-
-.checkUniform <- function(formula,defVars){
+.checkUniform <- function(formula){
   
-  c(min,max)
+  range <- unlist(strsplit(formula,";",fixed = T))
+  # We test for NAs so coercion warning can be suppressed.
+  range <- suppressWarnings(as.numeric(range))
+  
+  if(length(range) != 2 || any(!is.na(range)))
+    stop(paste(
+      "Formula for unifrom distributions must have",
+      "the format: 'min;max' \nwhere min/max are numeric. See ?distributions" 
+      ))
+  
+  r_min <- range[1]
+  r_max <- range[2]
+  
+  if (r_min == r_max) {
+    warning(
+      paste0("Formula warning: ",
+        "'min' and 'max' are both: '",
+        r_min,
+        "'.",
+        "This results in all Data being the same!"
+      )
+    )
+  }
+  
+  if(r_max < r_min)
+    stop("Formula invalid: 'max' < 'min'")
+  
+  invisible(c(r_min,r_max))
 }
 
-.checkUniformInt <- function(formula, defVars) {
-  range <- .checkUniform(formula, defVars)
+.checkUniformInt <- function(formula) {
+  range <- .checkUniform(formula)
   if (any(!is.integer(range)))
     stop(paste(
       "For 'uniformInt' min and max must be integers,",
       "did you mean to use 'uniform'?"
     ))
+  
+  invisible(formula)
 }
 
 
