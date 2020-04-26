@@ -41,7 +41,7 @@ addColumns <- function(dtDefs,dtOld) {
       chkVars <- c(dtDefs[1:(i-1), varname] , names(dtOld))
     }
 
-    .evalDef(dtDefs[i, varname], dtDefs[i,formula], dtDefs[i,dist], chkVars)
+    .evalDef(newvar = dtDefs[i, varname],newform =  dtDefs[i,formula], newdist = dtDefs[i,dist], defVars =chkVars)
   }
 
   oldkey <- data.table::key(dtOld)
