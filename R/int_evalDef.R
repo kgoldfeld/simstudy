@@ -159,8 +159,8 @@
   
   dotProbs <- startsWith(formDT$probs, "..")
   dotVars <- startsWith(formDT$vars, "..")
-  dotVarArrays <- .getDotArrs(formDT$vars)
-  dotProbArrays <- .getDotArrs(formDT$probs)
+  dotVarArrays <- .isDotArr(formDT$vars)
+  dotProbArrays <- .isDotArr(formDT$probs)
   dotProbsNames <- .rmDots(formDT$probs[dotProbs])
   dotVarNames <- .rmDots(formDT$vars[dotVars & !dotVarArrays])
   notDotVarProbs <-
@@ -340,7 +340,7 @@
   invisible(link)
 }
 
-.getDotArrs <- function(names) {
+.isDotArr <- function(names) {
   grepl("\\.\\..+\\[", names)
 }
 
@@ -349,7 +349,7 @@
 }
 
 .rmWS <- function(str) {
-  gsub("[[:blank:]]", "", str)
+  gsub("[[:space:]]", "", str)
 }
 
 .splitFormula <- function(formula) {
