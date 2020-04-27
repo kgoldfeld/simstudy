@@ -22,14 +22,13 @@ test_that("probs are generated correctly",{
     
 })
 
-
 test_that("probabilities are adjusted as documented.", {
   forall(gen.and_then(gen.element(2:15), function(n)
     gen_n_norm_Probs(n)), function(p) {
       over <- p / .9
       under <- p / 1.1
       expect_warning(catProbs(over),"will be normalized")
-      expect_warning(catProbs(under),"category will be added")
+      expect_warning(catProbs(under),"Adding category")
       expect_equal(sum(roundTrip(over)), 1)
       expect_equal(sum(roundTrip(under)), 1)
       expect_length(roundTrip(over), length(over))
@@ -41,4 +40,6 @@ test_that("erros are thrown",{
   expect_error(catProbs(),"Need to specify")
   expect_error(catProbs(1,2,3,n=5),"or n, not both")
   expect_error(catProbs(1.1),"must be less than 1")
+  expect_error(catProbs(n = 1.1),"must be a whole number")
+  expect_error(catProbs(n = -3),"Negative values")
 })
