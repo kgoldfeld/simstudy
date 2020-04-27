@@ -140,7 +140,7 @@ gen_mix_parts <- function(prev_var,n) generate(for (x in
   paste(x$vars,x$probs,sep = " | ", collapse = " + "))
 ## Categorical Generators ----
 gen_cat_probs <- gen.and_then(gen.element(2:10), function(n) gen_n_norm_Probs(n))
-gen_cat_formula <- function(x) gen.map(function(p) catProbs(p),gen_cat_probs)
+gen_cat_formula <- function(x) gen.map(function(p) catProbs(p),gen.choice(gen_cat_probs,gen.int(15)))
 
 ## Uniform Generators ----
 gen_uniformInt_range <- function(x) gen.map(function(x)paste0(sort(unlist(floor(x) -c(1,0))),collapse = ";"), gen.c(of = 2,gen.unif(-100,100)))
