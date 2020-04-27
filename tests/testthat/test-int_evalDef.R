@@ -1,5 +1,4 @@
- ge_before <- names(.GlobalEnv)
- ge_before <- names(.GlobalEnv)
+
 
 test_that("valid formula causes no errors.", {
   
@@ -8,9 +7,50 @@ test_that("valid formula causes no errors.", {
   
 })
 
- ge_after <- names(.GlobalEnv)
- ge_after <- names(.GlobalEnv)
- rm(list = ge_after[!ge_after %in% ge_before])
+test_that("'mixture' formula check correctly",{
+  gen_mix_vars <- gen.choice(gen_dotdot_num,gen_varname,gen.element(-100:100))
+  gen_mix_vForm <-
+    gen.sized(function(n) {
+      gen.and_then(gen.c(gen_mix_vars, of = n), function(p) {
+        gen_mixture(p)
+      })
+    })
+  gen_mix_form <- gen.choice(gen_mix_vForm,gen_mix_scalar)
+  
+  forall(gen_mix_form,function(f) expect_silent(.checkMixture(f)))
+  
+  expect_error(.checkMixture("nr | .5 + a "),"same amount")
+  expect_error(.checkMixture("nr | be"),"Probabilities can only be")
+  expect_error(.checkMixture("nr | ..be[3]"),"Probabilities can only be")
+  expect_error(.checkMixture("..nr | .2"),"Variables contain")
+  expect_error(.checkMixture("1 | .1 + 2 | 2"),"sum to 1")
+})
+
+test_that("'categorical' formula check correctly",{
+  forall(gen_cat_probs,function(f) expect_silent(.checkCategorical(catProbs(f))))
+  
+  expect_error(.checkCategorical("1;a;as;2"),"two numeric")
+  expect_error(.checkCategorical("1;3;2"),"sum to 1")
+  expect_error(.checkCategorical("1"),"two numeric")
+})
+
+test_that("'uniform' formula check correctly",{
+  forall(gen_uniform_range(), function(r) expect_silent(.checkUniform(r)))
+  
+  expect_warning(.checkUniform("1;1"),"the same")
+  expect_error(.checkUniform(""),"format")
+  expect_error(.checkUniform("1;2;3"),"format")
+  expect_error(.checkUniform("2;1"),"'max' < 'min'")
+})
+
+test_that("'uniformInt' formula check correctly",{
+  forall(gen_uniformInt_range(), function(r) expect_silent(.checkUniformInt(r)))
+  
+  expect_warning(.checkUniformInt("1;1"),"the same")
+  expect_error(.checkUniformInt(""),"format")
+  expect_error(.checkUniformInt("1;2;3"),"format")
+  expect_error(.checkUniformInt("2;1"),"'max' < 'min'")
+})
 
 test_that("'link' checked as expected",{
   expect_silent(.isIdLog("identity"))
@@ -20,17 +60,24 @@ test_that("'link' checked as expected",{
   
   expect_error(.isIdLog("what"),"Invalid link")
   expect_error(.isIdLogit("no"),"Invalid link")
+  expect_error(.isIdLog(""),"Invalid link")
+  expect_error(.isIdLogit(""),"Invalid link")
 }) 
 
-test_that("utility functions",{
+test_that("utility functions work",{
   names <- c("..as","..bs","..cs[4]","..ds[x]")
   res <- c("as","bs","cs[4]","ds[x]")
   
   expect_equal(.isDotArr(names),c(F,F,T,T))
+  
   expect_equal(.rmDots(names),res)
+  
   expect_equal(.rmWS(" ab  c      d \n\t e "),"abcde")
+  
   expect_equal(.splitFormula("nosplit"),"nosplit")
+  expect_vector(.splitFormula("a;split"))
   expect_equal(.splitFormula("a;split"),c("a","split"))
   expect_equal(.splitFormula(";split"),c("","split"))
 })
+
 

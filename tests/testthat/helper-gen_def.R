@@ -1,4 +1,4 @@
-
+library("hedgehog")
 ## General Generators ----
 gen_abc <- gen.element(letters)
 gen_ABC <- gen.element(LETTERS)
@@ -124,17 +124,16 @@ gen_formula_choice <-
   }
 
 ## Mixture Generators ----
-gen_n_norm_Probs <- function(n) gen.map(function(p) p/sum(p) ,gen.c(of = n, gen_prob()))
+gen_n_norm_Probs <- function(n) gen.map(function(p){ p/sum(p) },gen.c(of = n, gen_prob()))
     # atleast 2 vars are required for a correct mixture formula
 gen_mixture <-
   function(prev_var) {
-    if(length(prev_var) == 0 | is.numeric(prev_var))
-      return("1 | 1 + 1 | 0")
-    gen.and_then(gen.element(2:max(2, length(prev_var))), function(n) {
+    gen.and_then(gen.element(1:length(prev_var)), function(n) {
       gen_mix_parts(prev_var = prev_var, n = n)
     })
   }
 
+gen_mix_scalar <- gen.sized(function(n){ gen.and_then(gen.c(gen.element(-1000:1000),of = n),function(p) gen_mix_parts(p,n))})
 gen_mix_parts <- function(prev_var,n) generate(for (x in 
                                                     list(probs = gen_n_norm_Probs(n),
                                                          vars = gen.c(of = n, gen_prev_var(prev_var))))
@@ -144,7 +143,7 @@ gen_cat_probs <- gen.and_then(gen.element(2:10), function(n) gen_n_norm_Probs(n)
 gen_cat_formula <- function(x) gen.map(function(p) catProbs(p),gen_cat_probs)
 
 ## Uniform Generators ----
-gen_uniformInt_range <- function(x) gen.and_then(gen.int(1000), function(x) gen.map(function(y) paste0(y,";",x) ,gen.int(x)))
+gen_uniformInt_range <- function(x) gen.map(function(x)paste0(sort(unlist(floor(x) -c(1,0))),collapse = ";"), gen.c(of = 2,gen.unif(-100,100)))
 gen_uniform_range <- function(x) gen.map(function(x)paste0(sort(unlist(x)),collapse = ";"), gen.c(of = 2,gen.unif(-100,100)))
 
 ## Link Generators ----

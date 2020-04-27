@@ -166,7 +166,8 @@
   notDotVarProbs <-
     is.na(suppressWarnings(as.numeric(formDT$probs)))
   
-  if (any(dotVarArrays) |
+  if (any(dotVarArrays) ||
+      any(dotProbArrays) ||
       any(notDotVarProbs[!dotProbs])) {
     stop(
       paste0(
@@ -181,7 +182,7 @@
   }
   
   formDT$probs[dotProbs] <- mget(dotProbsNames)
-  formDT$vars[dotVars & !dotVarArrays] <- mget(dotVarNames)
+  formDT$vars[dotVars & !dotVarArrays] <- mget(dotVarNames, inherits = T, ifnotfound = NA)
   formDT$probs <- suppressWarnings(as.numeric(formDT$probs))
   
   if (any(is.na(formDT$probs)))
@@ -190,8 +191,14 @@
       " probably through coercion from String."
     ))
   
+  if (any(is.na(formDT$vars)))
+    stop(paste0(
+      "Variables contain 'NA',",
+      " check that all ..vars are actually assigned."
+    ))
+  
   if (!isTRUE(all.equal(sum(formDT$probs), 1)))
-    stop("Probabilities must sum to 1 and not See ?distributions")
+    stop("Probabilities must sum to 1. See ?distributions")
   
   invisible(formula)
 }
@@ -232,7 +239,7 @@
 
 .checkUniformInt <- function(formula) {
   range <- .checkUniform(formula)
-  if (any(!is.integer(range)))
+  if (any(! floor(range) == range))
     stop(paste(
       "For 'uniformInt' min and max must be integers,",
       "did you mean to use 'uniform'?"
