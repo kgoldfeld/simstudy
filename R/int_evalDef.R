@@ -107,8 +107,8 @@
       categorical = .checkCategorical(newform),
       
       mixture = {
-        .isValidArithmeticFormula(newform)
-        .checkMixture(newform, defVars)
+        .isValidArithmeticFormula(newform,defVars)
+        .checkMixture(newform)
       },
       
       uniform = .checkUniform(newform),

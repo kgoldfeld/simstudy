@@ -23,6 +23,34 @@ test_that("g.a.e. formula checked correctly.", {
 })
 
 rm(list = setdiff(names(.GlobalEnv),freeze_eval),pos = .GlobalEnv)
+  
+freeze_eval <- names(.GlobalEnv)
+test_that("checks combine in .evalDef correctly", {
+  gen_defVars <- gen.and_then(gen.int(20), gen_varnames)
+  
+  gen_evalDef_call <-
+    gen.and_then(gen_defVars, function(defVars)
+      generate(for (i in gen_dist)
+        list(
+          newvar = defVars[1],
+          newform = get(reg[name == i]$formula)(defVars[-1]),
+          newdist = i,
+          variance = get(reg[name == i]$variance)(defVars[-1]),
+          link = get(reg[name == i]$link),
+          defVars = defVars[-1])
+        ))
+  
+  forall(gen_evalDef_call, function(args) expect_silent(do.call(.evalDef,args)))
+
+  expect_error(.evalDef(newvar = 1,"1 + 2", "normal",0,"identiy",""),"must be single string")
+  expect_error(.evalDef(newvar = c("a","b"),"1 + 2", "normal",0,"identiy",""),"must be single string")
+  expect_error(.evalDef(newvar = "varname","1 + 2", "not valid",0,"identiy",""),"distribution is not a valid")
+  expect_error(.evalDef("..varname",3,"normal",0,"identity",""),"'..' is reserved to escap")
+  expect_error(.evalDef("varname",3,"normal",0,"identity","varname"),"previously defined")
+  expect_warning(.evalDef("2",3,"normal",0,"identity",""),"not a valid R variable")
+  expect_warning(.evalDef("varname",3,"normal",0,"identity"),"Was this intentional")
+})
+rm(list = setdiff(names(.GlobalEnv),freeze_eval),pos = .GlobalEnv)
 
 test_that("'mixture' formula checked correctly", {
   gen_mix_vars <-
