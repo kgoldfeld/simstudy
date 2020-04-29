@@ -84,11 +84,11 @@ gen_factor <- function(prev_var) {
     gen_prev_var(prev_var),
     gen_dotdot_var,
     gen_const,
-    
+    gen_expr_fun(prev_var),
     gen_expr_br(prev_var)
   )
 }
-#gen_expr_fun(prev_var),
+
 gen_factor_dt <- function(prev_var) {
   generate(for (x in list(
     op = gen.element(c(" * ", " / ", " ^ ", " %% ", " %/% ")),
@@ -143,7 +143,7 @@ gen_cat_probs <- gen.and_then(gen.element(2:10), function(n) gen_n_norm_Probs(n)
 gen_cat_formula <- function(x) gen.map(function(p) catProbs(p),gen.choice(gen_cat_probs,gen.int(15)))
 
 ## Uniform Generators ----
-gen_uniformInt_range <- function(x) gen.map(function(x)paste0(sort(unlist(floor(x) -c(1,0))),collapse = ";"), gen.c(of = 2,gen.unif(-100,100)))
+gen_uniformInt_range <- function(x) gen.map(function(x)paste0(sort(unlist(floor(x) ))-c(1,0),collapse = ";"), gen.c(of = 2,gen.unif(-100,100)))
 gen_uniform_range <- function(x) gen.map(function(x)paste0(sort(unlist(x)),collapse = ";"), gen.c(of = 2,gen.unif(-100,100)))
 
 ## Link Generators ----
@@ -196,7 +196,7 @@ gen_def_dt <-
 
 
 gen_def_fst <- function(dt.all) {
-  dt <- dt.all[1,]
+  dt <- dt.all[1, ]
   generate(for (x in list(
     varname = dt$varname,
     dist = dt$dist,
@@ -204,16 +204,18 @@ gen_def_fst <- function(dt.all) {
     variance = get(reg[name == dt$dist]$variance)(-100:100),
     link = get(reg[name == dt$dist]$link)
   ))
-    list(def = do.call(
-      defData,
-      list(
-        varname = x$varname,
-        dist = x$dist,
-        formula = ifelse(.isFormulaScalar(x$formula),eval(parse(text = x$formula)),x$formula),
-        variance = eval(parse(text = x$variance)),
-        link = x$link
-      )
-    ),dt = dt.all))
+    list(
+      def =
+        list(
+          varname = x$varname,
+          dist = x$dist,
+          formula = x$formula,
+          variance = x$variance,
+          link = x$link
+        )
+      ,
+      dt = dt.all
+    ))
 }
 
 gen_def_nth <- function(res) {

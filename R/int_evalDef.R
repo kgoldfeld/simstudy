@@ -181,20 +181,20 @@
     )
   }
   
-  formDT$probs[dotProbs] <- mget(dotProbsNames)
-  formDT$vars[dotVars & !dotVarArrays] <- mget(dotVarNames, inherits = T, ifnotfound = NA)
+  formDT$probs[dotProbs] <- mget(dotProbsNames, inherits = T, ifnotfound = NA, mode = "numeric")
+  formDT$vars[dotVars & !dotVarArrays] <- mget(dotVarNames, inherits = T, ifnotfound = NA, mode = "numeric")
   formDT$probs <- suppressWarnings(as.numeric(formDT$probs))
   
   if (any(is.na(formDT$probs)))
     stop(paste0(
       "Probabilites contain 'NA',",
-      " probably through coercion from String."
+      " check that all ..vars are actually assigned (and numeric)."
     ))
   
   if (any(is.na(formDT$vars)))
     stop(paste0(
       "Variables contain 'NA',",
-      " check that all ..vars are actually assigned."
+      " check that all ..vars are actually assigned (and numeric)."
     ))
   
   if (!isTRUE(all.equal(sum(formDT$probs), 1)))
@@ -271,10 +271,9 @@
   formFuncs <- formFuncs[!formFuncs %in% formVars]
   
   if (any(startsWith(formFuncs, "..")))
-    warning(
+    stop(
       paste(
-        "Functions don't need to be escaped with '..',",
-        "\nunless this is the real name this will cause an error later.",
+        "Functions don't need to be escaped with '..'.",
         "\nFunctions:",
         formFuncs[startsWith(formFuncs, "..")]
       )

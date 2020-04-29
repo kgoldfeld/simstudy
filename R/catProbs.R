@@ -30,10 +30,7 @@ catProbs <- function(..., n = 0) {
   if(n < 0) stop("Negative values for n are not valid.")
   if(floor(n) != n) stop("'n' must be a whole number.")
   if (length(probs) == 1 && probs >= 1) stop("Single probability must be less than 1.")
-    
-    
-  
-  
+
   if (nProbs > 0) {
     pnew <- .adjustProbs(probs)
   } 
