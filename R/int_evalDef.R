@@ -253,6 +253,9 @@
   if (grepl(";", formula, fixed = T))
     stop("';' are not allowed in arithmetic formulas. See ?distribution")
   
+  if(nchar(formula) < 1)
+    stop("Formula can't be empty!")
+  
   # This only catches gross errors like trailing operators, does not check
   # functionnames etc.
   newExpress <- try(parse(text = formula), silent = TRUE)
