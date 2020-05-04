@@ -4,15 +4,15 @@ gen_abc <- gen.element(letters)
 gen_ABC <- gen.element(LETTERS)
 gen_123 <- gen.element(0:9)
 gen_azAZ09 <- gen.choice(gen_abc, gen_ABC, gen_123)
-gen_azAZ09_ <- gen.choice(gen_azAZ09,"_")
+gen_azAZ09_ <- gen.choice(gen_azAZ09,"_",prob = c(0.98,0.02)) 
 
 gen_prob <- function(x) gen.unif(0,1)
 gen_var <- function(x) 0
 gen_id <- gen.element(c("identity"))
 
 # Shrink varnames?? 
-gen_name <- function(r)  gen.and_then(gen.element(r), function(x) gen.c(of = x, gen_azAZ09))
-gen_varname <- gen.map(function(x) make.names(paste0(x,collapse ="")),gen_name(1:20))
+gen_name <- function(r)  gen.and_then(gen.element(r), function(x) gen.c(of = x, gen_azAZ09_))
+gen_varname <- gen.map(function(x) make.names(paste0(x,collapse ="")),gen_name(3:12))
 gen_fun_name <- gen.map(function(x) make.names(paste0(x,collapse ="")) , gen_name(2:6))
 
 gen_assign_dotdot <- function(val) {gen.map(function(name){
@@ -58,15 +58,15 @@ gen_wrap_fun <-
   function(inner) {
     gen.map(function(x)
       sprintf(x, inner),
-      gen.choice(gen_base_func,gen_arb_fun))
+      gen.choice(gen_base_func,gen_arb_fun,prob = c(.8,.2)))
   }
 
 
 distributions <- .getDists()
-distributions_noMix <- distributions[distributions != "mixture"]
 gen_dist <- gen.no.shrink(gen.element(distributions))
-gen_dist_fst <- gen.no.shrink(gen.element(distributions_noMix))
 
+
+gen_precision <- function(...) gen.int(50)
 ## Formula Generators ----
 #
 # Generators to create an arithmetic expression with previously defined
@@ -82,10 +82,11 @@ gen_constf <- function(x) gen.element(0:1000)
 gen_factor <- function(prev_var) {
   gen.choice(
     gen_prev_var(prev_var),
-    gen_dotdot_var,
-    gen_const,
-    gen_expr_fun(prev_var),
-    gen_expr_br(prev_var)
+    #gen_dotdot_var,
+    #gen_expr_fun(prev_var),
+    #gen_expr_br(prev_var),
+    gen_const
+   
   )
 }
 
@@ -144,7 +145,7 @@ gen_mix_parts <- function(prev_var, n) {
   generate(for (x in
                 list(probs = gen_n_norm_Probs(n),
                      vars = gen.list(
-                       of = n, gen.choice(gen.element(prev_var), gen.element(-1000:1000))
+                       of = n, gen.choice(gen.element(prev_var), gen.element(-1000:1000),prob = c(.7,.3))
                      )))
     paste(x$vars, x$probs, sep = " | ", collapse = " + "))
 }
@@ -167,14 +168,15 @@ reg$name <- sort(.getDists())
 reg$formula <- character()
 reg$variance <- "gen_var"
 reg$link <- "gen_id"
-reg[!(name %in% c("binary","binomial","categorical","mixture","uniform","uniformInt")),]$formula <- rep("gen_formula",8)
-reg[name %in% c("binary","binomial")]$formula <- rep("gen_prob",2)
+reg[!(name %in% c("binary","binomial","beta","categorical","mixture","uniform","uniformInt")),]$formula <- rep("gen_formula",7)
+reg[name %in% c("binary","binomial","beta")]$formula <- rep("gen_prob",3)
 reg[name == "binomial"]$variance <- "gen_constf"
 reg[name == "categorical"]$formula <- "gen_cat_formula"
 reg[name == "mixture"]$formula <- "gen_mixture"
 reg[name == "uniform"]$formula <- "gen_uniform_range"
 reg[name == "uniformInt"]$formula <- "gen_uniformInt_range"
-reg[name %in% c("normal","negBinomial","gamma","beta")]$variance <-  rep("gen_formula",4)
+reg[name %in% c("normal","negBinomial","gamma")]$variance <-  rep("gen_formula",3)
+reg[name == "beta"]$variance <- "gen_precision"
 reg[name %in% c("beta","binary","binomial")]$link <- rep("gen_link_logit",3)
 reg[name %in% c("exponential","gamma","negBinomial","noZeroPoisson","poisson")]$link <- rep("gen_link_log",5)
 

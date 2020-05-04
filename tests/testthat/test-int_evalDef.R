@@ -3,7 +3,7 @@ freeze_eval <- names(.GlobalEnv)
 test_that("g.a.e. formula checked correctly.", {
   gen_gae <-
     gen.and_then(gen_varnames(8), function(ns)
-      gen.map(function(y)
+      gen.map(function(y) 
         list(
           defVars = ns, formula = y
         ), gen_formula(ns)))

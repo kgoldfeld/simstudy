@@ -9,7 +9,7 @@
 # @return A data.frame column with the updated simulated data
 
 .genmixture <- function(n, formula, dtSim) {
-  
+
   dT <- data.table::as.data.table(dtSim)
   
   fcompress <- gsub(" ", "", formula, fixed = TRUE)  # compress formula
@@ -22,8 +22,11 @@
   conditions <- paste0("(interval==", 1:length(vars), ")" )
   f1 <- paste(vars, conditions, sep = "*")
   f1 <- paste(f1, collapse = "+")
-    
-  dvars <- dT[, vars, with = FALSE]
+  
+  pVars <- all.vars(parse(text= formula))
+  dvars <- list()
+  if(length(pVars) > 0)
+    dvars <- dT[, pVars, with = FALSE]
   
   u <- stats::runif(n)
   dvars$interval <- findInterval(u, ps, rightmost.closed = TRUE) + 1
