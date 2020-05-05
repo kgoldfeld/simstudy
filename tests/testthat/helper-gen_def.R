@@ -46,6 +46,7 @@ gen_base_func <- gen.sample(c("log(abs(%s))","exp(%s)","sin(%s)","cos(%s)","log1
 gen_arb_fun <-
   gen.and_then(gen_fun_name, function(name) {
     gen.map(function(formula) {
+      formula <- gsub("..","",formula, fixed = T)
       assign(name, eval(parse(text = paste(
         "function(p)", formula
       ))), pos = .GlobalEnv)
@@ -82,11 +83,10 @@ gen_constf <- function(x) gen.element(0:1000)
 gen_factor <- function(prev_var) {
   gen.choice(
     gen_prev_var(prev_var),
-    #gen_dotdot_var,
-    #gen_expr_fun(prev_var),
-    #gen_expr_br(prev_var),
+    gen_dotdot_var,
+    gen_expr_fun(prev_var),
+    gen_expr_br(prev_var),
     gen_const
-   
   )
 }
 

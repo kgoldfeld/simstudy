@@ -81,31 +81,21 @@ test_that("'mixture' formula checked correctly", {
 test_that("'categorical' formula checked correctly", {
   forall(gen_cat_probs, function(f)
     expect_silent(.checkCategorical(catProbs(f))))
-  
-  expect_error(.checkCategorical("1;a;as;2"), "two numeric")
-  expect_error(.checkCategorical("1;3;2"), "sum to 1")
+
   expect_error(.checkCategorical("1"), "two numeric")
 })
 
 test_that("'uniform' formula checked correctly", {
-  forall(gen_uniform_range(), function(r)
-    expect_silent(.checkUniform(r)))
-  
-  expect_warning(.checkUniform("1;1"), "the same")
+  forall(gen.and_then(gen_varnames(10), function(names)
+    generate(for (x in list(min = gen_formula(names),
+                            max = gen_formula(names)))
+      paste0(x$min, ";", x$max)))
+    
+    , function(r)
+      expect_silent(.checkUniform(r)))
+ 
   expect_error(.checkUniform(""), "format")
   expect_error(.checkUniform("1;2;3"), "format")
-  expect_error(.checkUniform("2;1"), "'max' < 'min'")
-})
-
-test_that("'uniformInt' formula checked correctly", {
-  forall(gen_uniformInt_range(), function(r)
-    expect_silent(.checkUniformInt(r)))
-  
-  expect_warning(.checkUniformInt("1;1"), "the same")
-  expect_error(.checkUniformInt(""), "format")
-  expect_error(.checkUniformInt("1;2;3"), "format")
-  expect_error(.checkUniformInt("2;1"), "'max' < 'min'")
-  expect_error(.checkUniformInt("1.1;2.4"), "must be integer")
 })
 
 test_that("'link' checked as expected", {

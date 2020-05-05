@@ -44,18 +44,27 @@ catProbs <- function(..., n = 0) {
 }
 
 .adjustProbs <- function(probs) {
-  sumProbs <- sum(probs)
-  if (isTRUE(all.equal(sumProbs, 1))) {
+  if (is.matrix(probs)) {
+    sumProbs <- rowSums(probs)
+  } else{
+    sumProbs <- sum(probs)
+  }
+  
+  if (isTRUE(all.equal(mean(sumProbs), 1))) {
     probs
-  } else if (sumProbs < 1) {
+  } else if (any(sumProbs < 1)) {
     remainder <- 1 - sumProbs
     warning(paste0(
       "Probabilities do not sum to 1.\n",
       "Adding category with p = ",
       remainder
     ))
-    c(probs, remainder)
-  } else if (sumProbs > 1) {
+    if (is.matrix(probs)) {
+      cbind(probs, remainder)
+    } else{
+      c(probs, remainder)
+    }
+  } else if (any(sumProbs > 1)) {
     warning("Sum of probabilities > 1. Probabilities will be normalized.")
     probs / sumProbs
   }

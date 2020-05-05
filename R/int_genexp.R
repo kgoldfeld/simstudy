@@ -7,16 +7,11 @@
 # @return A data.frame column with the updated simulated data
 
 .genexp <- function(n, formula, link="identity", dtSim) {
-
+  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   if (link == "log") {
-    logmean <- with(dtSim,eval(parse(text = as.character(formula))))
-    mean <- exp(logmean)
-  } else {
-    mean <- with(dtSim,eval(parse(text = as.character(formula))))
+    mean <- exp(mean)
   }
-
   new <- stats::rexp(n, rate = 1/mean)
 
   return(new)
-
 }

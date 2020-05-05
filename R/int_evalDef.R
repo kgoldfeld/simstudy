@@ -111,9 +111,9 @@
         .checkMixture(newform)
       },
       
-      uniform = .checkUniform(newform),
+      uniform = ,
       
-      uniformInt = .checkUniformInt(newform),
+      uniformInt = .checkUniform(newform),
       
       stop("Unkown distribution.")
     )
@@ -123,19 +123,14 @@
 
 .checkCategorical <- function(formula) {
   probs <- .splitFormula(formula)
-  probs <- suppressWarnings(as.numeric(probs))
   
-  if (length(probs) < 2 || any(is.na(probs)))
+  if (length(probs) < 2 )
     stop(
       paste0(
         "The formula for 'categorical' must contain atleast",
         " two numeric probabilities."
       )
     )
-  
-  #all.equal allows for insignificant tolerances due to floats
-  if (!isTRUE(all.equal(sum(probs), 1)))
-    stop("Probabilities must sum to 1. See ?distributions")
   
   invisible(formula)
 }
@@ -205,49 +200,15 @@
 
 .checkUniform <- function(formula) {
   range <- .splitFormula(formula)
-  # We test for NAs so coercion warning can be suppressed.
-  range <- suppressWarnings(as.numeric(range))
   
-  if (length(range) != 2 || any(is.na(range)))
+  if (length(range) != 2)
     stop(
       paste(
         "Formula for unifrom distributions must have",
-        "the format: 'min;max' \nwhere min/max are numeric. See ?distributions"
+        "the format: 'min;max' See ?distributions"
       )
     )
-  
-  r_min <- range[1]
-  r_max <- range[2]
-  
-  if (r_min == r_max) {
-    warning(
-      paste0(
-        "Formula warning: ",
-        "'min' and 'max' are both: '",
-        r_min,
-        "'.",
-        "This results in all Data being the same!"
-      )
-    )
-  }
-  
-  if (r_max < r_min)
-    stop("Formula invalid: 'max' < 'min'")
-  
-  invisible(c(r_min, r_max))
 }
-
-.checkUniformInt <- function(formula) {
-  range <- .checkUniform(formula)
-  if (any(! floor(range) == range))
-    stop(paste(
-      "For 'uniformInt' min and max must be integers,",
-      "did you mean to use 'uniform'?"
-    ))
-  
-  invisible(formula)
-}
-
 
 .isValidArithmeticFormula <- function(formula, defVars) {
   if (grepl(";", formula, fixed = T))
@@ -362,5 +323,5 @@
 }
 
 .splitFormula <- function(formula) {
-  unlist(strsplit(formula, ";", fixed = T))
+  unlist(strsplit(.rmWS(formula), ";", fixed = T))
 }

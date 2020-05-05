@@ -38,10 +38,10 @@
   if (is.null(dfSim)) {
     dfNew <- data.frame(newColumn)
   } else {
-    dfNew <- data.frame(dfSim, newColumn)
+    dfNew <- cbind(dfSim,newColumn)
   }
 
-  setnames(dfNew, "newColumn", as.character(args$varname))
+  names(dfNew)[ncol(dfNew)] <-  as.character(args$varname)
 
   return(dfNew)
 }

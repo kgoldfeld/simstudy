@@ -8,12 +8,15 @@
 # @return A data.frame column  with the updated simulated data
 
 .genUnifInt <- function(n, formula, dtSim) {
-
-  range <- unlist(strsplit(as.character(formula),split=";", fixed=TRUE))
-  rangeMin = with(dtSim,eval(parse(text = as.character(range[1]))))
-  rangeMax = with(dtSim,eval(parse(text = as.character(range[2]))))
-
-  unifCont <- stats::runif(n, floor(rangeMin), ceiling(rangeMax) + 1)
+  range <- .parseUnifFormula(formula,dtSim,n)
+  
+  if (any(! sapply(range, function(x) floor(x) == x)))
+    stop(paste(
+      "For 'uniformInt' min and max must be integers,",
+      "did you mean to use 'uniform'?"
+    ))
+  
+  unifCont <- stats::runif(n, range$min, range$max + 1)
 
   return(as.integer(floor(unifCont)))
 

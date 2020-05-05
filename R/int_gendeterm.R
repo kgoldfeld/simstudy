@@ -9,12 +9,10 @@
 
 .gendeterm <- function(n, formula, link, dtSim) {
 
-  new <- with(dtSim,eval(parse(text = as.character(formula))))
-  if (is.null(dtSim)) new = rep(new,n)
+  new <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
 
-  if (link=="log") new = exp(new)
-  else if (link == "logit") new = 1 / (1 + exp(-new))
+  if (link=="log") new <- exp(new)
+  else if (link == "logit") new <- 1 / (1 + exp(-new))
 
-  return(as.numeric(new))
+  new
 }
-

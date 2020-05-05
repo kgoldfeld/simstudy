@@ -61,6 +61,8 @@ freeze_def <- names(.GlobalEnv)
 unique_names <- unique(gen.run(gen_varnames(50))$root)
 initialmodel <- list(def = NULL, varnames = character(0) , data= NULL, dataDone = FALSE , namelist = unique_names)
 test_that("something", {
+  #skip("not finished yet")
+  skip_on_cran()
   forall(gen.actions(initialmodel, list(addVar,genDat)), function (actions) {
     initialmodel <-
       list(
@@ -77,13 +79,3 @@ test_that("something", {
 
 
 rm(list = setdiff(names(.GlobalEnv),freeze_def),pos = .GlobalEnv)
-
-def2 <- NULL
-attach(i$input)
-for(i in lastTree$root){
-  attach(i$input)
-  print(varname)
-  def2 <- defData(def2, namelist[varname], formula, variance, dist, link)
- 
-}
-detach(i$inputs)
