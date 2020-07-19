@@ -40,6 +40,7 @@ defData <- function(dtDefs = NULL,
 
   if (missing(varname)) stop("argument 'varname' is missing", call. = FALSE)
   if (missing(formula)) stop("argument 'formula' is missing", call. = FALSE)
+  validDistNames(dist)
 
   #### No missing arguments
 

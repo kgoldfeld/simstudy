@@ -50,6 +50,8 @@ defCondition<- function(dtDefs = NULL,
 
   }
 
+  validDistNames(dist)
+
   dt.new <- data.table::data.table(condition,
                                    formula,
                                    variance,

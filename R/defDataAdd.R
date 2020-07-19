@@ -40,6 +40,7 @@ defDataAdd <- function(dtDefs = NULL,
     # attr(dtDefs,"id") <- id
 
   }
+  validDistNames(dist)
 
   dt.new <- data.table::data.table(varname,
                                    formula,
