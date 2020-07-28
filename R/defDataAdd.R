@@ -41,6 +41,7 @@ defDataAdd <- function(dtDefs = NULL,
 
   }
   validDistNames(dist)
+  stopifnot(!varname %chin% dtDefs$varname) ## duplicate varname??
 
   dt.new <- data.table::data.table(varname,
                                    formula,
