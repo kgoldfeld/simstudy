@@ -36,3 +36,5 @@ Suggests: testthat,
     Matrix
 VignetteBuilder: knitr
 LinkingTo: Rcpp
+URL: https://github.com/assignUser/simstudy
+BugReports: https://github.com/assignUser/simstudy/issues
