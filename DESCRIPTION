@@ -33,7 +33,8 @@ Suggests:
     rmarkdown,
     splines,
     survival,
-    testthat
+    testthat,
+    covr
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
