@@ -6,6 +6,7 @@ output: github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 [![R build status](https://github.com/assignUser/simstudy/workflows/R-CMD-check/badge.svg)](https://github.com/assignUser/simstudy/actions)
+[![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
 <!-- badges: end -->
 
 The simstudy package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user specifies a set of relationships between covariates, and generates data based on these specifications. The final data sets can represent data from randomized control trials, repeated measure (longitudinal) designs, and cluster randomized trials. Missingness can be generated using various mechanisms (MCAR, MAR, NMAR).
@@ -27,15 +28,15 @@ dt
 
 ```
 ##       id         x        y grp
-##   1:   1 10.443681 9.138509   1
-##   2:   2  8.319111 5.242411   3
-##   3:   3  8.733083 7.069943   1
-##   4:   4  9.178951 8.803296   1
-##   5:   5 12.757580 9.982477   1
+##   1:   1  9.631016 7.846761   1
+##   2:   2  7.881361 6.024021   2
+##   3:   3 13.026409 9.014371   1
+##   4:   4 11.498174 8.876936   4
+##   5:   5  7.260292 6.537616   4
 ##  ---                           
-## 246: 246 10.394314 7.554547   3
-## 247: 247  8.791271 6.998441   2
-## 248: 248  9.034011 6.667073   2
-## 249: 249 10.152148 6.397955   2
-## 250: 250 12.175421 8.860795   1
+## 246: 246 10.283806 6.215614   2
+## 247: 247 10.296753 7.855150   4
+## 248: 248 10.399282 8.780247   1
+## 249: 249  9.459950 7.799998   2
+## 250: 250  9.061005 7.089787   1
 ```
