@@ -5,7 +5,7 @@ output: github_document
 <!-- badges: start -->
 [![R build status](https://github.com/assignUser/simstudy/workflows/R-CMD-check/badge.svg)](https://github.com/assignUser/simstudy/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![Codecov test coverage](https://codecov.io/gh/assignUser/simstudy/branch/master/graph/badge.svg)](https://codecov.io/gh/assignUser/simstudy?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/assignUser/simstudy/branch/master/graph/badge.svg)](https://codecov.io/gh/assignUser/simstudy?branch=main)
 <!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->

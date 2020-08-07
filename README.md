@@ -5,7 +5,7 @@ output: github_document
 <!-- badges: start -->
 [![R build status](https://github.com/assignUser/simstudy/workflows/R-CMD-check/badge.svg)](https://github.com/assignUser/simstudy/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![Codecov test coverage](https://codecov.io/gh/assignUser/simstudy/branch/master/graph/badge.svg)](https://codecov.io/gh/assignUser/simstudy?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/assignUser/simstudy/branch/master/graph/badge.svg)](https://codecov.io/gh/assignUser/simstudy?branch=main)
 <!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -28,16 +28,16 @@ dt
 ```
 
 ```
-##       id         x         y grp
-##   1:   1 10.576770  8.330868   4
-##   2:   2 10.778353  8.924251   4
-##   3:   3  7.834482  6.561576   2
-##   4:   4 12.940744 11.016495   3
-##   5:   5 12.511204  8.636431   1
-##  ---                            
-## 246: 246 10.906759  8.572105   3
-## 247: 247 10.571323  8.244524   1
-## 248: 248 11.118148 10.209973   4
-## 249: 249  8.376581  5.995201   3
-## 250: 250 10.251902  8.606679   3
+##       id         x        y grp
+##   1:   1 10.963917 8.589558   3
+##   2:   2  8.363271 7.671193   3
+##   3:   3  8.853794 8.184564   2
+##   4:   4  7.857379 6.333022   1
+##   5:   5 12.132598 8.736175   3
+##  ---                           
+## 246: 246  9.084634 7.860628   4
+## 247: 247  8.826237 5.551464   3
+## 248: 248  7.021703 4.862885   1
+## 249: 249  9.472174 9.367608   3
+## 250: 250 10.667318 7.101749   2
 ```
