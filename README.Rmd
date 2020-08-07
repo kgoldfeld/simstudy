@@ -1,11 +1,12 @@
 ---
 output: github_document
 ---
+
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 [![R build status](https://github.com/assignUser/simstudy/workflows/R-CMD-check/badge.svg)](https://github.com/assignUser/simstudy/actions)
 <!-- badges: end -->
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 The simstudy package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user specifies a set of relationships between covariates, and generates data based on these specifications. The final data sets can represent data from randomized control trials, repeated measure (longitudinal) designs, and cluster randomized trials. Missingness can be generated using various mechanisms (MCAR, MAR, NMAR).
 
