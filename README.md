@@ -1,8 +1,14 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+---
+output: github_document
+---
+
 <!-- badges: start -->
 [![R build status](https://github.com/assignUser/simstudy/workflows/R-CMD-check/badge.svg)](https://github.com/assignUser/simstudy/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
+[![Codecov test coverage](https://codecov.io/gh/assignUser/simstudy/branch/master/graph/badge.svg)](https://codecov.io/gh/assignUser/simstudy?branch=master)
 <!-- badges: end -->
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 The simstudy package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user specifies a set of relationships between covariates, and generates data based on these specifications. The final data sets can represent data from randomized control trials, repeated measure (longitudinal) designs, and cluster randomized trials. Missingness can be generated using various mechanisms (MCAR, MAR, NMAR).
 
@@ -22,16 +28,16 @@ dt
 ```
 
 ```
-##       id         x        y grp
-##   1:   1  9.631016 7.846761   1
-##   2:   2  7.881361 6.024021   2
-##   3:   3 13.026409 9.014371   1
-##   4:   4 11.498174 8.876936   4
-##   5:   5  7.260292 6.537616   4
-##  ---                           
-## 246: 246 10.283806 6.215614   2
-## 247: 247 10.296753 7.855150   4
-## 248: 248 10.399282 8.780247   1
-## 249: 249  9.459950 7.799998   2
-## 250: 250  9.061005 7.089787   1
+##       id         x         y grp
+##   1:   1 10.576770  8.330868   4
+##   2:   2 10.778353  8.924251   4
+##   3:   3  7.834482  6.561576   2
+##   4:   4 12.940744 11.016495   3
+##   5:   5 12.511204  8.636431   1
+##  ---                            
+## 246: 246 10.906759  8.572105   3
+## 247: 247 10.571323  8.244524   1
+## 248: 248 11.118148 10.209973   4
+## 249: 249  8.376581  5.995201   3
+## 250: 250 10.251902  8.606679   3
 ```
