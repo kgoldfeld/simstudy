@@ -1,10 +1,10 @@
 on:
   push:
     branches:
-      - main
+      - restructure
   pull_request:
     branches:
-      - main
+      - restructure
 
 name: code-coverage
 

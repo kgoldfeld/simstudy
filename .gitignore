@@ -12,3 +12,5 @@ src/*.so
 src/*.dll
 doc
 Meta
+simstudy.code-workspace
+.vscode/

@@ -21,12 +21,19 @@ jobs:
           remotes::install_cran("rmarkdown")
         shell: Rscript {0}
 
+      - name: Query dependencies for caching
+        run: |
+          saveRDS(remotes::package_deps("rmarkdown","dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
       - name: Cache R packages
         if: runner.os != 'Windows'
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-readme
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'

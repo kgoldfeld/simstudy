@@ -1,41 +1,48 @@
-Package: simstudy
 Type: Package
+Package: simstudy
 Title: Simulation of Study Data
 Version: 0.1.17
 Date: 2020-04-01
-Author: Keith Goldfeld [aut, cre]
-Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
-Description: Simulates data sets in order to explore modeling techniques or
-    better understand data generating processes. The user specifies a set of
-    relationships between covariates, and generates data based on these
-    specifications. The final data sets can represent data from randomized
-    control trials, repeated measure (longitudinal) designs, and cluster
-    randomized trials. Missingness can be generated using various
-    mechanisms (MCAR, MAR, NMAR).
+Authors@R: person(given = "Keith",
+                  family = "Goldfeld",
+                  role = c("aut","cre"),
+                  email = "keith.goldfeld@nyumc.org",
+                  comment = c(ORCID = "0000-0002-0292-8780"))
+Description: Simulates data sets in order to explore modeling
+    techniques or better understand data generating processes. The user
+    specifies a set of relationships between covariates, and generates
+    data based on these specifications. The final data sets can represent
+    data from randomized control trials, repeated measure (longitudinal)
+    designs, and cluster randomized trials. Missingness can be generated
+    using various mechanisms (MCAR, MAR, NMAR).
+License: GPL-3
+URL: https://github.com/kgoldfeld/simstudy
+BugReports: https://github.com/kgoldfeld/simstudy/issues
 Depends:
     R (>= 3.2.2)
-License: GPL-3
-LazyData: TRUE
 Imports:
-    Rcpp,
     data.table,
     mvnfast,
-    mvtnorm
-RoxygenNote: 7.1.1
-Encoding: UTF-8
-Suggests: testthat,
-    hedgehog,
-    knitr,
-    rmarkdown,
+    mvtnorm,
+    Rcpp
+Suggests: 
+    covr,
+    formatR,
     ggplot2,
     grid,
     gridExtra,
-    survival,
-    splines,
-    formatR,
-    mgcv,
-    Matrix,
     hedgehog,
-    covr
-VignetteBuilder: knitr
-LinkingTo: Rcpp
+    knitr,
+    Matrix,
+    mgcv,
+    rmarkdown,
+    splines,
+    survival,
+    testthat
+LinkingTo: 
+    Rcpp
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: TRUE
+RoxygenNote: 7.1.1
