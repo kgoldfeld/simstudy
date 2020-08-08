@@ -9,25 +9,21 @@
 # @return A data.frame column with the updated simulated data
 
 
-.getPoissonMean <- function(dtSim, formula, link) {
-
+.getPoissonMean <- function(dtSim, formula, link, n) {
+  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+  
   if (link=="log") {
-    logmean <- with(dtSim,eval(parse(text = as.character(formula))))
-    mean = exp(logmean)
-  } else {
-    mean = with(dtSim,eval(parse(text = as.character(formula))))
+    mean <- exp(mean)
   }
-
+  
   return(mean)
-
 }
 
 
 .genpois <- function(n,formula,link,dtSim) {
 
-  mean <- .getPoissonMean(dtSim, formula, link)
+  mean <- .getPoissonMean(dtSim, formula, link, n)
 
   return(stats::rpois(n,mean))
-
 }
 

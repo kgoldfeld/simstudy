@@ -24,6 +24,7 @@ Imports:
 RoxygenNote: 7.1.1
 Encoding: UTF-8
 Suggests: testthat,
+    hedgehog,
     knitr,
     rmarkdown,
     ggplot2,
@@ -33,6 +34,8 @@ Suggests: testthat,
     splines,
     formatR,
     mgcv,
-    Matrix
+    Matrix,
+    hedgehog,
+    covr
 VignetteBuilder: knitr
 LinkingTo: Rcpp

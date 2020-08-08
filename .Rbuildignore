@@ -9,3 +9,5 @@
 ^CRAN-RELEASE$
 ^doc$
 ^Meta$
+^\.github$
+^codecov\.yml$

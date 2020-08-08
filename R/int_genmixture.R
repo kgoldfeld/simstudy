@@ -9,28 +9,22 @@
 # @return A data.frame column with the updated simulated data
 
 .genmixture <- function(n, formula, dtSim) {
+  formula <- .rmWS(formula)
+  var_pr <- strsplit(formula, "+", fixed = T)
+  var_dt <- strsplit(var_pr[[1]], "|", fixed = T)
+  formDT <- as.data.table(do.call(rbind, var_dt))
+  ps <-
+    cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2]), NULL, 1))
   
-  dT <- data.table::as.data.table(dtSim)
+  conditions <- paste0("(interval==", 1:nrow(formDT[, 1]), ")")
+  f1 <- paste(unlist(formDT[, 1]), conditions, sep = "*")
+  interval_formula <- paste(f1, collapse = "+")
   
-  fcompress <- gsub(" ", "", formula, fixed = TRUE)  # compress formula
-  fsplit <- strsplit(fcompress, "+", fixed = TRUE)[[1]] # split variables
-    
-  flist <- lapply(fsplit, function(x) unlist(strsplit(x, "|", fixed=TRUE) ))
-  ps <- cumsum(as.numeric(unlist(lapply(flist, function(x) (x[2])))))
-  vars <- unlist(lapply(flist, function(x) (x[1])))
-    
-  conditions <- paste0("(interval==", 1:length(vars), ")" )
-  f1 <- paste(vars, conditions, sep = "*")
-  f1 <- paste(f1, collapse = "+")
-    
-  dvars <- dT[, vars, with = FALSE]
+  dvars <- .parseDotVars(formula)
   
   u <- stats::runif(n)
   dvars$interval <- findInterval(u, ps, rightmost.closed = TRUE) + 1
   
-  new <- with(dvars, eval(parse(text = as.character(f1))))
-  
-  return(new)
-    
+  .evalWith(interval_formula, dvars, dtSim, n)
 }
 

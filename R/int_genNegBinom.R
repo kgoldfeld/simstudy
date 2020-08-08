@@ -6,22 +6,18 @@
 # @param formula String that specifies the mean
 # @return A data.frame column with the updated simulated data
 
-.getNBmean <- function(dtSim, formula, link) {
-  
+.getNBmean <- function(dtSim, formula, link, n) {
+  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   if (link == "log") {
-    logmean <- with(dtSim,eval(parse(text = as.character(formula))))
-    mean <- exp(logmean)
-  } else {
-    mean <- with(dtSim,eval(parse(text = as.character(formula))))
-  }
+    mean <- exp(mean)
+  } 
   
   return(mean)
-  
 }
 
 .gennegbinom <- function(n, formula, dispersion, link="identity", dtSim) {
 
-  mean <- .getNBmean(dtSim, formula, link)
+  mean <- .getNBmean(dtSim, formula, link, n)
   d <- as.numeric(as.character(dispersion))
 
   sp <- negbinomGetSizeProb(mean = mean, dispersion = d)

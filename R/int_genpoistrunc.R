@@ -11,12 +11,7 @@
 
 .genpoisTrunc <- function(n,formula,link,dtSim) {
 
-  if (link=="log") {
-    logmean <- with(dtSim,eval(parse(text = as.character(formula))))
-    mean = exp(logmean)
-  } else {
-    mean = with(dtSim,eval(parse(text = as.character(formula))))
-  }
+  mean <- .getPoissonMean(dtSim, formula, link, n)
 
   u <- stats::runif(n, min = 0, max = 1)
 
@@ -25,6 +20,5 @@
                       stats::ppois(0, lambda = mean)), lambda = mean)
 
   return(x)
-
 }
 

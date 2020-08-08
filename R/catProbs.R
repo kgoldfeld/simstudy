@@ -20,42 +20,52 @@
 #' catProbs(n=5)
 #' @export
 #'
-
 catProbs <- function(..., n = 0) {
 
-  p <- list(...)
-  lp <- length(p)
+  nProbs <-  ...length()
+  probs <-  unlist(list(...))
 
-  if (lp ==  0 & n==0) stop("Need to specify probabilities or n")
-  if (lp > 0 & n > 0) stop("Specify probabilities or n, not both")
+  if (nProbs ==  0 & n==0) stop("Need to specify probabilities or n.")
+  if (nProbs > 0 & n > 0) stop("Specify probabilities or n, not both.")
+  if(n < 0) stop("Negative values for n are not valid.")
+  if(floor(n) != n) stop("'n' must be a whole number.")
+  if (length(probs) == 1 && probs >= 1) stop("Single probability must be less than 1.")
 
-  if (lp == 1) {
-    
-    if (length(p[[1]]) > 1)  {
-      p <- as.list(p[[1]])
-    } else {
-      if (p[[1]] >= 1) stop("Single probability must be less than 1")
-    }
-    
+  if (nProbs > 0) {
+    pnew <- .adjustProbs(probs)
+  } 
+  
+  if(n > 0) {
+    pnew <- rep(1/n, n)
   }
+  
+  return(paste0(pnew, collapse = ";"))
+  
+}
 
-  if (lp > 0) {
-
-    tProb <- sum(unlist(p))
-
-    if (tProb > 1) {
-      pnew <- lapply(p, function(x) x/tProb)
-    } else if (tProb < 1) {
-      pnew <- p
-      pnew[[lp + 1]] <- 1 - sum(unlist(p))
-    } else if (tProb == 1) {
-      pnew <- p
-    }
-
-  } else { # n > 0
-    pnew <- as.list(rep(1/n, n))
+.adjustProbs <- function(probs) {
+  if (is.matrix(probs)) {
+    sumProbs <- rowSums(probs)
+  } else{
+    sumProbs <- sum(probs)
   }
-
-  return(paste(pnew, collapse = ";"))
-
+  
+  if (isTRUE(all.equal(mean(sumProbs), 1))) {
+    probs
+  } else if (any(sumProbs < 1)) {
+    remainder <- 1 - sumProbs
+    warning(paste0(
+      "Probabilities do not sum to 1.\n",
+      "Adding category with p = ",
+      remainder
+    ))
+    if (is.matrix(probs)) {
+      cbind(probs, remainder)
+    } else{
+      c(probs, remainder)
+    }
+  } else if (any(sumProbs > 1)) {
+    warning("Sum of probabilities > 1. Probabilities will be normalized.")
+    probs / sumProbs
+  }
 }

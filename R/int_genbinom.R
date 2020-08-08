@@ -8,26 +8,20 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column  with the updated simulated data
 
-.getBinaryMean <- function(dtSim, formula, Size, link) {
+.getBinaryMean <- function(dtSim, formula, Size, link, n) {
+  size <- .evalWith(Size, .parseDotVars(Size), dtSim, n)
+  p <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   
-  size <- with(dtSim, eval(parse(text = as.character(Size))))  
-  
-
   if (link=="logit") {
-    logit <- with(dtSim, eval(parse(text = as.character(formula))))
-    p <- 1 / (1 + exp(-logit))
-  } else {
-    p <- with(dtSim, eval(parse(text = as.character(formula))))
+    p <- 1 / (1 + exp(-p))
   }
-
   
   return(list(p, size))
-
 }
 
 .genbinom <- function(n, formula, Size, link, dtSim) {
   
-  params <- .getBinaryMean(dtSim, formula, Size, link)
+  params <- .getBinaryMean(dtSim, formula, Size, link, n)
 
   return(stats::rbinom(n, params[[2]], params[[1]]))
 
