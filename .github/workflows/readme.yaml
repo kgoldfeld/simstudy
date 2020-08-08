@@ -24,7 +24,7 @@ jobs:
       - name: Query dependencies for caching
         run: |
           install.packages('remotes')
-          saveRDS(remotes::package_deps("rmarkdown","dependencies = TRUE), ".github/depends.Rds", version = 2)
+          saveRDS(remotes::package_deps("rmarkdown",dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
 
