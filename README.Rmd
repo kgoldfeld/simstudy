@@ -3,7 +3,7 @@ output: github_document
 ---
 
 <!-- badges: start -->
-[![R build status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg)](https://github.com/kgoldfeld/simstudy/actions)
+[![R build status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=restructure)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![codecov](https://codecov.io/gh/assignUser/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/assignUser/simstudy)
 <!-- badges: end -->
