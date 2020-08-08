@@ -2,13 +2,15 @@
 <!-- badges: start -->
 
 [![R build
-status](https://github.com/assignUser/simstudy/workflows/R-CMD-check/badge.svg)](https://github.com/assignUser/simstudy/actions)
+status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=restructure)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![codecov](https://codecov.io/gh/assignUser/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/assignUser/simstudy)
 <!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+test
 
 The simstudy package is collection of functions that allow users to
 generate simulated data sets in order to explore modeling techniques or
@@ -34,14 +36,14 @@ dt
 ```
 
     ##       id         x         y grp
-    ##   1:   1 10.270203  8.529158   1
-    ##   2:   2 10.328287  7.518664   3
-    ##   3:   3 10.637073  6.877337   4
-    ##   4:   4  9.320375  7.222970   3
-    ##   5:   5 10.563545  7.834908   1
+    ##   1:   1  9.100623  6.354316   1
+    ##   2:   2 11.276444  8.491086   3
+    ##   3:   3 11.709242  9.248228   4
+    ##   4:   4  7.971723  7.608986   2
+    ##   5:   5 11.084042  9.410333   4
     ##  ---                            
-    ## 246: 246 13.466478 10.417064   4
-    ## 247: 247  8.064638  5.248006   2
-    ## 248: 248 10.955293  9.191688   2
-    ## 249: 249 11.022278  9.101368   2
-    ## 250: 250  9.732747  6.881608   3
+    ## 246: 246 11.759686  8.786624   4
+    ## 247: 247  9.253809  7.315656   4
+    ## 248: 248 11.411634 10.058268   4
+    ## 249: 249 11.814660  6.739552   4
+    ## 250: 250 10.495308  7.104637   1
