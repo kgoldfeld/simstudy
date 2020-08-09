@@ -10,8 +10,6 @@ status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.o
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-test
-
 The simstudy package is collection of functions that allow users to
 generate simulated data sets in order to explore modeling techniques or
 better understand data generating processes. The user specifies a set of
@@ -35,15 +33,15 @@ dt <- trtAssign(dt, nTrt = 4, grpName = "grp", balanced = TRUE)
 dt
 ```
 
-    ##       id         x         y grp
-    ##   1:   1  9.100623  6.354316   1
-    ##   2:   2 11.276444  8.491086   3
-    ##   3:   3 11.709242  9.248228   4
-    ##   4:   4  7.971723  7.608986   2
-    ##   5:   5 11.084042  9.410333   4
-    ##  ---                            
-    ## 246: 246 11.759686  8.786624   4
-    ## 247: 247  9.253809  7.315656   4
-    ## 248: 248 11.411634 10.058268   4
-    ## 249: 249 11.814660  6.739552   4
-    ## 250: 250 10.495308  7.104637   1
+    ##       id         x        y grp
+    ##   1:   1 12.236129 9.602256   1
+    ##   2:   2 10.473220 8.355542   2
+    ##   3:   3 10.485534 7.937013   2
+    ##   4:   4 11.486053 6.348253   2
+    ##   5:   5  7.322153 5.516090   4
+    ##  ---                           
+    ## 246: 246 10.629607 7.922196   3
+    ## 247: 247  9.189542 8.169237   3
+    ## 248: 248  9.316640 7.695466   2
+    ## 249: 249  8.553214 4.549107   1
+    ## 250: 250 11.405248 7.183506   2
