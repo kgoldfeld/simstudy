@@ -61,8 +61,8 @@ freeze_def <- names(.GlobalEnv)
 unique_names <- unique(gen.run(gen_varnames(50))$root)
 initialmodel <- list(def = NULL, varnames = character(0) , data= NULL, dataDone = FALSE , namelist = unique_names)
 test_that("something", {
-  #skip("not finished yet")
-  skip_on_cran()
+  skip("not finished yet")
+  #skip_on_cran()
   forall(gen.actions(initialmodel, list(addVar,genDat)), function (actions) {
     initialmodel <-
       list(

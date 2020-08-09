@@ -8,6 +8,7 @@
 ^Demo$
 ^CRAN-RELEASE$
 ^doc$
+^docs$
 ^Meta$
 ^\.github$
 ^codecov\.yml$
