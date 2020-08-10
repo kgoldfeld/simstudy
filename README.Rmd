@@ -27,3 +27,7 @@ dt <- trtAssign(dt, nTrt = 4, grpName = "grp", balanced = TRUE)
 dt
 
 ```
+
+## Code of Conduct
+
+Please note that the simstudy project is released with a [Contributor Code of Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
