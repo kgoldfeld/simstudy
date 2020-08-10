@@ -1,7 +1,6 @@
 .Rproj.user
 .Rhistory
 .RData
-.gitignore
 Working-code/
 Demo/
 simstudy.Rproj
@@ -10,7 +9,9 @@ cran-comments.md
 src/*.o
 src/*.so
 src/*.dll
+src-i386/
 doc
 Meta
 simstudy.code-workspace
 .vscode/
+docs
