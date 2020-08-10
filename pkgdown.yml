@@ -1,0 +1,10 @@
+pandoc: 2.7.3
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  simstudy: simstudy.html
+last_built: 2020-08-10T14:38Z
+urls:
+  reference: https://kgoldfeld.github.io/simstudy/reference
+  article: https://kgoldfeld.github.io/simstudy/articles
+
