@@ -1,6 +1,0 @@
-destination: docs/
-template:
-  params:
-    bootswatch: journal
-
-url: https://kgoldfeld.github.io/simstudy
