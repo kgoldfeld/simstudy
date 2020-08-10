@@ -1,9 +1,9 @@
+name: Render README
+
 on:
   push:
     paths:
       - README.Rmd
-
-name: Render README
 
 jobs:
   render:

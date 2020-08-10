@@ -1,12 +1,11 @@
-name: R-CMD-check
-
+name: R-CMD-manual
+#only works if this file is on the default branch
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: Git Ref (Optional)    
+        required: false 
 
 jobs:
   R-CMD-check:
@@ -29,6 +28,16 @@ jobs:
       RSPM: ${{ matrix.config.rspm }}
 
     steps:
+      - name: Clone Repository (Latest)
+        uses: actions/checkout@v2
+        if: github.event.inputs.git-ref == ''
+
+      - name: Clone Repository (Custom Ref)
+        uses: actions/checkout@v2
+        if: github.event.inputs.git-ref != ''
+        with:
+          ref: ${{ github.event.inputs.git-ref }}
+
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@master
