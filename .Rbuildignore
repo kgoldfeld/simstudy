@@ -14,3 +14,4 @@
 ^docs$
 ^pkgdown$
 ^codecov\.yml$
+^File_management$
