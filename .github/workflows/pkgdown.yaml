@@ -1,9 +1,6 @@
 name: pkgdown
 
 on:
-  push:
-    branches: main
-
   workflow_dispatch:
     inputs:
       git-ref:
