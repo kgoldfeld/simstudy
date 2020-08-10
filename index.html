@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Simulation of Study Data • simstudy</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.17</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -78,36 +78,31 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="simstudy" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#simstudy" class="anchor"></a>simstudy</h1></div>
-<!-- badges: start -->
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 <p>The simstudy package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user specifies a set of relationships between covariates, and generates data based on these specifications. The final data sets can represent data from randomized control trials, repeated measure (longitudinal) designs, and cluster randomized trials. Missingness can be generated using various mechanisms (MCAR, MAR, NMAR).</p>
 <p>Here is some simple sample code, much more in the vignette:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">simstudy</span>)
-
-<span class="no">def</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span>(<span class="kw">varname</span><span class="kw">=</span><span class="st">"x"</span>, <span class="kw">formula</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">variance</span> <span class="kw">=</span> <span class="fl">2</span>)
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">simstudy</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">## Loading required package: data.table</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="no">def</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span>(<span class="kw">varname</span><span class="kw">=</span><span class="st">"x"</span>, <span class="kw">formula</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">variance</span> <span class="kw">=</span> <span class="fl">2</span>)
 <span class="no">def</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span>(<span class="no">def</span>, <span class="kw">varname</span><span class="kw">=</span><span class="st">"y"</span>, <span class="kw">formula</span> <span class="kw">=</span> <span class="st">"3 + 0.5 * x"</span>, <span class="kw">variance</span> <span class="kw">=</span> <span class="fl">1</span>)
 <span class="no">dt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/genData.html">genData</a></span>(<span class="fl">250</span>, <span class="no">def</span>)
 
 <span class="no">dt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/trtAssign.html">trtAssign</a></span>(<span class="no">dt</span>, <span class="kw">nTrt</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">grpName</span> <span class="kw">=</span> <span class="st">"grp"</span>, <span class="kw">balanced</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 
 <span class="no">dt</span></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">##       id         x         y grp</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="co">##   1:   1  9.443780  7.938595   1</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co">##   2:   2  9.133914  6.863542   1</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co">##   3:   3 11.274323  9.019781   3</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">##   4:   4 10.335448  7.835146   3</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">##   5:   5  9.708638  7.370022   1</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co">##  ---                            </span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">## 246: 246  9.721158  7.920153   4</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="co">## 247: 247  9.519108  9.439130   3</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">## 248: 248 13.939843 10.300459   4</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">## 249: 249 11.222627  9.627471   2</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="co">## 250: 250  9.071751  8.051840   3</span></span></code></pre></div>
-</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">##       id grp         x        y</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">##   1:   1   3 10.393817 7.805703</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">##   2:   2   1 10.235161 5.705590</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">##   3:   3   1 11.517813 8.210183</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">##   4:   4   1 12.068125 8.618601</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">##   5:   5   1 10.078817 5.780655</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">##  ---                           </span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">## 246: 246   4 11.419577 8.442363</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">## 247: 247   3 10.567231 9.808930</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">## 248: 248   1 10.451896 7.720858</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">## 249: 249   3  7.633381 6.861638</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">## 250: 250   2  9.347781 6.094965</span></span></code></pre></div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -128,6 +123,13 @@
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
 </ul>
 </div>
+<div class="community">
+<h2>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
@@ -135,15 +137,7 @@
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/kgoldfeld/simstudy/actions"><img src="https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main" alt="R build status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=simstudy"><img src="https://www.r-pkg.org/badges/version/simstudy" alt="CRAN status"></a></li>
-<li><a href="https://codecov.io/gh/kgoldfeld/simstudy"><img src="https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg" alt="codecov"></a></li>
-</ul>
-</div>
-</div>
+  </div>
 </div>
 
 
