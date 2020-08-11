@@ -38,10 +38,10 @@
   if (is.null(dfSim)) {
     dfNew <- data.frame(newColumn)
   } else {
-    dfNew <- cbind(dfSim,newColumn)
+    dfNew <- cbind(dfSim, newColumn)
   }
 
-  names(dfNew)[ncol(dfNew)] <-  as.character(args$varname)
+  names(dfNew)[ncol(dfNew)] <- as.character(args$varname)
 
   return(dfNew)
 }
@@ -61,33 +61,33 @@
 
   reqparam <- length(knots) + degree + 1
   if (length(theta) != reqparam) {
-    stop(paste0("Number of specified paramaters (theta) not correct. Needs to be ",
-                reqparam, "."),call. = FALSE)
+    stop(paste0(
+      "Number of specified paramaters (theta) not correct. Needs to be ",
+      reqparam, "."
+    ), call. = FALSE)
   }
 
-  if ( ! all(theta <= 1) ) {
-
-    if (sum(theta>1) == 1) valueS <- " value of theta exceeds 1.00"
+  if (!all(theta <= 1)) {
+    if (sum(theta > 1) == 1) valueS <- " value of theta exceeds 1.00"
     else valueS <- " values of theta exceed 1.00"
 
-    stop(paste0(sum(theta>1), valueS))
+    stop(paste0(sum(theta > 1), valueS))
   }
 
-  if ( !is.null(knots) & !all(knots < 1) & !all(knots > 0) ) {
-
+  if (!is.null(knots) & !all(knots < 1) & !all(knots > 0)) {
     stop("All knots must be between 0 and 1")
-
   }
 
-  basis <- splines::bs(x = x, knots = knots, degree = degree,
-              Boundary.knots = c(0,1), intercept = TRUE)
+  basis <- splines::bs(
+    x = x, knots = knots, degree = degree,
+    Boundary.knots = c(0, 1), intercept = TRUE
+  )
 
   y.spline <- basis %*% theta
 
   dt <- data.table(x, y.spline = as.vector(y.spline))
 
   return(list(dt = dt, basis = basis, knots = knots, degree = degree))
-
 }
 
 # Internal function called by .generate - returns exp data
@@ -96,26 +96,24 @@
 # @param formula String that specifies the mean (lambda)
 # @return A data.frame column with the updated simulated data
 
-.getBetaMean <- function(dtSim, formula, link, n ) {
+.getBetaMean <- function(dtSim, formula, link, n) {
   mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   if (link == "logit") {
     mean <- 1 / (1 + exp(-mean))
   }
-  
+
   return(mean)
 }
 
-.genbeta <- function(n, formula, precision, link="identity", dtSim) {
-  
+.genbeta <- function(n, formula, precision, link = "identity", dtSim) {
   mean <- .getBetaMean(dtSim, formula, link, n)
-  
+
   d <- .evalWith(precision, .parseDotVars(precision), dtSim, n)
-  
+
   sr <- betaGetShapes(mean = mean, precision = d)
   new <- stats::rbeta(n, shape = sr$shape1, shape2 = sr$shape2)
-  
+
   return(new)
-  
 }
 
 # Internal function called by .generate - returns Binary data
@@ -129,20 +127,18 @@
 .getBinaryMean <- function(dtSim, formula, Size, link, n) {
   size <- .evalWith(Size, .parseDotVars(Size), dtSim, n)
   p <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
-  
-  if (link=="logit") {
+
+  if (link == "logit") {
     p <- 1 / (1 + exp(-p))
   }
-  
+
   return(list(p, size))
 }
 
 .genbinom <- function(n, formula, Size, link, dtSim) {
-  
   params <- .getBinaryMean(dtSim, formula, Size, link, n)
 
   return(stats::rbinom(n, params[[2]], params[[1]]))
-
 }
 
 # Internal function called by .generate - returns categorical data
@@ -154,25 +150,25 @@
 # @return A data.frame column with the updated simulated data
 .gencat <- function(n, formula, link, dfSim) {
   formulas <- .splitFormula(formula)
-  
+
   if (length(formulas) < 2)
     stop(paste0(
       "The formula for 'categorical' must contain atleast",
       " two probabilities."
     ))
-  
+
   parsedProbs <-
     .evalWith(formulas, .parseDotVars(formulas), dfSim, n)
-  
+
   if (link == "logit") {
     parsedProbs <- exp(parsedProbs)
-    parsedProbs <- parsedProbs  / (1 + rowSums(parsedProbs))
+    parsedProbs <- parsedProbs / (1 + rowSums(parsedProbs))
   } else {
     parsedProbs <- .adjustProbs(parsedProbs)
   }
-  
+
   parsedProbs <- cbind(parsedProbs, 1 - rowSums(parsedProbs))
-  
+
   .Call(`_simstudy_matMultinom`, parsedProbs, PACKAGE = "simstudy")
 }
 
@@ -184,10 +180,9 @@
 # @return A data.frame column  with the updated simulated data
 
 .gendeterm <- function(n, formula, link, dtSim) {
-
   new <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
 
-  if (link=="log") new <- exp(new)
+  if (link == "log") new <- exp(new)
   else if (link == "logit") new <- 1 / (1 + exp(-new))
 
   new
@@ -199,12 +194,12 @@
 # @param formula String that specifies the mean (lambda)
 # @return A data.frame column with the updated simulated data
 
-.genexp <- function(n, formula, link="identity", dtSim) {
+.genexp <- function(n, formula, link = "identity", dtSim) {
   mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
   }
-  new <- stats::rexp(n, rate = 1/mean)
+  new <- stats::rexp(n, rate = 1 / mean)
 
   return(new)
 }
@@ -221,12 +216,11 @@
   if (link == "log") {
     mean <- exp(mean)
   }
-  
+
   return(mean)
 }
 
-.gengamma <- function(n, formula, dispersion, link="identity", dtSim) {
-
+.gengamma <- function(n, formula, dispersion, link = "identity", dtSim) {
   mean <- .getGammaMean(dtSim, formula, link, n)
   d <- .evalWith(dispersion, .parseDotVars(dispersion), dtSim, n)
 
@@ -243,16 +237,16 @@
   formDT <- as.data.table(do.call(rbind, var_dt))
   ps <-
     cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2]), NULL, 1))
-  
+
   conditions <- paste0("(interval==", 1:nrow(formDT[, 1]), ")")
   f1 <- paste(unlist(formDT[, 1]), conditions, sep = "*")
   interval_formula <- paste(f1, collapse = "+")
-  
+
   dvars <- .parseDotVars(formula)
-  
+
   u <- stats::runif(n)
   dvars$interval <- findInterval(u, ps, rightmost.closed = TRUE) + 1
-  
+
   .evalWith(interval_formula, dvars, dtSim, n)
 }
 
@@ -278,11 +272,10 @@
   ColName <- as.character(missDefs[, varname]) # new data.table (changed 2016-12-05)
   Formula <- parse(text = as.character(missDefs[, formula]))
 
-  if (! missDefs[, logit.link]) {
+  if (!missDefs[, logit.link]) {
     # dtMissP[, eval(Expression) := dtName[, eval(Formula)]] # old data.table
 
     dtMissP[, (ColName) := dtName[, eval(Formula)]]
-
   } else {
     # dtMissP[, eval(Expression) := dtName[, .loProb(eval(Formula))]] # old data.table
     dtMissP[, (ColName) := dtName[, .loProb(eval(Formula))]]
@@ -291,11 +284,12 @@
   # matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1,
   #                                     dtMissP[, eval(Expression)])] # old data.table
 
-  matMiss[, (ColName) := stats::rbinom(nrow(dtMissP), 1,
-                                              dtMissP[, eval(Expression)])]
+  matMiss[, (ColName) := stats::rbinom(
+    nrow(dtMissP), 1,
+    dtMissP[, eval(Expression)]
+  )]
 
   return(matMiss)
-
 }
 
 # Internal function called by .generate - returns negative binomial data
@@ -308,21 +302,19 @@
   mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
-  } 
-  
+  }
+
   return(mean)
 }
 
-.gennegbinom <- function(n, formula, dispersion, link="identity", dtSim) {
-
+.gennegbinom <- function(n, formula, dispersion, link = "identity", dtSim) {
   mean <- .getNBmean(dtSim, formula, link, n)
   d <- as.numeric(as.character(dispersion))
 
   sp <- negbinomGetSizeProb(mean = mean, dispersion = d)
-  new <- stats::rnbinom(n, size = sp$size,  prob = sp$prob)
+  new <- stats::rnbinom(n, size = sp$size, prob = sp$prob)
 
   return(new)
-
 }
 
 # Internal function called by .generate - returns Normal data
@@ -338,13 +330,11 @@
   .evalWith(formula, .parseDotVars(formula), dtSim, n)
 }
 
-.gennorm <- function(n,formula,variance,link,dtSim) {
-
+.gennorm <- function(n, formula, variance, link, dtSim) {
   mean <- .getNormalMean(dtSim, formula, n)
   v <- .evalWith(variance, .parseDotVars(variance), dtSim, n)
-  
-  return(stats::rnorm(n, mean, sqrt(v)))
 
+  return(stats::rnorm(n, mean, sqrt(v)))
 }
 
 # Internal function called by .generate - returns Poisson count data
@@ -357,19 +347,18 @@
 
 .getPoissonMean <- function(dtSim, formula, link, n) {
   mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
-  
-  if (link=="log") {
+
+  if (link == "log") {
     mean <- exp(mean)
   }
-  
+
   return(mean)
 }
 
-.genpois <- function(n,formula,link,dtSim) {
-
+.genpois <- function(n, formula, link, dtSim) {
   mean <- .getPoissonMean(dtSim, formula, link, n)
 
-  return(stats::rpois(n,mean))
+  return(stats::rpois(n, mean))
 }
 
 # Internal function called by .generate - returns Poisson count data
@@ -381,15 +370,14 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column with the updated simulated data
 
-.genpoisTrunc <- function(n,formula,link,dtSim) {
-
+.genpoisTrunc <- function(n, formula, link, dtSim) {
   mean <- .getPoissonMean(dtSim, formula, link, n)
 
   u <- stats::runif(n, min = 0, max = 1)
 
-  x <- stats::qpois(stats::ppois(0,lambda = mean) +
-                      u * (stats::ppois(Inf, lambda = mean) -
-                      stats::ppois(0, lambda = mean)), lambda = mean)
+  x <- stats::qpois(stats::ppois(0, lambda = mean) +
+    u * (stats::ppois(Inf, lambda = mean) -
+      stats::ppois(0, lambda = mean)), lambda = mean)
 
   return(x)
 }
@@ -404,15 +392,15 @@
 .genunif <- function(n, formula, dtSim) {
   if (!is.null(dtSim) && n != nrow(dtSim))
     stop("Length mismatch between 'n' and 'dtSim'")
-  
+
   range <- .parseUnifFormula(formula, dtSim, n)
-  
+
   return(stats::runif(n, range$min, range$max))
 }
 
 .parseUnifFormula <- function(formula, dtSim, n) {
   range <- .splitFormula(formula)
-  
+
   if (length(range) != 2)
     stop(
       paste(
@@ -420,13 +408,13 @@
         "the format: 'min;max'. See ?distributions"
       )
     )
-  
-  parsedRange <- .evalWith(range, .parseDotVars(range), dtSim, n)
-  
-    r_min <- parsedRange[, 1]
-    r_max <- parsedRange[, 2]
 
-  
+  parsedRange <- .evalWith(range, .parseDotVars(range), dtSim, n)
+
+  r_min <- parsedRange[, 1]
+  r_max <- parsedRange[, 2]
+
+
   if (any(r_min == r_max)) {
     warning(
       paste0(
@@ -438,11 +426,11 @@
       )
     )
   }
-  
+
   if (any(r_max < r_min))
     stop(paste0("Formula invalid: 'max' < 'min' in ", r_max < r_min, " rows."))
-  
-  list(min = r_min,max = r_max)
+
+  list(min = r_min, max = r_max)
 }
 
 # Internal function called by .generate - returns Uniform integer data
@@ -453,16 +441,15 @@
 # @return A data.frame column  with the updated simulated data
 
 .genUnifInt <- function(n, formula, dtSim) {
-  range <- .parseUnifFormula(formula,dtSim,n)
-  
-  if (any(! sapply(range, function(x) floor(x) == x)))
+  range <- .parseUnifFormula(formula, dtSim, n)
+
+  if (any(!sapply(range, function(x) floor(x) == x)))
     stop(paste(
       "For 'uniformInt' min and max must be integers,",
       "did you mean to use 'uniform'?"
     ))
-  
+
   unifCont <- stats::runif(n, range$min, range$max + 1)
 
   return(as.integer(floor(unifCont)))
-
 }

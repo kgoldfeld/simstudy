@@ -11,41 +11,43 @@
 #' @return An updated data.table that that has multiple rows
 #' per observation in dtName
 #' @examples
-#' tdef <- defData(varname = "T", dist="binary", formula = 0.5)
+#' tdef <- defData(varname = "T", dist = "binary", formula = 0.5)
 #' tdef <- defData(tdef, varname = "Y0", dist = "normal", formula = 10, variance = 1)
 #' tdef <- defData(tdef, varname = "Y1", dist = "normal", formula = "Y0 + 5 + 5 * T", variance = 1)
 #' tdef <- defData(tdef, varname = "Y2", dist = "normal", formula = "Y0 + 10 + 5 * T", variance = 1)
 #'
-#' dtTrial <- genData( 5, tdef)
+#' dtTrial <- genData(5, tdef)
 #' dtTrial
 #'
-#' dtTime <- addPeriods(dtTrial, nPeriods = 3, idvars = "id",
-#'                      timevars = c("Y0", "Y1", "Y2"), timevarName = "Y")
+#' dtTime <- addPeriods(dtTrial,
+#'   nPeriods = 3, idvars = "id",
+#'   timevars = c("Y0", "Y1", "Y2"), timevarName = "Y"
+#' )
 #' dtTime
 #'
 #' # Varying # of periods and intervals - need to have variables
 #' # called nCount and mInterval
 #'
 #' def <- defData(varname = "xbase", dist = "normal", formula = 20, variance = 3)
-#' def <- defData(def,varname = "nCount", dist = "noZeroPoisson", formula = 6)
+#' def <- defData(def, varname = "nCount", dist = "noZeroPoisson", formula = 6)
 #' def <- defData(def, varname = "mInterval", dist = "gamma", formula = 30, variance = .01)
 #' def <- defData(def, varname = "vInterval", dist = "nonrandom", formula = .07)
 #'
 #' dt <- genData(200, def)
-#' dt[id %in% c(8,121)]
+#' dt[id %in% c(8, 121)]
 #'
 #' dtPeriod <- addPeriods(dt)
-#' dtPeriod[id %in% c(8,121)]  # View individuals 8 and 121 only
+#' dtPeriod[id %in% c(8, 121)] # View individuals 8 and 121 only
 #' @export
 #'
 
-addPeriods <-  function(dtName,
-                        nPeriods = NULL,
-                        idvars = "id",
-                        timevars = NULL,
-                        timevarName = "timevar",
-                        timeid = "timeID",
-                        perName = "period") {
+addPeriods <- function(dtName,
+                       nPeriods = NULL,
+                       idvars = "id",
+                       timevars = NULL,
+                       timevarName = "timevar",
+                       timeid = "timeID",
+                       perName = "period") {
 
   # "Declare" vars that exist in dtName
   # TODO "declare vars"
@@ -61,17 +63,16 @@ addPeriods <-  function(dtName,
   dtX1 <- copy(dtName)
 
   if (!is.null(nPeriods) & !is.null(timevars)) {
-    if (! (nPeriods == length(timevars))) {
+    if (!(nPeriods == length(timevars))) {
       warning("Number of periods <> number of time dependent variables:
       periods based on time-dependent variables")
     }
-
   }
 
   # if there are time dependent vars, remove for now
 
   if (!is.null(timevars)) {
-    dtX1[, eval(timevars) := NULL, with=TRUE]
+    dtX1[, eval(timevars) := NULL, with = TRUE]
     nPeriods <- length(timevars)
   }
 
@@ -79,19 +80,14 @@ addPeriods <-  function(dtName,
 
   if (!is.null(nPeriods)) { # same number for each subject
 
-    dtTimes1 <- dtX1[, list(.period = (0 : (nPeriods - 1))), keyby = idvars]
-
+    dtTimes1 <- dtX1[, list(.period = (0:(nPeriods - 1))), keyby = idvars]
   } else {
-
-
     if ("nCount" %in% names(dtX1)) { # specified for each subject
 
-      dtTimes1 <- dtX1[, list(.period = (0 : (nCount - 1))), keyby = idvars]
-
-    } else {  # not specified for each subject or for all
+      dtTimes1 <- dtX1[, list(.period = (0:(nCount - 1))), keyby = idvars]
+    } else { # not specified for each subject or for all
 
       stop("No period or count parameter provided")
-
     }
   }
 
@@ -103,9 +99,9 @@ addPeriods <-  function(dtName,
 
   # Create code for final index assignment
 
-  cmd <- quote(dtTimes1[, x] )
+  cmd <- quote(dtTimes1[, x])
   pmd <- quote(x := 1:.N)
-  pmd[[2]] <-  parse(text=timeid)[[1]]
+  pmd[[2]] <- parse(text = timeid)[[1]]
   cmd[[4]] <- pmd
 
   # do extra manipulation based on situation
@@ -117,16 +113,18 @@ addPeriods <-  function(dtName,
     if (!is.null(timevars)) { # if time dependent variables specified
 
       dtX2 <- copy(dtName)
-      varX2 <- names(dtX2)[!(names(dtX2) %in% c(idvars,timevars))]
+      varX2 <- names(dtX2)[!(names(dtX2) %in% c(idvars, timevars))]
 
       if (length(varX2)) {
-        dtX2[, eval(varX2) := NULL, with=TRUE]
+        dtX2[, eval(varX2) := NULL, with = TRUE]
       }
 
-      dtTimes2 <- data.table::melt(dtX2,id.vars=idvars,
-                                   value.name = timevarName,
-                                   variable.name = ".period",
-                                   variable.factor = TRUE)
+      dtTimes2 <- data.table::melt(dtX2,
+        id.vars = idvars,
+        value.name = timevarName,
+        variable.name = ".period",
+        variable.factor = TRUE
+      )
 
       dtTimes2[, .period := factor(.period, timevars)]
       dtTimes2[, .period := as.integer(.period) - 1]
@@ -137,47 +135,37 @@ addPeriods <-  function(dtName,
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
-      data.table::setnames(dtTimes1, old=".period", new = perName)
+      data.table::setnames(dtTimes1, old = ".period", new = perName)
       return(dtTimes1[])
-
     } else {
-
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
-      data.table::setnames(dtTimes1, old=".period", new = perName)
+      data.table::setnames(dtTimes1, old = ".period", new = perName)
       return(dtTimes1[])
-
     }
-
   } else { # is.null(nPeriods) == TRUE
 
     if (all(c("nCount", "mInterval") %in% names(dtX1))) {
-
       if (!("vInterval" %in% names(dtX1))) dtTimes1[, vInterval := 0]
 
-      dtTimes1[,timeElapsed := .genPosSkew(1, mInterval, vInterval), keyby = c(idvars,".period")]
+      dtTimes1[, timeElapsed := .genPosSkew(1, mInterval, vInterval), keyby = c(idvars, ".period")]
       dtTimes1[.period == 0, timeElapsed := 0]
 
-      dtTimes1[,time := round(cumsum(timeElapsed)), keyby=idvars]
-      dtTimes1[, c("timeElapsed","nCount", "mInterval", "vInterval") := NULL]
+      dtTimes1[, time := round(cumsum(timeElapsed)), keyby = idvars]
+      dtTimes1[, c("timeElapsed", "nCount", "mInterval", "vInterval") := NULL]
 
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
-      data.table::setnames(dtTimes1, old=".period", new = perName)
+      data.table::setnames(dtTimes1, old = ".period", new = perName)
       return(dtTimes1[])
-
     } else {
-
       stop("No period or count parameter provided")
-
     }
-
   }
 
   # if specified different measurement intervals:
-
 }
 
 #' @title  Simulate clustered data
@@ -195,22 +183,28 @@ addPeriods <-  function(dtName,
 #' only includes the Levels 1 and 2 ids.
 #' @return A simulated data table with level "1" data
 #' @examples
-#' gen.school <- defData(varname="s0", dist = "normal",
-#'  formula = 0, variance = 3, id = "idSchool"
+#' gen.school <- defData(
+#'   varname = "s0", dist = "normal",
+#'   formula = 0, variance = 3, id = "idSchool"
 #' )
-#' gen.school <- defData(gen.school, varname = "nClasses",
-#'                      dist = "noZeroPoisson", formula = 3
+#' gen.school <- defData(gen.school,
+#'   varname = "nClasses",
+#'   dist = "noZeroPoisson", formula = 3
 #' )
 #'
-#' dtSchool <- genData(3, gen.school)#'
+#' dtSchool <- genData(3, gen.school) #'
 #' dtSchool
 #'
-#' dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
-#'                       numIndsVar = "nClasses", level1ID = "idClass")
+#' dtClass <- genCluster(dtSchool,
+#'   cLevelVar = "idSchool",
+#'   numIndsVar = "nClasses", level1ID = "idClass"
+#' )
 #' dtClass
-#' 
-#' dtClass <- genCluster(dtSchool, cLevelVar = "idSchool",
-#'                       numIndsVar = 3, level1ID = "idClass")
+#'
+#' dtClass <- genCluster(dtSchool,
+#'   cLevelVar = "idSchool",
+#'   numIndsVar = 3, level1ID = "idClass"
+#' )
 #' dtClass
 #' @export
 
@@ -234,26 +228,29 @@ genCluster <- function(dtClust,
 
 
   if (is.character(numIndsVar)) {
-    dt <- dtClust[,list(id2 = get(cLevelVar),
-                        n = get(numIndsVar))][,list(id2 = rep(id2, n))]
+    dt <- dtClust[, list(
+      id2 = get(cLevelVar),
+      n = get(numIndsVar)
+    )][, list(id2 = rep(id2, n))]
   } else if (is.numeric(numIndsVar)) {
-    dt <- dtClust[,list(id2 = get(cLevelVar),
-                    n = as.integer(numIndsVar))][,list(id2 = rep(id2, n))]
+    dt <- dtClust[, list(
+      id2 = get(cLevelVar),
+      n = as.integer(numIndsVar)
+    )][, list(id2 = rep(id2, n))]
   }
-  
- # dt <- dtClust[,list(id2 = get(cLevelVar),
- #                     n = get(numIndsVar))][,list(id2 = rep(id2, n))]
+
+  # dt <- dtClust[,list(id2 = get(cLevelVar),
+  #                     n = get(numIndsVar))][,list(id2 = rep(id2, n))]
 
   dt[, eval(cLevelVar) := id2]
   dt[, id2 := NULL]
-  dt[, eval(level1ID) := (1 : .N)]
+  dt[, eval(level1ID) := (1:.N)]
 
   if (allLevel2) dt <- mergeData(dtClust, dt, cLevelVar)
 
   data.table::setkeyv(dt, level1ID)
 
   return(dt[])
-
 }
 
 #' Generate event data using longitudinal data, and restrict output to time
@@ -261,19 +258,23 @@ genCluster <- function(dtClust,
 #'
 #' @param dtName name of existing data table
 #' @param defEvent data definition table (created with defDataAdd) that
-#' determines the event generating process. 
+#' determines the event generating process.
 #' @param nEvents maximum number of events that will be generated (the nth
 #' event).
 #' @param perName variable name for period field. Defaults to "period"
-#' @param id string representing name of the id 
+#' @param id string representing name of the id
 #' field in table specified by dtName
 #' @return data.table that stops after "nEvents" are reached.
 #' @examples
-#' defD <- defData(varname = "effect", formula = 0, variance = 1, 
-#'                 dist = "normal")
-#' defE <- defDataAdd(varname = "died", formula = "-2.5 + 0.3*period + effect", 
-#'                    dist = "binary", link = "logit")
-#' 
+#' defD <- defData(
+#'   varname = "effect", formula = 0, variance = 1,
+#'   dist = "normal"
+#' )
+#' defE <- defDataAdd(
+#'   varname = "died", formula = "-2.5 + 0.3*period + effect",
+#'   dist = "binary", link = "logit"
+#' )
+#'
 #' d <- genData(1000, defD)
 #' d <- addPeriods(d, 10)
 #' dx <- genNthEvent(d, defEvent = defE, nEvents = 3)
@@ -282,36 +283,39 @@ genCluster <- function(dtClust,
 
 genNthEvent <- function(dtName, defEvent, nEvents = 1,
                         perName = "period", id = "id") {
-  
+
   # "Declare" vars to avoid R CMD warning
-   # TODO "declare vars"
+  # TODO "declare vars"
   .event <- NULL
   .id <- NULL
   .period <- NULL
   .first <- NULL
-  
+
   #
-  
+
   dd <- copy(dtName)
   dd <- addColumns(defEvent, dd)
-  
-  data.table::setnames(dd, c(defEvent$varname, id, perName), 
-                       c(".event", ".id", ".period"))
-  
+
+  data.table::setnames(
+    dd, c(defEvent$varname, id, perName),
+    c(".event", ".id", ".period")
+  )
+
   dsd <- dd[dd[.event == 1, .I[nEvents], keyby = .id]$V1]
-  
+
   df <- dsd[!is.na(.period), list(.id, .first = .period)]
-  
+
   devent <- merge(dd, df, by = ".id")[.period <= .first, ][, .first := NULL]
   dnone <- merge(dd, df, by = ".id", all.x = TRUE)[is.na(.first)][, .first := NULL]
-  
+
   dx <- data.table::rbindlist(list(devent, dnone))
   data.table::setkeyv(dx, key(dd))
-  
-  data.table::setnames(dx, c(".id",".period",".event"), 
-                       c(id, perName, defEvent$varname))
+
+  data.table::setnames(
+    dx, c(".id", ".period", ".event"),
+    c(id, perName, defEvent$varname)
+  )
   dx[]
-  
 }
 
 #' Assign treatment
@@ -322,7 +326,7 @@ genNthEvent <- function(dtName, defEvent, nEvents = 1,
 #' @param strata vector of strings representing stratifying variables
 #' @param grpName string representing variable name for treatment or
 #' exposure group
-#' @param ratio vector of values indicating relative proportion of group 
+#' @param ratio vector of values indicating relative proportion of group
 #' assignment
 #' @return An integer (group) ranging from 1 to length of the
 #' probability vector
@@ -352,14 +356,13 @@ genNthEvent <- function(dtName, defEvent, nEvents = 1,
 #' dt5 <- trtAssign(dt, nTrt = 5, balanced = TRUE, grpName = "Group")
 #' dt5[, .N, keyby = .(male, Group)]
 #' dt5[, .N, keyby = .(Group)]
-#' 
+#'
 #' dt6 <- trtAssign(dt, nTrt = 3, ratio = c(1, 2, 2), grpName = "Group")
 #' dt6[, .N, keyby = .(Group)]
-#'
 #' @export
 
 trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
-                       strata = NULL, grpName = "trtGrp", ratio = NULL) {
+                      strata = NULL, grpName = "trtGrp", ratio = NULL) {
 
   # 'declare' vars
   # TODO "declare vars"
@@ -384,43 +387,37 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   dt <- copy(dtName)
 
   if (balanced) {
-
     if (is.null(strata)) {
       dt[, .stratum := 1]
     } else {
       dt <- .addStrataCode(dt, strata)
     }
-    
+
     dt[, .n := .N, keyby = .stratum]
     dtrx <- dt[, list(grpExp = .stratSamp(.n[1], nTrt, ratio)), keyby = .stratum]
     dt[, grpExp := dtrx$grpExp]
     dt[, `:=`(.stratum = NULL, .n = NULL)]
-    
-    if (nTrt==2) dt[, grpExp := grpExp - 1]
-    data.table::setnames(dt, "grpExp", grpName)
-    data.table::setkeyv(dt,key(dtName))
 
+    if (nTrt == 2) dt[, grpExp := grpExp - 1]
+    data.table::setnames(dt, "grpExp", grpName)
+    data.table::setkeyv(dt, key(dtName))
   } else { # balanced is FALSE - strata are not relevant
 
     if (is.null(ratio)) {
-      
       if (nTrt == 2) {
         formula <- .5
       } else {
         formula <- rep(1 / nTrt, nTrt)
       }
-      
     } else { # ratio not null
-      formula <- round(ratio/sum(ratio), 8)
+      formula <- round(ratio / sum(ratio), 8)
     }
-    
+
 
     dt <- trtObserve(dt, formulas = formula, logit.link = FALSE, grpName)
-
   }
 
   return(dt[])
-
 }
 
 #' Observed exposure or treatment
@@ -434,8 +431,8 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 #' @return An integer (group) ranging from 1 to length of the probability vector
 #' @seealso \code{\link{trtAssign}}
 #' @examples
-#' def <- defData(varname = "male", dist = "binary", formula = .5 , id="cid")
-#' def <- defData(def, varname = "over65", dist = "binary", formula = "-1.7 + .8*male", link="logit")
+#' def <- defData(varname = "male", dist = "binary", formula = .5, id = "cid")
+#' def <- defData(def, varname = "over65", dist = "binary", formula = "-1.7 + .8*male", link = "logit")
 #' def <- defData(def, varname = "baseDBP", dist = "normal", formula = 70, variance = 40)
 #'
 #' dtstudy <- genData(1000, def)
@@ -447,16 +444,15 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 #'
 #' # Check actual distributions
 #'
-#' dtObs[, .(pctMale = round(mean(male),2)), keyby = exposure]
-#' dtObs[, .(pctMale = round(mean(over65),2)), keyby = exposure]
+#' dtObs[, .(pctMale = round(mean(male), 2)), keyby = exposure]
+#' dtObs[, .(pctMale = round(mean(over65), 2)), keyby = exposure]
 #'
 #' dtSum <- dtObs[, .N, keyby = .(male, over65, exposure)]
-#' dtSum[, grpPct :=round(N/sum(N), 2), keyby = .(male, over65)]
+#' dtSum[, grpPct := round(N / sum(N), 2), keyby = .(male, over65)]
 #' dtSum
 #' @export
 
 trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
-
   if (missing(dt)) {
     stop("Data table argument is missing", call. = FALSE)
   }
@@ -471,21 +467,22 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
   # TODO "declare vars"
   for (i in 1:ncat) {
     def <- defDataAdd(def,
-                   varname = paste0("e",i),
-                   dist = "nonrandom",
-                   formula = formulas[i]
+      varname = paste0("e", i),
+      dist = "nonrandom",
+      formula = formulas[i]
     )
   }
 
-  dtnew <-addColumns(def, dt)
+  dtnew <- addColumns(def, dt)
 
   dtmatrix <- as.matrix(dtnew[,
-                              .SD,
-                              .SDcols = c((ncols + 1) : (ncols + ncat))])
+    .SD,
+    .SDcols = c((ncols + 1):(ncols + ncat))
+  ])
 
   if (logit.link) {
     dtmatrix <- exp(dtmatrix)
-    dtmatrix <- dtmatrix  / (1 + apply(dtmatrix, 1, sum))
+    dtmatrix <- dtmatrix / (1 + apply(dtmatrix, 1, sum))
   }
 
   dtmatrix <- cbind(dtmatrix, 1 - apply(dtmatrix, 1, sum))
@@ -502,7 +499,6 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
   data.table::setnames(dtnew, "grpExp", grpName)
 
   return(dtnew[])
-
 }
 
 #' Assign treatment for stepped-wedge design
@@ -516,44 +512,49 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 #' @param grpName string representing variable name for treatment or
 #' exposure group
 #' @param lag integer representing length of transition period
-#' @param xrName string representing name of the field that 
+#' @param xrName string representing name of the field that
 #' indicates whether the cluster status is in transition status
-#' 
+#'
 #' @return A data.table with the added treatment assignment
 #' @seealso \code{\link{trtObserve} \link{trtAssign}}
 #' @examples
-#' defc <- defData(varname = "ceffect", formula = 0, variance = 0.10, 
-#'                 dist = "normal", id = "cluster")
+#' defc <- defData(
+#'   varname = "ceffect", formula = 0, variance = 0.10,
+#'   dist = "normal", id = "cluster"
+#' )
 #' defc <- defData(defc, "m", formula = 10, dist = "nonrandom")
-#' 
+#'
 #' # Will generate 3 waves of 4 clusters each - starting 2, 5, and 8
-#' 
+#'
 #' dc <- genData(12, defc)
 #' dp <- addPeriods(dc, 12, "cluster")
-#' dp <- trtStepWedge(dp, "cluster", nWaves = 3, 
-#'                    lenWaves = 3, startPer = 2)
+#' dp <- trtStepWedge(dp, "cluster",
+#'   nWaves = 3,
+#'   lenWaves = 3, startPer = 2
+#' )
 #' dp
 #'
 #' dp <- addPeriods(dc, 12, "cluster")
-#' dp <- trtStepWedge(dp, "cluster", nWaves = 2, 
-#'                    lenWaves = 1, startPer = 4, lag = 3)
+#' dp <- trtStepWedge(dp, "cluster",
+#'   nWaves = 2,
+#'   lenWaves = 1, startPer = 4, lag = 3
+#' )
 #' dp
-#' 
 #' @export
-trtStepWedge <- function(dtName, clustID, nWaves, lenWaves, 
+trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
                          startPer, perName = "period", grpName = "rx",
                          lag = 0, xrName = "xr") {
-  
+
   # 'declare' vars created in data.table
   # TODO "declare vars"
   rx = NULL
   period = NULL
   xr = NULL
-  
+
   #
-  
-  if (lag == 0) xrName <- "xr"  # override - will be deleted from dd
-  
+
+  if (lag == 0) xrName <- "xr" # override - will be deleted from dd
+
   if (missing(dtName)) {
     stop("Data table argument is missing", call. = FALSE)
   }
@@ -563,40 +564,42 @@ trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
   if (!(perName %in% names(dtName))) {
     stop("Period name has not been defined in data table", call. = FALSE)
   }
-  
+
   dd <- copy(dtName)
   data.table::setnames(dd, perName, "period")
-  
+
   nClust <- length(dd[, unique(get(clustID))])
   nPer <- length(dd[, unique(period)])
-  cPerWave <- nClust/nWaves
-  
+  cPerWave <- nClust / nWaves
+
   if (nClust %% nWaves != 0) {
-    
-    stop(paste("Cannot create equal size waves with", nClust, "clusters and", 
-               nWaves, "waves."))
+    stop(paste(
+      "Cannot create equal size waves with", nClust, "clusters and",
+      nWaves, "waves."
+    ))
   }
-  
-  if ( (nPer) < (startPer + (nWaves - 1) * lenWaves + 1)) {
-    
-    stop(paste("Design requires", (startPer + (nWaves - 1) * lenWaves + 1),
-               "periods but only", nPer, "generated."))
-    
+
+  if ((nPer) < (startPer + (nWaves - 1) * lenWaves + 1)) {
+    stop(paste(
+      "Design requires", (startPer + (nWaves - 1) * lenWaves + 1),
+      "periods but only", nPer, "generated."
+    ))
   }
-  
-  startTrt <- rep((0:(nWaves-1))*lenWaves, each = cPerWave) + startPer
+
+  startTrt <- rep((0:(nWaves - 1)) * lenWaves, each = cPerWave) + startPer
   dstart <- data.table::data.table(cid = 1:nClust, startTrt)
   data.table::setnames(dstart, "cid", clustID)
   data.table::setkeyv(dstart, clustID)
-  
+
   data.table::setkeyv(dd, clustID)
   dd <- dd[dstart]
-  dd[, xr := ( (period >= startTrt) & ( period < (startTrt + lag) ) ) * 1]
-  dd[, rx := ( (startTrt + lag) <= period ) * 1]
-  data.table::setnames(dd, c("period", "rx", "xr"), 
-                       c(perName, grpName, xrName))
-  
+  dd[, xr := ((period >= startTrt) & (period < (startTrt + lag))) * 1]
+  dd[, rx := ((startTrt + lag) <= period) * 1]
+  data.table::setnames(
+    dd, c("period", "rx", "xr"),
+    c(perName, grpName, xrName)
+  )
+
   if (lag == 0) dd[, `:=`(xr = NULL)]
   return(dd[])
-  
 }

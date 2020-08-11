@@ -1,34 +1,34 @@
 .parseDotVars <- function(formula) {
   vars <- all.vars(parse(text = formula))
-  dotVars <- startsWith(vars,"..")
-  varValues <- mget(sub("..","", vars[dotVars]),envir = .GlobalEnv)
+  dotVars <- startsWith(vars, "..")
+  varValues <- mget(sub("..", "", vars[dotVars]), envir = .GlobalEnv)
   names(varValues) <- vars[dotVars]
   varValues
 }
 
-.evalWith <- function(formula,extVars,dtSim,n = nrow(dtSim)) {
-  if(missing(dtSim) && missing(n)) n <- 1
-  
+.evalWith <- function(formula, extVars, dtSim, n = nrow(dtSim)) {
+  if (missing(dtSim) && missing(n)) n <- 1
+
   e <- list2env(extVars)
-  
-  if(!is.null(dtSim))
-    e <- list2env(dtSim,e)
-  
-  if(!is.null(e$formula2parse)) 
+
+  if (!is.null(dtSim))
+    e <- list2env(dtSim, e)
+
+  if (!is.null(e$formula2parse))
     stop("'formula2parse' is a reserved variable name!")
-  
+
   evalFormula <- function(x) {
     e$formula2parse <- x
     res <- with(e, eval(parse(text = formula2parse)))
-    
+
     if (length(res) == 1)
       rep(res, n)
     else
       res
   }
-  parsedValues <- sapply(formula,evalFormula)
-  
-  if(!is.matrix(parsedValues))
+  parsedValues <- sapply(formula, evalFormula)
+
+  if (!is.matrix(parsedValues))
     t(parsedValues)
   else
     parsedValues
@@ -72,39 +72,37 @@ parseT <- function(txt) parse(text = txt)
       FALSE
     else
       is.numeric(eval(parse(text = formula)))
-    else if (is.numeric(formula))
-      TRUE
-    else
-      FALSE
+  else if (is.numeric(formula))
+    TRUE
+  else
+    FALSE
 }
 
 #' Adapted from:
 #' \url{https://4dpiecharts.com/2011/07/04/testing-for-valid-variable-names/}
 #'
-#' @param x 
-#' @param allow_reserved 
-#' @param unique 
+#' @param x
+#' @param allow_reserved
+#' @param unique
 #'
 #' @noRd
-is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) 
-{
+is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   ok <- rep.int(TRUE, length(x))
-  
-  #is name too long?
-  max_name_length <- if(getRversion() < "2.13.0") 256L else 10000L
+
+  # is name too long?
+  max_name_length <- if (getRversion() < "2.13.0") 256L else 10000L
   ok[nchar(x) > max_name_length] <- FALSE
-  
-  #is it a reserved variable, i.e.
-  #an ellipsis or two dots then a number?
-  if(!allow_reserved)
-  {
-    ok[x == "..."] <- FALSE    
-    ok[grepl("^\\.{2}[[:digit:]]+$", x)] <- FALSE  
+
+  # is it a reserved variable, i.e.
+  # an ellipsis or two dots then a number?
+  if (!allow_reserved) {
+    ok[x == "..."] <- FALSE
+    ok[grepl("^\\.{2}[[:digit:]]+$", x)] <- FALSE
   }
-  
-  #are names valid (and maybe unique)
+
+  # are names valid (and maybe unique)
   ok[x != make.names(x, unique = unique)] <- FALSE
-  
+
   ok
 }
 
@@ -115,78 +113,83 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 # "LAG()" function
 
 .checkLags <- function(formulas) {
-  
-  nLAGS <- length(unlist(regmatches(formulas, 
-    gregexpr("(?=LAG\\().*?(?<=\\))", formulas, perl=T))))
-  
+  nLAGS <- length(unlist(regmatches(
+    formulas,
+    gregexpr("(?=LAG\\().*?(?<=\\))", formulas, perl = T)
+  )))
+
   return(nLAGS > 0)
 }
-  
+
 # .addLags adds temp lag fields and returns data.table and updated formulas
 #
 # @param olddt data.table to be modified
 # @param formsdt string of formulas to be modified
-# @return list of modified data.table, modified formulas, and vector of 
+# @return list of modified data.table, modified formulas, and vector of
 # names of temporary variables.
 
 .addLags <- function(olddt, formsdt) {
-  
+
   # "Declare" vars to avoid R CMD warning
   # TODO "declare vars"
   id <- NULL
   N <- NULL
-  
+
   ##
-  
+
   lagdt <- copy(olddt)
   lagforms <- copy(formsdt)
   origNames <- copy(names(olddt))
-  
-  if (! any(lagdt[, .N, keyby = id][, N > 1])) stop("Data not longitudinal")
-  
+
+  if (!any(lagdt[, .N, keyby = id][, N > 1])) stop("Data not longitudinal")
+
   nforms <- length(lagforms)
-  
+
   for (p in 1:nforms) {
-    
-    lags <- regmatches(lagforms[p], 
-               gregexpr("(?<=LAG\\().*?(?=\\))", lagforms[p], perl=T))[[1]]
-    
+    lags <- regmatches(
+      lagforms[p],
+      gregexpr("(?<=LAG\\().*?(?=\\))", lagforms[p], perl = T)
+    )[[1]]
+
     if (length(lags) == 0) next # No lags in current formula
-    
+
     if (any(table(lags) > 1)) {
       stop("Repeated lag term in formula")
     }
-    
-    if (! all(is.element(lags, origNames))) {
+
+    if (!all(is.element(lags, origNames))) {
       stop(paste(setdiff(lags, origNames), "not in data table. "))
     }
-    
+
     lags.1 <- paste0(".", lags, "1")
     if (is.element(lags.1, origNames)) {
       stop("Please do not use .*1 names")
     }
-    
+
     # Everything is OK: update formula
-    
-    regmatches(lagforms[p], 
-        gregexpr("(?=LAG\\().*?(?<=\\))", lagforms[p], perl=T)) <- list(lags.1)
-    
+
+    regmatches(
+      lagforms[p],
+      gregexpr("(?=LAG\\().*?(?<=\\))", lagforms[p], perl = T)
+    ) <- list(lags.1)
+
     # Add new column(s) for lagged data
-    
+
     for (i in 1:length(lags[p])) {
-      if (! is.element(lags.1[i], origNames)) {
-        lagdt[, (lags.1[i]) := shift( .SD[, lags, with = FALSE], n=1, fill = 0), 
-           by = id ]
+      if (!is.element(lags.1[i], origNames)) {
+        lagdt[, (lags.1[i]) := shift(.SD[, lags, with = FALSE], n = 1, fill = 0),
+          by = id
+        ]
       }
     }
   }
-  
+
   ####
-  
+
   lagNames <- setdiff(names(lagdt), origNames)
-  
+
   list(lagdt, lagforms, lagNames)
-} 
+}
 
 # Assign treatment
 #
@@ -204,11 +207,11 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 
   dtWork <- copy(dt)
 
-  strataOnly <- dtWork[, eval(strata) , with=FALSE]
+  strataOnly <- dtWork[, eval(strata), with = FALSE]
   data.table::setkeyv(strataOnly, names(strataOnly))
 
   uniqueStrata <- unique(strataOnly)
-  uniqueStrata[, .stratum := (1 : .N)]
+  uniqueStrata[, .stratum := (1:.N)]
 
   data.table::setkeyv(dtWork, names(strataOnly))
   dtWork <- uniqueStrata[dtWork]
@@ -225,18 +228,16 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 # @return A sample draw from a stratum
 
 .stratSamp <- function(nrow, ncat, ratio) {
-  
   if (is.null(ratio)) ratio <- rep(1, ncat)
-  
+
   neach <- floor(nrow / sum(ratio))
   distrx <- rep(c(1:ncat), times = (neach * ratio))
   extra <- nrow - length(distrx)
   sample(c(distrx, sample(rep(1:ncat, times = ratio), extra)))
-  
 }
 
 
-#### TODO Implement Emrich and Piedmonte algorithm for correlated binary data? #### 
+#### TODO Implement Emrich and Piedmonte algorithm for correlated binary data? ####
 # Internal functions called by genCorGen and addCorGen - returns matrix
 #
 # @param nvars Number of new variables to generate
@@ -246,41 +247,38 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 # @return A correlation matrix
 
 .checkBoundsBin <- function(p1, p2, d) {
+  l <- (p1 * p2) / ((1 - p1) * (1 - p2))
+  L <- max(-sqrt(l), -sqrt(1 / l))
 
-      l <- (p1*p2) / ((1-p1)*(1-p2))
-      L <- max(-sqrt(l), -sqrt(1/l))
-      
-      u <- (p1*(1-p2)) / (p2*(1-p1))
-      U <- min(sqrt(u), sqrt(1/u))  
-      
-      if ((d < L & isTRUE(all.equal(d, L)) == FALSE) | 
-          (d > U & isTRUE(all.equal(d, U)) == FALSE))   {
-        LU <- paste0("(", round(L,2) , " ... ", round(U, 2), ")")
-        stopText <- paste("Specified correlation", d, "out of range" , LU)
-        stop(stopText)
-      }
+  u <- (p1 * (1 - p2)) / (p2 * (1 - p1))
+  U <- min(sqrt(u), sqrt(1 / u))
+
+  if ((d < L & isTRUE(all.equal(d, L)) == FALSE) |
+    (d > U & isTRUE(all.equal(d, U)) == FALSE)) {
+    LU <- paste0("(", round(L, 2), " ... ", round(U, 2), ")")
+    stopText <- paste("Specified correlation", d, "out of range", LU)
+    stop(stopText)
+  }
 }
-   
+
 .findRhoBin <- function(p1, p2, d) {
-  
   .checkBoundsBin(p1, p2, d)
-  
-  target <- d*sqrt(p1*p2*(1-p1)*(1-p2)) + p1*p2
-  
+
+  target <- d * sqrt(p1 * p2 * (1 - p1) * (1 - p2)) + p1 * p2
+
   # given p1, p2 & d, bisection search for corresponding rho
-  
+
   Max <- 1
   Min <- -1
   test <- 0
   found <- FALSE
-  
+
   while (!found) {
-    
     corr <- diag(2)
-    corr[1,2] <-  corr[2,1] <- test
-    
-    est <- mvtnorm::pmvnorm(lower = rep(-Inf, 2), upper = c(stats::qnorm(p1), stats::qnorm(p2)), mean = c(0,0), corr = corr)
-    
+    corr[1, 2] <- corr[2, 1] <- test
+
+    est <- mvtnorm::pmvnorm(lower = rep(-Inf, 2), upper = c(stats::qnorm(p1), stats::qnorm(p2)), mean = c(0, 0), corr = corr)
+
     if (round(est, 5) == round(target, 5)) {
       found <- TRUE
       rho <- test
@@ -290,51 +288,46 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
     } else {
       Max <- test
       test <- (Min + Max) / 2
-    }  
+    }
   }
-  
-  return(rho)  
-  
+
+  return(rho)
 }
 
 .genBinEP <- function(n, p, tcorr) {
-  
+
   # "Declare" vars to avoid R CMD warning
   # TODO "declare vars"
   id <- NULL
   period <- NULL
   seqid <- NULL
-  
-  np <- length(p)  
+
+  np <- length(p)
   phicorr <- diag(length(p))
-  
-  for (i in (1: (np - 1))) {
-    
-    for (j in ((i+1):np)) {
-      
+
+  for (i in (1:(np - 1))) {
+    for (j in ((i + 1):np)) {
       p1 <- p[i]
       p2 <- p[j]
-      
+
       phicorr[j, i] <- phicorr[i, j] <- .findRhoBin(p1, p2, tcorr[i, j])
     }
-    
   }
-  
+
   # check that phicorr is positive definite (PD), if not adjust to nearest PD matrix
   if (!all(eigen(phicorr)$values > 0)) {
     phicorr <- Matrix::nearPD(phicorr)$mat
-    
   }
-  
+
   normvars <- mvnfast::rmvn(n, mu = rep(0, length(p)), sigma = phicorr)
   z <- matrix(rep(stats::qnorm(p), nrow(normvars)), nrow = nrow(normvars), byrow = TRUE)
   binvars <- matrix(as.integer(normvars < z), nrow = nrow(z))
-  
+
   dtX <- data.table(binvars)
   dtX[, id := .I]
-  
+
   dtM <- melt(dtX, id.vars = "id", variable.factor = TRUE, value.name = "X", variable.name = "seq")
-  
+
   dtM[, period := as.integer(seq) - 1]
   setkey(dtM, "id")
   dtM[, seqid := .I]
@@ -352,35 +345,30 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 # @return A correlation matrix
 
 .buildCorMat <- function(nvars, corMatrix, corstr, rho) {
-  
   if (is.null(corMatrix)) {
-    
     corMatrix <- diag(nvars) # do not modify if indepdendent
-    
+
     if (corstr == "cs") {
       corMatrix <- rho^(row(corMatrix) != col(corMatrix))
     } else if (corstr == "ar1") {
-      corMatrix <- rho^abs(row(corMatrix)-col(corMatrix))
+      corMatrix <- rho^abs(row(corMatrix) - col(corMatrix))
     }
-    
-  } else if (! is.null(corMatrix)) { # check if positive definite/symmetric
-    
+  } else if (!is.null(corMatrix)) { # check if positive definite/symmetric
+
     if (nvars != length(diag(corMatrix))) {
       stop("Length of mean vector mismatched with correlation matrix")
     }
-    
-    if (! isSymmetric(corMatrix)) {
+
+    if (!isSymmetric(corMatrix)) {
       stop("Correlation matrix not symmetric")
     }
-    
-    if (! all(eigen(corMatrix)$values > 0)) {
+
+    if (!all(eigen(corMatrix)$values > 0)) {
       stop("Correlation matrix not positive definite")
     }
-    
   }
-  
+
   return(corMatrix)
-  
 }
 
 # Internal function to find variance associated with ICC
@@ -389,29 +377,28 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 # @return inverse of Poisson ICC function
 
 .findPoisVar <- function(j) {
-  
+
   # 'declare' var
   # TODO "declare vars"
   y <- NULL
-  
+
   ##
-  
-  a <- seq(0, 20, by  = 0.01)
-  dx <- data.table::data.table(a = a, y = exp(3*a/2) - exp(a/2))
-  
+
+  a <- seq(0, 20, by = 0.01)
+  dx <- data.table::data.table(a = a, y = exp(3 * a / 2) - exp(a / 2))
+
   amin <- dx[y <= j][.N, a]
-  
+
   a <- seq(amin, amin + 1e-02, length = 101)
-  dx <- data.table::data.table(a = a, y = exp(3*a/2) - exp(a/2))
-  
+  dx <- data.table::data.table(a = a, y = exp(3 * a / 2) - exp(a / 2))
+
   amin <- dx[y <= j][.N, a]
-  
+
   a <- seq(amin, amin + 1e-04, length = 1001)
-  dx <- data.table::data.table(a = a, y = exp(3*a/2) - exp(a/2))
-  
-  
+  dx <- data.table::data.table(a = a, y = exp(3 * a / 2) - exp(a / 2))
+
+
   return(dx[y <= j][.N, a])
-  
 }
 
 #### Gamma distribution - variation to generate positive skew ####
@@ -423,20 +410,15 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 # @return A data.frame column with the updated simulated data
 
 .genPosSkew <- function(n, mean, dispersion = 0) {
-
   if (dispersion == 0) {
-
     new <- rep(mean, n)
-
   } else {
-
     variance = mean^2 * dispersion
 
-    shape <- (mean^2)/variance
-    rate <- mean/variance
+    shape <- (mean^2) / variance
+    rate <- mean / variance
 
     new <- stats::rgamma(n, shape = shape, rate = rate)
-
   }
 
   return(new)
@@ -464,24 +446,19 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 
   mu <- rep(0, nvars)
   if (is.null(corMatrix)) {
-
-    dt <- genCorData(n, mu, sigma = 1, rho = rho, corstr = corstr, idname = idname )
-
+    dt <- genCorData(n, mu, sigma = 1, rho = rho, corstr = corstr, idname = idname)
   } else {
-
-    dt <- genCorData(n, mu, sigma = 1, corMatrix = corMatrix, idname = idname )
-
+    dt <- genCorData(n, mu, sigma = 1, corMatrix = corMatrix, idname = idname)
   }
 
   dtM <- melt(dt, id.vars = idname, variable.factor = TRUE, value.name = "Y", variable.name = "seq")
-  
+
   dtM[, period := as.integer(seq) - 1]
   setkeyv(dtM, idname)
   dtM[, seqid := .I]
   dtM[, Unew := stats::pnorm(Y)]
 
   return(dtM[, -"Y"])
-
 }
 
 # Internal function
@@ -492,7 +469,7 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 
 .iserror <- function(tryobject) {
   if (class(tryobject)[1] == "try-error") {
-    return (TRUE)
+    return(TRUE)
   } else {
     return(FALSE)
   }
@@ -504,8 +481,6 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE)
 # @param logodds Log odds
 # @return Probability
 
-.loProb <- function (logodds) {
-
-  exp(logodds)/(1 + exp(logodds))
-
+.loProb <- function(logodds) {
+  exp(logodds) / (1 + exp(logodds))
 }

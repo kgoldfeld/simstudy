@@ -11,21 +11,27 @@
 #' @examples
 #' # New data set
 #'
-#' def <- defData(varname = "x", dist = "noZeroPoisson", formula=5)
-#' def <- defData(def, varname="y", dist="normal", formula=0, variance=9)
+#' def <- defData(varname = "x", dist = "noZeroPoisson", formula = 5)
+#' def <- defData(def, varname = "y", dist = "normal", formula = 0, variance = 9)
 #'
 #' dt <- genData(10, def)
 #'
 #' # Add columns to dt
 #'
-#' defC <- defCondition(condition = "x == 1", formula = "5 + 2*y",
-#'                      variance = 1,dist = "normal")
+#' defC <- defCondition(
+#'   condition = "x == 1", formula = "5 + 2*y",
+#'   variance = 1, dist = "normal"
+#' )
 #'
-#' defC <- defCondition(defC, condition = "x <= 5 & x >= 2", formula = "3 - 2*y",
-#'                      variance = 1, dist="normal")
+#' defC <- defCondition(defC,
+#'   condition = "x <= 5 & x >= 2", formula = "3 - 2*y",
+#'   variance = 1, dist = "normal"
+#' )
 #'
-#' defC <- defCondition(defC, condition = "x >= 6", formula = 1,
-#'                      variance = 1, dist="normal")
+#' defC <- defCondition(defC,
+#'   condition = "x >= 6", formula = 1,
+#'   variance = 1, dist = "normal"
+#' )
 #'
 #' defC
 #'
@@ -35,34 +41,32 @@
 #' dt
 #' @export
 
-defCondition<- function(dtDefs = NULL,
-                        condition,
-                        formula,
-                        variance = 0,
-                        dist = "normal",
-                        link = "identity") {
-
+defCondition <- function(dtDefs = NULL,
+                         condition,
+                         formula,
+                         variance = 0,
+                         dist = "normal",
+                         link = "identity") {
   if (is.null(dtDefs)) {
-
     dtDefs <- data.table::data.table()
 
     # attr(dtDefs,"id") <- id
-
   }
 
-  dt.new <- data.table::data.table(condition,
-                                   formula,
-                                   variance,
-                                   dist,
-                                   link)
+  dt.new <- data.table::data.table(
+    condition,
+    formula,
+    variance,
+    dist,
+    link
+  )
 
-  l = list(dtDefs,dt.new)
+  l = list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
   # attr(defNew, "id") <- attr(dtDefs, "id")
 
   return(defNew[])
-
 }
 
 #' Add single row to definitions table
@@ -79,19 +83,19 @@ defCondition<- function(dtDefs = NULL,
 #' @param link The link function for the mean, see details
 #' @param id A string indicating the field name for the unique record identifier
 #' @return A data.table named dtName that is an updated data definitions table
-#' @details The possible data distributions include "normal", "poisson", 
-#' "noZeroPoisson", "negBinomial" "binary", "binomial", "beta", "uniform", 
-#' "uniformInt", "categorical", "gamma", "exponential", 
+#' @details The possible data distributions include "normal", "poisson",
+#' "noZeroPoisson", "negBinomial" "binary", "binomial", "beta", "uniform",
+#' "uniformInt", "categorical", "gamma", "exponential",
 #' "mixture", and "nonrandom."
-#' 
+#'
 #' @examples
-#' def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")
-#' def <- defData(def, varname="xUni", dist="uniform", formula="10;20")
-#' def <- defData(def, varname="xNorm", formula="xNr + xUni * 2", dist="normal", variance=8)
-#' def <- defData(def, varname="xPois", dist="poisson", formula="xNr - 0.2 * xUni", link="log")
-#' def <- defData(def, varname="xCat", formula = "0.3;0.2;0.5", dist="categorical")
-#' def <- defData(def, varname="xGamma", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
-#' def <- defData(def, varname = "xBin", dist = "binary" , formula="-3 + xCat", link="logit")
+#' def <- defData(varname = "xNr", dist = "nonrandom", formula = 7, id = "idnum")
+#' def <- defData(def, varname = "xUni", dist = "uniform", formula = "10;20")
+#' def <- defData(def, varname = "xNorm", formula = "xNr + xUni * 2", dist = "normal", variance = 8)
+#' def <- defData(def, varname = "xPois", dist = "poisson", formula = "xNr - 0.2 * xUni", link = "log")
+#' def <- defData(def, varname = "xCat", formula = "0.3;0.2;0.5", dist = "categorical")
+#' def <- defData(def, varname = "xGamma", dist = "gamma", formula = "5+xCat", variance = 1, link = "log")
+#' def <- defData(def, varname = "xBin", dist = "binary", formula = "-3 + xCat", link = "logit")
 #' def
 #' @export
 
@@ -101,7 +105,7 @@ defData <- function(dtDefs = NULL,
                     variance = 0,
                     dist = "normal",
                     link = "identity",
-                    id="id") {
+                    id = "id") {
 
   #### Check that arguments have been passed ####
 
@@ -113,29 +117,29 @@ defData <- function(dtDefs = NULL,
   if (is.null(dtDefs)) { # checking that initial formula has no variables ...
 
     dtDefs <- data.table::data.table()
-    attr(dtDefs,"id") <- id
+    attr(dtDefs, "id") <- id
     defVars <- ""
-
   } else {
-    defVars <- dtDefs[,varname]
+    defVars <- dtDefs[, varname]
   }
 
   .evalDef(varname, formula, dist, variance, link, defVars)
-  
 
-  dt.new <- data.table::data.table(varname,
-                                   formula,
-                                   variance,
-                                   dist,
-                                   link)
 
-  l = list(dtDefs,dt.new)
+  dt.new <- data.table::data.table(
+    varname,
+    formula,
+    variance,
+    dist,
+    link
+  )
+
+  l = list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
   attr(defNew, "id") <- attr(dtDefs, "id")
 
   return(defNew[])
-
 }
 
 #' Add single row to definitions table that will be used to add data to an
@@ -151,15 +155,15 @@ defData <- function(dtDefs = NULL,
 #' @examples
 #' # New data set
 #'
-#' def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")
-#' def <- defData(def, varname="xUni", dist="uniform", formula="10;20")
+#' def <- defData(varname = "xNr", dist = "nonrandom", formula = 7, id = "idnum")
+#' def <- defData(def, varname = "xUni", dist = "uniform", formula = "10;20")
 #'
 #' dt <- genData(10, def)
 #'
 #' # Add columns to dt
 #'
-#' def2 <- defDataAdd(varname="y1", formula = 10, variance = 3)
-#' def2 <- defDataAdd(def2, varname="y2", formula = .5, dist = "binary")
+#' def2 <- defDataAdd(varname = "y1", formula = 10, variance = 3)
+#' def2 <- defDataAdd(def2, varname = "y2", formula = .5, dist = "binary")
 #' def2
 #'
 #' dt <- addColumns(def2, dt)
@@ -172,28 +176,26 @@ defDataAdd <- function(dtDefs = NULL,
                        variance = 0,
                        dist = "normal",
                        link = "identity") {
-
   if (is.null(dtDefs)) {
-
     dtDefs <- data.table::data.table()
 
     # attr(dtDefs,"id") <- id
-
   }
 
-  dt.new <- data.table::data.table(varname,
-                                   formula,
-                                   variance,
-                                   dist,
-                                   link)
+  dt.new <- data.table::data.table(
+    varname,
+    formula,
+    variance,
+    dist,
+    link
+  )
 
-  l = list(dtDefs,dt.new)
+  l = list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
   # attr(defNew, "id") <- attr(dtDefs, "id")
 
   return(defNew[])
-
 }
 
 #' Read external csv data set definitions
@@ -204,12 +206,13 @@ defDataAdd <- function(dtDefs = NULL,
 #' @examples
 #' # Create temporary external "csv" file
 #'
-#' test1 <- c("varname,formula,variance,dist,link",
-#'            "nr,7, 0,nonrandom,identity",
-#'            "x1,.4, 0,binary,identity",
-#'            "y1,nr + x1 * 2,8,normal,identity",
-#'            "y2,nr - 0.2 * x1,0,poisson, log"
-#'           )
+#' test1 <- c(
+#'   "varname,formula,variance,dist,link",
+#'   "nr,7, 0,nonrandom,identity",
+#'   "x1,.4, 0,binary,identity",
+#'   "y1,nr + x1 * 2,8,normal,identity",
+#'   "y2,nr - 0.2 * x1,0,poisson, log"
+#' )
 #'
 #' tfcsv <- tempfile()
 #' writeLines(test1, tfcsv)
@@ -236,39 +239,38 @@ defRead <- function(filen, id = "id") {
 
   #
 
-  if (! file.exists(filen)) stop("No such file")
+  if (!file.exists(filen)) stop("No such file")
 
-  read.df <- utils::read.csv(filen, header=TRUE, as.is = TRUE) # do not read as factors
+  read.df <- utils::read.csv(filen, header = TRUE, as.is = TRUE) # do not read as factors
   read.dt <- data.table::data.table(read.df)
 
-  if (! all(names(read.dt) == c("varname",
-                                "formula", "variance", "dist", "link"))) {
-
+  if (!all(names(read.dt) == c(
+    "varname",
+    "formula", "variance", "dist", "link"
+  ))) {
     stop("Field names do not match")
-
   }
 
   # check validity of data set
 
   suppressWarnings(test <- as.numeric(unlist(strsplit(as.character(read.dt[1, formula]),
-                                                      split=";",
-                                                      fixed = TRUE)))
-  )
+    split = ";",
+    fixed = TRUE
+  ))))
 
   if (sum(is.na(test))) {
     stop("First defined formula must be scalar", call. = FALSE)
   }
 
-  if (nrow(read.dt) > 1){
+  if (nrow(read.dt) > 1) {
     for (i in 2:nrow(read.dt)) {
-      .evalDef(newvar = read.dt[i,varname],newform = read.dt[i,formula],newdist = read.dt[i,dist],defVars= read.dt[1:(i-1), varname])
+      .evalDef(newvar = read.dt[i, varname], newform = read.dt[i, formula], newdist = read.dt[i, dist], defVars = read.dt[1:(i - 1), varname])
     }
   }
 
 
-  attr(read.dt,"id") <- id
+  attr(read.dt, "id") <- id
   return(read.dt[])
-
 }
 
 #' Read external csv data set definitions for adding columns
@@ -278,18 +280,20 @@ defRead <- function(filen, id = "id") {
 #' @examples
 #' # Create temporary external "csv" files
 #'
-#' test1 <- c("varname,formula,variance,dist,link",
-#'            "nr,7, 0,nonrandom,identity"
-#'           )
+#' test1 <- c(
+#'   "varname,formula,variance,dist,link",
+#'   "nr,7, 0,nonrandom,identity"
+#' )
 #'
 #' tfcsv1 <- tempfile()
 #' writeLines(test1, tfcsv1)
 #'
-#' test2 <- c("varname,formula,variance,dist,link",
-#'            "x1,.4, 0,binary,identity",
-#'            "y1,nr + x1 * 2,8,normal,identity",
-#'            "y2,nr - 0.2 * x1,0,poisson, log"
-#'           )
+#' test2 <- c(
+#'   "varname,formula,variance,dist,link",
+#'   "x1,.4, 0,binary,identity",
+#'   "y1,nr + x1 * 2,8,normal,identity",
+#'   "y2,nr - 0.2 * x1,0,poisson, log"
+#' )
 #'
 #' tfcsv2 <- tempfile()
 #' writeLines(test2, tfcsv2)
@@ -311,21 +315,19 @@ defRead <- function(filen, id = "id") {
 #' @export
 
 defReadAdd <- function(filen) {
+  if (!file.exists(filen)) stop("No such file")
 
-  if (! file.exists(filen)) stop("No such file")
-
-  read.df <- utils::read.csv(filen, header=TRUE, as.is = TRUE) # do not read as factors
+  read.df <- utils::read.csv(filen, header = TRUE, as.is = TRUE) # do not read as factors
   read.dt <- data.table::data.table(read.df)
 
-  if (! all(names(read.dt) == c("varname",
-                                "formula", "variance", "dist", "link"))) {
-
+  if (!all(names(read.dt) == c(
+    "varname",
+    "formula", "variance", "dist", "link"
+  ))) {
     stop("Field names do not match")
-
   }
 
   return(read.dt[])
-
 }
 
 #' Read external csv data set definitions for adding columns
@@ -335,18 +337,20 @@ defReadAdd <- function(filen) {
 #' @examples
 #' # Create temporary external "csv" files
 #'
-#' test1 <- c("varname,formula,variance,dist,link",
-#'            "x,0.3;0.4;0.3,0,categorical,identity"
-#'           )
+#' test1 <- c(
+#'   "varname,formula,variance,dist,link",
+#'   "x,0.3;0.4;0.3,0,categorical,identity"
+#' )
 #'
 #' tfcsv1 <- tempfile()
 #' writeLines(test1, tfcsv1)
 #'
-#' test2 <- c("condition,formula,variance,dist,link",
-#'            "x == 1, 0.4,0,binary,identity",
-#'            "x == 2, 0.6,0,binary,identity",
-#'            "x >= 3, 0.8,0,binary,identity"
-#'           )
+#' test2 <- c(
+#'   "condition,formula,variance,dist,link",
+#'   "x == 1, 0.4,0,binary,identity",
+#'   "x == 2, 0.6,0,binary,identity",
+#'   "x >= 3, 0.8,0,binary,identity"
+#' )
 #'
 #' tfcsv2 <- tempfile()
 #' writeLines(test2, tfcsv2)
@@ -370,20 +374,16 @@ defReadAdd <- function(filen) {
 #' @export
 
 defReadCond <- function(filen) {
+  if (!file.exists(filen)) stop("No such file")
 
-  if (! file.exists(filen)) stop("No such file")
-
-  read.df <- utils::read.csv(filen, header=TRUE, as.is = TRUE) # do not read as factors
+  read.df <- utils::read.csv(filen, header = TRUE, as.is = TRUE) # do not read as factors
   read.dt <- data.table::data.table(read.df)
 
-  if (! all(names(read.dt) == c("condition", "formula", "variance", "dist", "link"))) {
-
+  if (!all(names(read.dt) == c("condition", "formula", "variance", "dist", "link"))) {
     stop("field names do not match")
-
   }
 
   return(read.dt[])
-
 }
 
 #' Add single row to survival definitions
@@ -399,13 +399,15 @@ defReadCond <- function(filen) {
 #' # Baseline data definitions
 #'
 #' def <- defData(varname = "x1", formula = .5, dist = "binary")
-#' def <- defData(def,varname = "x2", formula = .5, dist = "binary")
-#' def <- defData(def,varname = "grp", formula = .5, dist = "binary")
+#' def <- defData(def, varname = "x2", formula = .5, dist = "binary")
+#' def <- defData(def, varname = "grp", formula = .5, dist = "binary")
 #'
 #' # Survival data definitions
 #'
-#' sdef <- defSurv(varname = "survTime", formula = "1.5*x1",
-#'                 scale = "grp*50 + (1-grp)*25", shape = "grp*1 + (1-grp)*1.5")
+#' sdef <- defSurv(
+#'   varname = "survTime", formula = "1.5*x1",
+#'   scale = "grp*50 + (1-grp)*25", shape = "grp*1 + (1-grp)*1.5"
+#' )
 #'
 #' sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
 #'
@@ -420,7 +422,6 @@ defReadCond <- function(filen) {
 #' dtSurv <- genSurv(dtSurv, sdef)
 #'
 #' head(dtSurv)
-#'
 #' @export
 
 defSurv <- function(dtDefs = NULL,
@@ -428,20 +429,20 @@ defSurv <- function(dtDefs = NULL,
                     formula = 0,
                     scale,
                     shape = 1) {
-
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
 
-  dt.new <- data.table::data.table(varname,
-                                   formula,
-                                   scale,
-                                   shape)
+  dt.new <- data.table::data.table(
+    varname,
+    formula,
+    scale,
+    shape
+  )
 
-  l = list(dtDefs,dt.new)
+  l = list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
 
   return(defNew[])
-
 }

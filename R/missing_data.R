@@ -15,9 +15,9 @@
 #' @examples
 #' def1 <- defData(varname = "m", dist = "binary", formula = .5)
 #' def1 <- defData(def1, "u", dist = "binary", formula = .5)
-#' def1 <- defData(def1, "x1", dist="normal", formula = "20*m + 20*u", variance = 2)
-#' def1 <- defData(def1, "x2", dist="normal", formula = "20*m + 20*u", variance = 2)
-#' def1 <- defData(def1, "x3", dist="normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x1", dist = "normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x2", dist = "normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x3", dist = "normal", formula = "20*m + 20*u", variance = 2)
 #'
 #' dtAct <- genData(1000, def1)
 #'
@@ -42,25 +42,25 @@ defMiss <- function(dtDefs = NULL,
                     varname,
                     formula,
                     logit.link = FALSE,
-                    baseline=FALSE,
-                    monotonic=FALSE) {
-
+                    baseline = FALSE,
+                    monotonic = FALSE) {
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
 
-  dt.new <- data.table::data.table(varname,
-                                   formula,
-                                   logit.link,
-                                   baseline,
-                                   monotonic)
+  dt.new <- data.table::data.table(
+    varname,
+    formula,
+    logit.link,
+    baseline,
+    monotonic
+  )
 
-  l = list(dtDefs,dt.new)
+  l = list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
 
   return(defNew[])
-
 }
 
 #' Generate missing data
@@ -75,9 +75,9 @@ defMiss <- function(dtDefs = NULL,
 #' @examples
 #' def1 <- defData(varname = "m", dist = "binary", formula = .5)
 #' def1 <- defData(def1, "u", dist = "binary", formula = .5)
-#' def1 <- defData(def1, "x1", dist="normal", formula = "20*m + 20*u", variance = 2)
-#' def1 <- defData(def1, "x2", dist="normal", formula = "20*m + 20*u", variance = 2)
-#' def1 <- defData(def1, "x3", dist="normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x1", dist = "normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x2", dist = "normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x3", dist = "normal", formula = "20*m + 20*u", variance = 2)
 #'
 #' dtAct <- genData(1000, def1)
 #'
@@ -115,65 +115,57 @@ genMiss <- function(dtName, missDefs, idvars,
   setkeyv(dtName, idvars)
   tmDefs <- copy(missDefs)
 
-  if (! repeated) {
-
+  if (!repeated) {
     dtMiss <- dtName[, c(idvars), with = FALSE]
     # names(dtMiss) <- c(idvars) # removed 2017919 - possible error in CRAN check
 
-    for (i in (1 : nrow(tmDefs))) {
+    for (i in (1:nrow(tmDefs))) {
       dtTemp = copy(dtName)
-      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i,])
+      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ])
       vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
 
       dtMiss <- cbind(dtMiss, vec1)
-
     }
-
   } else { # repeated
-    
+
     includesLags <- .checkLags(tmDefs[, formula])
 
     if (includesLags) {
-      
       lags <- .addLags(dtName, tmDefs[, formula])
-      
+
       tmDefs[, formula := lags[[2]]]
       dtName <- lags[[1]]
-      
     }
-    
+
     dtMiss <- dtName[, c(idvars, periodvar), with = FALSE]
     colnames <- c(idvars, "period")
     setnames(dtMiss, colnames)
 
-    nPeriods <- dtMiss[,max(period)] + 1
+    nPeriods <- dtMiss[, max(period)] + 1
 
-    for (i in (1 : nrow(tmDefs))) {
-
+    for (i in (1:nrow(tmDefs))) {
       if (tmDefs[i, baseline]) {
-
         dtTemp <- dtName[period == 0]
-        mat1 <- .genMissDataMat(dtName[period == 0], dtTemp, idvars, tmDefs[i,])
+        mat1 <- .genMissDataMat(dtName[period == 0], dtTemp, idvars, tmDefs[i, ])
         vec1 <- addPeriods(mat1, nPeriods, idvars)[, tmDefs[i, varname],
-                                                   with=FALSE]
+          with = FALSE
+        ]
 
         dtMiss <- cbind(dtMiss, vec1)
-
       } else { # not just baseline can be missing
 
         dtTemp = copy(dtName)
-        mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i,])
+        mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ])
         vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
         dtMiss <- cbind(dtMiss, vec1)
 
         if (tmDefs[i, monotonic]) { # monotonic missing
 
-          dt.fmiss <- dtMiss[eval(parse(text=tmDefs[i, varname])) == 1, list(fmiss = min(period)), keyby = eval(idvars)]
+          dt.fmiss <- dtMiss[eval(parse(text = tmDefs[i, varname])) == 1, list(fmiss = min(period)), keyby = eval(idvars)]
           data.table::setkeyv(dtMiss, idvars)
           dtMiss <- dt.fmiss[dtMiss]
           dtMiss[period > fmiss, eval(tmDefs[i, varname]) := 1]
-          dtMiss[,fmiss := NULL]
-
+          dtMiss[, fmiss := NULL]
         }
       }
     }
@@ -184,13 +176,12 @@ genMiss <- function(dtName, missDefs, idvars,
   names(addon) <- names(dtName[, !names(dtMiss), with = FALSE])
 
   dtbind <- cbind(dtMiss, addon)
-  
+
   if (includesLags) {
     dtbind[, (lags[[3]]) := NULL]
   }
-  
-  dtbind[]
 
+  dtbind[]
 }
 
 #### Generate observed only data ####
@@ -205,9 +196,9 @@ genMiss <- function(dtName, missDefs, idvars,
 #' @examples
 #' def1 <- defData(varname = "m", dist = "binary", formula = .5)
 #' def1 <- defData(def1, "u", dist = "binary", formula = .5)
-#' def1 <- defData(def1, "x1", dist="normal", formula = "20*m + 20*u", variance = 2)
-#' def1 <- defData(def1, "x2", dist="normal", formula = "20*m + 20*u", variance = 2)
-#' def1 <- defData(def1, "x3", dist="normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x1", dist = "normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x2", dist = "normal", formula = "20*m + 20*u", variance = 2)
+#' def1 <- defData(def1, "x3", dist = "normal", formula = "20*m + 20*u", variance = 2)
 #'
 #' dtAct <- genData(1000, def1)
 #'
@@ -229,7 +220,6 @@ genMiss <- function(dtName, missDefs, idvars,
 #' @export
 
 genObs <- function(dtName, dtMiss, idvars) {
-
   if (missing(dtName)) {
     stop("Argument dtName is missing", call. = FALSE)
   }
@@ -249,12 +239,10 @@ genObs <- function(dtName, dtMiss, idvars) {
   dtTemp <- dtName[, !idvars, with = FALSE]
 
   for (i in names(dtTemp)) {
-
     selectV <- as.vector(dtMiss[, i, with = FALSE] == 1)
     # dtTemp[selectV, i:= as.integer(NA), with = FALSE]  # old version - remove warning
     dtTemp[selectV, (i) := as.integer(NA)]
   }
 
   return(cbind(dtName[, idvars, with = FALSE], dtTemp))
-
 }
