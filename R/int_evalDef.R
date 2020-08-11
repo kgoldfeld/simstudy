@@ -1,5 +1,3 @@
-#### .evalDef ####
-
 # Internal function to check new data definition
 #
 # @param newvar Name of new variable
@@ -7,6 +5,7 @@
 # @param defVars Existing column names
 # @return Nothing is returned if all tests are passed. If a test fails,
 # execution is halted.
+
 .evalDef <-
   function(newvar,
            newform,
@@ -72,8 +71,7 @@
         .isIdLogit(link)
       },
       
-      beta = ,
-      
+      beta = ,      
       binomial = {
         .isValidArithmeticFormula(newform, defVars)
         .isValidArithmeticFormula(variance, defVars)
