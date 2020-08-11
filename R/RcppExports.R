@@ -2,13 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 matMultinom <- function(probmatrix) {
-  .Call(`_simstudy_matMultinom`, probmatrix)
+    .Call(`_simstudy_matMultinom`, probmatrix)
 }
 
 markovChains <- function(nchains, P, chainLen, state0) {
-  .Call(`_simstudy_markovChains`, nchains, P, chainLen, state0)
+    .Call(`_simstudy_markovChains`, nchains, P, chainLen, state0)
 }
 
 clipVec <- function(id, seq, event) {
-  .Call(`_simstudy_clipVec`, id, seq, event)
+    .Call(`_simstudy_clipVec`, id, seq, event)
 }
+
