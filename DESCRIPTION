@@ -1,13 +1,13 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.1.17
+Version: 0.1.16.9000
 Date: 2020-04-01
-Authors@R: person(given = "Keith",
+Authors@R: c(person(given = "Keith",
                   family = "Goldfeld",
                   role = c("aut","cre"),
                   email = "keith.goldfeld@nyumc.org",
-                  comment = c(ORCID = "0000-0002-0292-8780"))
+                  comment = c(ORCID = "0000-0002-0292-8780")))
 Description: Simulates data sets in order to explore modeling
     techniques or better understand data generating processes. The user
     specifies a set of relationships between covariates, and generates

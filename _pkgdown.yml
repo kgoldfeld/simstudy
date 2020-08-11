@@ -1,6 +1,2 @@
 destination: docs/
-template:
-  params:
-    bootswatch: journal
-
-url: https://kgoldfeld.github.io/simstudy
+useurl: https://kgoldfeld.github.io/simstudy
