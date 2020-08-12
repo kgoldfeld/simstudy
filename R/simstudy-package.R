@@ -18,7 +18,7 @@ NULL
 #'  String. Variables defined via [defData()] and variables within the
 #'  parent environment (prefixed with `..`) can be used within the formula.
 #'  Functions from the parent environment can be used without a prefix.
-#'@param variance Number. Default is `0``.
+#'@param variance Number. Default is `0`.
 #'@param link String identifying the link function to be used. Default is
 #' `identity`.
 #'@details For details about the statistical distributions please see
