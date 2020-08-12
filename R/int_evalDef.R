@@ -1,10 +1,11 @@
-# Internal function to check new data definition
-#
-# @param newvar Name of new variable
-# @param newfrom New formula
-# @param defVars Existing column names
-# @return Nothing is returned if all tests are passed. If a test fails,
-# execution is halted.
+#' Internal function to check new data definition
+#'
+#' @param newvar Name of new variable
+#' @param newfrom New formula
+#' @param defVars Existing column names
+#' @return Nothing is returned if all tests are passed. If a test fails,
+#' execution is halted.
+#' @noRd
 
 .evalDef <-
   function(newvar,

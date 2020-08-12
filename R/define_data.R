@@ -1,6 +1,6 @@
 #' Add single row to definitions table of conditions that will be used to add data to an
 #' existing definitions table
-#'
+#' @md 
 #' @param dtDefs Name of definition table to be modified. Null if this is a new definition.
 #' @param condition Formula specifying condition to be checked
 #' @param formula An R expression for mean (string)
@@ -8,6 +8,7 @@
 #' @param dist Distribution. For possibilities, see details
 #' @param link The link function for the mean, see details
 #' @return A data.table named dtName that is an updated data definitions table
+#' @seealso [distributions]
 #' @examples
 #' # New data set
 #'
@@ -74,7 +75,7 @@ defCondition <- function(dtDefs = NULL,
 #' @useDynLib simstudy, .registration = TRUE
 #' @importFrom Rcpp evalCpp
 #' @import data.table
-#'
+#' @md
 #' @param dtDefs Definition data.table to be modified
 #' @param varname Name (string) of new variable
 #' @param formula An R expression for mean (string)
@@ -83,10 +84,8 @@ defCondition <- function(dtDefs = NULL,
 #' @param link The link function for the mean, see details
 #' @param id A string indicating the field name for the unique record identifier
 #' @return A data.table named dtName that is an updated data definitions table
-#' @details The possible data distributions include "normal", "poisson",
-#' "noZeroPoisson", "negBinomial" "binary", "binomial", "beta", "uniform",
-#' "uniformInt", "categorical", "gamma", "exponential",
-#' "mixture", and "nonrandom."
+#' @seealso [distributions]
+#' @details The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
 #'
 #' @examples
 #' def <- defData(varname = "xNr", dist = "nonrandom", formula = 7, id = "idnum")
@@ -151,6 +150,7 @@ defData <- function(dtDefs = NULL,
 #' @param variance Number
 #' @param dist Distribution. For possibilities, see details
 #' @param link The link function for the mean, see details
+#' @seealso [distributions]
 #' @return A data.table named dtName that is an updated data definitions table
 #' @examples
 #' # New data set
@@ -203,6 +203,7 @@ defDataAdd <- function(dtDefs = NULL,
 #' @param filen String file name, including full path. Must be a csv file.
 #' @param id string that includes name of id field. Defaults to "id"
 #' @return A data.table with data set definitions
+#' @seealso [distributions]
 #' @examples
 #' # Create temporary external "csv" file
 #'
@@ -277,6 +278,7 @@ defRead <- function(filen, id = "id") {
 #'
 #' @param filen String file name, including full path. Must be a csv file.
 #' @return A data.table with data set definitions
+#' @seealso [distributions]
 #' @examples
 #' # Create temporary external "csv" files
 #'
@@ -334,6 +336,7 @@ defReadAdd <- function(filen) {
 #'
 #' @param filen String file name, including full path. Must be a csv file.
 #' @return A data.table with data set definitions
+#' @seealso [distributions]
 #' @examples
 #' # Create temporary external "csv" files
 #'

@@ -66,3 +66,6 @@ defC
 dt <- addCondition(defC, dt, "z")
 dt
 }
+\seealso{
+\link{distributions}
+}

@@ -36,10 +36,7 @@ A data.table named dtName that is an updated data definitions table
 Add single row to definitions table
 }
 \details{
-The possible data distributions include "normal", "poisson",
-"noZeroPoisson", "negBinomial" "binary", "binomial", "beta", "uniform",
-"uniformInt", "categorical", "gamma", "exponential",
-"mixture", and "nonrandom."
+The possible data distributions are: normal, binary, binomial, poisson, noZeroPoisson, uniform, categorical, gamma, beta, nonrandom, uniformInt, negBinomial, exponential, mixture.
 }
 \examples{
 def <- defData(varname = "xNr", dist = "nonrandom", formula = 7, id = "idnum")
@@ -50,4 +47,7 @@ def <- defData(def, varname = "xCat", formula = "0.3;0.2;0.5", dist = "categoric
 def <- defData(def, varname = "xGamma", dist = "gamma", formula = "5+xCat", variance = 1, link = "log")
 def <- defData(def, varname = "xBin", dist = "binary", formula = "-3 + xCat", link = "logit")
 def
+}
+\seealso{
+\link{distributions}
 }

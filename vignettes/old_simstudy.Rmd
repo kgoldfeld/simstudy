@@ -1,0 +1,1390 @@
+---
+title: "Simulating study data_2"
+author: "Keith S. Goldfeld"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simulating study data_2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<STYLE TYPE="text/css">
+<!--
+  td{
+    font-family: Arial; 
+    font-size: 8pt;
+    height: 2px;
+    padding:0px;
+    cellpadding="0";
+    cellspacing="0";
+    text-align: center;
+  }
+  th {
+    font-family: Arial; 
+    font-size: 9pt;
+    height: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
+  table { 
+    border-spacing: 0px;
+    border-collapse: collapse;
+  }
+--->
+</STYLE>
+
+```{r, echo = FALSE, message = FALSE}
+
+library(simstudy)
+library(ggplot2)
+library(scales)
+library(grid)
+library(gridExtra)
+library(survival)
+library(knitr)
+library(gee)
+library(splines)
+
+set.seed(33333)
+
+opts_chunk$set(tidy.opts=list(width.cutoff=75), tidy=TRUE)
+
+plotcolors <- c("#B84226", "#1B8445", "#1C5974")
+
+cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
+                "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+ggtheme <- function(panelback = "white") {
+  
+  ggplot2::theme(
+    panel.background = element_rect(fill = panelback),
+    panel.grid = element_blank(),
+    axis.ticks =  element_line(colour = "black"),
+    panel.spacing =unit(0.25, "lines"),  # requires package grid
+    panel.border = element_rect(fill = NA, colour="gray90"), 
+    plot.title = element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size = 8)
+  )  
+  
+}
+
+splotfunc <- function(dt, ptitle) {
+
+  dtplot <- dt[,.N,keyby=.(male, over65, rxGrp)][, .(rxGrp, grp = male * 2 + over65 * 1, N)]
+  ggplot(dtplot, aes(factor(grp), N)) +
+    geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position = "dodge", stat="identity") +
+    scale_fill_manual(values = plotcolors) +
+    ggtitle(ptitle) +
+    theme(legend.position = "none") +
+    ggtheme() +
+    xlab("Strata") +
+    ylim(0,80)
+}
+
+aplotfunc <- function(dt, ptitle) {
+
+  dtplot <- dt[,.N,keyby=.(rxGrp)]
+  ggplot(dtplot, aes(factor(rxGrp), N)) +
+    geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position="dodge", stat="identity", width=.5) +
+    scale_fill_manual(values = plotcolors) +
+    ggtitle(ptitle) +
+    theme(legend.position = "none") +
+    ggtheme() +
+    xlab("Treatment group") +
+    ylim(0,150)
+}
+
+ggmissing <- function(dtPlot,varSelect=NULL,varLevel=NULL, idvar = "id",
+                      periodvar = "period", missvar,
+                      pcolor="#738e75", title = NULL) {
+
+  dtP <- copy(dtPlot)
+
+  if (! is.null(varSelect)) dtP <- dtP[eval(parse(text=varSelect)) == varLevel]
+
+  xp <- ggplot(data=dtP, aes(y = factor(eval(parse(text=idvar))),
+                             x = eval(parse(text=periodvar)))) +
+    geom_tile(aes(fill=factor(eval(parse(text=missvar)))),
+                  color="white") +
+    ggtheme()+
+    theme(axis.text=element_blank(),
+          axis.ticks=element_blank(),
+          axis.title=element_blank(),
+          legend.position="none",
+          plot.title=element_text(size=8)
+    ) +
+    scale_fill_manual(values=c("grey80",pcolor))
+
+  if (is.null(title)) {
+    return(xp)
+  } else {
+    return(xp + ggtitle(title))
+  }
+}
+
+ggsurv_m <- function(
+  s,
+  CI         = 'def',
+  plot.cens  = TRUE,
+  surv.col   = 'gg.def',
+  cens.col   = 'gg.def',
+  lty.est    = 1,
+  lty.ci     = 2,
+  cens.shape = 3,
+  back.white = FALSE,
+  xlab       = 'Time',
+  ylab       = 'Survival',
+  main       = '',
+  strata     = length(s$strata),
+  labels     = NULL
+) {
+  
+  s <- fit
+  
+  n <- s$strata
+  
+  strataEqualNames <- unlist(strsplit(names(s$strata), '='))
+  groups <- factor(
+    strataEqualNames[seq(2, 2 * strata, by = 2)],
+    levels = strataEqualNames[seq(2, 2 * strata, by = 2)]
+  )
+  
+  gr.name <-  strataEqualNames[1]
+  gr.df   <- vector('list', strata)
+  n.ind   <- cumsum(c(0,n))
+  
+  for (i in 1:strata) {
+    indI <- (n.ind[i]+1):n.ind[i+1]
+    gr.df[[i]] <- data.frame(
+      time  = c(0, s$time[ indI ]),
+      surv  = c(1, s$surv[ indI ]),
+      up    = c(1, s$upper[ indI ]),
+      low   = c(1, s$lower[ indI ]),
+      cens  = c(0, s$n.censor[ indI ]),
+      group = rep(groups[i], n[i] + 1)
+    )
+  }
+  
+  dat      <- do.call(rbind, gr.df)
+  dat.cens <- subset(dat, cens != 0)
+  
+  pl <- ggplot(dat, aes(x = time, y = surv, group = group)) +
+    geom_step(aes(col = group, lty = group)) +
+    xlab(xlab) +
+    ylab(ylab) +
+    ggtitle(main)
+  
+  pl <- if(surv.col[1] != 'gg.def'){
+    scaleValues <- if (length(surv.col) == 1) {
+      rep(surv.col, strata)
+    } else{
+      surv.col
+    }
+    pl + scale_colour_manual(name = gr.name, values = scaleValues, labels=labels)
+    
+  } else {
+    pl + scale_colour_discrete(name = gr.name, labels=labels)
+  }
+  
+  lineScaleValues <- if (length(lty.est) == 1) {
+    rep(lty.est, strata)
+  } else {
+    lty.est
+  }
+  pl <- pl + scale_linetype_manual(name = gr.name, values = lineScaleValues)
+
+  if(identical(CI,TRUE)) {
+    if(length(surv.col) > 1 || length(lty.est) > 1){
+      stop('Either surv.col or lty.est should be of length 1 in order to plot 95% CI with multiple strata')
+    }
+
+    stepLty <- if ((length(surv.col) > 1 | surv.col == 'gg.def')[1]) {
+      lty.ci
+    } else {
+      surv.col
+    }
+    pl <- pl +
+      geom_step(aes(y = up, lty = group), lty = stepLty) +
+      geom_step(aes(y = low,lty = group), lty = stepLty)
+  }
+
+  if (identical(plot.cens, TRUE) ){
+    if (nrow(dat.cens) == 0) {
+      stop('There are no censored observations')
+    }
+    if (length(cens.col) == 1) {
+      col <- ifelse(cens.col == 'gg.def', 'red', cens.col)
+      pl <- pl + geom_point(
+        data    = dat.cens,
+        mapping = aes(y = surv),
+        shape   = cens.shape,
+        col     = col
+      )
+
+    } else if (length(cens.col) > 0) {
+    # if(!(identical(cens.col,surv.col) || is.null(cens.col))) {
+      #   warning ("Color scales for survival curves and censored points don't match.\nOnly one color scale can be used. Defaulting to surv.col")
+      # }
+
+
+      if (! identical(cens.col, "gg.def")) {
+        if (length(cens.col) != strata) {
+          warning("Color scales for censored points don't match the number of groups. Defaulting to ggplot2 default color scale")
+          cens.col <- "gg.def"
+        }
+      }
+
+      if (identical(cens.col, "gg.def")) {
+        pl <- pl + geom_point(
+          data = dat.cens,
+          mapping = aes(y=surv, col = group),
+          shape = cens.shape,
+          show.legend = FALSE
+        )
+      } else {
+
+        uniqueGroupVals = unique(dat.cens$group)
+        if (length(cens.shape) == 1) {
+          cens.shape = rep(cens.shape, strata)
+        }
+
+        if (length(cens.shape) != strata) {
+          warning("The length of the censored shapes does not match the number of groups (or 1). Defaulting shape = 3 (+)")
+          cens.shape = rep(3, strata)
+        }
+        for (i in seq_along(uniqueGroupVals)) {
+          groupVal = uniqueGroupVals[i]
+          dtGroup <- subset(dat.cens, group == groupVal)
+
+          pl <- pl + geom_point(
+            data = dtGroup,
+            mapping = aes(y=surv),
+            color = I(cens.col[i]),
+            shape = cens.shape[i],
+            show.legend = FALSE
+          )
+
+        }
+      }
+
+    }
+  }
+
+  if(identical(back.white, TRUE)) {
+    pl <- pl + theme_bw()
+  }
+  
+  pl
+}
+
+```
+
+Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to generate **survival** data, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, to create data sets with **missing** data, and to create non-linear relationships with underlying **spline** curves.
+
+## Defining the Data
+
+The key to simulating data in `simstudy` is the creation of series of data definition tables that look like this:
+
+```{r,  echo=FALSE}
+def <- defData(varname = "nr", dist = "nonrandom", formula=7, id = "idnum")
+def <- defData(def,varname="x1", dist="uniform", formula="10;20")
+def <- defData(def,varname="y1", formula="nr + x1 * 2", variance=8)
+def <- defData(def,varname="y2", dist="poisson", formula="nr - 0.2 * x1",link="log")
+def <- defData(def, varname = "xnb", dist = "negBinomial" , formula="nr - 0.2 * x1", variance = 0.05, link = "log")
+def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5", dist="categorical")
+def <- defData(def,varname="g1", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
+def <- defData(def, varname = "a1", dist = "binary" , formula="-3 + xCat", link="logit")
+def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit")
+
+knitr::kable(def)
+```
+
+These *definition* tables can be generated two ways. One option is to to use any external editor that allows the creation of `csv` files, which can be read in with a call to `defRead`. An  alternative is to make repeated calls to the function `defData`. Here, we illustrate the R code that builds this definition table internally:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "nr", dist = "nonrandom", formula=7, id = "idnum")
+def <- defData(def,varname="x1",dist="uniform",formula="10;20")
+def <- defData(def,varname="y1",formula="nr + x1 * 2",variance=8)
+def <- defData(def,varname="y2",dist="poisson",formula="nr - 0.2 * x1",link="log")
+def <- defData(def, varname = "xnb", dist = "negBinomial" , formula="nr - 0.2 * x1", variance = 0.05, link = "log")
+def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5",dist="categorical")
+def <- defData(def,varname="g1", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
+def <- defData(def, varname = "a1", dist = "binary" , formula="-3 + xCat", link="logit")
+def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit")
+```
+
+The first call to `defData` without specifying a definition name (in this example the definition name is *def*) creates a **new** data.table with a single row. An additional row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `defData` the user defines a variable name, a distribution (the default is 'normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
+
+The possible distributions include **normal**, **gamma**, **poisson**, **zero-truncated poisson**, **negative binomial**, **binary**, **binomial**, **uniform**, **uniform integer**, **categorical**, and **deterministic/non-random**. For all of these distributions, key parameters defining the distribution are entered in the `formula`, `variance`, and `link` fields. 
+
+In the case of the **normal**, **gamma**, and **negative binomial** distributions, the formula specifies the mean. The formula can be a scalar value (number) or a string that represents a function of previously defined variables in the data set definition (or, as we will see later, in a previously generated data set). In the example, the mean of `y1`, a normally distributed value, is declared as a linear function of `nr` and `x1`, and the mean of `g1` is a function of the category defined by `xCat`. The `variance` field is defined only for normal and gamma random variables, and can only be defined as a scalar value. In the case of gamma random and negative binomial variables, the value entered in variance field is really a dispersion value $d$. The variance of a gamma distributed variable will be $d \times mean^2$, and for a negative binomial distributed variable, the variance will be $mean + d*mean^2$. \
+
+In the case of the **poisson**, **zero-truncated poisson**, and **binary** distributions, the formula also specifies the mean. The variance is not a valid parameter in these cases, but the `link` field is. The default link is 'identity' but a 'log' link is available for the Poisson distributions and a "logit" link is available for the binary outcomes. In this example, `y2` is defined as Poisson random variable with a mean that is function of `nr` and `x1` on the log scale. For binary variables, which take a value of 0 or 1, the formula represents probability (with the 'identity' link) or log odds (with the 'logit' link) of the variable having a value of 1. In the example, `a1` has been defined as a binary random variable with a log odds that is a function of `xCat`.  \
+
+In the case of the *binomial* distribution, the formula specifies the probability of success $p$, and the variance field is used to specify the number of trials $n$. The mean of this distribution is $n*p$, and the variance is $n*p*(1-p)$.
+  
+Variables defined with a **uniform**, **uniform integer**, **categorical**, or **deterministic/non-random** distribution are specified using the formula only. The `variance` and `link` fields are not used in these cases.  \
+  
+For a uniformly distributed variable, The formula is a string with the format "a;b", where *a* and *b* are scalars or functions of previously defined variables. The uniform distribution has two parameters - the minimum and the maximum. In this case, *a* represents the minimum and *b* represents the maximum.  \
+  
+For a categorical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1 ; p_2 ; ... ; p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probability of category 2, etc. The probabilities can be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilities 0.3, 0.2, and 0.5, respectively.  \
+  
+Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as `nr`.
+
+## Generating the Data
+
+After the data set definitions have been created, a new data set with \(n\) observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set definitions in **`def`**, and then stored in the object **`dt`**:
+
+```{r, tidy = TRUE}
+dt <- genData(1000, def)
+dt
+```
+
+New data can be added to an existing data set with a call to function **`addColumns`**. The new data definitions are created with a call to **`defData`** and then included as an argument in the call to **`addColumns`**:
+
+```{r, tidy = TRUE}
+addef <- defDataAdd(varname = "zExtra", dist = "normal", formula = '3 + y1', 
+                 variance = 2)
+
+dt <- addColumns(addef, dt)
+dt
+```
+
+## Generating the Treatment/Exposure
+
+Treatment assignment can be accomplished through the original data generation process, using `defData` and `genData`. However, the functions `trtAssign` and `trtObserve` provide more options to generate treatment assignment.
+
+### Assigned treatment
+
+Treatment assignment can simulate how treatment is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.
+
+First, create the data definition:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "male", dist = "binary", formula = .5 , id="cid")
+def <- defData(def, varname = "over65", dist = "binary", formula = "-1.7 + .8*male", link="logit")
+def <- defData(def, varname = "baseDBP", dist = "normal", formula = 70, variance = 40)
+
+dtstudy <- genData(330, def)
+```
+
+*Balanced treatment assignment, stratified by gender and age category (not blood pressure)*
+```{r, tidy = TRUE}
+study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"), grpName = "rxGrp")
+
+study1
+```
+
+*Balanced treatment assignment (without stratification)*
+```{r, tidy = TRUE}
+study2 <- trtAssign(dtstudy , n=3, balanced = TRUE, grpName = "rxGrp")
+```
+
+*Random (unbalanced) treatment assignment*
+```{r, tidy = TRUE}
+study3 <- trtAssign(dtstudy , n=3, balanced = FALSE, grpName = "rxGrp")
+```
+
+*Comparison of three treatment assignment mechanisms*
+```{r, tidy = TRUE, echo = FALSE, fig.width = 4, fig.height = 6}
+p1 <- splotfunc(study1, "Balanced within strata")
+p1a <- aplotfunc(study1, "")
+
+p2 <- splotfunc(study2, "Balanced without strata")
+p2a <- aplotfunc(study2, "")
+
+p3 <- splotfunc(study3, "Random allocation")
+p3a <- aplotfunc(study3, "")
+
+grid.arrange(p1, p1a, p2, p2a, p3, p3a, ncol=2)
+```
+
+### Observed treatment
+
+If exposure or treatment is observed (rather than randomly assigned), use `trtObserve` to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:
+
+```{r, tidy = TRUE}
+formula1 <- c("-2 + 2*male - .5*over65", "-1 + 2*male + .5*over65")
+dtExp <- trtObserve(dtstudy, formulas = formula1, logit.link = TRUE, grpName = "exposure")
+```
+
+Here are the exposure distributions by gender and age:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5}
+dtplot1 <- dtExp[,.N,keyby=.(male,exposure)]
+p1 <- ggplot(data = dtplot1, aes(x=factor(male), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("Female", "Male")) +
+  ylab("Number exposed")+
+  ggtitle("Gender")
+
+dtplot2 <- dtExp[,.N,keyby=.(over65,exposure)]
+p2 <- ggplot(data = dtplot2, aes(x=factor(over65), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("65 or younger", "Over 65")) +
+  ylab("Number exposed") +
+  ggtitle("Age")
+
+grid.arrange(p1,p2,nrow=1)
+
+```
+
+Here is a second case of three exposures where the exposure is independent of any covariates. Note that specifying the formula as `c(.35, .45)` is the same as specifying it is `c(.35, .45, .20)`. Also, when referring to probabilities, the identity link is used:
+
+```{r, tidy = TRUE}
+formula2 <- c(.35, .45)
+
+dtExp2 <- trtObserve(dtstudy, formulas = formula2, logit.link = FALSE, grpName = "exposure")
+```
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5}
+dtplot1a <- dtExp2[,.N,keyby=.(male,exposure)]
+p1a <- ggplot(data = dtplot1a, aes(x=factor(male), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("Female", "Male")) +
+  ylab("Number exposed")+
+  ggtitle("Gender")
+
+dtplot2a <- dtExp2[,.N,keyby=.(over65,exposure)]
+p2a <- ggplot(data = dtplot2a, aes(x=factor(over65), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("65 or younger", "Over 65")) +
+  ylab("Number exposed") +
+  ggtitle("Age")
+
+grid.arrange(p1a,p2a,nrow=1)
+```
+
+## Survival Data
+
+Time-to-event data, including both survival and censoring times, are created using functions `defSurv` and `genSurv`. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the `formula` field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the *shape* of the distribution can be specified. A `shape` value of 1 reflects the *exponential* distribution.
+
+```{r, tidy = TRUE}
+
+# Baseline data definitions
+
+def <- defData(varname = "x1", formula = .5, dist = "binary")
+def <- defData(def,varname = "x2", formula = .5, dist = "binary")
+def <- defData(def,varname = "grp", formula = .5, dist = "binary")
+
+# Survival data definitions
+
+sdef <- defSurv(varname = "survTime", formula = "1.5*x1", scale = "grp*50 + (1-grp)*25", shape = "grp*1 + (1-grp)*1.5")
+sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
+
+sdef
+
+```
+
+The data are generated with calls to `genData` and `genSurv`:
+
+```{r, tidy = TRUE}
+
+# Baseline data definitions
+
+dtSurv <- genData(300, def)
+dtSurv <- genSurv(dtSurv, sdef)
+
+head(dtSurv)
+
+# A comparison of survival by group and x1
+
+dtSurv[,round(mean(survTime),1), keyby = .(grp,x1)]
+
+```
+
+Observed survival times and censoring indicators can be generated by defining new fields:
+
+```{r, tidy = TRUE}
+
+cdef <- defDataAdd(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="nonrandom")
+cdef <- defDataAdd(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="nonrandom")
+
+dtSurv <- addColumns(cdef, dtSurv)
+
+head(dtSurv)
+
+# estimate proportion of censoring by x1 and group
+
+dtSurv[,round(1-mean(status),2), keyby = .(grp,x1)]
+```
+
+Here is a Kaplan-Meier plot of the data by the four groups:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5}
+fit <- survfit(Surv(obsTime, status) ~ x1+grp, data=dtSurv)
+# ggsurvplot(fit, palette = cbbPalette, font.tickslab = c(8), font.x = 10, font.y = 10,
+#            legend = c(0.8, 0.8))
+
+ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette, 
+         labels = c("grp=0 & x1=0","grp=1 & x1=0","grp=0 & x1=1","grp=1 & x1=1")) +
+  ggplot2::guides(linetype = FALSE) +
+  ggtheme("grey95") +
+  theme(legend.position=c(.8,.8), 
+        legend.title = element_blank(),
+        legend.key = element_rect(fill="grey95" , color = "grey95"),
+        legend.background = element_rect(fill="grey95"),
+        legend.key.width = unit(1, "cm")) +
+  guides(colour = guide_legend(override.aes = list(size=1)))
+
+```
+
+
+## Longitudinal Data
+
+To simulate longitudinal data, we start with a 'cross-sectional' data set and convert it to a time-dependent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome `Y` once before and twice after intervention `T` in a randomized trial:
+
+```{r, tidy = TRUE}
+tdef <- defData(varname = "T", dist="binary", formula = 0.5)
+tdef <- defData(tdef, varname = "Y0", dist = "normal", formula = 10, variance = 1)
+tdef <- defData(tdef, varname = "Y1", dist = "normal", formula = "Y0 + 5 + 5 * T", variance = 1)
+tdef <- defData(tdef, varname = "Y2", dist = "normal", formula = "Y0 + 10 + 5 * T", variance = 1)
+
+dtTrial <- genData( 500, tdef)
+dtTrial
+```
+
+The data in longitudinal form is created with a call to **`addPeriods`**. If the cross-sectional data includes time dependent data, then the number of periods `nPeriods` must be the same as the number of time dependent columns. If a variable is not declared as one of the `timevars`, it will be repeated each time period. In this example, the treatment indicator `T` is not specified as a time dependent variable. (Note: if there are two time-dependent variables, it is best to create two data sets and merge them. This will be shown later in the vignette).
+
+```{r, tidy = TRUE}
+dtTime <- addPeriods(dtTrial, nPeriods = 3, idvars = "id", timevars = c("Y0", "Y1", "Y2"), timevarName = "Y")
+dtTime
+```
+
+This is what the longitudinal data look like:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6, fig.height = 3}
+
+avg <- dtTime[,.(Y=mean(Y)), keyby = .(T, period)]
+
+ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
+  geom_jitter(aes(color=factor(T)), size = .5, alpha = .8, width = .25) +
+  geom_line(data=avg, aes(x = factor(period), y = Y, group = T, color= factor(T)), size=1) +
+  xlab("Period") +
+  scale_color_manual(values = plotcolors[c(3,1)], 
+                     labels = c("Ctrl", "Trt")) +
+  theme(legend.title=element_blank()) +
+  ggtheme("grey90") +
+  theme(legend.key=element_rect(fill=NA))
+```
+
+### Longitudinal data with varying observation and interval times
+
+It is also possible to generate longitudinal data with varying numbers of measurement periods as well as varying time intervals between each measurement period. This is done by defining specific variables in the data set that define the number of observations per subject and the average interval time between each observation. `nCount` defines the number of measurements for an individual; `mInterval` specifies the average time between intervals for an subject; and `vInterval` specifies the variance of those interval times. If `vInterval` is set to 0 or is not defined, the interval for a subject is determined entirely by the mean interval. If `vInterval` is greater than 0, time intervals are generated using a gamma distribution with mean and dispersion specified.
+
+In this simple example, the cross-sectional data generates individuals with a different number of measurement observations and different times between each observation. Data for two of these individuals is printed:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "xbase", dist = "normal", formula = 20, variance = 3)
+def <- defData(def,varname = "nCount", dist = "noZeroPoisson", formula = 6)
+def <- defData(def, varname = "mInterval", dist = "gamma", formula = 30, variance = .01)
+def <- defData(def, varname = "vInterval", dist = "nonrandom", formula = .07)
+
+dt <- genData(200, def)
+dt[id %in% c(8,121)]                # View individuals 8 and 121
+```
+
+The resulting longitudinal data for these two subjects can be inspected after a call to `addPeriods`. Notice that no parameters need to be set since all information resides in the data set itself:
+
+```{r, tidy = TRUE}
+dtPeriod <- addPeriods(dt)
+dtPeriod[id %in% c(8,121)]  # View individuals 8 and 121 only
+```
+
+If a time sensitive measurement is added to the data set ...
+
+```{r, tidy = TRUE}
+def2 <- defDataAdd(varname = "Y", dist = "normal", formula = "15 + .1 * time", variance = 5)
+dtPeriod <- addColumns(def2, dtPeriod)
+```
+
+... a plot of a five randomly selected individuals looks like this:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6, fig.height = 3}
+
+sampledID <- sample(1:nrow(dt), 5)
+dtSample <- dtPeriod[id %in% sampledID]
+
+ggplot(data = dtSample, aes(x = time, y = Y, group=id)) +
+  geom_point(aes(color = factor(id))) +
+  geom_line(aes(color = factor(id))) +
+  xlab("Day") +
+  scale_color_manual(values = cbbPalette) +
+  theme(legend.position = "none") +
+  ggtheme("grey90")
+```
+
+## Clustered Data  
+
+The function `genCluster` generates multilevel or clustered data based on a previously generated data set that is one "level" up from the clustered data. For example, if there is a data set that contains school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)
+
+In the example here, we do in fact generate school, class, and student level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides *random effects* at each of these levels.
+
+We start by defining the school level data:
+
+```{r, tidy = TRUE}
+gen.school <- defData(varname="s0", dist = "normal", 
+                      formula = 0, variance = 3, id = "idSchool"
+)
+gen.school <- defData(gen.school, varname = "nClasses", 
+                      dist = "noZeroPoisson", formula = 3
+)
+
+dtSchool <- genData(8, gen.school)
+dtSchool <- trtAssign(dtSchool, n = 2)
+
+dtSchool
+
+```
+
+The classroom level data are generated with a call to `genCluster`, and then school level data is added by a call to `addColumns`:
+
+```{r, tidy = TRUE}
+gen.class <- defDataAdd(varname = "c0", dist = "normal", formula = 0, 
+                     variance = 2)
+gen.class <- defDataAdd(gen.class, varname = "nStudents", dist = "noZeroPoisson", formula = 20
+)
+
+dtClass <- genCluster(dtSchool, "idSchool", numIndsVar = "nClasses",level1ID = "idClass")
+dtClass <- addColumns(gen.class, dtClass)
+
+head(dtClass, 10)
+```
+
+Finally, the student level data are added using the same process:
+
+```{r, tidy = TRUE, tidy.opts= list(width.cutoff = 60)}
+gen.student <- defDataAdd(varname="Male", dist="binary", formula=0.5)
+gen.student <- defDataAdd(gen.student, varname="age", dist = "uniform", formula="9.5; 10.5")
+gen.student <- defDataAdd(gen.student, varname="test", dist = "normal",
+                       formula = "50 - 5*Male + s0 + c0 + 8 * trtGrp",                           variance = 2)
+dtStudent <- genCluster(dtClass,cLevelVar="idClass", numIndsVar = "nStudents",                        level1ID = "idChild")
+
+dtStudent <- addColumns(gen.student, dtStudent)
+```
+
+This is what the clustered data look like. Each classroom is represented by a box, and each school is represented by a color. The intervention group is highlighted by dark outlines:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 7, fig.height = 3}
+ggplot(data=dtStudent,aes(x=factor(idClass),y=test,group=idClass)) +
+  geom_boxplot(aes(color=factor(trtGrp), fill = factor(idSchool)))+
+  xlab("Classes")+
+  ylab("Test scores") +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  scale_fill_manual(values = cbbPalette, guide = FALSE) +
+  scale_color_manual(values = c("grey80", "#000000"),
+                    labels = c("Ctrl", "Rx"),
+                    guide = guide_legend(title = NULL,
+                                         override.aes = list(shape = 1,
+                                                             keywidth=8
+                                                             )
+                                         )
+                    ) +
+  theme(legend.key=element_rect(fill=NA)) +
+  ggtheme()
+```
+
+## Correlated Data
+
+Sometimes it is desirable to simulate correlated data from a correlation matrix directly. For example, a simulation might require two random effects (e.g. a random intercept and a random slope). Correlated data like this could be generated using the `defData` functionality, but it may be more natural to do this with `genCorData` or `addCorData`. Currently, simstudy can only generate multivariate normal using these functions. (In the future, additional distributions will be available.)
+
+`genCorData` requires the user to specify a mean vector `mu`, a single standard deviation or a vector of standard deviations `sigma`, and either a correlation matrix `corMatrix` or a correlation coefficient `rho` and a correlation structure `corsrt`. It is easy to see how this can be used from a few different examples.
+
+```{r, tidy=TRUE}
+# specifying a specific correlation matrix C
+C <- matrix(c(1,.7,.2, .7, 1, .8, .2, .8, 1),nrow = 3)
+C
+
+# generate 3 correlated variables with different location and scale for each field
+dt <- genCorData(1000, mu=c(4,12,3), sigma = c(1,2,3), corMatrix=C)
+dt
+
+# estimate correlation matrix
+dt[,round(cor(cbind(V1, V2, V3)),1)]
+
+# estimate standard deviation
+dt[,round(sqrt(diag(var(cbind(V1, V2, V3)))),1)]
+```
+
+```{r, tidy=TRUE}
+# generate 3 correlated variables with different location but same standard deviation
+# and compound symmetry (cs) correlation matrix with correlation coefficient = 0.4.
+# Other correlation matrix structures are "independent" ("ind") and "auto-regressive" ("ar1").
+
+dt <- genCorData(1000, mu=c(4,12,3), sigma = 3, rho = .4, corstr = "cs", 
+                cnames=c("x0","x1","x2"))
+dt
+
+# estimate correlation matrix
+dt[,round(cor(cbind(x0, x1, x2)),1)]
+
+# estimate standard deviation
+dt[,round(sqrt(diag(var(cbind(x0, x1, x2)))),1)]
+```
+
+The new data generated by `genCorData` can be merged with an existing data set. Alternatively, `addCorData` will do this directly:
+
+```{r, tidy = TRUE}
+
+# define and generate the original data set
+def <- defData(varname = "x", dist = "normal", formula = 0, variance = 1, id = "cid")
+dt <- genData(1000, def)
+
+# add new correlate fields a0 and a1 to "dt"
+dt <- addCorData(dt, idname="cid", mu=c(0,0), sigma = c(2,.2), rho = -0.2, 
+                 corstr = "cs", cnames=c("a0","a1"))
+
+dt
+
+# estimate correlation matrix
+dt[,round(cor(cbind(a0, a1)),1)]
+
+# estimate standard deviation
+dt[,round(sqrt(diag(var(cbind(a0, a1)))),1)]
+```
+
+### Correlated data: additional distributions
+
+Two additional functions facilitate the generation of correlated data from *binomial*, *poisson*, *gamma*, and *uniform* distributions: `genCorGen` and `addCorGen`.
+
+`genCorGen` is an extension of `genCorData`. In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.
+
+```{r}
+l <- c(8, 10, 12) # lambda for each new variable
+
+dx <- genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .3, corstr = "cs", wide = TRUE)
+dx
+round(cor(as.matrix(dx[, .(V1, V2, V3)])), 2)
+```
+
+We can also generate correlated binary data by specifying the probabilities:
+
+```{r}
+genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", rho = .8, corstr = "cs", wide = TRUE)
+```
+
+The gamma distribution requires two parameters - the mean and dispersion. (These are converted into shape and rate parameters more commonly used.)
+
+```{r}
+dx <- genCorGen(1000, nvars = 3, params1 = l, params2 = c(1,1,1), dist = "gamma", rho = .7, corstr = "cs", wide = TRUE, cnames="a, b, c")
+dx
+round(cor(as.matrix(dx[, .(a, b, c)])), 2)
+```
+
+These data sets can be generated in either *wide* or *long* form. So far, we have generated *wide* form data, where there is one row per unique id. Now, we will generate data using the *long* form, where the correlated data are on different rows, so that there are repeated measurements for each id. An id will have multiple records (i.e. one id will appear on multiple rows):
+
+```{r}
+dx <- genCorGen(1000, nvars = 3, params1 = l, params2 = c(1,1,1), dist = "gamma", rho = .7, corstr = "cs", wide = FALSE, cnames="NewCol")
+dx
+```
+
+`addCorGen` allows us to create correlated data from an existing data set, as one can already do using `addCorData`. In the case of `addCorGen`, the parameter(s) used to define the distribution are created as a field (or fields) in the dataset. The correlated data are added to the existing data set. In the example below, we are going to generate three sets (poisson, binary, and gamma) of correlated data with means that are a function of the variable `xbase`, which varies by id.
+
+First we define the data and generate a data set:
+
+```{r}
+def <- defData(varname = "xbase", formula = 5, variance = .2, dist = "gamma", id = "cid")
+def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist="nonrandom", link = "log")
+def <- defData(def, varname = "p", formula = "-2 + .3*xbase", dist="nonrandom", link = "logit")
+def <- defData(def, varname = "gammaMu", formula = ".5 + .2*xbase", dist="nonrandom", link = "log")
+def <- defData(def, varname = "gammaDis", formula = 1, dist="nonrandom")
+
+dt <- genData(10000, def)
+dt
+```
+
+The Poisson distribution has a single parameter, lambda:
+
+```{r}
+
+dtX1 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 3, rho = .1, corstr = "cs",
+                    dist = "poisson", param1 = "lambda", cnames = "a, b, c")
+dtX1
+```
+
+The Bernoulli (binary) distribution has a single parameter, p:
+
+```{r}
+dtX2 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
+                    dist = "binary", param1 = "p")
+dtX2
+```
+
+The Gamma distribution has two parameters - in `simstudy` the mean and dispersion are specified:
+
+```{r}
+dtX3 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "cs",
+                  dist = "gamma", param1 = "gammaMu", param2 = "gammaDis")
+dtX3
+```
+
+If we have data in *long* form (e.g. longitudinal data), the function will recognize the structure:
+
+```{r}
+def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
+def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
+
+def2 <- defDataAdd(varname = "lambda", formula = ".5+.5*period + .1*xbase", dist="nonrandom", link = "log")
+
+dt <- genData(1000, def)
+
+dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
+dtLong <- addColumns(def2, dtLong)
+
+dtLong
+
+### Generate the data 
+
+dtX3 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
+                  dist = "poisson", param1 = "lambda", cnames = "NewPois")
+dtX3
+```
+
+We can fit a generalized estimating equation (GEE) model and examine the coefficients and the working correlation matrix. They match closely to the data generating parameters:
+
+```{r}
+geefit <- gee(NewPois ~ period + xbase, data = dtX3, id = cid, family = poisson, corstr = "exchangeable")
+round(summary(geefit)$working.correlation, 2)
+
+```
+## Missing Data
+
+After generating a complete data set, it is possible to generate missing data. `defMiss` defines the parameters of missingness. `genMiss` generates a missing data matrix of indicators for each field. Indicators are set to 1 if the data are missing for a subject, 0 otherwise. `genObs` creates a data set that reflects what would have been observed had data been missing; this is a replicate of the original data set with "NAs" replacing values where missing data has been generated.
+
+By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) *missing completely at random* (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) *missing at random* (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) *not missing at random* (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with measure.
+
+These possibilities are illustrated with an example. A data set of 1000 observations with three "outcome" measures" `x1`, `x2`, and `x3` is defined. This data set also includes two independent predictors, `m` and `u` that largely determine the value of each outcome (subject to random noise).
+
+```{r, tidy = TRUE}
+def1 <- defData(varname = "m", dist = "binary", formula = .5)
+def1 <- defData(def1, "u", dist = "binary", formula = .5)
+def1 <- defData(def1, "x1", dist="normal", formula = "20*m + 20*u", variance = 2)
+def1 <- defData(def1, "x2", dist="normal", formula = "20*m + 20*u", variance = 2)
+def1 <- defData(def1, "x3", dist="normal", formula = "20*m + 20*u", variance = 2)
+
+dtAct <- genData(1000, def1)
+```
+
+In this example, the missing data mechanism is different for each outcome. As defined below, missingness for `x1` is MCAR, since the probability of missing is fixed. Missingness for `x2` is MAR, since missingness is a function of `m`, a measured predictor of `x2`. And missingness for `x3` is NMAR, since the probability of missing is dependent on `u`, an unmeasured predictor of `x3`:
+
+```{r, tidy = TRUE}
+defM <- defMiss(varname = "x1", formula = .15, logit.link = FALSE)
+defM <- defMiss(defM, varname = "x2", formula = ".05 + m * 0.25", logit.link = FALSE)
+defM <- defMiss(defM, varname = "x3", formula = ".05 + u * 0.25", logit.link = FALSE)
+defM <- defMiss(defM, varname = "u", formula = 1, logit.link = FALSE) # not observed
+
+missMat <- genMiss(dtName = dtAct, missDefs = defM, idvars = "id")
+dtObs <- genObs(dtAct, missMat, idvars = "id")
+```
+
+```{r, tidy = TRUE}
+missMat
+dtObs
+```
+
+The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the "true" data set without missing data as a comparison for the "observed" data set. Since `x1` is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for `x2` and `x3` are biased, as the difference between observed and actual is not close to 0:
+
+```{r tidy=TRUE}
+# Two functions to calculate means and compare them
+
+rmean <- function(var, digits = 1) {
+  round(mean(var, na.rm=TRUE), digits)
+}
+
+showDif <- function(dt1, dt2, rowName = c("Actual", "Observed", "Difference")) {
+  dt <- data.frame(rbind(dt1, dt2, dt1 - dt2))
+  rownames(dt) <- rowName
+  return(dt)
+}
+
+# data.table functionality to estimate means for each data set
+
+meanAct <- dtAct[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3))]
+meanObs <- dtObs[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3))]
+
+showDif(meanAct, meanObs)
+```
+
+After adjusting for the measured covariate `m`, the bias for the estimate of the mean of `x2` is mitigated, but not for `x3`, since `u` is not observed:
+
+```{r tidy=TRUE}
+meanActm <- dtAct[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3)), keyby = m]
+meanObsm <- dtObs[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3)), keyby = m]
+```
+```{r, tidy = TRUE}
+# compare observed and actual when m = 0
+
+showDif(meanActm[m==0, .(x1, x2, x3)], meanObsm[m==0, .(x1, x2, x3)])
+
+# compare observed and actual when m = 1
+
+showDif(meanActm[m==1, .(x1, x2, x3)], meanObsm[m==1, .(x1, x2, x3)])
+```
+
+
+## Longitudinal Data with Missingness
+
+Missingness can occur, of course, in the context of longitudinal data. `missDef` provides two additional arguments that are relevant for these types of data: `baseline` and `monotonic`. In the case of variables that are measured at baseline only, a missing value would be reflected throughout the course of the study. In the case where a variable is time-dependent (i.e it is measured at each time point), it is possible to declare missingness to be  *monotonic*. This means that if a value for this field is missing at time `t`, then values will also be missing at all times `T > t` as well. The call to `genMiss` must set `repeated` to TRUE.
+
+The following two examples describe an outcome variable `y` that is measured over time, whose value is a function of time and an observed exposure: 
+
+```{r, tidy = TRUE}
+
+# use baseline definitions from previous example
+
+dtAct <- genData(120, def1)
+dtAct <- trtObserve(dtAct, formulas = .5, logit.link = FALSE, grpName = "rx")
+
+# add longitudinal data
+
+defLong <- defDataAdd(varname = "y", dist = "normal", formula = "10 + period*2 + 2 * rx", variance = 2)
+
+dtTime <- addPeriods(dtAct, nPeriods = 4)
+dtTime <- addColumns(defLong, dtTime)
+```
+
+In the first case, missingness is not monotonic; a subject might miss a measurement but returns for subsequent measurements:
+
+```{r, tidy = TRUE}
+
+# missingness for y is not monotonic
+
+defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
+defMlong <- defMiss(defMlong,varname = "y", formula = "-1.5 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = FALSE)
+
+missMatLong <- genMiss(dtName = dtTime, missDefs = defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+```
+
+Here is a conceptual plot that shows the pattern of missingness. Each row represents an individual, and each box represents a time period. A box that is colored reflects missing data; a box colored grey reflects observed. The missingness pattern is shown for two variables `x1` and `y`:
+
+```{r tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 6}
+xp10 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="x1", pcolor="#1C5974",
+                 title = "x1: baseline (control)")
+
+xp11 <- ggmissing(missMatLong, varSelect="rx", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="x1", pcolor="#B84226",
+                 title = "x1: baseline (exposed)")
+
+xp20 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="y", pcolor="#1C5974",
+                 title = "y: not monotonic (control)")
+
+xp21 <- ggmissing(missMatLong, varSelect="rx", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="y", pcolor="#B84226",
+                 title = "y: not monotonic (exposed)")
+
+grid.arrange(xp10, xp20, xp11, xp21,
+             nrow = 2,
+             bottom = textGrob("Periods", gp = gpar(cex=.8)) #,
+#             left = textGrob("ID", gp = gpar(cex = .8), rot = 90)
+)
+
+
+```
+
+In the second case, missingness is monotonic; once a subject misses a measurement for `y`, there are no subsequent measurements:
+
+```{r tidy=TRUE}
+# missingness for y is not monotonic
+
+defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
+defMlong <- defMiss(defMlong,varname = "y", formula = "-1.8 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = TRUE)
+
+missMatLong <- genMiss(dtName = dtTime, missDefs = defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+```
+
+```{r tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 6}
+xp10 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="x1", pcolor="#1C5974",
+                 title = "x1: baseline (control)")
+
+xp11 <- ggmissing(missMatLong, varSelect="rx", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="x1", pcolor="#B84226",
+                 title = "x1: baseline (exposed)")
+
+xp20 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="y", pcolor="#1C5974",
+                 title = "y: monotonic (control)")
+
+xp21 <- ggmissing(missMatLong, varSelect="rx", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="y", pcolor="#B84226",
+                 title = "y: monotonic (exposed)")
+
+grid.arrange(xp10, xp20, xp11, xp21,
+             nrow = 2,
+             bottom = textGrob("Periods", gp = gpar(cex=.8)) #,
+#             left = textGrob("ID", gp = gpar(cex = .8), rot = 90)
+)
+
+
+```
+
+## Spline Data
+
+Sometimes (usually?) relationships between variables are non-linear. `simstudy` can already accommodate that. But, if we want to explicitly generate data from a piece-wise polynomial function to explore spline methods in particular, or non-linear relationships more generally. There are three functions that facilitate this: `viewBasis`, `viewSplines`, and `genSpline`. The first two functions are more exploratory in nature, and just provide plots of the B-spline basis functions and the splines, respectively. The third function actually generates data and adds to an existing data.table.
+
+The shape of a spline is determined by three factors: (1) the cut-points or knots that define the piecewise structure of the function, (2) the polynomial degree, such as linear, quadratic, cubic, etc., and (3) the linear coefficients that combine the basis functions, which is contained in a vector or matrix *theta*.
+
+First, we can look at the basis functions, we depend only the knots and degree. The knots are specified as quantiles, between 0 and 1:
+
+```{r, fig.width = 6, fig.height = 2.5 }
+knots <- c(0.25, 0.50, 0.75)
+viewBasis(knots, degree = 2)
+
+knots <- c(0.20, 0.40, 0.60, 0.80)
+viewBasis(knots, degree = 3)
+
+```
+
+The splines themselves are specified as linear combinations of each of the basis functions. The coefficients of those combinations are specified in *theta*. Each individual spline curve represents a specific linear combination of a particular set of basis functions. In exploring, we can look at a single curve or multiple curves, depending on whether or not we specify theta as a vector (single) or matrix (multiple).
+
+```{r, fig.width = 6, fig.height = 2.5 }
+knots <- c(0.25, 0.5, 0.75)
+
+# number of elements in theta: length(knots) + degree + 1
+theta1 = c(0.1, 0.8, 0.4, 0.9, 0.2, 1.0) 
+
+viewSplines(knots, degree = 2, theta1)
+
+
+theta2 = matrix(c(0.1, 0.2, 0.4, 0.9, 0.2, 0.3, 0.6, 
+                  0.1, 0.3, 0.3, 0.8, 1.0, 0.9, 0.4, 
+                  0.1, 0.9, 0.8, 0.2, 0.1, 0.6, 0.1),
+               ncol = 3)
+
+theta2
+
+viewSplines(knots, degree = 3, theta2)
+```
+
+We can generate data using a predictor in an existing data set by specifying the *knots* (in terms of quantiles), a vector of coefficients in *theta*, the degree of polynomial, as well as a range 
+
+```{r}
+ddef <- defData(varname = "age", formula = "20;60", dist = "uniform")
+
+theta1 = c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
+knots <- c(0.25, 0.5, 0.75)
+```
+
+Here is the shape of the curve that we want to generate data from:
+
+```{r, fig.width = 6, fig.height = 2.5 }
+viewSplines(knots = knots, theta = theta1, degree = 3)
+```
+
+Now we specify the variables in the data set and generate the data:
+
+```{r}
+set.seed(234)
+dt <- genData(1000, ddef)
+dt <- genSpline(dt = dt, newvar = "weight",
+                predictor = "age", theta = theta1,
+                knots = knots, degree = 3,
+                newrange = "90;160",
+                noise.var = 64)
+```
+
+Here's a plot of the data with a smoothed line fit to the data:
+
+```{r, fig.width = 6, fig.height = 3, message = FALSE}
+ggplot(data = dt, aes(x=age, y=weight)) +
+  geom_point(color = "grey65", size = 0.75) +
+  geom_smooth(se=FALSE, color="red", size = 1, method = "auto") +
+  geom_vline(xintercept = quantile(dt$age, knots)) +
+  theme(panel.grid.minor = element_blank())
+```
+
+Finally, we will fit three different spline models to the data - a linear, a quadratic, and a cubic - and plot the predicted values:
+
+```{r, fig.width = 6, fig.height = 3}
+
+# normalize age for best basis functions
+dt[, nage := (age - min(age))/(max(age) - min(age))] 
+
+# fit a cubic spline
+lmfit3 <- lm(weight ~ bs(x = nage, knots = knots, degree = 3, intercept = TRUE) - 1, data = dt)
+
+# fit a quadtratic spline
+lmfit2 <- lm(weight ~ bs(x = nage, knots = knots, degree = 2), data = dt)
+
+# fit a  linear spline
+lmfit1 <- lm(weight ~ bs(x = nage, knots = knots, degree = 1), data = dt)
+
+# add predicted values for plotting
+dt[, pred.3deg := predict(lmfit3)]
+dt[, pred.2deg := predict(lmfit2)]
+dt[, pred.1deg := predict(lmfit1)]
+
+ggplot(data = dt, aes(x=age, y=weight)) +
+  geom_point(color = "grey65", size = 0.75) +
+  geom_line(aes(x=age, y = pred.3deg), color = "#1B9E77", size = 1) +
+  geom_line(aes(x=age, y = pred.2deg), color = "#D95F02", size = 1) +
+  geom_line(aes(x=age, y = pred.1deg), color = "#7570B3", size = 1) +
+  geom_vline(xintercept = quantile(dt$age, knots)) +
+  theme(panel.grid.minor = element_blank())
+```
+
+## Ordinal Categorical Data
+
+Using the `defData` and `genData` functions, it is is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on five possible values: (1) strongly disagree, (2) disagree, (3) neutral, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.
+
+It is common to summarize the data by looking at *cumulative* probabilities, odds, or log-odds.  Comparisons of different exposures or individual characteristics typically look at how these cumulative measures vary across the different exposures or characteristics. So, if we were interested in cumulative odds, we would compare
+$$\small{\frac{P(response = 1|exposed)}{P(response > 1|exposed)} \ \ vs. \ \frac{P(response = 1|unexposed)}{P(response > 1|unexposed)}},$$
+
+$$\small{\frac{P(response \le 2|exposed)}{P(response > 2|exposed)} \ \ vs. \ \frac{P(response \le 2|unexposed)}{P(response > 2|unexposed)}},$$
+
+and continue until the last (in this case, fourth) comparison
+
+$$\small{\frac{P(response \le 4|exposed)}{P(response > 4|exposed)} \ \ vs. \ \frac{P(response \le 4|unexposed)}{P(response > 4|unexposed)}},$$
+
+
+We can use an underlying (continuous) latent process as the basis for data generation. If we assume that probabilities are determined by segments of a logistic distribution (see below), we can define the ordinal mechanism using thresholds along the support of the distribution. If there are $k$ possible responses (in the meat example, we have 5), then there will be $k-1$ thresholds. The area under the logistic density curve of each of the regions defined by those thresholds (there will be $k$ distinct regions) represents the probability of each possible response tied to that region.
+
+```{r options, echo = FALSE}
+options(digits = 2)
+```
+```{r threshold, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
+# preliminary libraries and plotting defaults
+
+library(ggplot2)
+library(data.table)
+
+my_theme <- function() {
+  theme(panel.background = element_rect(fill = "grey90"), 
+        panel.grid = element_blank(), 
+        axis.ticks = element_line(colour = "black"), 
+        panel.spacing = unit(0.25, "lines"), 
+        plot.title = element_text(size = 12, vjust = 0.5, hjust = 0), 
+        panel.border = element_rect(fill = NA, colour = "gray90"))
+}
+
+# create data points density curve 
+
+x <- seq(-6, 6, length = 1000)
+pdf <- dlogis(x, location = 0, scale = 1)
+dt <- data.table(x, pdf)
+
+# set thresholds for Group A
+
+thresholdA <- c(-2.1, -0.3, 1.4, 3.6)
+
+pdf <- dlogis(thresholdA)
+grpA <- data.table(threshold = thresholdA, pdf)
+aBreaks <- c(-6, grpA$threshold, 6)
+
+# plot density with cutpoints
+
+dt[, grpA := cut(x, breaks = aBreaks, labels = F, include.lowest = TRUE)]
+
+p1 <- ggplot(data = dt, aes(x = x, y = pdf)) +
+  geom_line() +
+  geom_area(aes(x = x, y = pdf, group = grpA, fill = factor(grpA))) +
+  geom_hline(yintercept = 0, color = "grey50") +
+  annotate("text", x = -5, y = .28, label = "unexposed", size = 5) +
+  scale_fill_manual(values = c("#d0d7d1", "#bbc5bc", "#a6b3a7", "#91a192", "#7c8f7d"),
+                    labels = c("strongly disagree", "disagree", "neutral", "agree", "strongly agree"),
+                    name = "Frequency") +
+  scale_x_continuous(breaks = thresholdA) +
+  scale_y_continuous(limits = c(0, 0.3), name = "Density") +
+  my_theme() +
+  theme(legend.position = c(.85, .7),
+        legend.background = element_rect(fill = "grey90"),
+        legend.key = element_rect(color = "grey90"))
+
+p1
+```
+
+### Comparing response distributions of different populations
+
+In the cumulative logit model, the underlying assumption is that the odds ratio of one population relative to another is constant across all the possible responses. This means that all of the cumulative odds ratios are equal: 
+
+$$\small{\frac{codds(P(Resp = 1 | exposed))}{codds(P(Resp = 1 | unexposed))} = \frac{codds(P(Resp \leq 2 | exposed))}{codds(P(Resp \leq 2 | unexposed))} = \ ... \ = \frac{codds(P(Resp \leq 4 | exposed))}{codds(P(Resp \leq 4 | unexposed))}}$$
+
+In terms of the underlying process, this means that each of the thresholds shifts the same amount, as shown below, where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.
+
+```{r plotB, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
+
+pA= plogis(c(thresholdA, Inf)) - plogis(c(-Inf, thresholdA))
+probs <- data.frame(pA)
+rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
+                     "P(Resp = 3)", "P(Resp = 4)", "P(Resp = 5)")
+
+probA <- data.frame(
+           cprob = plogis(thresholdA), 
+           codds = plogis(thresholdA)/(1-plogis(thresholdA)),
+           lcodds = log(plogis(thresholdA)/(1-plogis(thresholdA)))
+)
+rownames(probA) <- c("P(Grp < 2)", "P(Grp < 3)", "P(Grp < 4)", "P(Grp < 5)")
+
+thresholdB <- thresholdA + 1.1
+
+pdf <- dlogis(thresholdB)
+grpB <- data.table(threshold = thresholdB, pdf)
+bBreaks <- c(-6, grpB$threshold, 6)
+
+pB = plogis(c(thresholdB, Inf)) - plogis(c(-Inf, thresholdB))
+probs <- data.frame(pA, pB)
+rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
+                     "P(Resp = 3)", "P(Resp = 4)", "P(Resp = 5)")
+
+
+# Plot density for group B
+
+dt[, grpB := cut(x, breaks = bBreaks, labels = F, include.lowest = TRUE)]
+
+p2 <- ggplot(data = dt, aes(x = x, y = pdf)) +
+  geom_line() +
+  geom_area(aes(x = x, y = pdf, group = grpB, fill = factor(grpB))) +
+  geom_hline(yintercept = 0, color = "grey5") +
+  geom_segment(data=grpA, 
+               aes(x=threshold, xend = threshold, y=0, yend=pdf), 
+               size = 0.3, lty = 2, color = "#857284") +
+  annotate("text", x = -5, y = .28, label = "exposed", size = 5) +
+  scale_fill_manual(values = c("#d0d7d1", "#bbc5bc", "#a6b3a7", 
+                               "#91a192", "#7c8f7d"),
+                    name = "Frequency") +
+  scale_x_continuous(breaks = thresholdB) +
+  scale_y_continuous(limits = c(0.0, 0.3), name = "Density") +
+  my_theme() +
+  theme(legend.position = "none")
+
+p2
+```
+
+### The cumulative proportional odds model
+
+In the `R` package `ordinal`, the model is fit using function `clm`. The model that is being estimated has the form
+
+$$log \left( \frac{P(Resp \leq  i)}{P(Resp > i)} | Group \right) = \alpha_i - \beta*I(Group=exposed) \  \ , \ i \in \{1, 2, 3, 4\}$$
+
+The model specifies that the cumulative log-odds for a particular category is a function of two parameters, $\alpha_i$ and $\beta$. (Note that in this parameterization and the model fit, $-\beta$ is used.)  $\alpha_i$ represents the cumulative log odds of being in category $i$ or lower for those in the reference exposure group, which in our example is Group A. *$\alpha_i$ also represents the threshold of the latent continuous (logistic) data generating process.* $\beta$ is the cumulative log-odds ratio for the category $i$ comparing the unexposed to reference group, which is the exposed. *$\beta$ also represents the shift of the threshold on the latent continuous process for the exposed relative to the unexposed*. The proportionality assumption implies that the shift of the threshold for each of the categories is identical.
+
+### Simulation
+
+To generate ordered categorical data using `simstudy`, there is a function `genOrdCat`.
+
+```{r acuts}
+baseprobs <- c(0.11, 0.33, 0.36, 0.17, 0.03)
+
+defA <- defDataAdd(varname = "z", formula = "-1.1*exposed", dist = "nonrandom")
+
+set.seed(130)
+
+dT <- genData(25000)
+dT <- trtAssign(dT, grpName = "exposed")
+dT <- addColumns(defA, dT)
+
+dT <- genOrdCat(dT, adjVar = "z", baseprobs, catVar = "r")
+```
+
+Estimating the parameters of the model using function `clm`, we can recover the original parameters quite well.
+
+```{r ordinal}
+library(ordinal)
+clmFit <- clm(r ~ exposed, data = dT)
+summary(clmFit)
+```
+
+In the model output, the `exposed` coefficient of -1.15 is the estimate of $-\beta$ (i.e. $\hat{\beta} = 1.15$), which was set to -1.1 in the simulation. The threshold coefficients are the estimates of the $\alpha_i$'s in the model - and match the thresholds for the unexposed group.
+
+The log of the cumulative odds for groups 1 to 4 from the data without exposure are
+
+```{r}
+#(logOdds.unexp <- log(odds(cumsum(dT[exposed == 0, prop.table(table(r))])))[1:4])
+```
+
+And under exposure:
+
+```{r}
+#(logOdds.expos <- log(odds(cumsum(dT[exposed == 1, prop.table(table(r))])))[1:4])
+```
+
+The log of the cumulative odds ratios for each of the four groups is
+
+```{r}
+#logOdds.expos - logOdds.unexp
+```
+
+### Correlated multivariate ordinal data
+
+Function `genCorOrdCat` generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale, and is specified with a value of `rho` and a correlation structure (*independence*, *compound symmetry*, or *AR-1*). Alternatively, a correlation matrix can be specified.
+
+In this example, there are 5 questions, each of which has three possible responses: "none", "some", "a lot". The probabilities of response are specified in a $5 \times 3$ matrix, and the rows sum to 1:
+
+
+```{r}
+baseprobs <- matrix(c(0.2, 0.1, 0.7,
+                      0.7, 0.2, 0.1,
+                      0.5, 0.2, 0.3,
+                      0.4, 0.2, 0.4,
+                      0.6, 0.2, 0.2), 
+                    nrow = 5, byrow = TRUE)
+
+# generate the data
+
+set.seed(333)                     
+dT <- genData(10000)
+
+dX <- genCorOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+                   prefix = "q", rho = 0.15, corstr = "cs")
+```
+
+The observed correlation of the items is slightly less than the specified correlations as expected:
+
+```{r}
+round(dX[, cor(cbind(q1, q2, q3, q4, q5))], 2)
+```
+
+However, the marginal probability distributions of each item match quite closely with the specified probabilities:
+
+```{r}
+dM <- melt(dX, id.vars = "id")
+dProp <- dM[ , prop.table(table(value)), by = variable]
+dProp[, response := rep(seq(3), 5)]
+
+# observed probabilities
+dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
+
+# specified probabilites
+baseprobs
+```
+
+In the next example, the structure of the correlation is changed to AR-1, so the correlation between questions closer to each other is higher than for questions farther apart. But the probability distributions are unaffected:
+
+```{r}
+dX <- genCorOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+                   prefix = "q", rho = 0.40, corstr = "ar1")
+
+# correlation
+round(dX[, cor(cbind(q1, q2, q3, q4, q5))], 2)
+
+dM <- melt(dX, id.vars = "id")
+dProp <- dM[ , prop.table(table(value)), by = variable]
+dProp[, response := rep(seq(3), 5)]
+
+# probabilities
+dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
