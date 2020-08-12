@@ -6,7 +6,7 @@ Date: 2020-04-01
 Authors@R: c(person(given = "Keith",
                   family = "Goldfeld",
                   role = c("aut","cre"),
-                  email = "keith.goldfeld@nyumc.org",
+                  email = "Keith.Goldfeld@nyumc.org",
                   comment = c(ORCID = "0000-0002-0292-8780")))
 Description: Simulates data sets in order to explore modeling
     techniques or better understand data generating processes. The user
