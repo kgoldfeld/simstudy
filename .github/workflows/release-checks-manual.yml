@@ -1,0 +1,68 @@
+name: pkgdown manual
+# only works when this file is in the default branch
+on:
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: Git Ref (Optional)    
+        required: false
+      email:
+        description: email (Optional)    
+        required: false  
+
+jobs:
+  pkgdown:
+    runs-on: macOS-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Clone Repository (Latest)
+        uses: actions/checkout@v2
+        if: github.event.inputs.git-ref == ''
+
+      - name: Clone Repository (Custom Ref)
+        uses: actions/checkout@v2
+        if: github.event.inputs.git-ref != ''
+        with:
+          ref: ${{ github.event.inputs.git-ref }}
+
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@master
+
+      - uses: r-lib/actions/setup-pandoc@master
+
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Cache R packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+
+      - name: Install dependencies
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+          install.packages("pkgdown")
+        shell: Rscript {0}
+
+      - name: Run rhub checks (custom email)
+        if: github.event.inputs.email != ''
+        run: |
+          rhub::check_for_cran(email = ${{ github.event.inputs.email }})
+          rhub::check(platform = "debian-gcc-devel-nold", email = ${{ github.event.inputs.email }})
+        shell: Rscript {0}
+      
+      - name: Run rhub checks (maintainer)
+        if: github.event.inputs.email == ''
+        run: |
+          rhub::check_for_cran()
+          rhub::check(platform = "debian-gcc-devel-nold")
+        shell: Rscript {0}
+
