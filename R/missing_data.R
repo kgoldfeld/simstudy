@@ -109,11 +109,11 @@ genMiss <- function(dtName, missDefs, idvars,
   # monotonic <- NULL
   # fmiss     <- NULL
   # formula   <- NULL
-  #utils::globalVariables(names = c(
-  #  "varname", "period", "baseline",
-  #  "monotonic", "fmiss", "formula"
-  #), package = "simstudy")
-  
+  utils::globalVariables(c(
+    "varname", "period", "baseline",
+    "monotonic", "fmiss", "formula"
+  ))
+
   includesLags <- FALSE
 
   data.table::setkeyv(dtName, idvars)
