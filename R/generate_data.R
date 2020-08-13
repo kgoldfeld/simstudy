@@ -78,7 +78,7 @@ genData <- function(n, dtDefs = NULL, id = "id") {
 addColumns <- function(dtDefs, dtOld) {
 
   # "declares" varname to avoid global NOTE
-  # TODO "declare vars": is there no way to do this cleaner?
+  # TODO "declare vars": see ?utils::globalVariables
   varname = NULL
   formula = NULL
   dist = NULL

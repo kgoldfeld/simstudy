@@ -461,13 +461,13 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   return(dtM[, -"Y"])
 }
 
-# Internal function
-#
-# @param tryObject the result of a try() call.
-# @return TRUE or FALSE
-#
+#' Check if error
+#'
+#' @param tryObject the result of a try() call.
+#' @return TRUE or FALSE
+#' @noRd
 
-.iserror <- function(tryobject) {
+.isError <- function(tryobject) {
   if (class(tryobject)[1] == "try-error") {
     return(TRUE)
   } else {
@@ -475,12 +475,13 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   }
 }
 
-#### Generate missing data matrix ####
-# Internal function convert log odds to probability
-#
-# @param logodds Log odds
-# @return Probability
 
-.loProb <- function(logodds) {
+#' Convert log odds to probability
+#'
+#' @param logodds Log odds
+#' @return Probability
+#' @noRd
+
+.log2Prob <- function(logodds) {
   exp(logodds) / (1 + exp(logodds))
 }

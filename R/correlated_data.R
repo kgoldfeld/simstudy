@@ -527,7 +527,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     }
 
     newExpress <- try(parse(text = formSpec), silent = TRUE)
-    if (.iserror(newExpress)) stop("!")
+    if (.isError(newExpress)) stop("!")
 
     .Vars = all.vars(newExpress)
     .Vars <- .Vars[.Vars != periodvar]

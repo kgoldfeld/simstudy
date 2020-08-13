@@ -10,7 +10,7 @@ NULL
   # nolint start
 
 #'Distributions for Data Definitions
-#' @md 
+#'
 #'This help file describes the distributions used for data creation in
 #'`simstudy`.
 #'
@@ -58,6 +58,7 @@ NULL
 #'@aliases normal, poisson, noZeroPoisson, binary, binomial, uniform,
 #'  categorical, gamma, beta, negBinomial, nonrandom, exponential, mixture,
 #'  pseudorandom, pseudorandomSeq
+#'@md
 NULL
 
 # TODO pseudorandom dist doc

@@ -44,23 +44,23 @@ defMiss <- function(dtDefs = NULL,
                     logit.link = FALSE,
                     baseline = FALSE,
                     monotonic = FALSE) {
+                      # TODO check param validity
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
 
-  dt.new <- data.table::data.table(
+  dtNew <- data.table::data.table(
     varname,
     formula,
     logit.link,
     baseline,
     monotonic
   )
-
-  l = list(dtDefs, dt.new)
+  # TODO streamline this
+  l <- list(dtDefs, dtNew)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
 
-  return(defNew[])
 }
 
 #' Generate missing data
@@ -103,24 +103,28 @@ genMiss <- function(dtName, missDefs, idvars,
 
   # "Declare" vars to avoid R CMD warning
   # TODO "declare vars"
-  varname <- NULL
-  period <- NULL
-  baseline <- NULL
-  monotonic <- NULL
-  fmiss <- NULL
-  formula <- NULL
-
+  # varname   <- NULL
+  # period    <- NULL
+  # baseline  <- NULL
+  # monotonic <- NULL
+  # fmiss     <- NULL
+  # formula   <- NULL
+  #utils::globalVariables(names = c(
+  #  "varname", "period", "baseline",
+  #  "monotonic", "fmiss", "formula"
+  #), package = "simstudy")
+  
   includesLags <- FALSE
 
-  setkeyv(dtName, idvars)
-  tmDefs <- copy(missDefs)
+  data.table::setkeyv(dtName, idvars)
+  tmDefs <- data.table::copy(missDefs)
 
   if (!repeated) {
     dtMiss <- dtName[, c(idvars), with = FALSE]
     # names(dtMiss) <- c(idvars) # removed 2017919 - possible error in CRAN check
 
     for (i in (1:nrow(tmDefs))) {
-      dtTemp = copy(dtName)
+      dtTemp <- data.table::copy(dtName)
       mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ])
       vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
 
@@ -183,6 +187,50 @@ genMiss <- function(dtName, missDefs, idvars,
 
   dtbind[]
 }
+
+#' Internal function called by genMiss - returns a missing data matrix
+#'
+#' @param dtName Name of complete data set
+#' @param dtTemp Name of data set with unique ids only
+#' @param idvars To be filled in
+#' @param missDefs To be filled in
+#' @return A missing data matrix of 0/1, where 1 indicates missing
+#' @noRd
+
+.genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
+
+  # 'declare vars
+  # TODO "declare vars"
+  varname = NULL
+  logit.link = NULL
+  formula = NULL
+
+  dtMissP <- dtTemp[, idvars, with = FALSE]
+ 
+  Expression <- parse(text = as.character(missDefs[, varname]))
+  ColName <- as.character(missDefs[, varname]) # new data.table (changed 2016-12-05)
+  Formula <- parse(text = as.character(missDefs[, formula]))
+
+  if (!missDefs[, logit.link]) {
+    # dtMissP[, eval(Expression) := dtName[, eval(Formula)]] # old data.table
+
+    dtMissP[, (ColName) := dtName[, eval(Formula)]]
+  } else {
+    # dtMissP[, eval(Expression) := dtName[, .log2Prob(eval(Formula))]] # old data.table
+    dtMissP[, (ColName) := dtName[, .log2Prob(eval(Formula))]]
+  }
+  matMiss <- dtMissP[, idvars, with = FALSE]
+  # matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1, dtMissP[,
+  #                                     eval(Expression)])] # old data.table
+
+  matMiss[, (ColName) := stats::rbinom(
+    nrow(dtMissP), 1,
+    dtMissP[, eval(Expression)]
+  )]
+
+  return(matMiss)
+}
+
 
 #### Generate observed only data ####
 #' Create an observed data set that includes missing data

@@ -221,7 +221,7 @@
   # functionnames etc.
   newExpress <- try(parse(text = formula), silent = TRUE)
 
-  if (.iserror(newExpress)) {
+  if (.isError(newExpress)) {
     stop(paste(
       "Equation: '",
       formula,

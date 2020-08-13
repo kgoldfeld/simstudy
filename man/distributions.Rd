@@ -24,13 +24,14 @@ String. Variables defined via \code{\link[=defData]{defData()}} and variables wi
 parent environment (prefixed with \code{..}) can be used within the formula.
 Functions from the parent environment can be used without a prefix.}
 
-\item{variance}{Number. Default is `0``.}
+\item{variance}{Number. Default is \code{0}.}
 
 \item{link}{String identifying the link function to be used. Default is
 \code{identity}.}
 }
 \description{
-Distributions for Data Definitions
+This help file describes the distributions used for data creation in
+\code{simstudy}.
 }
 \details{
 For details about the statistical distributions please see

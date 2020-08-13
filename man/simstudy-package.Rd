@@ -24,7 +24,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Keith Goldfeld \email{keith.goldfeld@nyumc.org} (\href{https://orcid.org/0000-0002-0292-8780}{ORCID})
+\strong{Maintainer}: Keith Goldfeld \email{Keith.Goldfeld@nyumc.org} (\href{https://orcid.org/0000-0002-0292-8780}{ORCID})
 
 }
 \keyword{internal}
