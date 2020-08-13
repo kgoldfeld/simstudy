@@ -1,4 +1,4 @@
-name: pkgdown manual
+name: release checks
 # only works when this file is in the default branch
 on:
   workflow_dispatch:
@@ -6,9 +6,19 @@ on:
       git-ref:
         description: Git Ref (Optional)    
         required: false  
-
+      email:
+        description: email 
+        required: true
+        default: "Keith.Goldfeld@nyumc.org"
+      token:
+        description: email validation token    
+        required: true
+      platforms:
+        description: platforms to check on
+        required: true
+        default: c("windows-x86_64-devel","fedora-clang-devel","linux-x86_64-rocker-gcc-san","debian-gcc-devel-nold")
 jobs:
-  pkgdown:
+  rhub:
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -46,20 +56,12 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          install.packages("pkgdown")
+          install.packages("rhub")
         shell: Rscript {0}
 
-      - name: Run rhub checks (custom email)
-        if: github.event.inputs.email != ''
+      - name: Run rhub checks
         run: |
-          rhub::check_for_cran(email = ${{ github.event.inputs.email }})
-          rhub::check(platform = "debian-gcc-devel-nold", email = ${{ github.event.inputs.email }})
-        shell: Rscript {0}
-      
-      - name: Run rhub checks (maintainer)
-        if: github.event.inputs.email == ''
-        run: |
-          rhub::check_for_cran()
-          rhub::check(platform = "debian-gcc-devel-nold")
+          rhub::validate_email(email = ${{ github.event.inputs.email }}, token = ${{ github.event.inputs.token }})
+          rhub::check(platform = ${{ github.event.inputs.platforms }}, email = ${{ github.event.inputs.email }})
         shell: Rscript {0}
 
