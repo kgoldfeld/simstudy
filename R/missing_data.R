@@ -103,17 +103,14 @@ genMiss <- function(dtName, missDefs, idvars,
 
   # "Declare" vars to avoid R CMD warning
   # TODO "declare vars"
-  # varname   <- NULL
-  # period    <- NULL
-  # baseline  <- NULL
-  # monotonic <- NULL
-  # fmiss     <- NULL
-  # formula   <- NULL
-  utils::globalVariables(c(
-    "varname", "period", "baseline",
-    "monotonic", "fmiss", "formula"
-  ))
+  varname   <- NULL
+  period    <- NULL
+  baseline  <- NULL
+  monotonic <- NULL
+  fmiss     <- NULL
+  formula   <- NULL
 
+   
   includesLags <- FALSE
 
   data.table::setkeyv(dtName, idvars)
@@ -143,14 +140,17 @@ genMiss <- function(dtName, missDefs, idvars,
 
     dtMiss <- dtName[, c(idvars, periodvar), with = FALSE]
     colnames <- c(idvars, "period")
-    setnames(dtMiss, colnames)
-
+    data.table::setnames(dtMiss, colnames)
+    
     nPeriods <- dtMiss[, max(period)] + 1
 
     for (i in (1:nrow(tmDefs))) {
       if (tmDefs[i, baseline]) {
         dtTemp <- dtName[period == 0]
-        mat1 <- .genMissDataMat(dtName[period == 0], dtTemp, idvars, tmDefs[i, ])
+        mat1 <- .genMissDataMat(
+          dtName[period == 0], dtTemp,
+          idvars, tmDefs[i, ]
+        )
         vec1 <- addPeriods(mat1, nPeriods, idvars)[, tmDefs[i, varname],
           with = FALSE
         ]
@@ -158,7 +158,7 @@ genMiss <- function(dtName, missDefs, idvars,
         dtMiss <- cbind(dtMiss, vec1)
       } else { # not just baseline can be missing
 
-        dtTemp = copy(dtName)
+        dtTemp <- data.table::copy(dtName)
         mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ])
         vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
         dtMiss <- cbind(dtMiss, vec1)

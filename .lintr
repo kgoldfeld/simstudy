@@ -1,1 +1,2 @@
-linters: with_defaults(object_name_linter("camelCase"))
+linters: with_defaults(object_name_linter("camelCase"),
+object_usage_linter = NULL)

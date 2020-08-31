@@ -106,12 +106,12 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   ok
 }
 
-# .checkLags searches formulas for "LAG()" function
-#
-# @param formulas
-# @return boolean indicator that that at least one formula includes
-# "LAG()" function
-
+#' .checkLags searches formulas for "LAG()" function
+#'
+#' @param formulas
+#' @return boolean indicator that that at least one formula includes
+#' "LAG()" function
+#' @noRd
 .checkLags <- function(formulas) {
   nLAGS <- length(unlist(regmatches(
     formulas,
@@ -121,13 +121,13 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   return(nLAGS > 0)
 }
 
-# .addLags adds temp lag fields and returns data.table and updated formulas
-#
-# @param olddt data.table to be modified
-# @param formsdt string of formulas to be modified
-# @return list of modified data.table, modified formulas, and vector of
-# names of temporary variables.
-
+#' .addLags adds temp lag fields and returns data.table and updated formulas
+#'
+#' @param olddt data.table to be modified
+#' @param formsdt string of formulas to be modified
+#' @return list of modified data.table, modified formulas, and vector of
+#' names of temporary variables.
+#'@noRd
 .addLags <- function(olddt, formsdt) {
 
   # "Declare" vars to avoid R CMD warning
@@ -137,9 +137,9 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
 
   ##
 
-  lagdt <- copy(olddt)
-  lagforms <- copy(formsdt)
-  origNames <- copy(names(olddt))
+  lagdt <- data.table::copy(olddt)
+  lagforms <- data.table::copy(formsdt)
+  origNames <- data.table::copy(names(olddt))
 
   if (!any(lagdt[, .N, keyby = id][, N > 1])) stop("Data not longitudinal")
 

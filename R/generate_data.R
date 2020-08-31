@@ -79,9 +79,9 @@ addColumns <- function(dtDefs, dtOld) {
 
   # "declares" varname to avoid global NOTE
   # TODO "declare vars": see ?utils::globalVariables
-  varname = NULL
-  formula = NULL
-  dist = NULL
+  varname <- NULL
+  formula <- NULL
+  dist    <- NULL
 
   #
 
