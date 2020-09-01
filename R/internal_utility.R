@@ -26,16 +26,31 @@
 #'
 #' @param formula A data definition formula.
 #' @param extVars Named list with values of ..vars in `formula`
-#' @param dtSim data.table with previously generated data or NULL.
+#' @param dtSim data.table with previously generated data.
 #' @param n Number of observations to be generated
 #' @return A matrix of the generated Data.
-.evalWith <- function(formula, extVars, dtSim, n = nrow(dtSim)) {
-  if (missing(dtSim) && missing(n)) n <- 1
+#' @noRd
+.evalWith <- function(formula,
+                      extVars,
+                      dtSim = data.frame(),
+                      n = nrow(dtSim)) {
+
+  if (missing(dtSim) && missing(n)) {
+    n <- 1
+  }
+
+  if (!missing(dtSim) && n != nrow(dtSim)) {
+    stop(glue(
+      "Both 'dtSim' and 'n' are set but are of different length: ",
+       "{nrow(dtSim)} != {n}"
+    ))
+  }
 
   e <- list2env(extVars)
 
-  if (!is.null(dtSim))
+  if (!missing(dtSim)) {
     e <- list2env(dtSim, e)
+  }
 
   if (!is.null(e$formula2parse))
     stop("'formula2parse' is a reserved variable name!")
@@ -51,10 +66,12 @@
   }
   parsedValues <- sapply(formula, evalFormula)
 
+  # If only a single formula with 1 rep is eval'ed output would be not be
+  # matrix, so transpose for uniform output.
   if (!is.matrix(parsedValues))
     t(parsedValues)
   else
-    parsedValues
+   parsedValues
 }
 
 #' Get Distributions
@@ -83,16 +100,23 @@
 
 #' Is Formula Scalar?
 #'
+#' 
 #' @param formula String or Number
-#'
 #' @return Boolean
+#' @details currently not in use
 #' @noRd
 .isFormulaScalar <- function(formula) {
-  if (is.character(formula))
-    if (";" %in% strsplit(formula, "")[[1]])
+  if (is.character(formula)) {
+    if (";" %in% strsplit(formula, "")[[1]]) {
       FALSE
-    else
-      is.numeric(eval(parse(text = formula)))
+    } else {
+      !.isError(
+        try(is.numeric(eval(parse(text = formula),
+                        envir = NULL, enclos = NULL
+        )), silent = TRUE)
+      )
+    }
+  }
   else if (is.numeric(formula))
     TRUE
   else
@@ -135,12 +159,7 @@
 #' "LAG()" function
 #' @noRd
 .checkLags <- function(formulas) {
-  nLAGS <- length(unlist(regmatches(
-    formulas,
-    gregexpr("(?=LAG\\().*?(?<=\\))", formulas, perl = T)
-  )))
-
-  return(nLAGS > 0)
+  "LAG" %in% all.names(parse(text = formulas))
 }
 
 #' Add temp lag fields and update formulas
@@ -149,7 +168,7 @@
 #' @param formsdt string of formulas to be modified
 #' @return list of modified data.table, modified formulas, and vector of
 #' names of temporary variables.
-#'@noRd
+#' @noRd
 .addLags <- function(oldDT, formsdt) {
 
   # "Declare" vars to avoid R CMD warning
@@ -397,7 +416,7 @@
 #
 #' @param j Value of function
 #' @return inverse of Poisson ICC function
-
+#' @noRd 
 .findPoisVar <- function(j) {
 
   # 'declare' var
@@ -489,12 +508,8 @@
 #' @return TRUE or FALSE
 #' @noRd
 
-.isError <- function(tryobject) {
-  if (class(tryobject)[1] == "try-error") {
-    return(TRUE)
-  } else {
-    return(FALSE)
-  }
+.isError <- function(tryObject) {
+  is(tryObject, "try-error")
 }
 
 
@@ -503,6 +518,6 @@
 #' @param logodds Log odds
 #' @return Probability
 #' @noRd
-.log2Prob <- function(logodds) {
-  exp(logodds) / (1 + exp(logodds))
+.log2Prob <- function(logOdds) {
+  exp(logOdds) / (1 + exp(logOdds))
 }
