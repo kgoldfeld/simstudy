@@ -1,11 +1,34 @@
+#' Parse value of external variables
+#'
+#' @description This function fetches the value of variables that lie
+#'  outside the scope of the definition table so that they can be used in data
+#'  generation.
+#'
+#' @param formula Some object or literal containing data definition formula(s). 
+#' @return A named list with the value of the external variables.
+#' @examples
+#' extVar1 <- 23
+#' extVar2 <- 42
+#' .parseDotVars("a + ..extVar1 | b + ..extVar2")
+#' .parseDotVars(c("a + ..extVar1","b + ..extVar2"))
+#' .parseDotVars(data.frame("a + ..extVar1","b + ..extVar2"))
+#' @noRd
 .parseDotVars <- function(formula) {
   vars <- all.vars(parse(text = formula))
   dotVars <- startsWith(vars, "..")
-  varValues <- mget(sub("..", "", vars[dotVars]), envir = .GlobalEnv)
+  # TODO clarify inheritance in case of non globalEnvs in documentation
+  varValues <- mget(sub("..", "", vars[dotVars]), inherits = TRUE)
   names(varValues) <- vars[dotVars]
   varValues
 }
 
+#' Evaluate data frame with external variables
+#'
+#' @param formula A data definition formula.
+#' @param extVars Named list with values of ..vars in `formula`
+#' @param dtSim data.table with previously generated data or NULL.
+#' @param n Number of observations to be generated
+#' @return A matrix of the generated Data.
 .evalWith <- function(formula, extVars, dtSim, n = nrow(dtSim)) {
   if (missing(dtSim) && missing(n)) n <- 1
 
@@ -58,8 +81,6 @@
     )
   }
 
-parseT <- function(txt) parse(text = txt)
-
 #' Is Formula Scalar?
 #'
 #' @param formula String or Number
@@ -78,24 +99,25 @@ parseT <- function(txt) parse(text = txt)
     FALSE
 }
 
-#' Adapted from:
+#' Check if variable name is valid.
+#'
+#' @param x Name(s) to check for validity.
+#' @param allowReserved Should reserved names be allowed (..., ..1 etc.)
+#' @param unique Should the names be unique?
+#' @return A boolean value for each checked name.
+#' @details Adapted from:
 #' \url{https://4dpiecharts.com/2011/07/04/testing-for-valid-variable-names/}
-#'
-#' @param x
-#' @param allow_reserved
-#' @param unique
-#'
 #' @noRd
-is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
+.isValidVarName <- function(x, allowReserved = FALSE, unique = FALSE) {
   ok <- rep.int(TRUE, length(x))
 
   # is name too long?
-  max_name_length <- if (getRversion() < "2.13.0") 256L else 10000L
-  ok[nchar(x) > max_name_length] <- FALSE
+  maxLength <- if (getRversion() < "2.13.0") 256L else 10000L
+  ok[nchar(x) > maxLength] <- FALSE
 
   # is it a reserved variable, i.e.
   # an ellipsis or two dots then a number?
-  if (!allow_reserved) {
+  if (!allowReserved) {
     ok[x == "..."] <- FALSE
     ok[grepl("^\\.{2}[[:digit:]]+$", x)] <- FALSE
   }
@@ -106,9 +128,9 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   ok
 }
 
-#' .checkLags searches formulas for "LAG()" function
+#' Search formulas for "LAG()" function
 #'
-#' @param formulas
+#' @param formulas Formulas to check.
 #' @return boolean indicator that that at least one formula includes
 #' "LAG()" function
 #' @noRd
@@ -121,14 +143,14 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   return(nLAGS > 0)
 }
 
-#' .addLags adds temp lag fields and returns data.table and updated formulas
+#' Add temp lag fields and update formulas
 #'
-#' @param olddt data.table to be modified
+#' @param oldDT data.table to be modified
 #' @param formsdt string of formulas to be modified
 #' @return list of modified data.table, modified formulas, and vector of
 #' names of temporary variables.
 #'@noRd
-.addLags <- function(olddt, formsdt) {
+.addLags <- function(oldDT, formsdt) {
 
   # "Declare" vars to avoid R CMD warning
   # TODO "declare vars"
@@ -137,9 +159,9 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
 
   ##
 
-  lagdt <- data.table::copy(olddt)
+  lagdt <- data.table::copy(oldDT)
   lagforms <- data.table::copy(formsdt)
-  origNames <- data.table::copy(names(olddt))
+  origNames <- data.table::copy(names(oldDT))
 
   if (!any(lagdt[, .N, keyby = id][, N > 1])) stop("Data not longitudinal")
 
@@ -191,17 +213,17 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   list(lagdt, lagforms, lagNames)
 }
 
-# Assign treatment
-#
-# @param dt data table
-# @param strata vector of string names representing strata
-# @return An integer (group) ranging from 1 to length of the probability vector
-
+#' Assign treatment
+#'
+#' @param dt data table
+#' @param strata vector of string names representing strata
+#' @return An integer (group) ranging from 1 to length of the probability vector
+#' @noRd 
 .addStrataCode <- function(dt, strata) {
 
   # 'Declare' var
   # TODO "declare vars"
-  .stratum = NULL
+  .stratum <- NULL
 
   #
 
@@ -221,12 +243,12 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   dtWork[]
 }
 
-# Stratified sample
-#
-# @param nrow Number of rows in the stratum
-# @param ncat Number of treatment categories
-# @return A sample draw from a stratum
-
+#' Stratified sample
+#'
+#' @param nrow Number of rows in the stratum
+#' @param ncat Number of treatment categories
+#' @return A sample draw from a stratum
+#' @noRd
 .stratSamp <- function(nrow, ncat, ratio) {
   if (is.null(ratio)) ratio <- rep(1, ncat)
 
@@ -237,15 +259,15 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
 }
 
 
-#### TODO Implement Emrich and Piedmonte algorithm for correlated binary data? ####
-# Internal functions called by genCorGen and addCorGen - returns matrix
-#
-# @param nvars Number of new variables to generate
-# @param corMatrix Correlation matrix
-# @param rho Correlation coefficient
-# @param corstr Correlation structure
-# @return A correlation matrix
-
+# TODO Implement Emrich and Piedmonte algorithm for correlated binary data?
+#' Internal functions called by genCorGen and addCorGen - returns matrix
+#'
+#' @param nvars Number of new variables to generate
+#' @param corMatrix Correlation matrix
+#' @param rho Correlation coefficient
+#' @param corstr Correlation structure
+#' @return A correlation matrix
+#' @noRd
 .checkBoundsBin <- function(p1, p2, d) {
   l <- (p1 * p2) / ((1 - p1) * (1 - p2))
   L <- max(-sqrt(l), -sqrt(1 / l))
@@ -335,15 +357,15 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   return(dtM[])
 }
 
-### Check or create correlation matrix ####
-# Internal function called by genCorData and addCorGen - returns matrix
-#
-# @param nvars Number of new variables to generate
-# @param corMatrix Correlation matrix
-# @param rho Correlation coefficient
-# @param corstr Correlation structure
-# @return A correlation matrix
-
+#' Check or create correlation matrix
+#'
+#' @param nvars Number of new variables to generate
+#' @param corMatrix Correlation matrix
+#' @param rho Correlation coefficient
+#' @param corstr Correlation structure
+#' @return A correlation matrix
+#' @details  Internal function called by genCorData and addCorGen
+#' @noRd
 .buildCorMat <- function(nvars, corMatrix, corstr, rho) {
   if (is.null(corMatrix)) {
     corMatrix <- diag(nvars) # do not modify if indepdendent
@@ -371,10 +393,10 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   return(corMatrix)
 }
 
-# Internal function to find variance associated with ICC
+#' Find variance associated with ICC
 #
-# @param j Value of function
-# @return inverse of Poisson ICC function
+#' @param j Value of function
+#' @return inverse of Poisson ICC function
 
 .findPoisVar <- function(j) {
 
@@ -401,19 +423,19 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   return(dx[y <= j][.N, a])
 }
 
-#### Gamma distribution - variation to generate positive skew ####
-# Internal function called by .generate - returns gamma data
-#
-# @param n The number of observations required in the data set
-# @param mean The mean
-# @param variance The variance
-# @return A data.frame column with the updated simulated data
-
+#' Gamma distribution - variation to generate positive skew
+#'
+#' @param n The number of observations required in the data set
+#' @param mean The mean
+#' @param variance The variance
+#' @return A data.frame column with the updated simulated data
+#' @details Internal function called by .generate - returns gamma data
+#' @noRd 
 .genPosSkew <- function(n, mean, dispersion = 0) {
   if (dispersion == 0) {
     new <- rep(mean, n)
   } else {
-    variance = mean^2 * dispersion
+    variance <- mean^2 * dispersion
 
     shape <- (mean^2) / variance
     rate <- mean / variance
@@ -424,17 +446,17 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
   return(new)
 }
 
-#### Quantile for copula data generation ####
-# Internal function called by genCorGen and addCorGen - returns data.table
-#
-# @param nvars Number of new variables to generate
-# @param n Number records to generate
-# @param rho Correlation coefficient
-# @param corstr Correlation structure
-# @param corMatrix Correlation matrix
-# @param idname Name of id variable
-# @return A data.frame column with correlated uniforms
-
+#' Quantile for copula data generation
+#'
+#' @param nvars Number of new variables to generate
+#' @param n Number records to generate
+#' @param rho Correlation coefficient
+#' @param corstr Correlation structure
+#' @param corMatrix Correlation matrix
+#' @param idname Name of id variable
+#' @return A data.frame column with correlated uniforms
+#' @details Internal function called by genCorGen and addCorGen
+#' @noRd
 .genQuantU <- function(nvars, n, rho, corstr, corMatrix, idname = "id") {
 
   # "Declare" vars to avoid R CMD warning
@@ -481,7 +503,6 @@ is_valid_variable_name <- function(x, allow_reserved = FALSE, unique = FALSE) {
 #' @param logodds Log odds
 #' @return Probability
 #' @noRd
-
 .log2Prob <- function(logodds) {
   exp(logodds) / (1 + exp(logodds))
 }

@@ -6,7 +6,6 @@
 #' @return Nothing is returned if all tests are passed. If a test fails,
 #' execution is halted.
 #' @noRd
-
 .evalDef <-
   function(newvar,
            newform,
@@ -43,7 +42,7 @@
       )
     }
 
-    if (!is_valid_variable_name(newvar)) {
+    if (!.isValidVarName(newvar)) {
       warning(
         paste(
           "Variable name '",
