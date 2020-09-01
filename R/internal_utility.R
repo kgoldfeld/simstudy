@@ -17,7 +17,7 @@
   vars <- all.vars(parse(text = formula))
   dotVars <- startsWith(vars, "..")
   # TODO clarify inheritance in case of non globalEnvs in documentation
-  varValues <- mget(sub("..", "", vars[dotVars]), inherits = TRUE)
+  varValues <- mget(sub("..", "", vars[dotVars]),envir = parent.frame(), inherits = TRUE)
   names(varValues) <- vars[dotVars]
   varValues
 }

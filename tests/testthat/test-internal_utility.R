@@ -19,9 +19,6 @@ test_that("variables from different environments are parsed correctly", {
   env2$extVar2 <- 42
   res <- list(..extVar1 = 23, ..extVar2 = 42, ..extVar3 = 7)
 
-  expect_equal(.parseDotVars("a + ..extVar1 | b + ..extVar2 * ..extVar3"), res)
-  expect_equal(.parseDotVars(c("a + ..extVar1 * ..extVar2", "b + ..extVar3")), res)
-
   with(env2, {
       expect_equal(.parseDotVars("a + ..extVar1 | b + ..extVar2 * ..extVar3"), res)
       expect_equal(.parseDotVars(c("a + ..extVar1 * ..extVar2", "b + ..extVar3")), res)
