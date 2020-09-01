@@ -236,7 +236,7 @@
   var_dt <- strsplit(var_pr[[1]], "|", fixed = T)
   formDT <- as.data.table(do.call(rbind, var_dt))
   ps <-
-    cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2]), NULL, 1))
+    cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2])))
 
   conditions <- paste0("(interval==", 1:nrow(formDT[, 1]), ")")
   f1 <- paste(unlist(formDT[, 1]), conditions, sep = "*")
