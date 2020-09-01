@@ -22,12 +22,12 @@ Depends:
     R (>= 3.2.2)
 Imports:
     data.table,
+    glue,
     mvnfast,
     mvtnorm,
     Rcpp
 Suggests: 
     covr,
-    formatR,
     ggplot2,
     grid,
     gridExtra,
