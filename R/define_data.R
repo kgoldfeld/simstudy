@@ -41,7 +41,6 @@
 #' dt <- addCondition(defC, dt, "z")
 #' dt
 #' @export
-
 defCondition <- function(dtDefs = NULL,
                          condition,
                          formula,
@@ -106,7 +105,7 @@ defData <- function(dtDefs = NULL,
                     link = "identity",
                     id = "id") {
 
-  #### Check that arguments have been passed ####
+  #### Check that arguments have been passed
 
   if (missing(varname)) stop("argument 'varname' is missing", call. = FALSE)
   if (missing(formula)) stop("argument 'formula' is missing", call. = FALSE)
