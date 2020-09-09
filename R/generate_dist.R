@@ -96,7 +96,7 @@
 # @param formula String that specifies the mean (lambda)
 # @return A data.frame column with the updated simulated data
 
-.getBetaMean <- function(dtSim, formula, link, n) {
+.getBetaMean <- function(dtSim, formula, link, n = nrow(dtSim)) {
   mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   if (link == "logit") {
     mean <- 1 / (1 + exp(-mean))
@@ -124,7 +124,7 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column  with the updated simulated data
 
-.getBinaryMean <- function(dtSim, formula, Size, link, n) {
+.getBinaryMean <- function(dtSim, formula, Size, link, n = nrow(dtSim)) {
   size <- .evalWith(Size, .parseDotVars(Size), dtSim, n)
   p <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
 
@@ -211,7 +211,7 @@
 # @param formula String that specifies the probabilities
 # @return A data.frame column with the updated simulated data
 
-.getGammaMean <- function(dtSim, formula, link, n) {
+.getGammaMean <- function(dtSim, formula, link, n = nrow(dtSim)) {
   mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
@@ -256,7 +256,7 @@
 # @param formula String that specifies the mean
 # @return A data.frame column with the updated simulated data
 
-.getNBmean <- function(dtSim, formula, link, n) {
+.getNBmean <- function(dtSim, formula, link, n = nrow(dtSim)) {
   mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
@@ -284,7 +284,7 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column  with the updated simulated data
 
-.getNormalMean <- function(dtSim, formula, n) {
+.getNormalMean <- function(dtSim, formula, n = nrow(dtSim)) {
   .evalWith(formula, .parseDotVars(formula), dtSim, n)
 }
 
@@ -303,7 +303,7 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column with the updated simulated data
 
-.getPoissonMean <- function(dtSim, formula, link, n) {
+.getPoissonMean <- function(dtSim, formula, link, n = nrow(dtSim)) {
   mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
 
   if (link == "log") {
