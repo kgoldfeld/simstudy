@@ -9,6 +9,8 @@
 status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=restructure)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/restructure/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
@@ -53,16 +55,16 @@ dt <- genData(250, def)
 dt <- trtAssign(dt, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dt
-#>       id         x        y grp
-#>   1:   1  9.750958 7.253067   1
-#>   2:   2 10.290396 7.459266   1
-#>   3:   3  8.475827 4.762035   4
-#>   4:   4  8.835629 7.875204   4
-#>   5:   5 10.996427 8.740167   3
-#>  ---                           
-#> 246: 246  9.524532 7.303001   2
-#> 247: 247 10.038139 7.591058   1
-#> 248: 248  6.330682 6.872658   4
-#> 249: 249  8.340167 7.684489   2
-#> 250: 250 11.634552 8.893969   2
+#>       id         x         y grp
+#>   1:   1  7.115924  7.875171   2
+#>   2:   2 10.572041  7.355647   1
+#>   3:   3  9.634730  8.622469   4
+#>   4:   4 11.558365  8.794604   4
+#>   5:   5  7.861149  8.568316   2
+#>  ---                            
+#> 246: 246 13.458648  9.492960   1
+#> 247: 247 10.037167  8.555292   2
+#> 248: 248  8.632074  4.632683   2
+#> 249: 249 13.328257 12.422091   3
+#> 250: 250 11.316940  8.071595   3
 ```
