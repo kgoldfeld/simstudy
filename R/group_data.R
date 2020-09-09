@@ -360,7 +360,6 @@ genNthEvent <- function(dtName, defEvent, nEvents = 1,
 #' dt6 <- trtAssign(dt, nTrt = 3, ratio = c(1, 2, 2), grpName = "Group")
 #' dt6[, .N, keyby = .(Group)]
 #' @export
-
 trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
                       strata = NULL, grpName = "trtGrp", ratio = NULL) {
 
@@ -418,6 +417,57 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   }
 
   return(dt[])
+}
+
+#' Add strata code to data table
+#'
+#' @param dt data table
+#' @param strata vector of string names representing strata
+#' @return The old data table with an add column containing an integer ranging
+#' from one to `2^length(strata)`.
+#' @md
+#' @noRd
+.addStrataCode <- function(dt, strata) {
+
+  # 'Declare' var
+  # TODO "declare vars"
+  .stratum <- NULL
+
+  dtWork <- copy(dt)
+
+  strataOnly <- dtWork[, eval(strata), with = FALSE]
+  data.table::setkeyv(strataOnly, names(strataOnly))
+
+  uniqueStrata <- unique(strataOnly)
+  uniqueStrata[, .stratum := (1:.N)]
+
+  data.table::setkeyv(dtWork, names(strataOnly))
+  dtWork <- uniqueStrata[dtWork]
+
+  data.table::setkeyv(dtWork, key(dt))
+  setcolorder(dtWork, colnames(dt))
+
+  dtWork
+}
+
+#' Stratified sample
+#' @description Helper function to randomly assign a treatment group to the
+#' elements of a stratum.
+#' @param nrow Number of rows in the stratum
+#' @param ncat Number of treatment categories
+#' @param ratio vector of values indicating relative proportion of group
+#' assignment
+#' @return A vector containing the group assignments for each elemen of the
+#'  stratum.
+#' @noRd
+.stratSamp <- function(nrow, ncat, ratio = NULL) {
+  if (is.null(ratio)) ratio <- rep(1, ncat)
+
+  neach <- floor(nrow / sum(ratio))
+  distrx <- rep(c(1:ncat), times = (neach * ratio))
+  extra <- nrow - length(distrx)
+  
+  sample(c(distrx, sample(rep(1:ncat, times = ratio), extra)))
 }
 
 #' Observed exposure or treatment

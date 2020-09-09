@@ -1,5 +1,5 @@
 # .parseDotVars ----
-test_that("dotVars are parsed correctly", {
+test_that("dotVars are parsed correctly.", {
   extVar1 <- 23
   extVar2 <- 42
   res <- list(..extVar1 = 23, ..extVar2 = 42)
@@ -11,7 +11,7 @@ test_that("dotVars are parsed correctly", {
   expect_error(.parseDotVars("..extVar12"))
 })
 
-test_that("variables from different environments are parsed correctly", {
+test_that("variables from different environments are parsed correctly.", {
   extVar3 <- 7
   env1 <- new.env()
   env2 <- new.env(parent = env1)
@@ -27,7 +27,7 @@ test_that("variables from different environments are parsed correctly", {
 })
 
 # .evalWith ----
-test_that("evalWith throws errors", {
+test_that("evalWith throws errors.", {
   df <- data.frame()
   ext <- list(formula2parse = 2)
 
@@ -35,7 +35,7 @@ test_that("evalWith throws errors", {
   expect_error(.evalWith("", list(), df, 10), "different length")
 })
 
-test_that("evalWith output length is correct", {
+test_that("evalWith output length is correct.", {
   df <- data.frame(a = rep.int(5, 5))
   ext <- list(..ev = 2)
 
@@ -59,11 +59,13 @@ test_that("number of Dists is up to date.", {
 })
 
 # .isFormulaScalar ----
-test_that("isFormularScalar works correctly", {
+test_that("isFormularScalar works correctly.", {
   expect_true(.isFormulaScalar("5 + 3"))
   expect_true(.isFormulaScalar(5 + 3))
+
   expect_false(.isFormulaScalar("a + 3"))
   expect_false(.isFormulaScalar("a;3"))
+  expect_false(.isFormulaScalar(data.frame(a = "asd")))
 })
 
 # .isValidVarName ----
@@ -80,24 +82,11 @@ test_that("var names are validated correctly.", {
   expect_false(all(.isValidVarName(validNames, unique = TRUE)))
 })
 
-# .checkLags ----
-test_that("LAG() usage is detected correctly", {
-  hasLag <- c("a + 5 | LAG(3) - 4", " 4 + 3 ", "LAG()")
-  noLag <- c("a +5", "3 + 1", "log(3) + b")
 
-  expect_true(.checkLags(hasLag))
-  expect_true(.checkLags(hasLag[1]))
+# .genQuantU ----
 
-  expect_false(.checkLags(noLag))
-  expect_false(.checkLags(noLag[1]))
-})
-
-# .addLags ----
-test_that("unit of code works", {
-  
-})
 # .isError ----
-test_that("errors are detected correctly", {
+test_that("errors are detected correctly.", {
   err <- try(nonVar + 4, silent = TRUE)
   noErr <- try(3 + 5, silent = TRUE)
 

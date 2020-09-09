@@ -97,7 +97,6 @@ defMiss <- function(dtDefs = NULL,
 #' dtObs <- genObs(dtAct, missMat, idvars = "id")
 #' dtObs
 #' @export
-
 genMiss <- function(dtName, missDefs, idvars,
                     repeated = FALSE, periodvar = "period") {
 
@@ -188,6 +187,88 @@ genMiss <- function(dtName, missDefs, idvars,
   dtbind[]
 }
 
+
+#' Search formulas for "LAG()" function
+#'
+#' @param formulas Formulas to check.
+#' @return boolean indicator that that at least one formula includes
+#' "LAG()" function
+#' @noRd
+.checkLags <- function(formulas) {
+  "LAG" %in% all.names(parse(text = formulas))
+}
+
+#' Add temp lag fields and update formulas
+#'
+#' @description Creates new columns with shifted values for "LAG(x)" fields to
+#' allow for MAR-missignes. Replaces "LAG(x)" with temp var ".x1".
+#' @param oldDT data.table to be modified
+#' @param formsdt string of formulas to be modified
+#' @return list of modified data.table, modified formulas, and vector of
+#' names of temporary variables.
+#' @noRd
+.addLags <- function(oldDT, formsdt) {
+  # TODO add LAG function to documentation
+  # "Declare" vars to avoid R CMD warning
+  # TODO "declare vars"
+  id <- NULL
+  N <- NULL
+
+  ##
+
+  lagdt <- data.table::copy(oldDT)
+  lagforms <- data.table::copy(formsdt)
+  origNames <- data.table::copy(names(oldDT))
+
+  if (!any(lagdt[, .N, keyby = id][, N > 1])) stop("Data not longitudinal")
+
+  nforms <- length(lagforms)
+
+  for (p in 1:nforms) {
+    lags <- regmatches(
+      lagforms[p],
+      gregexpr("(?<=LAG\\().*?(?=\\))", lagforms[p], perl = T)
+    )[[1]]
+
+    if (length(lags) == 0) next # No lags in current formula
+
+    # TODO remove/adjust this error
+    if (any(table(lags) > 1)) {
+      stop("Repeated lag term in formula")
+    }
+
+    if (!all(is.element(lags, origNames))) {
+      stop(paste(setdiff(lags, origNames), "not in data table. "))
+    }
+
+    lags1 <- paste0(".", lags, "1")
+    if (is.element(lags1, origNames)) {
+      stop("Please do not use .*1 names")
+    }
+
+    # Everything is OK: update formula
+
+    regmatches(
+      lagforms[p],
+      gregexpr("(?=LAG\\().*?(?<=\\))", lagforms[p], perl = T)
+    ) <- list(lags1)
+
+    # Add new column(s) for lagged data
+
+    for (i in 1:length(lags[p])) {
+      if (!is.element(lags1[i], origNames)) {
+        lagdt[, (lags1[i]) := shift(.SD[, lags, with = FALSE], n = 1, fill = 0),
+          by = id
+        ]
+      }
+    }
+  }
+
+  lagNames <- setdiff(names(lagdt), origNames)
+
+  list(lagdt, lagforms, lagNames)
+}
+
 #' Internal function called by genMiss - returns a missing data matrix
 #'
 #' @param dtName Name of complete data set
@@ -231,8 +312,6 @@ genMiss <- function(dtName, missDefs, idvars,
   return(matMiss)
 }
 
-
-#### Generate observed only data ####
 #' Create an observed data set that includes missing data
 #'
 #' @param dtName Name of complete data set

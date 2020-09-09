@@ -125,7 +125,7 @@ catProbs <- function(..., n = 0) {
 
 delColumns <- function(dtOld, vars) {
 
-  #### Check that arguments have been passed ####
+  #### Check that arguments have been passed 
 
   if (missing(dtOld)) stop("argument 'dtOld' is missing", call. = FALSE)
   if (missing(vars)) stop("argument 'vars' is missing", call. = FALSE)
@@ -207,7 +207,6 @@ gammaGetShapeRate <- function(mean, dispersion) {
 #'
 #' iccRE(targetICC, "negBinomial", lambda = 40, disp = .5)
 #' @export
-
 iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, disp = NULL) {
   if (dist == "poisson") {
     if (is.null(lambda)) stop("Specify a value for lambda")
