@@ -83,7 +83,7 @@ test_that("var names are validated correctly.", {
 })
 
 
-# .genQuantU ----
+
 
 # .isError ----
 test_that("errors are detected correctly.", {
