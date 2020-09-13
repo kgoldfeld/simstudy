@@ -14,7 +14,7 @@
 #' def <- defData(varname = "xNr", dist = "nonrandom", formula = 7,
 #'                id = "idnum")
 #' def <- defData(def, varname = "xUni", dist = "uniform",
-#' q              formula = "10;20")
+#'                formula = "10;20")
 #' def <- defData(def, varname = "xNorm", formula = "xNr + xUni * 2",
 #'                dist = "normal", variance = 8)
 #' def <- defData(def, varname = "xPois", dist = "poisson",
