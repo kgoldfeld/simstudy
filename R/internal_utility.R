@@ -282,9 +282,8 @@
 #' @param tryObject the result of a try() call.
 #' @return TRUE or FALSE
 #' @noRd
-
 .isError <- function(tryObject) {
-  is(tryObject, "try-error")
+  methods::is(tryObject, "try-error")
 }
 
 
