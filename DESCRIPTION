@@ -23,6 +23,7 @@ Depends:
 Imports:
     data.table,
     glue,
+    methods,
     mvnfast,
     mvtnorm,
     Rcpp
