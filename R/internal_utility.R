@@ -39,7 +39,7 @@
     n <- 1
   }
 
-  if (!missing(dtSim) && n != nrow(dtSim)) {
+  if (!missing(dtSim) && !is.null(dtSim) && n != nrow(dtSim)) {
     stop(glue(
       "Both 'dtSim' and 'n' are set but are of different length: ",
        "{nrow(dtSim)} != {n}"
@@ -48,7 +48,7 @@
 
   e <- list2env(extVars)
 
-  if (!missing(dtSim)) {
+  if (!missing(dtSim) && !is.null(dtSim)) {
     e <- list2env(dtSim, e)
   }
 
