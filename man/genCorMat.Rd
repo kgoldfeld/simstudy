@@ -30,3 +30,4 @@ genCorMat(3)
 genCorMat(5, c(.3, -.2, .1, .2, .5, .2, -.1, .3, .1, .2))
 genCorMat(5)
 }
+\concept{correlated}

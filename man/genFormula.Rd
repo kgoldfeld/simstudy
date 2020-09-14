@@ -40,3 +40,4 @@ set.seed(2001)
 dt <- genData(500, def1)
 summary(glm(B ~ A, data = dt, family = binomial))
 }
+\concept{generate_data}

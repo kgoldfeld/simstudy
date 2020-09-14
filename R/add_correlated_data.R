@@ -55,8 +55,8 @@
 #'   corMatrix = corMat
 #' )
 #' round(cor(dtAdd[, .(V1, V2, V3)]), 2)
+#' @concept correlated
 #' @export
-
 addCorData <- function(dtOld, idname, mu, sigma, corMatrix = NULL,
                        rho, corstr = "ind", cnames = NULL) {
   # dtName must contain id for now
@@ -142,8 +142,8 @@ addCorData <- function(dtOld, idname, mu, sigma, corMatrix = NULL,
 #'
 #' # Check global correlations - should not be as correlated
 #' cor(di[, list(A, B, C, D)])
+#' @concept correlated
 #' @export
-#'
 addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
                        corMatrix = NULL) {
 
@@ -388,8 +388,8 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #'   method = "ep", formSpec = probform,
 #'   periodvar = "period"
 #' )
+#' @concept correlated
 #' @export
-#'
 addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL,
                       method = "copula", formSpec = NULL, periodvar = "period") {

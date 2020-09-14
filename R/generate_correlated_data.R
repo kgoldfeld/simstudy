@@ -37,8 +37,7 @@
 #' round(var(dtcor2[, .(V1, V2, V3)]), 3)
 #' round(cor(dtcor2[, .(V1, V2, V3)]), 2)
 #' @export
-#'
-
+#' @concept correlated
 genCorData <- function(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
                        cnames = NULL, idname = "id") {
   nvars <- length(mu)
@@ -115,7 +114,7 @@ genCorData <- function(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
 #' var(dt[, -"id"])
 #' apply(dt[, -"id"], 2, mean)
 #' @export
-#'
+#' @concept correlated
 genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = NULL) {
 
   # "Declare" vars to avoid R CMD warning
@@ -288,7 +287,7 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = 
 #'   corMatrix = genCorMat(3), method = "copula"
 #' )
 #' @export
-#'
+#' @concept correlated
 genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
                       corMatrix = NULL, wide = FALSE, cnames = NULL, method = "copula",
                       idname = "id") {
@@ -533,8 +532,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 #' genCorMat(5, c(.3, -.2, .1, .2, .5, .2, -.1, .3, .1, .2))
 #' genCorMat(5)
 #' @export
-#'
-
+#' @concept correlated
 genCorMat <- function(nvars, cors = NULL) {
   if (is.null(cors)) {
     ev = stats::runif(nvars, 0, 10)
@@ -621,6 +619,7 @@ genCorMat <- function(nvars, cors = NULL) {
 #'   value.var = "V1", fill = 0
 #' )
 #' @export
+#' @concept correlated
 genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
                          prefix = "grp", rho, corstr, corMatrix = NULL) {
 

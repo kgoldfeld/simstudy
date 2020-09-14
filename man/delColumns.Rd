@@ -31,3 +31,4 @@ dt
 dt <- delColumns(dt, "x")
 dt
 }
+\concept{utility}

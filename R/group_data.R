@@ -39,8 +39,7 @@
 #' dtPeriod <- addPeriods(dt)
 #' dtPeriod[id %in% c(8, 121)] # View individuals 8 and 121 only
 #' @export
-#'
-
+#' @concept group_data
 addPeriods <- function(dtName,
                        nPeriods = NULL,
                        idvars = "id",
@@ -207,7 +206,7 @@ addPeriods <- function(dtName,
 #' )
 #' dtClass
 #' @export
-
+#' @concept group_data
 genCluster <- function(dtClust,
                        cLevelVar,
                        numIndsVar,
@@ -279,8 +278,7 @@ genCluster <- function(dtClust,
 #' d <- addPeriods(d, 10)
 #' dx <- genNthEvent(d, defEvent = defE, nEvents = 3)
 #' @export
-#'
-
+#' @concept group_data
 genNthEvent <- function(dtName, defEvent, nEvents = 1,
                         perName = "period", id = "id") {
 
@@ -360,6 +358,7 @@ genNthEvent <- function(dtName, defEvent, nEvents = 1,
 #' dt6 <- trtAssign(dt, nTrt = 3, ratio = c(1, 2, 2), grpName = "Group")
 #' dt6[, .N, keyby = .(Group)]
 #' @export
+#' @concept group_data
 trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
                       strata = NULL, grpName = "trtGrp", ratio = NULL) {
 
@@ -501,7 +500,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 #' dtSum[, grpPct := round(N / sum(N), 2), keyby = .(male, over65)]
 #' dtSum
 #' @export
-
+#' @concept group_data
 trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
   if (missing(dt)) {
     stop("Data table argument is missing", call. = FALSE)
@@ -591,6 +590,7 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 #' )
 #' dp
 #' @export
+#' @concept group_data
 trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
                          startPer, perName = "period", grpName = "rx",
                          lag = 0, xrName = "xr") {

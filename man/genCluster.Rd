@@ -54,3 +54,4 @@ dtClass <- genCluster(dtSchool,
 )
 dtClass
 }
+\concept{group_data}

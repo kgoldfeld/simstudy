@@ -80,3 +80,4 @@ for (i in 1:nrow(dc)) {
 # Check global correlations - should not be as correlated
 cor(di[, list(A, B, C, D)])
 }
+\concept{correlated}

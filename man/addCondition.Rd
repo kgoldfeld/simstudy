@@ -54,3 +54,5 @@ library(ggplot2)
 ggplot(data = dt, aes(x = y, y = NewVar, group = x)) +
   geom_point(aes(color = factor(x)))
 }
+\concept{condition}
+\concept{generate_data}

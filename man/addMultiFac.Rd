@@ -42,3 +42,4 @@ DT <- genData(300, defD)
 DT <- addMultiFac(DT, nFactors = 3, levels = 2)
 DT[, .N, keyby = .(Var1, Var2, Var3)]
 }
+\concept{generate_data}

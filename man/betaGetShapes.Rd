@@ -37,3 +37,4 @@ vec <- rbeta(1000, shape1 = rs$shape1, shape2 = rs$shape2)
   (shape1 * shape2) / ((shape1 + shape2)^2 * (1 + shape1 + shape2))
 )))
 }
+\concept{utility}

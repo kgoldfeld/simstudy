@@ -66,3 +66,5 @@ dt <- genSpline(
 
 dt
 }
+\concept{generate_data}
+\concept{splines}

@@ -21,7 +21,7 @@
 #'   (shape1 * shape2) / ((shape1 + shape2)^2 * (1 + shape1 + shape2))
 #' )))
 #' @export
-
+#' @concept utility
 betaGetShapes <- function(mean, precision) {
   if (any(mean <= 0) | any(mean >= 1)) stop("Mean out of range: must be between 0 and 1")
   if (any(precision <= 0)) stop("Precision out of range: must be greater than 0")
@@ -54,7 +54,7 @@ betaGetShapes <- function(mean, precision) {
 #' catProbs(1, 2, 3)
 #' catProbs(n = 5)
 #' @export
-
+#' @concept utility
 catProbs <- function(..., n = 0) {
   nProbs <- ...length()
   probs <- unlist(list(...))
@@ -122,7 +122,7 @@ catProbs <- function(..., n = 0) {
 #' dt <- delColumns(dt, "x")
 #' dt
 #' @export
-
+#' @concept utility
 delColumns <- function(dtOld, vars) {
 
   #### Check that arguments have been passed 
@@ -162,7 +162,7 @@ delColumns <- function(dtOld, vars) {
 #' (theoryMoments <- c(mean, mean^2 * dispersion))
 #' (theoryMoments <- c(rs$shape / rs$rate, rs$shape / rs$rate^2))
 #' @export
-
+#' @concept utility
 gammaGetShapeRate <- function(mean, dispersion) {
   variance = dispersion * (mean^2)
 
@@ -207,6 +207,7 @@ gammaGetShapeRate <- function(mean, dispersion) {
 #'
 #' iccRE(targetICC, "negBinomial", lambda = 40, disp = .5)
 #' @export
+#' @concept utility
 iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, disp = NULL) {
   if (dist == "poisson") {
     if (is.null(lambda)) stop("Specify a value for lambda")
@@ -261,7 +262,7 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
 #' dtMerge <- mergeData(dt1, dt2, "xcat")
 #' dtMerge
 #' @export
-
+#' @concept utility
 mergeData <- function(dt1, dt2, idvars) {
   oldkey = data.table::key(dt1)
 
@@ -294,7 +295,7 @@ mergeData <- function(dt1, dt2, idvars) {
 #' (theoryMoments <- c(mean, mean + mean^2 * dispersion))
 #' (theoryMoments <- c(sp$size * (1 - sp$prob) / sp$prob, sp$size * (1 - sp$prob) / sp$prob^2))
 #' @export
-
+#' @concept utility
 negbinomGetSizeProb <- function(mean, dispersion) {
   variance = mean + dispersion * (mean^2)
 
@@ -336,7 +337,7 @@ negbinomGetSizeProb <- function(mean, dispersion) {
 #'
 #' dp
 #' @export
-
+#' @concept utility
 trimData <- function(dtOld, seqvar, eventvar, idvar = "id") {
   dx <- copy(dtOld)
 
@@ -389,7 +390,8 @@ trimData <- function(dtOld, seqvar, eventvar, idvar = "id") {
 #' updateDef(dtDefs = defs, changevar = "x", remove = TRUE)
 #' updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
 #' @export
-
+#' @concept utility 
+#' @concept define_data
 updateDef <- function(dtDefs, changevar, newformula = NULL,
                       newvariance = NULL, newdist = NULL, newlink = NULL,
                       remove = FALSE) {
@@ -496,7 +498,8 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
 #' dt <- addColumns(defsA, dt)
 #' dt
 #' @export
-
+#' @concept utility 
+#' @concept define_data
 updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
                          newvariance = NULL, newdist = NULL, newlink = NULL,
                          remove = FALSE) {
@@ -563,7 +566,8 @@ updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
 #' knots <- c(0.25, 0.50, 0.75)
 #' viewBasis(knots, degree = 3)
 #' @export
-
+#' @concept utility 
+#' @concept splines
 viewBasis <- function(knots, degree) {
 
   # 'declare vars'
@@ -628,7 +632,8 @@ viewBasis <- function(knots, degree) {
 #'
 #' viewSplines(knots, degree = 2, theta2)
 #' @export
-
+#' @concept splines
+#' @concept utility
 viewSplines <- function(knots, degree, theta) {
 
   # 'declare'

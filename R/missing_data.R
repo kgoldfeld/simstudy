@@ -37,7 +37,7 @@
 #' dtObs <- genObs(dtAct, missMat, idvars = "id")
 #' dtObs
 #' @export
-
+#' @concept missing
 defMiss <- function(dtDefs = NULL,
                     varname,
                     formula,
@@ -97,6 +97,7 @@ defMiss <- function(dtDefs = NULL,
 #' dtObs <- genObs(dtAct, missMat, idvars = "id")
 #' dtObs
 #' @export
+#' @concept missing
 genMiss <- function(dtName, missDefs, idvars,
                     repeated = FALSE, periodvar = "period") {
 
@@ -345,7 +346,7 @@ genMiss <- function(dtName, missDefs, idvars,
 #' dtObs <- genObs(dtAct, missMat, idvars = "id")
 #' dtObs
 #' @export
-
+#' @concept missing
 genObs <- function(dtName, dtMiss, idvars) {
   if (missing(dtName)) {
     stop("Argument dtName is missing", call. = FALSE)

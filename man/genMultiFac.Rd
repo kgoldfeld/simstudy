@@ -47,3 +47,4 @@ genMultiFac(
   colNames = c("Fac1", "Fac2", "Fac3"), id = "block"
 )
 }
+\concept{generate_data}

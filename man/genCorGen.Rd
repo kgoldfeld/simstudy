@@ -100,3 +100,4 @@ genCorGen(1000,
   corMatrix = genCorMat(3), method = "copula"
 )
 }
+\concept{correlated}

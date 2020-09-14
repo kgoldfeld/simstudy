@@ -41,6 +41,8 @@
 #' dt <- addCondition(defC, dt, "z")
 #' dt
 #' @export
+#' @concept define_data
+#' @concept condition
 defCondition <- function(dtDefs = NULL,
                          condition,
                          formula,
@@ -100,6 +102,7 @@ defCondition <- function(dtDefs = NULL,
 #'                link = "logit")
 #' def
 #' @export
+#' @concept define_data
 defData <- function(dtDefs = NULL,
                     varname,
                     formula,
@@ -171,7 +174,7 @@ defData <- function(dtDefs = NULL,
 #' dt <- addColumns(def2, dt)
 #' dt
 #' @export
-
+#' @concept define_data
 defDataAdd <- function(dtDefs = NULL,
                        varname,
                        formula,
@@ -231,7 +234,8 @@ defDataAdd <- function(dtDefs = NULL,
 #'
 #' genData(5, defs)
 #' @export
-
+#' @concept define_data
+#' @concept condition
 defRead <- function(filen, id = "id") {
 
   # 'declare var
@@ -317,7 +321,7 @@ defRead <- function(filen, id = "id") {
 #' unlink(tfcsv1)
 #' unlink(tfcsv2)
 #' @export
-
+#' @concept define_data
 defReadAdd <- function(filen) {
   if (!file.exists(filen)) stop("No such file")
 
@@ -377,7 +381,7 @@ defReadAdd <- function(filen) {
 #' unlink(tfcsv1)
 #' unlink(tfcsv2)
 #' @export
-
+#' @concept define_data
 defReadCond <- function(filen) {
   if (!file.exists(filen)) stop("No such file")
 
@@ -428,7 +432,7 @@ defReadCond <- function(filen) {
 #'
 #' head(dtSurv)
 #' @export
-
+#' @concept define_data
 defSurv <- function(dtDefs = NULL,
                     varname,
                     formula = 0,
@@ -750,7 +754,7 @@ defSurv <- function(dtDefs = NULL,
       formFuncs,
       ifnotfound = NA,
       mode = "function",
-      inherits = T
+      inherits = TRUE
     ))
 
   if (any(naFormFuncs))
@@ -764,7 +768,7 @@ defSurv <- function(dtDefs = NULL,
       sub("..", "", formVars[dotVarsBol]),
       ifnotfound = NA,
       mode = "numeric",
-      inherits = T
+      inherits = TRUE
     ))
 
   if (any(naDotVars))

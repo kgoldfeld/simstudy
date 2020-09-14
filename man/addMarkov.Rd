@@ -85,3 +85,4 @@ d2 <- addMarkov(dd, P, chainLen = 5, wide = TRUE)
 d3 <- addMarkov(dd, P, chainLen = 5, wide = TRUE, start0lab = "S0")
 d4 <- addMarkov(dd, P, chainLen = 5, start0lab = "S0", trimvalue = 3)
 }
+\concept{generate_data}

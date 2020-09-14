@@ -52,3 +52,4 @@ dtSurv <- genSurv(dtSurv, sdef)
 
 head(dtSurv)
 }
+\concept{define_data}

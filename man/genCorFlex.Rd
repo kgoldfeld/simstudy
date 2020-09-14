@@ -52,3 +52,4 @@ cor(dt[, -"id"], method = "kendall")
 var(dt[, -"id"])
 apply(dt[, -"id"], 2, mean)
 }
+\concept{correlated}

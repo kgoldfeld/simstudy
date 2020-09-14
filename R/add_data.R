@@ -19,9 +19,9 @@
 #'
 #' dt <- addColumns(def2, dt)
 #' dt
+#' @concept generate_data
+#' @concept define_data
 #' @export
-#'
-
 addColumns <- function(dtDefs, dtOld) {
 
   # "declares" varname to avoid global NOTE
@@ -99,9 +99,8 @@ addColumns <- function(dtDefs, dtOld) {
 #' ggplot(data = dt, aes(x = y, y = NewVar, group = x)) +
 #'   geom_point(aes(color = factor(x)))
 #' @export
-#'
-
-
+#' @concept generate_data 
+#' @concept condition
 addCondition <- function(condDefs, dtOld, newvar) {
 
   # 'declare' vars
@@ -225,7 +224,7 @@ addCondition <- function(condDefs, dtOld, newvar) {
 #' d3 <- addMarkov(dd, P, chainLen = 5, wide = TRUE, start0lab = "S0")
 #' d4 <- addMarkov(dd, P, chainLen = 5, start0lab = "S0", trimvalue = 3)
 #' @export
-
+#' @concept generate_data
 addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state",
                       widePrefix = "S", start0lab = NULL,
@@ -337,7 +336,7 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
 #' DT <- addMultiFac(DT, nFactors = 3, levels = 2)
 #' DT[, .N, keyby = .(Var1, Var2, Var3)]
 #' @export
-
+#' @concept generate_data
 addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames = NULL) {
 
   # 'declare' vars

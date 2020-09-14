@@ -46,3 +46,4 @@ dp <- trimData(dp, seqvar = "period", eventvar = "e", idvar = "id")
 
 dp
 }
+\concept{utility}

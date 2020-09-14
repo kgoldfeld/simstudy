@@ -63,3 +63,5 @@ dt <- genData(10, defs)
 dt <- addColumns(defsA, dt)
 dt
 }
+\concept{define_data}
+\concept{utility}

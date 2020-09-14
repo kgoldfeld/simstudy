@@ -32,3 +32,4 @@ dt2 <- genData(3, def2)
 dtMerge <- mergeData(dt1, dt2, "xcat")
 dtMerge
 }
+\concept{utility}

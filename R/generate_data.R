@@ -7,6 +7,7 @@
 #' @param id The string defining the id of the record
 #' @return A data.table that contains the simulated data.
 #' @export
+#' @concept generate_data
 #' @examples
 #' genData(5)
 #' genData(5, id = "grpID")
@@ -93,8 +94,7 @@ genData <- function(n, dtDefs = NULL, id = "id") {
 #' dx <- genDummy(dx, varname = "arm")
 #' dx
 #' @export
-#'
-
+#' @concept generate_data
 genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 
   # Initial data checks
@@ -185,8 +185,7 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 #' dx <- genFactor(dx, varname = "studyArm", labels = c("control", "treatment"), prefix = "t_")
 #' dx
 #' @export
-#'
-
+#' @concept generate_data
 genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FALSE) {
 
   # Initial data checks
@@ -281,7 +280,7 @@ genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FA
 #' dt <- genData(500, def1)
 #' summary(glm(B ~ A, data = dt, family = binomial))
 #' @export
-
+#' @concept generate_data
 genFormula <- function(coefs, vars) {
   lcoef <- length(coefs)
   lvars <- length(vars)
@@ -360,7 +359,7 @@ genFormula <- function(coefs, vars) {
 #'   trimvalue = 3
 #' )
 #' @export
-
+#' @concept generate_data
 genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state",
                       widePrefix = "S", trimvalue = NULL) {
@@ -424,8 +423,7 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
 #'   colNames = c("Fac1", "Fac2", "Fac3"), id = "block"
 #' )
 #' @export
-#'
-
+#' @concept generate_data
 genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames = NULL, idName = "id") {
   if (nFactors < 2) stop("Must specify at least 2 factors")
   if (length(levels) > 1 & (length(levels) != nFactors)) stop("Number of levels does not match factors")
@@ -492,7 +490,8 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' probs <- c(0.40, 0.25, 0.15)
 #' dx <- genOrdCat(dx, adjVar = "z", probs, catVar = "grp")
 #' @export
-
+#' @concept generate_data
+#' @concept categorical
 genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE) {
 
   # "declares" to avoid global NOTE
@@ -602,7 +601,8 @@ genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE
 #'
 #' dt
 #' @export
-
+#' @concept splines
+#' @concept generate_data
 genSpline <- function(dt, newvar, predictor, theta,
                       knots = c(0.25, 0.50, 0.75), degree = 3,
                       newrange = NULL, noise.var = 0) {
@@ -704,7 +704,7 @@ genSpline <- function(dt, newvar, predictor, theta,
 #'
 #' head(dtSurv)
 #' @export
-
+#' @concept generate_data
 genSurv <- function(dtName, survDefs, digits = 3) {
 
   # 'declare

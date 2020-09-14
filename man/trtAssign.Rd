@@ -67,3 +67,4 @@ dt6[, .N, keyby = .(Group)]
 \seealso{
 \code{\link{trtObserve}}
 }
+\concept{group_data}

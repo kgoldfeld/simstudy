@@ -42,3 +42,4 @@ d <- genData(1000, defD)
 d <- addPeriods(d, 10)
 dx <- genNthEvent(d, defEvent = defE, nEvents = 3)
 }
+\concept{group_data}

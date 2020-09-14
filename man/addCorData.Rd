@@ -85,3 +85,4 @@ dtAdd <- addCorData(dt, "myID",
 )
 round(cor(dtAdd[, .(V1, V2, V3)]), 2)
 }
+\concept{correlated}

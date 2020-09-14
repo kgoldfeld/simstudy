@@ -180,3 +180,4 @@ dg <- addCorGen(dx,
   periodvar = "period"
 )
 }
+\concept{correlated}
