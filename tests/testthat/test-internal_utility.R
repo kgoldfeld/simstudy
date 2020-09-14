@@ -20,10 +20,9 @@ test_that("variables from different environments are parsed correctly.", {
   res <- list(..extVar1 = 23, ..extVar2 = 42, ..extVar3 = 7)
 
   with(env2, {
-      expect_equal(.parseDotVars("a + ..extVar1 | b + ..extVar2 * ..extVar3"), res)
-      expect_equal(.parseDotVars(c("a + ..extVar1 * ..extVar2", "b + ..extVar3")), res)
-      }
-  )
+    expect_equal(.parseDotVars("a + ..extVar1 | b + ..extVar2 * ..extVar3"), res)
+    expect_equal(.parseDotVars(c("a + ..extVar1 * ..extVar2", "b + ..extVar3")), res)
+  })
 })
 
 # .evalWith ----
@@ -43,7 +42,7 @@ test_that("evalWith output length is correct.", {
   expect_equal(length(.evalWith("a + ..ev", ext, dtSim = df)), 5)
 })
 
-test_that("evalWith output is Matrix.",{
+test_that("evalWith output is Matrix.", {
   df <- data.frame(a = rep.int(5, 5))
   ext <- list(..ev = 2)
 

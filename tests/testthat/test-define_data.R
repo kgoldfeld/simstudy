@@ -58,6 +58,7 @@ test_that("g.a.e. formula checked correctly.", {
 })
 
 test_that(".isValidArithmeticFormula throws errors correctly.", {
+  expect_error(.isValidArithmeticFormula(""), "can't be empty")
   expect_error(.isValidArithmeticFormula("a;3"), "';' are not allowed")
   expect_error(.isValidArithmeticFormula("1+3-"), "not in proper form")
   expect_error(.isValidArithmeticFormula("..log(3)", ""), "Functions don't need")
