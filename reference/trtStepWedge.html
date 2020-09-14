@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Assign treatment for stepped-wedge design</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/trtStepWedge.R'><code>R/trtStepWedge.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/group_data.R'><code>R/group_data.R</code></a></small>
     <div class="hidden name"><code>trtStepWedge.Rd</code></div>
     </div>
 
@@ -124,15 +124,15 @@
     </div>
 
     <pre class="usage"><span class='fu'>trtStepWedge</span>(
-  <span class='no'>dtName</span>,
-  <span class='no'>clustID</span>,
-  <span class='no'>nWaves</span>,
-  <span class='no'>lenWaves</span>,
-  <span class='no'>startPer</span>,
-  <span class='kw'>perName</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
-  <span class='kw'>grpName</span> <span class='kw'>=</span> <span class='st'>"rx"</span>,
-  <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>xrName</span> <span class='kw'>=</span> <span class='st'>"xr"</span>
+  <span class='kw'>dtName</span>,
+  <span class='kw'>clustID</span>,
+  <span class='kw'>nWaves</span>,
+  <span class='kw'>lenWaves</span>,
+  <span class='kw'>startPer</span>,
+  perName = <span class='st'>"period"</span>,
+  grpName = <span class='st'>"rx"</span>,
+  lag = <span class='fl'>0</span>,
+  xrName = <span class='st'>"xr"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -173,7 +173,7 @@ exposure group</p></td>
     </tr>
     <tr>
       <th>xrName</th>
-      <td><p>string representing name of the field that 
+      <td><p>string representing name of the field that
 indicates whether the cluster status is in transition status</p></td>
     </tr>
     </table>
@@ -186,17 +186,22 @@ indicates whether the cluster status is in transition status</p></td>
     <div class='dont-index'><p><code><a href='trtObserve.html'>trtObserve</a> <a href='trtAssign.html'>trtAssign</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>defc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"ceffect"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>0.10</span>,
-                <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"cluster"</span>)
-<span class='no'>defc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>defc</span>, <span class='st'>"m"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"nonrandom"</span>)
+    <pre class="examples"><div class='input'><span class='kw'>defc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(
+  varname = <span class='st'>"ceffect"</span>, formula = <span class='fl'>0</span>, variance = <span class='fl'>0.10</span>,
+  dist = <span class='st'>"normal"</span>, id = <span class='st'>"cluster"</span>
+)
+<span class='kw'>defc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>defc</span>, <span class='st'>"m"</span>, formula = <span class='fl'>10</span>, dist = <span class='st'>"nonrandom"</span>)
 
 <span class='co'># Will generate 3 waves of 4 clusters each - starting 2, 5, and 8</span>
 
-<span class='no'>dc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>12</span>, <span class='no'>defc</span>)
-<span class='no'>dp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span>(<span class='no'>dc</span>, <span class='fl'>12</span>, <span class='st'>"cluster"</span>)
-<span class='no'>dp</span> <span class='kw'>&lt;-</span> <span class='fu'>trtStepWedge</span>(<span class='no'>dp</span>, <span class='st'>"cluster"</span>, <span class='kw'>nWaves</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-                   <span class='kw'>lenWaves</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>startPer</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>dp</span></div><div class='output co'>#&gt;      cluster period     ceffect  m timeID startTrt rx
+<span class='kw'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>12</span>, <span class='kw'>defc</span>)
+<span class='kw'>dp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span>(<span class='kw'>dc</span>, <span class='fl'>12</span>, <span class='st'>"cluster"</span>)
+<span class='kw'>dp</span> <span class='op'>&lt;-</span> <span class='fu'>trtStepWedge</span>(<span class='kw'>dp</span>, <span class='st'>"cluster"</span>,
+  nWaves = <span class='fl'>3</span>,
+  lenWaves = <span class='fl'>3</span>, startPer = <span class='fl'>2</span>
+)
+<span class='kw'>dp</span>
+</div><div class='output co'>#&gt;      cluster period     ceffect  m timeID startTrt rx
 #&gt;   1:       1      0 -0.03387530 10      1        2  0
 #&gt;   2:       1      1 -0.03387530 10      2        2  0
 #&gt;   3:       1      2 -0.03387530 10      3        2  1
@@ -208,10 +213,13 @@ indicates whether the cluster status is in transition status</p></td>
 #&gt; 142:      12      9 -0.06267344 10    142        8  1
 #&gt; 143:      12     10 -0.06267344 10    143        8  1
 #&gt; 144:      12     11 -0.06267344 10    144        8  1</div><div class='input'>
-<span class='no'>dp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span>(<span class='no'>dc</span>, <span class='fl'>12</span>, <span class='st'>"cluster"</span>)
-<span class='no'>dp</span> <span class='kw'>&lt;-</span> <span class='fu'>trtStepWedge</span>(<span class='no'>dp</span>, <span class='st'>"cluster"</span>, <span class='kw'>nWaves</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-                   <span class='kw'>lenWaves</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>startPer</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-<span class='no'>dp</span></div><div class='output co'>#&gt;      cluster period     ceffect  m timeID startTrt xr rx
+<span class='kw'>dp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span>(<span class='kw'>dc</span>, <span class='fl'>12</span>, <span class='st'>"cluster"</span>)
+<span class='kw'>dp</span> <span class='op'>&lt;-</span> <span class='fu'>trtStepWedge</span>(<span class='kw'>dp</span>, <span class='st'>"cluster"</span>,
+  nWaves = <span class='fl'>2</span>,
+  lenWaves = <span class='fl'>1</span>, startPer = <span class='fl'>4</span>, lag = <span class='fl'>3</span>
+)
+<span class='kw'>dp</span>
+</div><div class='output co'>#&gt;      cluster period     ceffect  m timeID startTrt xr rx
 #&gt;   1:       1      0 -0.03387530 10      1        4  0  0
 #&gt;   2:       1      1 -0.03387530 10      2        4  0  0
 #&gt;   3:       1      2 -0.03387530 10      3        4  0  0
@@ -222,8 +230,7 @@ indicates whether the cluster status is in transition status</p></td>
 #&gt; 141:      12      8 -0.06267344 10    141        5  0  1
 #&gt; 142:      12      9 -0.06267344 10    142        5  0  1
 #&gt; 143:      12     10 -0.06267344 10    143        5  0  1
-#&gt; 144:      12     11 -0.06267344 10    144        5  0  1</div><div class='input'>
-</div></pre>
+#&gt; 144:      12     11 -0.06267344 10    144        5  0  1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -239,7 +246,7 @@ indicates whether the cluster status is in transition status</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

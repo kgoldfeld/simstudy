@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add multi-factorial data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/addMultiFac.R'><code>R/addMultiFac.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/add_data.R'><code>R/add_data.R</code></a></small>
     <div class="hidden name"><code>addMultiFac.Rd</code></div>
     </div>
 
@@ -123,7 +123,7 @@
     <p>Add multi-factorial data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>addMultiFac</span>(<span class='no'>dtOld</span>, <span class='no'>nFactors</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>coding</span> <span class='kw'>=</span> <span class='st'>"dummy"</span>, <span class='kw'>colNames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>addMultiFac</span>(<span class='kw'>dtOld</span>, <span class='kw'>nFactors</span>, levels = <span class='fl'>2</span>, coding = <span class='st'>"dummy"</span>, colNames = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,11 +162,12 @@ represent the name for each factor.</p></td>
 an integer.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>defD</span> <span class='kw'>&lt;-</span><span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='kw'>defD</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"x"</span>, formula = <span class='fl'>0</span>, variance = <span class='fl'>1</span>)
 
-<span class='no'>DT</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>360</span>, <span class='no'>defD</span>)
-<span class='no'>DT</span> <span class='kw'>&lt;-</span> <span class='fu'>addMultiFac</span>(<span class='no'>DT</span>, <span class='kw'>nFactors</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3</span>), <span class='kw'>colNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>))
-<span class='no'>DT</span></div><div class='output co'>#&gt;       id          x A B C
+<span class='kw'>DT</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>360</span>, <span class='kw'>defD</span>)
+<span class='kw'>DT</span> <span class='op'>&lt;-</span> <span class='fu'>addMultiFac</span>(<span class='kw'>DT</span>, nFactors = <span class='fl'>3</span>, levels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3</span>), colNames = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>))
+<span class='kw'>DT</span>
+</div><div class='output co'>#&gt;       id          x A B C
 #&gt;   1:   1 -1.8796096 1 3 2
 #&gt;   2:   2  0.2918719 2 2 1
 #&gt;   3:   3  1.4042147 1 1 2
@@ -177,7 +178,8 @@ an integer.</p>
 #&gt; 357: 357  0.2549942 1 2 2
 #&gt; 358: 358 -0.3719562 1 2 1
 #&gt; 359: 359 -0.8049113 2 3 2
-#&gt; 360: 360  0.1845554 1 1 3</div><div class='input'><span class='no'>DT</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>A</span>, <span class='no'>B</span>, <span class='no'>C</span>)]</div><div class='output co'>#&gt;     A B C  N
+#&gt; 360: 360  0.1845554 1 1 3</div><div class='input'><span class='kw'>DT</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>A</span>, <span class='kw'>B</span>, <span class='kw'>C</span>)]
+</div><div class='output co'>#&gt;     A B C  N
 #&gt;  1: 1 1 1 20
 #&gt;  2: 1 1 2 20
 #&gt;  3: 1 1 3 20
@@ -196,9 +198,10 @@ an integer.</p>
 #&gt; 16: 2 3 1 20
 #&gt; 17: 2 3 2 20
 #&gt; 18: 2 3 3 20</div><div class='input'>
-<span class='no'>DT</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>300</span>, <span class='no'>defD</span>)
-<span class='no'>DT</span> <span class='kw'>&lt;-</span> <span class='fu'>addMultiFac</span>(<span class='no'>DT</span>, <span class='kw'>nFactors</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>DT</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>Var1</span>, <span class='no'>Var2</span>, <span class='no'>Var3</span>)]</div><div class='output co'>#&gt;    Var1 Var2 Var3  N
+<span class='kw'>DT</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>300</span>, <span class='kw'>defD</span>)
+<span class='kw'>DT</span> <span class='op'>&lt;-</span> <span class='fu'>addMultiFac</span>(<span class='kw'>DT</span>, nFactors = <span class='fl'>3</span>, levels = <span class='fl'>2</span>)
+<span class='kw'>DT</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>Var1</span>, <span class='kw'>Var2</span>, <span class='kw'>Var3</span>)]
+</div><div class='output co'>#&gt;    Var1 Var2 Var3  N
 #&gt; 1:    0    0    0 37
 #&gt; 2:    0    0    1 37
 #&gt; 3:    0    1    0 38
@@ -206,8 +209,7 @@ an integer.</p>
 #&gt; 5:    1    0    0 37
 #&gt; 6:    1    0    1 38
 #&gt; 7:    1    1    0 38
-#&gt; 8:    1    1    1 37</div><div class='input'>
-</div></pre>
+#&gt; 8:    1    1    1 37</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -223,7 +225,7 @@ an integer.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

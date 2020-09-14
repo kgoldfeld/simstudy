@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add columns to existing data set</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/addColumns.R'><code>R/addColumns.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/add_data.R'><code>R/add_data.R</code></a></small>
     <div class="hidden name"><code>addColumns.Rd</code></div>
     </div>
 
@@ -123,7 +123,7 @@
     <p>Add columns to existing data set</p>
     </div>
 
-    <pre class="usage"><span class='fu'>addColumns</span>(<span class='no'>dtDefs</span>, <span class='no'>dtOld</span>)</pre>
+    <pre class="usage"><span class='fu'>addColumns</span>(<span class='kw'>dtDefs</span>, <span class='kw'>dtOld</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,20 +145,22 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># New data set</span>
 
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"xNr"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"nonrandom"</span>, <span class='kw'>formula</span><span class='kw'>=</span><span class='fl'>7</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"idnum"</span>)
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def</span>, <span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"xUni"</span>, <span class='kw'>dist</span><span class='kw'>=</span><span class='st'>"uniform"</span>, <span class='kw'>formula</span><span class='kw'>=</span><span class='st'>"10;20"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"xNr"</span>, dist = <span class='st'>"nonrandom"</span>, formula = <span class='fl'>7</span>, id = <span class='st'>"idnum"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xUni"</span>, dist = <span class='st'>"uniform"</span>, formula = <span class='st'>"10;20"</span>)
 
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>, <span class='no'>def</span>)
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>, <span class='kw'>def</span>)
 
 <span class='co'># Add columns to dt</span>
 
-<span class='no'>def2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"y1"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-<span class='no'>def2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='no'>def2</span>, <span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"y2"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"binary"</span>)
-<span class='no'>def2</span></div><div class='output co'>#&gt;    varname formula variance   dist     link
+<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(varname = <span class='st'>"y1"</span>, formula = <span class='fl'>10</span>, variance = <span class='fl'>3</span>)
+<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>def2</span>, varname = <span class='st'>"y2"</span>, formula = <span class='fl'>.5</span>, dist = <span class='st'>"binary"</span>)
+<span class='kw'>def2</span>
+</div><div class='output co'>#&gt;    varname formula variance   dist     link
 #&gt; 1:      y1    10.0        3 normal identity
 #&gt; 2:      y2     0.5        0 binary identity</div><div class='input'>
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'>addColumns</span>(<span class='no'>def2</span>, <span class='no'>dt</span>)
-<span class='no'>dt</span></div><div class='output co'>#&gt;     idnum xNr     xUni        y1 y2
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>addColumns</span>(<span class='kw'>def2</span>, <span class='kw'>dt</span>)
+<span class='kw'>dt</span>
+</div><div class='output co'>#&gt;     idnum xNr     xUni        y1 y2
 #&gt;  1:     1   7 10.80750 11.989107  0
 #&gt;  2:     2   7 18.34333  6.844519  0
 #&gt;  3:     3   7 16.00761  9.571620  0
@@ -184,7 +186,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

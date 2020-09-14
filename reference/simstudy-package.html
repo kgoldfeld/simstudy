@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot spline curves — viewSplines • simstudy</title>
+<title>simstudy: Simulation of Study Data — simstudy-package • simstudy</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,14 @@
 
 
 
-<meta property="og:title" content="Plot spline curves — viewSplines" />
-<meta property="og:description" content="Plot spline curves" />
+<meta property="og:title" content="simstudy: Simulation of Study Data — simstudy-package" />
+<meta property="og:description" content="Simulates data sets in order to explore modeling
+    techniques or better understand data generating processes. The user
+    specifies a set of relationships between covariates, and generates
+    data based on these specifications. The final data sets can represent
+    data from randomized control trials, repeated measure (longitudinal)
+    designs, and cluster randomized trials. Missingness can be generated
+    using various mechanisms (MCAR, MAR, NMAR)." />
 
 
 
@@ -114,60 +120,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot spline curves</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/utility.R'><code>R/utility.R</code></a></small>
-    <div class="hidden name"><code>viewSplines.Rd</code></div>
+    <h1>simstudy: Simulation of Study Data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/simstudy-package.R'><code>R/simstudy-package.R</code></a></small>
+    <div class="hidden name"><code>simstudy-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot spline curves</p>
+    <p>Simulates data sets in order to explore modeling
+    techniques or better understand data generating processes. The user
+    specifies a set of relationships between covariates, and generates
+    data based on these specifications. The final data sets can represent
+    data from randomized control trials, repeated measure (longitudinal)
+    designs, and cluster randomized trials. Missingness can be generated
+    using various mechanisms (MCAR, MAR, NMAR).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>viewSplines</span>(<span class='kw'>knots</span>, <span class='kw'>degree</span>, <span class='kw'>theta</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>knots</th>
-      <td><p>A vector of values between 0 and 1, specifying cut-points for splines</p></td>
-    </tr>
-    <tr>
-      <th>degree</th>
-      <td><p>Integer specifying degree of curvature.</p></td>
-    </tr>
-    <tr>
-      <th>theta</th>
-      <td><p>A vector or matrix of values between 0 and 1. Each column of the matrix
-represents the weights/coefficients that will be applied to the basis functions
-determined by the knots and degree. Each column of theta represents a separate
-spline curve.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>A ggplot object that contains a plot of the spline curves. The number of
-spline curves in the plot will equal the number of columns in the matrix (or it
-will equal 1 if theta is a vector).</p>
+    <div class='dont-index'><p>Useful links:</p><ul>
+<li><p><a href='https://kgoldfeld.github.io/simstudy'>https://kgoldfeld.github.io/simstudy</a></p></li>
+<li><p><a href='https://github.com/kgoldfeld/simstudy'>https://github.com/kgoldfeld/simstudy</a></p></li>
+<li><p>Report bugs at <a href='https://github.com/kgoldfeld/simstudy/issues'>https://github.com/kgoldfeld/simstudy/issues</a></p></li>
+</ul>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>)
-<span class='kw'>theta1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.8</span>, <span class='fl'>0.4</span>, <span class='fl'>0.9</span>, <span class='fl'>0.2</span>, <span class='fl'>1.0</span>)
+</div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-<span class='fu'>viewSplines</span>(<span class='kw'>knots</span>, degree = <span class='fl'>2</span>, <span class='kw'>theta1</span>)
-</div><div class='img'><img src='viewSplines-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='kw'>theta2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
-  <span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.4</span>, <span class='fl'>0.9</span>, <span class='fl'>0.2</span>, <span class='fl'>0.3</span>,
-  <span class='fl'>0.1</span>, <span class='fl'>0.3</span>, <span class='fl'>0.3</span>, <span class='fl'>0.8</span>, <span class='fl'>1.0</span>, <span class='fl'>0.9</span>,
-  <span class='fl'>0.1</span>, <span class='fl'>0.4</span>, <span class='fl'>0.3</span>, <span class='fl'>0.8</span>, <span class='fl'>0.7</span>, <span class='fl'>0.5</span>,
-  <span class='fl'>0.1</span>, <span class='fl'>0.9</span>, <span class='fl'>0.8</span>, <span class='fl'>0.2</span>, <span class='fl'>0.1</span>, <span class='fl'>0.6</span>
-),
-ncol = <span class='fl'>4</span>
-)
+    <p><strong>Maintainer</strong>: Keith Goldfeld <a href='mailto:Keith.Goldfeld@nyumc.org'>Keith.Goldfeld@nyumc.org</a> (<a href='https://orcid.org/0000-0002-0292-8780'>ORCID</a>)</p>
 
-<span class='fu'>viewSplines</span>(<span class='kw'>knots</span>, degree = <span class='fl'>2</span>, <span class='kw'>theta2</span>)
-</div><div class='img'><img src='viewSplines-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

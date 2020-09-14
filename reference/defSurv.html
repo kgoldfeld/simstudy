@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add single row to survival definitions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/defSurv.R'><code>R/defSurv.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/define_data.R'><code>R/define_data.R</code></a></small>
     <div class="hidden name"><code>defSurv.Rd</code></div>
     </div>
 
@@ -123,7 +123,7 @@
     <p>Add single row to survival definitions</p>
     </div>
 
-    <pre class="usage"><span class='fu'>defSurv</span>(<span class='kw'>dtDefs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>varname</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>scale</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>defSurv</span>(dtDefs = <span class='kw'>NULL</span>, <span class='kw'>varname</span>, formula = <span class='fl'>0</span>, <span class='kw'>scale</span>, shape = <span class='fl'>1</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,36 +158,39 @@ an exponential distribution</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Baseline data definitions</span>
 
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"x1"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"binary"</span>)
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def</span>,<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"x2"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"binary"</span>)
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def</span>,<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"binary"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"x1"</span>, formula = <span class='fl'>.5</span>, dist = <span class='st'>"binary"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"x2"</span>, formula = <span class='fl'>.5</span>, dist = <span class='st'>"binary"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"grp"</span>, formula = <span class='fl'>.5</span>, dist = <span class='st'>"binary"</span>)
 
 <span class='co'># Survival data definitions</span>
 
-<span class='no'>sdef</span> <span class='kw'>&lt;-</span> <span class='fu'>defSurv</span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"survTime"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"1.5*x1"</span>,
-                <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"grp*50 + (1-grp)*25"</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"grp*1 + (1-grp)*1.5"</span>)
+<span class='kw'>sdef</span> <span class='op'>&lt;-</span> <span class='fu'>defSurv</span>(
+  varname = <span class='st'>"survTime"</span>, formula = <span class='st'>"1.5*x1"</span>,
+  scale = <span class='st'>"grp*50 + (1-grp)*25"</span>, shape = <span class='st'>"grp*1 + (1-grp)*1.5"</span>
+)
 
-<span class='no'>sdef</span> <span class='kw'>&lt;-</span> <span class='fu'>defSurv</span>(<span class='no'>sdef</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"censorTime"</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>80</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='kw'>sdef</span> <span class='op'>&lt;-</span> <span class='fu'>defSurv</span>(<span class='kw'>sdef</span>, varname = <span class='st'>"censorTime"</span>, scale = <span class='fl'>80</span>, shape = <span class='fl'>1</span>)
 
-<span class='no'>sdef</span></div><div class='output co'>#&gt;       varname formula               scale               shape
+<span class='kw'>sdef</span>
+</div><div class='output co'>#&gt;       varname formula               scale               shape
 #&gt; 1:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5
 #&gt; 2: censorTime       0                  80                   1</div><div class='input'>
 <span class='co'># Baseline data definitions</span>
 
-<span class='no'>dtSurv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>300</span>, <span class='no'>def</span>)
+<span class='kw'>dtSurv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>300</span>, <span class='kw'>def</span>)
 
 <span class='co'># Add survival times</span>
 
-<span class='no'>dtSurv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genSurv.html'>genSurv</a></span>(<span class='no'>dtSurv</span>, <span class='no'>sdef</span>)
+<span class='kw'>dtSurv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genSurv.html'>genSurv</a></span>(<span class='kw'>dtSurv</span>, <span class='kw'>sdef</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>dtSurv</span>)</div><div class='output co'>#&gt;    id x1 x2 grp survTime censorTime
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>dtSurv</span>)
+</div><div class='output co'>#&gt;    id x1 x2 grp survTime censorTime
 #&gt; 1:  1  1  0   1    8.608     21.564
 #&gt; 2:  2  1  1   0    0.692     46.502
 #&gt; 3:  3  0  1   1   98.678    132.305
 #&gt; 4:  4  0  1   0  210.815     23.778
 #&gt; 5:  5  1  0   1    8.831     20.523
-#&gt; 6:  6  0  1   0   62.965    107.078</div><div class='input'>
-</div></pre>
+#&gt; 6:  6  0  1   0   62.965    107.078</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -203,7 +206,7 @@ an exponential distribution</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

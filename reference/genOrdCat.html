@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate ordinal categorical data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genOrdCat.R'><code>R/genOrdCat.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
     <div class="hidden name"><code>genOrdCat.Rd</code></div>
     </div>
 
@@ -123,7 +123,7 @@
     <p>Ordinal categorical data is added to an existing data set.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genOrdCat</span>(<span class='no'>dtName</span>, <span class='no'>adjVar</span>, <span class='no'>baseprobs</span>, <span class='kw'>catVar</span> <span class='kw'>=</span> <span class='st'>"cat"</span>, <span class='kw'>asFactor</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>genOrdCat</span>(<span class='kw'>dtName</span>, <span class='kw'>adjVar</span>, <span class='kw'>baseprobs</span>, catVar = <span class='st'>"cat"</span>, asFactor = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,17 +162,18 @@ as a factor. If asFactor == FALSE, new field is returned as an integer.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>#### Set definitions</span>
 
-<span class='no'>def1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"male"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>0.45</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"binary"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"idG"</span>)
-<span class='no'>def1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def1</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"1.2*male"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"nonrandom"</span>)
+<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"male"</span>, formula = <span class='fl'>0.45</span>, dist = <span class='st'>"binary"</span>, id = <span class='st'>"idG"</span>)
+<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def1</span>, varname = <span class='st'>"z"</span>, formula = <span class='st'>"1.2*male"</span>, dist = <span class='st'>"nonrandom"</span>)
 
 <span class='co'>#### Generate data</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20</span>)
 
-<span class='no'>dx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='no'>def1</span>)
+<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='kw'>def1</span>)
 
-<span class='no'>probs</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.40</span>, <span class='fl'>0.25</span>, <span class='fl'>0.15</span>)
-<span class='no'>dx</span> <span class='kw'>&lt;-</span> <span class='fu'>genOrdCat</span>(<span class='no'>dx</span>, <span class='kw'>adjVar</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='no'>probs</span>, <span class='kw'>catVar</span> <span class='kw'>=</span> <span class='st'>"grp"</span>)</div></pre>
+<span class='kw'>probs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.40</span>, <span class='fl'>0.25</span>, <span class='fl'>0.15</span>)
+<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genOrdCat</span>(<span class='kw'>dx</span>, adjVar = <span class='st'>"z"</span>, <span class='kw'>probs</span>, catVar = <span class='st'>"grp"</span>)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -188,7 +189,7 @@ as a factor. If asFactor == FALSE, new field is returned as an integer.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

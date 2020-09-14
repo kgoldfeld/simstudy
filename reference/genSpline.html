@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate spline curves</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genSpline.R'><code>R/genSpline.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
     <div class="hidden name"><code>genSpline.Rd</code></div>
     </div>
 
@@ -124,14 +124,14 @@
     </div>
 
     <pre class="usage"><span class='fu'>genSpline</span>(
-  <span class='no'>dt</span>,
-  <span class='no'>newvar</span>,
-  <span class='no'>predictor</span>,
-  <span class='no'>theta</span>,
-  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>),
-  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>newrange</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>noise.var</span> <span class='kw'>=</span> <span class='fl'>0</span>
+  <span class='kw'>dt</span>,
+  <span class='kw'>newvar</span>,
+  <span class='kw'>predictor</span>,
+  <span class='kw'>theta</span>,
+  knots = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>),
+  degree = <span class='fl'>3</span>,
+  newrange = <span class='kw'>NULL</span>,
+  noise.var = <span class='fl'>0</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -184,21 +184,25 @@ is value of spline curve.</p></td>
     <p>A modified data.table with an added column named newvar.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>ddef</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"age"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"0;1"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"uniform"</span>)
+    <pre class="examples"><div class='input'><span class='kw'>ddef</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"age"</span>, formula = <span class='st'>"0;1"</span>, dist = <span class='st'>"uniform"</span>)
 
-<span class='no'>theta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.8</span>, <span class='fl'>0.6</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>, <span class='fl'>0.9</span>, <span class='fl'>0.9</span>)
-<span class='no'>knots</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>)
+<span class='kw'>theta1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.8</span>, <span class='fl'>0.6</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>, <span class='fl'>0.9</span>, <span class='fl'>0.9</span>)
+<span class='kw'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>)
 
-<span class='fu'><a href='viewSplines.html'>viewSplines</a></span>(<span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>theta1</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='genSpline-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='viewSplines.html'>viewSplines</a></span>(knots = <span class='kw'>knots</span>, theta = <span class='kw'>theta1</span>, degree = <span class='fl'>3</span>)
+</div><div class='img'><img src='genSpline-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>234</span>)
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='no'>ddef</span>)
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='kw'>ddef</span>)
 
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'>genSpline</span>(<span class='kw'>dt</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='kw'>newvar</span> <span class='kw'>=</span> <span class='st'>"weight"</span>,
-                <span class='kw'>predictor</span> <span class='kw'>=</span> <span class='st'>"age"</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>theta1</span>,
-                <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-                <span class='kw'>noise.var</span> <span class='kw'>=</span> <span class='fl'>.025</span>)
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>genSpline</span>(
+  dt = <span class='kw'>dt</span>, newvar = <span class='st'>"weight"</span>,
+  predictor = <span class='st'>"age"</span>, theta = <span class='kw'>theta1</span>,
+  knots = <span class='kw'>knots</span>, degree = <span class='fl'>3</span>,
+  noise.var = <span class='fl'>.025</span>
+)
 
-<span class='no'>dt</span></div><div class='output co'>#&gt;         id        age    weight
+<span class='kw'>dt</span>
+</div><div class='output co'>#&gt;         id        age    weight
 #&gt;    1:    1 0.74562000 0.5520232
 #&gt;    2:    2 0.78171242 1.0489039
 #&gt;    3:    3 0.02003711 0.3503075
@@ -209,8 +213,7 @@ is value of spline curve.</p></td>
 #&gt;  997:  997 0.32153055 0.1728941
 #&gt;  998:  998 0.07071976 0.4556826
 #&gt;  999:  999 0.36119713 0.7547905
-#&gt; 1000: 1000 0.13465554 0.6626064</div><div class='input'>
-</div></pre>
+#&gt; 1000: 1000 0.13465554 0.6626064</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -226,7 +229,7 @@ is value of spline curve.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Read external csv data set definitions for adding columns</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/defReadCond.R'><code>R/defReadCond.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/define_data.R'><code>R/define_data.R</code></a></small>
     <div class="hidden name"><code>defReadCond.Rd</code></div>
     </div>
 
@@ -123,7 +123,7 @@
     <p>Read external csv data set definitions for adding columns</p>
     </div>
 
-    <pre class="usage"><span class='fu'>defReadCond</span>(<span class='no'>filen</span>)</pre>
+    <pre class="usage"><span class='fu'>defReadCond</span>(<span class='kw'>filen</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,31 +137,37 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.table with data set definitions</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>[distributions]</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Create temporary external "csv" files</span>
 
-<span class='no'>test1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"varname,formula,variance,dist,link"</span>,
-           <span class='st'>"x,0.3;0.4;0.3,0,categorical,identity"</span>
-          )
+<span class='kw'>test1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
+  <span class='st'>"varname,formula,variance,dist,link"</span>,
+  <span class='st'>"x,0.3;0.4;0.3,0,categorical,identity"</span>
+)
 
-<span class='no'>tfcsv1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
-<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span>(<span class='no'>test1</span>, <span class='no'>tfcsv1</span>)
+<span class='kw'>tfcsv1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
+<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span>(<span class='kw'>test1</span>, <span class='kw'>tfcsv1</span>)
 
-<span class='no'>test2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition,formula,variance,dist,link"</span>,
-           <span class='st'>"x == 1, 0.4,0,binary,identity"</span>,
-           <span class='st'>"x == 2, 0.6,0,binary,identity"</span>,
-           <span class='st'>"x &gt;= 3, 0.8,0,binary,identity"</span>
-          )
+<span class='kw'>test2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
+  <span class='st'>"condition,formula,variance,dist,link"</span>,
+  <span class='st'>"x == 1, 0.4,0,binary,identity"</span>,
+  <span class='st'>"x == 2, 0.6,0,binary,identity"</span>,
+  <span class='st'>"x &gt;= 3, 0.8,0,binary,identity"</span>
+)
 
-<span class='no'>tfcsv2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
-<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span>(<span class='no'>test2</span>, <span class='no'>tfcsv2</span>)
+<span class='kw'>tfcsv2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
+<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span>(<span class='kw'>test2</span>, <span class='kw'>tfcsv2</span>)
 
 <span class='co'># Generate data based on external definitions</span>
 
-<span class='no'>defs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defRead.html'>defRead</a></span>(<span class='no'>tfcsv1</span>)
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>2000</span>, <span class='no'>defs</span>)
-<span class='no'>dt</span></div><div class='output co'>#&gt;         id x
+<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defRead.html'>defRead</a></span>(<span class='kw'>tfcsv1</span>)
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>2000</span>, <span class='kw'>defs</span>)
+<span class='kw'>dt</span>
+</div><div class='output co'>#&gt;         id x
 #&gt;    1:    1 1
 #&gt;    2:    2 2
 #&gt;    3:    3 1
@@ -175,9 +181,10 @@
 #&gt; 2000: 2000 1</div><div class='input'>
 <span class='co'># Add column based on</span>
 
-<span class='no'>defsCond</span> <span class='kw'>&lt;-</span> <span class='fu'>defReadCond</span>(<span class='no'>tfcsv2</span>)
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='addCondition.html'>addCondition</a></span>(<span class='no'>defsCond</span>, <span class='no'>dt</span>, <span class='st'>"y"</span>)
-<span class='no'>dt</span></div><div class='output co'>#&gt;         id y x
+<span class='kw'>defsCond</span> <span class='op'>&lt;-</span> <span class='fu'>defReadCond</span>(<span class='kw'>tfcsv2</span>)
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCondition.html'>addCondition</a></span>(<span class='kw'>defsCond</span>, <span class='kw'>dt</span>, <span class='st'>"y"</span>)
+<span class='kw'>dt</span>
+</div><div class='output co'>#&gt;         id y x
 #&gt;    1:    1 1 1
 #&gt;    2:    2 0 2
 #&gt;    3:    3 0 1
@@ -189,12 +196,14 @@
 #&gt; 1998: 1998 0 1
 #&gt; 1999: 1999 1 3
 #&gt; 2000: 2000 1 1</div><div class='input'>
-<span class='no'>dt</span>[, <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>y</span>), <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='no'>x</span>]</div><div class='output co'>#&gt;    x        V1
+<span class='kw'>dt</span>[, <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>y</span>), keyby = <span class='kw'>x</span>]
+</div><div class='output co'>#&gt;    x        V1
 #&gt; 1: 1 0.3982143
 #&gt; 2: 2 0.6072727
 #&gt; 3: 3 0.8243902</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>tfcsv1</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>tfcsv2</span>)</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='kw'>tfcsv1</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='kw'>tfcsv2</span>)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -210,7 +219,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

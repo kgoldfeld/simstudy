@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Assign treatment</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/trtAssign.R'><code>R/trtAssign.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/group_data.R'><code>R/group_data.R</code></a></small>
     <div class="hidden name"><code>trtAssign.Rd</code></div>
     </div>
 
@@ -124,12 +124,12 @@
     </div>
 
     <pre class="usage"><span class='fu'>trtAssign</span>(
-  <span class='no'>dtName</span>,
-  <span class='kw'>nTrt</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>balanced</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>grpName</span> <span class='kw'>=</span> <span class='st'>"trtGrp"</span>,
-  <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>dtName</span>,
+  nTrt = <span class='fl'>2</span>,
+  balanced = <span class='fl'>TRUE</span>,
+  strata = <span class='kw'>NULL</span>,
+  grpName = <span class='st'>"trtGrp"</span>,
+  ratio = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -158,7 +158,7 @@ exposure group</p></td>
     </tr>
     <tr>
       <th>ratio</th>
-      <td><p>vector of values indicating relative proportion of group 
+      <td><p>vector of values indicating relative proportion of group
 assignment</p></td>
     </tr>
     </table>
@@ -172,21 +172,24 @@ probability vector</p>
     <div class='dont-index'><p><code><a href='trtObserve.html'>trtObserve</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>15</span>)
+    <pre class="examples"><div class='input'><span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>15</span>)
 
-<span class='no'>dt1</span> <span class='kw'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='no'>dt</span>, <span class='kw'>nTrt</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>balanced</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>dt1</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='no'>trtGrp</span>]</div><div class='output co'>#&gt;    trtGrp N
+<span class='kw'>dt1</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='kw'>dt</span>, nTrt = <span class='fl'>3</span>, balanced = <span class='fl'>TRUE</span>)
+<span class='kw'>dt1</span>[, <span class='kw'>.N</span>, keyby = <span class='kw'>trtGrp</span>]
+</div><div class='output co'>#&gt;    trtGrp N
 #&gt; 1:      1 5
 #&gt; 2:      2 5
 #&gt; 3:      3 5</div><div class='input'>
-<span class='no'>dt2</span> <span class='kw'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='no'>dt</span>, <span class='kw'>nTrt</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>balanced</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>dt2</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='no'>trtGrp</span>]</div><div class='output co'>#&gt;    trtGrp N
+<span class='kw'>dt2</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='kw'>dt</span>, nTrt = <span class='fl'>3</span>, balanced = <span class='fl'>FALSE</span>)
+<span class='kw'>dt2</span>[, <span class='kw'>.N</span>, keyby = <span class='kw'>trtGrp</span>]
+</div><div class='output co'>#&gt;    trtGrp N
 #&gt; 1:      1 4
 #&gt; 2:      2 3
 #&gt; 3:      3 8</div><div class='input'>
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"male"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>.4</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"binary"</span>)
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='no'>def</span>)
-<span class='no'>dt</span></div><div class='output co'>#&gt;         id male
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"male"</span>, formula = <span class='fl'>.4</span>, dist = <span class='st'>"binary"</span>)
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='kw'>def</span>)
+<span class='kw'>dt</span>
+</div><div class='output co'>#&gt;         id male
 #&gt;    1:    1    0
 #&gt;    2:    2    1
 #&gt;    3:    3    1
@@ -198,19 +201,21 @@ probability vector</p>
 #&gt;  998:  998    0
 #&gt;  999:  999    1
 #&gt; 1000: 1000    0</div><div class='input'>
-<span class='no'>dt3</span> <span class='kw'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='no'>dt</span>, <span class='kw'>nTrt</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>strata</span> <span class='kw'>=</span> <span class='st'>"male"</span>, <span class='kw'>balanced</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>grpName</span> <span class='kw'>=</span> <span class='st'>"Group"</span>)
-<span class='no'>dt3</span></div><div class='output co'>#&gt;       male   id Group
-#&gt;    1:    0    1     3
-#&gt;    2:    1    2     2
-#&gt;    3:    1    3     5
-#&gt;    4:    1    4     4
-#&gt;    5:    0    5     1
+<span class='kw'>dt3</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='kw'>dt</span>, nTrt = <span class='fl'>5</span>, strata = <span class='st'>"male"</span>, balanced = <span class='fl'>TRUE</span>, grpName = <span class='st'>"Group"</span>)
+<span class='kw'>dt3</span>
+</div><div class='output co'>#&gt;         id male Group
+#&gt;    1:    1    0     3
+#&gt;    2:    2    1     2
+#&gt;    3:    3    1     5
+#&gt;    4:    4    1     4
+#&gt;    5:    5    0     1
 #&gt;   ---                
-#&gt;  996:    1  996     1
-#&gt;  997:    0  997     3
-#&gt;  998:    0  998     3
-#&gt;  999:    1  999     2
-#&gt; 1000:    0 1000     5</div><div class='input'><span class='no'>dt3</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>male</span>, <span class='no'>Group</span>)]</div><div class='output co'>#&gt;     male Group   N
+#&gt;  996:  996    1     1
+#&gt;  997:  997    0     3
+#&gt;  998:  998    0     3
+#&gt;  999:  999    1     2
+#&gt; 1000: 1000    0     5</div><div class='input'><span class='kw'>dt3</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>male</span>, <span class='kw'>Group</span>)]
+</div><div class='output co'>#&gt;     male Group   N
 #&gt;  1:    0     1 122
 #&gt;  2:    0     2 122
 #&gt;  3:    0     3 122
@@ -220,14 +225,16 @@ probability vector</p>
 #&gt;  7:    1     2  78
 #&gt;  8:    1     3  78
 #&gt;  9:    1     4  78
-#&gt; 10:    1     5  79</div><div class='input'><span class='no'>dt3</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>Group</span>)]</div><div class='output co'>#&gt;    Group   N
+#&gt; 10:    1     5  79</div><div class='input'><span class='kw'>dt3</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>Group</span>)]
+</div><div class='output co'>#&gt;    Group   N
 #&gt; 1:     1 201
 #&gt; 2:     2 200
 #&gt; 3:     3 200
 #&gt; 4:     4 199
 #&gt; 5:     5 200</div><div class='input'>
-<span class='no'>dt4</span> <span class='kw'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='no'>dt</span>, <span class='kw'>nTrt</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>strata</span> <span class='kw'>=</span> <span class='st'>"male"</span>, <span class='kw'>balanced</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>grpName</span> <span class='kw'>=</span> <span class='st'>"Group"</span>)
-<span class='no'>dt4</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>male</span>, <span class='no'>Group</span>)]</div><div class='output co'>#&gt;     male Group   N
+<span class='kw'>dt4</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='kw'>dt</span>, nTrt = <span class='fl'>5</span>, strata = <span class='st'>"male"</span>, balanced = <span class='fl'>FALSE</span>, grpName = <span class='st'>"Group"</span>)
+<span class='kw'>dt4</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>male</span>, <span class='kw'>Group</span>)]
+</div><div class='output co'>#&gt;     male Group   N
 #&gt;  1:    0     1 119
 #&gt;  2:    0     2 125
 #&gt;  3:    0     3 117
@@ -237,14 +244,16 @@ probability vector</p>
 #&gt;  7:    1     2  91
 #&gt;  8:    1     3  66
 #&gt;  9:    1     4  84
-#&gt; 10:    1     5  81</div><div class='input'><span class='no'>dt4</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>Group</span>)]</div><div class='output co'>#&gt;    Group   N
+#&gt; 10:    1     5  81</div><div class='input'><span class='kw'>dt4</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>Group</span>)]
+</div><div class='output co'>#&gt;    Group   N
 #&gt; 1:     1 189
 #&gt; 2:     2 216
 #&gt; 3:     3 183
 #&gt; 4:     4 208
 #&gt; 5:     5 204</div><div class='input'>
-<span class='no'>dt5</span> <span class='kw'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='no'>dt</span>, <span class='kw'>nTrt</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>balanced</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>grpName</span> <span class='kw'>=</span> <span class='st'>"Group"</span>)
-<span class='no'>dt5</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>male</span>, <span class='no'>Group</span>)]</div><div class='output co'>#&gt;     male Group   N
+<span class='kw'>dt5</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='kw'>dt</span>, nTrt = <span class='fl'>5</span>, balanced = <span class='fl'>TRUE</span>, grpName = <span class='st'>"Group"</span>)
+<span class='kw'>dt5</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>male</span>, <span class='kw'>Group</span>)]
+</div><div class='output co'>#&gt;     male Group   N
 #&gt;  1:    0     1 122
 #&gt;  2:    0     2 122
 #&gt;  3:    0     3 117
@@ -254,18 +263,19 @@ probability vector</p>
 #&gt;  7:    1     2  78
 #&gt;  8:    1     3  83
 #&gt;  9:    1     4  81
-#&gt; 10:    1     5  72</div><div class='input'><span class='no'>dt5</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>Group</span>)]</div><div class='output co'>#&gt;    Group   N
+#&gt; 10:    1     5  72</div><div class='input'><span class='kw'>dt5</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>Group</span>)]
+</div><div class='output co'>#&gt;    Group   N
 #&gt; 1:     1 200
 #&gt; 2:     2 200
 #&gt; 3:     3 200
 #&gt; 4:     4 200
 #&gt; 5:     5 200</div><div class='input'>
-<span class='no'>dt6</span> <span class='kw'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='no'>dt</span>, <span class='kw'>nTrt</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>), <span class='kw'>grpName</span> <span class='kw'>=</span> <span class='st'>"Group"</span>)
-<span class='no'>dt6</span>[, <span class='no'>.N</span>, <span class='kw'>keyby</span> <span class='kw'>=</span> <span class='fu'>.</span>(<span class='no'>Group</span>)]</div><div class='output co'>#&gt;    Group   N
+<span class='kw'>dt6</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span>(<span class='kw'>dt</span>, nTrt = <span class='fl'>3</span>, ratio = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>), grpName = <span class='st'>"Group"</span>)
+<span class='kw'>dt6</span>[, <span class='kw'>.N</span>, keyby = <span class='fu'>.</span>(<span class='kw'>Group</span>)]
+</div><div class='output co'>#&gt;    Group   N
 #&gt; 1:     1 200
 #&gt; 2:     2 400
-#&gt; 3:     3 400</div><div class='input'>
-</div></pre>
+#&gt; 3:     3 400</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -281,7 +291,7 @@ probability vector</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

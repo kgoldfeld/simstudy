@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create longitudinal/panel data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/addPeriods.R'><code>R/addPeriods.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/group_data.R'><code>R/group_data.R</code></a></small>
     <div class="hidden name"><code>addPeriods.Rd</code></div>
     </div>
 
@@ -124,13 +124,13 @@
     </div>
 
     <pre class="usage"><span class='fu'>addPeriods</span>(
-  <span class='no'>dtName</span>,
-  <span class='kw'>nPeriods</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>idvars</span> <span class='kw'>=</span> <span class='st'>"id"</span>,
-  <span class='kw'>timevars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>timevarName</span> <span class='kw'>=</span> <span class='st'>"timevar"</span>,
-  <span class='kw'>timeid</span> <span class='kw'>=</span> <span class='st'>"timeID"</span>,
-  <span class='kw'>perName</span> <span class='kw'>=</span> <span class='st'>"period"</span>
+  <span class='kw'>dtName</span>,
+  nPeriods = <span class='kw'>NULL</span>,
+  idvars = <span class='st'>"id"</span>,
+  timevars = <span class='kw'>NULL</span>,
+  timevarName = <span class='st'>"timevar"</span>,
+  timeid = <span class='st'>"timeID"</span>,
+  perName = <span class='st'>"period"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -173,21 +173,25 @@ repeated during each time period</p></td>
 per observation in dtName</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tdef</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"T"</span>, <span class='kw'>dist</span><span class='kw'>=</span><span class='st'>"binary"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
-<span class='no'>tdef</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>tdef</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"Y0"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>tdef</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>tdef</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"Y1"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"Y0 + 5 + 5 * T"</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>tdef</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>tdef</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"Y2"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"Y0 + 10 + 5 * T"</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='kw'>tdef</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"T"</span>, dist = <span class='st'>"binary"</span>, formula = <span class='fl'>0.5</span>)
+<span class='kw'>tdef</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>tdef</span>, varname = <span class='st'>"Y0"</span>, dist = <span class='st'>"normal"</span>, formula = <span class='fl'>10</span>, variance = <span class='fl'>1</span>)
+<span class='kw'>tdef</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>tdef</span>, varname = <span class='st'>"Y1"</span>, dist = <span class='st'>"normal"</span>, formula = <span class='st'>"Y0 + 5 + 5 * T"</span>, variance = <span class='fl'>1</span>)
+<span class='kw'>tdef</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>tdef</span>, varname = <span class='st'>"Y2"</span>, dist = <span class='st'>"normal"</span>, formula = <span class='st'>"Y0 + 10 + 5 * T"</span>, variance = <span class='fl'>1</span>)
 
-<span class='no'>dtTrial</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>( <span class='fl'>5</span>, <span class='no'>tdef</span>)
-<span class='no'>dtTrial</span></div><div class='output co'>#&gt;    id T        Y0       Y1       Y2
+<span class='kw'>dtTrial</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>5</span>, <span class='kw'>tdef</span>)
+<span class='kw'>dtTrial</span>
+</div><div class='output co'>#&gt;    id T        Y0       Y1       Y2
 #&gt; 1:  1 0 11.250332 15.15071 20.24321
 #&gt; 2:  2 0 10.386095 14.83192 20.85290
 #&gt; 3:  3 0 11.239934 15.35838 20.78620
 #&gt; 4:  4 0  9.486771 15.74710 20.10258
 #&gt; 5:  5 0  9.915813 13.22807 19.45120</div><div class='input'>
-<span class='no'>dtTime</span> <span class='kw'>&lt;-</span> <span class='fu'>addPeriods</span>(<span class='no'>dtTrial</span>, <span class='kw'>nPeriods</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>idvars</span> <span class='kw'>=</span> <span class='st'>"id"</span>,
-                     <span class='kw'>timevars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Y0"</span>, <span class='st'>"Y1"</span>, <span class='st'>"Y2"</span>), <span class='kw'>timevarName</span> <span class='kw'>=</span> <span class='st'>"Y"</span>)
-<span class='no'>dtTime</span></div><div class='output co'>#&gt;     id period T         Y timeID
+<span class='kw'>dtTime</span> <span class='op'>&lt;-</span> <span class='fu'>addPeriods</span>(<span class='kw'>dtTrial</span>,
+  nPeriods = <span class='fl'>3</span>, idvars = <span class='st'>"id"</span>,
+  timevars = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Y0"</span>, <span class='st'>"Y1"</span>, <span class='st'>"Y2"</span>), timevarName = <span class='st'>"Y"</span>
+)
+<span class='kw'>dtTime</span>
+</div><div class='output co'>#&gt;     id period T         Y timeID
 #&gt;  1:  1      0 0 11.250332      1
 #&gt;  2:  1      1 0 15.150712      2
 #&gt;  3:  1      2 0 20.243215      3
@@ -206,17 +210,19 @@ per observation in dtName</p>
 <span class='co'># Varying # of periods and intervals - need to have variables</span>
 <span class='co'># called nCount and mInterval</span>
 
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"xbase"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def</span>,<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"nCount"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"noZeroPoisson"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>6</span>)
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"mInterval"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>.01</span>)
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"vInterval"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"nonrandom"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>.07</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"xbase"</span>, dist = <span class='st'>"normal"</span>, formula = <span class='fl'>20</span>, variance = <span class='fl'>3</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"nCount"</span>, dist = <span class='st'>"noZeroPoisson"</span>, formula = <span class='fl'>6</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"mInterval"</span>, dist = <span class='st'>"gamma"</span>, formula = <span class='fl'>30</span>, variance = <span class='fl'>.01</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"vInterval"</span>, dist = <span class='st'>"nonrandom"</span>, formula = <span class='fl'>.07</span>)
 
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>200</span>, <span class='no'>def</span>)
-<span class='no'>dt</span>[<span class='no'>id</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8</span>,<span class='fl'>121</span>)]</div><div class='output co'>#&gt;     id    xbase nCount mInterval vInterval
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>200</span>, <span class='kw'>def</span>)
+<span class='kw'>dt</span>[<span class='kw'>id</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8</span>, <span class='fl'>121</span>)]
+</div><div class='output co'>#&gt;     id    xbase nCount mInterval vInterval
 #&gt; 1:   8 20.08569      5  34.61167      0.07
 #&gt; 2: 121 20.92508      7  28.33791      0.07</div><div class='input'>
-<span class='no'>dtPeriod</span> <span class='kw'>&lt;-</span> <span class='fu'>addPeriods</span>(<span class='no'>dt</span>)
-<span class='no'>dtPeriod</span>[<span class='no'>id</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8</span>,<span class='fl'>121</span>)]  <span class='co'># View individuals 8 and 121 only</span></div><div class='output co'>#&gt;      id period    xbase time timeID
+<span class='kw'>dtPeriod</span> <span class='op'>&lt;-</span> <span class='fu'>addPeriods</span>(<span class='kw'>dt</span>)
+<span class='kw'>dtPeriod</span>[<span class='kw'>id</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8</span>, <span class='fl'>121</span>)] <span class='co'># View individuals 8 and 121 only</span>
+</div><div class='output co'>#&gt;      id period    xbase time timeID
 #&gt;  1:   8      0 20.08569    0     42
 #&gt;  2:   8      1 20.08569   46     43
 #&gt;  3:   8      2 20.08569   74     44
@@ -244,7 +250,7 @@ per observation in dtName</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

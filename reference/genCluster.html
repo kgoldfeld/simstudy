@@ -74,7 +74,7 @@ individual records in a particular cluster." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@ individual records in a particular cluster." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Simulate clustered data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genCluster.R'><code>R/genCluster.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/group_data.R'><code>R/group_data.R</code></a></small>
     <div class="hidden name"><code>genCluster.Rd</code></div>
     </div>
 
@@ -127,7 +127,7 @@ level "2" data set must contain a field that specifies the number of
 individual records in a particular cluster.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genCluster</span>(<span class='no'>dtClust</span>, <span class='no'>cLevelVar</span>, <span class='no'>numIndsVar</span>, <span class='no'>level1ID</span>, <span class='kw'>allLevel2</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>genCluster</span>(<span class='kw'>dtClust</span>, <span class='kw'>cLevelVar</span>, <span class='kw'>numIndsVar</span>, <span class='kw'>level1ID</span>, allLevel2 = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,21 +163,27 @@ only includes the Levels 1 and 2 ids.</p></td>
     <p>A simulated data table with level "1" data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>gen.school</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"s0"</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
- <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"idSchool"</span>
+    <pre class="examples"><div class='input'><span class='kw'>gen.school</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(
+  varname = <span class='st'>"s0"</span>, dist = <span class='st'>"normal"</span>,
+  formula = <span class='fl'>0</span>, variance = <span class='fl'>3</span>, id = <span class='st'>"idSchool"</span>
 )
-<span class='no'>gen.school</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>gen.school</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"nClasses"</span>,
-                     <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"noZeroPoisson"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>3</span>
+<span class='kw'>gen.school</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>gen.school</span>,
+  varname = <span class='st'>"nClasses"</span>,
+  dist = <span class='st'>"noZeroPoisson"</span>, formula = <span class='fl'>3</span>
 )
 
-<span class='no'>dtSchool</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>3</span>, <span class='no'>gen.school</span>)<span class='co'>#'</span>
-<span class='no'>dtSchool</span></div><div class='output co'>#&gt;    idSchool          s0 nClasses
+<span class='kw'>dtSchool</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>3</span>, <span class='kw'>gen.school</span>) <span class='co'>#'</span>
+<span class='kw'>dtSchool</span>
+</div><div class='output co'>#&gt;    idSchool          s0 nClasses
 #&gt; 1:        1 -2.47606482        3
 #&gt; 2:        2 -0.68211482        3
 #&gt; 3:        3  0.02383165        4</div><div class='input'>
-<span class='no'>dtClass</span> <span class='kw'>&lt;-</span> <span class='fu'>genCluster</span>(<span class='no'>dtSchool</span>, <span class='kw'>cLevelVar</span> <span class='kw'>=</span> <span class='st'>"idSchool"</span>,
-                      <span class='kw'>numIndsVar</span> <span class='kw'>=</span> <span class='st'>"nClasses"</span>, <span class='kw'>level1ID</span> <span class='kw'>=</span> <span class='st'>"idClass"</span>)
-<span class='no'>dtClass</span></div><div class='output co'>#&gt;     idSchool          s0 nClasses idClass
+<span class='kw'>dtClass</span> <span class='op'>&lt;-</span> <span class='fu'>genCluster</span>(<span class='kw'>dtSchool</span>,
+  cLevelVar = <span class='st'>"idSchool"</span>,
+  numIndsVar = <span class='st'>"nClasses"</span>, level1ID = <span class='st'>"idClass"</span>
+)
+<span class='kw'>dtClass</span>
+</div><div class='output co'>#&gt;     idSchool          s0 nClasses idClass
 #&gt;  1:        1 -2.47606482        3       1
 #&gt;  2:        1 -2.47606482        3       2
 #&gt;  3:        1 -2.47606482        3       3
@@ -188,9 +194,12 @@ only includes the Levels 1 and 2 ids.</p></td>
 #&gt;  8:        3  0.02383165        4       8
 #&gt;  9:        3  0.02383165        4       9
 #&gt; 10:        3  0.02383165        4      10</div><div class='input'>
-<span class='no'>dtClass</span> <span class='kw'>&lt;-</span> <span class='fu'>genCluster</span>(<span class='no'>dtSchool</span>, <span class='kw'>cLevelVar</span> <span class='kw'>=</span> <span class='st'>"idSchool"</span>,
-                      <span class='kw'>numIndsVar</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>level1ID</span> <span class='kw'>=</span> <span class='st'>"idClass"</span>)
-<span class='no'>dtClass</span></div><div class='output co'>#&gt;    idSchool          s0 nClasses idClass
+<span class='kw'>dtClass</span> <span class='op'>&lt;-</span> <span class='fu'>genCluster</span>(<span class='kw'>dtSchool</span>,
+  cLevelVar = <span class='st'>"idSchool"</span>,
+  numIndsVar = <span class='fl'>3</span>, level1ID = <span class='st'>"idClass"</span>
+)
+<span class='kw'>dtClass</span>
+</div><div class='output co'>#&gt;    idSchool          s0 nClasses idClass
 #&gt; 1:        1 -2.47606482        3       1
 #&gt; 2:        1 -2.47606482        3       2
 #&gt; 3:        1 -2.47606482        3       3
@@ -215,7 +224,7 @@ only includes the Levels 1 and 2 ids.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

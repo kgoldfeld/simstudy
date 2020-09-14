@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add correlated data to existing data.table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/addCorData.R'><code>R/addCorData.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/add_correlated_data.R'><code>R/add_correlated_data.R</code></a></small>
     <div class="hidden name"><code>addCorData.Rd</code></div>
     </div>
 
@@ -124,14 +124,14 @@
     </div>
 
     <pre class="usage"><span class='fu'>addCorData</span>(
-  <span class='no'>dtOld</span>,
-  <span class='no'>idname</span>,
-  <span class='no'>mu</span>,
-  <span class='no'>sigma</span>,
-  <span class='kw'>corMatrix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>rho</span>,
-  <span class='kw'>corstr</span> <span class='kw'>=</span> <span class='st'>"ind"</span>,
-  <span class='kw'>cnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>dtOld</span>,
+  <span class='kw'>idname</span>,
+  <span class='kw'>mu</span>,
+  <span class='kw'>sigma</span>,
+  corMatrix = <span class='kw'>NULL</span>,
+  <span class='kw'>rho</span>,
+  corstr = <span class='st'>"ind"</span>,
+  cnames = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -151,19 +151,22 @@
     </tr>
     <tr>
       <th>sigma</th>
-      <td><p>Standard deviation of variables. If standard deviation differs for
-each variable, enter as a vector with the same length as the mean vector mu. If
-the standard deviation is constant across variables, as single value can be entered.</p></td>
+      <td><p>Standard deviation of variables. If standard deviation differs
+for each variable, enter as a vector with the same length as the mean vector
+mu. If the standard deviation is constant across variables, as single value
+can be entered.</p></td>
     </tr>
     <tr>
       <th>corMatrix</th>
-      <td><p>Correlation matrix can be entered directly. It must be symmetrical and
-positive semi-definite. It is not a required field; if a matrix is not provided, then a
-structure and correlation coefficient rho must be specified.</p></td>
+      <td><p>Correlation matrix can be entered directly. It must be
+symmetrical and positive semi-definite. It is not a required field; if a
+matrix is not provided, then a structure and correlation coefficient rho must
+be specified.</p></td>
     </tr>
     <tr>
       <th>rho</th>
-      <td><p>Correlation coefficient, -1 &lt;= rho &lt;= 1. Use if corMatrix is not provided.</p></td>
+      <td><p>Correlation coefficient, -1 &lt;= rho &lt;= 1. Use if corMatrix is not
+provided.</p></td>
     </tr>
     <tr>
       <th>corstr</th>
@@ -185,16 +188,23 @@ represents the column.</p></td>
     <p>The original data table with the additional correlated columns</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"xUni"</span>, <span class='kw'>dist</span><span class='kw'>=</span><span class='st'>"uniform"</span>, <span class='kw'>formula</span><span class='kw'>=</span><span class='st'>"10;20"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"myID"</span>)
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def</span>, <span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"xNorm"</span>, <span class='kw'>formula</span><span class='kw'>=</span><span class='st'>"xUni * 2"</span>, <span class='kw'>dist</span><span class='kw'>=</span><span class='st'>"normal"</span>, <span class='kw'>variance</span><span class='kw'>=</span><span class='fl'>8</span>)
+    <pre class="examples"><div class='input'><span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"xUni"</span>, dist = <span class='st'>"uniform"</span>, formula = <span class='st'>"10;20"</span>, id = <span class='st'>"myID"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>,
+  varname = <span class='st'>"xNorm"</span>, formula = <span class='st'>"xUni * 2"</span>, dist = <span class='st'>"normal"</span>,
+  variance = <span class='fl'>8</span>
+)
 
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>250</span>, <span class='no'>def</span>)
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>250</span>, <span class='kw'>def</span>)
 
-<span class='no'>mu</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>8</span>, <span class='fl'>15</span>)
-<span class='no'>sigma</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)
+<span class='kw'>mu</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>8</span>, <span class='fl'>15</span>)
+<span class='kw'>sigma</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)
 
-<span class='no'>dtAdd</span> <span class='kw'>&lt;-</span> <span class='fu'>addCorData</span>(<span class='no'>dt</span>, <span class='st'>"myID"</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>mu</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>sigma</span>, <span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>.7</span>, <span class='kw'>corstr</span> <span class='kw'>=</span> <span class='st'>"cs"</span>)
-<span class='no'>dtAdd</span></div><div class='output co'>#&gt;      myID     xUni    xNorm       V1        V2        V3
+<span class='kw'>dtAdd</span> <span class='op'>&lt;-</span> <span class='fu'>addCorData</span>(<span class='kw'>dt</span>, <span class='st'>"myID"</span>,
+  mu = <span class='kw'>mu</span>, sigma = <span class='kw'>sigma</span>,
+  rho = <span class='fl'>.7</span>, corstr = <span class='st'>"cs"</span>
+)
+<span class='kw'>dtAdd</span>
+</div><div class='output co'>#&gt;      myID     xUni    xNorm       V1        V2        V3
 #&gt;   1:    1 18.41861 34.82973 3.858941  9.666185 16.874089
 #&gt;   2:    2 16.31256 34.99261 1.788267  6.828155 12.247735
 #&gt;   3:    3 17.54575 35.26970 3.852962  8.479367 12.087658
@@ -206,22 +216,32 @@ represents the column.</p></td>
 #&gt; 248:  248 14.69369 31.05177 0.761934  5.351151  8.705052
 #&gt; 249:  249 19.07693 37.18574 3.287041 10.947499 22.196264
 #&gt; 250:  250 15.58474 31.25266 2.132821  7.096336 15.578519</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='no'>dtAdd</span>[,<span class='fu'>.</span>(<span class='no'>V1</span>, <span class='no'>V2</span>, <span class='no'>V3</span>)]), <span class='fl'>3</span>)</div><div class='output co'>#&gt;       V1    V2    V3
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='kw'>dtAdd</span>[, <span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>3</span>)
+</div><div class='output co'>#&gt;       V1    V2    V3
 #&gt; V1 0.844 1.198 1.786
 #&gt; V2 1.198 3.651 3.822
-#&gt; V3 1.786 3.822 8.631</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='no'>dtAdd</span>[,<span class='fu'>.</span>(<span class='no'>V1</span>, <span class='no'>V2</span>, <span class='no'>V3</span>)]), <span class='fl'>2</span>)</div><div class='output co'>#&gt;      V1   V2   V3
+#&gt; V3 1.786 3.822 8.631</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dtAdd</span>[, <span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>2</span>)
+</div><div class='output co'>#&gt;      V1   V2   V3
 #&gt; V1 1.00 0.68 0.66
 #&gt; V2 0.68 1.00 0.68
 #&gt; V3 0.66 0.68 1.00</div><div class='input'>
-<span class='no'>dtAdd</span> <span class='kw'>&lt;-</span> <span class='fu'>addCorData</span>(<span class='no'>dt</span>, <span class='st'>"myID"</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>mu</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>sigma</span>, <span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>.7</span>, <span class='kw'>corstr</span> <span class='kw'>=</span> <span class='st'>"ar1"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='no'>dtAdd</span>[,<span class='fu'>.</span>(<span class='no'>V1</span>, <span class='no'>V2</span>, <span class='no'>V3</span>)]), <span class='fl'>2</span>)</div><div class='output co'>#&gt;      V1   V2   V3
+<span class='kw'>dtAdd</span> <span class='op'>&lt;-</span> <span class='fu'>addCorData</span>(<span class='kw'>dt</span>, <span class='st'>"myID"</span>,
+  mu = <span class='kw'>mu</span>, sigma = <span class='kw'>sigma</span>,
+  rho = <span class='fl'>.7</span>, corstr = <span class='st'>"ar1"</span>
+)
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dtAdd</span>[, <span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>2</span>)
+</div><div class='output co'>#&gt;      V1   V2   V3
 #&gt; V1 1.00 0.65 0.46
 #&gt; V2 0.65 1.00 0.71
 #&gt; V3 0.46 0.71 1.00</div><div class='input'>
-<span class='no'>corMat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>.2</span>, <span class='fl'>.8</span>, <span class='fl'>.2</span>, <span class='fl'>1</span>, <span class='fl'>.6</span>, <span class='fl'>.8</span>, <span class='fl'>.6</span>, <span class='fl'>1</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+<span class='kw'>corMat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>.2</span>, <span class='fl'>.8</span>, <span class='fl'>.2</span>, <span class='fl'>1</span>, <span class='fl'>.6</span>, <span class='fl'>.8</span>, <span class='fl'>.6</span>, <span class='fl'>1</span>), nrow = <span class='fl'>3</span>)
 
-<span class='no'>dtAdd</span> <span class='kw'>&lt;-</span> <span class='fu'>addCorData</span>(<span class='no'>dt</span>, <span class='st'>"myID"</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>mu</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>sigma</span>, <span class='kw'>corMatrix</span> <span class='kw'>=</span> <span class='no'>corMat</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='no'>dtAdd</span>[,<span class='fu'>.</span>(<span class='no'>V1</span>, <span class='no'>V2</span>, <span class='no'>V3</span>)]), <span class='fl'>2</span>)</div><div class='output co'>#&gt;      V1   V2  V3
+<span class='kw'>dtAdd</span> <span class='op'>&lt;-</span> <span class='fu'>addCorData</span>(<span class='kw'>dt</span>, <span class='st'>"myID"</span>,
+  mu = <span class='kw'>mu</span>, sigma = <span class='kw'>sigma</span>,
+  corMatrix = <span class='kw'>corMat</span>
+)
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dtAdd</span>[, <span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>2</span>)
+</div><div class='output co'>#&gt;      V1   V2  V3
 #&gt; V1 1.00 0.21 0.8
 #&gt; V2 0.21 1.00 0.6
 #&gt; V3 0.80 0.60 1.0</div></pre>
@@ -240,7 +260,7 @@ represents the column.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

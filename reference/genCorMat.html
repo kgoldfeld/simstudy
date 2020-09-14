@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a correlation matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genCorMat.R'><code>R/genCorMat.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_correlated_data.R'><code>R/generate_correlated_data.R</code></a></small>
     <div class="hidden name"><code>genCorMat.Rd</code></div>
     </div>
 
@@ -123,7 +123,7 @@
     <p>Create a correlation matrix</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genCorMat</span>(<span class='no'>nvars</span>, <span class='kw'>cors</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>genCorMat</span>(<span class='kw'>nvars</span>, cors = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,23 +145,27 @@
 
     <p>If the vector cors is not specified, a random correlation matrix is generated with no assumptions.
 If the vector is provided, it should be interpreted as the lower triangle of the correlation
-matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and 
+matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and
 nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, -<span class='fl'>.2</span>, <span class='fl'>.1</span>))</div><div class='output co'>#&gt;      [,1] [,2] [,3]
+    <pre class="examples"><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span>))
+</div><div class='output co'>#&gt;      [,1] [,2] [,3]
 #&gt; [1,]  1.0  0.3 -0.2
 #&gt; [2,]  0.3  1.0  0.1
-#&gt; [3,] -0.2  0.1  1.0</div><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>3</span>)</div><div class='output co'>#&gt;            [,1]        [,2]        [,3]
+#&gt; [3,] -0.2  0.1  1.0</div><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>3</span>)
+</div><div class='output co'>#&gt;            [,1]        [,2]        [,3]
 #&gt; [1,]  1.0000000 -0.05721830 -0.26562439
 #&gt; [2,] -0.0572183  1.00000000 -0.08206648
 #&gt; [3,] -0.2656244 -0.08206648  1.00000000</div><div class='input'>
-<span class='fu'>genCorMat</span>(<span class='fl'>5</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, -<span class='fl'>.2</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.2</span>, -<span class='fl'>.1</span>, <span class='fl'>.3</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>))</div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4] [,5]
+<span class='fu'>genCorMat</span>(<span class='fl'>5</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.2</span>, <span class='op'>-</span><span class='fl'>.1</span>, <span class='fl'>.3</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>))
+</div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4] [,5]
 #&gt; [1,]  1.0  0.3 -0.2  0.1  0.2
 #&gt; [2,]  0.3  1.0  0.5  0.2 -0.1
 #&gt; [3,] -0.2  0.5  1.0  0.3  0.1
 #&gt; [4,]  0.1  0.2  0.3  1.0  0.2
-#&gt; [5,]  0.2 -0.1  0.1  0.2  1.0</div><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>5</span>)</div><div class='output co'>#&gt;             [,1]        [,2]        [,3]       [,4]        [,5]
+#&gt; [5,]  0.2 -0.1  0.1  0.2  1.0</div><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>5</span>)
+</div><div class='output co'>#&gt;             [,1]        [,2]        [,3]       [,4]        [,5]
 #&gt; [1,]  1.00000000  0.18378060 -0.08859631 0.07366686  0.04571161
 #&gt; [2,]  0.18378060  1.00000000  0.34041009 0.03797508 -0.48391898
 #&gt; [3,] -0.08859631  0.34041009  1.00000000 0.12364752  0.27887791
@@ -182,7 +186,7 @@ nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].</p
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -74,7 +74,7 @@ and defReadAdd use updateDefAdd.)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@ and defReadAdd use updateDefAdd.)" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Update definition table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/updateDef.R'><code>R/updateDef.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/utility.R'><code>R/utility.R</code></a></small>
     <div class="hidden name"><code>updateDef.Rd</code></div>
     </div>
 
@@ -128,13 +128,13 @@ and defReadAdd use updateDefAdd.)</p>
     </div>
 
     <pre class="usage"><span class='fu'>updateDef</span>(
-  <span class='no'>dtDefs</span>,
-  <span class='no'>changevar</span>,
-  <span class='kw'>newformula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>newvariance</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>newdist</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>newlink</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>dtDefs</span>,
+  <span class='kw'>changevar</span>,
+  newformula = <span class='kw'>NULL</span>,
+  newvariance = <span class='kw'>NULL</span>,
+  newdist = <span class='kw'>NULL</span>,
+  newlink = <span class='kw'>NULL</span>,
+  remove = <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -178,37 +178,42 @@ and defReadAdd use updateDefAdd.)</p>
     <pre class="examples"><div class='input'>
 <span class='co'># Example 1</span>
 
-<span class='no'>defs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>)
-<span class='no'>defs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>defs</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"y"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"2 + 3*x"</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>)
-<span class='no'>defs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>defs</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"4 + 3*x - 2*y"</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>)
+<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"x"</span>, formula = <span class='fl'>0</span>, variance = <span class='fl'>3</span>, dist = <span class='st'>"normal"</span>)
+<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>defs</span>, varname = <span class='st'>"y"</span>, formula = <span class='st'>"2 + 3*x"</span>, variance = <span class='fl'>1</span>, dist = <span class='st'>"normal"</span>)
+<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>defs</span>, varname = <span class='st'>"z"</span>, formula = <span class='st'>"4 + 3*x - 2*y"</span>, variance = <span class='fl'>1</span>, dist = <span class='st'>"normal"</span>)
 
-<span class='no'>defs</span></div><div class='output co'>#&gt;    varname       formula variance   dist     link
+<span class='kw'>defs</span>
+</div><div class='output co'>#&gt;    varname       formula variance   dist     link
 #&gt; 1:       x             0        3 normal identity
 #&gt; 2:       y       2 + 3*x        1 normal identity
 #&gt; 3:       z 4 + 3*x - 2*y        1 normal identity</div><div class='input'>
-<span class='fu'>updateDef</span>(<span class='kw'>dtDefs</span> <span class='kw'>=</span> <span class='no'>defs</span>, <span class='kw'>changevar</span> <span class='kw'>=</span> <span class='st'>"y"</span>, <span class='kw'>newformula</span> <span class='kw'>=</span> <span class='st'>"x + 5"</span>, <span class='kw'>newvariance</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;    varname       formula variance   dist     link
+<span class='fu'>updateDef</span>(dtDefs = <span class='kw'>defs</span>, changevar = <span class='st'>"y"</span>, newformula = <span class='st'>"x + 5"</span>, newvariance = <span class='fl'>2</span>)
+</div><div class='output co'>#&gt;    varname       formula variance   dist     link
 #&gt; 1:       x             0        3 normal identity
 #&gt; 2:       y         x + 5        2 normal identity
-#&gt; 3:       z 4 + 3*x - 2*y        1 normal identity</div><div class='input'><span class='fu'>updateDef</span>(<span class='kw'>dtDefs</span> <span class='kw'>=</span> <span class='no'>defs</span>, <span class='kw'>changevar</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>newdist</span> <span class='kw'>=</span> <span class='st'>"poisson"</span>, <span class='kw'>newlink</span> <span class='kw'>=</span> <span class='st'>"log"</span>)</div><div class='output co'>#&gt;    varname       formula variance    dist     link
+#&gt; 3:       z 4 + 3*x - 2*y        1 normal identity</div><div class='input'><span class='fu'>updateDef</span>(dtDefs = <span class='kw'>defs</span>, changevar = <span class='st'>"z"</span>, newdist = <span class='st'>"poisson"</span>, newlink = <span class='st'>"log"</span>)
+</div><div class='output co'>#&gt;    varname       formula variance    dist     link
 #&gt; 1:       x             0        3  normal identity
 #&gt; 2:       y       2 + 3*x        1  normal identity
 #&gt; 3:       z 4 + 3*x - 2*y        1 poisson identity</div><div class='input'>
 <span class='co'># Example 2</span>
 
-<span class='no'>defs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"w"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>)
-<span class='no'>defs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>defs</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"1 + w"</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>)
-<span class='no'>defs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>defs</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"normal"</span>)
+<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"w"</span>, formula = <span class='fl'>0</span>, variance = <span class='fl'>3</span>, dist = <span class='st'>"normal"</span>)
+<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>defs</span>, varname = <span class='st'>"x"</span>, formula = <span class='st'>"1 + w"</span>, variance = <span class='fl'>1</span>, dist = <span class='st'>"normal"</span>)
+<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>defs</span>, varname = <span class='st'>"z"</span>, formula = <span class='fl'>4</span>, variance = <span class='fl'>1</span>, dist = <span class='st'>"normal"</span>)
 
-<span class='no'>defs</span></div><div class='output co'>#&gt;    varname formula variance   dist     link
+<span class='kw'>defs</span>
+</div><div class='output co'>#&gt;    varname formula variance   dist     link
 #&gt; 1:       w       0        3 normal identity
 #&gt; 2:       x   1 + w        1 normal identity
 #&gt; 3:       z       4        1 normal identity</div><div class='input'>
-<span class='fu'>updateDef</span>(<span class='kw'>dtDefs</span> <span class='kw'>=</span> <span class='no'>defs</span>, <span class='kw'>changevar</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    varname formula variance   dist     link
+<span class='fu'>updateDef</span>(dtDefs = <span class='kw'>defs</span>, changevar = <span class='st'>"x"</span>, remove = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt;    varname formula variance   dist     link
 #&gt; 1:       w       0        3 normal identity
-#&gt; 2:       z       4        1 normal identity</div><div class='input'><span class='fu'>updateDef</span>(<span class='kw'>dtDefs</span> <span class='kw'>=</span> <span class='no'>defs</span>, <span class='kw'>changevar</span> <span class='kw'>=</span> <span class='st'>"z"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    varname formula variance   dist     link
+#&gt; 2:       z       4        1 normal identity</div><div class='input'><span class='fu'>updateDef</span>(dtDefs = <span class='kw'>defs</span>, changevar = <span class='st'>"z"</span>, remove = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt;    varname formula variance   dist     link
 #&gt; 1:       w       0        3 normal identity
-#&gt; 2:       x   1 + w        1 normal identity</div><div class='input'>
-</div></pre>
+#&gt; 2:       x   1 + w        1 normal identity</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -224,7 +229,7 @@ and defReadAdd use updateDefAdd.)</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

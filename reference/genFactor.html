@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create factor variable from an existing (non-double) variable</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genFactor.R'><code>R/genFactor.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
     <div class="hidden name"><code>genFactor.Rd</code></div>
     </div>
 
@@ -123,7 +123,7 @@
     <p>Create factor variable from an existing (non-double) variable</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genFactor</span>(<span class='no'>dtName</span>, <span class='no'>varname</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"f"</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>genFactor</span>(<span class='kw'>dtName</span>, <span class='kw'>varname</span>, labels = <span class='kw'>NULL</span>, prefix = <span class='st'>"f"</span>, replace = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,11 +158,12 @@ referenced varname will be removed.</p></td>
     <pre class="examples"><div class='input'>
 <span class='co'># First example:</span>
 
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"cat"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>".2;.3;.5"</span>, <span class='kw'>dist</span><span class='kw'>=</span><span class='st'>"categorical"</span>)
-<span class='no'>def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='no'>def</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>variance</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"cat"</span>, formula = <span class='st'>".2;.3;.5"</span>, dist = <span class='st'>"categorical"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"x"</span>, formula = <span class='fl'>5</span>, variance = <span class='fl'>2</span>)
 
-<span class='no'>dx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>200</span>,<span class='no'>def</span>)
-<span class='no'>dx</span></div><div class='output co'>#&gt;       id cat        x
+<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>200</span>, <span class='kw'>def</span>)
+<span class='kw'>dx</span>
+</div><div class='output co'>#&gt;       id cat        x
 #&gt;   1:   1   3 5.575692
 #&gt;   2:   2   3 2.665863
 #&gt;   3:   3   3 5.780934
@@ -174,8 +175,9 @@ referenced varname will be removed.</p></td>
 #&gt; 198: 198   2 3.980982
 #&gt; 199: 199   3 5.764928
 #&gt; 200: 200   3 4.791226</div><div class='input'>
-<span class='no'>dx</span> <span class='kw'>&lt;-</span> <span class='fu'>genFactor</span>(<span class='no'>dx</span>, <span class='st'>"cat"</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"one"</span>, <span class='st'>"two"</span>, <span class='st'>"three"</span>))
-<span class='no'>dx</span></div><div class='output co'>#&gt;       id cat        x  fcat
+<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genFactor</span>(<span class='kw'>dx</span>, <span class='st'>"cat"</span>, labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"one"</span>, <span class='st'>"two"</span>, <span class='st'>"three"</span>))
+<span class='kw'>dx</span>
+</div><div class='output co'>#&gt;       id cat        x  fcat
 #&gt;   1:   1   3 5.575692 three
 #&gt;   2:   2   3 2.665863 three
 #&gt;   3:   3   3 5.780934 three
@@ -189,10 +191,11 @@ referenced varname will be removed.</p></td>
 #&gt; 200: 200   3 4.791226 three</div><div class='input'>
 <span class='co'># Second example:</span>
 
-<span class='no'>dx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>)
-<span class='no'>dx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='trtAssign.html'>trtAssign</a></span>(<span class='kw'>dtName</span> <span class='kw'>=</span> <span class='no'>dx</span>, <span class='fl'>2</span>, <span class='kw'>grpName</span> <span class='kw'>=</span> <span class='st'>"studyArm"</span>)
-<span class='no'>dx</span> <span class='kw'>&lt;-</span> <span class='fu'>genFactor</span>(<span class='no'>dx</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"studyArm"</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"control"</span>, <span class='st'>"treatment"</span>), <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"t_"</span>)
-<span class='no'>dx</span></div><div class='output co'>#&gt;     id studyArm t_studyArm
+<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>)
+<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='trtAssign.html'>trtAssign</a></span>(dtName = <span class='kw'>dx</span>, <span class='fl'>2</span>, grpName = <span class='st'>"studyArm"</span>)
+<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genFactor</span>(<span class='kw'>dx</span>, varname = <span class='st'>"studyArm"</span>, labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"control"</span>, <span class='st'>"treatment"</span>), prefix = <span class='st'>"t_"</span>)
+<span class='kw'>dx</span>
+</div><div class='output co'>#&gt;     id studyArm t_studyArm
 #&gt;  1:  1        1  treatment
 #&gt;  2:  2        1  treatment
 #&gt;  3:  3        1  treatment
@@ -218,7 +221,7 @@ referenced varname will be removed.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
