@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate spline curves</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genSpline.R'><code>R/genSpline.R</code></a></small>
     <div class="hidden name"><code>genSpline.Rd</code></div>
     </div>
 
@@ -194,12 +194,10 @@ is value of spline curve.</p></td>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>234</span>)
 <span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='kw'>ddef</span>)
 
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>genSpline</span>(
-  dt = <span class='kw'>dt</span>, newvar = <span class='st'>"weight"</span>,
-  predictor = <span class='st'>"age"</span>, theta = <span class='kw'>theta1</span>,
-  knots = <span class='kw'>knots</span>, degree = <span class='fl'>3</span>,
-  noise.var = <span class='fl'>.025</span>
-)
+<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>genSpline</span>(dt = <span class='kw'>dt</span>, newvar = <span class='st'>"weight"</span>,
+                predictor = <span class='st'>"age"</span>, theta = <span class='kw'>theta1</span>,
+                knots = <span class='kw'>knots</span>, degree = <span class='fl'>3</span>,
+                noise.var = <span class='fl'>.025</span>)
 
 <span class='kw'>dt</span>
 </div><div class='output co'>#&gt;         id        age    weight
@@ -213,7 +211,8 @@ is value of spline curve.</p></td>
 #&gt;  997:  997 0.32153055 0.1728941
 #&gt;  998:  998 0.07071976 0.4556826
 #&gt;  999:  999 0.36119713 0.7547905
-#&gt; 1000: 1000 0.13465554 0.6626064</div></pre>
+#&gt; 1000: 1000 0.13465554 0.6626064</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

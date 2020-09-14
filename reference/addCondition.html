@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add a single column to existing data set based on a condition</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/add_data.R'><code>R/add_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/addCondition.R'><code>R/addCondition.R</code></a></small>
     <div class="hidden name"><code>addCondition.Rd</code></div>
     </div>
 
@@ -151,160 +151,18 @@
 <span class='co'># New data set</span>
 
 <span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"x"</span>, dist = <span class='st'>"categorical"</span>, formula = <span class='st'>".33;.33"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"y"</span>, dist = <span class='st'>"uniform"</span>, formula = <span class='st'>"-5;5"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname=<span class='st'>"y"</span>, dist=<span class='st'>"uniform"</span>, formula=<span class='st'>"-5;5"</span>)
 
 <span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='kw'>def</span>)
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.34Probabilities do not sum to 1.</span></div><div class='input'>
+
 <span class='co'># Define conditions</span>
 
-<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defCondition.html'>defCondition</a></span>(
-  condition = <span class='st'>"x == 1"</span>, formula = <span class='st'>"5 + 2*y-.5*y^2"</span>,
-  variance = <span class='fl'>1</span>, dist = <span class='st'>"normal"</span>
-)
-<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defCondition.html'>defCondition</a></span>(<span class='kw'>defC</span>,
-  condition = <span class='st'>"x == 2"</span>,
-  formula = <span class='st'>"3 - 3*y + y^2"</span>, variance = <span class='fl'>2</span>, dist = <span class='st'>"normal"</span>
-)
-<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defCondition.html'>defCondition</a></span>(<span class='kw'>defC</span>,
-  condition = <span class='st'>"x == 3"</span>,
-  formula = <span class='st'>"abs(y)"</span>, dist = <span class='st'>"poisson"</span>
-)
+<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defCondition.html'>defCondition</a></span>(condition = <span class='st'>"x == 1"</span>, formula = <span class='st'>"5 + 2*y-.5*y^2"</span>,
+                     variance = <span class='fl'>1</span>,dist = <span class='st'>"normal"</span>)
+<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defCondition.html'>defCondition</a></span>(<span class='kw'>defC</span>, condition = <span class='st'>"x == 2"</span>,
+                     formula = <span class='st'>"3 - 3*y + y^2"</span>, variance = <span class='fl'>2</span>, dist=<span class='st'>"normal"</span>)
+<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defCondition.html'>defCondition</a></span>(<span class='kw'>defC</span>, condition = <span class='st'>"x == 3"</span>,
+                     formula = <span class='st'>"abs(y)"</span>, dist=<span class='st'>"poisson"</span>)
 
 <span class='co'># Add column</span>
 
@@ -314,9 +172,10 @@
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://ggplot2.tidyverse.org'>ggplot2</a></span>)
 
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(data = <span class='kw'>dt</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(x = <span class='kw'>y</span>, y = <span class='kw'>NewVar</span>, group = <span class='kw'>x</span>)) <span class='op'>+</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(data = <span class='kw'>dt</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(x=<span class='kw'>y</span>, y=<span class='kw'>NewVar</span>, group = <span class='kw'>x</span>)) <span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(color = <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>x</span>)))
-</div><div class='img'><img src='addCondition-1.png' alt='' width='700' height='433' /></div></pre>
+</div><div class='img'><img src='addCondition-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

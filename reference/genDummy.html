@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create dummy variables from a factor or integer variable</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genDummy.R'><code>R/genDummy.R</code></a></small>
     <div class="hidden name"><code>genDummy.Rd</code></div>
     </div>
 
@@ -154,10 +154,10 @@ referenced varname will be removed.</p></td>
     <pre class="examples"><div class='input'>
 <span class='co'># First example:</span>
 
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"cat"</span>, formula = <span class='st'>".2;.3;.5"</span>, dist = <span class='st'>"categorical"</span>)
+<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"cat"</span>, formula = <span class='st'>".2;.3;.5"</span>, dist=<span class='st'>"categorical"</span>)
 <span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"x"</span>, formula = <span class='fl'>5</span>, variance = <span class='fl'>2</span>)
 
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>200</span>, <span class='kw'>def</span>)
+<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>200</span>,<span class='kw'>def</span>)
 <span class='kw'>dx</span>
 </div><div class='output co'>#&gt;       id cat        x
 #&gt;   1:   1   2 5.217482

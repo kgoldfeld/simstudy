@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -81,28 +81,12 @@
 <div id="simstudy" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#simstudy" class="anchor"></a>simstudy</h1></div>
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 <p>The simstudy package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user specifies a set of relationships between covariates, and generates data based on these specifications. The final data sets can represent data from randomized control trials, repeated measure (longitudinal) designs, and cluster randomized trials. Missingness can be generated using various mechanisms (MCAR, MAR, NMAR).</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of simstudy from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"simstudy"</span>)
-</pre></div>
-<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># install.packages("devtools")</span>
-<span class="kw">devtools</span>::<span class="fu">install_github</span>(<span class="st">"kgoldfeld/simstudy"</span>)
-</pre></div>
-</div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
 <p>Here is some simple sample code, much more in the vignette:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
+<div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://kgoldfeld.github.io/simstudy">simstudy</a></span>)
 
 <span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span>(varname=<span class="st">"x"</span>, formula = <span class="fl">10</span>, variance = <span class="fl">2</span>)
@@ -112,19 +96,23 @@
 <span class="kw">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/trtAssign.html">trtAssign</a></span>(<span class="kw">dt</span>, nTrt = <span class="fl">4</span>, grpName = <span class="st">"grp"</span>, balanced = <span class="fl">TRUE</span>)
 
 <span class="kw">dt</span>
-<span class="co">#&gt;       id         x         y grp</span>
-<span class="co">#&gt;   1:   1  7.115924  7.875171   2</span>
-<span class="co">#&gt;   2:   2 10.572041  7.355647   1</span>
-<span class="co">#&gt;   3:   3  9.634730  8.622469   4</span>
-<span class="co">#&gt;   4:   4 11.558365  8.794604   4</span>
-<span class="co">#&gt;   5:   5  7.861149  8.568316   2</span>
-<span class="co">#&gt;  ---                            </span>
-<span class="co">#&gt; 246: 246 13.458648  9.492960   1</span>
-<span class="co">#&gt; 247: 247 10.037167  8.555292   2</span>
-<span class="co">#&gt; 248: 248  8.632074  4.632683   2</span>
-<span class="co">#&gt; 249: 249 13.328257 12.422091   3</span>
-<span class="co">#&gt; 250: 250 11.316940  8.071595   3</span>
 </pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">##       id         x         y grp</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">##   1:   1  8.314181  7.063609   2</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">##   2:   2 10.465894  7.773591   1</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">##   3:   3 12.441911 10.323158   1</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">##   4:   4  9.765096  8.575847   3</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">##   5:   5 10.237149 10.476723   1</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">##  ---                            </span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">## 246: 246  8.789552  5.888775   3</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">## 247: 247  9.520327  8.173849   1</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">## 248: 248  8.803506  7.257983   2</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">## 249: 249  8.916332  7.011706   1</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">## 250: 250  8.371343  7.092098   2</span></span></code></pre></div>
+<div id="code-of-conduct" class="section level2">
+<h2 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
+<p>Please note that the simstudy project is released with a <a href="https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
   </div>
@@ -147,6 +135,13 @@
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
 </ul>
 </div>
+<div class="community">
+<h2>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
@@ -157,11 +152,9 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/kgoldfeld/simstudy/actions"><img src="https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=restructure" alt="R build status"></a></li>
+<li><a href="https://github.com/kgoldfeld/simstudy/actions"><img src="https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main" alt="R build status"></a></li>
 <li><a href="https://CRAN.R-project.org/package=simstudy"><img src="https://www.r-pkg.org/badges/version/simstudy" alt="CRAN status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=simstudy"><img src="https://cranlogs.r-pkg.org/badges/grand-total/simstudy" alt="CRAN downloads"></a></li>
-<li><a href="https://codecov.io/gh/kgoldfeld/simstudy"><img src="https://codecov.io/gh/kgoldfeld/simstudy/branch/restructure/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
+<li><a href="https://codecov.io/gh/kgoldfeld/simstudy"><img src="https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg" alt="codecov"></a></li>
 </ul>
 </div>
 </div>

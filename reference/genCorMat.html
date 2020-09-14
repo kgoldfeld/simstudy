@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a correlation matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_correlated_data.R'><code>R/generate_correlated_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genCorMat.R'><code>R/genCorMat.R</code></a></small>
     <div class="hidden name"><code>genCorMat.Rd</code></div>
     </div>
 
@@ -145,7 +145,7 @@
 
     <p>If the vector cors is not specified, a random correlation matrix is generated with no assumptions.
 If the vector is provided, it should be interpreted as the lower triangle of the correlation
-matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and
+matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and 
 nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

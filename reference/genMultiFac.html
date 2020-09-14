@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate multi-factorial data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genMultiFac.R'><code>R/genMultiFac.R</code></a></small>
     <div class="hidden name"><code>genMultiFac.Rd</code></div>
     </div>
 
@@ -220,10 +220,8 @@ an integer.</p>
 #&gt; 22: 22    2    3
 #&gt; 23: 23    2    3
 #&gt; 24: 24    2    3
-#&gt;     id Var1 Var2</div><div class='input'><span class='fu'>genMultiFac</span>(
-  nFactors = <span class='fl'>3</span>, each = <span class='fl'>1</span>, coding = <span class='st'>"effect"</span>,
-  colNames = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Fac1"</span>, <span class='st'>"Fac2"</span>, <span class='st'>"Fac3"</span>), id = <span class='st'>"block"</span>
-)
+#&gt;     id Var1 Var2</div><div class='input'><span class='fu'>genMultiFac</span>(nFactors = <span class='fl'>3</span>, each = <span class='fl'>1</span>, coding = <span class='st'>"effect"</span>, 
+   colNames = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Fac1"</span>,<span class='st'>"Fac2"</span>, <span class='st'>"Fac3"</span>), id = <span class='st'>"block"</span>)
 </div><div class='output co'>#&gt;    block Fac1 Fac2 Fac3
 #&gt; 1:     1   -1   -1   -1
 #&gt; 2:     2    1   -1   -1

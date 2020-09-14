@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -198,16 +198,22 @@
 </table>
 <p>These <em>definition</em> tables can be generated two ways. One option is to to use any external editor that allows the creation of <code>csv</code> files, which can be read in with a call to <code>defRead</code>. An alternative is to make repeated calls to the function <code>defData</code>. Here, we illustrate the R code that builds this definition table internally:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(varname = <span class="st">"nr"</span>, dist = <span class="st">"nonrandom"</span>, formula=<span class="fl">7</span>, id = <span class="st">"idnum"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>,varname=<span class="st">"x1"</span>,dist=<span class="st">"uniform"</span>,formula=<span class="st">"10;20"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>,varname=<span class="st">"y1"</span>,formula=<span class="st">"nr + x1 * 2"</span>,variance=<span class="fl">8</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>,varname=<span class="st">"y2"</span>,dist=<span class="st">"poisson"</span>,formula=<span class="st">"nr - 0.2 * x1"</span>,link=<span class="st">"log"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"xnb"</span>, dist = <span class="st">"negBinomial"</span> , formula=<span class="st">"nr - 0.2 * x1"</span>, variance = <span class="fl">0.05</span>, link = <span class="st">"log"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>,varname=<span class="st">"xCat"</span>,formula = <span class="st">"0.3;0.2;0.5"</span>,dist=<span class="st">"categorical"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>,varname=<span class="st">"g1"</span>, dist=<span class="st">"gamma"</span>, formula = <span class="st">"5+xCat"</span>, variance = <span class="fl">1</span>, link = <span class="st">"log"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>,varname=<span class="st">"b1"</span>, dist=<span class="st">"beta"</span>, formula = <span class="st">"1+0.3*xCat"</span>, variance = <span class="fl">1</span>, link = <span class="st">"logit"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"a1"</span>, dist = <span class="st">"binary"</span> , formula=<span class="st">"-3 + xCat"</span>, link=<span class="st">"logit"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"a2"</span>, dist = <span class="st">"binomial"</span> , formula=<span class="st">"-3 + xCat"</span>, variance = <span class="fl">100</span>, link=<span class="st">"logit"</span>) 
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(varname = <span class="st">"nr"</span>, dist = <span class="st">"nonrandom"</span>, formula = <span class="fl">7</span>, id = <span class="st">"idnum"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"x1"</span>, dist = <span class="st">"uniform"</span>, formula = <span class="st">"10;20"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"y1"</span>, formula = <span class="st">"nr + x1 * 2"</span>, variance = <span class="fl">8</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"y2"</span>, dist = <span class="st">"poisson"</span>, formula = <span class="st">"nr - 0.2 * x1"</span>, 
+    link = <span class="st">"log"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"xnb"</span>, dist = <span class="st">"negBinomial"</span>, formula = <span class="st">"nr - 0.2 * x1"</span>, 
+    variance = <span class="fl">0.05</span>, link = <span class="st">"log"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"xCat"</span>, formula = <span class="st">"0.3;0.2;0.5"</span>, dist = <span class="st">"categorical"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"g1"</span>, dist = <span class="st">"gamma"</span>, formula = <span class="st">"5+xCat"</span>, variance = <span class="fl">1</span>, 
+    link = <span class="st">"log"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"b1"</span>, dist = <span class="st">"beta"</span>, formula = <span class="st">"1+0.3*xCat"</span>, variance = <span class="fl">1</span>, 
+    link = <span class="st">"logit"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"a1"</span>, dist = <span class="st">"binary"</span>, formula = <span class="st">"-3 + xCat"</span>, 
+    link = <span class="st">"logit"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"a2"</span>, dist = <span class="st">"binomial"</span>, formula = <span class="st">"-3 + xCat"</span>, 
+    variance = <span class="fl">100</span>, link = <span class="st">"logit"</span>)
 </pre></div>
 <p>The first call to <code>defData</code> without specifying a definition name (in this example the definition name is <em>def</em>) creates a <strong>new</strong> data.table with a single row. An additional row is added to the table <code>def</code> each time the function <code>defData</code> is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named ‘nr’, defined as a constant with a value to be 7. In each call to <code>defData</code> the user defines a variable name, a distribution (the default is ‘normal’), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to ‘identity’).<br></p>
 <p>The possible distributions include <strong>normal</strong>, <strong>gamma</strong>, <strong>poisson</strong>, <strong>zero-truncated poisson</strong>, <strong>negative binomial</strong>, <strong>binary</strong>, <strong>binomial</strong>, <strong>beta</strong>, <strong>uniform</strong>, <strong>uniform integer</strong>, <strong>categorical</strong>, and <strong>deterministic/non-random</strong>. For all of these distributions, key parameters defining the distribution are entered in the <code>formula</code>, <code>variance</code>, and <code>link</code> fields.</p>
@@ -241,8 +247,8 @@
 ## 1000:  1000  7 12.72076 33.53079  78  70    1  605.9685 0.4719441  0 13</code></pre>
 <p>New data can be added to an existing data set with a call to function <strong><code>addColumns</code></strong>. The new data definitions are created with a call to <strong><code>defData</code></strong> and then included as an argument in the call to <strong><code>addColumns</code></strong>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">addef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span>(varname = <span class="st">"zExtra"</span>, dist = <span class="st">"normal"</span>, formula = <span class="st">'3 + y1'</span>, 
-                 variance = <span class="fl">2</span>)
+<span class="kw">addef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span>(varname = <span class="st">"zExtra"</span>, dist = <span class="st">"normal"</span>, formula = <span class="st">"3 + y1"</span>, 
+    variance = <span class="fl">2</span>)
 
 <span class="kw">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span>(<span class="kw">addef</span>, <span class="kw">dt</span>)
 <span class="kw">dt</span>
@@ -282,37 +288,39 @@
 <p>Treatment assignment can simulate how treatment is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.</p>
 <p>First, create the data definition:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(varname = <span class="st">"male"</span>, dist = <span class="st">"binary"</span>, formula = <span class="fl">.5</span> , id=<span class="st">"cid"</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"over65"</span>, dist = <span class="st">"binary"</span>, formula = <span class="st">"-1.7 + .8*male"</span>, link=<span class="st">"logit"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(varname = <span class="st">"male"</span>, dist = <span class="st">"binary"</span>, formula = <span class="fl">0.5</span>, id = <span class="st">"cid"</span>)
+<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"over65"</span>, dist = <span class="st">"binary"</span>, formula = <span class="st">"-1.7 + .8*male"</span>, 
+    link = <span class="st">"logit"</span>)
 <span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname = <span class="st">"baseDBP"</span>, dist = <span class="st">"normal"</span>, formula = <span class="fl">70</span>, variance = <span class="fl">40</span>)
 
 <span class="kw">dtstudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span>(<span class="fl">330</span>, <span class="kw">def</span>)
 </pre></div>
 <p><em>Balanced treatment assignment, stratified by gender and age category (not blood pressure)</em></p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw">study1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span>(<span class="kw">dtstudy</span> , n=<span class="fl">3</span>, balanced = <span class="fl">TRUE</span>, strata = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"male"</span>,<span class="st">"over65"</span>), grpName = <span class="st">"rxGrp"</span>)
+<span class="kw">study1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span>(<span class="kw">dtstudy</span>, n = <span class="fl">3</span>, balanced = <span class="fl">TRUE</span>, strata = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"male"</span>, <span class="st">"over65"</span>), 
+    grpName = <span class="st">"rxGrp"</span>)
 
 <span class="kw">study1</span>
 </pre></div>
-<pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    1      0 69.71811     3
-##   2:   2    0      0 68.21481     1
-##   3:   3    1      0 63.64589     1
-##   4:   4    0      0 67.40492     2
-##   5:   5    0      0 72.96366     2
+<pre><code>##      male over65 cid  baseDBP rxGrp
+##   1:    1      0   1 69.71811     3
+##   2:    0      0   2 68.21481     1
+##   3:    1      0   3 63.64589     1
+##   4:    0      0   4 67.40492     2
+##   5:    0      0   5 72.96366     2
 ##  ---                               
-## 326: 326    1      1 67.99205     1
-## 327: 327    1      0 55.73555     2
-## 328: 328    1      0 74.85385     2
-## 329: 329    1      0 75.20651     2
-## 330: 330    1      0 66.24796     1</code></pre>
+## 326:    1      1 326 67.99205     1
+## 327:    1      0 327 55.73555     2
+## 328:    1      0 328 74.85385     2
+## 329:    1      0 329 75.20651     2
+## 330:    1      0 330 66.24796     1</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="kw">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span>(<span class="kw">dtstudy</span> , n=<span class="fl">3</span>, balanced = <span class="fl">TRUE</span>, grpName = <span class="st">"rxGrp"</span>)
+<span class="kw">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span>(<span class="kw">dtstudy</span>, n = <span class="fl">3</span>, balanced = <span class="fl">TRUE</span>, grpName = <span class="st">"rxGrp"</span>)
 </pre></div>
 <p><em>Random (unbalanced) treatment assignment</em></p>
 <div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="kw">study3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span>(<span class="kw">dtstudy</span> , n=<span class="fl">3</span>, balanced = <span class="fl">FALSE</span>, grpName = <span class="st">"rxGrp"</span>)
+<span class="kw">study3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span>(<span class="kw">dtstudy</span>, n = <span class="fl">3</span>, balanced = <span class="fl">FALSE</span>, grpName = <span class="st">"rxGrp"</span>)
 </pre></div>
 </div>
 </div>

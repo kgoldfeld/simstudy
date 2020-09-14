@@ -75,7 +75,7 @@ coefficients (ICCs) for clustered data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -119,7 +119,7 @@ coefficients (ICCs) for clustered data." />
     <div class="page-header">
     <h1>Generate variance for random effects that produce desired intra-class
 coefficients (ICCs) for clustered data.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/utility.R'><code>R/utility.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/iccRE.R'><code>R/iccRE.R</code></a></small>
     <div class="hidden name"><code>iccRE.Rd</code></div>
     </div>
 
@@ -140,7 +140,7 @@ target ICC levels</p></td>
     </tr>
     <tr>
       <th>dist</th>
-      <td><p>The distribution that describes the outcome data at the
+      <td><p>The distribution that describes the outcome data at the 
 individual level. Possible distributions include "normal", "binary",
 "poisson", or "gamma"</p></td>
     </tr>
@@ -153,7 +153,7 @@ varTotal or varWithin must be specified, but not both.</p></td>
     <tr>
       <th>varWithin</th>
       <td><p>Numeric value that represents the variation within a
-cluster for a normally distributed model. If "normal" distribution is
+cluster for a normally distributed model. If "normal" distribution is 
 specified, either varTotal or varWithin must be specified, but not both.</p></td>
     </tr>
     <tr>
@@ -164,7 +164,7 @@ when distribution is "poisson" or "negative binomial".</p></td>
     <tr>
       <th>disp</th>
       <td><p>Numeric value that represents the dispersion parameter that is used
-to define a gamma or negative binomial distribution with a log link. Must be
+to define a gamma or negative binomial distribution with a log link. Must be 
 specified when distribution is "gamma".</p></td>
     </tr>
     </table>
@@ -197,7 +197,8 @@ at the cluster level that correspond to the ICC vector.</p>
 <span class='fu'>iccRE</span>(<span class='kw'>targetICC</span>, <span class='st'>"negBinomial"</span>, lambda = <span class='fl'>40</span>, disp = <span class='fl'>.5</span>)
 </div><div class='output co'>#&gt;  [1] 0.03609454 0.04377423 0.05161908 0.05963446 0.06782601 0.07619959
 #&gt;  [7] 0.08476134 0.09351768 0.10247531 0.11164126 0.12102288 0.13062787
-#&gt; [13] 0.14046431 0.15054066 0.16086581 0.17144908</div></pre>
+#&gt; [13] 0.14046431 0.15054066 0.16086581 0.17144908</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

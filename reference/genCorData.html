@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create correlated data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_correlated_data.R'><code>R/generate_correlated_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genCorData.R'><code>R/genCorData.R</code></a></small>
     <div class="hidden name"><code>genCorData.Rd</code></div>
     </div>
 
@@ -219,20 +219,20 @@ means in the vector mu.</p>
 #&gt;  998:  998 3.410602 5.333275 13.205202
 #&gt;  999:  999 3.479042 5.746235 15.073017
 #&gt; 1000: 1000 2.360636 7.973820 12.279591</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='kw'>dtcor1</span>[, <span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>3</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='kw'>dtcor1</span>[,<span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>3</span>)
 </div><div class='output co'>#&gt;       V1    V2    V3
 #&gt; V1 0.885 1.274 1.817
 #&gt; V2 1.274 3.898 3.844
-#&gt; V3 1.817 3.844 8.423</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dtcor1</span>[, <span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>2</span>)
+#&gt; V3 1.817 3.844 8.423</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dtcor1</span>[,<span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>2</span>)
 </div><div class='output co'>#&gt;      V1   V2   V3
 #&gt; V1 1.00 0.69 0.67
 #&gt; V2 0.69 1.00 0.67
 #&gt; V3 0.67 0.67 1.00</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='kw'>dtcor2</span>[, <span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>3</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='kw'>dtcor2</span>[,<span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>3</span>)
 </div><div class='output co'>#&gt;       V1    V2    V3
 #&gt; V1 0.956 0.383 2.237
 #&gt; V2 0.383 3.959 3.400
-#&gt; V3 2.237 3.400 8.214</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dtcor2</span>[, <span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>2</span>)
+#&gt; V3 2.237 3.400 8.214</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dtcor2</span>[,<span class='fu'>.</span>(<span class='kw'>V1</span>, <span class='kw'>V2</span>, <span class='kw'>V3</span>)]), <span class='fl'>2</span>)
 </div><div class='output co'>#&gt;     V1  V2  V3
 #&gt; V1 1.0 0.2 0.8
 #&gt; V2 0.2 1.0 0.6

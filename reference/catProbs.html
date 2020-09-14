@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a semi-colon delimited string of probabilities to be used to define categorical data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/utility.R'><code>R/utility.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/catProbs.R'><code>R/catProbs.R</code></a></small>
     <div class="hidden name"><code>catProbs.Rd</code></div>
     </div>
 
@@ -154,10 +154,9 @@ of the probabilities provided.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>catProbs</span>(<span class='fl'>0.25</span>, <span class='fl'>0.25</span>, <span class='fl'>0.50</span>)
-</div><div class='output co'>#&gt; [1] "0.25;0.25;0.5"</div><div class='input'><span class='fu'>catProbs</span>(<span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>2</span>)
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Probabilities do not sum to 1.</span>
-#&gt; <span class='warning'>Adding category with p = 0.166666666666667</span></div><div class='output co'>#&gt; [1] "0.333333333333333;0.5;0.166666666666667"</div><div class='input'><span class='fu'>catProbs</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Sum of probabilities &gt; 1. Probabilities will be normalized.</span></div><div class='output co'>#&gt; [1] "0.166666666666667;0.333333333333333;0.5"</div><div class='input'><span class='fu'>catProbs</span>(n = <span class='fl'>5</span>)
+</div><div class='output co'>#&gt; [1] "0.25;0.25;0.5"</div><div class='input'><span class='fu'>catProbs</span>(<span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>2</span>)
+</div><div class='output co'>#&gt; [1] "0.333333333333333;0.5;0.166666666666667"</div><div class='input'><span class='fu'>catProbs</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)
+</div><div class='output co'>#&gt; [1] "0.166666666666667;0.333333333333333;0.5"</div><div class='input'><span class='fu'>catProbs</span>(n=<span class='fl'>5</span>)
 </div><div class='output co'>#&gt; [1] "0.2;0.2;0.2;0.2;0.2"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

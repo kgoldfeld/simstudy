@@ -3,5 +3,8 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   simstudy: simstudy.html
-last_built: 2020-09-14T17:46Z
+last_built: 2020-09-14T17:58Z
+urls:
+  reference: https://kgoldfeld.github.io/simstudy/reference
+  article: https://kgoldfeld.github.io/simstudy/articles
 
