@@ -3,11 +3,10 @@ name: code-coverage
 on:
   push:
     branches:
-      - restructure
+      - main
   pull_request:
     branches:
-      - restructure
-
+      - main
 
 
 jobs:

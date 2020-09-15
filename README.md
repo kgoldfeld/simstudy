@@ -1,8 +1,18 @@
+simstudy
+================
+
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
+[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
+<!-- badges: end -->
 
 # simstudy
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- badges: start -->
 
 [![R build
@@ -31,6 +41,7 @@ You can install the released version of simstudy from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
+
 install.packages("simstudy")
 ```
 

@@ -15,5 +15,6 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^\.lintr$
-^simstudy\.code-workspace$
 ^tests/\.lintr$
+^File_management$
+^simstudy\.code-workspace$

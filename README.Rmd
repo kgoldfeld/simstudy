@@ -1,7 +1,7 @@
 ---
+title: "simstudy"
 output: github_document
 ---
-
 
 
 ```{r, include = FALSE}
@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 ```
 
 # simstudy
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 [![R build status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=restructure)](https://github.com/kgoldfeld/simstudy/actions)
@@ -59,7 +60,4 @@ dt
 
 ## Code of Conduct
 
-Please note that the simstudy project is released with a [Contributor
-Code of
-Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html). By
-contributing to this project, you agree to abide by its terms.
+Please note that the simstudy project is released with a [Contributor Code of Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
