@@ -9,7 +9,6 @@ on:
       - main
 
 
-
 jobs:
   test-coverage:
     runs-on: macOS-latest
