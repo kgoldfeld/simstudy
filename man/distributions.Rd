@@ -64,8 +64,9 @@ part of the new distribution \verb{x_1,...,X_n} is assigned a probability
 }
 
 \examples{
-ext_var <- 2.9
-def <- defData(varname = "external",formula = "3 + log(..ext_var)", variance = .5)
+
+ext_var <<- 2.9 
+def <- defData(varname = "external", formula = "3 + log(..ext_var)", variance = .5)
 def
 genData(5,def)
 }

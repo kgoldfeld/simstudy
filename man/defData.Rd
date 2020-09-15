@@ -39,6 +39,7 @@ Add single row to definitions table
 The possible data distributions are: normal, binary, binomial, poisson, noZeroPoisson, uniform, categorical, gamma, beta, nonrandom, uniformInt, negBinomial, exponential, mixture.
 }
 \examples{
+extVar <<- 2.3
 def <- defData(varname = "xNr", dist = "nonrandom", formula = 7, id = "idnum")
 def <- defData(def, varname = "xUni", dist = "uniform", formula = "10;20")
 def <- defData(def, varname = "xNorm", formula = "xNr + xUni * 2", dist = "normal",
@@ -50,6 +51,8 @@ def <- defData(def, varname = "xGamma", dist = "gamma", formula = "5+xCat",
                variance = 1, link = "log")
 def <- defData(def, varname = "xBin", dist = "binary", formula = "-3 + xCat",
                link = "logit")
+def <- defData(def, varname ="external", dist = "nonrandom",
+               formula = "xBin * log(..extVar)")
 def
 }
 \seealso{

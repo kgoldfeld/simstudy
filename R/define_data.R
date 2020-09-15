@@ -1,6 +1,6 @@
 #' Add single row to definitions table of conditions that will be used to add data to an
 #' existing definitions table
-#' @md 
+#' @md
 #' @param dtDefs Name of definition table to be modified. Null if this is a new definition.
 #' @param condition Formula specifying condition to be checked
 #' @param formula An R expression for mean (string)
@@ -89,6 +89,7 @@ defCondition <- function(dtDefs = NULL,
 #' @details The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
 #'
 #' @examples
+#' extVar <<- 2.3
 #' def <- defData(varname = "xNr", dist = "nonrandom", formula = 7, id = "idnum")
 #' def <- defData(def, varname = "xUni", dist = "uniform", formula = "10;20")
 #' def <- defData(def, varname = "xNorm", formula = "xNr + xUni * 2", dist = "normal",
@@ -100,6 +101,8 @@ defCondition <- function(dtDefs = NULL,
 #'                variance = 1, link = "log")
 #' def <- defData(def, varname = "xBin", dist = "binary", formula = "-3 + xCat",
 #'                link = "logit")
+#' def <- defData(def, varname ="external", dist = "nonrandom",
+#'                formula = "xBin * log(..extVar)")
 #' def
 #' @export
 #' @concept define_data
@@ -754,6 +757,7 @@ defSurv <- function(dtDefs = NULL,
       formFuncs,
       ifnotfound = NA,
       mode = "function",
+      envir = parent.frame(),
       inherits = TRUE
     ))
 
@@ -768,6 +772,7 @@ defSurv <- function(dtDefs = NULL,
       sub("..", "", formVars[dotVarsBol]),
       ifnotfound = NA,
       mode = "numeric",
+      envir = parent.frame(),
       inherits = TRUE
     ))
 

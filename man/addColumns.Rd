@@ -34,5 +34,4 @@ def2
 dt <- addColumns(def2, dt)
 dt
 }
-\concept{define_data}
 \concept{generate_data}

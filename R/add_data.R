@@ -20,7 +20,6 @@
 #' dt <- addColumns(def2, dt)
 #' dt
 #' @concept generate_data
-#' @concept define_data
 #' @export
 addColumns <- function(dtDefs, dtOld) {
 
