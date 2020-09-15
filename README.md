@@ -13,7 +13,7 @@ status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.o
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/restructure/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
 The simstudy package is collection of functions that allow users to
@@ -55,16 +55,23 @@ dt <- genData(250, def)
 dt <- trtAssign(dt, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dt
-#>       id         x         y grp
-#>   1:   1  7.115924  7.875171   2
-#>   2:   2 10.572041  7.355647   1
-#>   3:   3  9.634730  8.622469   4
-#>   4:   4 11.558365  8.794604   4
-#>   5:   5  7.861149  8.568316   2
-#>  ---                            
-#> 246: 246 13.458648  9.492960   1
-#> 247: 247 10.037167  8.555292   2
-#> 248: 248  8.632074  4.632683   2
-#> 249: 249 13.328257 12.422091   3
-#> 250: 250 11.316940  8.071595   3
+#>       id         x        y grp
+#>   1:   1 12.332108 8.742219   3
+#>   2:   2  9.657903 6.947927   2
+#>   3:   3 11.263337 7.971667   4
+#>   4:   4  9.803841 8.201055   1
+#>   5:   5  7.893644 8.075940   4
+#>  ---                           
+#> 246: 246  9.960719 8.494674   2
+#> 247: 247 10.569261 9.776772   4
+#> 248: 248 12.957195 8.372593   2
+#> 249: 249  8.596451 5.748960   4
+#> 250: 250  8.910230 7.460821   3
 ```
+
+## Code of Conduct
+
+Please note that the simstudy project is released with a [Contributor
+Code of
+Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.
