@@ -105,9 +105,9 @@ addCondition <- function(condDefs, dtOld, newvar) {
   # 'declare' vars
   # TODO "declare vars"
 
-  varname = NULL
-  formula = NULL
-  dist = NULL
+  varname <- NULL
+  formula <- NULL
+  dist <- NULL
 
   # Checks
 
@@ -231,8 +231,8 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
 
   # 'declare' vars created in data.table
   # TODO "declare vars"
-  variable = NULL
-  .e = NULL
+  variable <- NULL
+  .e <- NULL
 
   # check transMat is square matrix and row sums = 1
 

@@ -51,30 +51,13 @@ NULL
 #'  `p_1,...,p_n`. For more information see
 #'  [rdatagen.net](https://www.rdatagen.net/post/adding-mixture-distributions-to-simstudy/).
 #' @examples
-#' 
-#' ext_var <<- 2.9 
+#' ext_var <<- 2.9
 #' def <- defData(varname = "external", formula = "3 + log(..ext_var)", variance = .5)
 #' def
-#' genData(5,def)
+#' genData(5, def)
 #' @name distributions
 #' @aliases normal, poisson, noZeroPoisson, binary, binomial, uniform,
 #'  categorical, gamma, beta, negBinomial, nonrandom, exponential, mixture,
 #'  pseudorandom, pseudorandomSeq
 #' @md
 NULL
-
-# TODO pseudorandom dist doc
-# | pseudorandom    | vector and repetitions | "vector;reps"                            | NA             | identity or fill  |
-# | pseudorandomSeq | vector and repetitions | "vector;reps"                            | NA             | identity or fill  |
-#@section Pseudo-random and Pseudo-random-sequence: These distributions repeat
-#  the elements of a numeric vector a certain number of times in a random
-#  order. With \code{pseudorandom} every element in \code{vector} will be
-#  repeated \code{reps} times in a completly random order.
-#  \code{pseudorandomSeq} will also repeat the elements \code{reps} times but
-#  will randomize in sequences of \code{length(vector)}. E.g. \code{formula =
-#  "1+2+3;2"} could look like \code{3,1,1,2,3,2} for \code{pseudorandom} but
-#  something like \code{3,1,2,1,3,2} for \code{pseudorandomSeq}. Both
-#  distributions expect \code{reps * length(vector) = n} where \code{n} is the
-#  number of rows in the simulated data. Setting \code{link = "fill"} will
-#  supress this requirement and adjust the output to length \code{n}.
-# nolint end

@@ -4,7 +4,7 @@
 #'  outside the scope of the definition table so that they can be used in data
 #'  generation.
 #'
-#' @param formula Some object or literal containing data definition formula(s). 
+#' @param formula Some object or literal containing data definition formula(s).
 #' @return A named list with the value of the external variables.
 #' @examples
 #' extVar1 <- 23
