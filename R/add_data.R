@@ -24,7 +24,6 @@
 addColumns <- function(dtDefs, dtOld) {
 
   # "declares" varname to avoid global NOTE
-  # TODO "declare vars": see ?utils::globalVariables
   varname <- NULL
   formula <- NULL
   dist    <- NULL
@@ -103,8 +102,6 @@ addColumns <- function(dtDefs, dtOld) {
 addCondition <- function(condDefs, dtOld, newvar) {
 
   # 'declare' vars
-  # TODO "declare vars"
-
   varname <- NULL
   formula <- NULL
   dist <- NULL
@@ -230,7 +227,6 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
                       trimvalue = NULL) {
 
   # 'declare' vars created in data.table
-  # TODO "declare vars"
   variable <- NULL
   .e <- NULL
 
@@ -339,7 +335,6 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
 addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames = NULL) {
 
   # 'declare' vars
-  # TODO "declare vars"
   count <- NULL
 
   if (nFactors < 2) stop("Must specify at least 2 factors")

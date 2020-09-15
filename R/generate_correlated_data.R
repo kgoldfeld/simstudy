@@ -478,7 +478,6 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 .genBinEP <- function(n, p, tcorr) {
 
   # "Declare" vars to avoid R CMD warning
-  # TODO "declare vars"
   id <- NULL
   period <- NULL
   seqid <- NULL

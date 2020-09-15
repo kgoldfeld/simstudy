@@ -397,7 +397,6 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
                       remove = FALSE) {
 
   # "declares" to avoid global NOTE
-  # TODO "declare vars"
   formula <- NULL
   variance <- NULL
   dist <- NULL
@@ -505,7 +504,6 @@ updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
                          remove = FALSE) {
 
   # "declares" to avoid global NOTE
-  # TODO "declare vars"
   formula <- NULL
   variance <- NULL
   dist <- NULL
@@ -571,11 +569,8 @@ updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
 viewBasis <- function(knots, degree) {
 
   # 'declare vars'
-  # TODO "declare vars"
   value <- NULL
   basis <- NULL
-
-  #
 
   x <- seq(0, 1, length.out = 1000)
   reqparam <- length(knots) + degree + 1

@@ -102,7 +102,6 @@ genMiss <- function(dtName, missDefs, idvars,
                     repeated = FALSE, periodvar = "period") {
 
   # "Declare" vars to avoid R CMD warning
-  # TODO "declare vars"
   varname   <- NULL
   period    <- NULL
   baseline  <- NULL
@@ -211,11 +210,8 @@ genMiss <- function(dtName, missDefs, idvars,
 .addLags <- function(oldDT, formsdt) {
   # TODO add LAG function to documentation
   # "Declare" vars to avoid R CMD warning
-  # TODO "declare vars"
   id <- NULL
   N <- NULL
-
-  ##
 
   lagdt <- data.table::copy(oldDT)
   lagforms <- data.table::copy(formsdt)
@@ -282,10 +278,9 @@ genMiss <- function(dtName, missDefs, idvars,
 .genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
 
   # 'declare vars
-  # TODO "declare vars"
-  varname = NULL
-  logit.link = NULL
-  formula = NULL
+  varname <- NULL
+  logit.link <- NULL
+  formula <- NULL
 
   dtMissP <- dtTemp[, idvars, with = FALSE]
  

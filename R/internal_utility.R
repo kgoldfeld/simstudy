@@ -195,10 +195,7 @@
 .findPoisVar <- function(j) {
 
   # 'declare' var
-  # TODO "declare vars"
   y <- NULL
-
-  ##
 
   a <- seq(0, 20, by = 0.01)
   dx <- data.table::data.table(a = a, y = exp(3 * a / 2) - exp(a / 2))
@@ -254,7 +251,6 @@
 .genQuantU <- function(nvars, n, rho, corstr, corMatrix, idname = "id") {
 
   # "Declare" vars to avoid R CMD warning
-  # TODO "declare vars"
   seqid <- NULL
   period <- NULL
   Unew <- NULL

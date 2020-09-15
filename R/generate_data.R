@@ -365,8 +365,7 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
                       widePrefix = "S", trimvalue = NULL) {
 
   # 'declare' vars created in data.table
-  # TODO "declare vars"
-  variable = NULL
+  variable <- NULL
 
   # check transMat is square matrix and row sums = 1
 
@@ -495,7 +494,6 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE) {
 
   # "declares" to avoid global NOTE
-  # TODO "declare vars"
   cat <- NULL
 
   # Check arguments
@@ -608,7 +606,6 @@ genSpline <- function(dt, newvar, predictor, theta,
                       newrange = NULL, noise.var = 0) {
 
   # "declares" to avoid global NOTE
-  # TODO "declare vars"
   y.spline <- NULL
 
   # Check arguments
@@ -708,16 +705,15 @@ genSpline <- function(dt, newvar, predictor, theta,
 genSurv <- function(dtName, survDefs, digits = 3) {
 
   # 'declare
-  # TODO "declare vars"
-  varname = NULL
-  formula = NULL
+  varname <- NULL
+  formula <- NULL
 
-  dtSurv = copy(dtName)
+  dtSurv <- copy(dtName)
 
   for (i in (1:nrow(survDefs))) {
-    shape = dtSurv[, eval(parse(text = survDefs[i, shape]))]
-    scale = dtSurv[, eval(parse(text = survDefs[i, scale]))]
-    survPred = dtSurv[, eval(parse(text = survDefs[i, formula]))]
+    shape <- dtSurv[, eval(parse(text = survDefs[i, shape]))]
+    scale <- dtSurv[, eval(parse(text = survDefs[i, scale]))]
+    survPred <- dtSurv[, eval(parse(text = survDefs[i, formula]))]
 
     u <- stats::runif(n = nrow(dtSurv))
 

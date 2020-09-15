@@ -49,15 +49,12 @@ addPeriods <- function(dtName,
                        perName = "period") {
 
   # "Declare" vars that exist in dtName
-  # TODO "declare vars"
-  nCount = NULL
-  .period = NULL
-  vInterval = NULL
-  mInterval = NULL
-  timeElapsed = NULL
-  time = NULL
-
-  #
+  nCount <- NULL
+  .period <- NULL
+  vInterval <- NULL
+  mInterval <- NULL
+  timeElapsed <- NULL
+  time <- NULL
 
   dtX1 <- copy(dtName)
 
@@ -214,12 +211,10 @@ genCluster <- function(dtClust,
                        allLevel2 = TRUE) {
 
   # 'declare' var
-  # TODO "declare vars"
-  id2 = NULL
-  n = NULL
+  id2 <- NULL
+  n <- NULL
 
   #### Check missing arguments
-
   if (missing(dtClust)) stop("argument 'dtClust' is missing", call. = FALSE)
   if (missing(cLevelVar)) stop("argument 'cLevelVar' is missing", call. = FALSE)
   if (missing(numIndsVar)) stop("argument 'numIndsVar' is missing", call. = FALSE)
@@ -283,13 +278,10 @@ genNthEvent <- function(dtName, defEvent, nEvents = 1,
                         perName = "period", id = "id") {
 
   # "Declare" vars to avoid R CMD warning
-  # TODO "declare vars"
   .event <- NULL
   .id <- NULL
   .period <- NULL
   .first <- NULL
-
-  #
 
   dd <- copy(dtName)
   dd <- addColumns(defEvent, dd)
@@ -363,12 +355,9 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
                       strata = NULL, grpName = "trtGrp", ratio = NULL) {
 
   # 'declare' vars
-  # TODO "declare vars"
-  .stratum = NULL
-  .n = NULL
-  grpExp = NULL
-
-  #
+  .stratum <- NULL
+  .n <- NULL
+  grpExp <- NULL
 
   if (missing(dtName)) {
     stop("Data table argument is missing", call. = FALSE)
@@ -429,7 +418,6 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 .addStrataCode <- function(dt, strata) {
 
   # 'Declare' var
-  # TODO "declare vars"
   .stratum <- NULL
 
   dtWork <- copy(dt)
@@ -512,8 +500,8 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
   ncols = ncol(dt)
 
   ncat <- length(formulas)
-  def = NULL
-  # TODO "declare vars"
+  def <- NULL
+
   for (i in 1:ncat) {
     def <- defDataAdd(def,
       varname = paste0("e", i),
@@ -596,12 +584,9 @@ trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
                          lag = 0, xrName = "xr") {
 
   # 'declare' vars created in data.table
-  # TODO "declare vars"
-  rx = NULL
-  period = NULL
-  xr = NULL
-
-  #
+  rx <- NULL
+  period <- NULL
+  xr <- NULL
 
   if (lag == 0) xrName <- "xr" # override - will be deleted from dd
 

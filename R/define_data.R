@@ -242,7 +242,6 @@ defDataAdd <- function(dtDefs = NULL,
 defRead <- function(filen, id = "id") {
 
   # 'declare var
-  # TODO "declare vars"
   varname = NULL
   formula = NULL
   dist = NULL
