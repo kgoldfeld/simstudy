@@ -1,18 +1,10 @@
 simstudy
 ================
 
-<!-- badges: start -->
-
-[![R build
-status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
-<!-- badges: end -->
-
 # simstudy
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![R build
@@ -41,7 +33,6 @@ You can install the released version of simstudy from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-
 install.packages("simstudy")
 ```
 
@@ -67,17 +58,17 @@ dt <- trtAssign(dt, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dt
 #>       id         x         y grp
-#>   1:   1  9.685096  9.717291   2
-#>   2:   2 11.100525  8.968503   3
-#>   3:   3 10.921085  8.942450   2
-#>   4:   4 10.984265  7.507868   3
-#>   5:   5 10.233290  7.988352   3
+#>   1:   1  9.475569  7.582237   1
+#>   2:   2 10.787550  8.815293   2
+#>   3:   3  9.499066  8.371405   4
+#>   4:   4 10.599778  8.681764   1
+#>   5:   5  8.145189  7.400807   4
 #>  ---                            
-#> 246: 246  9.261419  7.699312   1
-#> 247: 247  8.853927  6.113308   3
-#> 248: 248  9.828950 10.313612   4
-#> 249: 249 10.508336  8.166311   4
-#> 250: 250 12.869016  8.707060   1
+#> 246: 246 10.118552  6.081986   4
+#> 247: 247 11.364979 10.039341   3
+#> 248: 248  9.438307  8.997141   2
+#> 249: 249 10.125286  6.181774   2
+#> 250: 250 13.217308 10.571772   1
 ```
 
 ## Code of Conduct
