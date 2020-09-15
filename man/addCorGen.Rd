@@ -108,16 +108,26 @@ def2 <- defDataAdd(def2,
   varname = "gammaMu", formula = ".2*period + .3*xbase",
   dist = "nonrandom", link = "log"
 )
-def2 <- defDataAdd(def2, varname = "gammaDis",
-                   formula = 1, dist = "nonrandom")
-def2 <- defDataAdd(def2, varname = "normMu",
-                   formula = "5+period + .5*xbase", dist = "nonrandom")
-def2 <- defDataAdd(def2, varname = "normVar", formula = 4,
-                   dist = "nonrandom")
-def2 <- defDataAdd(def2, varname = "unifMin",
-                   formula = "5 + 2*period + .2*xbase", dist = "nonrandom")
-def2 <- defDataAdd(def2, varname = "unifMax",
-                   formula = "unifMin + 20", dist = "nonrandom")
+def2 <- defDataAdd(def2,
+  varname = "gammaDis",
+  formula = 1, dist = "nonrandom"
+)
+def2 <- defDataAdd(def2,
+  varname = "normMu",
+  formula = "5+period + .5*xbase", dist = "nonrandom"
+)
+def2 <- defDataAdd(def2,
+  varname = "normVar", formula = 4,
+  dist = "nonrandom"
+)
+def2 <- defDataAdd(def2,
+  varname = "unifMin",
+  formula = "5 + 2*period + .2*xbase", dist = "nonrandom"
+)
+def2 <- defDataAdd(def2,
+  varname = "unifMax",
+  formula = "unifMin + 20", dist = "nonrandom"
+)
 
 dt <- genData(1000, def)
 

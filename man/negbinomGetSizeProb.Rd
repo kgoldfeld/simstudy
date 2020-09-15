@@ -12,21 +12,24 @@ negbinomGetSizeProb(mean, dispersion)
 \item{dispersion}{The dispersion parameter of a gamma distribution}
 }
 \value{
-A list that includes the size and prob parameters of the neg binom distribution
+A list that includes the size and prob parameters of the neg binom
+distribution
 }
 \description{
 Convert negative binomial mean and dispersion parameters to size and prob parameters
 }
 \details{
-In simstudy, users specify the negative binomial distribution as a function of
-two parameters - a mean and dispersion. In this case, the variance of the specified
-distribution is mean + (mean^2)*dispersion. The base R function rnbinom uses the size
-and prob parameters to specify the negative binomial distribution. This function converts
-the mean and dispersion into the size and probability parameters.
+In simstudy, users specify the negative binomial distribution as a
+function of two parameters - a mean and dispersion. In this case, the
+variance of the specified distribution is mean + (mean^2)*dispersion. The
+base R function rnbinom uses the size and prob parameters to specify the
+negative binomial distribution. This function converts the mean and
+dispersion into the size and probability parameters.
 }
 \examples{
 set.seed(12345)
-mean = 5; dispersion = 0.5
+mean <- 5
+dispersion <- 0.5
 sp <- negbinomGetSizeProb(mean, dispersion)
 c(sp$size, sp$prob)
 vec <- rnbinom(1000, size = sp$size, prob = sp$prob)

@@ -26,5 +26,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Keith Goldfeld \email{Keith.Goldfeld@nyumc.org} (\href{https://orcid.org/0000-0002-0292-8780}{ORCID})
 
+Authors:
+\itemize{
+  \item Jacob Wujciak-Jens \email{jacob@wujciak.de} (\href{https://orcid.org/0000-0002-7281-3989}{ORCID})
+}
+
 }
 \keyword{internal}

@@ -26,7 +26,8 @@ the mean and precision into the shape1 and shape2 parameters.
 }
 \examples{
 set.seed(12345)
-mean = 0.3; precision = 1.6
+mean <- 0.3
+precision <- 1.6
 rs <- betaGetShapes(mean, precision)
 c(rs$shape1, rs$shape2)
 vec <- rbeta(1000, shape1 = rs$shape1, shape2 = rs$shape2)

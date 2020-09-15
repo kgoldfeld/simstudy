@@ -49,7 +49,7 @@ Generate spline curves
 \examples{
 ddef <- defData(varname = "age", formula = "0;1", dist = "uniform")
 
-theta1 = c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
+theta1 <- c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
 knots <- c(0.25, 0.5, 0.75)
 
 viewSplines(knots = knots, theta = theta1, degree = 3)

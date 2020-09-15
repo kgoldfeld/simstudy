@@ -25,7 +25,8 @@ This function converts the mean and dispersion into the shape and rate.
 }
 \examples{
 set.seed(12345)
-mean = 5; dispersion = 1.5
+mean <- 5
+dispersion <- 1.5
 rs <- gammaGetShapeRate(mean, dispersion)
 c(rs$shape, rs$rate)
 vec <- rgamma(1000, shape = rs$shape, rate = rs$rate)
