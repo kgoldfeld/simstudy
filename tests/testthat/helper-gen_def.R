@@ -156,8 +156,9 @@ gen_arb_fun <-
 gen_wrap_fun <-
   function(inner) {
     gen.map(
-      function(x)
-        sprintf(x, inner),
+      function(x) {
+        sprintf(x, inner)
+      },
       gen.choice(gen_base_func, gen_arb_fun, prob = c(.8, .2))
     )
   }
@@ -203,8 +204,9 @@ gen_factor_dt <- function(prev_var) {
     op = gen.element(c(" * ", " / ", " ^ ", " %% ", " %/% ")),
     fac1 = gen_factor(prev_var),
     fac2 = gen_factor(prev_var)
-  ))
-    list(x$fac1, x$op, x$fac2))
+  )) {
+    list(x$fac1, x$op, x$fac2)
+  })
 }
 
 # <term> ::= <factor> ("*" | "/" |"^" | "%%" | "%/%") <term> | <factor>
@@ -214,13 +216,15 @@ gen_term <- function(prev_var) {
 
 # ::= <term> ("+" | "-") <expr>
 gen_term_pm <-
-  function(prev_var)
+  function(prev_var) {
     generate(for (x in list(
       op = gen.element(c(" + ", " - ")),
       term1 = gen_factor(prev_var),
       term2 = gen_factor(prev_var)
-    ))
-      list(x$term1, x$op, x$term2))
+    )) {
+      list(x$term1, x$op, x$term2)
+    })
+  }
 
 # ::= "(" <expr> ")"
 gen_expr_br <- function(prev_var) {
@@ -251,8 +255,9 @@ gen_expr <- function(prev_var) {
 gen_formula <-
   function(prev_var) {
     if (missing(prev_var) ||
-      length(prev_var) == 0 || !all(nchar(prev_var) > 0))
+      length(prev_var) == 0 || !all(nchar(prev_var) > 0)) {
       prev_var <- c(-100:100)
+    }
 
     gen.map(function(x) {
       paste(unlist(x), collapse = "")
@@ -314,8 +319,9 @@ gen_mix_parts <- function(prev_var, n) {
       vars = gen.list(
         of = n, gen.choice(gen.element(prev_var), gen.element(-1000:1000), prob = c(.7, .3))
       )
-  ))
-    paste(x$vars, x$probs, sep = " | ", collapse = " + "))
+  )) {
+    paste(x$vars, x$probs, sep = " | ", collapse = " + ")
+  })
 }
 
 # Categorical Generators ----
@@ -432,7 +438,9 @@ gen_def_dt <-
 gen_def_dt_n <- gen.sized(gen_def_dt)
 
 gen_defs <- function(dt, n, i = 1) {
-  if (i > n) return(dt)
+  if (i > n) {
+    return(dt)
+  }
 
   generate(for  (x in list(
     formula = get(reg[name == dt[i, dist]]$formula)(dt[seq_len(i - 1), varname]),

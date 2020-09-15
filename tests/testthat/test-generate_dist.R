@@ -24,9 +24,12 @@ test_that("'uniform' formula checked correctly", {
     generate(for (x in list(
       range = gen_uniform_range(),
       n = gen.int(40)
-    )) x),
-    function(x)
+    )) {
+      x
+    }),
+    function(x) {
       expect_silent(.genunif(x$n, x$range, NULL))
+    }
   )
 
   expect_warning(.genunif(3, "1;1", NULL), "are equal")
@@ -55,7 +58,9 @@ test_that("'uniformInt' formula checked correctly", {
     generate(for (x in list(
       range = gen_uniformInt_range(),
       n = gen.int(40)
-    )) x),
+    )) {
+      x
+    }),
     function(x) {
       expect_silent(.genUnifInt(x$n, x$range, NULL))
     }

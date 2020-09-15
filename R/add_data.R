@@ -26,7 +26,7 @@ addColumns <- function(dtDefs, dtOld) {
   # "declares" varname to avoid global NOTE
   varname <- NULL
   formula <- NULL
-  dist    <- NULL
+  dist <- NULL
 
   #
 
@@ -43,8 +43,8 @@ addColumns <- function(dtDefs, dtOld) {
 
   oldkey <- data.table::key(dtOld)
 
-  iter = nrow(dtDefs)
-  n = nrow(dtOld)
+  iter <- nrow(dtDefs)
+  n <- nrow(dtOld)
   for (i in (1:iter)) {
     dtOld <- .generate(dtDefs[i, ], n, dtOld, oldkey)
   }
@@ -97,7 +97,7 @@ addColumns <- function(dtDefs, dtOld) {
 #' ggplot(data = dt, aes(x = y, y = NewVar, group = x)) +
 #'   geom_point(aes(color = factor(x)))
 #' @export
-#' @concept generate_data 
+#' @concept generate_data
 #' @concept condition
 addCondition <- function(condDefs, dtOld, newvar) {
 
@@ -146,7 +146,7 @@ addCondition <- function(condDefs, dtOld, newvar) {
     formula <- cDefs[, formula][i]
 
     dtTemp <- dtOld[eval(parse(text = condition))]
-    n = nrow(dtTemp)
+    n <- nrow(dtTemp)
 
     if (n > 0) {
       dtTemp <- .generate(cDefs[i, ], n, dtTemp, oldkey)
@@ -349,7 +349,9 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
 
   if (length(levels) == 1) {
     combos <- prod(rep(levels, nFactors))
-  } else combos <- prod(levels)
+  } else {
+    combos <- prod(levels)
+  }
 
   each <- ceiling(nrow(dtOld) / combos)
   extra <- nrow(dtOld) %% combos

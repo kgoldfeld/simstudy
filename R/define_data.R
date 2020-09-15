@@ -63,7 +63,7 @@ defCondition <- function(dtDefs = NULL,
     link
   )
 
-  l = list(dtDefs, dt.new)
+  l <- list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
   # attr(defNew, "id") <- attr(dtDefs, "id")
@@ -92,17 +92,27 @@ defCondition <- function(dtDefs = NULL,
 #' extVar <<- 2.3
 #' def <- defData(varname = "xNr", dist = "nonrandom", formula = 7, id = "idnum")
 #' def <- defData(def, varname = "xUni", dist = "uniform", formula = "10;20")
-#' def <- defData(def, varname = "xNorm", formula = "xNr + xUni * 2", dist = "normal",
-#'                variance = 8)
-#' def <- defData(def, varname = "xPois", dist = "poisson", formula = "xNr - 0.2 * xUni",
-#'                link = "log")
+#' def <- defData(def,
+#'   varname = "xNorm", formula = "xNr + xUni * 2", dist = "normal",
+#'   variance = 8
+#' )
+#' def <- defData(def,
+#'   varname = "xPois", dist = "poisson", formula = "xNr - 0.2 * xUni",
+#'   link = "log"
+#' )
 #' def <- defData(def, varname = "xCat", formula = "0.3;0.2;0.5", dist = "categorical")
-#' def <- defData(def, varname = "xGamma", dist = "gamma", formula = "5+xCat",
-#'                variance = 1, link = "log")
-#' def <- defData(def, varname = "xBin", dist = "binary", formula = "-3 + xCat",
-#'                link = "logit")
-#' def <- defData(def, varname ="external", dist = "nonrandom",
-#'                formula = "xBin * log(..extVar)")
+#' def <- defData(def,
+#'   varname = "xGamma", dist = "gamma", formula = "5+xCat",
+#'   variance = 1, link = "log"
+#' )
+#' def <- defData(def,
+#'   varname = "xBin", dist = "binary", formula = "-3 + xCat",
+#'   link = "logit"
+#' )
+#' def <- defData(def,
+#'   varname = "external", dist = "nonrandom",
+#'   formula = "xBin * log(..extVar)"
+#' )
 #' def
 #' @export
 #' @concept define_data
@@ -141,7 +151,7 @@ defData <- function(dtDefs = NULL,
     link
   )
 
-  l = list(dtDefs, dt.new)
+  l <- list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
   attr(defNew, "id") <- attr(dtDefs, "id")
@@ -198,7 +208,7 @@ defDataAdd <- function(dtDefs = NULL,
     link
   )
 
-  l = list(dtDefs, dt.new)
+  l <- list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
   # attr(defNew, "id") <- attr(dtDefs, "id")
@@ -242,9 +252,9 @@ defDataAdd <- function(dtDefs = NULL,
 defRead <- function(filen, id = "id") {
 
   # 'declare var
-  varname = NULL
-  formula = NULL
-  dist = NULL
+  varname <- NULL
+  formula <- NULL
+  dist <- NULL
 
   #
 
@@ -451,7 +461,7 @@ defSurv <- function(dtDefs = NULL,
     shape
   )
 
-  l = list(dtDefs, dt.new)
+  l <- list(dtDefs, dt.new)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
 
@@ -459,13 +469,13 @@ defSurv <- function(dtDefs = NULL,
 }
 
 #' Check new data definition
-#' 
+#'
 #' @description Check validity of data definition, Can only check properties
-#'  independent of previously generated data. 
+#'  independent of previously generated data.
 #' @param newvar Name of new variable
 #' @param newfrom New formula
 #' @param defVars Existing column names
-#' @return newvar is returned invisibly if all tests are passed. If a test 
+#' @return newvar is returned invisibly if all tests are passed. If a test
 #' fails, execution is halted.
 #' @seealso [distributions]
 #' @noRd
@@ -584,29 +594,30 @@ defSurv <- function(dtDefs = NULL,
   }
 
 #' Check categorical formula
-#' 
+#'
 #' @description Categorical formulas muste be of the form "x1; x2; ..." and
 #' contain atleast 2 numeric probabilities.
 #' @param formula Formula as string.
-#' @return Invisible, error if formula not valid. 
+#' @return Invisible, error if formula not valid.
 #' @seealso distributions
-#' @noRd 
+#' @noRd
 .checkCategorical <- function(formula) {
   probs <- .splitFormula(formula)
 
-  if (length(probs) < 2)
+  if (length(probs) < 2) {
     stop(
       paste0(
         "The formula for 'categorical' must contain atleast",
         " two numeric probabilities."
       )
     )
+  }
 
   invisible(formula)
 }
 
 #' Check mixture formula
-#' 
+#'
 #' @description Mixture formulas must be of the form "x1 | p2 + x2 | p2 ..."
 #' where x* = variables and p* = probabilities and have a balanced number
 #' of variables and probabilities. Actual formula can not be check pre
@@ -620,7 +631,7 @@ defSurv <- function(dtDefs = NULL,
   var_pr <- strsplit(formula, "+", fixed = T)
   var_dt <- strsplit(var_pr[[1]], "|", fixed = T)
 
-  if (length(unlist(var_dt)) %% 2)
+  if (length(unlist(var_dt)) %% 2) {
     stop(
       paste0(
         "Mixture formula most contain same amount",
@@ -628,6 +639,7 @@ defSurv <- function(dtDefs = NULL,
         " See ?distributions"
       )
     )
+  }
 
   formDT <- as.data.table(do.call(rbind, var_dt))
   names(formDT) <- c("vars", "probs")
@@ -660,26 +672,29 @@ defSurv <- function(dtDefs = NULL,
   formDT$vars[dotVars & !dotVarArrays] <- mget(dotVarNames, inherits = T, ifnotfound = NA, mode = "numeric")
   formDT$probs <- suppressWarnings(as.numeric(formDT$probs))
 
-  if (any(is.na(formDT$probs)))
+  if (any(is.na(formDT$probs))) {
     stop(paste0(
       "Probabilites contain 'NA',",
       " check that all ..vars are actually assigned (and numeric)."
     ))
+  }
 
-  if (any(is.na(formDT$vars)))
+  if (any(is.na(formDT$vars))) {
     stop(paste0(
       "Variables contain 'NA',",
       " check that all ..vars are actually assigned (and numeric)."
     ))
+  }
 
-  if (!isTRUE(all.equal(sum(formDT$probs), 1)))
+  if (!isTRUE(all.equal(sum(formDT$probs), 1))) {
     stop("Probabilities must sum to 1. See ?distributions")
+  }
 
   invisible(formula)
 }
 
 #' Check uniform formula
-#' 
+#'
 #' @description Unifom formulas must be of the form "min;max"
 #' @param formula Formula as string.
 #' @return Invisible, error if formula not valid.
@@ -688,28 +703,31 @@ defSurv <- function(dtDefs = NULL,
 .checkUniform <- function(formula) {
   range <- .splitFormula(formula)
 
-  if (length(range) != 2)
+  if (length(range) != 2) {
     stop(
       paste(
         "Formula for unifrom distributions must have",
         "the format: 'min;max' See ?distributions"
       )
     )
+  }
 }
 
 #' Check if arithmetic formula is valid
-#' 
+#'
 #' @description Checks if formula is valid arithmetic expression and that all
 #' vars are previously or externaly defined.
 #' @param formula Formula as string.
 #' @return Invisible, error if formula not valid.
 #' @noRd
 .isValidArithmeticFormula <- function(formula, defVars) {
-  if (grepl(";", formula, fixed = T))
+  if (grepl(";", formula, fixed = T)) {
     stop("';' are not allowed in arithmetic formulas. See ?distribution")
+  }
 
-  if (nchar(formula) < 1)
+  if (nchar(formula) < 1) {
     stop("Formula can't be empty!")
+  }
 
   # This only catches gross errors like trailing operators, does not check
   # functionnames etc.
@@ -729,7 +747,7 @@ defSurv <- function(dtDefs = NULL,
   formVars <- all.vars(newExpress)
   formFuncs <- formFuncs[!formFuncs %in% formVars]
 
-  if (any(startsWith(formFuncs, "..")))
+  if (any(startsWith(formFuncs, ".."))) {
     stop(
       paste(
         "Functions don't need to be escaped with '..'.",
@@ -737,6 +755,7 @@ defSurv <- function(dtDefs = NULL,
         formFuncs[startsWith(formFuncs, "..")]
       )
     )
+  }
 
   dotVarsBol <- startsWith(formVars, "..")
   inDef <- formVars %in% defVars
@@ -760,11 +779,12 @@ defSurv <- function(dtDefs = NULL,
       inherits = TRUE
     ))
 
-  if (any(naFormFuncs))
+  if (any(naFormFuncs)) {
     stop(paste(
       "Functions(s) referenced not defined:",
       paste(formFuncs[naFormFuncs], collapse = ", ")
     ), call. = FALSE)
+  }
 
   naDotVars <-
     is.na(mget(
@@ -775,19 +795,20 @@ defSurv <- function(dtDefs = NULL,
       inherits = TRUE
     ))
 
-  if (any(naDotVars))
+  if (any(naDotVars)) {
     stop(paste(
       "Escaped variables referenced not defined (or not numeric):",
       paste(names(naDotVars), collapse = ", ")
     ),
     call. = FALSE
     )
+  }
 
   invisible(formula)
 }
 
 #' Is identity logit?
-#' 
+#'
 #' @param link link as string.
 #' @return Invisible, error if link not valid.
 #' @noRd
@@ -797,7 +818,7 @@ defSurv <- function(dtDefs = NULL,
 }
 
 #' Is identity log?
-#' 
+#'
 #' @param link link as string.
 #' @return Invisible, error if link not valid.
 #' @noRd
@@ -807,13 +828,13 @@ defSurv <- function(dtDefs = NULL,
 }
 
 #' Error template for link check
-#' 
+#'
 #' @param link Link as string.
 #' @param options Valid forms of link.
 #' @return Invisible, error if link not valid.
 #' @noRd
 .isLink <- function(link, options) {
-  if (!link %in% options)
+  if (!link %in% options) {
     stop(paste0(
       "Invalid link function: '",
       link,
@@ -821,12 +842,13 @@ defSurv <- function(dtDefs = NULL,
       paste0("'", options, "'", collapse = " or "),
       ". See ?distributions"
     ))
+  }
 
   invisible(link)
 }
 
 #' Is external array?
-#' 
+#'
 #' @param names Variable name(s) to check.
 #' @return Boolean(s)
 #' @noRd
@@ -835,7 +857,7 @@ defSurv <- function(dtDefs = NULL,
 }
 
 #' Remove dots
-#' 
+#'
 #' @param names Variable name(s) to clean e.g. "..var".
 #' @return Variable names without leading dots "var".
 #' @noRd
@@ -844,10 +866,10 @@ defSurv <- function(dtDefs = NULL,
 }
 
 #' Remove whitespace
-#' 
+#'
 #' @param str string
 #' @return str without whitespace
-#' @noRd 
+#' @noRd
 .rmWS <- function(str) {
   gsub("[[:space:]]", "", str)
 }

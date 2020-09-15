@@ -317,16 +317,26 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #'   varname = "gammaMu", formula = ".2*period + .3*xbase",
 #'   dist = "nonrandom", link = "log"
 #' )
-#' def2 <- defDataAdd(def2, varname = "gammaDis",
-#'                    formula = 1, dist = "nonrandom")
-#' def2 <- defDataAdd(def2, varname = "normMu",
-#'                    formula = "5+period + .5*xbase", dist = "nonrandom")
-#' def2 <- defDataAdd(def2, varname = "normVar", formula = 4,
-#'                    dist = "nonrandom")
-#' def2 <- defDataAdd(def2, varname = "unifMin",
-#'                    formula = "5 + 2*period + .2*xbase", dist = "nonrandom")
-#' def2 <- defDataAdd(def2, varname = "unifMax",
-#'                    formula = "unifMin + 20", dist = "nonrandom")
+#' def2 <- defDataAdd(def2,
+#'   varname = "gammaDis",
+#'   formula = 1, dist = "nonrandom"
+#' )
+#' def2 <- defDataAdd(def2,
+#'   varname = "normMu",
+#'   formula = "5+period + .5*xbase", dist = "nonrandom"
+#' )
+#' def2 <- defDataAdd(def2,
+#'   varname = "normVar", formula = 4,
+#'   dist = "nonrandom"
+#' )
+#' def2 <- defDataAdd(def2,
+#'   varname = "unifMin",
+#'   formula = "5 + 2*period + .2*xbase", dist = "nonrandom"
+#' )
+#' def2 <- defDataAdd(def2,
+#'   varname = "unifMax",
+#'   formula = "unifMin + 20", dist = "nonrandom"
+#' )
 #'
 #' dt <- genData(1000, def)
 #'
@@ -457,8 +467,11 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   # wide(ness) is determined by incoming data structure.
 
   maxN <- dtTemp[, .N, by = id][, max(N)]
-  if (maxN == 1) wide <- TRUE
-  else wide <- FALSE
+  if (maxN == 1) {
+    wide <- TRUE
+  } else {
+    wide <- FALSE
+  }
 
   if (wide == FALSE) {
     if (maxN != nvars) stop(paste0("Number of records per id (", maxN, ") not equal to specified nvars (", nvars, ")."))
@@ -483,7 +496,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     n <- length(unique(dtTemp[, id])) # should check if n's are correct
     dtM <- .genQuantU(nvars, n, rho, corstr, corMatrix)
 
-    xid = "id"
+    xid <- "id"
     if (wide == TRUE) {
       dtTemp <- dtM[dtTemp[, c(xid, param1, param2), with = FALSE]]
       dtTemp[, .U := Unew]
@@ -534,7 +547,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     newExpress <- try(parse(text = formSpec), silent = TRUE)
     if (.isError(newExpress)) stop("!")
 
-    .Vars = all.vars(newExpress)
+    .Vars <- all.vars(newExpress)
     .Vars <- .Vars[.Vars != periodvar]
     listvar <- c(.Vars, periodvar, param1)
 
@@ -621,8 +634,11 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       setnames(dtTemp, idvar, "id")
     }
 
-    if (!is.null(cnames)) setnames(dtTemp, ".XX", cnames)
-    else setnames(dtTemp, ".XX", "X")
+    if (!is.null(cnames)) {
+      setnames(dtTemp, ".XX", cnames)
+    } else {
+      setnames(dtTemp, ".XX", "X")
+    }
   }
 
   setnames(dtTemp, "id", idvar)

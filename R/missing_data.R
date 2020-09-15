@@ -44,7 +44,6 @@ defMiss <- function(dtDefs = NULL,
                     logit.link = FALSE,
                     baseline = FALSE,
                     monotonic = FALSE) {
-                      
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
@@ -60,7 +59,6 @@ defMiss <- function(dtDefs = NULL,
   l <- list(dtDefs, dtNew)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
-
 }
 
 #' Generate missing data
@@ -102,14 +100,14 @@ genMiss <- function(dtName, missDefs, idvars,
                     repeated = FALSE, periodvar = "period") {
 
   # "Declare" vars to avoid R CMD warning
-  varname   <- NULL
-  period    <- NULL
-  baseline  <- NULL
+  varname <- NULL
+  period <- NULL
+  baseline <- NULL
   monotonic <- NULL
-  fmiss     <- NULL
-  formula   <- NULL
+  fmiss <- NULL
+  formula <- NULL
 
-   
+
   includesLags <- FALSE
 
   data.table::setkeyv(dtName, idvars)
@@ -140,7 +138,7 @@ genMiss <- function(dtName, missDefs, idvars,
     dtMiss <- dtName[, c(idvars, periodvar), with = FALSE]
     colnames <- c(idvars, "period")
     data.table::setnames(dtMiss, colnames)
-    
+
     nPeriods <- dtMiss[, max(period)] + 1
 
     for (i in (1:nrow(tmDefs))) {
@@ -283,7 +281,7 @@ genMiss <- function(dtName, missDefs, idvars,
   formula <- NULL
 
   dtMissP <- dtTemp[, idvars, with = FALSE]
- 
+
   Expression <- parse(text = as.character(missDefs[, varname]))
   ColName <- as.character(missDefs[, varname]) # new data.table (changed 2016-12-05)
   Formula <- parse(text = as.character(missDefs[, formula]))

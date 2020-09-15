@@ -67,8 +67,11 @@
   }
 
   if (!all(theta <= 1)) {
-    if (sum(theta > 1) == 1) valueS <- " value of theta exceeds 1.00"
-    else valueS <- " values of theta exceed 1.00"
+    if (sum(theta > 1) == 1) {
+      valueS <- " value of theta exceeds 1.00"
+    } else {
+      valueS <- " values of theta exceed 1.00"
+    }
 
     stop(paste0(sum(theta > 1), valueS))
   }
@@ -150,11 +153,12 @@
 .gencat <- function(n, formula, link, dfSim) {
   formulas <- .splitFormula(formula)
 
-  if (length(formulas) < 2)
+  if (length(formulas) < 2) {
     stop(paste0(
       "The formula for 'categorical' must contain atleast",
       " two probabilities."
     ))
+  }
 
   parsedProbs <-
     .evalWith(formulas, .parseDotVars(formulas), dfSim, n)
@@ -181,8 +185,9 @@
 .gendeterm <- function(n, formula, link, dtSim) {
   new <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
 
-  if (link == "log") new <- exp(new)
-  else if (link == "logit") new <- 1 / (1 + exp(-new))
+  if (link == "log") {
+    new <- exp(new)
+  } else if (link == "logit") new <- 1 / (1 + exp(-new))
 
   new
 }
@@ -347,8 +352,9 @@
 # @return A data.frame column  with the updated simulated data
 
 .genunif <- function(n, formula, dtSim) {
-  if (!is.null(dtSim) && n != nrow(dtSim))
+  if (!is.null(dtSim) && n != nrow(dtSim)) {
     stop("Length mismatch between 'n' and 'dtSim'")
+  }
 
   range <- .parseUnifFormula(formula, dtSim, n)
 
@@ -358,13 +364,14 @@
 .parseUnifFormula <- function(formula, dtSim, n) {
   range <- .splitFormula(formula)
 
-  if (length(range) != 2)
+  if (length(range) != 2) {
     stop(
       paste(
         "Formula for unifrom distributions must have",
         "the format: 'min;max'. See ?distributions"
       )
     )
+  }
 
   parsedRange <- .evalWith(range, .parseDotVars(range), dtSim, n)
 
@@ -384,8 +391,9 @@
     )
   }
 
-  if (any(r_max < r_min))
+  if (any(r_max < r_min)) {
     stop(paste0("Formula invalid: 'max' < 'min' in ", r_max < r_min, " rows."))
+  }
 
   list(min = r_min, max = r_max)
 }
@@ -400,11 +408,12 @@
 .genUnifInt <- function(n, formula, dtSim) {
   range <- .parseUnifFormula(formula, dtSim, n)
 
-  if (any(!sapply(range, function(x) floor(x) == x)))
+  if (any(!sapply(range, function(x) floor(x) == x))) {
     stop(paste(
       "For 'uniformInt' min and max must be integers,",
       "did you mean to use 'uniform'?"
     ))
+  }
 
   unifCont <- stats::runif(n, range$min, range$max + 1)
 

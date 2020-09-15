@@ -12,20 +12,34 @@
 #' genData(5)
 #' genData(5, id = "grpID")
 #'
-#' def <- defData(varname = "xNr", dist = "nonrandom", formula = 7,
-#'                id = "idnum")
-#' def <- defData(def, varname = "xUni", dist = "uniform",
-#'                formula = "10;20")
-#' def <- defData(def, varname = "xNorm", formula = "xNr + xUni * 2",
-#'                dist = "normal", variance = 8)
-#' def <- defData(def, varname = "xPois", dist = "poisson",
-#'                formula = "xNr - 0.2 * xUni", link = "log")
-#' def <- defData(def, varname = "xCat", formula = "0.3;0.2;0.5",
-#'                dist = "categorical")
-#' def <- defData(def, varname = "xGamma", dist = "gamma", formula = "5+xCat",
-#'                variance = 1, link = "log")
-#' def <- defData(def, varname = "xBin", dist = "binary", formula = "-3 + xCat",
-#'                link = "logit")
+#' def <- defData(
+#'   varname = "xNr", dist = "nonrandom", formula = 7,
+#'   id = "idnum"
+#' )
+#' def <- defData(def,
+#'   varname = "xUni", dist = "uniform",
+#'   formula = "10;20"
+#' )
+#' def <- defData(def,
+#'   varname = "xNorm", formula = "xNr + xUni * 2",
+#'   dist = "normal", variance = 8
+#' )
+#' def <- defData(def,
+#'   varname = "xPois", dist = "poisson",
+#'   formula = "xNr - 0.2 * xUni", link = "log"
+#' )
+#' def <- defData(def,
+#'   varname = "xCat", formula = "0.3;0.2;0.5",
+#'   dist = "categorical"
+#' )
+#' def <- defData(def,
+#'   varname = "xGamma", dist = "gamma", formula = "5+xCat",
+#'   variance = 1, link = "log"
+#' )
+#' def <- defData(def,
+#'   varname = "xBin", dist = "binary", formula = "-3 + xCat",
+#'   link = "logit"
+#' )
 #' def
 #'
 #' genData(5, def)
@@ -43,7 +57,7 @@ genData <- function(n, dtDefs = NULL, id = "id") {
     data.table::setkeyv(dt, id)
   } else { # existing definitions
 
-    idname = attr(dtDefs, "id")
+    idname <- attr(dtDefs, "id")
 
     dfSimulate <- data.frame(c(1:n)) # initialize simulated data with ids
     names(dfSimulate) <- attr(dtDefs, "id") # name first column attribute "id"
@@ -582,7 +596,7 @@ genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE
 #' @examples
 #' ddef <- defData(varname = "age", formula = "0;1", dist = "uniform")
 #'
-#' theta1 = c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
+#' theta1 <- c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
 #' knots <- c(0.25, 0.5, 0.75)
 #'
 #' viewSplines(knots = knots, theta = theta1, degree = 3)

@@ -325,12 +325,12 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
   }
 
   if (length(params1) == 1) {
-    params1 = rep(params1, nvars)
+    params1 <- rep(params1, nvars)
   }
 
   if (!is.null(params2)) {
     if (length(params2) == 1) {
-      params2 = rep(params2, nvars)
+      params2 <- rep(params2, nvars)
     }
   }
 
@@ -474,7 +474,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
   return(rho)
 }
 
-#' 
+#'
 .genBinEP <- function(n, p, tcorr) {
 
   # "Declare" vars to avoid R CMD warning
@@ -534,7 +534,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 #' @concept correlated
 genCorMat <- function(nvars, cors = NULL) {
   if (is.null(cors)) {
-    ev = stats::runif(nvars, 0, 10)
+    ev <- stats::runif(nvars, 0, 10)
 
     Z <- matrix(ncol = nvars, stats::rnorm(nvars^2))
 

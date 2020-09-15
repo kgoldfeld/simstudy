@@ -453,7 +453,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   neach <- floor(nrow / sum(ratio))
   distrx <- rep(c(1:ncat), times = (neach * ratio))
   extra <- nrow - length(distrx)
-  
+
   sample(c(distrx, sample(rep(1:ncat, times = ratio), extra)))
 }
 
@@ -497,7 +497,7 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
     stop("Group name has previously been defined in data table", call. = FALSE)
   }
 
-  ncols = ncol(dt)
+  ncols <- ncol(dt)
 
   ncat <- length(formulas)
   def <- NULL

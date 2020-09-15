@@ -27,8 +27,9 @@ test_that("cat probs are generated correctly", {
 
 test_that("probabilities are adjusted as documented.", {
   skip_on_cran()
-  forall(gen.and_then(gen.element(2:15), function(n)
-    gen_n_norm_Probs(n)), function(p) {
+  forall(gen.and_then(gen.element(2:15), function(n) {
+    gen_n_norm_Probs(n)
+  }), function(p) {
     over <- p / .9
     under <- p / 1.1
     expect_warning(catProbs(over), "will be normalized")

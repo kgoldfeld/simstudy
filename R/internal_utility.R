@@ -10,14 +10,18 @@
 #' extVar1 <- 23
 #' extVar2 <- 42
 #' .parseDotVars("a + ..extVar1 | b + ..extVar2")
-#' .parseDotVars(c("a + ..extVar1","b + ..extVar2"))
-#' .parseDotVars(data.frame("a + ..extVar1","b + ..extVar2"))
+#' .parseDotVars(c("a + ..extVar1", "b + ..extVar2"))
+#' .parseDotVars(data.frame("a + ..extVar1", "b + ..extVar2"))
 #' @noRd
 .parseDotVars <- function(formula) {
   vars <- all.vars(parse(text = formula))
   dotVars <- startsWith(vars, "..")
   # TODO clarify inheritance in case of non globalEnvs in documentation
-  varValues <- mget(sub("..", "", vars[dotVars]),envir = parent.frame(), inherits = TRUE)
+  varValues <- mget(
+    sub("..", "", vars[dotVars]),
+    envir = parent.frame(), inherits = TRUE
+  )
+
   names(varValues) <- vars[dotVars]
   varValues
 }
@@ -34,7 +38,6 @@
                       extVars,
                       dtSim = data.frame(),
                       n = nrow(dtSim)) {
-
   if (missing(dtSim) && missing(n)) {
     n <- 1
   }
@@ -42,7 +45,7 @@
   if (!missing(dtSim) && !is.null(dtSim) && n != nrow(dtSim)) {
     stop(glue(
       "Both 'dtSim' and 'n' are set but are of different length: ",
-       "{nrow(dtSim)} != {n}"
+      "{nrow(dtSim)} != {n}"
     ))
   }
 
@@ -52,26 +55,29 @@
     e <- list2env(dtSim, e)
   }
 
-  if (!is.null(e$formula2parse))
+  if (!is.null(e$formula2parse)) {
     stop("'formula2parse' is a reserved variable name!")
+  }
 
   evalFormula <- function(x) {
     e$formula2parse <- x
     res <- with(e, eval(parse(text = formula2parse)))
 
-    if (length(res) == 1)
+    if (length(res) == 1) {
       rep(res, n)
-    else
+    } else {
       res
+    }
   }
   parsedValues <- sapply(formula, evalFormula)
 
   # If only a single formula with 1 rep is eval'ed output would be not be
   # matrix, so transpose for uniform output.
-  if (!is.matrix(parsedValues))
+  if (!is.matrix(parsedValues)) {
     t(parsedValues)
-  else
-   parsedValues
+  } else {
+    parsedValues
+  }
 }
 
 #' Get Distributions
@@ -111,15 +117,16 @@
     } else {
       !.isError(
         try(is.numeric(eval(parse(text = formula),
-                        envir = NULL, enclos = NULL
+          envir = NULL, enclos = NULL
         )), silent = TRUE)
       )
     }
   }
-  else if (is.numeric(formula))
+  else if (is.numeric(formula)) {
     TRUE
-  else
+  } else {
     FALSE
+  }
 }
 
 #' Check if variable name is valid.
@@ -191,7 +198,7 @@
 #
 #' @param j Value of function
 #' @return inverse of Poisson ICC function
-#' @noRd 
+#' @noRd
 .findPoisVar <- function(j) {
 
   # 'declare' var
@@ -221,7 +228,7 @@
 #' @param variance The variance
 #' @return A data.frame column with the updated simulated data
 #' @details Internal function called by .generate - returns gamma data
-#' @noRd 
+#' @noRd
 .genPosSkew <- function(n, mean, dispersion = 0) {
   if (dispersion == 0) {
     new <- rep(mean, n)

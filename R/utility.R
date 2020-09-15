@@ -10,7 +10,8 @@
 #' the mean and precision into the shape1 and shape2 parameters.
 #' @examples
 #' set.seed(12345)
-#' mean = 0.3; precision = 1.6
+#' mean <- 0.3
+#' precision <- 1.6
 #' rs <- betaGetShapes(mean, precision)
 #' c(rs$shape1, rs$shape2)
 #' vec <- rbeta(1000, shape1 = rs$shape1, shape2 = rs$shape2)
@@ -125,7 +126,7 @@ catProbs <- function(..., n = 0) {
 #' @concept utility
 delColumns <- function(dtOld, vars) {
 
-  #### Check that arguments have been passed 
+  #### Check that arguments have been passed
 
   if (missing(dtOld)) stop("argument 'dtOld' is missing", call. = FALSE)
   if (missing(vars)) stop("argument 'vars' is missing", call. = FALSE)
@@ -154,7 +155,8 @@ delColumns <- function(dtOld, vars) {
 #' This function converts the mean and dispersion into the shape and rate.
 #' @examples
 #' set.seed(12345)
-#' mean = 5; dispersion = 1.5
+#' mean <- 5
+#' dispersion <- 1.5
 #' rs <- gammaGetShapeRate(mean, dispersion)
 #' c(rs$shape, rs$rate)
 #' vec <- rgamma(1000, shape = rs$shape, rate = rs$rate)
@@ -164,7 +166,7 @@ delColumns <- function(dtOld, vars) {
 #' @export
 #' @concept utility
 gammaGetShapeRate <- function(mean, dispersion) {
-  variance = dispersion * (mean^2)
+  variance <- dispersion * (mean^2)
 
   shape <- (mean^2) / variance
   rate <- mean / variance
@@ -216,11 +218,13 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
   } else if (dist == "binary") {
     vars <- unlist(lapply(ICC, function(x) (x / (1 - x) * (pi^2) / 3)))
   } else if (dist == "normal") {
-    if (!is.null(varTotal) & !is.null(varWithin))
+    if (!is.null(varTotal) & !is.null(varWithin)) {
       stop("Do not specify total and within variance simultaneously")
+    }
 
-    if (is.null(varTotal) & is.null(varWithin))
+    if (is.null(varTotal) & is.null(varWithin)) {
       stop("Specify either total or within variance")
+    }
 
     if (!is.null(varTotal)) {
       vars <- unlist(lapply(ICC, function(x) x * varTotal))
@@ -238,7 +242,9 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
     if (is.null(lambda)) stop("Specify lambda")
 
     vars <- unlist(lapply(ICC, function(x) (x / (1 - x)) * trigamma((1 / lambda + disp)^(-1))))
-  } else stop("Specify appropriate distribution")
+  } else {
+    stop("Specify appropriate distribution")
+  }
 
   return(vars)
 }
@@ -264,7 +270,7 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
 #' @export
 #' @concept utility
 mergeData <- function(dt1, dt2, idvars) {
-  oldkey = data.table::key(dt1)
+  oldkey <- data.table::key(dt1)
 
   setkeyv(dt1, idvars)
   setkeyv(dt2, idvars)
@@ -279,15 +285,18 @@ mergeData <- function(dt1, dt2, idvars) {
 #'
 #' @param mean The mean of a gamma distribution
 #' @param dispersion The dispersion parameter of a gamma distribution
-#' @return A list that includes the size and prob parameters of the neg binom distribution
-#' @details In simstudy, users specify the negative binomial distribution as a function of
-#' two parameters - a mean and dispersion. In this case, the variance of the specified
-#' distribution is mean + (mean^2)*dispersion. The base R function rnbinom uses the size
-#' and prob parameters to specify the negative binomial distribution. This function converts
-#' the mean and dispersion into the size and probability parameters.
+#' @return A list that includes the size and prob parameters of the neg binom
+#' distribution
+#' @details In simstudy, users specify the negative binomial distribution as a
+#' function of two parameters - a mean and dispersion. In this case, the
+#' variance of the specified distribution is mean + (mean^2)*dispersion. The
+#' base R function rnbinom uses the size and prob parameters to specify the
+#' negative binomial distribution. This function converts the mean and
+#' dispersion into the size and probability parameters.
 #' @examples
 #' set.seed(12345)
-#' mean = 5; dispersion = 0.5
+#' mean <- 5
+#' dispersion <- 0.5
 #' sp <- negbinomGetSizeProb(mean, dispersion)
 #' c(sp$size, sp$prob)
 #' vec <- rnbinom(1000, size = sp$size, prob = sp$prob)
@@ -297,7 +306,7 @@ mergeData <- function(dt1, dt2, idvars) {
 #' @export
 #' @concept utility
 negbinomGetSizeProb <- function(mean, dispersion) {
-  variance = mean + dispersion * (mean^2)
+  variance <- mean + dispersion * (mean^2)
 
   size <- (mean^2) / (variance - mean)
   prob <- mean / variance
@@ -341,9 +350,9 @@ negbinomGetSizeProb <- function(mean, dispersion) {
 trimData <- function(dtOld, seqvar, eventvar, idvar = "id") {
   dx <- copy(dtOld)
 
-  id = dx[, get(idvar)]
-  seq = dx[, get(seqvar)]
-  event = dx[, get(eventvar)]
+  id <- dx[, get(idvar)]
+  seq <- dx[, get(seqvar)]
+  event <- dx[, get(eventvar)]
 
   last <- clipVec(id = id, seq = seq, event = event)
 
@@ -390,7 +399,7 @@ trimData <- function(dtOld, seqvar, eventvar, idvar = "id") {
 #' updateDef(dtDefs = defs, changevar = "x", remove = TRUE)
 #' updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
 #' @export
-#' @concept utility 
+#' @concept utility
 #' @concept define_data
 updateDef <- function(dtDefs, changevar, newformula = NULL,
                       newvariance = NULL, newdist = NULL, newlink = NULL,
@@ -443,14 +452,17 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
   if (!remove) { # check changed row
 
     prevVars <- xdef$varname[1:(rowvar - 1)]
-    if (rowvar == 1) prevVars = ""
+    if (rowvar == 1) prevVars <- ""
 
     .evalDef(newvar = xdef[rowvar, varname], newform = xdef[rowvar, formula], newdist = xdef[rowvar, dist], defVars = prevVars)
   } else if (remove & (rowvar <= nrow(xdef))) { # check all rows after deleted row
 
     for (i in (rowvar:nrow(xdef))) {
-      if (i == 1) prevVars = ""
-      else prevVars <- xdef$varname[1:(i - 1)]
+      if (i == 1) {
+        prevVars <- ""
+      } else {
+        prevVars <- xdef$varname[1:(i - 1)]
+      }
 
       .evalDef(newvar = xdef[i, varname], newform = xdef[i, formula], newdist = xdef[i, dist], defVars = prevVars)
     }
@@ -497,7 +509,7 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
 #' dt <- addColumns(defsA, dt)
 #' dt
 #' @export
-#' @concept utility 
+#' @concept utility
 #' @concept define_data
 updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
                          newvariance = NULL, newdist = NULL, newlink = NULL,
@@ -564,7 +576,7 @@ updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
 #' knots <- c(0.25, 0.50, 0.75)
 #' viewBasis(knots, degree = 3)
 #' @export
-#' @concept utility 
+#' @concept utility
 #' @concept splines
 viewBasis <- function(knots, degree) {
 
@@ -612,11 +624,11 @@ viewBasis <- function(knots, degree) {
 #' will equal 1 if theta is a vector).
 #' @examples
 #' knots <- c(0.25, 0.5, 0.75)
-#' theta1 = c(0.1, 0.8, 0.4, 0.9, 0.2, 1.0)
+#' theta1 <- c(0.1, 0.8, 0.4, 0.9, 0.2, 1.0)
 #'
 #' viewSplines(knots, degree = 2, theta1)
 #'
-#' theta2 = matrix(c(
+#' theta2 <- matrix(c(
 #'   0.1, 0.2, 0.4, 0.9, 0.2, 0.3,
 #'   0.1, 0.3, 0.3, 0.8, 1.0, 0.9,
 #'   0.1, 0.4, 0.3, 0.8, 0.7, 0.5,

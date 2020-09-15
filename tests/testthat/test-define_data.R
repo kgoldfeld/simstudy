@@ -2,9 +2,6 @@ library(hedgehog)
 freeze_eval <- names(.GlobalEnv)
 
 # defCondition ----
-test_that("unit of code works", {
-
-})
 
 # .evalDef ----
 test_that("checks combine in .evalDef correctly", {
@@ -98,8 +95,9 @@ test_that(".checkMixture throws errors.", {
 # .checkCategorical ----
 test_that("'categorical' formula checked correctly", {
   skip_on_cran()
-  forall(gen_cat_probs, function(f)
-    expect_silent(.checkCategorical(catProbs(f))))
+  forall(gen_cat_probs, function(f) {
+    expect_silent(.checkCategorical(catProbs(f)))
+  })
 })
 
 test_that(".checkCategorical throws errors.", {
@@ -114,8 +112,9 @@ test_that("'uniform' formula checked correctly", {
       generate(for (x in list(
         min = gen_formula(names),
         max = gen_formula(names)
-      ))
-        paste0(x$min, ";", x$max))
+      )) {
+        paste0(x$min, ";", x$max)
+      })
     }),
     function(r) {
       expect_silent(.checkUniform(r))
