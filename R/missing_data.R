@@ -44,7 +44,7 @@ defMiss <- function(dtDefs = NULL,
                     logit.link = FALSE,
                     baseline = FALSE,
                     monotonic = FALSE) {
-                      # TODO check param validity
+                      
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
@@ -56,7 +56,7 @@ defMiss <- function(dtDefs = NULL,
     baseline,
     monotonic
   )
-  # TODO streamline this
+
   l <- list(dtDefs, dtNew)
 
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)

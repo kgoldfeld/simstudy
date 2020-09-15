@@ -3,7 +3,7 @@ name: code-coverage
 on:
   push:
     branches:
-      - restructure-tests
+      - restructure
   pull_request:
     branches:
       - restructure
