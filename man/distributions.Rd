@@ -45,7 +45,7 @@ distribution can be found in this table:\tabular{lllll}{
    categorical \tab probabilities \tab \verb{p_1;p_2;..;p_n} \tab NA \tab NA \cr
    exponential \tab mean (lambda) \tab String or Number \tab NA \tab identity or log \cr
    gamma \tab mean \tab String or Number \tab dispersion value \tab identity or log \cr
-   mixture \tab formula \tab \verb{x_1 \| p_1 + x_2 \| p_2 ... x_n \| p_n} \tab NA \tab NA \cr
+   mixture \tab formula \tab \code{x_1 }|\code{p_1 + x_2}|\verb{p_2 ... x_n}|\code{ p_n} \tab NA \tab NA \cr
    negBinomial \tab mean \tab String or Number \tab dispersion value \tab identity or log \cr
    nonrandom \tab formula \tab String or Number \tab NA \tab NA \cr
    normal \tab mean \tab String or Number \tab variance \tab NA \cr
@@ -64,8 +64,8 @@ part of the new distribution \verb{x_1,...,X_n} is assigned a probability
 }
 
 \examples{
-ext_var <- 2.9
-def <- defData(varname = "external",formula = "3 + log(..ext_var)", variance = .5)
+ext_var <<- 2.9 
+def <- defData(varname = "external", formula = "3 + log(..ext_var)", variance = .5)
 def
 genData(5,def)
 }

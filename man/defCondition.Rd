@@ -69,3 +69,5 @@ dt
 \seealso{
 \link{distributions}
 }
+\concept{condition}
+\concept{define_data}

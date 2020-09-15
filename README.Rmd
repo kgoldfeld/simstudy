@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -14,12 +14,13 @@ knitr::opts_chunk$set(
 ```
 
 # simstudy
-
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 [![R build status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=restructure)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/restructure/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
 
@@ -56,8 +57,9 @@ dt <- trtAssign(dt, nTrt = 4, grpName = "grp", balanced = TRUE)
 dt
 ```
 
+## Code of Conduct
 
-
-
-
-
+Please note that the simstudy project is released with a [Contributor
+Code of
+Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.

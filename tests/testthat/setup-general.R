@@ -1,2 +1,2 @@
-freeze <- names(.GlobalEnv)
 library(hedgehog)
+freeze <- names(.GlobalEnv)

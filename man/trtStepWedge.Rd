@@ -70,3 +70,4 @@ dp
 \seealso{
 \code{\link{trtObserve} \link{trtAssign}}
 }
+\concept{group_data}

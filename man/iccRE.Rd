@@ -52,3 +52,4 @@ iccRE(targetICC, "gamma", disp = .5)
 
 iccRE(targetICC, "negBinomial", lambda = 40, disp = .5)
 }
+\concept{utility}

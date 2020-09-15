@@ -41,3 +41,5 @@ ncol = 4
 
 viewSplines(knots, degree = 2, theta2)
 }
+\concept{splines}
+\concept{utility}

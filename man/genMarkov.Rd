@@ -73,3 +73,4 @@ d3 <- genMarkov(
   trimvalue = 3
 )
 }
+\concept{generate_data}

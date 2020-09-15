@@ -33,3 +33,4 @@ vec <- rgamma(1000, shape = rs$shape, rate = rs$rate)
 (theoryMoments <- c(mean, mean^2 * dispersion))
 (theoryMoments <- c(rs$shape / rs$rate, rs$shape / rs$rate^2))
 }
+\concept{utility}

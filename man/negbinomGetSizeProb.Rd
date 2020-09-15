@@ -34,3 +34,4 @@ vec <- rnbinom(1000, size = sp$size, prob = sp$prob)
 (theoryMoments <- c(mean, mean + mean^2 * dispersion))
 (theoryMoments <- c(sp$size * (1 - sp$prob) / sp$prob, sp$size * (1 - sp$prob) / sp$prob^2))
 }
+\concept{utility}

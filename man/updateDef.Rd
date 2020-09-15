@@ -61,3 +61,5 @@ defs
 updateDef(dtDefs = defs, changevar = "x", remove = TRUE)
 updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
 }
+\concept{define_data}
+\concept{utility}

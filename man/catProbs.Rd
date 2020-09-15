@@ -35,3 +35,4 @@ catProbs(1 / 3, 1 / 2)
 catProbs(1, 2, 3)
 catProbs(n = 5)
 }
+\concept{utility}

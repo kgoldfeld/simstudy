@@ -43,3 +43,4 @@ dx <- trtAssign(dtName = dx, 2, grpName = "studyArm")
 dx <- genFactor(dx, varname = "studyArm", labels = c("control", "treatment"), prefix = "t_")
 dx
 }
+\concept{generate_data}

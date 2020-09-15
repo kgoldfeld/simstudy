@@ -43,3 +43,5 @@ dx <- genData(1000, def1)
 probs <- c(0.40, 0.25, 0.15)
 dx <- genOrdCat(dx, adjVar = "z", probs, catVar = "grp")
 }
+\concept{categorical}
+\concept{generate_data}

@@ -47,3 +47,4 @@ dtSum
 \seealso{
 \code{\link{trtAssign}}
 }
+\concept{group_data}

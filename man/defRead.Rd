@@ -45,3 +45,5 @@ genData(5, defs)
 \seealso{
 [distributions]
 }
+\concept{condition}
+\concept{define_data}

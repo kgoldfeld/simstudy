@@ -16,3 +16,4 @@
 ^pkgdown$
 ^\.lintr$
 ^simstudy\.code-workspace$
+^tests/\.lintr$

@@ -39,8 +39,7 @@
 #' dtPeriod <- addPeriods(dt)
 #' dtPeriod[id %in% c(8, 121)] # View individuals 8 and 121 only
 #' @export
-#'
-
+#' @concept group_data
 addPeriods <- function(dtName,
                        nPeriods = NULL,
                        idvars = "id",
@@ -50,15 +49,12 @@ addPeriods <- function(dtName,
                        perName = "period") {
 
   # "Declare" vars that exist in dtName
-  # TODO "declare vars"
-  nCount = NULL
-  .period = NULL
-  vInterval = NULL
-  mInterval = NULL
-  timeElapsed = NULL
-  time = NULL
-
-  #
+  nCount <- NULL
+  .period <- NULL
+  vInterval <- NULL
+  mInterval <- NULL
+  timeElapsed <- NULL
+  time <- NULL
 
   dtX1 <- copy(dtName)
 
@@ -207,7 +203,7 @@ addPeriods <- function(dtName,
 #' )
 #' dtClass
 #' @export
-
+#' @concept group_data
 genCluster <- function(dtClust,
                        cLevelVar,
                        numIndsVar,
@@ -215,12 +211,10 @@ genCluster <- function(dtClust,
                        allLevel2 = TRUE) {
 
   # 'declare' var
-  # TODO "declare vars"
-  id2 = NULL
-  n = NULL
+  id2 <- NULL
+  n <- NULL
 
   #### Check missing arguments
-
   if (missing(dtClust)) stop("argument 'dtClust' is missing", call. = FALSE)
   if (missing(cLevelVar)) stop("argument 'cLevelVar' is missing", call. = FALSE)
   if (missing(numIndsVar)) stop("argument 'numIndsVar' is missing", call. = FALSE)
@@ -279,19 +273,15 @@ genCluster <- function(dtClust,
 #' d <- addPeriods(d, 10)
 #' dx <- genNthEvent(d, defEvent = defE, nEvents = 3)
 #' @export
-#'
-
+#' @concept group_data
 genNthEvent <- function(dtName, defEvent, nEvents = 1,
                         perName = "period", id = "id") {
 
   # "Declare" vars to avoid R CMD warning
-  # TODO "declare vars"
   .event <- NULL
   .id <- NULL
   .period <- NULL
   .first <- NULL
-
-  #
 
   dd <- copy(dtName)
   dd <- addColumns(defEvent, dd)
@@ -360,17 +350,14 @@ genNthEvent <- function(dtName, defEvent, nEvents = 1,
 #' dt6 <- trtAssign(dt, nTrt = 3, ratio = c(1, 2, 2), grpName = "Group")
 #' dt6[, .N, keyby = .(Group)]
 #' @export
-
+#' @concept group_data
 trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
                       strata = NULL, grpName = "trtGrp", ratio = NULL) {
 
   # 'declare' vars
-  # TODO "declare vars"
-  .stratum = NULL
-  .n = NULL
-  grpExp = NULL
-
-  #
+  .stratum <- NULL
+  .n <- NULL
+  grpExp <- NULL
 
   if (missing(dtName)) {
     stop("Data table argument is missing", call. = FALSE)
@@ -420,6 +407,56 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   return(dt[])
 }
 
+#' Add strata code to data table
+#'
+#' @param dt data table
+#' @param strata vector of string names representing strata
+#' @return The old data table with an add column containing an integer ranging
+#' from one to `2^length(strata)`.
+#' @md
+#' @noRd
+.addStrataCode <- function(dt, strata) {
+
+  # 'Declare' var
+  .stratum <- NULL
+
+  dtWork <- copy(dt)
+
+  strataOnly <- dtWork[, eval(strata), with = FALSE]
+  data.table::setkeyv(strataOnly, names(strataOnly))
+
+  uniqueStrata <- unique(strataOnly)
+  uniqueStrata[, .stratum := (1:.N)]
+
+  data.table::setkeyv(dtWork, names(strataOnly))
+  dtWork <- uniqueStrata[dtWork]
+
+  data.table::setkeyv(dtWork, key(dt))
+  setcolorder(dtWork, colnames(dt))
+
+  dtWork
+}
+
+#' Stratified sample
+#' @description Helper function to randomly assign a treatment group to the
+#' elements of a stratum.
+#' @param nrow Number of rows in the stratum
+#' @param ncat Number of treatment categories
+#' @param ratio vector of values indicating relative proportion of group
+#' assignment
+#' @return A vector containing the group assignments for each elemen of the
+#'  stratum.
+#' @noRd
+.stratSamp <- function(nrow, ncat, ratio = NULL) {
+  if (is.null(ratio)) ratio <- rep(1, ncat)
+
+  neach <- floor(nrow / sum(ratio))
+  distrx <- rep(c(1:ncat), times = (neach * ratio))
+  extra <- nrow - length(distrx)
+
+  sample(c(distrx, sample(rep(1:ncat, times = ratio), extra)))
+}
+
 #' Observed exposure or treatment
 #'
 #' @param dt data table
@@ -451,7 +488,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 #' dtSum[, grpPct := round(N / sum(N), 2), keyby = .(male, over65)]
 #' dtSum
 #' @export
-
+#' @concept group_data
 trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
   if (missing(dt)) {
     stop("Data table argument is missing", call. = FALSE)
@@ -460,11 +497,11 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
     stop("Group name has previously been defined in data table", call. = FALSE)
   }
 
-  ncols = ncol(dt)
+  ncols <- ncol(dt)
 
   ncat <- length(formulas)
-  def = NULL
-  # TODO "declare vars"
+  def <- NULL
+
   for (i in 1:ncat) {
     def <- defDataAdd(def,
       varname = paste0("e", i),
@@ -541,17 +578,15 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 #' )
 #' dp
 #' @export
+#' @concept group_data
 trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
                          startPer, perName = "period", grpName = "rx",
                          lag = 0, xrName = "xr") {
 
   # 'declare' vars created in data.table
-  # TODO "declare vars"
-  rx = NULL
-  period = NULL
-  xr = NULL
-
-  #
+  rx <- NULL
+  period <- NULL
+  xr <- NULL
 
   if (lag == 0) xrName <- "xr" # override - will be deleted from dd
 

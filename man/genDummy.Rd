@@ -43,3 +43,4 @@ dx <- trtAssign(dtName = dx, 3, grpName = "arm")
 dx <- genDummy(dx, varname = "arm")
 dx
 }
+\concept{generate_data}

@@ -1,7 +1,7 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # simstudy
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <!-- badges: start -->
 
@@ -9,9 +9,11 @@
 status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=restructure)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/restructure/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
 The simstudy package is collection of functions that allow users to
@@ -53,16 +55,23 @@ dt <- genData(250, def)
 dt <- trtAssign(dt, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dt
-#>       id         x         y grp
-#>   1:   1 14.266204 10.895233   4
-#>   2:   2  9.373006  7.183554   4
-#>   3:   3 10.744351  9.942125   2
-#>   4:   4 11.531077  8.876605   2
-#>   5:   5 10.293400  8.184003   4
-#>  ---                            
-#> 246: 246  8.753421  8.828490   1
-#> 247: 247 11.370372  9.181893   2
-#> 248: 248 12.303811  8.999920   1
-#> 249: 249 10.108948  8.947288   2
-#> 250: 250  8.618022  6.453240   2
+#>       id         x        y grp
+#>   1:   1 12.332108 8.742219   3
+#>   2:   2  9.657903 6.947927   2
+#>   3:   3 11.263337 7.971667   4
+#>   4:   4  9.803841 8.201055   1
+#>   5:   5  7.893644 8.075940   4
+#>  ---                           
+#> 246: 246  9.960719 8.494674   2
+#> 247: 247 10.569261 9.776772   4
+#> 248: 248 12.957195 8.372593   2
+#> 249: 249  8.596451 5.748960   4
+#> 250: 250  8.910230 7.460821   3
 ```
+
+## Code of Conduct
+
+Please note that the simstudy project is released with a [Contributor
+Code of
+Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.

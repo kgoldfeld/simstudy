@@ -47,3 +47,4 @@ dtSurv <- genSurv(dtSurv, sdef)
 
 head(dtSurv)
 }
+\concept{generate_data}
