@@ -8,12 +8,12 @@ simstudy
 <!-- badges: start -->
 
 [![R build
-status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=restructure)](https://github.com/kgoldfeld/simstudy/actions)
+status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/restructure/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
+[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
@@ -58,17 +58,17 @@ dt <- trtAssign(dt, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dt
 #>       id         x         y grp
-#>   1:   1  9.475569  7.582237   1
-#>   2:   2 10.787550  8.815293   2
-#>   3:   3  9.499066  8.371405   4
-#>   4:   4 10.599778  8.681764   1
-#>   5:   5  8.145189  7.400807   4
+#>   1:   1  9.156749  8.895291   4
+#>   2:   2 14.101606  9.400687   2
+#>   3:   3  9.756959  8.026519   2
+#>   4:   4  7.968584  7.937833   3
+#>   5:   5  9.325378  7.762094   4
 #>  ---                            
-#> 246: 246 10.118552  6.081986   4
-#> 247: 247 11.364979 10.039341   3
-#> 248: 248  9.438307  8.997141   2
-#> 249: 249 10.125286  6.181774   2
-#> 250: 250 13.217308 10.571772   1
+#> 246: 246  8.230012  6.794570   1
+#> 247: 247  8.976130  7.943784   4
+#> 248: 248 11.958703 11.331082   4
+#> 249: 249 11.618778  8.406787   3
+#> 250: 250 13.104799 10.004097   4
 ```
 
 ## Code of Conduct
