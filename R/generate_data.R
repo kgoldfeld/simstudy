@@ -491,8 +491,14 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' @examples
 #' #### Set definitions
 #'
-#' def1 <- defData(varname = "male", formula = 0.45, dist = "binary", id = "idG")
-#' def1 <- defData(def1, varname = "z", formula = "1.2*male", dist = "nonrandom")
+#' def1 <- defData(
+#'   varname = "male",
+#'   formula = 0.45, dist = "binary", id = "idG"
+#' )
+#' def1 <- defData(def1,
+#'   varname = "z",
+#'   formula = "1.2*male", dist = "nonrandom"
+#' )
 #'
 #' #### Generate data
 #'
@@ -505,18 +511,20 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' @export
 #' @concept generate_data
 #' @concept categorical
-genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE) {
+genOrdCat <- function(dtName,
+                      adjVar = NULL,
+                      baseprobs,
+                      catVar = "cat",
+                      asFactor = TRUE) {
 
   # "declares" to avoid global NOTE
   cat <- NULL
-
-  # Check arguments
 
   if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
     stop("Data table does not exist.")
   }
 
-  if (!adjVar %in% names(dtName)) {
+  if (!missing(adjVar) && !is.null(adjVar) && !adjVar %in% names(dtName)) {
     stop(paste0("Variable ", adjVar, " not in data.table"))
   }
 
