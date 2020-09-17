@@ -4,7 +4,7 @@
 \alias{genOrdCat}
 \title{Generate ordinal categorical data}
 \usage{
-genOrdCat(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE)
+genOrdCat(dtName, adjVar = NULL, baseprobs, catVar = "cat", asFactor = TRUE)
 }
 \arguments{
 \item{dtName}{Name of complete data set}
@@ -31,8 +31,14 @@ Ordinal categorical data is added to an existing data set.
 \examples{
 #### Set definitions
 
-def1 <- defData(varname = "male", formula = 0.45, dist = "binary", id = "idG")
-def1 <- defData(def1, varname = "z", formula = "1.2*male", dist = "nonrandom")
+def1 <- defData(
+  varname = "male",
+  formula = 0.45, dist = "binary", id = "idG"
+)
+def1 <- defData(def1,
+  varname = "z",
+  formula = "1.2*male", dist = "nonrandom"
+)
 
 #### Generate data
 

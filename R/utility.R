@@ -77,33 +77,6 @@ catProbs <- function(..., n = 0) {
   return(paste0(pnew, collapse = ";"))
 }
 
-.adjustProbs <- function(probs) {
-  if (is.matrix(probs)) {
-    sumProbs <- rowSums(probs)
-  } else {
-    sumProbs <- sum(probs)
-  }
-
-  if (isTRUE(all.equal(mean(sumProbs), 1))) {
-    probs
-  } else if (any(sumProbs < 1)) {
-    remainder <- 1 - sumProbs
-    warning(paste0(
-      "Probabilities do not sum to 1.\n",
-      "Adding category with p = ",
-      remainder
-    ))
-    if (is.matrix(probs)) {
-      cbind(probs, remainder)
-    } else {
-      c(probs, remainder)
-    }
-  } else if (any(sumProbs > 1)) {
-    warning("Sum of probabilities > 1. Probabilities will be normalized.")
-    probs / sumProbs
-  }
-}
-
 #' Delete columns from existing data set
 #'
 #' @param dtOld Name of data table that is to be updated

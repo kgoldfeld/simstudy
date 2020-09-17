@@ -1,5 +1,7 @@
 # catProbs ----
-roundTrip <- function(args) as.numeric(.splitFormula(do.call(catProbs, as.list(args))))
+roundTrip <- function(args) {
+  as.numeric(.splitFormula(do.call(catProbs, as.list(args))))
+}
 
 test_that("probabilities stay the same after catProbs", {
   skip_on_cran()
@@ -25,7 +27,7 @@ test_that("cat probs are generated correctly", {
   })
 })
 
-test_that("probabilities are adjusted as documented.", {
+test_that("probabilities (vector) are adjusted as documented.", {
   skip_on_cran()
   forall(gen.and_then(gen.element(2:15), function(n) {
     gen_n_norm_Probs(n)
