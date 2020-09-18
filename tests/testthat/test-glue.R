@@ -14,7 +14,7 @@ test_that("Blocks are collapsed as expected.", {
     })
 
 test_that("numbers are formated as expected.", {
-  nums <- rnorm(3)
+  nums <- c(1.23, 0.556, 1/3)
   ints <- c(1, 2, 3)
   expect_equal(glueFmt("{nums:.2}"), as.character(round(nums, 2)))
   expect_equal(glueFmt("{ints:.2}"), c("1.00", "2.00", "3.00"))

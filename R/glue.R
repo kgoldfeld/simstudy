@@ -3,7 +3,7 @@
 #' @description Transformer for use with glue(). Collapses content of glue block
 #' ending with regex.
 #' @param regex Regex to mark blocks to collapse.
-#' @para, ... Arguments passed by the calling lue function (text, envir)
+#' @param ... Arguments passed by the calling lue function (text, envir)
 #'  and params to pass through to glue_collapse like sep, last.
 #' @return The collapsed text, or identity when no marker found.
 #' @noRd
@@ -28,7 +28,7 @@ collapseTransformer <- function(regex = "[*]$", ...) {
 #' similar to sprintf-
 #' @param text Text to format.
 #' @param envir environment
-#' @para, envir environment
+#' @param envir environment
 #' @return The formatted text.
 #' @noRd
 sprintfTransformer <- function(text, envir) {
@@ -61,7 +61,7 @@ sprintfCTransformer <- function(sep = ", ", last = " and ", ...) {
             expr <- parse(text = text, keep.source = FALSE)
             var <- all.vars(expr)
             fmtString <- glue("%{format}f")
-            varL <- ifelse(nzchar(var) > 0, length(get(var, envir = envir), 1))
+            varL <- ifelse(length(var) != 0, length(get(var, envir = envir)), 1)
             res <- eval(expr, envir)
 
             if (varL > 1) {
