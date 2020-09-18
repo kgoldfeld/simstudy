@@ -42,6 +42,7 @@ Suggests:
     gridExtra,
     hedgehog,
     knitr,
+    magrittr,
     Matrix,
     mgcv,
     rmarkdown,
