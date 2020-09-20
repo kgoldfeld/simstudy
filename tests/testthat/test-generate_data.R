@@ -14,7 +14,9 @@ test_that("data is generated as expected", {
 
 # genOrdCat ----
 test_that("genOrdCat throws errors.", {
-  expect_error(genOrdCat("not a data table", NULL, c(.1, .1)))
+  expect_error(genOrdCat2("not a data table", NULL, c(.1, .1)), class = "simstudy::wrongClass")
+  expect_error(genOrdCat2(adjVar = NULL, rho = 1), class = "simstudy::MissingArgument")
+  expect_error(genOrdCat2(NULL, NULL, NULL), class = "simstudy::noValue")
 })
 
 library(magrittr)
@@ -25,9 +27,10 @@ test_that("ordinal categorical data is generated correctly.", {
   probs <- c(.2, .2, .6)
   data <- genData(n)
 
-  expect_equal({
+  expect_equal(
+    {
       data %>%
-        genOrdCat(baseprobs = probs, asFactor = FALSE) %>%
+        genOrdCat2(baseprobs = probs, asFactor = FALSE) %>%
         select(cat) %>%
         range()
     },
@@ -36,7 +39,7 @@ test_that("ordinal categorical data is generated correctly.", {
 
   expect_equal({
       data %>%
-        genOrdCat(baseprobs = probs, asFactor = FALSE) %>%
+        genOrdCat2(baseprobs = probs, asFactor = FALSE) %>%
         select(cat) %>%
         table() %>%
         as.numeric() / n
