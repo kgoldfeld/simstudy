@@ -94,7 +94,7 @@
   } else {
     sumProbs <- sum(probs)
   }
-
+  #TODO check for negative values
   if (isTRUE(all.equal(mean(sumProbs), 1))) {
     return(probs)
   } else if (any(sumProbs < 1)) {
