@@ -586,7 +586,7 @@ genOrdCat2 <- function(dtName,
     corstr = corstr
   )
   assertClass(dtName = dtName, class = "data.table")
-  assertClass(baseprobs = baseprobs, rho = rho, class = "numeric")
+  assertClass(rho = rho, class = "numeric")
   assertClass(
     catVar = catVar,
     prefix = prefix,
