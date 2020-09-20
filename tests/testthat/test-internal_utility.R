@@ -100,9 +100,6 @@ test_that("var names are validated correctly.", {
   expect_false(all(.isValidVarName(validNames, unique = TRUE)))
 })
 
-
-
-
 # .isError ----
 test_that("errors are detected correctly.", {
   err <- try(nonVar + 4, silent = TRUE)
@@ -112,6 +109,17 @@ test_that("errors are detected correctly.", {
   expect_false(.isError(noErr))
   expect_false(.isError(5))
   expect_false(.isError("ab"))
+})
+
+# .hasValue ----
+test_that("hasValue works.", {
+  expect_true(.hasValue("value"))
+  expect_true((function(x) .hasValue(x))(5))
+  expect_true((function(x) .hasValue(x))(NA))
+  expect_false(.hasValue())
+  expect_false((function(x) .hasValue(x))())
+  expect_false((function(x) .hasValue(x))(NULL))
+  expect_false(.hasValue(NULL))
 })
 
 # .log2Prob ----

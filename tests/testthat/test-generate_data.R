@@ -11,3 +11,37 @@ test_that("data is generated as expected", {
   expect_warning(genData(n, def2), "will be normalized")
   expect_warning(genData(n, def3), "Adding category")
 })
+
+# genOrdCat ----
+test_that("genOrdCat throws errors.", {
+  expect_error(genOrdCat("not a data table", NULL, c(.1, .1)))
+})
+
+library(magrittr)
+library(dplyr)
+test_that("ordinal categorical data is generated correctly.", {
+  n <- 10000
+  probs_short <- c(.2, .4, .2)
+  probs <- c(.2, .2, .6)
+  data <- genData(n)
+
+  expect_equal({
+      data %>%
+        genOrdCat(baseprobs = probs, asFactor = FALSE) %>%
+        select(cat) %>%
+        range()
+    },
+    c(1, 3)
+  )
+
+  expect_equal({
+      data %>%
+        genOrdCat(baseprobs = probs, asFactor = FALSE) %>%
+        select(cat) %>%
+        table() %>%
+        as.numeric() / n
+    },
+    probs, tolerance = 0.01
+  )
+
+})
