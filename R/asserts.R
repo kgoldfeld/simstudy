@@ -68,9 +68,9 @@ assertValue <- function(...) {
 #' @noRd
 assertUnique <- function(...) {
     dots <- dots2argNames(...)
-
-    stopifnot(sapply(dots$args, is, "vector") ||
-        sapply(dots$args, is, "list"))
+    stopifnot(sapply(dots$args, is, "vector") |
+        sapply(dots$args, is, "list") | sapply(dots$args, is, "glue") |
+        lengths(dots$args) == 1L)
     
     isUnique <- function(var) {
         length(var) == length(unique(var))

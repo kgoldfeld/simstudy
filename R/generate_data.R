@@ -655,7 +655,7 @@ genOrdCat2 <- function(dtName,
 
   if (asFactor) {
     dtName <- genFactor(dtName, catVar, replace = TRUE)
-    data.table::setnames(dt, glue("f{catVar}"), catVar)
+    data.table::setnames(dtName, glue("f{catVar}"), catVar)
   }
 
   dtName[]
