@@ -200,31 +200,16 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 #' dx
 #' @export
 #' @concept generate_data
-genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FALSE) {
-
-  # Initial data checks
-
-  if (missing(dtName)) stop("argument 'dtName' is missing", call. = FALSE)
-  if (missing(varname)) stop("argument 'varname' is missing", call. = FALSE)
-
-  # Check if data table exists
-
-  if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
-    stop(paste("data table", deparse(substitute(dtName)), "not found"),
-      call. = FALSE
-    )
-  }
-
-  # Check if field exists, extract, and verify it is not double
-
-  if (!(varname %in% names(dtName))) {
-    stop(paste(
-      "variable", varname, "not found in data table",
-      deparse(substitute(dtName))
-    ),
-    call. = FALSE
-    )
-  }
+genFactor <- function(dtName,
+                      varname,
+                      labels = NULL,
+                      prefix = "f",
+                      replace = FALSE) {
+  assertNotMissing(dtName = missing(dtName), varname = missing(varname))
+  assertValue(dtName = dtName, varname = varname)
+  assertClass(dtName = dtName, class = "data.table")
+  assertUnique(varname = varname)
+  assertInDataTable(vars = varname, dt = dtName)
 
   xcol <- dtName[, get(varname)]
 
@@ -240,22 +225,14 @@ genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FA
 
   # Create new field name (check to see if it exists)
 
-  fname <- make.names(paste0(prefix, varname))
-
-  if (fname %in% names(dtName)) {
-    stop(paste(
-      "variable", fname,
-      "already exists in data table", deparse(substitute(dtName))
-    ),
-    call. = FALSE
-    )
-  }
+  fname <- make.names(glue("{prefix}{varname}"))
+  assertNotInDataTable(vars = fname, dt = dtName)
 
   # Create new column as factor
 
   if (is.null(labels)) {
     xfac <- factor(xcol)
-  } else {
+  } else { # TODO  vectorize label assignment
     xfac <- factor(xcol, labels = labels)
   }
 
@@ -524,7 +501,7 @@ genOrdCat <- function(dtName,
     stop("Data table does not exist.")
   }
 
-  if (!missing(adjVar) && !is.null(adjVar) && !adjVar %in% names(dtName)) {
+  if (.hasValue(adjVar) && !adjVar %in% names(dtName)) {
     stop(paste0("Variable ", adjVar, " not in data.table"))
   }
 
@@ -580,6 +557,110 @@ genOrdCat <- function(dtName,
 
   return(dt[])
 }
+
+genOrdCat2 <- function(dtName,
+                       adjVar = NULL,
+                       baseprobs,
+                       catVar = "cat",
+                       asFactor = TRUE,
+                       idname = "id",
+                       prefix = "grp",
+                       rho = 0,
+                       corstr = "ind",
+                       corMatrix = NULL) {
+
+  # "declares" to avoid global NOTE
+  cat <- NULL
+  logisZ <- NULL
+  period <- NULL
+
+  assertNotMissing(dtName = missing(dtName), baseprobs = missing(baseprobs))
+  assertValue(
+    dtName = dtName,
+    baseprobs = baseprobs,
+    catVar = catVar,
+    asFactor = asFactor,
+    idname = idname,
+    prefix = prefix,
+    rho = rho,
+    corstr = corstr
+  )
+  assertClass(dtName = dtName, class = "data.table")
+  assertClass(baseprobs = baseprobs, rho = rho, class = "numeric")
+  assertClass(
+    catVar = catVar,
+    prefix = prefix,
+    corstr = corstr,
+    idname = idname,
+    class = "character"
+  )
+  assertInDataTable(c(adjVar, idname), dtName)
+
+  baseprobs <- ensureMatrix(baseprobs)
+  baseprobs <- .adjustProbs(baseprobs)
+
+
+  nCats <- nrow(baseprobs)
+  ensureLength(catVar = catVar, n = nCats)
+
+  if (!is.null(adjVar)) {
+    adjVar <- ensureLength(
+      adjVar = adjVar,
+      n = seq_len(nCats), msg = list(
+        "Number of categories implied",
+        " by baseprobs and adjVar do not match. ",
+        "{ dots$names[[1]] } should be",
+        " either length 1 or { n } but",
+        " is { length(var) }!"
+      )
+    )
+  }
+
+  if (nCats > 1 && length(catVar) != nCats) {
+    catVar <- glue("{prefix}{i}", i = zeroPadInts(1:nCats))
+  }
+
+  n <- nrow(dtName)
+  zs <- .genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
+  zs[, logisZ := stats::qlogis(p = zs$Unew)]
+  cprop <- t(apply(baseprobs, 1, cumsum))
+  quant <- t(apply(cprop, 1, stats::qlogis))
+
+  mycat <- list()
+
+  for (i in 1:nCats) {
+    iLogisZ <- zs[period == i - 1, logisZ]
+    matlp <- matrix(rep(quant[i, ], n),
+      ncol = ncol(cprop),
+      byrow = TRUE
+    )
+    if (!is.null(adjVar)) {
+      z <- dtName[, adjVar[i], with = FALSE][[1]]
+      matlp <- matlp - z
+    }
+    locateGrp <- (iLogisZ > cbind(-Inf, matlp))
+    assignGrp <- apply(locateGrp, 1, sum)
+    mycat[[i]] <- data.table(
+      id = dtName[, idname, with = FALSE][[1]],
+      var = catVar[[i]],
+      cat = assignGrp
+    )
+  }
+  dcat <- data.table::rbindlist(mycat)
+  cats <- data.table::dcast(dcat, id ~ var, value.var = "cat")
+
+  setnames(cats, "id", idname)
+  setkeyv(cats, idname)
+  dtName <- dtName[cats]
+
+  if (asFactor) {
+    dtName <- genFactor(dtName, catVar, replace = TRUE)
+    data.table::setnames(dt, glue("f{catVar}"), catVar)
+  }
+
+  dtName[]
+}
+
 
 
 #' Generate spline curves
