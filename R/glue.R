@@ -25,7 +25,7 @@ collapseTransformer <- function(regex = "[*]$", ...) {
 #' Sprintf Transformer
 #'
 #' @description Transformer for use with glue(). Formats numbers
-#' similar to sprintf-
+#' similar to sprintf. Use like: var:02d
 #' @param text Text to format.
 #' @param envir environment
 #' @param envir environment
@@ -37,7 +37,7 @@ sprintfTransformer <- function(text, envir) {
         format <- substring(regmatches(text, m), 2)
         regmatches(text, m) <- ""
         res <- eval(parse(text = text, keep.source = FALSE), envir)
-        do.call(sprintf, list(glue("%{format}f"), res))
+        do.call(sprintf, list(glue("%{format}"), res))
     } else {
         eval(parse(text = text, keep.source = FALSE), envir)
     }
@@ -60,7 +60,7 @@ sprintfCTransformer <- function(sep = ", ", last = " and ", ...) {
             regmatches(text, m) <- ""
             expr <- parse(text = text, keep.source = FALSE)
             var <- all.vars(expr)
-            fmtString <- glue("%{format}f")
+            fmtString <- glue("%{format}")
             varL <- ifelse(length(var) != 0, length(get(var, envir = envir)), 1)
             res <- eval(expr, envir)
 

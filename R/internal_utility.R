@@ -346,3 +346,15 @@
 .log2Prob <- function(logOdds) {
   exp(logOdds) / (1 + exp(logOdds))
 }
+
+#' Zero Padding Integers
+#'
+#' @description description
+#' @param ints
+#' @param width
+#' @return The padded integers as glue character vector.
+#' @noRd
+zeroPadInts <- function(ints, width =  max(nchar(ints))) {
+    glueFormat <- glue("[i:0{s}d]", s = width)
+    glueFmt(glueFormat, i = ints, .open = "[", .close = "]")
+}

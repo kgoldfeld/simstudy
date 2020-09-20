@@ -30,6 +30,8 @@ assertLengthEqual <- function(...) {
     }
 }
 
+
+
 #' Check for Class
 #'
 #' @description Checks if all passed vars inherit from class.
@@ -55,7 +57,27 @@ assertValue <- function(...) {
     noValue <- sapply(dots$args, is.null) | is.na(dots$args)
 
     if (any(noValue)) {
-        valueError(dots$names[noValue], call = sys.call(-1))
+        noValueError(dots$names[noValue], call = sys.call(-1))
+    }
+}
+
+#' Are Values Unique?
+#'
+#' @description Checks if all passed vars have only unique values.
+#' @param ... Any number of list or vectors as named elements e.g. var1 = var1.
+#' @noRd
+assertUnique <- function(...) {
+    dots <- dots2argNames(...)
+
+    stopifnot(sapply(dots$args, is, "vector") ||
+        sapply(dots$args, is, "list"))
+    
+    isUnique <- function(var) {
+        length(var) == length(unique(var))
+    }
+    notUnique <- !sapply(dots$args, isUnique)
+    if (any(notUnique)) {
+        notUniqueError(dots$names[notUnique], call = sys.call(-1))
     }
 }
 
@@ -73,13 +95,27 @@ assertInDataTable <- function(vars, dt) {
     }
 }
 
+#' Var Not Defined?
+#'
+#' @description Checks if all passed vars have not been defined in dt.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param dt data.table to check for vars.
+#' @noRd
+assertNotInDataTable <- function(vars, dt) {
+    areDefined <- vars %in% names(dt)
+
+    if (any(areDefined)) {
+        alreadyDefinedError(vars[areDefined], call = sys.call(-1))
+    }
+}
+
 #' Ensure Length
 #'
 #' @description Ensures that var is of length n or 1. Repeats the value n
 #' times in the second case. Throws simstudy::lengthError if other length found.
 #' @param ... One variable as named element: var = var.
 #' @param n Desired length.
-#' @return Input var of length n.
+#' @return Invisibly returns input var with length n.
 #' @noRd
 ensureLength <- function(..., n,
                          msg = list(
@@ -92,14 +128,32 @@ ensureLength <- function(..., n,
     var <- dots$args[[1]]
 
     if (length(var) == 1) {
-        return(rep(var, n))
+        invisible(rep(var, n))
     } else if (length(var) == n) {
-        return(var)
+        invisible(var)
     } else {
         lengthError(
             names = dots$names, call = sys.call(-1),
             msg = do.call(glue, msg)
         )
+    }
+}
+
+#' Ensure Input is Matrix
+#'
+#' @description Checks if var is a matrix or vector, if vector converts it to 1
+#' row matrix.
+#' @param var Variable to check
+#' @return var as matrix.
+#' @importFrom methods is
+#' @noRd
+ensureMatrix <- function(var) {
+    stopifnot(is(var, "matrix") || is(var, "vector"))
+
+    if (is(var, "vector")) {
+        return(matrix(var, nrow = 1))
+    } else {
+        return(var)
     }
 }
 

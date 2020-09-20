@@ -74,7 +74,7 @@ classError <- function(names, class, call = sys.call(-1), msg = "", ...) {
 #' @param msg Additional information for the error message as 
 #' glueCollapse'able string.
 #' @noRd
-valueError <- function(names, call = sys.call(-1), msg = "", ...) {
+noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
     plr <- ifelse(length(names) > 1, "", "s")
     message <- glueCollapse(
         "{ names *} need{plr} to have a value",
@@ -84,6 +84,27 @@ valueError <- function(names, call = sys.call(-1), msg = "", ...) {
 
     c <- condition(
         c("simstudy::noValue", "error"),
+        message, call, ...
+    )
+    stop(c)
+}
+
+#' Not Uniwue Error
+#'
+#' @param names Names of the vars.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as 
+#' glueCollapse'able string.
+#' @noRd
+notUniqueError <- function(names, call = sys.call(-1), msg = "", ...) {
+    plr <- ifelse(length(names) > 1, "", "s")
+    message <- glueCollapse(
+        "{ names *} need{plr} to have only unique values",
+        msg
+    )
+
+    c <- condition(
+        c("simstudy::uniqueValue", "error"),
         message, call, ...
     )
     stop(c)
@@ -104,6 +125,26 @@ notDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
 
     c <- condition(
         c("simstudy::notDefined", "error"),
+        message, call, ...
+    )
+    stop(c)
+}
+
+#' Var Already Defined Error
+#'
+#' @param names Names of the vars.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as 
+#' glueCollapse'able string.
+#' @noRd
+alreadyDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
+    plr <- ifelse(length(names) > 1, "s", "")
+    message <- glueCollapse(
+        "Variable{plr} { names *} previously defined!", msg
+    )
+
+    c <- condition(
+        c("simstudy::alreadyDefined", "error"),
         message, call, ...
     )
     stop(c)
