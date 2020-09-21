@@ -43,6 +43,7 @@ LinkingTo:
 Suggests: 
     covr,
     formatR,
+    gee,
     ggplot2,
     grid,
     gridExtra,
