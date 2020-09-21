@@ -11,9 +11,8 @@ vignette: >
 
 library(simstudy)
 library(ggplot2)
-library(grid)
-library(gridExtra)
 library(knitr)
+library(data.table)
 
 set.seed(33333)
 
