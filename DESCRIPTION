@@ -42,6 +42,7 @@ LinkingTo:
     Rcpp
 Suggests: 
     covr,
+    formatR,
     ggplot2,
     grid,
     gridExtra,
