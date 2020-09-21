@@ -10,6 +10,7 @@ vignette: >
 ```{r, echo = FALSE, message = FALSE}
 
 library(simstudy)
+library(data.table)
 library(ggplot2)
 library(grid)
 library(gridExtra)
