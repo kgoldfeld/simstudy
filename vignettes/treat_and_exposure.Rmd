@@ -16,7 +16,7 @@ library(grid)
 library(gridExtra)
 library(survival)
 library(gee)
-librar(data.table)
+library(data.table)
 
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
