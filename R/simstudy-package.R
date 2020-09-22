@@ -56,8 +56,7 @@ NULL
 #' def
 #' genData(5, def)
 #' @name distributions
-#' @aliases normal, poisson, noZeroPoisson, binary, binomial, uniform,
-#'  categorical, gamma, beta, negBinomial, nonrandom, exponential, mixture,
-#'  pseudorandom, pseudorandomSeq
+#' @aliases normal poisson noZeroPoisson binary binomial uniform
+#'  categorical gamma beta negBinomia nonrandom exponential mixture
 #' @md
 NULL
