@@ -59,6 +59,7 @@ test_that("correlated ordinal categorical data is generated correctly.", {
   oldSeed <- .Random.seed
   set.seed(230920)
   probs <- matrix(0.25, 5, 4)
+  rownames(probs) <- letters[1:5]
   n <- 10000
 
   dT <- genData(n)
