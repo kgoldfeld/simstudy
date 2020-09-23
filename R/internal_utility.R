@@ -353,11 +353,12 @@
 #' Zero Padding Integers
 #'
 #' @description description
-#' @param ints
-#' @param width
+#' @param ints Integers to padd.
+#' @param width Up to which width to padd (inlcuding the integer digits). 
 #' @return The padded integers as glue character vector.
 #' @noRd
 zeroPadInts <- function(ints, width =  max(nchar(ints))) {
+  stopifnot(width <= max(nchar(ints)))
     glueFormat <- glue("[i:0{s}d]", s = width)
     glueFmt(glueFormat, i = ints, .open = "[", .close = "]")
 }

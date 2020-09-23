@@ -568,7 +568,7 @@ genCorMat <- function(nvars, cors = NULL) {
 #' @description This function is deprecated, please use [genOrdCat] instead.
 #' @export
 #' @md
-#' @keyword internal
+#' @keywords internal
 genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
                          prefix = "grp", rho, corstr, corMatrix = NULL) {
   .Deprecated("genOrdCat")
