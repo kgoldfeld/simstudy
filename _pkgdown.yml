@@ -32,3 +32,7 @@ reference:
 - title: Utility
 - contents:
   - has_concept("utility")
+
+- title: Deprecated & Defunct
+- contents: 
+  - simstudy-deprecated
