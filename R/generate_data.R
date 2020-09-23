@@ -563,6 +563,7 @@ genOrdCat <- function(dtName,
   return(dt[])
 }
 
+#matrix has to be pos def
 genOrdCat2 <- function(dtName,
                        adjVar = NULL,
                        baseprobs,

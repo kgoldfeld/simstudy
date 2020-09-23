@@ -50,6 +50,23 @@ test_that("ordinal categorical data is generated correctly.", {
   )
 })
 
+test_that("correlated ordinal categorical data is generated correctly.", {
+  library(pracma)
+  oldSeed <- .Random.seed
+  set.seed(230920)
+  probs <- matrix(0.25, 5, 4)
+  n <- 10000
+
+  dT <- genData(n)
+  dX <- genOrdCat2(dT, baseprobs = probs, prefix = "q", rho = 0.2, corstr = "cs", asFactor = FALSE)
+  cdX <- cor(dX[, -1])
+  truMat <- genCorMat(nvars = 5, rep(0.2, 10))
+  distSum <- sum(diag(distmat(cdX, truMat)))
+  expect_lte(distSum, 1)
+
+  set.seed(oldSeed)
+})
+
 # genFactor ----
 test_that("genFactor throws erros", {
   expect_error(genFactor(),
