@@ -45,6 +45,7 @@ Suggests:
     magrittr,
     Matrix,
     mgcv,
+    pracma,
     rmarkdown,
     splines,
     survival,

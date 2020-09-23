@@ -60,3 +60,15 @@ NULL
 #'  categorical gamma beta negBinomia nonrandom exponential mixture
 #' @md
 NULL
+
+#' Deprecated functions in simstudy
+#' 
+#' These functions are provided for compatibility with older versions
+#' of simstudy only, and will be defunct in the future.
+#' 
+#' * [genCorOrdCat]: This function is deprecated, and will
+#'  be removed in the future. Use [genOrdCat] instead.
+#' @md
+#' @name simstudy-deprecated
+NULL
+

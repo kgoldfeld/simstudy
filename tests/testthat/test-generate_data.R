@@ -14,9 +14,9 @@ test_that("data is generated as expected", {
 
 # genOrdCat ----
 test_that("genOrdCat throws errors.", {
-  expect_error(genOrdCat2("not a data table", NULL, c(.1, .1)), class = "simstudy::wrongClass")
-  expect_error(genOrdCat2(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
-  expect_error(genOrdCat2(NULL, NULL, NULL), class = "simstudy::noValue")
+  expect_error(genOrdCat("not a data table", NULL, c(.1, .1)), class = "simstudy::wrongClass")
+  expect_error(genOrdCat(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
+  expect_error(genOrdCat(NULL, NULL, NULL), class = "simstudy::noValue")
 })
 
 library(magrittr)
@@ -30,7 +30,7 @@ test_that("ordinal categorical data is generated correctly.", {
   expect_equal(
     {
       data %>%
-        genOrdCat2(baseprobs = probs, asFactor = FALSE) %>%
+        genOrdCat(baseprobs = probs, asFactor = FALSE) %>%
         select(cat) %>%
         range()
     },
@@ -40,7 +40,7 @@ test_that("ordinal categorical data is generated correctly.", {
   expect_equal(
     {
       data %>%
-        genOrdCat2(baseprobs = probs, asFactor = FALSE) %>%
+        genOrdCat(baseprobs = probs, asFactor = FALSE) %>%
         select(cat) %>%
         table() %>%
         as.numeric() / n
@@ -48,6 +48,10 @@ test_that("ordinal categorical data is generated correctly.", {
     probs,
     tolerance = 0.01
   )
+})
+
+test_that("deprecation warning shows up.", {
+  expect_warning(genCorOrdCat(genData(5),baseprobs = c(.2,.3,.5), rho = 0, corstr = "cs"), "deprecated")
 })
 
 test_that("correlated ordinal categorical data is generated correctly.", {
@@ -58,7 +62,7 @@ test_that("correlated ordinal categorical data is generated correctly.", {
   n <- 10000
 
   dT <- genData(n)
-  dX <- genOrdCat2(dT, baseprobs = probs, prefix = "q", rho = 0.2, corstr = "cs", asFactor = FALSE)
+  dX <- genOrdCat(dT, baseprobs = probs, prefix = "q", rho = 0.2, corstr = "cs", asFactor = FALSE)
   cdX <- cor(dX[, -1])
   truMat <- genCorMat(nvars = 5, rep(0.2, 10))
   distSum <- sum(diag(distmat(cdX, truMat)))

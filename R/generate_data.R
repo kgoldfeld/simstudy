@@ -459,112 +459,94 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 
 #' @title Generate ordinal categorical data
 #' @description Ordinal categorical data is added to an existing data set.
+#' Correlations can be added via correlation matrix or `rho` and `corstr`.
 #' @param dtName Name of complete data set
 #' @param adjVar Adjustment variable  name in dtName - determines
 #' logistic shift. This is specified assuming a cumulative logit
 #' link.
-#' @param baseprobs Baseline probability expressed as a vector of
-#' probabilities. The values must sum to <= 1. If sum(baseprobs) < 1,
-#' an additional category is added with probability 1 - sum(baseprobs).
-#' @param catVar Name of the new categorical field. Defaults to "cat"
-#' @param asFactor If asFactor == TRUE (default), new field is returned
-#' as a factor. If asFactor == FALSE, new field is returned as an integer.
-#' @return Original data.table with added categorical field
+#' @param baseprobs Baseline probability expressed as a vector or matrix of
+#' probabilities. The values (per row) must sum to <= 1. If `rowSums(baseprobs)
+#' < 1`, an additional category is added with probability `1 -
+#' rowSums(baseprobs)`. The number of rows represents the number of new
+#' categorical variables. The number of columns represents the number of
+#' possible responses - if an particular category has fewer possible responses,
+#' assign zero probability to non-relevant columns.
+#' @param catVar Name of the new categorical field. Defaults to "cat". Can be a
+#' character vector with a name for each new variable defined via `baseprobs`.
+#' Will be overriden by `prefix` if more than one variable is defined and
+#' `length(catVar) == 1`.
+#' @param asFactor If `asFactor == TRUE` (default), new field is returned
+#' as a factor. If `asFactor == FALSE`, new field is returned as an integer.
+#' @param idname Name of the id column in `dtName`.
+#' @param rho Correlation coefficient, -1 < rho < 1. Use if corMatrix is not
+#' provided. 
+#' @param corstr Correlation structure of the variance-covariance matrix defined
+#' by sigma and rho. Options include "ind" for an independence structure, "cs"
+#' for a compound symmetry structure, and "ar1" for an autoregressive structure.
+#' @param corMatrix Correlation matrix can be entered directly. It must be
+#' symmetrical and positive definite. It is not a required field; if a matrix is
+#' not provided, then a structure and correlation coefficient rho must be
+#' specified. (The matrix created via `rho` and `corstr` must also be positive
+#' definite.)
+#' @return Original data.table with added categorical field.
 #' @examples
-#' #### Set definitions
+#' # Ordinal Categorical Data ----
 #'
 #' def1 <- defData(
-#'   varname = "male",
-#'   formula = 0.45, dist = "binary", id = "idG"
+#'     varname = "male",
+#'     formula = 0.45, dist = "binary", id = "idG"
 #' )
 #' def1 <- defData(def1,
-#'   varname = "z",
-#'   formula = "1.2*male", dist = "nonrandom"
+#'     varname = "z",
+#'     formula = "1.2*male", dist = "nonrandom"
 #' )
+#' def1
 #'
-#' #### Generate data
+#' ## Generate data
 #'
 #' set.seed(20)
 #'
 #' dx <- genData(1000, def1)
 #'
 #' probs <- c(0.40, 0.25, 0.15)
-#' dx <- genOrdCat(dx, adjVar = "z", probs, catVar = "grp")
+#' dx <- genOrdCat(dx, adjVar = "z", idname = "idG", baseprobs = probs,
+#' catVar = "grp")
+#' dx
+#'
+#' # Correlated Ordinal Categorical Data ----
+#'
+#' baseprobs <- matrix(c(
+#'     0.2, 0.1, 0.1, 0.6,
+#'     0.7, 0.2, 0.1, 0,
+#'     0.5, 0.2, 0.3, 0,
+#'     0.4, 0.2, 0.4, 0,
+#'     0.6, 0.2, 0.2, 0
+#' ),
+#' nrow = 5, byrow = TRUE
+#' )
+#'
+#' set.seed(333)
+#' dT <- genData(1000)
+#'
+#' dX <- genOrdCat(dT,
+#'     adjVar = NULL, baseprobs = baseprobs,
+#'     prefix = "q", rho = .125, corstr = "cs", asFactor = FALSE
+#' )
+#' dX
+#'
+#' dM <- data.table::melt(dX, id.vars = "id")
+#' dProp <- dM[, prop.table(table(value)), by = variable]
+#' dProp[, response := c(1:4, 1:3, 1:3, 1:3, 1:3)]
+#'
+#' data.table::dcast(dProp, variable ~ response,
+#'     value.var = "V1", fill = 0
+#' )
 #' @export
+#' @md
 #' @concept generate_data
 #' @concept categorical
+#' @concept correlated
 genOrdCat <- function(dtName,
-                      adjVar = NULL,
-                      baseprobs,
-                      catVar = "cat",
-                      asFactor = TRUE) {
-
-  # "declares" to avoid global NOTE
-  cat <- NULL
-
-  if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
-    stop("Data table does not exist.")
-  }
-
-  if (.hasValue(adjVar) && !adjVar %in% names(dtName)) {
-    stop(paste0("Variable ", adjVar, " not in data.table"))
-  }
-
-  if (!is.character(catVar)) {
-    stop("catVar must be a string")
-  }
-
-  # Check probability vector
-
-  if (is.null(baseprobs)) {
-    stop("Proability vector is empty")
-  }
-
-  if (sum(baseprobs) > 1 | sum(baseprobs) <= 0) {
-    stop("Probabilities are not properly specified")
-  }
-
-  if (sum(baseprobs) < 1) {
-    baseprobs <- c(baseprobs, 1 - sum(baseprobs))
-  }
-
-  # checking complete
-
-  dt <- copy(dtName)
-
-  cprop <- cumsum(baseprobs)
-  quant <- stats::qlogis(cprop)
-
-  matlp <- matrix(rep(quant, nrow(dt)),
-    ncol = length(cprop),
-    byrow = TRUE
-  )
-
-  if (!is.null(adjVar)) {
-    z <- dt[, adjVar, with = FALSE][[1]]
-    matlp <- matlp - z
-  }
-
-
-  matcump <- 1 / (1 + exp(-matlp))
-  matcump <- cbind(0, matcump)
-
-  p <- t(t(matcump)[-1, ] - t(matcump)[-(length(baseprobs) + 1), ])
-
-  dt[, cat := matMultinom(p)]
-
-  if (asFactor) {
-    dt <- genFactor(dt, "cat", replace = TRUE)
-    data.table::setnames(dt, "fcat", catVar)
-  } else {
-    data.table::setnames(dt, "cat", catVar)
-  }
-
-  return(dt[])
-}
-
-#matrix has to be pos def
-genOrdCat2 <- function(dtName,
                        adjVar = NULL,
                        baseprobs,
                        catVar = "cat",
@@ -666,8 +648,6 @@ genOrdCat2 <- function(dtName,
 
   dtName[]
 }
-
-
 
 #' Generate spline curves
 #'
