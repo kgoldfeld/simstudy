@@ -26,7 +26,7 @@ argMissingError <- function(args, call = sys.call(-1), msg = "", ...) {
         " missing with no default: { args *} ",
         msg
     )
-    c <- condition(c("simstudy::MissingArgument", "error"), message, call, ...)
+    c <- condition(c("simstudy::missingArgument", "error"), message, call, ...)
 
     stop(c)
 }
@@ -43,7 +43,7 @@ lengthError <- function(names,
                         call = sys.call(-1),
                         msg = "{ names *} should be of { prop } length!", ...) {
     c <- condition(
-        c("simstudy::LengthMismatch", "error"),
+        c("simstudy::lengthMismatch", "error"),
         glueCollapse(msg), call, ...
     )
     stop(c)
@@ -76,7 +76,7 @@ classError <- function(names, class, call = sys.call(-1), msg = "", ...) {
 #' glueCollapse'able string.
 #' @noRd
 typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
-    message <- glueCollapse("{ names *} should be/contain a { type }!", msg)
+    message <- glueCollapse("{ names *} should be/contain only { type }(s)!", msg)
 
     c <- condition(
         c("simstudy::wrongType", "error"),
@@ -96,7 +96,7 @@ noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
     plr <- ifelse(length(names) > 1, "", "s")
     message <- glueCollapse(
         "{ names *} need{plr} to have a value",
-        " other than NULL or NA!",
+        " other than NULL or NA an a length > 0!",
         msg
     )
 

@@ -17,7 +17,9 @@ assertNotMissing <- function(..., call = sys.call(-1)) {
 
 #' Are Lengths Equal?
 #'
-#' @description Checks if all passed vars are of equal Length.
+#' @description Checks if all passed vars are of equal Length. Caveat:
+#' length(matrix) = numer of elements but length(data.frame) = number
+#'  of columns.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
 assertLengthEqual <- function(..., call = sys.call(-1)) {
@@ -32,16 +34,18 @@ assertLengthEqual <- function(..., call = sys.call(-1)) {
 
 #' Is length correct?
 #'
-#' @description Checks if all passed vars are of length 'length'.
+#' @description Checks if all passed vars are of length 'length'. Caveat:
+#' length(matrix) = numer of elements but length(data.frame) = number
+#'  of columns.
 #' @param length Length to check
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
 assertLength <- function(..., length, call = sys.call(-1)) {
     dots <- dots2argNames(...)
     correctLength <- lengths(dots$args) == length
-    if (!correctLength) {
+    if (!all(correctLength)) {
         lengthError(dots$names[!correctLength],
-        prop = length,
+            prop = length,
             msg = "{ names *} should be of length { prop }!", call = call
         )
     }
@@ -67,37 +71,24 @@ assertClass <- function(..., class, call = sys.call(-1)) {
 #' @description Checks if all passed vars and their content are of type.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @param type Type to check against.
+#' @param deep Should the elements of the variable be tested?
 #' @noRd
-assertType <- function(..., type, call = sys.call(-1)) {
+assertType <- function(..., type, deep = TRUE, call = sys.call(-1)) {
     dots <- dots2argNames(...)
     reduceType <- function(arg) {
-        types <- sapply(arg, typeof)
-        if (length(types) == 1) {
-            return(types == type)
+        if (deep) {
+            types <- sapply(arg, typeof)
+            if (length(types) == 1) {
+                return(types == type)
+            }
+            return(Reduce(`&&`, types == type))
+        } else {
+            typeof(arg) == type
         }
-        Reduce(`&&`, types == type)
     }
     wrongType <- !sapply(dots$args, reduceType)
     if (any(wrongType)) {
         typeError(dots$names[wrongType], type = type, call = call)
-    }
-}
-
-#' Check for Integer
-#'
-#' @description Checks if all passed vars and their content are of integers.
-#' @param ... Any number of variables as named elements e.g. var1 = var1.
-#' @noRd
-assertInteger <- function(..., type, call = sys.call(-1)) {
-    assertNumeric(..., call = call)
-    dots <- dots2argNames(...)
-    checkInteger <- function(arg) {
-        arg <- unlist(arg)
-        all(arg == as.integer(arg))
-    }
-    notInteger <- !sapply(dots$args, checkInteger)
-    if (any(notInteger)) {
-        typeError(dots$names[notInteger], type = "integer", call = call)
     }
 }
 
@@ -119,15 +110,35 @@ assertNumeric <- function(..., call = sys.call(-1)) {
     }
 }
 
+#' Check for Integer
+#'
+#' @description Checks if all passed vars and their content are integers or can
+#' be coerced to integer without loss of information.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertInteger <- function(..., type, call = sys.call(-1)) {
+    assertNumeric(..., call = call)
+    dots <- dots2argNames(...)
+    checkInteger <- function(arg) {
+        arg <- unlist(arg)
+        all(arg == as.integer(arg))
+    }
+    notInteger <- !sapply(dots$args, checkInteger)
+    if (any(notInteger)) {
+        typeError(dots$names[notInteger], type = "integer", call = call)
+    }
+}
+
 #' Check for Value
 #'
-#' @description Checks if all passed vars have a value other than NULL and NA.
+#' @description Checks if all passed vars have a value other than NULL and NA
+#' and a length > 0.
 #' Does not check if all elements contained are NULL or NA.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
 assertValue <- function(..., call = sys.call(-1)) {
     dots <- dots2argNames(...)
-    noValue <- sapply(dots$args, is.null) | is.na(dots$args)
+    noValue <- sapply(dots$args, is.null) | is.na(dots$args) | lengths(dots$args) == 0
 
     if (any(noValue)) {
         noValueError(dots$names[noValue], call = call)
@@ -198,9 +209,9 @@ ensureLength <- function(..., n,
                          ),
                          call = sys.call(-1)) {
     dots <- dots2argNames(...)
-    stopifnot(length(dots$args) == 1)
+    stopifnot(length(dots$args) == 1, !missing(n))
     var <- dots$args[[1]]
-
+    
     if (length(var) == 1) {
         invisible(rep(var, n))
     } else if (length(var) == n) {
@@ -237,6 +248,7 @@ ensureMatrix <- function(var) {
 #' @return A list containing the arguments and names.
 #' @noRd
 dots2argNames <- function(...) {
+    stopifnot(...length() != 0) 
     args <- list(...)
     names <- names(args)
     names <- names[names != ""]
