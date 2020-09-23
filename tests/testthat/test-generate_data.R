@@ -37,14 +37,61 @@ test_that("ordinal categorical data is generated correctly.", {
     c(1, 3)
   )
 
-  expect_equal({
+  expect_equal(
+    {
       data %>%
         genOrdCat2(baseprobs = probs, asFactor = FALSE) %>%
         select(cat) %>%
         table() %>%
         as.numeric() / n
     },
-    probs, tolerance = 0.01
+    probs,
+    tolerance = 0.01
   )
+})
 
+# genFactor ----
+test_that("genFactor throws erros", {
+  expect_error(genFactor(),
+    regexp = "dtName and varname", class = "simstudy::missingArgument"
+  )
+  expect_error(genFactor(NULL, NA),
+    regexp = "dtName and varname", class = "simstudy::noValue"
+  )
+  expect_error(genFactor(data.frame(a = 3), "a"),
+    regexp = "dtName", class = "simstudy::wrongClass"
+  )
+  expect_error(genFactor(data.table(a = 3), 5),
+    regexp = "varname", class = "simstudy::wrongType"
+  )
+  expect_error(genFactor(data.table(a = 3), c("a", "a")),
+    regexp = "varname", class = "simstudy::uniqueValue"
+  )
+  expect_error(genFactor(data.table(a = 3), "b"),
+    regexp = "b", class = "simstudy::notDefined"
+  )
+  expect_error(genFactor(data.table(a = "c"), "a"),
+    regexp = "columns2Convert", class = "simstudy::wrongType"
+  )
+  expect_error(genFactor(data.table(a = 5, fa = 5), "a"),
+    regexp = "fa", class = "simstudy::alreadyDefined"
+  )
+})
+
+test_that("genFactor works.", {
+  dt <- data.table(
+    id = 1:100, q1 = sample(1:5, 100, replace = TRUE),
+    q2 = sample(1:5, 100, replace = TRUE),
+    q3 = sample(1:5, 100, replace = TRUE)
+  )
+  labels <- list(q1 = letters[1:5], q2 = letters[6:10])
+  dt_res <- copy(dt)
+  dt_res$fq1 <- factor(dt$q1, labels = labels$q1)
+  dt_res$fq2 <- factor(dt$q2, labels = labels$q2)
+
+  expect_true(is.factor(genFactor(copy(dt), "q2")$fq2))
+  expect_equal(genFactor(copy(dt), "q2")$fq2, factor(dt$q2))
+  expect_length(genFactor(copy(dt), c("q1", "q2")), 6)
+  expect_length(genFactor(copy(dt), c("q1", "q2"), replace = TRUE), 4)
+  expect_equal(genFactor(copy(dt), c("q1", "q2"), labels = labels), dt_res)
 })

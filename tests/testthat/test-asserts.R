@@ -112,7 +112,7 @@ test_that("ensureLength works.", {
 })
 
 test_that("ensureMatrix works", {
-  expect_error(ensureMatrix("a"), class = "simpleError")
+  expect_error(ensureMatrix(data.frame("a")), class = "simpleError")
   expect_is(ensureMatrix(c(1, 2, 3, 4)), "matrix")
   expect_is(ensureMatrix(matrix(1:25, 5)), "matrix")
 })

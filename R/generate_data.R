@@ -223,19 +223,15 @@ genFactor <- function(dtName,
   # Create new column as factor
   if (!is.null(labels)) {
     assertType(labels = labels, type = "character")
-  
+
     if (is.list(labels)) {
       assertLength(labels = labels, length = length(varname))
 
-      dtName[, (fname) := unlist(
-        apply(
-          mapply(function(x, labels) {
-            factor(x = x, labels = labels)
-          }, .SD, labels), 2, list
-        ),
-        recursive = FALSE
-      ), .SDcols = varname]
-
+      for (i in seq_len(length(varname))) {
+        dtName[[fname[i]]] <- factor(dtName[[varname[i]]],
+          labels = labels[[i]]
+        )
+      }
     } else {
       dtName[, (fname) := lapply(.SD, factor, labels = labels),
         .SDcols = varname
