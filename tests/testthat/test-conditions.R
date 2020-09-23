@@ -12,9 +12,9 @@ test_that("conditions have correct class.", {
 
 test_that("pluralization works.", {
   expect_error(argMissingError("arg1"), "argument is missing",
-    class = "simstudy::MissingArgument"
+    class = "simstudy::missingArgument"
   )
   expect_error(argMissingError(c("arg1", "arg2")), "arguments are missing",
-    class = "simstudy::MissingArgument"
+    class = "simstudy::missingArgument"
   )
 })

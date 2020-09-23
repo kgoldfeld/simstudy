@@ -15,7 +15,7 @@ test_that("data is generated as expected", {
 # genOrdCat ----
 test_that("genOrdCat throws errors.", {
   expect_error(genOrdCat2("not a data table", NULL, c(.1, .1)), class = "simstudy::wrongClass")
-  expect_error(genOrdCat2(adjVar = NULL, rho = 1), class = "simstudy::MissingArgument")
+  expect_error(genOrdCat2(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
   expect_error(genOrdCat2(NULL, NULL, NULL), class = "simstudy::noValue")
 })
 
