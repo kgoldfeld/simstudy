@@ -170,10 +170,12 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 
 #' Create factor variable from an existing (non-double) variable
 #'
-#' @param dtName Data table with column
-#' @param varname Name of field that is to be converted
+#' @param dtName Data table with columns.
+#' @param varname Name of field(s) to be converted.
 #' @param labels Factor level labels. If not provided, the generated factor
-#' levels will be used as the labels.
+#' levels will be used as the labels. Can be a vector (if only one new factor or
+#' all factors have the same labeks) or a list of character vectors of the same
+#' length as varname.
 #' @param prefix By default, the new field name will be a concatenation of "f"
 #' and the old field name. A prefix string can be provided.
 #' @param replace If replace is set to TRUE (defaults to FALSE) the field
