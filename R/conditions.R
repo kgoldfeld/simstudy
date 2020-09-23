@@ -54,7 +54,7 @@ lengthError <- function(names,
 #' @param names Names of the vars.
 #' @param class Class the variable should inherit.
 #' @param call sys.call to pass on to the error.
-#' @param msg Additional information for the error message as 
+#' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
 classError <- function(names, class, call = sys.call(-1), msg = "", ...) {
@@ -62,6 +62,24 @@ classError <- function(names, class, call = sys.call(-1), msg = "", ...) {
 
     c <- condition(
         c("simstudy::wrongClass", "error"),
+        message, call, ...
+    )
+    stop(c)
+}
+
+#' Wrong Type Error
+#'
+#' @param names Names of the vars.
+#' @param type Type the variable should inherit.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
+    message <- glueCollapse("{ names *} should be/contain a { type }!", msg)
+
+    c <- condition(
+        c("simstudy::wrongType", "error"),
         message, call, ...
     )
     stop(c)

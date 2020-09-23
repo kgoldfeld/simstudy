@@ -208,20 +208,10 @@ genFactor <- function(dtName,
   assertNotMissing(dtName = missing(dtName), varname = missing(varname))
   assertValue(dtName = dtName, varname = varname)
   assertClass(dtName = dtName, class = "data.table")
+  assertType(varname = varname, type = "character")
   assertUnique(varname = varname)
   assertInDataTable(vars = varname, dt = dtName)
-
-  xcol <- dtName[, get(varname)]
-
-  if (is.double(xcol)) {
-    if (!all(xcol == as.integer(xcol))) {
-      stop(paste("variable", varname, "is of type 'double'"),
-        call. = FALSE
-      )
-    }
-
-    xcol <- as.integer(xcol)
-  }
+  assertInteger(columns2Convert = dtName[, ..varname])
 
   # Create new field name (check to see if it exists)
 
@@ -229,14 +219,31 @@ genFactor <- function(dtName,
   assertNotInDataTable(vars = fname, dt = dtName)
 
   # Create new column as factor
+  if (!is.null(labels)) {
+    assertType(labels = labels, type = "character")
+  
+    if (is.list(labels)) {
+      assertLength(labels = labels, length = length(varname))
 
-  if (is.null(labels)) {
-    xfac <- factor(xcol)
-  } else { # TODO  vectorize label assignment
-    xfac <- factor(xcol, labels = labels)
+      dtName[, (fname) := unlist(
+        apply(
+          mapply(function(x, labels) {
+            factor(x = x, labels = labels)
+          }, .SD, labels), 2, list
+        ),
+        recursive = FALSE
+      ), .SDcols = varname]
+
+    } else {
+      dtName[, (fname) := lapply(.SD, factor, labels = labels),
+        .SDcols = varname
+      ]
+    }
+  } else {
+    dtName[, (fname) := lapply(.SD, factor),
+      .SDcols = varname
+    ]
   }
-
-  dtName[, (fname) := xfac]
 
   if (replace == TRUE) dtName[, (varname) := NULL]
 

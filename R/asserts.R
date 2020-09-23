@@ -3,7 +3,7 @@
 #' @param ... any number of missing(arg) as named elements
 #' e.g. x = missing(x)
 #' @noRd
-assertNotMissing <- function(...) {
+assertNotMissing <- function(..., call = sys.call(-1)) {
     args <- list(...)
     names <- names(args)
     args <- unlist(args)
@@ -11,7 +11,7 @@ assertNotMissing <- function(...) {
     stopifnot(length(args) == length(names))
 
     if (any(args)) {
-        argMissingError(names[args], call = sys.call(-1))
+        argMissingError(names[args], call = call)
     }
 }
 
@@ -20,17 +20,32 @@ assertNotMissing <- function(...) {
 #' @description Checks if all passed vars are of equal Length.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
-assertLengthEqual <- function(...) {
+assertLengthEqual <- function(..., call = sys.call(-1)) {
     dots <- dots2argNames(...)
     stopifnot(length(dots$args) >= 2)
 
     sameLength <- length(unique(lengths(dots$args))) == 1L
     if (!sameLength) {
-        lengthError(dots$names, "equal", call = sys.call(-1))
+        lengthError(dots$names, "equal", call = call)
     }
 }
 
-
+#' Is length correct?
+#'
+#' @description Checks if all passed vars are of length 'length'.
+#' @param length Length to check
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertLength <- function(..., length, call = sys.call(-1)) {
+    dots <- dots2argNames(...)
+    correctLength <- lengths(dots$args) == length
+    if (!correctLength) {
+        lengthError(dots$names[!correctLength],
+        prop = length,
+            msg = "{ names *} should be of length { prop }!", call = call
+        )
+    }
+}
 
 #' Check for Class
 #'
@@ -38,26 +53,84 @@ assertLengthEqual <- function(...) {
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @param class Class to check against.
 #' @noRd
-assertClass <- function(..., class) {
+assertClass <- function(..., class, call = sys.call(-1)) {
     dots <- dots2argNames(...)
     wrongClass <- !sapply(dots$args, inherits, class)
 
     if (any(wrongClass)) {
-        classError(dots$names[wrongClass], class = class, call = sys.call(-1))
+        classError(dots$names[wrongClass], class = class, call = call)
+    }
+}
+
+#' Check for Type
+#'
+#' @description Checks if all passed vars and their content are of type.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param type Type to check against.
+#' @noRd
+assertType <- function(..., type, call = sys.call(-1)) {
+    dots <- dots2argNames(...)
+    reduceType <- function(arg) {
+        types <- sapply(arg, typeof)
+        if (length(types) == 1) {
+            return(types == type)
+        }
+        Reduce(`&&`, types == type)
+    }
+    wrongType <- !sapply(dots$args, reduceType)
+    if (any(wrongType)) {
+        typeError(dots$names[wrongType], type = type, call = call)
+    }
+}
+
+#' Check for Integer
+#'
+#' @description Checks if all passed vars and their content are of integers.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertInteger <- function(..., type, call = sys.call(-1)) {
+    assertNumeric(..., call = call)
+    dots <- dots2argNames(...)
+    checkInteger <- function(arg) {
+        arg <- unlist(arg)
+        all(arg == as.integer(arg))
+    }
+    notInteger <- !sapply(dots$args, checkInteger)
+    if (any(notInteger)) {
+        typeError(dots$names[notInteger], type = "integer", call = call)
+    }
+}
+
+#' Check for Numeric
+#'
+#' @description Checks if all passed vars and their content are numeric.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertNumeric <- function(..., call = sys.call(-1)) {
+    dots <- dots2argNames(...)
+    reduceNumeric <- function(arg) {
+        types <- sapply(arg, typeof)
+        Reduce(`&&`, types == "integer" |
+            types == "double" | types == "numeric")
+    }
+    notNumeric <- !sapply(dots$args, reduceNumeric)
+    if (any(notNumeric)) {
+        typeError(dots$names[notNumeric], type = "numeric", call = call)
     }
 }
 
 #' Check for Value
 #'
 #' @description Checks if all passed vars have a value other than NULL and NA.
+#' Does not check if all elements contained are NULL or NA.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
-assertValue <- function(...) {
+assertValue <- function(..., call = sys.call(-1)) {
     dots <- dots2argNames(...)
     noValue <- sapply(dots$args, is.null) | is.na(dots$args)
 
     if (any(noValue)) {
-        noValueError(dots$names[noValue], call = sys.call(-1))
+        noValueError(dots$names[noValue], call = call)
     }
 }
 
@@ -66,18 +139,18 @@ assertValue <- function(...) {
 #' @description Checks if all passed vars have only unique values.
 #' @param ... Any number of list or vectors as named elements e.g. var1 = var1.
 #' @noRd
-assertUnique <- function(...) {
+assertUnique <- function(..., call = sys.call(-1)) {
     dots <- dots2argNames(...)
     stopifnot(sapply(dots$args, is, "vector") |
         sapply(dots$args, is, "list") | sapply(dots$args, is, "glue") |
         lengths(dots$args) == 1L)
-    
+
     isUnique <- function(var) {
         length(var) == length(unique(var))
     }
     notUnique <- !sapply(dots$args, isUnique)
     if (any(notUnique)) {
-        notUniqueError(dots$names[notUnique], call = sys.call(-1))
+        notUniqueError(dots$names[notUnique], call = call)
     }
 }
 
@@ -87,11 +160,11 @@ assertUnique <- function(...) {
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @param dt data.table to check for vars.
 #' @noRd
-assertInDataTable <- function(vars, dt) {
+assertInDataTable <- function(vars, dt, call = sys.call(-1)) {
     notDefined <- !vars %in% names(dt)
 
     if (any(notDefined)) {
-        notDefinedError(vars[notDefined], call = sys.call(-1))
+        notDefinedError(vars[notDefined], call = call)
     }
 }
 
@@ -101,11 +174,11 @@ assertInDataTable <- function(vars, dt) {
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @param dt data.table to check for vars.
 #' @noRd
-assertNotInDataTable <- function(vars, dt) {
+assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
     areDefined <- vars %in% names(dt)
 
     if (any(areDefined)) {
-        alreadyDefinedError(vars[areDefined], call = sys.call(-1))
+        alreadyDefinedError(vars[areDefined], call = call)
     }
 }
 
@@ -122,7 +195,8 @@ ensureLength <- function(..., n,
                              "{ dots$names[[1]] } should be",
                              " either length 1 or { n } but",
                              " is { length(var) }!"
-                         )) {
+                         ),
+                         call = sys.call(-1)) {
     dots <- dots2argNames(...)
     stopifnot(length(dots$args) == 1)
     var <- dots$args[[1]]
@@ -133,7 +207,7 @@ ensureLength <- function(..., n,
         invisible(var)
     } else {
         lengthError(
-            names = dots$names, call = sys.call(-1),
+            names = dots$names, call = call,
             msg = do.call(glue, msg)
         )
     }
