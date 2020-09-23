@@ -32,15 +32,15 @@ collapseTransformer <- function(regex = "[*]$", ...) {
 #' @return The formatted text.
 #' @noRd
 sprintfTransformer <- function(text, envir) {
-    m <- regexpr(":.+$", text)
-    if (m != -1) {
-        format <- substring(regmatches(text, m), 2)
-        regmatches(text, m) <- ""
-        res <- eval(parse(text = text, keep.source = FALSE), envir)
-        do.call(sprintf, list(glue("%{format}"), res))
-    } else {
-        eval(parse(text = text, keep.source = FALSE), envir)
-    }
+  m <- regexpr(":.+$", text)
+  if (m != -1) {
+    format <- substring(regmatches(text, m), 2)
+    regmatches(text, m) <- ""
+    res <- eval(parse(text = text, keep.source = FALSE), envir)
+    do.call(sprintf, list(glue("%{format}"), res))
+  } else {
+    eval(parse(text = text, keep.source = FALSE), envir)
+  }
 }
 
 #' Sprintf Collapse Transformer
@@ -53,35 +53,35 @@ sprintfTransformer <- function(text, envir) {
 #' @return The formatted text.
 #' @noRd
 sprintfCTransformer <- function(sep = ", ", last = " and ", ...) {
-    function(text, envir) {
-        m <- regexpr(":.+$", text)
-        if (m != -1) {
-            format <- substring(regmatches(text, m), 2)
-            regmatches(text, m) <- ""
-            expr <- parse(text = text, keep.source = FALSE)
-            var <- all.vars(expr)
-            fmtString <- glue("%{format}")
-            varL <- ifelse(length(var) != 0, length(get(var, envir = envir)), 1)
-            res <- eval(expr, envir)
+  function(text, envir) {
+    m <- regexpr(":.+$", text)
+    if (m != -1) {
+      format <- substring(regmatches(text, m), 2)
+      regmatches(text, m) <- ""
+      expr <- parse(text = text, keep.source = FALSE)
+      var <- all.vars(expr)
+      fmtString <- glue("%{format}")
+      varL <- ifelse(length(var) != 0, length(get(var, envir = envir)), 1)
+      res <- eval(expr, envir)
 
-            if (varL > 1) {
-                do.call(
-                    sprintf,
-                    c(
-                        glue_collapse(
-                            rep(fmtString, varL),
-                            sep = sep, last = last
-                        ),
-                        as.list(res)
-                    )
-                )
-            } else {
-                do.call(sprintf, list(fmtString, res))
-            }
-        } else {
-            eval(parse(text = text, keep.source = FALSE), envir)
-        }
+      if (varL > 1) {
+        do.call(
+          sprintf,
+          c(
+            glue_collapse(
+              rep(fmtString, varL),
+              sep = sep, last = last
+            ),
+            as.list(res)
+          )
+        )
+      } else {
+        do.call(sprintf, list(fmtString, res))
+      }
+    } else {
+      eval(parse(text = text, keep.source = FALSE), envir)
     }
+  }
 }
 
 #' Collapse and glue text

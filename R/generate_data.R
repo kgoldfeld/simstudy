@@ -215,6 +215,7 @@ genFactor <- function(dtName,
   assertInDataTable(vars = varname, dt = dtName)
   assertInteger(columns2Convert = dtName[, ..varname])
 
+  ..varname <- NULL
   # Create new field name (check to see if it exists)
 
   fname <- make.names(glue("{prefix}{varname}"))
@@ -478,8 +479,11 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' @param asFactor If `asFactor == TRUE` (default), new field is returned
 #' as a factor. If `asFactor == FALSE`, new field is returned as an integer.
 #' @param idname Name of the id column in `dtName`.
+#' @param prefix A string. The names of the new variables will be a
+#' concatenation of the prefix and a sequence of integers indicating the
+#' variable number.
 #' @param rho Correlation coefficient, -1 < rho < 1. Use if corMatrix is not
-#' provided. 
+#' provided.
 #' @param corstr Correlation structure of the variance-covariance matrix defined
 #' by sigma and rho. Options include "ind" for an independence structure, "cs"
 #' for a compound symmetry structure, and "ar1" for an autoregressive structure.
@@ -509,8 +513,10 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' dx <- genData(1000, def1)
 #'
 #' probs <- c(0.40, 0.25, 0.15)
-#' dx <- genOrdCat(dx, adjVar = "z", idname = "idG", baseprobs = probs,
-#' catVar = "grp")
+#' dx <- genOrdCat(dx,
+#'   adjVar = "z", idname = "idG", baseprobs = probs,
+#'   catVar = "grp"
+#' )
 #' dx
 #'
 #' # Correlated Ordinal Categorical Data ----
@@ -547,15 +553,15 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' @concept categorical
 #' @concept correlated
 genOrdCat <- function(dtName,
-                       adjVar = NULL,
-                       baseprobs,
-                       catVar = "cat",
-                       asFactor = TRUE,
-                       idname = "id",
-                       prefix = "grp",
-                       rho = 0,
-                       corstr = "ind",
-                       corMatrix = NULL) {
+                      adjVar = NULL,
+                      baseprobs,
+                      catVar = "cat",
+                      asFactor = TRUE,
+                      idname = "id",
+                      prefix = "grp",
+                      rho = 0,
+                      corstr = "ind",
+                      corMatrix = NULL) {
 
   # "declares" to avoid global NOTE
   cat <- NULL

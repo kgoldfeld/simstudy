@@ -178,11 +178,11 @@ alreadyDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
 notPositiveDefiniteError <- function(var,
                                      call = sys.call(-1),
                                      msg = "", ...) {
-    message <- glueCollapse("{ var *} is not positive definite!", msg)
+  message <- glueCollapse("{ var *} is not positive definite!", msg)
 
-    c <- condition(
-        c("simstudy::notPositiveDefinite", "error"),
-        message, call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::notPositiveDefinite", "error"),
+    message, call, ...
+  )
+  stop(c)
 }

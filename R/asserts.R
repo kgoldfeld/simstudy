@@ -138,7 +138,9 @@ assertInteger <- function(..., type, call = sys.call(-1)) {
 #' @noRd
 assertValue <- function(..., call = sys.call(-1)) {
     dots <- dots2argNames(...)
-    noValue <- sapply(dots$args, is.null) | is.na(dots$args) | lengths(dots$args) == 0
+    noValue <- sapply(dots$args, is.null) |
+        is.na(dots$args) |
+        lengths(dots$args) == 0
 
     if (any(noValue)) {
         noValueError(dots$names[noValue], call = call)
@@ -203,25 +205,25 @@ assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
 #' @noRd
 ensureLength <- function(..., n,
                          msg = list(
-                             "{ dots$names[[1]] } should be",
-                             " either length 1 or { n } but",
-                             " is { length(var) }!"
+                           "{ dots$names[[1]] } should be",
+                           " either length 1 or { n } but",
+                           " is { length(var) }!"
                          ),
                          call = sys.call(-1)) {
-    dots <- dots2argNames(...)
-    stopifnot(length(dots$args) == 1, !missing(n))
-    var <- dots$args[[1]]
-    
-    if (length(var) == 1) {
-        invisible(rep(var, n))
-    } else if (length(var) == n) {
-        invisible(var)
-    } else {
-        lengthError(
-            names = dots$names, call = call,
-            msg = do.call(glue, msg)
-        )
-    }
+  dots <- dots2argNames(...)
+  stopifnot(length(dots$args) == 1, !missing(n))
+  var <- dots$args[[1]]
+
+  if (length(var) == 1) {
+    invisible(rep(var, n))
+  } else if (length(var) == n) {
+    invisible(var)
+  } else {
+    lengthError(
+      names = dots$names, call = call,
+      msg = do.call(glue, msg)
+    )
+  }
 }
 
 #' Ensure Input is Matrix
@@ -248,15 +250,15 @@ ensureMatrix <- function(var) {
 #' @param ... A matrix as named element e.g. var1 = var1.
 #' @noRd
 assertPositiveDefinite <- function(..., call = sys.call(-1)) {
-   stopifnot(...length() == 1)
-   dots <- dots2argNames(...)
-   matrix <- dots$args[[1]]
-   isSym <- isSymmetric(matrix)
-   eigenValues <- unlist(eigen(matrix, only.values = TRUE))
+  stopifnot(...length() == 1)
+  dots <- dots2argNames(...)
+  matrix <- dots$args[[1]]
+  isSym <- isSymmetric(matrix)
+  eigenValues <- unlist(eigen(matrix, only.values = TRUE))
 
-    if (!all(eigenValues > 0) || !isSym) {
-        notPositiveDefiniteError(dots$names, call = call)
-    }
+  if (!all(eigenValues > 0) || !isSym) {
+    notPositiveDefiniteError(dots$names, call = call)
+  }
 }
 
 #' Dots to Args & Names
@@ -265,12 +267,12 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
 #' @return A list containing the arguments and names.
 #' @noRd
 dots2argNames <- function(...) {
-    stopifnot(...length() != 0)
-    args <- list(...)
-    names <- names(args)
-    names <- names[names != ""]
+  stopifnot(...length() != 0)
+  args <- list(...)
+  names <- names(args)
+  names <- names[names != ""]
 
-    stopifnot(length(args) == length(names))
+  stopifnot(length(args) == length(names))
 
-    list(args = args, names = names)
+  list(args = args, names = names)
 }

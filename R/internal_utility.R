@@ -94,7 +94,7 @@
   } else {
     sumProbs <- sum(probs)
   }
-  #TODO check for negative values
+  # TODO check for negative values
   if (isTRUE(all.equal(mean(sumProbs), 1))) {
     return(probs)
   } else if (any(sumProbs < 1)) {
@@ -352,11 +352,11 @@
 #'
 #' @description description
 #' @param ints Integers to padd.
-#' @param width Up to which width to padd (inlcuding the integer digits). 
+#' @param width Up to which width to padd (inlcuding the integer digits).
 #' @return The padded integers as glue character vector.
 #' @noRd
-zeroPadInts <- function(ints, width =  max(nchar(ints))) {
+zeroPadInts <- function(ints, width = max(nchar(ints))) {
   stopifnot(width <= max(nchar(ints)))
-    glueFormat <- glue("[i:0{s}d]", s = width)
-    glueFmt(glueFormat, i = ints, .open = "[", .close = "]")
+  glueFormat <- glue("[i:0{s}d]", s = width)
+  glueFmt(glueFormat, i = ints, .open = "[", .close = "]")
 }
