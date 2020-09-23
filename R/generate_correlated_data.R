@@ -557,11 +557,10 @@ genCorMat <- function(nvars, cors = NULL) {
     cm <- cmLower + cmUpper
 
     diag(cm) <- 1
-
-    if (!all(eigen(cm)$values > 0)) stop("Not a positive definite matrix")
   }
 
-  return(cm)
+  assertPositiveDefinite(corMat = cm)
+  cm
 }
 
 

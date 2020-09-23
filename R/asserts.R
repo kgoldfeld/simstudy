@@ -242,13 +242,30 @@ ensureMatrix <- function(var) {
     }
 }
 
+#' Check Matrix is Positve Definite
+#'
+#' @description Checks if Matrix is positiv definite,
+#' @param ... A matrix as named element e.g. var1 = var1.
+#' @noRd
+assertPositiveDefinite <- function(..., call = sys.call(-1)) {
+   stopifnot(...length() == 1)
+   dots <- dots2argNames(...)
+   matrix <- dots$args[[1]]
+   isSym <- isSymmetric(matrix)
+   eigenValues <- unlist(eigen(matrix, only.values = TRUE))
+
+    if (!all(eigenValues > 0) || !isSym) {
+        notPositiveDefiniteError(dots$names, call = call)
+    }
+}
+
 #' Dots to Args & Names
 #'
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @return A list containing the arguments and names.
 #' @noRd
 dots2argNames <- function(...) {
-    stopifnot(...length() != 0) 
+    stopifnot(...length() != 0)
     args <- list(...)
     names <- names(args)
     names <- names[names != ""]

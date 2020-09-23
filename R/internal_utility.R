@@ -231,6 +231,7 @@
     }
   }
 
+  assertPositiveDefinite(corMatrix = corMatrix, call = sys.call(-2))
   return(corMatrix)
 }
 

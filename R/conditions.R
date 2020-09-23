@@ -89,7 +89,7 @@ typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
 #'
 #' @param names Names of the vars.
 #' @param call sys.call to pass on to the error.
-#' @param msg Additional information for the error message as 
+#' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
 noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
@@ -111,7 +111,7 @@ noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
 #'
 #' @param names Names of the vars.
 #' @param call sys.call to pass on to the error.
-#' @param msg Additional information for the error message as 
+#' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
 notUniqueError <- function(names, call = sys.call(-1), msg = "", ...) {
@@ -132,7 +132,7 @@ notUniqueError <- function(names, call = sys.call(-1), msg = "", ...) {
 #'
 #' @param names Names of the vars.
 #' @param call sys.call to pass on to the error.
-#' @param msg Additional information for the error message as 
+#' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
 notDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
@@ -152,7 +152,7 @@ notDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
 #'
 #' @param names Names of the vars.
 #' @param call sys.call to pass on to the error.
-#' @param msg Additional information for the error message as 
+#' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
 alreadyDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
@@ -163,6 +163,25 @@ alreadyDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
 
     c <- condition(
         c("simstudy::alreadyDefined", "error"),
+        message, call, ...
+    )
+    stop(c)
+}
+
+#' Not Positive Definite Error
+#'
+#' @param var Name of matrix.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+notPositiveDefiniteError <- function(var,
+                                     call = sys.call(-1),
+                                     msg = "", ...) {
+    message <- glueCollapse("{ var *} is not positive definite!", msg)
+
+    c <- condition(
+        c("simstudy::notPositiveDefinite", "error"),
         message, call, ...
     )
     stop(c)

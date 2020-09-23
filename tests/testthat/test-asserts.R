@@ -117,6 +117,16 @@ test_that("ensureMatrix works", {
   expect_is(ensureMatrix(matrix(1:25, 5)), "matrix")
 })
 
+test_that("assertPositiveDefinite works.", {
+  notPosDef <- matrix(rep(-.5, 25), 5, 5)
+  diag(notPosDef) <- 1
+  posDef <- matrix(rep(-.2, 25), 5, 5)
+  diag(posDef) <- 1
+
+  expect_silent(assertPositiveDefinite(mat = posDef))
+  expect_error(assertPositiveDefinite(mat = notPosDef), class = "simstudy::notPositiveDefinite")
+})
+
 test_that("dots2args works.", {
   expect_error(dots2argNames(), class = "simpleError")
   expect_error(dots2argNames(a = 3, 2), class = "simpleError")
