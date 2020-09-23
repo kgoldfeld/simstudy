@@ -40,6 +40,10 @@ as a factor. If \code{asFactor == FALSE}, new field is returned as an integer.}
 
 \item{idname}{Name of the id column in \code{dtName}.}
 
+\item{prefix}{A string. The names of the new variables will be a
+concatenation of the prefix and a sequence of integers indicating the
+variable number.}
+
 \item{rho}{Correlation coefficient, -1 < rho < 1. Use if corMatrix is not
 provided.}
 
@@ -80,8 +84,10 @@ set.seed(20)
 dx <- genData(1000, def1)
 
 probs <- c(0.40, 0.25, 0.15)
-dx <- genOrdCat(dx, adjVar = "z", idname = "idG", baseprobs = probs,
-catVar = "grp")
+dx <- genOrdCat(dx,
+  adjVar = "z", idname = "idG", baseprobs = probs,
+  catVar = "grp"
+)
 dx
 
 # Correlated Ordinal Categorical Data ----
