@@ -1,8 +1,8 @@
 ---
-title: "simstudy: ordinal categorical data"
+title: "Ordinal Categorical Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{simstudy: ordinal categorical data}
+  %\VignetteIndexEntry{Ordinal Categorical Data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

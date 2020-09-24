@@ -1,8 +1,8 @@
 ---
-title: "simstudy: correlated data"
+title: "Correlated Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{simstudy: correlated data}
+  %\VignetteIndexEntry{Correlated Data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

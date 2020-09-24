@@ -44,7 +44,7 @@ devtools::install_github("kgoldfeld/simstudy")
 ```
 ## Example
 
-Here is some simple sample code, much more in the vignette:
+Here is some simple sample code, much more in the vignettes:
 
 ```{r, echo = TRUE}
 library(simstudy)

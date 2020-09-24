@@ -1,8 +1,8 @@
 ---
-title: "simstudy: treatment and exposure"
+title: "Treatment and Exposure"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{simstudy: treatment and exposure}
+  %\VignetteIndexEntry{Treatment and Exposure}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

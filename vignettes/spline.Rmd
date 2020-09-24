@@ -1,8 +1,8 @@
 ---
-title: "simstudy: spline data"
+title: "Spline Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{simstudy: spline data}
+  %\VignetteIndexEntry{Spline Data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

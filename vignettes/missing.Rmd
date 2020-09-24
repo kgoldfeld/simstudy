@@ -1,8 +1,8 @@
 ---
-title: "simstudy: missing data"
+title: "Missing Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{simstudy: missing data}
+  %\VignetteIndexEntry{Missing Data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

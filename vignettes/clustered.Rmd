@@ -1,8 +1,8 @@
 ---
-title: "simstudy: clustered data"
+title: "Clustered Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{simstudy: clustered data}
+  %\VignetteIndexEntry{Clustered Data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
