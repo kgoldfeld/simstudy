@@ -2,21 +2,19 @@
 % Please edit documentation in R/simstudy-package.R
 \name{distributions}
 \alias{distributions}
-\alias{normal,}
-\alias{poisson,}
-\alias{noZeroPoisson,}
-\alias{binary,}
-\alias{binomial,}
-\alias{uniform,}
-\alias{categorical,}
-\alias{gamma,}
-\alias{beta,}
-\alias{negBinomial,}
-\alias{nonrandom,}
-\alias{exponential,}
-\alias{mixture,}
-\alias{pseudorandom,}
-\alias{pseudorandomSeq}
+\alias{normal}
+\alias{poisson}
+\alias{noZeroPoisson}
+\alias{binary}
+\alias{binomial}
+\alias{uniform}
+\alias{categorical}
+\alias{gamma}
+\alias{beta}
+\alias{negBinomia}
+\alias{nonrandom}
+\alias{exponential}
+\alias{mixture}
 \title{Distributions for Data Definitions}
 \arguments{
 \item{formula}{Desired mean as a Number or an R expression for mean as a

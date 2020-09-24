@@ -7,12 +7,14 @@
 genFactor(dtName, varname, labels = NULL, prefix = "f", replace = FALSE)
 }
 \arguments{
-\item{dtName}{Data table with column}
+\item{dtName}{Data table with columns.}
 
-\item{varname}{Name of field that is to be converted}
+\item{varname}{Name of field(s) to be converted.}
 
 \item{labels}{Factor level labels. If not provided, the generated factor
-levels will be used as the labels.}
+levels will be used as the labels. Can be a vector (if only one new factor or
+all factors have the same labeks) or a list of character vectors of the same
+length as varname.}
 
 \item{prefix}{By default, the new field name will be a concatenation of "f"
 and the old field name. A prefix string can be provided.}

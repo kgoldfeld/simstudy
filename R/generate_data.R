@@ -170,10 +170,12 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 
 #' Create factor variable from an existing (non-double) variable
 #'
-#' @param dtName Data table with column
-#' @param varname Name of field that is to be converted
+#' @param dtName Data table with columns.
+#' @param varname Name of field(s) to be converted.
 #' @param labels Factor level labels. If not provided, the generated factor
-#' levels will be used as the labels.
+#' levels will be used as the labels. Can be a vector (if only one new factor or
+#' all factors have the same labeks) or a list of character vectors of the same
+#' length as varname.
 #' @param prefix By default, the new field name will be a concatenation of "f"
 #' and the old field name. A prefix string can be provided.
 #' @param replace If replace is set to TRUE (defaults to FALSE) the field
@@ -200,66 +202,47 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 #' dx
 #' @export
 #' @concept generate_data
-genFactor <- function(dtName, varname, labels = NULL, prefix = "f", replace = FALSE) {
+genFactor <- function(dtName,
+                      varname,
+                      labels = NULL,
+                      prefix = "f",
+                      replace = FALSE) {
+  assertNotMissing(dtName = missing(dtName), varname = missing(varname))
+  assertValue(dtName = dtName, varname = varname)
+  assertClass(dtName = dtName, class = "data.table")
+  assertType(varname = varname, type = "character")
+  assertUnique(varname = varname)
+  assertInDataTable(vars = varname, dt = dtName)
+  assertInteger(columns2Convert = dtName[, ..varname])
 
-  # Initial data checks
-
-  if (missing(dtName)) stop("argument 'dtName' is missing", call. = FALSE)
-  if (missing(varname)) stop("argument 'varname' is missing", call. = FALSE)
-
-  # Check if data table exists
-
-  if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
-    stop(paste("data table", deparse(substitute(dtName)), "not found"),
-      call. = FALSE
-    )
-  }
-
-  # Check if field exists, extract, and verify it is not double
-
-  if (!(varname %in% names(dtName))) {
-    stop(paste(
-      "variable", varname, "not found in data table",
-      deparse(substitute(dtName))
-    ),
-    call. = FALSE
-    )
-  }
-
-  xcol <- dtName[, get(varname)]
-
-  if (is.double(xcol)) {
-    if (!all(xcol == as.integer(xcol))) {
-      stop(paste("variable", varname, "is of type 'double'"),
-        call. = FALSE
-      )
-    }
-
-    xcol <- as.integer(xcol)
-  }
-
+  ..varname <- NULL
   # Create new field name (check to see if it exists)
 
-  fname <- make.names(paste0(prefix, varname))
-
-  if (fname %in% names(dtName)) {
-    stop(paste(
-      "variable", fname,
-      "already exists in data table", deparse(substitute(dtName))
-    ),
-    call. = FALSE
-    )
-  }
+  fname <- make.names(glue("{prefix}{varname}"))
+  assertNotInDataTable(vars = fname, dt = dtName)
 
   # Create new column as factor
+  if (!is.null(labels)) {
+    assertType(labels = labels, type = "character")
 
-  if (is.null(labels)) {
-    xfac <- factor(xcol)
+    if (is.list(labels)) {
+      assertLength(labels = labels, length = length(varname))
+
+      for (i in seq_len(length(varname))) {
+        dtName[[fname[i]]] <- factor(dtName[[varname[i]]],
+          labels = labels[[i]]
+        )
+      }
+    } else {
+      dtName[, (fname) := lapply(.SD, factor, labels = labels),
+        .SDcols = varname
+      ]
+    }
   } else {
-    xfac <- factor(xcol, labels = labels)
+    dtName[, (fname) := lapply(.SD, factor),
+      .SDcols = varname
+    ]
   }
-
-  dtName[, (fname) := xfac]
 
   if (replace == TRUE) dtName[, (varname) := NULL]
 
@@ -477,102 +460,200 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 
 #' @title Generate ordinal categorical data
 #' @description Ordinal categorical data is added to an existing data set.
+#' Correlations can be added via correlation matrix or `rho` and `corstr`.
 #' @param dtName Name of complete data set
 #' @param adjVar Adjustment variable  name in dtName - determines
 #' logistic shift. This is specified assuming a cumulative logit
 #' link.
-#' @param baseprobs Baseline probability expressed as a vector of
-#' probabilities. The values must sum to <= 1. If sum(baseprobs) < 1,
-#' an additional category is added with probability 1 - sum(baseprobs).
-#' @param catVar Name of the new categorical field. Defaults to "cat"
-#' @param asFactor If asFactor == TRUE (default), new field is returned
-#' as a factor. If asFactor == FALSE, new field is returned as an integer.
-#' @return Original data.table with added categorical field
+#' @param baseprobs Baseline probability expressed as a vector or matrix of
+#' probabilities. The values (per row) must sum to <= 1. If `rowSums(baseprobs)
+#' < 1`, an additional category is added with probability `1 -
+#' rowSums(baseprobs)`. The number of rows represents the number of new
+#' categorical variables. The number of columns represents the number of
+#' possible responses - if an particular category has fewer possible responses,
+#' assign zero probability to non-relevant columns.
+#' @param catVar Name of the new categorical field. Defaults to "cat". Can be a
+#' character vector with a name for each new variable defined via `baseprobs`.
+#' Will be overriden by `prefix` if more than one variable is defined and
+#' `length(catVar) == 1`.
+#' @param asFactor If `asFactor == TRUE` (default), new field is returned
+#' as a factor. If `asFactor == FALSE`, new field is returned as an integer.
+#' @param idname Name of the id column in `dtName`.
+#' @param prefix A string. The names of the new variables will be a
+#' concatenation of the prefix and a sequence of integers indicating the
+#' variable number.
+#' @param rho Correlation coefficient, -1 < rho < 1. Use if corMatrix is not
+#' provided.
+#' @param corstr Correlation structure of the variance-covariance matrix defined
+#' by sigma and rho. Options include "ind" for an independence structure, "cs"
+#' for a compound symmetry structure, and "ar1" for an autoregressive structure.
+#' @param corMatrix Correlation matrix can be entered directly. It must be
+#' symmetrical and positive definite. It is not a required field; if a matrix is
+#' not provided, then a structure and correlation coefficient rho must be
+#' specified. (The matrix created via `rho` and `corstr` must also be positive
+#' definite.)
+#' @return Original data.table with added categorical field.
 #' @examples
-#' #### Set definitions
+#' # Ordinal Categorical Data ----
 #'
-#' def1 <- defData(varname = "male", formula = 0.45, dist = "binary", id = "idG")
-#' def1 <- defData(def1, varname = "z", formula = "1.2*male", dist = "nonrandom")
+#' def1 <- defData(
+#'     varname = "male",
+#'     formula = 0.45, dist = "binary", id = "idG"
+#' )
+#' def1 <- defData(def1,
+#'     varname = "z",
+#'     formula = "1.2*male", dist = "nonrandom"
+#' )
+#' def1
 #'
-#' #### Generate data
+#' ## Generate data
 #'
 #' set.seed(20)
 #'
 #' dx <- genData(1000, def1)
 #'
 #' probs <- c(0.40, 0.25, 0.15)
-#' dx <- genOrdCat(dx, adjVar = "z", probs, catVar = "grp")
+#' dx <- genOrdCat(dx,
+#'   adjVar = "z", idname = "idG", baseprobs = probs,
+#'   catVar = "grp"
+#' )
+#' dx
+#'
+#' # Correlated Ordinal Categorical Data ----
+#'
+#' baseprobs <- matrix(c(
+#'     0.2, 0.1, 0.1, 0.6,
+#'     0.7, 0.2, 0.1, 0,
+#'     0.5, 0.2, 0.3, 0,
+#'     0.4, 0.2, 0.4, 0,
+#'     0.6, 0.2, 0.2, 0
+#' ),
+#' nrow = 5, byrow = TRUE
+#' )
+#'
+#' set.seed(333)
+#' dT <- genData(1000)
+#'
+#' dX <- genOrdCat(dT,
+#'     adjVar = NULL, baseprobs = baseprobs,
+#'     prefix = "q", rho = .125, corstr = "cs", asFactor = FALSE
+#' )
+#' dX
+#'
+#' dM <- data.table::melt(dX, id.vars = "id")
+#' dProp <- dM[, prop.table(table(value)), by = variable]
+#' dProp[, response := c(1:4, 1:3, 1:3, 1:3, 1:3)]
+#'
+#' data.table::dcast(dProp, variable ~ response,
+#'     value.var = "V1", fill = 0
+#' )
 #' @export
+#' @md
 #' @concept generate_data
 #' @concept categorical
-genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE) {
+#' @concept correlated
+genOrdCat <- function(dtName,
+                      adjVar = NULL,
+                      baseprobs,
+                      catVar = "cat",
+                      asFactor = TRUE,
+                      idname = "id",
+                      prefix = "grp",
+                      rho = 0,
+                      corstr = "ind",
+                      corMatrix = NULL) {
 
   # "declares" to avoid global NOTE
   cat <- NULL
+  logisZ <- NULL
+  period <- NULL
 
-  # Check arguments
-
-  if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
-    stop("Data table does not exist.")
-  }
-
-  if (!adjVar %in% names(dtName)) {
-    stop(paste0("Variable ", adjVar, " not in data.table"))
-  }
-
-  if (!is.character(catVar)) {
-    stop("catVar must be a string")
-  }
-
-  # Check probability vector
-
-  if (is.null(baseprobs)) {
-    stop("Proability vector is empty")
-  }
-
-  if (sum(baseprobs) > 1 | sum(baseprobs) <= 0) {
-    stop("Probabilities are not properly specified")
-  }
-
-  if (sum(baseprobs) < 1) {
-    baseprobs <- c(baseprobs, 1 - sum(baseprobs))
-  }
-
-  # checking complete
-
-  dt <- copy(dtName)
-
-  cprop <- cumsum(baseprobs)
-  quant <- stats::qlogis(cprop)
-
-  matlp <- matrix(rep(quant, nrow(dt)),
-    ncol = length(cprop),
-    byrow = TRUE
+  assertNotMissing(dtName = missing(dtName), baseprobs = missing(baseprobs))
+  assertValue(
+    dtName = dtName,
+    baseprobs = baseprobs,
+    catVar = catVar,
+    asFactor = asFactor,
+    idname = idname,
+    prefix = prefix,
+    rho = rho,
+    corstr = corstr
   )
+  assertClass(dtName = dtName, class = "data.table")
+  assertClass(rho = rho, class = "numeric")
+  assertClass(
+    catVar = catVar,
+    prefix = prefix,
+    corstr = corstr,
+    idname = idname,
+    class = "character"
+  )
+  assertInDataTable(c(adjVar, idname), dtName)
+
+  baseprobs <- ensureMatrix(baseprobs)
+  baseprobs <- .adjustProbs(baseprobs)
+
+
+  nCats <- nrow(baseprobs)
+  ensureLength(catVar = catVar, n = nCats)
 
   if (!is.null(adjVar)) {
-    z <- dt[, adjVar, with = FALSE][[1]]
-    matlp <- matlp - z
+    adjVar <- ensureLength(
+      adjVar = adjVar,
+      n = seq_len(nCats), msg = list(
+        "Number of categories implied",
+        " by baseprobs and adjVar do not match. ",
+        "{ dots$names[[1]] } should be",
+        " either length 1 or { n } but",
+        " is { length(var) }!"
+      )
+    )
   }
 
+  if (nCats > 1 && length(catVar) != nCats) {
+    catVar <- glue("{prefix}{i}", i = zeroPadInts(1:nCats))
+  }
 
-  matcump <- 1 / (1 + exp(-matlp))
-  matcump <- cbind(0, matcump)
+  n <- nrow(dtName)
+  zs <- .genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
+  zs[, logisZ := stats::qlogis(p = zs$Unew)]
+  cprop <- t(apply(baseprobs, 1, cumsum))
+  quant <- t(apply(cprop, 1, stats::qlogis))
 
-  p <- t(t(matcump)[-1, ] - t(matcump)[-(length(baseprobs) + 1), ])
+  mycat <- list()
 
-  dt[, cat := matMultinom(p)]
+  for (i in 1:nCats) {
+    iLogisZ <- zs[period == i - 1, logisZ]
+    matlp <- matrix(rep(quant[i, ], n),
+      ncol = ncol(cprop),
+      byrow = TRUE
+    )
+    if (!is.null(adjVar)) {
+      z <- dtName[, adjVar[i], with = FALSE][[1]]
+      matlp <- matlp - z
+    }
+    locateGrp <- (iLogisZ > cbind(-Inf, matlp))
+    assignGrp <- apply(locateGrp, 1, sum)
+    mycat[[i]] <- data.table(
+      id = dtName[, idname, with = FALSE][[1]],
+      var = catVar[[i]],
+      cat = assignGrp
+    )
+  }
+  dcat <- data.table::rbindlist(mycat)
+  cats <- data.table::dcast(dcat, id ~ var, value.var = "cat")
+
+  setnames(cats, "id", idname)
+  setkeyv(cats, idname)
+  dtName <- dtName[cats]
 
   if (asFactor) {
-    dt <- genFactor(dt, "cat", replace = TRUE)
-    data.table::setnames(dt, "fcat", catVar)
-  } else {
-    data.table::setnames(dt, "cat", catVar)
+    dtName <- genFactor(dtName, catVar, replace = TRUE)
+    data.table::setnames(dtName, glue("f{catVar}"), catVar)
   }
 
-  return(dt[])
+  dtName[]
 }
-
 
 #' Generate spline curves
 #'
