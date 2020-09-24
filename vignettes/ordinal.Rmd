@@ -16,7 +16,7 @@ library(gridExtra)
 library(survival)
 library(gee)
 library(data.table)
-
+odds <- function (p)  p/(1 - p) # TODO temporary remove when added to package
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
 cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
