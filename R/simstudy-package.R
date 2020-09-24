@@ -1,5 +1,5 @@
 #' @keywords internal
-#' @importFrom glue glue
+#' @import glue
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
@@ -56,8 +56,18 @@ NULL
 #' def
 #' genData(5, def)
 #' @name distributions
-#' @aliases normal, poisson, noZeroPoisson, binary, binomial, uniform,
-#'  categorical, gamma, beta, negBinomial, nonrandom, exponential, mixture,
-#'  pseudorandom, pseudorandomSeq
+#' @aliases normal poisson noZeroPoisson binary binomial uniform
+#'  categorical gamma beta negBinomia nonrandom exponential mixture
 #' @md
+NULL
+
+#' Deprecated functions in simstudy
+#'
+#' These functions are provided for compatibility with older versions
+#' of simstudy only, and will be defunct in the future.
+#'
+#' * [genCorOrdCat]: This function is deprecated, and will
+#'  be removed in the future. Use [genOrdCat] instead.
+#' @md
+#' @name simstudy-deprecated
 NULL

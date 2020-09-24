@@ -1,5 +1,11 @@
-# simstudy 0.1.16.9000
-
+# simstudy 0.2.0
+* Moved genCorOrdCat's functionality into genOrdCat. genCorOrdCat is now
+  deprecated.
+* catProbs now warns if an additional category is created.
+* Introduced a new system for formula definitions and completely reworked the
+  underlying code. See vignette "NAME".
+* Added new vignettes.
+* Created documentation page: https://kgoldfeld.github.io/simstudy/
 * Fixed bug in trtAssign related new ratio argument.
 
 # simstudy 0.1.16

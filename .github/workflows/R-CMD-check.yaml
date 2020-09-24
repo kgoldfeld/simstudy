@@ -35,6 +35,10 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
+      - name: Increase linux stacksize
+        if: runner.os == 'Linux'
+        run: ulimit -s 7972228
+
       - name: Query dependencies
         run: |
           install.packages('remotes')

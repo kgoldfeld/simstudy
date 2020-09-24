@@ -80,6 +80,46 @@
   }
 }
 
+#' Adjust probabilities so they sum to 1
+#'
+#' @description The probabilities will be normalized for sum(probs) > 1 or an
+#' addtional probability will be added if sum(probs) < 1. For matricies the
+#' probabilities will be assumed to be row wise!
+#' @param probs numeric vector or matrix of probabilities
+#' @return  The adjusted probabilities.
+#' @noRd
+.adjustProbs <- function(probs) {
+  if (is.matrix(probs)) {
+    sumProbs <- rowSums(probs)
+  } else {
+    sumProbs <- sum(probs)
+  }
+  # TODO check for negative values
+  if (isTRUE(all.equal(mean(sumProbs), 1))) {
+    return(probs)
+  } else if (any(sumProbs < 1)) {
+    remainder <- 1 - sumProbs
+
+    if (is.matrix(probs)) {
+      warning(glue(
+        "Probabilities do not sum to 1. ",
+        "Adding category to all rows!"
+      ), call. = FALSE)
+
+      return(cbind(probs, remainder))
+    } else {
+      warning(glue(
+        "Probabilities do not sum to 1. ",
+        "Adding category with p = { remainder }"
+      ), call. = FALSE)
+      return(c(probs, remainder))
+    }
+  } else if (any(sumProbs > 1)) {
+    warning("Sum of probabilities > 1. Probabilities will be normalized.")
+    return(probs / sumProbs)
+  }
+}
+
 #' Get Distributions
 #'
 #' @return A character vector containing the names of all valid distributions.
@@ -191,6 +231,7 @@
     }
   }
 
+  assertPositiveDefinite(corMatrix = corMatrix, call = sys.call(-2))
   return(corMatrix)
 }
 
@@ -289,6 +330,14 @@
   methods::is(tryObject, "try-error")
 }
 
+#' Check for value
+#'
+#' @param x object to test
+#' @return Boolean
+#' @noRd
+.hasValue <- function(x) {
+  !missing(x) && !is.null(x)
+}
 
 #' Convert log odds to probability
 #'
@@ -297,4 +346,17 @@
 #' @noRd
 .log2Prob <- function(logOdds) {
   exp(logOdds) / (1 + exp(logOdds))
+}
+
+#' Zero Padding Integers
+#'
+#' @description description
+#' @param ints Integers to padd.
+#' @param width Up to which width to padd (inlcuding the integer digits).
+#' @return The padded integers as glue character vector.
+#' @noRd
+zeroPadInts <- function(ints, width = max(nchar(ints))) {
+  stopifnot(width <= max(nchar(ints)))
+  glueFormat <- glue("[i:0{s}d]", s = width)
+  glueFmt(glueFormat, i = ints, .open = "[", .close = "]")
 }

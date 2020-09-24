@@ -52,6 +52,25 @@ test_that("evalWith output is Matrix.", {
   expect_is(.evalWith("..ev * 2", ext), "matrix")
 })
 
+# .adjustProbs ----
+test_that("probabilities (matrix) are adjusted as documented.", {
+  skip_on_cran()
+  forall(gen.and_then(gen.c(gen.element(2:6), of = 2), function(n) { 
+    gen.with(gen.list(gen_n_norm_Probs(n[2]), of = n[1]), function(ps) {
+      do.call("rbind", ps)
+    })
+  }), function(p) {
+    over <- p / .9
+    under <- p / 1.1
+    expect_warning(.adjustProbs(over), "will be normalized")
+    expect_warning(.adjustProbs(under), "Adding category")
+    expect_equal(mean(rowSums(.adjustProbs(under))), 1)
+    expect_equal(mean(rowSums(.adjustProbs(over))), 1)
+    expect_equal(dim(.adjustProbs(over)), dim(over))
+    expect_equal(dim(.adjustProbs(under)), dim(under) + c(0, 1))
+  })
+})
+
 # .getDists ----
 test_that("number of Dists is up to date.", {
   expect_length(.getDists(), 14)
@@ -81,9 +100,6 @@ test_that("var names are validated correctly.", {
   expect_false(all(.isValidVarName(validNames, unique = TRUE)))
 })
 
-
-
-
 # .isError ----
 test_that("errors are detected correctly.", {
   err <- try(nonVar + 4, silent = TRUE)
@@ -93,6 +109,17 @@ test_that("errors are detected correctly.", {
   expect_false(.isError(noErr))
   expect_false(.isError(5))
   expect_false(.isError("ab"))
+})
+
+# .hasValue ----
+test_that("hasValue works.", {
+  expect_true(.hasValue("value"))
+  expect_true((function(x) .hasValue(x))(5))
+  expect_true((function(x) .hasValue(x))(NA))
+  expect_false(.hasValue())
+  expect_false((function(x) .hasValue(x))())
+  expect_false((function(x) .hasValue(x))(NULL))
+  expect_false(.hasValue(NULL))
 })
 
 # .log2Prob ----
