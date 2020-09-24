@@ -37,6 +37,8 @@ Imports:
 Suggests: 
     covr,
     dplyr,
+    formatR,
+    gee,
     ggplot2,
     grid,
     gridExtra,
@@ -45,6 +47,7 @@ Suggests:
     magrittr,
     Matrix,
     mgcv,
+    ordinal,
     pracma,
     rmarkdown,
     splines,
