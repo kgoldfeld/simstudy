@@ -217,9 +217,9 @@ The log of the cumulative odds ratios for each of the four groups is
 logOdds.expos - logOdds.unexp
 ```
 
-### Correlated multivariate ordinal data (available on github version only)
+### Correlated multivariate ordinal data
 
-Function `genCorOrdCat` generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale, and is specified with a value of `rho` and a correlation structure (*independence*, *compound symmetry*, or *AR-1*). Alternatively, a correlation matrix can be specified.
+Function `genOrdCat` generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale, and is specified with a value of `rho` and a correlation structure (*independence*, *compound symmetry*, or *AR-1*). Alternatively, a correlation matrix can be specified.
 
 In this example, there are 5 questions, each of which has three possible responses: "none", "some", "a lot". The probabilities of response are specified in a $5 \times 3$ matrix, and the rows sum to 1:
 
@@ -237,8 +237,8 @@ baseprobs <- matrix(c(0.2, 0.1, 0.7,
 set.seed(333)                     
 dT <- genData(10000)
 
-dX <- genCorOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
-                   prefix = "q", rho = 0.15, corstr = "cs")
+dX <- genOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+                   prefix = "q", rho = 0.15, corstr = "cs", asFactor = FALSE)
 ```
 
 The observed correlation of the items is slightly less than the specified correlations as expected:
@@ -264,8 +264,8 @@ baseprobs
 In the next example, the structure of the correlation is changed to AR-1, so the correlation between questions closer to each other is higher than for questions farther apart. But the probability distributions are unaffected:
 
 ```{r}
-dX <- genCorOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
-                   prefix = "q", rho = 0.40, corstr = "ar1")
+dX <- genOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+                   prefix = "q", rho = 0.40, corstr = "ar1", asFactor = FALSE)
 
 # correlation
 round(dX[, cor(cbind(q1, q2, q3, q4, q5))], 2)
