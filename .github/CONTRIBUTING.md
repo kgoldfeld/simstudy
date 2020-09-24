@@ -2,7 +2,7 @@
 
 This outlines how to propose a change to simstudy. 
 For more detailed info about contributing to this package please see the well written
-[** tidyverse development contributing guide**](https://rstd.io/tidy-contrib).
+[**tidyverse development contributing guide**](https://rstd.io/tidy-contrib).
 The only difference is, that simstudy is not developed in bursts and we should
 be able to answer your issues relatively quickly! Please do keep in mind that this
 is a volunteer project though.
