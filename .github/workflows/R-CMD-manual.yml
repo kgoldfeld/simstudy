@@ -44,10 +44,6 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
-      - name: Check linux stacksize
-        if: runner.os == 'Linux'
-        run: ulimit -s 
-
       - name: Increase linux stacksize
         if: runner.os == 'Linux'
         run: ulimit -s 10000000

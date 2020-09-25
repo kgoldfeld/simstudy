@@ -22,6 +22,8 @@ test_that("genOrdCat throws errors.", {
 library(magrittr)
 library(dplyr)
 test_that("ordinal categorical data is generated correctly.", {
+  oldSeed <- .Random.seed
+  set.seed(230920)
   n <- 10000
   probs_short <- c(.2, .4, .2)
   probs <- c(.2, .2, .6)
@@ -48,10 +50,11 @@ test_that("ordinal categorical data is generated correctly.", {
     probs,
     tolerance = 0.01
   )
+  set.seed(oldSeed)
 })
 
 test_that("deprecation warning shows up.", {
-  expect_warning(genCorOrdCat(genData(5),baseprobs = c(.2,.3,.5), rho = 0, corstr = "cs"), "deprecated")
+  expect_warning(genCorOrdCat(genData(5), baseprobs = c(.2, .3, .5), rho = 0, corstr = "cs"), "deprecated")
 })
 
 test_that("correlated ordinal categorical data is generated correctly.", {
