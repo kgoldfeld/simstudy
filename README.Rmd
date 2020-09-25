@@ -1,5 +1,4 @@
 ---
-title: "simstudy"
 output: github_document
 ---
 
