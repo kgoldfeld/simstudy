@@ -1,6 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
+.DS_Store
 Working-code/
 Demo/
 simstudy.Rproj
