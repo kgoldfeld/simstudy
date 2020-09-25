@@ -1,0 +1,237 @@
+---
+title: "Missing Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Missing Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(simstudy)
+library(ggplot2)
+library(scales)
+library(grid)
+library(gridExtra)
+library(survival)
+library(gee)
+library(data.table)
+
+ggmissing <- function(dtPlot,varSelect=NULL,varLevel=NULL, idvar = "id",
+                      periodvar = "period", missvar,
+                      pcolor="#738e75", title = NULL) {
+
+  dtP <- copy(dtPlot)
+
+  if (! is.null(varSelect)) dtP <- dtP[eval(parse(text=varSelect)) == varLevel]
+
+  xp <- ggplot(data=dtP, aes(y = factor(eval(parse(text=idvar))),
+                             x = eval(parse(text=periodvar)))) +
+    geom_tile(aes(fill=factor(eval(parse(text=missvar)))),
+                  color="white") +
+    ggtheme()+
+    theme(axis.text=element_blank(),
+          axis.ticks=element_blank(),
+          axis.title=element_blank(),
+          legend.position="none",
+          plot.title=element_text(size=8)
+    ) +
+    scale_fill_manual(values=c("grey80",pcolor))
+
+  if (is.null(title)) {
+    return(xp)
+  } else {
+    return(xp + ggtitle(title))
+  }
+}
+plotcolors <- c("#B84226", "#1B8445", "#1C5974")
+
+cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
+                "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+ggtheme <- function(panelback = "white") {
+  
+  ggplot2::theme(
+    panel.background = element_rect(fill = panelback),
+    panel.grid = element_blank(),
+    axis.ticks =  element_line(colour = "black"),
+    panel.spacing =unit(0.25, "lines"),  # requires package grid
+    panel.border = element_rect(fill = NA, colour="gray90"), 
+    plot.title = element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size = 8)
+  )  
+  
+}
+```
+
+After generating a complete data set, it is possible to generate missing data. `defMiss` defines the parameters of missingness. `genMiss` generates a missing data matrix of indicators for each field. Indicators are set to 1 if the data are missing for a subject, 0 otherwise. `genObs` creates a data set that reflects what would have been observed had data been missing; this is a replicate of the original data set with "NAs" replacing values where missing data has been generated.
+
+By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) *missing completely at random* (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) *missing at random* (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) *not missing at random* (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with measure.
+
+These possibilities are illustrated with an example. A data set of 1000 observations with three "outcome" measures" `x1`, `x2`, and `x3` is defined. This data set also includes two independent predictors, `m` and `u` that largely determine the value of each outcome (subject to random noise).
+
+```{r, tidy = TRUE}
+def1 <- defData(varname = "m", dist = "binary", formula = .5)
+def1 <- defData(def1, "u", dist = "binary", formula = .5)
+def1 <- defData(def1, "x1", dist="normal", formula = "20*m + 20*u", variance = 2)
+def1 <- defData(def1, "x2", dist="normal", formula = "20*m + 20*u", variance = 2)
+def1 <- defData(def1, "x3", dist="normal", formula = "20*m + 20*u", variance = 2)
+
+dtAct <- genData(1000, def1)
+```
+
+In this example, the missing data mechanism is different for each outcome. As defined below, missingness for `x1` is MCAR, since the probability of missing is fixed. Missingness for `x2` is MAR, since missingness is a function of `m`, a measured predictor of `x2`. And missingness for `x3` is NMAR, since the probability of missing is dependent on `u`, an unmeasured predictor of `x3`:
+
+```{r, tidy = TRUE}
+defM <- defMiss(varname = "x1", formula = .15, logit.link = FALSE)
+defM <- defMiss(defM, varname = "x2", formula = ".05 + m * 0.25", logit.link = FALSE)
+defM <- defMiss(defM, varname = "x3", formula = ".05 + u * 0.25", logit.link = FALSE)
+defM <- defMiss(defM, varname = "u", formula = 1, logit.link = FALSE) # not observed
+
+missMat <- genMiss(dtAct, defM, idvars = "id")
+dtObs <- genObs(dtAct, missMat, idvars = "id")
+```
+
+```{r, tidy = TRUE}
+missMat
+dtObs
+```
+
+The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the "true" data set without missing data as a comparison for the "observed" data set. Since `x1` is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for `x2` and `x3` are biased, as the difference between observed and actual is not close to 0:
+
+```{r tidy=TRUE}
+# Two functions to calculate means and compare them
+
+rmean <- function(var, digits = 1) {
+  round(mean(var, na.rm=TRUE), digits)
+}
+
+showDif <- function(dt1, dt2, rowName = c("Actual", "Observed", "Difference")) {
+  dt <- data.frame(rbind(dt1, dt2, dt1 - dt2))
+  rownames(dt) <- rowName
+  return(dt)
+}
+
+# data.table functionality to estimate means for each data set
+
+meanAct <- dtAct[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3))]
+meanObs <- dtObs[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3))]
+
+showDif(meanAct, meanObs)
+```
+
+After adjusting for the measured covariate `m`, the bias for the estimate of the mean of `x2` is mitigated, but not for `x3`, since `u` is not observed:
+
+```{r tidy=TRUE}
+meanActm <- dtAct[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3)), keyby = m]
+meanObsm <- dtObs[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3)), keyby = m]
+```
+```{r, tidy = TRUE}
+# compare observed and actual when m = 0
+
+showDif(meanActm[m==0, .(x1, x2, x3)], meanObsm[m==0, .(x1, x2, x3)])
+
+# compare observed and actual when m = 1
+
+showDif(meanActm[m==1, .(x1, x2, x3)], meanObsm[m==1, .(x1, x2, x3)])
+```
+
+
+## Longitudinal data with missingness
+
+Missingness can occur, of course, in the context of longitudinal data. `missDef` provides two additional arguments that are relevant for these types of data: `baseline` and `monotonic`. In the case of variables that are measured at baseline only, a missing value would be reflected throughout the course of the study. In the case where a variable is time-dependent (i.e it is measured at each time point), it is possible to declare missingness to be  *monotonic*. This means that if a value for this field is missing at time `t`, then values will also be missing at all times `T > t` as well. The call to `genMiss` must set `repeated` to TRUE.
+
+The following two examples describe an outcome variable `y` that is measured over time, whose value is a function of time and an observed exposure: 
+
+```{r, tidy = TRUE}
+
+# use baseline definitions from previous example
+
+dtAct <- genData(120, def1)
+dtAct <- trtObserve(dtAct, formulas = .5, logit.link = FALSE, grpName = "rx")
+
+# add longitudinal data
+
+defLong <- defDataAdd(varname = "y", dist = "normal", formula = "10 + period*2 + 2 * rx", variance = 2)
+
+dtTime <- addPeriods(dtAct, nPeriods = 4)
+dtTime <- addColumns(defLong, dtTime)
+```
+
+In the first case, missingness is not monotonic; a subject might miss a measurement but returns for subsequent measurements:
+
+```{r, tidy = TRUE}
+
+# missingness for y is not monotonic
+
+defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
+defMlong <- defMiss(defMlong,varname = "y", formula = "-1.5 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = FALSE)
+
+missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+```
+
+Here is a conceptual plot that shows the pattern of missingness. Each row represents an individual, and each box represents a time period. A box that is colored reflects missing data; a box colored grey reflects observed. The missingness pattern is shown for two variables `x1` and `y`:
+
+```{r tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 6}
+xp10 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="x1", pcolor="#1C5974",
+                 title = "x1: baseline (control)")
+
+xp11 <- ggmissing(missMatLong, varSelect="rx", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="x1", pcolor="#B84226",
+                 title = "x1: baseline (exposed)")
+
+xp20 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="y", pcolor="#1C5974",
+                 title = "y: not monotonic (control)")
+
+xp21 <- ggmissing(missMatLong, varSelect="rx", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="y", pcolor="#B84226",
+                 title = "y: not monotonic (exposed)")
+
+grid.arrange(xp10, xp20, xp11, xp21,
+             nrow = 2,
+             bottom = textGrob("Periods", gp = gpar(cex=.8)) #,
+#             left = textGrob("ID", gp = gpar(cex = .8), rot = 90)
+)
+
+
+```
+
+In the second case, missingness is monotonic; once a subject misses a measurement for `y`, there are no subsequent measurements:
+
+```{r tidy=TRUE}
+# missingness for y is monotonic
+
+defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
+defMlong <- defMiss(defMlong,varname = "y", formula = "-1.8 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = TRUE)
+
+missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+```
+
+```{r tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 6}
+xp10 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="x1", pcolor="#1C5974",
+                 title = "x1: baseline (control)")
+
+xp11 <- ggmissing(missMatLong, varSelect="rx", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="x1", pcolor="#B84226",
+                 title = "x1: baseline (exposed)")
+
+xp20 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
+                 periodvar = "period", missvar="y", pcolor="#1C5974",
+                 title = "y: monotonic (control)")
+
+xp21 <- ggmissing(missMatLong, varSelect="rx", varLevel = 1, idvar = "id",
+                 periodvar = "period", missvar="y", pcolor="#B84226",
+                 title = "y: monotonic (exposed)")
+
+grid.arrange(xp10, xp20, xp11, xp21,
+             nrow = 2,
+             bottom = textGrob("Periods", gp = gpar(cex=.8)) #,
+#             left = textGrob("ID", gp = gpar(cex = .8), rot = 90)
+)
+
+
+```

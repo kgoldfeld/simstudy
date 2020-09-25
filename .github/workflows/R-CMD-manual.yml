@@ -46,7 +46,7 @@ jobs:
 
       - name: Increase linux stacksize
         if: runner.os == 'Linux'
-        run: ulimit -s 7972228
+        run: ulimit -s unlimited
 
       - name: Query dependencies
         run: |

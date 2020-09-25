@@ -67,7 +67,7 @@ NULL
 #' of simstudy only, and will be defunct in the future.
 #'
 #' * [genCorOrdCat]: This function is deprecated, and will
-#'  be removed in the future. Use [genOrdCat] instead.
+#'  be removed in the future. Use [genOrdCat] with `asFactor = FALSE` instead.
 #' @md
 #' @name simstudy-deprecated
 NULL
