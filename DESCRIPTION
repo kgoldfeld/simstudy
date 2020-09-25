@@ -50,6 +50,7 @@ Suggests:
     ordinal,
     pracma,
     rmarkdown,
+    scales,
     splines,
     survival,
     testthat
