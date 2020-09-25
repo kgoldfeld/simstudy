@@ -37,6 +37,7 @@ Imports:
 Suggests: 
     covr,
     dplyr,
+
     formatR,
     gee,
     ggplot2,
