@@ -44,10 +44,6 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
-      - name: Increase linux stacksize
-        if: runner.os == 'Linux'
-        run: ulimit -s 10000000
-
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -69,21 +65,27 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'cat(remotes::system_requirements("ubuntu", "16.04"), sep = "\n")')
-          
+          done < <(Rscript -e 'cat(remotes::system_requirements("ubuntu", "16.04"), sep = "\n")')  
 
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
-
-      - name: Check
+        
+      - name: Check Linux
+        if: runner.os == 'Linux'
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
-            Cstack_info()
-            rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+          ulimit -s 10000000
+          Rscript -e 'Cstack_info(); rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")'
+        
+      - name: Check not Linux
+        if: runner.os != 'Linux'
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Show testthat output

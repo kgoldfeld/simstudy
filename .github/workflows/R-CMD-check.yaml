@@ -35,14 +35,6 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
-      - name: Increase linux stacksize
-        if: runner.os == 'Linux'
-        run: ulimit -s 10000000
-
-      - name: Check linux stacksize
-        if: runner.os == 'Linux'
-        run: ulimit -s
-
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -78,7 +70,7 @@ jobs:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
           ulimit -s 10000000
-          Rscript -e 'rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")'
+          Rscript -e 'Cstack_info(); rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")'
         
       - name: Check not Linux
         if: runner.os != 'Linux'
@@ -86,6 +78,7 @@ jobs:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
+
       - name: Show testthat output
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
