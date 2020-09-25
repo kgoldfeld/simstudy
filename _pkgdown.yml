@@ -1,5 +1,8 @@
 destination: docs/
 useurl: https://kgoldfeld.github.io/simstudy
+authors:
+  Keith Goldfeld:
+    href: "https://www.rdatagen.net/"
 reference:
 - title: Define Data
 - contents:
