@@ -589,7 +589,12 @@ genOrdCat <- function(dtName,
     class = "character"
   )
   assertInDataTable(c(adjVar, idname), dtName)
-
+  corstr <- ensureOption(
+    corstr = corstr,
+    options = c("ind", "cs", "ar1"),
+    default = "ind"
+  )
+  
   baseprobs <- ensureMatrix(baseprobs)
   baseprobs <- .adjustProbs(baseprobs)
 

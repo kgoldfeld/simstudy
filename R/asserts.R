@@ -261,18 +261,61 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
   }
 }
 
+#' Check Option Valid
+#'
+#' @param ... An argument as named element e.g. var1 = var1.
+#' @param value Value of the argument
+#' @param options Valid options for the argument
+#' @param call sys.call to pass on to the error.
+#' @noRd
+assertOption <- function(..., options, call = sys.call(-1)) {
+    stopifnot(...length() == 1)
+    dots <- dots2argNames(...)
+    notValid <- !dots$args[[1]] %in% options
+
+    if (notValid) {
+        optionInvalidError(dots$names[[1]], dots$args[[1]], options, call)
+    }
+}
+
+#' Ensure Option Valid
+#'
+#' @param ... An argument as named element e.g. var1 = var1.
+#' @param value Value of the argument
+#' @param options Valid options for the argument
+#' @param default Value argument will default to.
+#' @param call sys.call to pass on to the warn.
+#' @return The argument or default.
+#' @noRd
+ensureOption <- function(..., options, default, call = sys.call(-1)) {
+    stopifnot(...length() == 1)
+    dots <- dots2argNames(...)
+    notValid <- !dots$args[[1]] %in% options
+
+    if (notValid) {
+        optionInvalidWarning(
+            dots$names[[1]],
+            dots$args[[1]],
+            options,
+            default,
+            call
+        )
+        return(default)
+    }
+    dots$args[[1]]
+}
+
 #' Dots to Args & Names
 #'
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @return A list containing the arguments and names.
 #' @noRd
 dots2argNames <- function(...) {
-  stopifnot(...length() != 0)
-  args <- list(...)
-  names <- names(args)
-  names <- names[names != ""]
+    stopifnot(...length() != 0)
+    args <- list(...)
+    names <- names(args)
+    names <- names[names != ""]
+    stopifnot(length(args) == length(names))
 
-  stopifnot(length(args) == length(names))
-
-  list(args = args, names = names)
+    list(args = args, names = names)
 }

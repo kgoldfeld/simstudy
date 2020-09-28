@@ -107,7 +107,8 @@ noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
     stop(c)
 }
 
-#' Not Uniwue Error
+
+#' Not Unique Error
 #'
 #' @param names Names of the vars.
 #' @param call sys.call to pass on to the error.
@@ -185,4 +186,48 @@ notPositiveDefiniteError <- function(var,
     message, call, ...
   )
   stop(c)
+}
+
+#' Option Invalid Warning
+#'
+#' @param name Name of invalid option
+#' @param value Value of name
+#' @param options Valid options for name
+#' @param default Value name will default to.
+#' @param call sys.call to pass on to the warning.
+#' @return Warning with information which value name will take.
+#' @noRd
+optionInvalidWarning <- function(name,
+                                 value,
+                                 options,
+                                 default,
+                                 call = sys.call(-1),
+                                 ...) {
+    message <- glueCollapse(
+        "Argument {name}: '{value}' invalid.",
+        " Valid options: {options *}.",
+        "\nDefaulting to '{default}'."
+    )
+    c <- condition(c("simstudy::optionInvalid", "warning"), message, call, ...)
+    warning(c)
+}
+
+#' Option Invalid Error
+#'
+#' @param name Name of invalid option
+#' @param value Value of name
+#' @param options Valid options for name
+#' @param call sys.call to pass on to the error.
+#' @noRd
+optionInvalidError <- function(name,
+                                 value,
+                                 options,
+                                 call = sys.call(-1),
+                                 ...) {
+    message <- glueCollapse(
+        "Argument {name}: '{value}' invalid.",
+        " Valid options: {options *}.",
+    )
+    c <- condition(c("simstudy::optionInvalid", "error"), message, call, ...)
+    stop(c)
 }

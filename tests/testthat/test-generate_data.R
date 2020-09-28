@@ -17,6 +17,8 @@ test_that("genOrdCat throws errors.", {
   expect_error(genOrdCat("not a data table", NULL, c(.1, .1)), class = "simstudy::wrongClass")
   expect_error(genOrdCat(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
   expect_error(genOrdCat(NULL, NULL, NULL), class = "simstudy::noValue")
+  expect_warning(genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "notValid"), class = "simstudy::invalidOption")
+  
 })
 
 library(magrittr)
@@ -50,6 +52,15 @@ test_that("ordinal categorical data is generated correctly.", {
     probs,
     tolerance = 0.01
   )
+
+  expect_equal({
+    set.seed(123)
+    genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "ind")
+  }, {
+    set.seed(123)
+    suppressWarnings(genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "notValid"),
+    classes = "simstudy::optionInvalid")
+  })
   set.seed(oldSeed)
 })
 
