@@ -286,7 +286,11 @@ assertOption <- function(..., options, call = sys.call(-1)) {
 #' @param maxCheck Comparison that is made with the upper boundary.
 #' @return
 #' @noRd
-assertInRange <- function(..., range, minCheck = ">=", maxCheck = "<=", call = sys.call(-1)) {
+assertInRange <- function(...,
+                          range,
+                          minCheck = ">=",
+                          maxCheck = "<=",
+                          call = sys.call(-1)) {
     assertLength(
         minCheck = minCheck, maxCheck = maxCheck,
         length = 1,
@@ -294,6 +298,14 @@ assertInRange <- function(..., range, minCheck = ">=", maxCheck = "<=", call = s
     )
     assertLength(range = range, length = 2)
     assertNumeric(range = range)
+    assertOption(
+        minCheck = minCheck,
+        options = c("<", "<=", "==", "!=", ">", ">=")
+    )
+    assertOption(
+        maxCheck = maxCheck,
+        options = c("<", "<=", "==", "!=", ">", ">=")
+    )
     dots <- dots2argNames(...)
     do.call(function(...) assertNumeric(..., call = call), dots$args)
 

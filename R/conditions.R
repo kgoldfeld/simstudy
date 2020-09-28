@@ -116,12 +116,12 @@ noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
 #' @param call sys.call to pass on to the error.
 #' @noRd
 valueError <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
-    if(is.list(msg)){
+    if (is.list(msg)) {
         message <- do.call(glueCollapse, msg)
     } else {
         message <- glueCollapse(msg)
     }
-    
+
     c <- condition(
         c("simstudy::valueError", "error"),
         message, call, ...
@@ -263,10 +263,10 @@ optionInvalidWarning <- function(name,
 #' @param call sys.call to pass on to the error.
 #' @noRd
 optionInvalidError <- function(name,
-                                 value,
-                                 options,
-                                 call = sys.call(-1),
-                                 ...) {
+                               value,
+                               options,
+                               call = sys.call(-1),
+                               ...) {
     message <- glueCollapse(
         "Argument {name}: '{value}' invalid.",
         " Valid options: {options *}.",

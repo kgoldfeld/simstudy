@@ -152,6 +152,12 @@ test_that("ensureOption works", {
   ), 2)
 })
 
+test_that("assertInRange works", {
+  expect_error(assertInRange(a = 1, b = 2, range = c(2, 3)), class = "simstudy::valueError")
+  expect_error(assertInRange(a = -100, b = 2, range = c(2, Inf), maxCheck = "<"), class = "simstudy::valueError")
+  expect_silent(assertInRange(a = 1:5, range = c(0, 100)))
+})
+
 test_that("dots2args works.", {
   expect_error(dots2argNames(), class = "simpleError")
   expect_error(dots2argNames(a = 3, 2), class = "simpleError")
