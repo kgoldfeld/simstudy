@@ -1,13 +1,44 @@
+#' Generate Mixture Formula
+#'
+#' @description Generates a mixture formula from a vector of variable names and
+#' an optional vector of probabilities.
+#' @param vars Character vector/list of variable names. 
+#' @param probs Numeric vector/list of probabilities. Has to be same length as
+#' vars or NULL. Probabilities will be normalized if the sum to > 1.
+#' @param roundTo How many decimal places to round to when generating
+#'  probabilities.
+#' @return The mixture formula as a string.
+#' @examples
+#' genMixFormula(c("a", "..b[..i]", "c"))
+#' genMixFormula(c("a", "..b", "c"), c(.2, .5, .3))
+#' @exported
+#' @md
+genMixFormula <- function(vars, probs = NULL, roundTo = 3) {
+    assertNotMissing(vars = missing(vars))
+
+    if (is.null(probs)) {
+        n <- length(vars)
+        probs <- round(rep(1 / n, n), roundTo)
+    } else {
+        assertNumeric(probs = probs)
+        probs <- round(.adjustProbs(unlist(probs)), roundTo)
+        assertLengthEqual(vars = vars, probs = probs)
+    }
+
+    paste(vars, probs, sep = " | ", collapse = " + ")
+}
+
 #' Convert beta mean and precision parameters to two shape parameters
 #'
 #' @param mean The mean of a beta distribution
 #' @param precision The precision parameter (phi) of a beta distribution
 #' @return A list that includes the shape parameters of the beta distribution
-#' @details In simstudy, users specify the beta distribution as a function of two parameters -
-#' a mean and precision, where 0 < mean < 1 and precision > 0. In this case, the variance
-#' of the specified distribution is (mean)*(1-mean)/(1+precision). The base R function rbeta
-#' uses the two shape parameters to specify the beta distribution. This function converts
-#' the mean and precision into the shape1 and shape2 parameters.
+#' @details In simstudy, users specify the beta distribution as a function of
+#' two parameters - a mean and precision, where 0 < mean < 1 and precision > 0.
+#' In this case, the variance of the specified distribution is
+#' (mean)*(1-mean)/(1+precision). The base R function rbeta uses the two shape
+#' parameters to specify the beta distribution. This function converts the mean
+#' and precision into the shape1 and shape2 parameters.
 #' @examples
 #' set.seed(12345)
 #' mean <- 0.3
