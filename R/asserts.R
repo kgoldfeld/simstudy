@@ -278,6 +278,55 @@ assertOption <- function(..., options, call = sys.call(-1)) {
     }
 }
 
+#' Check Values in Range
+#'
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param range Numeric vector of range as c(min,max).
+#' @param minCheck Comparison that is made with the lower boundary.
+#' @param maxCheck Comparison that is made with the upper boundary.
+#' @return
+#' @noRd
+assertInRange <- function(..., range, minCheck = ">=", maxCheck = "<=", call = sys.call(-1)) {
+    assertLength(
+        minCheck = minCheck, maxCheck = maxCheck,
+        length = 1,
+        call = call
+    )
+    assertLength(range = range, length = 2)
+    assertNumeric(range = range)
+    dots <- dots2argNames(...)
+    do.call(function(...) assertNumeric(..., call = call), dots$args)
+
+    createExpressions <- function(values) {
+        glue(
+            "{values} {minCheck} {range[[1]]}",
+            " && {values} {maxCheck} {range[[2]]} "
+        )
+    }
+
+    inRange <- function(values) {
+        all(
+            sapply(
+                lapply(createExpressions(values), function(x) parse(text = x)),
+                eval
+            )
+        )
+    }
+
+    notInRange <- !sapply(dots$args, inRange)
+
+    if (any(notInRange)) {
+        valueError(
+            names = dots$names[notInRange], var = range,
+            msg = list(
+                "Some values in {names *} are not in the",
+                " range from {var[[1]]} to {var[[2]]}."
+            ),
+            call = call
+        )
+    }
+}
+
 #' Ensure Option Valid
 #'
 #' @param ... An argument as named element e.g. var1 = var1.

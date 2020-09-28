@@ -89,33 +89,41 @@
 #' @return  The adjusted probabilities.
 #' @noRd
 .adjustProbs <- function(probs) {
+  assertNotMissing(probs = missing(probs))
+
   if (is.matrix(probs)) {
     sumProbs <- rowSums(probs)
   } else {
     sumProbs <- sum(probs)
   }
-  # TODO check for negative values
+  assertInRange(probs = probs, range = c(0, Inf), maxCheck = "<")
   if (isTRUE(all.equal(mean(sumProbs), 1))) {
     return(probs)
   } else if (any(sumProbs < 1)) {
     remainder <- 1 - sumProbs
 
     if (is.matrix(probs)) {
-      warning(glue(
-        "Probabilities do not sum to 1. ",
-        "Adding category to all rows!"
-      ), call. = FALSE)
+      valueWarning("",
+        list(
+          "Probabilities do not sum to 1. ",
+          "Adding category to all rows!"
+        ),
+       call = NULL)
 
       return(cbind(probs, remainder))
     } else {
-      warning(glue(
+      valueWarning("",
+        list(
         "Probabilities do not sum to 1. ",
-        "Adding category with p = { remainder }"
-      ), call. = FALSE)
+        "Adding category with p = { var }"
+      ), remainder, call = NULL)
       return(c(probs, remainder))
     }
   } else if (any(sumProbs > 1)) {
-    warning("Sum of probabilities > 1. Probabilities will be normalized.")
+    valueWarning("",
+      "Sum of probabilities > 1. Probabilities will be normalized.",
+      call = NULL
+    )
     return(probs / sumProbs)
   }
 }

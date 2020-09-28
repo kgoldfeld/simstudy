@@ -594,7 +594,7 @@ genOrdCat <- function(dtName,
     options = c("ind", "cs", "ar1"),
     default = "ind"
   )
-  
+
   baseprobs <- ensureMatrix(baseprobs)
   baseprobs <- .adjustProbs(baseprobs)
 

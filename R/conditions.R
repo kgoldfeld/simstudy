@@ -107,6 +107,49 @@ noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
     stop(c)
 }
 
+#' Generic Value Error
+#'
+#' @param names Names of the vars.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @param var Additional var to access in msg via glue.
+#' @param call sys.call to pass on to the error.
+#' @noRd
+valueError <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
+    if(is.list(msg)){
+        message <- do.call(glueCollapse, msg)
+    } else {
+        message <- glueCollapse(msg)
+    }
+    
+    c <- condition(
+        c("simstudy::valueError", "error"),
+        message, call, ...
+    )
+    stop(c)
+}
+
+#' Generic Value Warning
+#'
+#' @param names Names of the vars.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @param var Additional var to access in msg via glue.
+#' @param call sys.call to pass on to the error.
+#' @noRd
+valueWarning <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
+    if (is.list(msg)) {
+        message <- do.call(glueCollapse, msg)
+    } else {
+        message <- glueCollapse(msg)
+    }
+
+    c <- condition(
+        c("simstudy::valueWarning", "warning"),
+        message, call, ...
+    )
+    warning(c)
+}
 
 #' Not Unique Error
 #'
