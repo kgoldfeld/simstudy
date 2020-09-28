@@ -50,3 +50,13 @@ test_that("catProbs throws errors.", {
   expect_error(catProbs(n = 1.1), "must be a whole number")
   expect_error(catProbs(n = -3), "Negative values")
 })
+
+# betaGetShapes ----
+test_that("betaGetShapes throws errors.", {
+  expect_error(betaGetShapes(1, 12), class = "simstudy::valueError")
+  expect_error(betaGetShapes(.5, -5), class = "simstudy::valueError")
+})
+
+test_that("betaGetShapes works.", {
+  expect_equal(betaGetShapes(.4, 5), list(shape1 = .4 * 5, shape2 = (1 - .4) * 5))
+})

@@ -12,6 +12,7 @@
 #' genMixFormula(c("a", "..b[..i]", "c"))
 #' genMixFormula(c("a", "..b", "c"), c(.2, .5, .3))
 #' @exported
+#' @concept utility
 #' @md
 genMixFormula <- function(vars, probs = NULL, roundTo = 3) {
     assertNotMissing(vars = missing(vars))
@@ -55,29 +56,40 @@ genMixFormula <- function(vars, probs = NULL, roundTo = 3) {
 #' @export
 #' @concept utility
 betaGetShapes <- function(mean, precision) {
-  if (any(mean <= 0) | any(mean >= 1)) stop("Mean out of range: must be between 0 and 1")
-  if (any(precision <= 0)) stop("Precision out of range: must be greater than 0")
+  assertInRange(
+    mean = mean, range = c(0, 1),
+    minCheck = ">", maxCheck = "<"
+  )
+  assertInRange(
+    precision = precision, range = c(0, Inf),
+    minCheck = ">", maxCheck = "<"
+  )
 
   a <- mean * precision
   b <- (1 - mean) * precision
 
-
   return(list(shape1 = a, shape2 = b))
 }
 
-#' Create a semi-colon delimited string of probabilities to be used to define categorical data
-#'
+#' Generate Categorical Formula
+#' 
+#' @description Create a semi-colon delimited string of probabilities to be used
+#' to define categorical data.
 #' @param ... one or more numeric values to be concatenated, delimited by ";".
-#' @param n number of probabilities (categories) to be generated - all with equal probability.
+#' @param n Number of probabilities (categories) to be generated - all with
+#' equal probability.
 #' @return string with multinomial probabilities.
-#' @details The function accepts a number of probabilities or a value of n, but not both.
+#' @details The function accepts a number of probabilities or a value of n, but
+#' not both.
 #'
-#' If probabilities are passed, the string that is returned depends on the nature of those probabilities.
-#' If the sum of the probabilities is less than 1, an additional category is created with the probability
-#' 1 - sum(provided probabilities). If the sum of the probabilities is equal to 1, then the number of
-#' categories is set to the number of probabilities provided. If the sum of the probabilities exceeds one
-#' (and there is more than one probability), the probabilities are standardized by dividing by the sum
-#' of the probabilities provided.
+#' If probabilities are passed, the string that is returned depends on the
+#' nature of those probabilities. If the sum of the probabilities is less than
+#' 1, an additional category is created with the probability 1 - sum(provided
+#' probabilities). If the sum of the probabilities is equal to 1, then the
+#' number of categories is set to the number of probabilities provided. If the
+#' sum of the probabilities exceeds one (and there is more than one
+#' probability), the probabilities are standardized by dividing by the sum of
+#' the probabilities provided.
 #'
 #' If n is provided, n probabilities are included in the string, each with a probability equal to 1/n.
 #' @examples
