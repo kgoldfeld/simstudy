@@ -235,6 +235,7 @@
 }
 
 .genmixture <- function(n, formula, dtSim) {
+  origFormula <- formula
   formula <- .rmWS(formula)
   var_pr <- strsplit(formula, "+", fixed = T)
   var_dt <- strsplit(var_pr[[1]], "|", fixed = T)
@@ -242,6 +243,14 @@
   ps <-
     cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2])))
 
+  if (!isTRUE(all.equal(max(ps), 1))) {
+    valueError(origFormula,
+      msg = list("Probabilities in mixture",
+      " formula: '{names}' have to sum to 1!"),
+      call = NULL
+    )
+  }
+  
   conditions <- paste0("(interval==", 1:nrow(formDT[, 1]), ")")
   f1 <- paste(unlist(formDT[, 1]), conditions, sep = "*")
   interval_formula <- paste(f1, collapse = "+")
