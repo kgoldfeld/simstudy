@@ -7,12 +7,12 @@
 delColumns(dtOld, vars)
 }
 \arguments{
-\item{dtOld}{Name of data table that is to be updated}
+\item{dtOld}{Name of data table that is to be updated.}
 
-\item{vars}{Vector of column names (as strings)}
+\item{vars}{Vector of column names (as strings).}
 }
 \value{
-An updated data.table that contains the added simulated data
+An updated data.table without \code{vars}.
 }
 \description{
 Delete columns from existing data set

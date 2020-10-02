@@ -245,12 +245,14 @@
 
   if (!isTRUE(all.equal(max(ps), 1))) {
     valueError(origFormula,
-      msg = list("Probabilities in mixture",
-      " formula: '{names}' have to sum to 1!"),
+      msg = list(
+        "Probabilities in mixture",
+        " formula: '{names}' have to sum to 1!"
+      ),
       call = NULL
     )
   }
-  
+
   conditions <- paste0("(interval==", 1:nrow(formDT[, 1]), ")")
   f1 <- paste(unlist(formDT[, 1]), conditions, sep = "*")
   interval_formula <- paste(f1, collapse = "+")

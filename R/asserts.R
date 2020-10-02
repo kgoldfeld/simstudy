@@ -175,17 +175,17 @@ assertUnique <- function(..., call = sys.call(-1)) {
 #' defined variables.
 #' @noRd
 assertInDataTable <- function(vars, dt, call = sys.call(-1)) {
-    if (is.data.frame(dt)) {
-        dtNames <- names(dt)
-    } else {
-        stopifnot(is.character(dt))
-        dtNames <- dt
-    }
-    notDefined <- !vars %in% dtNames
+  if (is.data.frame(dt)) {
+    dtNames <- names(dt)
+  } else {
+    stopifnot(is.character(dt))
+    dtNames <- dt
+  }
+  notDefined <- !vars %in% dtNames
 
-    if (any(notDefined)) {
-        notDefinedError(vars[notDefined], call = call)
-    }
+  if (any(notDefined)) {
+    notDefinedError(vars[notDefined], call = call)
+  }
 }
 
 #' Var Not Defined?

@@ -155,7 +155,7 @@ genCatFormula <- function(..., n = 0) {
 #'
 #' @param dtOld Name of data table that is to be updated.
 #' @param vars Vector of column names (as strings).
-#' @return An updated data.table without `vars`. 
+#' @return An updated data.table without `vars`.
 #' @examples
 #' # New data set
 #'

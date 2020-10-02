@@ -97,23 +97,22 @@ typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
 #' @noRd
 noValueError <- function(names, call = sys.call(-1),
                          msg = list(
-                             "{ names *} need{plr} to have a value",
-                             " other than NULL or NA and a length > 0!"
+                           "{ names *} need{plr} to have a value",
+                           " other than NULL or NA and a length > 0!"
                          ), ...) {
+  plr <- ifelse(length(names) > 1, "", "s")
 
-    plr <- ifelse(length(names) > 1, "", "s")
+  if (is.list(msg)) {
+    message <- do.call(glueCollapse, msg)
+  } else {
+    message <- glueCollapse(msg)
+  }
 
-    if (is.list(msg)) {
-        message <- do.call(glueCollapse, msg)
-    } else {
-        message <- glueCollapse(msg)
-    }
-
-    c <- condition(
-        c("simstudy::noValue", "error"),
-        message, call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::noValue", "error"),
+    message, call, ...
+  )
+  stop(c)
 }
 
 #' Generic Value Error

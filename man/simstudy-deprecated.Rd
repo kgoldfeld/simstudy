@@ -11,5 +11,7 @@ of simstudy only, and will be defunct in the future.
 \itemize{
 \item \link{genCorOrdCat}: This function is deprecated, and will
 be removed in the future. Use \link{genOrdCat} with \code{asFactor = FALSE} instead.
+\item \link{catProbs}: This function is deprecated, and will be removed in the future.
+Use \link{genCatFormula} with the same functionality instead.
 }
 }
