@@ -1,7 +1,8 @@
 # simstudy 0.2.0
+* Renamed catProbs to genCatFormula for naming consistency. catProbs is now deprecated. 
+* genCatFormula now warns if an additional category is created.
 * Moved genCorOrdCat's functionality into genOrdCat. genCorOrdCat is now
   deprecated.
-* catProbs now warns if an additional category is created.
 * Introduced a new system for formula definitions and completely reworked the
   underlying code. See vignette "NAME".
 * Added new vignettes.

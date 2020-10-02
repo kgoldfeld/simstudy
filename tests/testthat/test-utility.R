@@ -1,9 +1,9 @@
-# catProbs ----
+# genCatFormula ----
 roundTrip <- function(args) {
-  as.numeric(.splitFormula(do.call(catProbs, as.list(args))))
+  as.numeric(.splitFormula(do.call(genCatFormula, as.list(args))))
 }
 
-test_that("probabilities stay the same after catProbs", {
+test_that("probabilities stay the same after genCatFormula", {
   skip_on_cran()
   forall(gen_cat_probs, function(ps) {
     rt <- roundTrip(ps)
@@ -34,8 +34,8 @@ test_that("probabilities (vector) are adjusted as documented.", {
   }), function(p) {
     over <- p / .9
     under <- p / 1.1
-    expect_warning(catProbs(over), "will be normalized")
-    expect_warning(catProbs(under), "Adding category")
+    expect_warning(genCatFormula(over), "will be normalized")
+    expect_warning(genCatFormula(under), "Adding category")
     expect_equal(sum(roundTrip(over)), 1)
     expect_equal(sum(roundTrip(under)), 1)
     expect_length(roundTrip(over), length(over))
@@ -43,12 +43,12 @@ test_that("probabilities (vector) are adjusted as documented.", {
   })
 })
 
-test_that("catProbs throws errors.", {
-  expect_error(catProbs(), "Need to specify")
-  expect_error(catProbs(1, 2, 3, n = 5), "or n, not both")
-  expect_error(catProbs(1.1), "must be less than 1")
-  expect_error(catProbs(n = 1.1), "must be a whole number")
-  expect_error(catProbs(n = -3), "Negative values")
+test_that("genCatFormula throws errors.", {
+  expect_error(genCatFormula(), "Need to specify")
+  expect_error(genCatFormula(1, 2, 3, n = 5), "or n, not both")
+  expect_error(genCatFormula(1.1), "must be less than 1")
+  expect_error(genCatFormula(n = 1.1), "must be a whole number")
+  expect_error(genCatFormula(n = -3), "Negative values")
 })
 
 # betaGetShapes ----

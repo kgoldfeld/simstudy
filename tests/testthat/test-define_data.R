@@ -55,13 +55,11 @@ test_that("g.a.e. formula checked correctly.", {
 })
 
 test_that(".isValidArithmeticFormula throws errors correctly.", {
-  expect_error(.isValidArithmeticFormula(""), "can't be empty")
-  expect_error(.isValidArithmeticFormula("a;3"), "';' are not allowed")
-  expect_error(.isValidArithmeticFormula("1+3-"), "not in proper form")
-  expect_error(.isValidArithmeticFormula("..log(3)", ""), "Functions don't need")
-  expect_error(.isValidArithmeticFormula("a + 3", ""), "not previously defined")
-  expect_error(.isValidArithmeticFormula("noAfunc() + 3", ""), "referenced not defined")
-  expect_error(.isValidArithmeticFormula("..notAvar + 3", ""), "Escaped variables referenced")
+  expect_error(.isValidArithmeticFormula(""), class = "simstudy::noValue")
+  expect_error(.isValidArithmeticFormula("a;3"), class = "simstudy::valueError")
+  expect_error(.isValidArithmeticFormula("1+3-"), class = "simstudy::valueError")
+  expect_error(.isValidArithmeticFormula("..log(3)", ""), class = "simstudy::valueError")
+  expect_error(.isValidArithmeticFormula("a + 3", ""), class = "simstudy::notDefined")
 })
 
 # .checkMixture ----
@@ -84,19 +82,13 @@ test_that("'mixture' formula checked correctly", {
 test_that(".checkMixture throws errors.", {
   expect_error(.checkMixture("nr | .5 + a "), "same amount")
   expect_error(.checkMixture("nr | be"), "Probabilities can only be")
-  expect_error(.checkMixture("nr | ..be[3]"), "Probabilities can only be")
-  expect_error(.checkMixture("..nr | .2"), "Variables contain")
-  expect_error(.checkMixture("1 | .1 + 2 | 2"), "sum to 1")
-  notANumber <- "string"
-  expect_error(.checkMixture("1 | ..notANumber + 2 | 2"), "Probabilites contain 'NA'")
-  expect_error(.checkMixture("..notANumber | 1 + 2 | 2"), "Variables contain 'NA'")
 })
 
 # .checkCategorical ----
 test_that("'categorical' formula checked correctly", {
   skip_on_cran()
   forall(gen_cat_probs, function(f) {
-    expect_silent(.checkCategorical(catProbs(f)))
+    expect_silent(.checkCategorical(genCatFormula(f)))
   })
 })
 
