@@ -19,10 +19,23 @@
   # TODO clarify inheritance in case of non globalEnvs in documentation
   varValues <- mget(
     sub("..", "", vars[dotVars]),
-    envir = parent.frame(), inherits = TRUE
+    envir = parent.frame(),
+    inherits = TRUE,
+    ifnotfound = NA
   )
-
   names(varValues) <- vars[dotVars]
+  notFound <- is.na(varValues)
+
+  if (any(notFound)) {
+    noValueError(sub("..", "", names(varValues)[notFound]),
+      call = NULL,
+      msg = list(
+        "External variable(s) not defined",
+        " or NA: {names*}"
+      )
+    )
+  }
+
   varValues
 }
 
@@ -108,15 +121,18 @@
           "Probabilities do not sum to 1. ",
           "Adding category to all rows!"
         ),
-       call = NULL)
+        call = NULL
+      )
 
       return(cbind(probs, remainder))
     } else {
       valueWarning("",
         list(
-        "Probabilities do not sum to 1. ",
-        "Adding category with p = { var }"
-      ), remainder, call = NULL)
+          "Probabilities do not sum to 1. ",
+          "Adding category with p = { var }"
+        ), remainder,
+        call = NULL
+      )
       return(c(probs, remainder))
     }
   } else if (any(sumProbs > 1)) {
