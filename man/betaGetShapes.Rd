@@ -18,11 +18,12 @@ A list that includes the shape parameters of the beta distribution
 Convert beta mean and precision parameters to two shape parameters
 }
 \details{
-In simstudy, users specify the beta distribution as a function of two parameters -
-a mean and precision, where 0 < mean < 1 and precision > 0. In this case, the variance
-of the specified distribution is (mean)*(1-mean)/(1+precision). The base R function rbeta
-uses the two shape parameters to specify the beta distribution. This function converts
-the mean and precision into the shape1 and shape2 parameters.
+In simstudy, users specify the beta distribution as a function of
+two parameters - a mean and precision, where 0 < mean < 1 and precision > 0.
+In this case, the variance of the specified distribution is
+(mean)*(1-mean)/(1+precision). The base R function rbeta uses the two shape
+parameters to specify the beta distribution. This function converts the mean
+and precision into the shape1 and shape2 parameters.
 }
 \examples{
 set.seed(12345)
