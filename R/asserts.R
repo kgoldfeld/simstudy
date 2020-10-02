@@ -76,7 +76,7 @@ assertClass <- function(..., class, call = sys.call(-1)) {
 assertType <- function(..., type, deep = TRUE, call = sys.call(-1)) {
     dots <- dots2argNames(...)
     reduceType <- function(arg) {
-        if (deep) {
+        if (deep && length(arg) >= 1) {
             types <- sapply(arg, typeof)
             if (length(types) == 1) {
                 return(types == type)
@@ -188,7 +188,13 @@ assertInDataTable <- function(vars, dt, call = sys.call(-1)) {
 #' @param dt data.table to check for vars.
 #' @noRd
 assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
-    areDefined <- vars %in% names(dt)
+    if (is.data.frame(dt)) {
+        dtNames <- names(dt)
+    } else {
+        stopifnot(is.character(dt))
+        dtNames <- dt
+    }
+    areDefined <- vars %in% dtNames
 
     if (any(areDefined)) {
         alreadyDefinedError(vars[areDefined], call = call)
@@ -266,15 +272,22 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
 #' @param ... An argument as named element e.g. var1 = var1.
 #' @param value Value of the argument
 #' @param options Valid options for the argument
+#' @param msg Additonal message to be displayed.
 #' @param call sys.call to pass on to the error.
 #' @noRd
-assertOption <- function(..., options, call = sys.call(-1)) {
+assertOption <- function(..., options, msg = "", call = sys.call(-1)) {
     stopifnot(...length() == 1)
     dots <- dots2argNames(...)
     notValid <- !dots$args[[1]] %in% options
 
     if (notValid) {
-        optionInvalidError(dots$names[[1]], dots$args[[1]], options, call)
+        optionInvalidError(
+            name = dots$names[[1]],
+            value = dots$args[[1]],
+            options = options,
+            msg = msg,
+            call = call
+        )
     }
 }
 
@@ -364,6 +377,30 @@ ensureOption <- function(..., options, default, call = sys.call(-1)) {
         return(default)
     }
     dots$args[[1]]
+}
+
+#' Ensure Names are Valid
+#'
+#' @param names A character vector of names to check.
+#' @param call sys.call to pass on to the warn.
+#' @return The modified names.
+#' @noRd
+ensureValidName <- function(names, call = sys.call(-1)) {
+    notValid <- !.isValidVarName(names)
+
+    if (any(notValid)) {
+        # TODO pluralize
+        valueWarning(
+            msg = list(
+                "Variable name(s) '{var *}' not a valid R variable name,",
+                "and will be converted to: '{make.names(var)}'."
+            ), var = names[notValid],
+            call. = call
+        )
+        return(make.names(names))
+    }
+
+    names
 }
 
 #' Dots to Args & Names

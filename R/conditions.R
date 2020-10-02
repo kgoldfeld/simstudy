@@ -76,7 +76,10 @@ classError <- function(names, class, call = sys.call(-1), msg = "", ...) {
 #' glueCollapse'able string.
 #' @noRd
 typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
-    message <- glueCollapse("{ names *} should be/contain only { type }(s)!", msg)
+    message <- glueCollapse(
+        "{ names *} should be/contain only { type }(s)!",
+        msg
+    )
 
     c <- condition(
         c("simstudy::wrongType", "error"),
@@ -260,16 +263,19 @@ optionInvalidWarning <- function(name,
 #' @param name Name of invalid option
 #' @param value Value of name
 #' @param options Valid options for name
+#' @param msg Additonal message to be displayed.
 #' @param call sys.call to pass on to the error.
 #' @noRd
 optionInvalidError <- function(name,
                                value,
                                options,
                                call = sys.call(-1),
+                               msg = "",
                                ...) {
     message <- glueCollapse(
         "Argument {name}: '{value}' invalid.",
         " Valid options: {options *}.",
+        msg
     )
     c <- condition(c("simstudy::optionInvalid", "error"), message, call, ...)
     stop(c)

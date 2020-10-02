@@ -28,13 +28,13 @@ test_that("checks combine in .evalDef correctly", {
 })
 
 test_that(".evalDef throws erros correctly.", {
-  expect_error(.evalDef(newvar = 1, "1 + 2", "normal", 0, "identiy", ""), "must be single string")
-  expect_error(.evalDef(newvar = c("a", "b"), "1 + 2", "normal", 0, "identiy", ""), "must be single string")
-  expect_error(.evalDef(newvar = "varname", "1 + 2", "not valid", 0, "identiy", ""), "distribution is not a valid")
-  expect_error(.evalDef("..varname", 3, "normal", 0, "identity", ""), "'..' is reserved to escap")
-  expect_error(.evalDef("varname", 3, "normal", 0, "identity", "varname"), "previously defined")
-  expect_warning(.evalDef("2", 3, "normal", 0, "identity", ""), "not a valid R variable")
-  expect_warning(.evalDef("varname", 3, "normal", 0, "identity"), "Was this intentional")
+  expect_error(.evalDef(newvar = 1, "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::wrongType")
+  expect_error(.evalDef(newvar = c("a", "b"), "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::lengthMismatch")
+  expect_error(.evalDef(newvar = "varname", "1 + 2", "not valid", 0, "identiy", ""), class = "simstudy::optionInvalid")
+  expect_error(.evalDef("..varname", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
+  expect_error(.evalDef("varname", 3, "normal", 0, "identity", "varname"), class = "simstudy::alreadyDefined")
+  expect_error(.evalDef("varname", 3, "normal", 0, "identity"), class = "simstudy::missingArgument")
+  expect_warning(.evalDef("2", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
 })
 
 # .isValidArithmeticFormula ----

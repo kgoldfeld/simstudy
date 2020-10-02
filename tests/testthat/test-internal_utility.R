@@ -62,8 +62,8 @@ test_that("probabilities (matrix) are adjusted as documented.", {
   }), function(p) {
     over <- p / .9
     under <- p / 1.1
-    expect_warning(.adjustProbs(over), regexp = "will be normalized", class = "simstudy::valueWarning")
-    expect_warning(.adjustProbs(under), regexp = "Adding category", class = "simstudy::valueWarning")
+    expect_warning(.adjustProbs(over), class = "simstudy::valueWarning")
+    expect_warning(.adjustProbs(under), class = "simstudy::valueWarning")
     expect_error(.adjustProbs(under * -1), class = "simstudy::valueError")
     expect_equal(mean(rowSums(.adjustProbs(under))), 1)
     expect_equal(mean(rowSums(.adjustProbs(over))), 1)

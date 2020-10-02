@@ -61,6 +61,8 @@ NULL
 #' @md
 NULL
 
+# nolint end
+
 #' Deprecated functions in simstudy
 #'
 #' These functions are provided for compatibility with older versions
