@@ -76,7 +76,10 @@ classError <- function(names, class, call = sys.call(-1), msg = "", ...) {
 #' glueCollapse'able string.
 #' @noRd
 typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
-    message <- glueCollapse("{ names *} should be/contain only { type }(s)!", msg)
+    message <- glueCollapse(
+        "{ names *} should be/contain only { type }(s)!",
+        msg
+    )
 
     c <- condition(
         c("simstudy::wrongType", "error"),
@@ -107,7 +110,51 @@ noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
     stop(c)
 }
 
-#' Not Uniwue Error
+#' Generic Value Error
+#'
+#' @param names Names of the vars.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @param var Additional var to access in msg via glue.
+#' @param call sys.call to pass on to the error.
+#' @noRd
+valueError <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
+    if (is.list(msg)) {
+        message <- do.call(glueCollapse, msg)
+    } else {
+        message <- glueCollapse(msg)
+    }
+
+    c <- condition(
+        c("simstudy::valueError", "error"),
+        message, call, ...
+    )
+    stop(c)
+}
+
+#' Generic Value Warning
+#'
+#' @param names Names of the vars.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @param var Additional var to access in msg via glue.
+#' @param call sys.call to pass on to the error.
+#' @noRd
+valueWarning <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
+    if (is.list(msg)) {
+        message <- do.call(glueCollapse, msg)
+    } else {
+        message <- glueCollapse(msg)
+    }
+
+    c <- condition(
+        c("simstudy::valueWarning", "warning"),
+        message, call, ...
+    )
+    warning(c)
+}
+
+#' Not Unique Error
 #'
 #' @param names Names of the vars.
 #' @param call sys.call to pass on to the error.
@@ -185,4 +232,51 @@ notPositiveDefiniteError <- function(var,
     message, call, ...
   )
   stop(c)
+}
+
+#' Option Invalid Warning
+#'
+#' @param name Name of invalid option
+#' @param value Value of name
+#' @param options Valid options for name
+#' @param default Value name will default to.
+#' @param call sys.call to pass on to the warning.
+#' @return Warning with information which value name will take.
+#' @noRd
+optionInvalidWarning <- function(name,
+                                 value,
+                                 options,
+                                 default,
+                                 call = sys.call(-1),
+                                 ...) {
+    message <- glueCollapse(
+        "Argument {name}: '{value}' invalid.",
+        " Valid options: {options *}.",
+        "\nDefaulting to '{default}'."
+    )
+    c <- condition(c("simstudy::optionInvalid", "warning"), message, call, ...)
+    warning(c)
+}
+
+#' Option Invalid Error
+#'
+#' @param name Name of invalid option
+#' @param value Value of name
+#' @param options Valid options for name
+#' @param msg Additonal message to be displayed.
+#' @param call sys.call to pass on to the error.
+#' @noRd
+optionInvalidError <- function(name,
+                               value,
+                               options,
+                               call = sys.call(-1),
+                               msg = "",
+                               ...) {
+    message <- glueCollapse(
+        "Argument {name}: '{value}' invalid.",
+        " Valid options: {options *}.",
+        msg
+    )
+    c <- condition(c("simstudy::optionInvalid", "error"), message, call, ...)
+    stop(c)
 }

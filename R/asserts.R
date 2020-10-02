@@ -76,7 +76,7 @@ assertClass <- function(..., class, call = sys.call(-1)) {
 assertType <- function(..., type, deep = TRUE, call = sys.call(-1)) {
     dots <- dots2argNames(...)
     reduceType <- function(arg) {
-        if (deep) {
+        if (deep && length(arg) >= 1) {
             types <- sapply(arg, typeof)
             if (length(types) == 1) {
                 return(types == type)
@@ -188,7 +188,13 @@ assertInDataTable <- function(vars, dt, call = sys.call(-1)) {
 #' @param dt data.table to check for vars.
 #' @noRd
 assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
-    areDefined <- vars %in% names(dt)
+    if (is.data.frame(dt)) {
+        dtNames <- names(dt)
+    } else {
+        stopifnot(is.character(dt))
+        dtNames <- dt
+    }
+    areDefined <- vars %in% dtNames
 
     if (any(areDefined)) {
         alreadyDefinedError(vars[areDefined], call = call)
@@ -261,18 +267,153 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
   }
 }
 
+#' Check Option Valid
+#'
+#' @param ... An argument as named element e.g. var1 = var1.
+#' @param value Value of the argument
+#' @param options Valid options for the argument
+#' @param msg Additonal message to be displayed.
+#' @param call sys.call to pass on to the error.
+#' @noRd
+assertOption <- function(..., options, msg = "", call = sys.call(-1)) {
+    stopifnot(...length() == 1)
+    dots <- dots2argNames(...)
+    notValid <- !dots$args[[1]] %in% options
+
+    if (notValid) {
+        optionInvalidError(
+            name = dots$names[[1]],
+            value = dots$args[[1]],
+            options = options,
+            msg = msg,
+            call = call
+        )
+    }
+}
+
+#' Check Values in Range
+#'
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param range Numeric vector of range as c(min,max).
+#' @param minCheck Comparison that is made with the lower boundary.
+#' @param maxCheck Comparison that is made with the upper boundary.
+#' @return
+#' @noRd
+assertInRange <- function(...,
+                          range,
+                          minCheck = ">=",
+                          maxCheck = "<=",
+                          call = sys.call(-1)) {
+    assertLength(
+        minCheck = minCheck, maxCheck = maxCheck,
+        length = 1,
+        call = call
+    )
+    assertLength(range = range, length = 2)
+    assertNumeric(range = range)
+    assertOption(
+        minCheck = minCheck,
+        options = c("<", "<=", "==", "!=", ">", ">=")
+    )
+    assertOption(
+        maxCheck = maxCheck,
+        options = c("<", "<=", "==", "!=", ">", ">=")
+    )
+    dots <- dots2argNames(...)
+    do.call(function(...) assertNumeric(..., call = call), dots$args)
+
+    createExpressions <- function(values) {
+        glue(
+            "{values} {minCheck} {range[[1]]}",
+            " && {values} {maxCheck} {range[[2]]} "
+        )
+    }
+
+    inRange <- function(values) {
+        all(
+            sapply(
+                lapply(createExpressions(values), function(x) parse(text = x)),
+                eval
+            )
+        )
+    }
+
+    notInRange <- !sapply(dots$args, inRange)
+
+    if (any(notInRange)) {
+        valueError(
+            names = dots$names[notInRange], var = range,
+            msg = list(
+                "Some values in {names *} are not in the",
+                " range from {var[[1]]} to {var[[2]]}."
+            ),
+            call = call
+        )
+    }
+}
+
+#' Ensure Option Valid
+#'
+#' @param ... An argument as named element e.g. var1 = var1.
+#' @param value Value of the argument
+#' @param options Valid options for the argument
+#' @param default Value argument will default to.
+#' @param call sys.call to pass on to the warn.
+#' @return The argument or default.
+#' @noRd
+ensureOption <- function(..., options, default, call = sys.call(-1)) {
+    stopifnot(...length() == 1)
+    dots <- dots2argNames(...)
+    notValid <- !dots$args[[1]] %in% options
+
+    if (notValid) {
+        optionInvalidWarning(
+            dots$names[[1]],
+            dots$args[[1]],
+            options,
+            default,
+            call
+        )
+        return(default)
+    }
+    dots$args[[1]]
+}
+
+#' Ensure Names are Valid
+#'
+#' @param names A character vector of names to check.
+#' @param call sys.call to pass on to the warn.
+#' @return The modified names.
+#' @noRd
+ensureValidName <- function(names, call = sys.call(-1)) {
+    notValid <- !.isValidVarName(names)
+
+    if (any(notValid)) {
+        # TODO pluralize
+        valueWarning(
+            msg = list(
+                "Variable name(s) '{var *}' not a valid R variable name,",
+                "and will be converted to: '{make.names(var)}'."
+            ), var = names[notValid],
+            call. = call
+        )
+        return(make.names(names))
+    }
+
+    names
+}
+
 #' Dots to Args & Names
 #'
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @return A list containing the arguments and names.
 #' @noRd
 dots2argNames <- function(...) {
-  stopifnot(...length() != 0)
-  args <- list(...)
-  names <- names(args)
-  names <- names[names != ""]
+    stopifnot(...length() != 0)
+    args <- list(...)
+    names <- names(args)
+    names <- names[names != ""]
+    stopifnot(length(args) == length(names))
 
-  stopifnot(length(args) == length(names))
-
-  list(args = args, names = names)
+    list(args = args, names = names)
 }

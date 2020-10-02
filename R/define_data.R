@@ -478,7 +478,7 @@ defSurv <- function(dtDefs = NULL,
 #' @return newvar is returned invisibly if all tests are passed. If a test
 #' fails, execution is halted.
 #' @seealso [distributions]
-#' @noRd
+#' @noRd 
 .evalDef <-
   function(newvar,
            newform,
@@ -486,56 +486,40 @@ defSurv <- function(dtDefs = NULL,
            variance = 0,
            link = "identity",
            defVars) {
-    if (!is.character(newvar) || length(newvar) != 1 || is.na(newvar)) {
-      stop("Parameter 'varname' must be single string.", call. = FALSE)
-    }
-
-    if (!newdist %in% .getDists()) {
-      stop(
-        paste0(
-          "'",
-          newdist,
-          "' distribution is not a valid option. See ?distributions."
-        ),
-        call. = FALSE
-      )
-    }
-
-    if (missing(defVars)) {
-      warning("Argument 'defVars' missing with no default. Was this intentional?")
-      defVars <- ""
-    }
+             # TODO adjust argument name to be same as user facing.
+    assertNotMissing(
+      newvar = missing(newvar),
+      newform = missing(newform),
+      newdist = missing(newdist),
+      defVars = missing(defVars),
+      call = sys.call(-1)
+    )
+    assertValue(varname = newvar, call = sys.call(-1))
+    assertLength(varname = newvar, length = 1, call = sys.call(-1))
+    assertType(
+      varname = newvar,
+      defVars = defVars,
+      type = "character",
+      call = sys.call(-1)
+    )
+    assertOption(
+      dist = newdist,
+      options = .getDists(),
+      msg = "\nSee '?distributions'",
+      call = sys.call(-1)
+    )
 
     if (startsWith(newvar, "..")) {
-      stop(
-        paste(
-          "The prefix '..' is reserved to escape variables",
-          "from outside the definition table in formulas."
-        )
-      )
+      valueError("varname", list(
+        "The prefix '..' is reserved to escape variables",
+        "from outside the definition table in formulas."
+      ), call = sys.call(-1))
     }
 
-    if (!.isValidVarName(newvar)) {
-      warning(
-        paste(
-          "Variable name '",
-          newvar,
-          "' is not a valid R variable name,\n",
-          "and will be converted to: '",
-          make.names(newvar),
-          "'."
-        ),
-        call. = FALSE
-      )
-      newvar <- make.names(newvar)
-    }
+    newvar <- ensureValidName(newvar, call = sys.call(-1))
 
-    if (newvar %in% defVars) {
-      stop(paste("Variable name '", newvar, "' previously defined."),
-        call. = FALSE
-      )
-    }
 
+    assertNotInDataTable(vars = newvar, dt = defVars)
 
     switch(
       newdist,

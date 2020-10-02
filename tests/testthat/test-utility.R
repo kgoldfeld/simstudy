@@ -50,3 +50,29 @@ test_that("catProbs throws errors.", {
   expect_error(catProbs(n = 1.1), "must be a whole number")
   expect_error(catProbs(n = -3), "Negative values")
 })
+
+# betaGetShapes ----
+test_that("betaGetShapes throws errors.", {
+  expect_error(betaGetShapes(1, 12), class = "simstudy::valueError")
+  expect_error(betaGetShapes(.5, -5), class = "simstudy::valueError")
+})
+
+test_that("betaGetShapes works.", {
+  expect_equal(betaGetShapes(.4, 5), list(shape1 = .4 * 5, shape2 = (1 - .4) * 5))
+})
+
+# genMixFormula ----
+test_that("genMixFormula throws errors.", {
+  expect_error(genMixFormula(), class = "simstudy::missingArgument")
+  expect_error(genMixFormula("a", varLength = 3), class = "simstudy::valueError")
+  expect_error(genMixFormula("..a", varLength = "b"), class = "simstudy::wrongType")
+  expect_error(genMixFormula(3, varLength = "b"), class = "simstudy::wrongType")
+  expect_error(genMixFormula(c("a", "b"), probs = "b"), class = "simstudy::wrongType")
+  expect_warning(genMixFormula(c("a", "b"), probs = c(.3)), class = "simstudy::valueWarning")
+})
+
+test_that("genMixFormula works.", {
+  expect_equal(genMixFormula("a"), "a | 1")
+  expect_equal(genMixFormula(c("a", "..b"), c(.3, .7)), "a | 0.3 + ..b | 0.7")
+  expect_equal(genMixFormula("..a", varLength = 3), "..a[[1]] | 0.333 + ..a[[2]] | 0.333 + ..a[[3]] | 0.333")
+})

@@ -1,13 +1,68 @@
+#' Generate Mixture Formula
+#'
+#' @description Generates a mixture formula from a vector of variable names and
+#' an optional vector of probabilities.
+#' @param vars Character vector/list of variable names.
+#' @param probs Numeric vector/list of probabilities. Has to be same length as
+#' vars or NULL. Probabilities will be normalized if the sum to > 1.
+#' @param varLength If `vars` is of length one and varLength is set to any
+#' integer > 0, `vars` will be interpreted as array of length `varLength` and
+#' all elements will used in sequence.
+#' @param roundTo How many decimal places to round to when generating
+#'  probabilities.
+#' @return The mixture formula as a string.
+#' @examples
+#' genMixFormula(c("a", "..b[..i]", "c"))
+#' genMixFormula(c("a", "..b", "c"), c(.2, .5, .3))
+#'
+#' # Shorthand to use external vectors/lists
+#' genMixFormula("..arr", varLength = 5)
+#' @export
+#' @concept utility
+#' @md
+genMixFormula <- function(vars, probs = NULL, varLength = NULL, roundTo = 3) {
+  assertNotMissing(vars = missing(vars))
+
+  if (length(vars) == 1 && !is.null(varLength)) {
+    assertType(vars = vars, type = "character")
+    assertInteger(varLength = varLength)
+
+    if (!startsWith(vars, "..")) {
+      valueError(
+        vars,
+        list(
+          "'{names}' not dot-dot-var, only external",
+          " arrays can be used to generate a mixture formula."
+        )
+      )
+    }
+
+    vars <- glue("{vars}[[{1:varLength}]]")
+  }
+
+  if (is.null(probs)) {
+    n <- length(vars)
+    probs <- round(rep(1 / n, n), roundTo)
+  } else {
+    assertNumeric(probs = probs)
+    probs <- round(.adjustProbs(unlist(probs)), roundTo)
+    assertLengthEqual(vars = vars, probs = probs)
+  }
+
+  paste(vars, probs, sep = " | ", collapse = " + ")
+}
+
 #' Convert beta mean and precision parameters to two shape parameters
 #'
 #' @param mean The mean of a beta distribution
 #' @param precision The precision parameter (phi) of a beta distribution
 #' @return A list that includes the shape parameters of the beta distribution
-#' @details In simstudy, users specify the beta distribution as a function of two parameters -
-#' a mean and precision, where 0 < mean < 1 and precision > 0. In this case, the variance
-#' of the specified distribution is (mean)*(1-mean)/(1+precision). The base R function rbeta
-#' uses the two shape parameters to specify the beta distribution. This function converts
-#' the mean and precision into the shape1 and shape2 parameters.
+#' @details In simstudy, users specify the beta distribution as a function of
+#' two parameters - a mean and precision, where 0 < mean < 1 and precision > 0.
+#' In this case, the variance of the specified distribution is
+#' (mean)*(1-mean)/(1+precision). The base R function rbeta uses the two shape
+#' parameters to specify the beta distribution. This function converts the mean
+#' and precision into the shape1 and shape2 parameters.
 #' @examples
 #' set.seed(12345)
 #' mean <- 0.3
@@ -24,29 +79,40 @@
 #' @export
 #' @concept utility
 betaGetShapes <- function(mean, precision) {
-  if (any(mean <= 0) | any(mean >= 1)) stop("Mean out of range: must be between 0 and 1")
-  if (any(precision <= 0)) stop("Precision out of range: must be greater than 0")
+  assertInRange(
+    mean = mean, range = c(0, 1),
+    minCheck = ">", maxCheck = "<"
+  )
+  assertInRange(
+    precision = precision, range = c(0, Inf),
+    minCheck = ">", maxCheck = "<"
+  )
 
   a <- mean * precision
   b <- (1 - mean) * precision
 
-
   return(list(shape1 = a, shape2 = b))
 }
 
-#' Create a semi-colon delimited string of probabilities to be used to define categorical data
+#' Generate Categorical Formula
 #'
+#' @description Create a semi-colon delimited string of probabilities to be used
+#' to define categorical data.
 #' @param ... one or more numeric values to be concatenated, delimited by ";".
-#' @param n number of probabilities (categories) to be generated - all with equal probability.
+#' @param n Number of probabilities (categories) to be generated - all with
+#' equal probability.
 #' @return string with multinomial probabilities.
-#' @details The function accepts a number of probabilities or a value of n, but not both.
+#' @details The function accepts a number of probabilities or a value of n, but
+#' not both.
 #'
-#' If probabilities are passed, the string that is returned depends on the nature of those probabilities.
-#' If the sum of the probabilities is less than 1, an additional category is created with the probability
-#' 1 - sum(provided probabilities). If the sum of the probabilities is equal to 1, then the number of
-#' categories is set to the number of probabilities provided. If the sum of the probabilities exceeds one
-#' (and there is more than one probability), the probabilities are standardized by dividing by the sum
-#' of the probabilities provided.
+#' If probabilities are passed, the string that is returned depends on the
+#' nature of those probabilities. If the sum of the probabilities is less than
+#' 1, an additional category is created with the probability 1 - sum(provided
+#' probabilities). If the sum of the probabilities is equal to 1, then the
+#' number of categories is set to the number of probabilities provided. If the
+#' sum of the probabilities exceeds one (and there is more than one
+#' probability), the probabilities are standardized by dividing by the sum of
+#' the probabilities provided.
 #'
 #' If n is provided, n probabilities are included in the string, each with a probability equal to 1/n.
 #' @examples

@@ -127,6 +127,37 @@ test_that("assertPositiveDefinite works.", {
   expect_error(assertPositiveDefinite(mat = notPosDef), class = "simstudy::notPositiveDefinite")
 })
 
+test_that("assertOption works", {
+  expect_silent(assertOption(opt = 2, options = c(1, 2, 3, 5)))
+  expect_error(assertOption(opt = FALSE, options = c(1, 2, 3)), class = "simstudy::optionInvalid")
+  expect_error(assertOption(opt = FALSE, options = TRUE), class = "simstudy::optionInvalid")
+  expect_error(assertOption(opt = 5, options = 1:4), class = "simstudy::optionInvalid")
+  expect_error(assertOption(opt = "in", options = c("a", "b", "c")), class = "simstudy::optionInvalid")
+})
+
+test_that("ensureOption works", {
+  expect_equal(suppressWarnings(
+    ensureOption(opt = "b", options = letters[4:7], default = "d"),
+    classes = "simstudy::optionInvalid"
+  ), "d")
+
+  expect_equal(suppressWarnings(
+    ensureOption(opt = "e", options = letters[4:7], default = "d"),
+    classes = "simstudy::optionInvalid"
+  ), "e")
+
+  expect_equal(suppressWarnings(
+    ensureOption(opt = 1, options = 2:4, default = 2),
+    classes = "simstudy::optionInvalid"
+  ), 2)
+})
+
+test_that("assertInRange works", {
+  expect_error(assertInRange(a = 1, b = 2, range = c(2, 3)), class = "simstudy::valueError")
+  expect_error(assertInRange(a = -100, b = 2, range = c(2, Inf), maxCheck = "<"), class = "simstudy::valueError")
+  expect_silent(assertInRange(a = 1:5, range = c(0, 100)))
+})
+
 test_that("dots2args works.", {
   expect_error(dots2argNames(), class = "simpleError")
   expect_error(dots2argNames(a = 3, 2), class = "simpleError")

@@ -10,6 +10,6 @@ of simstudy only, and will be defunct in the future.
 \details{
 \itemize{
 \item \link{genCorOrdCat}: This function is deprecated, and will
-be removed in the future. Use \link{genOrdCat} instead.
+be removed in the future. Use \link{genOrdCat} with \code{asFactor = FALSE} instead.
 }
 }
