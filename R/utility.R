@@ -17,7 +17,7 @@
 #'
 #' # Shorthand to use external vectors/lists
 #' genMixFormula("..arr", varLength = 5)
-#' @exported
+#' @export
 #' @concept utility
 #' @md
 genMixFormula <- function(vars, probs = NULL, varLength = NULL, roundTo = 3) {

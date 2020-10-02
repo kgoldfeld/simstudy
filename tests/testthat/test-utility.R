@@ -71,7 +71,7 @@ test_that("genMixFormula throws errors.", {
   expect_warning(genMixFormula(c("a", "b"), probs = c(.3)), class = "simstudy::valueWarning")
 })
 
-test_that("genMixFormula workds.", {
+test_that("genMixFormula works.", {
   expect_equal(genMixFormula("a"), "a | 1")
   expect_equal(genMixFormula(c("a", "..b"), c(.3, .7)), "a | 0.3 + ..b | 0.7")
   expect_equal(genMixFormula("..a", varLength = 3), "..a[[1]] | 0.333 + ..a[[2]] | 0.333 + ..a[[3]] | 0.333")
