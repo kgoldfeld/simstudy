@@ -68,7 +68,6 @@ test_that("genMixFormula throws errors.", {
   expect_error(genMixFormula("..a", varLength = "b"), class = "simstudy::wrongType")
   expect_error(genMixFormula(3, varLength = "b"), class = "simstudy::wrongType")
   expect_error(genMixFormula(c("a", "b"), probs = "b"), class = "simstudy::wrongType")
-  expect_error(genMixFormula(c("a", "b"), probs = c(.3, .7)), class = "simstudy::wrongType")
   expect_warning(genMixFormula(c("a", "b"), probs = c(.3)), class = "simstudy::valueWarning")
 })
 
