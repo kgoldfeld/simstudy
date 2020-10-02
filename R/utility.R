@@ -2,31 +2,54 @@
 #'
 #' @description Generates a mixture formula from a vector of variable names and
 #' an optional vector of probabilities.
-#' @param vars Character vector/list of variable names. 
+#' @param vars Character vector/list of variable names.
 #' @param probs Numeric vector/list of probabilities. Has to be same length as
 #' vars or NULL. Probabilities will be normalized if the sum to > 1.
+#' @param varLength If `vars` is of length one and varLength is set to any
+#' integer > 0, `vars` will be interpreted as array of length `varLength` and
+#' all elements will used in sequence.
 #' @param roundTo How many decimal places to round to when generating
 #'  probabilities.
 #' @return The mixture formula as a string.
 #' @examples
 #' genMixFormula(c("a", "..b[..i]", "c"))
 #' genMixFormula(c("a", "..b", "c"), c(.2, .5, .3))
+#'
+#' # Shorthand to use external vectors/lists
+#' genMixFormula("..arr", varLength = 5)
 #' @exported
 #' @concept utility
 #' @md
-genMixFormula <- function(vars, probs = NULL, roundTo = 3) {
-    assertNotMissing(vars = missing(vars))
+genMixFormula <- function(vars, probs = NULL, varLength = NULL, roundTo = 3) {
+  assertNotMissing(vars = missing(vars))
 
-    if (is.null(probs)) {
-        n <- length(vars)
-        probs <- round(rep(1 / n, n), roundTo)
-    } else {
-        assertNumeric(probs = probs)
-        probs <- round(.adjustProbs(unlist(probs)), roundTo)
-        assertLengthEqual(vars = vars, probs = probs)
+  if (length(vars) == 1 && !is.null(varLength)) {
+    assertType(vars = vars, type = "character")
+    assertInteger(varLength = varLength)
+
+    if (!startsWith(vars, "..")) {
+      valueError(
+        vars,
+        list(
+          "'{names}' not dot-dot-var, only external",
+          " arrays can be used to generate a mixture formula."
+        )
+      )
     }
 
-    paste(vars, probs, sep = " | ", collapse = " + ")
+    vars <- glue("{vars}[[{1:varLength}]]")
+  }
+
+  if (is.null(probs)) {
+    n <- length(vars)
+    probs <- round(rep(1 / n, n), roundTo)
+  } else {
+    assertNumeric(probs = probs)
+    probs <- round(.adjustProbs(unlist(probs)), roundTo)
+    assertLengthEqual(vars = vars, probs = probs)
+  }
+
+  paste(vars, probs, sep = " | ", collapse = " + ")
 }
 
 #' Convert beta mean and precision parameters to two shape parameters
@@ -72,7 +95,7 @@ betaGetShapes <- function(mean, precision) {
 }
 
 #' Generate Categorical Formula
-#' 
+#'
 #' @description Create a semi-colon delimited string of probabilities to be used
 #' to define categorical data.
 #' @param ... one or more numeric values to be concatenated, delimited by ";".
