@@ -28,9 +28,10 @@ addColumns <- function(dtDefs, dtOld) {
   formula <- NULL
   dist <- NULL
 
-  #
+  assertNotMissing(dtDefs = missing(dtDefs), dtOld = missing(dtOld))
+  assertClass(dtDefs = dtDefs, dtOld = dtOld, class = "data.table")
 
-  for (i in 1:nrow(dtDefs)) {
+  for (i in seq_len(nrow(dtDefs))) {
     if (i == 1) {
       chkVars <- names(dtOld)
     } else { # check all previously defined vars
@@ -38,7 +39,12 @@ addColumns <- function(dtDefs, dtOld) {
       chkVars <- c(dtDefs[1:(i - 1), varname], names(dtOld))
     }
 
-    .evalDef(newvar = dtDefs[i, varname], newform = dtDefs[i, formula], newdist = dtDefs[i, dist], defVars = chkVars)
+    .evalDef(
+      newvar = dtDefs[i, varname],
+      newform = dtDefs[i, formula],
+      newdist = dtDefs[i, dist],
+      defVars = chkVars
+    )
   }
 
   oldkey <- data.table::key(dtOld)
@@ -106,19 +112,16 @@ addCondition <- function(condDefs, dtOld, newvar) {
   formula <- NULL
   dist <- NULL
 
-  # Checks
-
-  if (missing(condDefs)) stop("argument 'condDefs' is missing", call. = FALSE)
-  if (missing(dtOld)) stop("argument 'dtOld' is missing", call. = FALSE)
-  if (missing(newvar)) stop("argument 'newvar' is missing", call. = FALSE)
-
-  if (!exists(deparse(substitute(condDefs)), envir = parent.frame())) {
-    stop(paste("definitions", deparse(substitute(condDefs)), "not found"), call. = FALSE)
-  }
-
-  if (!exists(deparse(substitute(dtOld)), envir = parent.frame())) {
-    stop(paste("data table", deparse(substitute(dtOld)), "not found"), call. = FALSE)
-  }
+  assertNotMissing(
+    condDefs = missing(condDefs),
+    dtOld = missing(dtOld),
+    newvar = missing(newvar)
+  )
+  assertClass(
+    condDefs = condDefs,
+    dtOld = dtOld,
+    class = "data.table"
+  )
 
   cDefs <- copy(condDefs)
   cDefs[, varname := newvar]
@@ -127,9 +130,21 @@ addCondition <- function(condDefs, dtOld, newvar) {
 
   # Check to make sure both formulas are appropriate and reference valid data
 
-  for (i in 1:nrow(condDefs)) {
-    .evalDef(newvar = newvar, newform = cDefs[i, formula], newdist = cDefs[i, dist], defVars = chkVars)
-    .evalDef(newvar = newvar, newform = cDefs[i, condition], newdist = "nonrandom", defVars = chkVars)
+  for (i in seq_len(nrow(condDefs))) {
+    .evalDef(
+      newvar = newvar,
+      newform = cDefs[i, formula],
+      newdist = cDefs[i, dist],
+      defVars = chkVars
+    )
+
+    .evalDef(
+      newvar = newvar,
+      newform = cDefs[i,
+      condition],
+      newdist = "nonrandom",
+      defVars = chkVars
+    )
   }
 
   oldkey <- data.table::key(dtOld)
