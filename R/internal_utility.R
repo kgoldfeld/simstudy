@@ -13,13 +13,13 @@
 #' .parseDotVars(c("a + ..extVar1", "b + ..extVar2"))
 #' .parseDotVars(data.frame("a + ..extVar1", "b + ..extVar2"))
 #' @noRd
-.parseDotVars <- function(formula) {
+.parseDotVars <- function(formula, envir = parent.frame()) {
   vars <- all.vars(parse(text = formula))
   dotVars <- startsWith(vars, "..")
   # TODO clarify inheritance in case of non globalEnvs in documentation
   varValues <- mget(
     sub("..", "", vars[dotVars]),
-    envir = parent.frame(),
+    envir = envir,
     inherits = TRUE,
     ifnotfound = NA
   )

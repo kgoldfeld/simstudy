@@ -6,27 +6,116 @@
 #' @param args One row from data definitions data.table
 #' @param n The number of observations required in the data set
 #' @param dt Incomplete simulated data.table
+#' @param envir Environment the data definitions are evaluated in.
+#'  Defaults to [base::parent.frame].
 #' @return A data.frame with the updated simulated data
 #' @noRd
-.generate <- function(args, n, dfSim, idname) {
+.generate <- function(args, n, dfSim, idname, envir = parent.frame()) {
   newColumn <- switch(args$dist,
-    beta = .genbeta(n, args$formula, args$variance, args$link, dfSim),
+    beta = .genbeta(
+      n = n,
+      formula = args$formula,
+      precision = args$variance,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
     binary = {
       args$variance <- 1
-      .genbinom(n, args$formula, args$variance, args$link, dfSim)
+      .genbinom(
+        n = n,
+        formula = args$formula,
+        size = args$variance,
+        link = args$link,
+        dtSim = dfSim,
+        envir = envir
+      )
     },
-    binomial = .genbinom(n, args$formula, args$variance, args$link, dfSim),
-    categorical = .gencat(n, args$formula, args$link, dfSim),
-    exponential = .genexp(n, args$formula, args$link, dfSim),
-    gamma = .gengamma(n, args$formula, args$variance, args$link, dfSim),
-    mixture = .genmixture(n, args$formula, dfSim),
-    negBinomial = .gennegbinom(n, args$formula, args$variance, args$link, dfSim),
-    nonrandom = .gendeterm(n, args$formula, args$link, dfSim),
-    normal = .gennorm(n, args$formula, args$variance, args$link, dfSim),
-    noZeroPoisson = .genpoisTrunc(n, args$formula, args$link, dfSim),
-    poisson = .genpois(n, args$formula, args$link, dfSim),
-    uniform = .genunif(n, args$formula, dfSim),
-    uniformInt = .genUnifInt(n, args$formula, dfSim),
+    binomial = .genbinom(
+      n = n,
+      formula = args$formula,
+      size = args$variance,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    categorical = .gencat(
+      n = n,
+      formula = args$formula,
+      link = args$link,
+      dfSim = dfSim,
+      envir = envir
+    ),
+    exponential = .genexp(
+      n = n,
+      formula = args$formula,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    gamma = .gengamma(
+      n = n,
+      formula = args$formula,
+      dispersion = args$variance,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    mixture = .genmixture(
+      n = n,
+      formula = args$formula,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    negBinomial = .gennegbinom(
+      n = n,
+      formula = args$formula,
+      dispersion = args$variance,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    nonrandom = .gendeterm(
+      n = n,
+      formula = args$formula,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    normal = .gennorm(
+      n = n,
+      formula = args$formula,
+      variance = args$variance,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    noZeroPoisson = .genpoisTrunc(
+      n = n,
+      formula = args$formula,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    poisson = .genpois(
+      n = n,
+      formula = args$formula,
+      link = args$link,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    uniform = .genunif(
+      n = n,
+      formula = args$formula,
+      dtSim = dfSim,
+      envir = envir
+    ),
+    uniformInt = .genUnifInt(
+      n = n,
+      formula = args$formula,
+      dtSim = dfSim,
+      envir = envir
+    ),
     default = stop(
       paste(args$dist, "not a valid distribution. Please check spelling."),
       call. = FALSE
@@ -107,10 +196,11 @@
   return(mean)
 }
 
-.genbeta <- function(n, formula, precision, link = "identity", dtSim) {
+# TODO document internal functions
+.genbeta <- function(n, formula, precision, link = "identity", dtSim, envir) {
   mean <- .getBetaMean(dtSim, formula, link, n)
 
-  d <- .evalWith(precision, .parseDotVars(precision), dtSim, n)
+  d <- .evalWith(precision, .parseDotVars(precision, envir), dtSim, n)
 
   sr <- betaGetShapes(mean = mean, precision = d)
   new <- stats::rbeta(n, shape = sr$shape1, shape2 = sr$shape2)
@@ -126,9 +216,14 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column  with the updated simulated data
 
-.getBinaryMean <- function(dtSim, formula, Size, link, n = nrow(dtSim)) {
-  size <- .evalWith(Size, .parseDotVars(Size), dtSim, n)
-  p <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.getBinaryMean <- function(dtSim,
+                           formula,
+                           size,
+                           link,
+                           n = nrow(dtSim),
+                           envir = parent.frame()) {
+  size <- .evalWith(size, .parseDotVars(size, envir), dtSim, n)
+  p <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
 
   if (link == "logit") {
     p <- 1 / (1 + exp(-p))
@@ -137,8 +232,15 @@
   return(list(p, size))
 }
 
-.genbinom <- function(n, formula, Size, link, dtSim) {
-  params <- .getBinaryMean(dtSim, formula, Size, link, n)
+.genbinom <- function(n, formula, size, link, dtSim, envir) {
+  params <- .getBinaryMean(
+    dtSim = dtSim,
+    formula = formula,
+    size = size,
+    link = link,
+    n = n,
+    envir = envir
+  )
 
   return(stats::rbinom(n, params[[2]], params[[1]]))
 }
@@ -149,8 +251,10 @@
 # @param formula String that specifies the probabilities, each separated by ";"
 # @param dfSim Incomplete simulated data set
 # @param idkey Key of incomplete data set
+# @param envir Environment the data definitions are evaluated in.
+#  Defaults to [base::parent.frame].
 # @return A data.frame column with the updated simulated data
-.gencat <- function(n, formula, link, dfSim) {
+.gencat <- function(n, formula, link, dfSim, envir) {
   formulas <- .splitFormula(formula)
 
   if (length(formulas) < 2) {
@@ -161,7 +265,7 @@
   }
 
   parsedProbs <-
-    .evalWith(formulas, .parseDotVars(formulas), dfSim, n)
+    .evalWith(formulas, .parseDotVars(formulas, envir), dfSim, n)
 
   if (link == "logit") {
     parsedProbs <- exp(parsedProbs)
@@ -182,8 +286,8 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column  with the updated simulated data
 
-.gendeterm <- function(n, formula, link, dtSim) {
-  new <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.gendeterm <- function(n, formula, link, dtSim, envir) {
+  new <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
 
   if (link == "log") {
     new <- exp(new)
@@ -197,9 +301,8 @@
 # @param n The number of observations required in the data set
 # @param formula String that specifies the mean (lambda)
 # @return A data.frame column with the updated simulated data
-
-.genexp <- function(n, formula, link = "identity", dtSim) {
-  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.genexp <- function(n, formula, link = "identity", dtSim, envir) {
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
   }
@@ -215,8 +318,8 @@
 # @param formula String that specifies the probabilities
 # @return A data.frame column with the updated simulated data
 
-.getGammaMean <- function(dtSim, formula, link, n = nrow(dtSim)) {
-  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.getGammaMean <- function(dtSim, formula, link, n = nrow(dtSim), envir) {
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
   }
@@ -224,9 +327,9 @@
   return(mean)
 }
 
-.gengamma <- function(n, formula, dispersion, link = "identity", dtSim) {
-  mean <- .getGammaMean(dtSim, formula, link, n)
-  d <- .evalWith(dispersion, .parseDotVars(dispersion), dtSim, n)
+.gengamma <- function(n, formula, dispersion, link = "identity", dtSim, envir) {
+  mean <- .getGammaMean(dtSim, formula, link, n, envir)
+  d <- .evalWith(dispersion, .parseDotVars(dispersion, envir), dtSim, n)
 
   sr <- gammaGetShapeRate(mean = mean, dispersion = d)
   new <- stats::rgamma(n, shape = sr$shape, rate = sr$rate)
@@ -234,14 +337,14 @@
   return(new)
 }
 
-.genmixture <- function(n, formula, dtSim) {
+.genmixture <- function(n, formula, dtSim, envir) {
   origFormula <- formula
   formula <- .rmWS(formula)
   var_pr <- strsplit(formula, "+", fixed = T)
   var_dt <- strsplit(var_pr[[1]], "|", fixed = T)
   formDT <- as.data.table(do.call(rbind, var_dt))
   ps <-
-    cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2])))
+    cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2], envir)))
 
   if (!isTRUE(all.equal(max(ps), 1))) {
     valueError(origFormula,
@@ -271,8 +374,8 @@
 # @param formula String that specifies the mean
 # @return A data.frame column with the updated simulated data
 
-.getNBmean <- function(dtSim, formula, link, n = nrow(dtSim)) {
-  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.getNBmean <- function(dtSim, formula, link, n = nrow(dtSim), envir = parent.frame()) {
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
   }
@@ -280,8 +383,8 @@
   return(mean)
 }
 
-.gennegbinom <- function(n, formula, dispersion, link = "identity", dtSim) {
-  mean <- .getNBmean(dtSim, formula, link, n)
+.gennegbinom <- function(n, formula, dispersion, link = "identity", dtSim, envir) {
+  mean <- .getNBmean(dtSim, formula, link, n, envir)
   d <- as.numeric(as.character(dispersion))
 
   sp <- negbinomGetSizeProb(mean = mean, dispersion = d)
@@ -299,13 +402,16 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column  with the updated simulated data
 
-.getNormalMean <- function(dtSim, formula, n = nrow(dtSim)) {
-  .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.getNormalMean <- function(dtSim,
+                           formula,
+                           n = nrow(dtSim),
+                           envir = parent.frame()) {
+  .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
 }
 
-.gennorm <- function(n, formula, variance, link, dtSim) {
-  mean <- .getNormalMean(dtSim, formula, n)
-  v <- .evalWith(variance, .parseDotVars(variance), dtSim, n)
+.gennorm <- function(n, formula, variance, link, dtSim, envir) {
+  mean <- .getNormalMean(dtSim, formula, n, envir)
+  v <- .evalWith(variance, .parseDotVars(variance, envir), dtSim, n)
 
   return(stats::rnorm(n, mean, sqrt(v)))
 }
@@ -318,8 +424,8 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column with the updated simulated data
 
-.getPoissonMean <- function(dtSim, formula, link, n = nrow(dtSim)) {
-  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.getPoissonMean <- function(dtSim, formula, link, n = nrow(dtSim), envir = parent.frame()) {
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
 
   if (link == "log") {
     mean <- exp(mean)
@@ -328,8 +434,8 @@
   return(mean)
 }
 
-.genpois <- function(n, formula, link, dtSim) {
-  mean <- .getPoissonMean(dtSim, formula, link, n)
+.genpois <- function(n, formula, link, dtSim, envir) {
+  mean <- .getPoissonMean(dtSim, formula, link, n, envir)
 
   return(stats::rpois(n, mean))
 }
@@ -343,8 +449,8 @@
 # @param dtSim Incomplete simulated data.table
 # @return A data.frame column with the updated simulated data
 
-.genpoisTrunc <- function(n, formula, link, dtSim) {
-  mean <- .getPoissonMean(dtSim, formula, link, n)
+.genpoisTrunc <- function(n, formula, link, dtSim, envir) {
+  mean <- .getPoissonMean(dtSim, formula, link, n, envir)
 
   u <- stats::runif(n, min = 0, max = 1)
 
@@ -362,17 +468,17 @@
 # @param dtSim Incomplete simulated data set
 # @return A data.frame column  with the updated simulated data
 
-.genunif <- function(n, formula, dtSim) {
+.genunif <- function(n, formula, dtSim, envir) {
   if (!is.null(dtSim) && n != nrow(dtSim)) {
     stop("Length mismatch between 'n' and 'dtSim'")
   }
 
-  range <- .parseUnifFormula(formula, dtSim, n)
+  range <- .parseUnifFormula(formula, dtSim, n, envir)
 
   return(stats::runif(n, range$min, range$max))
 }
 
-.parseUnifFormula <- function(formula, dtSim, n) {
+.parseUnifFormula <- function(formula, dtSim, n, envir) {
   range <- .splitFormula(formula)
 
   if (length(range) != 2) {
@@ -384,7 +490,7 @@
     )
   }
 
-  parsedRange <- .evalWith(range, .parseDotVars(range), dtSim, n)
+  parsedRange <- .evalWith(range, .parseDotVars(range, envir), dtSim, n)
 
   r_min <- parsedRange[, 1]
   r_max <- parsedRange[, 2]
@@ -416,8 +522,8 @@
 # @param dtSim Incomplete simulated data set
 # @return A data.frame column  with the updated simulated data
 
-.genUnifInt <- function(n, formula, dtSim) {
-  range <- .parseUnifFormula(formula, dtSim, n)
+.genUnifInt <- function(n, formula, dtSim, envir) {
+  range <- .parseUnifFormula(formula, dtSim, n, envir)
 
   if (any(!sapply(range, function(x) floor(x) == x))) {
     stop(paste(

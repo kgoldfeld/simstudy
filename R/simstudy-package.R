@@ -51,7 +51,7 @@ NULL
 #'  `p_1,...,p_n`. For more information see
 #'  [rdatagen.net](https://www.rdatagen.net/post/adding-mixture-distributions-to-simstudy/).
 #' @examples
-#' ext_var <<- 2.9
+#' ext_var <- 2.9
 #' def <- defData(varname = "external", formula = "3 + log(..ext_var)", variance = .5)
 #' def
 #' genData(5, def)

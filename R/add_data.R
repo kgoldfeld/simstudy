@@ -2,6 +2,8 @@
 #'
 #' @param dtDefs name of definitions for added columns
 #' @param dtOld name of data table that is to be updated
+#' @param envir Environment the data definitions are evaluated in.
+#'  Defaults to [base::parent.frame].
 #' @return an updated data.table that contains the added simulated data
 #' @examples
 #' # New data set
@@ -20,8 +22,9 @@
 #' dt <- addColumns(def2, dt)
 #' dt
 #' @concept generate_data
+#' @md
 #' @export
-addColumns <- function(dtDefs, dtOld) {
+addColumns <- function(dtDefs, dtOld, envir = parent.frame()) {
 
   # "declares" varname to avoid global NOTE
   varname <- NULL
@@ -52,7 +55,13 @@ addColumns <- function(dtDefs, dtOld) {
   iter <- nrow(dtDefs)
   n <- nrow(dtOld)
   for (i in (1:iter)) {
-    dtOld <- .generate(dtDefs[i, ], n, dtOld, oldkey)
+    dtOld <- .generate(
+      args = dtDefs[i, ],
+      n = n,
+      dfSim = dtOld,
+      idname = oldkey,
+      envir = envir
+    )
   }
 
   dtOld <- data.table::data.table(dtOld)
@@ -66,7 +75,8 @@ addColumns <- function(dtDefs, dtOld) {
 #' @param condDefs Name of definitions for added column
 #' @param dtOld Name of data table that is to be updated
 #' @param newvar Name of new column to add
-#'
+#' @param envir Environment the data definitions are evaluated in.
+#'  Defaults to [base::parent.frame].
 #' @return An updated data.table that contains the added simulated data
 #' @examples
 #'
@@ -103,9 +113,10 @@ addColumns <- function(dtDefs, dtOld) {
 #' ggplot(data = dt, aes(x = y, y = NewVar, group = x)) +
 #'   geom_point(aes(color = factor(x)))
 #' @export
+#' @md
 #' @concept generate_data
 #' @concept condition
-addCondition <- function(condDefs, dtOld, newvar) {
+addCondition <- function(condDefs, dtOld, newvar, envir = parent.frame()) {
 
   # 'declare' vars
   varname <- NULL
@@ -163,7 +174,13 @@ addCondition <- function(condDefs, dtOld, newvar) {
     n <- nrow(dtTemp)
 
     if (n > 0) {
-      dtTemp <- .generate(cDefs[i, ], n, dtTemp, oldkey)
+      dtTemp <- .generate(
+        args = cDefs[i, ],
+        n = n,
+        dfSim = dtTemp,
+        idname =  oldkey,
+        envir = envir
+      )
 
       dtTemp <- data.table::data.table(dtTemp)
       dtTemp <- dtTemp[, list(get(oldkey), get(newvar))]
