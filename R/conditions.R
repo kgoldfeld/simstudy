@@ -95,19 +95,24 @@ typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
 #' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
-noValueError <- function(names, call = sys.call(-1), msg = "", ...) {
-    plr <- ifelse(length(names) > 1, "", "s")
-    message <- glueCollapse(
-        "{ names *} need{plr} to have a value",
-        " other than NULL or NA an a length > 0!",
-        msg
-    )
+noValueError <- function(names, call = sys.call(-1),
+                         msg = list(
+                           "{ names *} need{plr} to have a value",
+                           " other than NULL or NA and a length > 0!"
+                         ), ...) {
+  plr <- ifelse(length(names) > 1, "", "s")
 
-    c <- condition(
-        c("simstudy::noValue", "error"),
-        message, call, ...
-    )
-    stop(c)
+  if (is.list(msg)) {
+    message <- do.call(glueCollapse, msg)
+  } else {
+    message <- glueCollapse(msg)
+  }
+
+  c <- condition(
+    c("simstudy::noValue", "error"),
+    message, call, ...
+  )
+  stop(c)
 }
 
 #' Generic Value Error

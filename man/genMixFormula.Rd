@@ -4,7 +4,7 @@
 \alias{genMixFormula}
 \title{Generate Mixture Formula}
 \usage{
-genMixFormula(vars, probs = NULL, varLength = NULL, roundTo = 3)
+genMixFormula(vars, probs = NULL, varLength = NULL)
 }
 \arguments{
 \item{vars}{Character vector/list of variable names.}
@@ -15,9 +15,6 @@ vars or NULL. Probabilities will be normalized if the sum to > 1.}
 \item{varLength}{If \code{vars} is of length one and varLength is set to any
 integer > 0, \code{vars} will be interpreted as array of length \code{varLength} and
 all elements will used in sequence.}
-
-\item{roundTo}{How many decimal places to round to when generating
-probabilities.}
 }
 \value{
 The mixture formula as a string.

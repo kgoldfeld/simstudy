@@ -478,7 +478,7 @@ defSurv <- function(dtDefs = NULL,
 #' @return newvar is returned invisibly if all tests are passed. If a test
 #' fails, execution is halted.
 #' @seealso [distributions]
-#' @noRd 
+#' @noRd
 .evalDef <-
   function(newvar,
            newform,
@@ -486,7 +486,7 @@ defSurv <- function(dtDefs = NULL,
            variance = 0,
            link = "identity",
            defVars) {
-             # TODO adjust argument name to be same as user facing.
+    # TODO adjust argument name to be same as user facing.
     assertNotMissing(
       newvar = missing(newvar),
       newform = missing(newform),
@@ -517,8 +517,6 @@ defSurv <- function(dtDefs = NULL,
     }
 
     newvar <- ensureValidName(newvar, call = sys.call(-1))
-
-
     assertNotInDataTable(vars = newvar, dt = defVars)
 
     switch(
@@ -630,48 +628,20 @@ defSurv <- function(dtDefs = NULL,
 
   dotProbs <- startsWith(formDT$probs, "..")
   dotVars <- startsWith(formDT$vars, "..")
-  dotVarArrays <- .isDotArr(formDT$vars)
-  dotProbArrays <- .isDotArr(formDT$probs)
-  dotProbsNames <- .rmDots(formDT$probs[dotProbs])
-  dotVarNames <- .rmDots(formDT$vars[dotVars & !dotVarArrays])
   notDotVarProbs <-
     is.na(suppressWarnings(as.numeric(formDT$probs)))
 
-  if (any(dotVarArrays) ||
-    any(dotProbArrays) ||
-    any(notDotVarProbs[!dotProbs])) {
+  if (any(notDotVarProbs[!dotProbs])) {
     stop(
       paste0(
         "Invalid variable(s): ",
         paste0(formDT$probs[(notDotVarProbs &
-          !dotProbs) | dotProbArrays], collapse = ", "),
+          !dotProbs)], collapse = ", "),
         "\n",
-        "Probabilities can only be numeric or numeric",
-        " ..vars (not arrays). See ?distribution"
+        "Probabilities can only be numeric or ",
+        " ..vars . See ?distribution"
       )
     )
-  }
-
-  formDT$probs[dotProbs] <- mget(dotProbsNames, inherits = T, ifnotfound = NA, mode = "numeric")
-  formDT$vars[dotVars & !dotVarArrays] <- mget(dotVarNames, inherits = T, ifnotfound = NA, mode = "numeric")
-  formDT$probs <- suppressWarnings(as.numeric(formDT$probs))
-
-  if (any(is.na(formDT$probs))) {
-    stop(paste0(
-      "Probabilites contain 'NA',",
-      " check that all ..vars are actually assigned (and numeric)."
-    ))
-  }
-
-  if (any(is.na(formDT$vars))) {
-    stop(paste0(
-      "Variables contain 'NA',",
-      " check that all ..vars are actually assigned (and numeric)."
-    ))
-  }
-
-  if (!isTRUE(all.equal(sum(formDT$probs), 1))) {
-    stop("Probabilities must sum to 1. See ?distributions")
   }
 
   invisible(formula)
@@ -706,11 +676,15 @@ defSurv <- function(dtDefs = NULL,
 #' @noRd
 .isValidArithmeticFormula <- function(formula, defVars) {
   if (grepl(";", formula, fixed = T)) {
-    stop("';' are not allowed in arithmetic formulas. See ?distribution")
+    valueError("",
+      "';' are not allowed in arithmetic formulas. See ?distribution",
+      call = NULL
+    )
   }
 
-  if (nchar(formula) < 1) {
-    stop("Formula can't be empty!")
+  assertValue(formula = formula, call = NULL)
+  if (!nzchar(formula)) {
+    noValueError("", msg = "Formula can't be empty!", call = NULL)
   }
 
   # This only catches gross errors like trailing operators, does not check
@@ -718,6 +692,11 @@ defSurv <- function(dtDefs = NULL,
   newExpress <- try(parse(text = formula), silent = TRUE)
 
   if (.isError(newExpress)) {
+    valueError(
+      names = formula,
+      msg = list("Equation: '{names}' not in proper form. See ?distributions ."),
+      call = NULL
+    )
     stop(paste(
       "Equation: '",
       formula,
@@ -732,61 +711,17 @@ defSurv <- function(dtDefs = NULL,
   formFuncs <- formFuncs[!formFuncs %in% formVars]
 
   if (any(startsWith(formFuncs, ".."))) {
-    stop(
-      paste(
+    valueError(
+      names = formFuncs[startsWith(formFuncs, "..")],
+      msg = list(
         "Functions don't need to be escaped with '..'.",
-        "\nFunctions:",
-        formFuncs[startsWith(formFuncs, "..")]
-      )
+        "\nFunctions: {names*}"
+      ), call = NULL
     )
   }
 
   dotVarsBol <- startsWith(formVars, "..")
-  inDef <- formVars %in% defVars
-  unRefVars <- !inDef & !dotVarsBol
-
-  if (any(unRefVars)) {
-    stop(paste(
-      "Variable(s) referenced not previously defined:",
-      paste(formVars[unRefVars], collapse = ", ")
-    ),
-    call. = FALSE
-    )
-  }
-
-  naFormFuncs <-
-    is.na(mget(
-      formFuncs,
-      ifnotfound = NA,
-      mode = "function",
-      envir = parent.frame(),
-      inherits = TRUE
-    ))
-
-  if (any(naFormFuncs)) {
-    stop(paste(
-      "Functions(s) referenced not defined:",
-      paste(formFuncs[naFormFuncs], collapse = ", ")
-    ), call. = FALSE)
-  }
-
-  naDotVars <-
-    is.na(mget(
-      sub("..", "", formVars[dotVarsBol]),
-      ifnotfound = NA,
-      mode = "numeric",
-      envir = parent.frame(),
-      inherits = TRUE
-    ))
-
-  if (any(naDotVars)) {
-    stop(paste(
-      "Escaped variables referenced not defined (or not numeric):",
-      paste(names(naDotVars), collapse = ", ")
-    ),
-    call. = FALSE
-    )
-  }
+  assertInDataTable(formVars[!dotVarsBol], defVars, call = NULL)
 
   invisible(formula)
 }

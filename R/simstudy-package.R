@@ -70,6 +70,8 @@ NULL
 #'
 #' * [genCorOrdCat]: This function is deprecated, and will
 #'  be removed in the future. Use [genOrdCat] with `asFactor = FALSE` instead.
+#' * [catProbs]: This function is deprecated, and will be removed in the future.
+#'   Use [genCatFormula] with the same functionality instead.
 #' @md
 #' @name simstudy-deprecated
 NULL

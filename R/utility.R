@@ -8,8 +8,6 @@
 #' @param varLength If `vars` is of length one and varLength is set to any
 #' integer > 0, `vars` will be interpreted as array of length `varLength` and
 #' all elements will used in sequence.
-#' @param roundTo How many decimal places to round to when generating
-#'  probabilities.
 #' @return The mixture formula as a string.
 #' @examples
 #' genMixFormula(c("a", "..b[..i]", "c"))
@@ -20,7 +18,7 @@
 #' @export
 #' @concept utility
 #' @md
-genMixFormula <- function(vars, probs = NULL, varLength = NULL, roundTo = 3) {
+genMixFormula <- function(vars, probs = NULL, varLength = NULL) {
   assertNotMissing(vars = missing(vars))
 
   if (length(vars) == 1 && !is.null(varLength)) {
@@ -42,10 +40,10 @@ genMixFormula <- function(vars, probs = NULL, varLength = NULL, roundTo = 3) {
 
   if (is.null(probs)) {
     n <- length(vars)
-    probs <- round(rep(1 / n, n), roundTo)
+    probs <- rep(1 / n, n)
   } else {
     assertNumeric(probs = probs)
-    probs <- round(.adjustProbs(unlist(probs)), roundTo)
+    probs <- .adjustProbs(unlist(probs))
     assertLengthEqual(vars = vars, probs = probs)
   }
 
@@ -95,6 +93,16 @@ betaGetShapes <- function(mean, precision) {
 }
 
 #' Generate Categorical Formula
+#' @description This function is deprecated, please use [genCatFormula] instead.
+#' @export
+#' @md
+#' @keywords internal
+catProbs <- function(..., n = 0) {
+  .Deprecated("genCatFormula")
+  genCatFormula(..., n = n)
+}
+
+#' Generate Categorical Formula
 #'
 #' @description Create a semi-colon delimited string of probabilities to be used
 #' to define categorical data.
@@ -116,13 +124,13 @@ betaGetShapes <- function(mean, precision) {
 #'
 #' If n is provided, n probabilities are included in the string, each with a probability equal to 1/n.
 #' @examples
-#' catProbs(0.25, 0.25, 0.50)
-#' catProbs(1 / 3, 1 / 2)
-#' catProbs(1, 2, 3)
-#' catProbs(n = 5)
+#' genCatFormula(0.25, 0.25, 0.50)
+#' genCatFormula(1 / 3, 1 / 2)
+#' genCatFormula(1, 2, 3)
+#' genCatFormula(n = 5)
 #' @export
 #' @concept utility
-catProbs <- function(..., n = 0) {
+genCatFormula <- function(..., n = 0) {
   nProbs <- ...length()
   probs <- unlist(list(...))
 
@@ -145,9 +153,9 @@ catProbs <- function(..., n = 0) {
 
 #' Delete columns from existing data set
 #'
-#' @param dtOld Name of data table that is to be updated
-#' @param vars Vector of column names (as strings)
-#' @return An updated data.table that contains the added simulated data
+#' @param dtOld Name of data table that is to be updated.
+#' @param vars Vector of column names (as strings).
+#' @return An updated data.table without `vars`.
 #' @examples
 #' # New data set
 #'
@@ -162,19 +170,13 @@ catProbs <- function(..., n = 0) {
 #' dt <- delColumns(dt, "x")
 #' dt
 #' @export
+#' @md
 #' @concept utility
 delColumns <- function(dtOld, vars) {
-
-  #### Check that arguments have been passed
-
-  if (missing(dtOld)) stop("argument 'dtOld' is missing", call. = FALSE)
-  if (missing(vars)) stop("argument 'vars' is missing", call. = FALSE)
-
-  #### Check that columns exist
-
-  if (!(all(vars %in% names(dtOld)))) {
-    stop(paste("All columns not in data table", deparse(substitute(dtOld))), call. = FALSE)
-  }
+  assertNotMissing(dtOld = missing(dtOld), vars = missing(vars))
+  assertValue(dtOld = dtOld, vars = vars)
+  assertType(vars = vars, type = "character")
+  assertInDataTable(vars, dtOld)
 
   if (any(key(dtOld) %in% vars)) {
     stop(paste0("Cannot delete the index key"), call. = FALSE)

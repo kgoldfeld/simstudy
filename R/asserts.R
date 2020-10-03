@@ -170,22 +170,30 @@ assertUnique <- function(..., call = sys.call(-1)) {
 #' Var Defined?
 #'
 #' @description Checks if all passed vars have been defined in dt.
-#' @param ... Any number of variables as named elements e.g. var1 = var1.
-#' @param dt data.table to check for vars.
+#' @param vars Name of variables to check.
+#' @param dt data.table to check for vars. Can also be character vector with
+#' defined variables.
 #' @noRd
 assertInDataTable <- function(vars, dt, call = sys.call(-1)) {
-    notDefined <- !vars %in% names(dt)
+  if (is.data.frame(dt)) {
+    dtNames <- names(dt)
+  } else {
+    stopifnot(is.character(dt))
+    dtNames <- dt
+  }
+  notDefined <- !vars %in% dtNames
 
-    if (any(notDefined)) {
-        notDefinedError(vars[notDefined], call = call)
-    }
+  if (any(notDefined)) {
+    notDefinedError(vars[notDefined], call = call)
+  }
 }
 
 #' Var Not Defined?
 #'
 #' @description Checks if all passed vars have not been defined in dt.
-#' @param ... Any number of variables as named elements e.g. var1 = var1.
-#' @param dt data.table to check for vars.
+#' @param ... vars Name of variables to check.
+#' @param dt data.table to check for vars. Can also be character vector with
+#' defined variables.
 #' @noRd
 assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
     if (is.data.frame(dt)) {

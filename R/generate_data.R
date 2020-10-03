@@ -44,18 +44,17 @@
 #'
 #' genData(5, def)
 genData <- function(n, dtDefs = NULL, id = "id") {
-
-  #### Check that arguments have been passed
-
-  if (missing(n)) stop("argument 'n' is missing", call. = FALSE)
-
-  ####
+  assertNotMissing(n = missing(n))
+  assertValue(n = n, id = id)
+  assertType(id = id, type = "character")
+  assertNumeric(n = n)
 
   if (is.null(dtDefs)) {
     dt <- data.table::data.table(x = 1:n)
     data.table::setnames(dt, id)
     data.table::setkeyv(dt, id)
   } else { # existing definitions
+    assertClass(dtDefs = dtDefs, class = "data.table")
 
     idname <- attr(dtDefs, "id")
 

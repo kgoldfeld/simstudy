@@ -140,8 +140,7 @@ addCondition <- function(condDefs, dtOld, newvar) {
 
     .evalDef(
       newvar = newvar,
-      newform = cDefs[i,
-      condition],
+      newform = cDefs[i, condition],
       newdist = "nonrandom",
       defVars = chkVars
     )

@@ -337,13 +337,13 @@ gen_cat_probs <- gen.and_then(gen.element(2:10), function(n) {
 #' Generate Categorical Formula
 #'
 #' @description This will generate a categorical formula by passing either a
-#' number of probabilities or a single integer to catProbs..
+#' number of probabilities or a single integer to genCatFormula..
 #' @return Formula as string, eg. ".5;.5".
 #' @noRd
 gen_cat_formula <- function(...) {
   gen.map(
     function(p) {
-      do.call(catProbs, as.list(p))
+      do.call(genCatFormula, as.list(p))
     },
     gen.choice(gen_cat_probs, gen.map(
       function(x) {
