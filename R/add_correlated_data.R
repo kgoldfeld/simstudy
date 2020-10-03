@@ -95,6 +95,8 @@ addCorData <- function(dtOld, idname, mu, sigma, corMatrix = NULL,
 #' symmetrical and positive semi-definite. It is not a required field; if a
 #' matrix is not provided, then a structure and correlation coefficient rho must
 #' be specified.
+#' @param envir Environment the data definitions are evaluated in.
+#'  Defaults to [base::parent.frame].
 #' @return data.table with added column(s) of correlated data
 #' @examples
 #' defC <- defData(
@@ -143,9 +145,10 @@ addCorData <- function(dtOld, idname, mu, sigma, corMatrix = NULL,
 #' # Check global correlations - should not be as correlated
 #' cor(di[, list(A, B, C, D)])
 #' @concept correlated
+#' @md
 #' @export
 addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
-                       corMatrix = NULL) {
+                       corMatrix = NULL, envir = parent.frame()) {
 
   # "Declare" vars to avoid R CMD warning
 
@@ -203,15 +206,30 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
     iLink <- corDefs[i, link]
 
     if (iDist == "binary") {
-      params <- .getBinaryMean(dTemp, formula = iFormula, Size = 1, link = iLink)
+      params <- .getBinaryMean(dTemp,
+        formula = iFormula,
+        size = 1,
+        link = iLink,
+        envir = envir
+      )
 
       V <- dTemp[, stats::qbinom(Unew, 1, params[[1]])]
     } else if (iDist == "poisson") {
-      param1 <- .getPoissonMean(dTemp, formula = iFormula, link = iLink)
+      param1 <- .getPoissonMean(
+        dtSim = dTemp,
+        formula = iFormula,
+        link = iLink,
+        envir = envir
+      )
 
       V <- dTemp[, stats::qpois(Unew, param1)]
     } else if (iDist == "gamma") {
-      mn <- .getGammaMean(dTemp, formula = iFormula, link = iLink)
+      mn <- .getGammaMean(
+        dtSim = dTemp,
+        formula = iFormula,
+        link = iLink,
+        envir = envir
+      )
 
       ### Gamma parameters need to be transformed
 
@@ -221,7 +239,7 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 
       V <- dTemp[, stats::qgamma(Unew, param1, param2)]
     } else if (iDist == "negBinomial") {
-      mn <- .getNBmean(dTemp, formula = iFormula, link = iLink)
+      mn <- .getNBmean(dTemp, formula = iFormula, link = iLink, envir = envir)
 
       ### NB parameters need to be transformed
 
@@ -231,7 +249,7 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 
       V <- dTemp[, stats::qnbinom(Unew, param1, param2)]
     } else if (iDist == "normal") {
-      param1 <- .getNormalMean(dTemp, formula = iFormula)
+      param1 <- .getNormalMean(dtSim = dTemp, formula = iFormula, envir = envir)
       param2 <- sqrt(corDefs[i, variance])
 
       V <- dTemp[, stats::qnorm(Unew, param1, param2)]

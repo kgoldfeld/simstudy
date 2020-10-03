@@ -5,8 +5,11 @@
 #'  are provided
 #' a data set with ids only is generated.
 #' @param id The string defining the id of the record
+#' @param envir Environment the data definitions are evaluated in.
+#'  Defaults to [base::parent.frame].
 #' @return A data.table that contains the simulated data.
 #' @export
+#' @md
 #' @concept generate_data
 #' @examples
 #' genData(5)
@@ -43,7 +46,7 @@
 #' def
 #'
 #' genData(5, def)
-genData <- function(n, dtDefs = NULL, id = "id") {
+genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
   assertNotMissing(n = missing(n))
   assertValue(n = n, id = id)
   assertType(id = id, type = "character")
@@ -63,7 +66,13 @@ genData <- function(n, dtDefs = NULL, id = "id") {
     iter <- nrow(dtDefs) # generate a column of data for each row of dtDefs
 
     for (i in (1:iter)) {
-      dfSimulate <- .generate(dtDefs[i, ], n, dfSimulate, idname)
+      dfSimulate <- .generate(
+        args = dtDefs[i, ],
+        n = n,
+        dfSim = dfSimulate,
+        idname = idname,
+        envir = envir
+      )
     }
 
     dt <- data.table::data.table(dfSimulate)

@@ -3,6 +3,8 @@ useurl: https://kgoldfeld.github.io/simstudy
 authors:
   Keith Goldfeld:
     href: "https://www.rdatagen.net/"
+development: 
+  mode: auto
 reference:
 - title: Define Data
 - contents:

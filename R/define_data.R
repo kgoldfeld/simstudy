@@ -89,7 +89,7 @@ defCondition <- function(dtDefs = NULL,
 #' @details The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
 #'
 #' @examples
-#' extVar <<- 2.3
+#' extVar <- 2.3
 #' def <- defData(varname = "xNr", dist = "nonrandom", formula = 7, id = "idnum")
 #' def <- defData(def, varname = "xUni", dist = "uniform", formula = "10;20")
 #' def <- defData(def,

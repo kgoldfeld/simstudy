@@ -4,12 +4,15 @@
 \alias{addColumns}
 \title{Add columns to existing data set}
 \usage{
-addColumns(dtDefs, dtOld)
+addColumns(dtDefs, dtOld, envir = parent.frame())
 }
 \arguments{
 \item{dtDefs}{name of definitions for added columns}
 
 \item{dtOld}{name of data table that is to be updated}
+
+\item{envir}{Environment the data definitions are evaluated in.
+Defaults to \link[base:sys.parent]{base::parent.frame}.}
 }
 \value{
 an updated data.table that contains the added simulated data
