@@ -4,7 +4,7 @@
 * Moved genCorOrdCat's functionality into genOrdCat. genCorOrdCat is now
   deprecated.
 * Introduced a new system for formula definitions and completely reworked the
-  underlying code. See vignette "NAME".
+  underlying code. See vignette "double-dot".
 * Added new vignettes.
 * Created documentation page: https://kgoldfeld.github.io/simstudy/
 * Fixed bug in trtAssign related new ratio argument.

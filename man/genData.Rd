@@ -4,16 +4,19 @@
 \alias{genData}
 \title{Calling function to simulate data}
 \usage{
-genData(n, dtDefs = NULL, id = "id")
+genData(n, dtDefs = NULL, id = "id", envir = parent.frame())
 }
 \arguments{
 \item{n}{the number of observations required in the data set.}
 
 \item{dtDefs}{name of definitions data.table/data.frame. If no definitions
- are provided
+are provided
 a data set with ids only is generated.}
 
 \item{id}{The string defining the id of the record}
+
+\item{envir}{Environment the data definitions are evaluated in.
+Defaults to \link[base:sys.parent]{base::parent.frame}.}
 }
 \value{
 A data.table that contains the simulated data.

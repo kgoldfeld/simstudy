@@ -4,7 +4,7 @@
 \alias{addCondition}
 \title{Add a single column to existing data set based on a condition}
 \usage{
-addCondition(condDefs, dtOld, newvar)
+addCondition(condDefs, dtOld, newvar, envir = parent.frame())
 }
 \arguments{
 \item{condDefs}{Name of definitions for added column}
@@ -12,6 +12,9 @@ addCondition(condDefs, dtOld, newvar)
 \item{dtOld}{Name of data table that is to be updated}
 
 \item{newvar}{Name of new column to add}
+
+\item{envir}{Environment the data definitions are evaluated in.
+Defaults to \link[base:sys.parent]{base::parent.frame}.}
 }
 \value{
 An updated data.table that contains the added simulated data

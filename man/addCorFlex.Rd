@@ -4,12 +4,20 @@
 \alias{addCorFlex}
 \title{Create multivariate (correlated) data - for general distributions}
 \usage{
-addCorFlex(dt, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = NULL)
+addCorFlex(
+  dt,
+  defs,
+  rho = 0,
+  tau = NULL,
+  corstr = "cs",
+  corMatrix = NULL,
+  envir = parent.frame()
+)
 }
 \arguments{
 \item{dt}{Data table that will be updated.}
 
-\item{defs}{Field definition table created by function `defDataAdd`.}
+\item{defs}{Field definition table created by function \code{defDataAdd}.}
 
 \item{rho}{Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not
 provided.}
@@ -26,6 +34,9 @@ and "ar1" for an autoregressive structure. Defaults to "cs".}
 symmetrical and positive semi-definite. It is not a required field; if a
 matrix is not provided, then a structure and correlation coefficient rho must
 be specified.}
+
+\item{envir}{Environment the data definitions are evaluated in.
+Defaults to \link[base:sys.parent]{base::parent.frame}.}
 }
 \value{
 data.table with added column(s) of correlated data
