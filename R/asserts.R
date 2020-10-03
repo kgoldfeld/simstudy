@@ -300,7 +300,7 @@ assertOption <- function(..., options, msg = "", call = sys.call(-1)) {
 }
 
 #' Check Values in Range
-#'
+#' !! Slow for a larg number of elements !!
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @param range Numeric vector of range as c(min,max).
 #' @param minCheck Comparison that is made with the lower boundary.

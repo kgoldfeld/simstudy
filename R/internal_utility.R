@@ -96,7 +96,7 @@
 #' Adjust probabilities so they sum to 1
 #'
 #' @description The probabilities will be normalized for sum(probs) > 1 or an
-#' addtional probability will be added if sum(probs) < 1. For matricies the
+#' additional probability will be added if sum(probs) < 1. For matrices the
 #' probabilities will be assumed to be row wise!
 #' @param probs numeric vector or matrix of probabilities
 #' @return  The adjusted probabilities.
@@ -109,7 +109,11 @@
   } else {
     sumProbs <- sum(probs)
   }
-  assertInRange(probs = probs, range = c(0, Inf), maxCheck = "<")
+
+  if (any(probs < 0)) {
+    valueError("", "Probabilities can not be negative!", call = NULL)
+  }
+
   if (isTRUE(all.equal(mean(sumProbs), 1))) {
     return(probs)
   } else if (any(sumProbs < 1)) {
