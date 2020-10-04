@@ -39,7 +39,7 @@ ggtheme <- function(panelback = "white") {
 
 ```
 
-Often, we'd like to explore data generation and modeling under different scenarios. For example, we might want to understand the operating characteristics of a model given different variance or other parametric assumptions. There is functionality built into `simstudy` to facilitate this type of dynamic exploration. First, there are functions `updateDef` and `updateDefAdd` that essentially allow one to edit lines of existing data definition tables. Second, there is a built mechanism - called *double-dot*  reference - to access external variables that do not exist in a defined data set or data definition.
+Often, we'd like to explore data generation and modeling under different scenarios. For example, we might want to understand the operating characteristics of a model given different variance or other parametric assumptions. There is functionality built into `simstudy` to facilitate this type of dynamic exploration. First, there are functions `updateDef` and `updateDefAdd` that essentially allow one to edit lines of existing data definition tables. Second, there is a built in mechanism - called *double-dot*  reference - to access external variables that do not exist in a defined data set or data definition.
 
 ### Updating existing definition tables
 
