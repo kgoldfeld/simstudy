@@ -64,6 +64,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
       <a href="../articles/longitudinal.html">Longitudinal Data</a>
     </li>
     <li>
@@ -129,15 +132,15 @@
 <span class="va">dtSchool</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtSchool</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 
 <span class="va">dtSchool</span></pre></div>
-<pre><code>##    idSchool          s0 nClasses trtGrp
-## 1:        1  0.06510213        1      0
-## 2:        2 -0.17704148        6      1
-## 3:        3  1.68806813        2      0
-## 4:        4  1.26114690        2      0
-## 5:        5  0.39087337        2      1
-## 6:        6  2.59058435        2      1
-## 7:        7 -1.23466233        3      0
-## 8:        8 -1.16261592        5      1</code></pre>
+<pre><code>##    idSchool         s0 nClasses trtGrp
+## 1:        1  1.1497264        3      1
+## 2:        2  0.2998549        2      0
+## 3:        3 -1.2509252        1      1
+## 4:        4  1.5441879        4      1
+## 5:        5 -1.9960500        3      0
+## 6:        6 -1.4236187        4      0
+## 7:        7  0.3353587        1      1
+## 8:        8 -0.2668715        1      0</code></pre>
 <p>The classroom level data are generated with a call to <code>genCluster</code>, and then school level data is added by a call to <code>addColumns</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="va">gen.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"c0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
@@ -148,17 +151,17 @@
 <span class="va">dtClass</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">gen.class</span>, <span class="va">dtClass</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dtClass</span>, <span class="fl">10</span><span class="op">)</span></pre></div>
-<pre><code>##     idSchool          s0 nClasses trtGrp idClass         c0 nStudents
-##  1:        1  0.06510213        1      0       1 -2.5917580        16
-##  2:        2 -0.17704148        6      1       2  1.0574080        26
-##  3:        2 -0.17704148        6      1       3  2.2414651        20
-##  4:        2 -0.17704148        6      1       4  1.4796851        16
-##  5:        2 -0.17704148        6      1       5  0.9558879        19
-##  6:        2 -0.17704148        6      1       6 -0.1417719        23
-##  7:        2 -0.17704148        6      1       7 -1.3112973        18
-##  8:        3  1.68806813        2      0       8 -1.4612478        14
-##  9:        3  1.68806813        2      0       9  1.4857812        25
-## 10:        4  1.26114690        2      0      10 -1.8876574        20</code></pre>
+<pre><code>##     idSchool         s0 nClasses trtGrp idClass          c0 nStudents
+##  1:        1  1.1497264        3      1       1  0.76626647        20
+##  2:        1  1.1497264        3      1       2  2.26240787        23
+##  3:        1  1.1497264        3      1       3 -1.06963248        18
+##  4:        2  0.2998549        2      0       4  0.03651767        16
+##  5:        2  0.2998549        2      0       5 -1.67373378        17
+##  6:        3 -1.2509252        1      1       6 -0.28148248        14
+##  7:        4  1.5441879        4      1       7 -3.84889276        21
+##  8:        4  1.5441879        4      1       8  0.53547187        28
+##  9:        4  1.5441879        4      1       9 -0.31616133        21
+## 10:        4  1.5441879        4      1      10  0.23598257        12</code></pre>
 <p>Finally, the student level data are added using the same process:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, 
