@@ -481,7 +481,7 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
   }
 
   if (!is.null(newlink)) {
-    xdef[rowvar, link := link]
+    xdef[rowvar, link := newlink]
   }
 
   if (remove) {
@@ -591,7 +591,7 @@ updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
   }
 
   if (!is.null(newlink)) {
-    xdef[rowvar, link := link]
+    xdef[rowvar, link := newlink]
   }
 
   if (remove) {

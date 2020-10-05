@@ -1,0 +1,150 @@
+---
+title: "Dynamic Data Definition"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Dynamic Data Definition}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(simstudy)
+library(ggplot2)
+library(scales)
+library(grid)
+library(gridExtra)
+library(survival)
+library(gee)
+library(data.table)
+odds <- function (p)  p/(1 - p) # TODO temporary remove when added to package
+plotcolors <- c("#B84226", "#1B8445", "#1C5974")
+
+cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
+                "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+ggtheme <- function(panelback = "white") {
+  
+  ggplot2::theme(
+    panel.background = element_rect(fill = panelback),
+    panel.grid = element_blank(),
+    axis.ticks =  element_line(colour = "black"),
+    panel.spacing =unit(0.25, "lines"),  # requires package grid
+    panel.border = element_rect(fill = NA, colour="gray90"), 
+    plot.title = element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size = 8)
+  )  
+  
+}
+
+```
+
+Often, we'd like to explore data generation and modeling under different scenarios. For example, we might want to understand the operating characteristics of a model given different variance or other parametric assumptions. There is functionality built into `simstudy` to facilitate this type of dynamic exploration. First, there are functions `updateDef` and `updateDefAdd` that essentially allow one to edit lines of existing data definition tables. Second, there is a built in mechanism - called *double-dot*  reference - to access external variables that do not exist in a defined data set or data definition.
+
+### Updating existing definition tables
+
+The `updateDef` function updates a row in a definition table created by functions `defData` or `defRead`. Analogously, `updateDefAdd` function updates a row in a definition table created by functions `defDataAdd` or `defReadAdd`. 
+
+The original data set definition includes three variables `x`, `y`, and `z`, all normally distributed:
+
+```{r}
+defs <- defData(varname = "x", formula = 0, variance = 3, dist = "normal")
+defs <- defData(defs, varname = "y", formula = "2 + 3*x", variance = 1, dist = "normal")
+defs <- defData(defs, varname = "z", formula = "4 + 3*x - 2*y", variance = 1, dist = "normal")
+
+defs
+```
+
+In the first case, we are changing the relationship of `y` with `x` as well as the variance:
+
+```{r}
+defs <- updateDef(dtDefs = defs, changevar = "y", newformula = "x + 5", newvariance = 2)
+defs
+```
+
+In this second case, we are changing the distribution of `z` to *Poisson* and updating the link function to *log*:
+
+```{r}
+defs <- updateDef(dtDefs = defs, changevar = "z", newdist = "poisson", newlink = "log")
+defs
+```
+
+And in the last case, we remove a variable from a data set definition. Note in the case of a definition created by `defData` that it is not possible to remove a variable that is a predictor of a subsequent variable, such as `x` or `y` in this case.
+
+```{r}
+defs <- updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
+defs
+```
+
+### Double-dot external variable reference
+
+For a truly dynamic data definition process, `simstudy` (as of `version 0.2.0`) allows users to reference variables that exist outside of data generation. These can be thought of as a type of hyperparameter of the data generation process. The reference is made directly in the formula itself, using a double-dot ("..") notation before the variable name. Here is a simple example:
+
+```{r}
+def <- defData(varname = "x", formula = 0, 
+  variance = 5, dist = "normal")
+def <- defData(def, varname = "y", formula = "..B0 + ..B1 * x", 
+  variance = "..sigma2", dist = "normal")
+
+def
+```
+
+```{r}
+B0 <- 4;
+B1 <- 2;
+sigma2 <- 9
+
+set.seed(716251)
+dd <- genData(100, def)
+
+fit <- summary(lm(y ~ x, data = dd))
+
+coef(fit)
+fit$sigma
+```
+
+It is easy to create a new data set on the fly with a difference variance assumption without having to go to the trouble of updating the data definitions.
+
+```{r}
+sigma2 <- 16
+
+dd <- genData(100, def)
+fit <- summary(lm(y ~ x, data = dd))
+
+coef(fit)
+fit$sigma
+```
+
+The double-dot notation can be flexibly applied using `lapply` (or the parallel version `mclapply`) to create a range of data sets under different assumptions:
+
+```{r, fig.width = 5}
+sigma2s <- c(1, 2, 6, 9)
+
+gen_data <- function(sigma2, d) {
+  dd <- genData(200, d)
+  dd$sigma2 <- sigma2
+  dd
+}
+
+dd_4 <- lapply(sigma2s, function(s) gen_data(s, def))
+dd_4 <- rbindlist(dd_4)
+
+ggplot(data = dd_4, aes(x = x, y = y)) +
+  geom_point(size = .5, color = "grey30") +
+  facet_wrap(sigma2 ~ .) +
+  theme(panel.grid = element_blank())
+```
+
+The double-dot notation is also *array-friendly*. For example if we want to create a mixture distribution from a vector of values (which we can also do using a *categorical* distribution), we can define the mixture formula in terms of the vector. In this case we are generating permuted block sizes of 2 and 4:
+
+```{r}
+defblk <- defData(varname = "blksize", 
+   formula = "..sizes[1] | .5 + ..sizes[2] | .5", dist = "mixture")
+
+defblk
+```
+
+```{r}
+sizes <- c(2, 4)
+genData(1000, defblk)
+```
