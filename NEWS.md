@@ -10,8 +10,8 @@
 * Introduced a new system for formula definitions and completely reworked the
   underlying code. See vignette "Dynamic Data Definition".
 * The new function genMixFormula generates mixture formulas from different
-  Inputs.
-* Some simstudy functions now produces custom errors and warnings. Eventually
+  inputs.
+* Some simstudy functions now produce custom errors and warnings. Eventually
   all conditions will be replaced by the new system to make error handling
   easier for the user.
 * Added new vignettes.
