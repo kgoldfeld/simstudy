@@ -23,7 +23,8 @@ Description: Simulates data sets in order to explore modeling
     using various mechanisms (MCAR, MAR, NMAR).
 License: GPL-3
 URL: https://kgoldfeld.github.io/simstudy,
-    https://github.com/kgoldfeld/simstudy
+    https://github.com/kgoldfeld/simstudy,
+    https://github.com/kgoldfeld/simstudy/dev
 BugReports: https://github.com/kgoldfeld/simstudy/issues
 Depends:
     R (>= 3.2.2)

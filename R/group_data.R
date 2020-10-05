@@ -444,7 +444,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 #' @param ncat Number of treatment categories
 #' @param ratio vector of values indicating relative proportion of group
 #' assignment
-#' @return A vector containing the group assignments for each elemen of the
+#' @return A vector of length(nrow) containing the group assignments for each elemen of the
 #'  stratum.
 #' @noRd
 .stratSamp <- function(nrow, ncat, ratio = NULL) {
@@ -453,8 +453,13 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   neach <- floor(nrow / sum(ratio))
   distrx <- rep(c(1:ncat), times = (neach * ratio))
   extra <- nrow - length(distrx)
+  strata <- c(distrx, sample(rep(1:ncat, times = ratio), extra))
 
-  sample(c(distrx, sample(rep(1:ncat, times = ratio), extra)))
+  if (length(strata) == 1) {
+    return(strata)
+  }
+
+   sample(strata)
 }
 
 #' Observed exposure or treatment

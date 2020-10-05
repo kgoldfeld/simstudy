@@ -14,6 +14,8 @@ test_that("strata codes are added as expected.", {
 
 # .stratSamp ----
 test_that("stratified samples are drawn correctly.", {
+  expect_length(.stratSamp(1, 2), 1)
+  expect_length(.stratSamp(2, 4), 2)
   expect_length(.stratSamp(50, 3), 50)
   expect_gte(table(.stratSamp(148, 2, c(1, 2)))[1], 49)
   expect_gte(table(.stratSamp(148, 2, c(1, 2)))[2], 98)

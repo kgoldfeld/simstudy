@@ -626,8 +626,8 @@ genOrdCat <- function(dtName,
   if (nCats > 1 && length(catVar) != nCats) {
     catVar <- glue("{prefix}{i}", i = zeroPadInts(1:nCats))
   }
-
-  n <- nrow(dtName)
+  dt <- copy(dtName)
+  n <- nrow(dt)
   zs <- .genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
   zs[, logisZ := stats::qlogis(p = zs$Unew)]
   cprop <- t(apply(baseprobs, 1, cumsum))
@@ -642,13 +642,13 @@ genOrdCat <- function(dtName,
       byrow = TRUE
     )
     if (!is.null(adjVar)) {
-      z <- dtName[, adjVar[i], with = FALSE][[1]]
+      z <- dt[, adjVar[i], with = FALSE][[1]]
       matlp <- matlp - z
     }
     locateGrp <- (iLogisZ > cbind(-Inf, matlp))
     assignGrp <- apply(locateGrp, 1, sum)
     mycat[[i]] <- data.table(
-      id = dtName[, idname, with = FALSE][[1]],
+      id = dt[, idname, with = FALSE][[1]],
       var = catVar[[i]],
       cat = assignGrp
     )
@@ -658,14 +658,14 @@ genOrdCat <- function(dtName,
 
   setnames(cats, "id", idname)
   setkeyv(cats, idname)
-  dtName <- dtName[cats]
+  dt <- dt[cats]
 
   if (asFactor) {
-    dtName <- genFactor(dtName, catVar, replace = TRUE)
-    data.table::setnames(dtName, glue("f{catVar}"), catVar)
+    dt <- genFactor(dt, catVar, replace = TRUE)
+    data.table::setnames(dt, glue("f{catVar}"), catVar)
   }
 
-  dtName[]
+  dt[]
 }
 
 #' Generate spline curves
