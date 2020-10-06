@@ -141,17 +141,17 @@
 
 <span class="va">study1</span></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    0      1 80.68700     2
-##   2:   2    1      0 49.43887     2
-##   3:   3    1      0 70.45644     1
-##   4:   4    1      0 66.46627     2
-##   5:   5    0      0 69.19442     3
+##   1:   1    0      0 74.01675     3
+##   2:   2    1      0 71.87080     2
+##   3:   3    0      0 73.07117     2
+##   4:   4    0      0 76.34542     1
+##   5:   5    0      0 69.28514     2
 ##  ---                               
-## 326: 326    0      0 75.17408     3
-## 327: 327    1      1 66.71430     3
-## 328: 328    1      0 62.65456     3
-## 329: 329    1      1 76.93804     2
-## 330: 330    0      0 67.92728     3</code></pre>
+## 326: 326    1      0 67.19747     3
+## 327: 327    0      0 77.71068     3
+## 328: 328    0      0 73.02344     1
+## 329: 329    1      0 76.03144     1
+## 330: 330    0      0 76.72350     2</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></pre></div>
@@ -185,7 +185,7 @@
 <p>where <span class="math inline">\(Y_{ict}\)</span> is the outcome for individual <span class="math inline">\(i\)</span> in cluster <span class="math inline">\(c\)</span> in time period <span class="math inline">\(t\)</span>, <span class="math inline">\(b_c\)</span> is a cluster-specific effect, <span class="math inline">\(X_{ct}\)</span> is the intervention indicator that has a value 1 during periods where the cluster is under the intervention, and <span class="math inline">\(e_{ict}\)</span> is the individual-level effect. Both <span class="math inline">\(b_c\)</span> and <span class="math inline">\(e_{ict}\)</span> are normally distributed with mean 0 and variances <span class="math inline">\(\sigma^2_{b}\)</span> and <span class="math inline">\(\sigma^2_{e}\)</span>, respectively. <span class="math inline">\(\beta_1\)</span> is the time trend, and <span class="math inline">\(\beta_2\)</span> is the intervention effect.</p>
 <p>We need to define the cluster-level variables (i.e. the cluster effect and the cluster size) as well as the individual specific outcome. In this case each cluster will have 15 individuals per period, and <span class="math inline">\(\sigma^2_b = 0.20\)</span>. In addition, <span class="math inline">\(\sigma^2_e = 1.75\)</span>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://kgoldfeld.github.io/simstudy">simstudy</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy">simstudy</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">defc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"ceffect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">0.20</span>, 
