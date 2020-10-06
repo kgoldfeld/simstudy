@@ -18,3 +18,4 @@
 ^tests/\.lintr$
 ^File_management$
 ^simstudy\.code-workspace$
+^codemeta\.json$
