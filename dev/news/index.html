@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.16.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -153,21 +153,51 @@
       <small>Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="simstudy-development-version" class="section level1">
+<h1 class="page-header" data-toc-text="development version">
+<a href="#simstudy-development-version" class="anchor"></a>simstudy (development version)<small> Unreleased </small>
+</h1>
+</div>
     <div id="simstudy-020" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.0">
-<a href="#simstudy-020" class="anchor"></a>simstudy 0.2.0<small> Unreleased </small>
+<a href="#simstudy-020" class="anchor"></a>simstudy 0.2.0<small> 2020-10-06 </small>
 </h1>
+<div id="deprecated-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecated-functions" class="anchor"></a>Deprecated Functions</h2>
 <ul>
-<li>Renamed catProbs to genCatFormula for naming consistency. catProbs is now deprecated.</li>
-<li>genCatFormula now warns if an additional category is created.</li>
-<li>The new function genMixFormula generates mixture formulas from different Inputs.</li>
 <li>Moved genCorOrdCat’s functionality into genOrdCat. genCorOrdCat is now deprecated.</li>
-<li>Introduced a new system for formula definitions and completely reworked the underlying code. See vignette “Dynamic Data Definition”.</li>
-<li>Added new vignettes.</li>
-<li>Created documentation page: <a href="https://kgoldfeld.github.io/simstudy/" class="uri">https://kgoldfeld.github.io/simstudy/</a>
-</li>
-<li>Fixed bug in trtAssign related new ratio argument.</li>
+<li>Renamed catProbs to genCatFormula for naming consistency. catProbs is now deprecated.</li>
 </ul>
+</div>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
+<ul>
+<li>Introduced a new system for formula definitions and completely reworked the underlying code. See vignette “Dynamic Data Definition”.</li>
+<li>The new function genMixFormula generates mixture formulas from different inputs.</li>
+<li>Some simstudy functions now produce custom errors and warnings. Eventually all conditions will be replaced by the new system to make error handling easier for the user.</li>
+<li>Added new vignettes.</li>
+<li>Created documentation pages for:
+<ul>
+<li>the release version <a href="https://kgoldfeld.github.io/simstudy/" class="uri">https://kgoldfeld.github.io/simstudy/</a>
+</li>
+<li>and development version <a href="https://kgoldfeld.github.io/simstudy/dev" class="uri">https://kgoldfeld.github.io/simstudy/dev</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="minor-improvements-and-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-improvements-and-fixes" class="anchor"></a>Minor improvements and fixes</h2>
+<ul>
+<li>genCatFormula now warns if an additional category is created or probabilities are normalized.</li>
+<li>Fixed bug in trtAssign related new ratio argument.</li>
+<li>Fixed bug in trtAssign when strata had count of one.</li>
+<li>defData now also checks the first row in the definition table for validity.</li>
+</ul>
+</div>
 </div>
     <div id="simstudy-0116" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.16">

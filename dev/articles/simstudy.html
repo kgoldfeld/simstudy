@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.16.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -570,7 +570,7 @@
 <div id="defdataaddreaddataadd-and-addcolumns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#defdataaddreaddataadd-and-addcolumns" class="anchor"></a>defDataAdd/readDataAdd and addColumns</h3>
-<p>There are several important functions that facilitate the augementation of data sets. <code>defDataAdd</code> and <code>readDataAdd</code> are similar to their counterparts <code>defData</code> and <code>readData</code>; they create data definition tables that will be used by the function <code>addColumns</code>. The formulas in these “<em>add</em>-ing” functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.</p>
+<p>There are several important functions that facilitate the augmentation of data sets. <code>defDataAdd</code> and <code>readDataAdd</code> are similar to their counterparts <code>defData</code> and <code>readData</code>; they create data definition tables that will be used by the function <code>addColumns</code>. The formulas in these “<em>add</em>-ing” functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span>, 
     dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>

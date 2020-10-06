@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.16.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -142,17 +142,17 @@
 
 <span class="va">study1</span></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    1      0 61.43643     2
-##   2:   2    0      0 87.23492     1
-##   3:   3    0      0 67.81393     3
-##   4:   4    0      1 72.43244     2
-##   5:   5    0      0 70.06156     2
+##   1:   1    1      1 69.77959     2
+##   2:   2    0      0 79.27614     1
+##   3:   3    1      1 59.11991     1
+##   4:   4    0      0 71.45829     2
+##   5:   5    1      0 74.60325     1
 ##  ---                               
-## 326: 326    0      0 70.17168     3
-## 327: 327    1      1 66.68615     1
-## 328: 328    0      0 73.50735     3
-## 329: 329    0      0 66.31937     2
-## 330: 330    0      0 66.02436     2</code></pre>
+## 326: 326    0      0 60.94647     1
+## 327: 327    1      0 69.77443     1
+## 328: 328    1      1 71.37661     1
+## 329: 329    0      1 85.13682     1
+## 330: 330    0      0 75.83133     1</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></pre></div>
@@ -186,7 +186,7 @@
 <p>where <span class="math inline">\(Y_{ict}\)</span> is the outcome for individual <span class="math inline">\(i\)</span> in cluster <span class="math inline">\(c\)</span> in time period <span class="math inline">\(t\)</span>, <span class="math inline">\(b_c\)</span> is a cluster-specific effect, <span class="math inline">\(X_{ct}\)</span> is the intervention indicator that has a value 1 during periods where the cluster is under the intervention, and <span class="math inline">\(e_{ict}\)</span> is the individual-level effect. Both <span class="math inline">\(b_c\)</span> and <span class="math inline">\(e_{ict}\)</span> are normally distributed with mean 0 and variances <span class="math inline">\(\sigma^2_{b}\)</span> and <span class="math inline">\(\sigma^2_{e}\)</span>, respectively. <span class="math inline">\(\beta_1\)</span> is the time trend, and <span class="math inline">\(\beta_2\)</span> is the intervention effect.</p>
 <p>We need to define the cluster-level variables (i.e. the cluster effect and the cluster size) as well as the individual specific outcome. In this case each cluster will have 15 individuals per period, and <span class="math inline">\(\sigma^2_b = 0.20\)</span>. In addition, <span class="math inline">\(\sigma^2_e = 1.75\)</span>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://kgoldfeld.github.io/simstudy">simstudy</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy">simstudy</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">defc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"ceffect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">0.20</span>, 
