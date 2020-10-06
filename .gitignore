@@ -1,6 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
+.DS_Store
 Working-code/
 Demo/
 simstudy.Rproj
@@ -10,6 +11,7 @@ src/*.o
 src/*.so
 src/*.dll
 src-i386/
+src-x64/
 doc
 Meta
 simstudy.code-workspace

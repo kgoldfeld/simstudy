@@ -1,57 +1,30 @@
 ---
-title: "Simulating study data: introduction"
-author: "Keith S. Goldfeld"
-date: "`r Sys.Date()`"
+title: "Simulating Study Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Simulating study data}
+  %\VignetteIndexEntry{Simulating Study Data}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}
 ---
-
-<STYLE TYPE="text/css">
-<!--
-  td{
-    font-family: Arial; 
-    font-size: 8pt;
-    height: 2px;
-    padding:0px;
-    cellpadding="0";
-    cellspacing="0";
-    text-align: center;
-  }
-  th {
-    font-family: Arial; 
-    font-size: 9pt;
-    height: 20px;
-    font-weight: bold;
-    text-align: center;
-  }
-  table { 
-    border-spacing: 0px;
-    border-collapse: collapse;
-  }
---->
-</STYLE>
 
 ```{r, echo = FALSE, message = FALSE}
 
 library(simstudy)
+library(data.table)
 library(ggplot2)
-library(grid)
-library(gridExtra)
 library(knitr)
+library(data.table)
 
 set.seed(33333)
 
-opts_chunk$set(tidy.opts=list(width.cutoff=75), tidy=TRUE)
+options(digits = 3)
+
+opts_chunk$set(tidy.opts=list(width.cutoff=55), tidy=TRUE)
 
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
 cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
                 "#B87326","#B8A526", "#6CA723", "#1C5974") 
-
-# 
 
 ggtheme <- function(panelback = "white") {
   
@@ -60,149 +33,279 @@ ggtheme <- function(panelback = "white") {
     panel.grid = element_blank(),
     axis.ticks =  element_line(colour = "black"),
     panel.spacing =unit(0.25, "lines"),  # requires package grid
-    panel.border = element_rect(fill = NA, colour="gray90"), 
+    panel.border = element_rect(fill = NA, colour="grey90"), 
     plot.title = element_text(size = 8,vjust=.5,hjust=0),
     axis.text = element_text(size=8),
     axis.title = element_text(size = 8)
   )  
   
 }
-
-splotfunc <- function(dt, ptitle) {
-
-  dtplot <- dt[,.N,keyby=.(male, over65, rxGrp)][, .(rxGrp, grp = male * 2 + over65 * 1, N)]
-  ggplot(dtplot, aes(factor(grp), N)) +
-    geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position = "dodge", stat="identity") +
-    scale_fill_manual(values = plotcolors) +
-    ggtitle(ptitle) +
-    theme(legend.position = "none") +
-    ggtheme() +
-    xlab("Strata") +
-    ylim(0,80)
-}
-
-aplotfunc <- function(dt, ptitle) {
-
-  dtplot <- dt[,.N,keyby=.(rxGrp)]
-  ggplot(dtplot, aes(factor(rxGrp), N)) +
-    geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position="dodge", stat="identity", width=.5) +
-    scale_fill_manual(values = plotcolors) +
-    ggtitle(ptitle) +
-    theme(legend.position = "none") +
-    ggtheme() +
-    xlab("Treatment group") +
-    ylim(0,150)
-}
-
 ```
 
-Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to generate **survival** data, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, to create data sets with **missing** data, and to create non-linear relationships with underlying **spline** curves.
+The `simstudy` package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.
 
-This vignette provides a brief introduction to the basics of generating data. For information on more elaborate data generating mechanisms, please visit  https://www.rdatagen.net/page/simstudy/.
+Simulation using `simstudy` has two fundamental steps. The user (1) **defines** the data elements of a data set and (2) **generates** the data based on these definitions. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, to create data sets with **missing** data, and to create non-linear relationships with underlying **spline** curves.
 
-## Defining the Data
+The overarching philosophy of `simstudy` is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in `simstudy` *gamma*-distributed data are generated based on the specification of a mean $\mu$ (or $log(\mu)$) and a dispersion $d$, rather than shape $\alpha$ and rate $\beta$ parameters that more typically characterize the *gamma* distribution. When we estimate the parameters, we are modeling $\mu$ (or some function of $(\mu)$), so we should explicitly recover the `simstudy` parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.
+
+## Overview
+
+This introduction provides a brief overview to the basics of defining and generating data, including treatment or exposure variables. Subsequent sections in this vignette provide more details on these processes. For information on more elaborate data generating mechanisms, please refer to other package vignettes that provide more detailed descriptions.
+
+### Defining the Data
 
 The key to simulating data in `simstudy` is the creation of series of data definition tables that look like this:
 
 ```{r,  echo=FALSE}
-def <- defData(varname = "nr", dist = "nonrandom", formula=7, id = "idnum")
-def <- defData(def,varname="x1", dist="uniform", formula="10;20")
-def <- defData(def,varname="y1", formula="nr + x1 * 2", variance=8)
-def <- defData(def,varname="y2", dist="poisson", formula="nr - 0.2 * x1",link="log")
-def <- defData(def, varname = "xnb", dist = "negBinomial" , formula="nr - 0.2 * x1", variance = 0.05, link = "log")
-def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5", dist="categorical")
-def <- defData(def,varname="g1", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
-def <- defData(def,varname="b1", dist="beta", formula = "1+0.3*xCat", variance = 1, link = "logit")
-def <- defData(def, varname = "a1", dist = "binary" , formula="-3 + xCat", link="logit")
-def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit")
+def <- defData(varname="age", dist="normal", formula=10, variance = 2)
+def <- defData(def, varname="female", dist="binary", 
+    formula="-2 + age * 0.1", link = "logit")
+def <- defData(def,varname="visits", dist="poisson", 
+    formula="1.5 - 0.2 * age + 0.5 * female", link="log")
 
 knitr::kable(def)
 ```
 
-These *definition* tables can be generated two ways. One option is to to use any external editor that allows the creation of `csv` files, which can be read in with a call to `defRead`. An  alternative is to make repeated calls to the function `defData`. Here, we illustrate the R code that builds this definition table internally:
+These definition tables can be generated two ways. One option is to to use any external editor that allows the creation of .csv files, which can be read in with a call to `defRead`. An  alternative is to make repeated calls to the function `defData`. This script builds a definition table internally:
 
-```{r, tidy = TRUE}
-def <- defData(varname = "nr", dist = "nonrandom", formula=7, id = "idnum")
-def <- defData(def,varname="x1",dist="uniform",formula="10;20")
-def <- defData(def,varname="y1",formula="nr + x1 * 2",variance=8)
-def <- defData(def,varname="y2",dist="poisson",formula="nr - 0.2 * x1",link="log")
-def <- defData(def, varname = "xnb", dist = "negBinomial" , formula="nr - 0.2 * x1", variance = 0.05, link = "log")
-def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5",dist="categorical")
-def <- defData(def,varname="g1", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
-def <- defData(def,varname="b1", dist="beta", formula = "1+0.3*xCat", variance = 1, link = "logit")
-def <- defData(def, varname = "a1", dist = "binary" , formula="-3 + xCat", link="logit")
-def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit") 
+```{r}
+def <- defData(varname="age", dist="normal", formula=10, variance = 2)
+def <- defData(def, varname="female", dist="binary", 
+  formula="-2 + age * 0.1", link = "logit")
+def <- defData(def,varname="visits", dist="poisson", 
+  formula="1.5 - 0.2 * age + 0.5 * female", link="log")
 ```
 
-The first call to `defData` without specifying a definition name (in this example the definition name is *def*) creates a **new** data.table with a single row. An additional row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named 'nr', defined as a constant with a value to be 7. In each call to `defData` the user defines a variable name, a distribution (the default is 'normal'), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to 'identity').\
+The data definition table includes a row for each variable that is to be generated, and has the following fields: **varname**, **formula**, **variance**, **dist**, and **link**. **varname** is a provides the name of the variable to be generated. **formula** is either a value or string representing any valid R formula (which can include function calls) that in most cases defines the mean of the distribution. **variance** is a value or string that specifies either the variance or other parameter that characterizes the distribution; the default is 0. **dist** is defines the distribution of the variable to be generated; the default is *normal*. The **link** is a function that defines the relationship of the formula with the mean value, and can either *identity*, *log*, or *logit*, depending on the distribution; the default is *identity*.
 
-The possible distributions include **normal**, **gamma**, **poisson**, **zero-truncated poisson**, **negative binomial**, **binary**, **binomial**, **beta**, **uniform**, **uniform integer**, **categorical**, and **deterministic/non-random**. For all of these distributions, key parameters defining the distribution are entered in the `formula`, `variance`, and `link` fields. 
+If using `defData` to create the definition table, the first call to `defData` without specifying a definition name (in this example the definition name is *def*) creates a **new** data.table with a single row. An additional row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated.
 
-In the case of the **normal**, **gamma**, **beta**, and **negative binomial** distributions, the formula specifies the mean. The formula can be a scalar value (number) or a string that represents a function of previously defined variables in the data set definition (or, as we will see later, in a previously generated data set). In the example, the mean of `y1`, a normally distributed value, is declared as a linear function of `nr` and `x1`, and the mean of `g1` is a function of the category defined by `xCat`. The `variance` field is defined only for normal, gamma, beta, and negative binomial random variables, and can only be defined as a scalar value. In the case of gamma, beta, and negative binomial variables, the value entered in variance field is really a dispersion value $d$. The variance of a gamma distributed variable will be $d \times mean^2$, for a beta distributed variable will be $mean \times (1- mean)/(1 + d)$, and for a negative binomial distributed variable, the variance will be $mean + d*mean^2$. \
+### Generating the data
 
-In the case of the **poisson**, **zero-truncated poisson**, and **binary** distributions, the formula also specifies the mean. The variance is not a valid parameter in these cases, but the `link` field is. The default link is 'identity' but a 'log' link is available for the Poisson distributions and a "logit" link is available for the binary outcomes. In this example, `y2` is defined as Poisson random variable with a mean that is function of `nr` and `x1` on the log scale. For binary variables, which take a value of 0 or 1, the formula represents probability (with the 'identity' link) or log odds (with the 'logit' link) of the variable having a value of 1. In the example, `a1` has been defined as a binary random variable with a log odds that is a function of `xCat`.  \
+After the data set definitions have been created, a new data set with \(n\) observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set definitions in **`def`**, and then stored in the object **`dd`**:
 
-In the case of the *binomial* distribution, the formula specifies the probability of success $p$, and the variance field is used to specify the number of trials $n$. The mean of this distribution is $n*p$, and the variance is $n*p*(1-p)$.
-  
-Variables defined with a **uniform**, **uniform integer**, **categorical**, or **deterministic/non-random** distribution are specified using the formula only. The `variance` and `link` fields are not used in these cases.  \
-  
-For a uniformly distributed variable, The formula is a string with the format "a;b", where *a* and *b* are scalars or functions of previously defined variables. The uniform distribution has two parameters - the minimum and the maximum. In this case, *a* represents the minimum and *b* represents the maximum.  \
-  
-For a categorical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1 ; p_2 ; ... ; p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probability of category 2, etc. The probabilities can be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilities 0.3, 0.2, and 0.5, respectively.  \
-  
-Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as `nr`.
-
-## Generating the Data
-
-After the data set definitions have been created, a new data set with \(n\) observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set definitions in **`def`**, and then stored in the object **`dt`**:
-
-```{r, tidy = TRUE}
-dt <- genData(1000, def)
-dt
+```{r}
+dd <- genData(1000, def)
+dd
 ```
 
-New data can be added to an existing data set with a call to function **`addColumns`**. The new data definitions are created with a call to **`defData`** and then included as an argument in the call to **`addColumns`**:
+If no data definition is provided, a simple data is created with just id's.
 
-```{r, tidy = TRUE}
-addef <- defDataAdd(varname = "zExtra", dist = "normal", formula = '3 + y1', 
-                 variance = 2)
-
-dt <- addColumns(addef, dt)
-dt
+```{r}
+genData(1000)
 ```
 
-## Generating the Treatment/Exposure
+### Assigning treatment/exposure
 
-Treatment assignment can be accomplished through the original data generation process, using `defData` and `genData`. However, the functions `trtAssign` and `trtObserve` provide more options to generate treatment assignment.
+In many instances, the data generation process will involve a treatment or exposure. While it is possible to generate a treatment or exposure variable directly using the data definition process, `trtAssign` and `trtObserve` offer the ability to generate more involved types of study designs. In particular, with `trtAssign`, balanced and stratified designs are possible.
 
-### Assigned treatment
-
-Treatment assignment can simulate how treatment is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.
-
-First, create the data definition:
-
-```{r, tidy = TRUE}
-def <- defData(varname = "male", dist = "binary", formula = .5 , id="cid")
-def <- defData(def, varname = "over65", dist = "binary", formula = "-1.7 + .8*male", link="logit")
-def <- defData(def, varname = "baseDBP", dist = "normal", formula = 70, variance = 40)
-
-dtstudy <- genData(330, def)
-```
-
-*Balanced treatment assignment, stratified by gender and age category (not blood pressure)*
-```{r, tidy = TRUE}
-study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"), grpName = "rxGrp")
-
+```{r}
+study1 <- trtAssign(dd , n=3, balanced = TRUE, strata = c("female"), grpName = "rx")
 study1
 
+study1[, .N, keyby = .(female, rx)]
 ```
 
-*Balanced treatment assignment (without stratification)*
-```{r, tidy = TRUE}
-study2 <- trtAssign(dtstudy , n=3, balanced = TRUE, grpName = "rxGrp")
+## More details on data definitions
+
+This section elaborates on the data definition process to provide more details on how to create data sets.
+
+### Formulas
+
+The data definition table for a new data set is constructed sequentially. As each new row or variable is added, the formula (and in some cases the variance) can refer back to a previously defined variable. The first row by necessity cannot refer to another variable, so the formula must be a specific value (i.e. not a string formula). Starting with second row, the formula can either be a value or any valid `R` equation with quotes, and can include any variables previously defined.
+
+In the definition we created above, the probability being **female** is a function of **age**, which was previously defined. Likewise, the number of **visits** is a function of both **age** and **female**. Since **age** is the first row in the table, we had to use a scalar to define the mean.
+
+```{r}
+def <- defData(varname = "age", dist = "normal", formula=10, variance = 2)
+def <- defData(def, varname="female", dist="binary", 
+  formula="-2 + age * 0.1", link = "logit")
+def <- defData(def,varname="visits", dist="poisson", 
+  formula="1.5 - 0.2 * age + 0.5 * female", link="log")
 ```
 
-*Random (unbalanced) treatment assignment*
-```{r, tidy = TRUE}
-study3 <- trtAssign(dtstudy , n=3, balanced = FALSE, grpName = "rxGrp")
+Formulas can include `R` functions or user-defined functions. Here is an example with a user-defined function `myinv` and the `log` function from base `R`:
+
+```{r}
+myinv <- function(x) {
+  1/x
+}
+
+def <- defData(varname = "age", formula=10, variance = 2, dist = "normal")
+def <- defData(def, varname="loginvage", formula="log(myinv(age))", 
+  variance = 0.1, dist="normal")
+
+genData(5, def)
 ```
+
+Replication is an important aspect of data simulation - it is often very useful to generate data under different sets of assumptions. `simstudy` facilitates this in at least two different ways. There is function `updateDef` which allows row by row changes of a data definition table. In this case, we are changing the formula of **loginvage** in **def** so that it uses the function `log10` instead of `log`:
+
+```{r}
+def10 <- updateDef(def, changevar = "loginvage", newformula = "log10(myinv(age))")
+def10
+
+genData(5, def10)
+```
+
+A more powerful feature of `simstudy` that allows for dynamic definition tables is the external reference capability through the *double-dot* notation. Any variable reference in a formula that is preceded by ".." refers to an externally defined variable:
+
+```{r}
+age_effect <- 3
+
+def <- defData(varname = "age", formula=10, variance = 2, dist = "normal")
+def <- defData(def, varname="agemult", 
+  formula="age * ..age_effect", dist="nonrandom")
+
+def
+
+genData(2, def)
+```
+
+But the real power of dynamic definition is seen in the context of iteration over multiple values:
+
+```{r}
+age_effects <- c(0, 5, 10)
+list_of_data <- list()
+
+for (i in seq_along(age_effects)) {
+  age_effect <- age_effects[i]
+  list_of_data[[i]] <- genData(2, def)  
+}
+
+list_of_data
+```
+
+### Distributions
+
+The foundation of generating data is the assumptions we make about the distribution of each variable. `simstudy` provides 14 types of distributions, which are listed in the following table:
+
+```{r,  echo=FALSE}
+d <- list()
+d[[1]] <- data.table("beta", "mean", "both", "-", "dispersion", "X", "-", "X") 
+d[[2]] <- data.table("binary", "probability", "both", "-", "-", "X", "-", "X") 
+d[[3]] <- data.table("binomial", "probability", "both", "-", "# of trials", "X", "-", "X")
+d[[4]] <- data.table("categorical", "probability", "string", " p_1;p_2;...;p_n", "-", "X", "-", "-")
+d[[5]] <- data.table("exponential", "mean", "both", "-", "-", "X", "X", "-")
+d[[6]] <- data.table("gamma", "mean", "both", "-", "dispersion", "X", "X", "-")
+d[[7]] <- data.table("mixture", "formula", "string", "x_1 | p_1 + ... + x_n | p_n", "-", "X", "-", "-")
+d[[8]] <- data.table("negBinomial", "mean", "both", "-", "dispersion", "X", "X", "-")
+d[[9]] <- data.table("nonrandom", "formula", "both", "-", "-", "X", "-", "-")
+d[[10]] <- data.table("normal", "mean", "both", "-", "variance", "X", "-", "-")
+d[[11]] <- data.table("noZeroPoisson", "mean", "both", "-", "-", "X", "X", "-")
+d[[12]] <- data.table("poisson", "mean", "both", "-", "-", "X", "X", "-")
+d[[13]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[14]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
+
+
+d <- rbindlist(d)
+setnames(d, c("name", "formula", "string/value", "format", "variance", "identity", "log", "logit"))
+knitr::kable(d, align = "lllllccc")
+```
+
+#### beta
+
+A *beta* distribution is a continuous data distribution that takes on values between $0$ and $1$. The *formula* specifies the mean $\mu$ (with the 'identity' link) or the log-odds of the mean (with the 'logit' link). The scalar value in the 'variance' represents the dispersion value $d$. The variance $\sigma^2$ for a beta distributed variable will be $\mu (1- \mu)/(1 + d)$. Typically, the beta distribution is specified using two shape parameters $\alpha$ and $\beta$, where $\mu = \alpha/(\alpha + \beta)$ and $\sigma^2 = \alpha\beta/[(\alpha + \beta)^2 (\alpha + \beta + 1)]$.
+
+#### binary
+
+A *binary* distribution is a discrete data distribution that takes values $0$ or $1$. (It is more conventionally called a *Bernoulli* distribution, or is a *binomial* distribution with a single trial $n=1$.) The *formula* represents the probability (with the 'identity' link) or the log odds (with the 'logit' link) that the variable takes the value of 1. The mean of this distribution is $p$, and variance $\sigma^2$ is $p(1-p)$.
+
+#### binomial
+
+A *binomial* distribution is a discrete data distribution that represents the count of the number of successes given a number of trials. The formula specifies the probability of success $p$, and the variance field is used to specify the number of trials $n$. Given a value of $p$, the mean $\mu$ of this distribution is $n*p$, and the variance $\sigma^2$ is $np(1-p)$.
+
+#### categorical
+
+A *categorical* distribution is a discrete data distribution taking on values from $1$ to $K$, with each value representing a specific category, and there are $K$ categories. The categories may or may not be ordered. For a categorical variable with $k$ categories, the *formula* is a string of probabilities that sum to 1, each separated by a semi-colon: $(p_1 ; p_2 ; ... ; p_k)$. $p_1$ is the probability of the random variable falling in category $1$, $p_2$ is the probability of category $2$, etc. The probabilities can be specified as functions of other variables previously defined. The *variance* and *link* fields do not apply to the *categorical* distribution.
+
+#### exponential
+
+An *exponential* distribution is a continuous data distribution that takes on non-negative values. The *formula* represents the mean $\theta$ (with the 'identity' link) or log of the mean (with the 'log' link). The *variance* argument does not apply to the *exponential* distribution. The variance $\sigma^2$ is $\theta^2$.
+
+#### gamma
+
+A *gamma* distribution is a continuous data distribution that takes on non-negative values. The *formula* specifies the mean $\mu$ (with the 'identity' link) or the log of the mean (with the 'log' link).  The *variance* field represents a dispersion value $d$. The variance $\sigma^2$ is is $d \mu^2$.
+
+#### mixture
+
+The *mixture* distribution is a mixture of other predefined variables, which can be defined based on any of the other available distributions. The formula is a string structured with a sequence of variables $x_i$ and probabilities $p_i$: $x_1 | p_1 + … + x_n | p_n$. All of the $x_i$'s are required to have been previously defined, and the probabilities must sum to $1$ (i.e. $\sum_1^n p_i = 1$). The result of generating from a mixture is the value $x_i$ with probability $p_i$. The *variance* and *link* fields do not apply to the *mixture* distribution.
+
+#### negBinomial
+
+A *negative binomial* distribution is a discrete data distribution that represents the number of successes that occur in sequence of *Bernoulli* trials before a specified number of failures occurs. It is often used to model count data more generally when a *Poisson* distribution is not considered appropriate; the variance of the negative binomial distribution is larger than the *Poisson* distribution. The *formula* specifies the mean $\mu$ or the log of the mean. The variance field represents a dispersion value $d$. The variance $\sigma^2$ will be $\mu + d\mu^2$.
+
+#### nonrandom
+
+Deterministic data can be "generated" using the *nonrandom* distribution. The *formula* explicitly represents the value of the variable to be generated, without any uncertainty. The *variance* and *link* fields do not apply to *nonrandom* data generation.
+
+#### normal
+
+A *normal* or *Gaussian* distribution is a continuous data distribution that takes on values between $-\infty$ and $\infty$. The *formula* represents the mean $\mu$ and the *variance* represents $\sigma^2$. The *link* field is not applied to the *normal* distribution.
+
+#### noZeroPoisson
+
+The *noZeroPoisson* distribution is a discrete data distribution that takes on positive integers. This is a truncated *poisson* distribution that excludes $0$. The *formula*  specifies the parameter $\lambda$ (link is 'identity') or log(\lambda) (*link* is log). The *variance* field does not apply to this distribution. The mean $\mu$ of this distribution is $\lambda/(1-e^{-\lambda})$ and the variance $\sigma^2$ is $(\lambda + \lambda^2)/(1-e^{-\lambda}) - \lambda^2/(1-e^{-\lambda})^2$. We are not typically interested in modeling data drawn from this distribution (except in the case of a *hurdle model*), but it is useful to generate positive count data where it is not desirable to have any $0$ values.
+
+#### poisson
+
+The *poisson* distribution is a discrete data distribution that takes on non-negative integers. The *formula* specifies the mean $\lambda$ (link is 'identity') or log of the mean (*link* is log). The *variance* field does not apply to this distribution. The variance $\sigma^2$ is $\lambda$ itself.
+
+#### uniform
+
+A $uniform$ distribution is a continuous data distribution that takes on values from $a$ to $b$, where $b$ > $a$, and they both lie anywhere on the real number line. The *formula* is a string with the format "a;b", where *a* and *b* are scalars or functions of previously defined variables. The *variance* and *link* arguments do not apply to the *uniform* distribution.
+
+#### uniformInt
+
+A $uniform integer$ distribution is a discrete data distribution that takes on values from $a$ to $b$, where $b$ > $a$, and they both lie anywhere on the integer number line. The *formula* is a string with the format "a;b", where *a* and *b* are scalars or functions of previously defined variables. The *variance* and *link* arguments do not apply to the *uniform integer* distribution.
+
+## Adding data to an existing data table
+
+Until this point, we have been generating new data sets, building them up from scratch. However, it is often necessary to generate the data in multiple stages so that we would need to add data as we go along. For example we may have multi-level data with clusters that contain collections of individual observations. The data generation might begin with defining and generating cluster-level variables, followed by the definition and generation of the individual-level data; the individual-level data set would be adding to the cluster-level data set.
+
+### defDataAdd/readDataAdd and addColumns
+
+There are several important functions that facilitate the augmentation of data sets. `defDataAdd` and `readDataAdd` are similar to their counterparts `defData` and `readData`; they create data definition tables that will be used by the function `addColumns`. The formulas in these "*add*-ing" functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.
+
+```{r}
+d1 <- defData(varname = "x1", formula = 0, variance = 1, dist = "normal")
+d1 <- defData(d1, varname = "x2", formula = 0.5, dist = "binary")
+
+d2 <- defDataAdd(varname = "y", formula = "-2 + 0.5*x1 + 0.5*x2 + 1*rx", 
+                 dist = "binary", link = "logit")
+
+dd <- genData(5, d1)
+dd <- trtAssign(dd, nTrt = 2, grpName = "rx")
+dd
+
+dd <- addColumns(d2, dd)
+dd
+```
+
+### defCondition and addCondition
+
+In certain situations, it might be useful to define a data distribution conditional on previously generated data in a way that is more complex than might be easily handled by a single formula. `defCondition` creates a special table of definitions and the new variable is added to an existing data set by calling `addCondition`. `defCondition` specifies a condition argument that will be based on a variable that already exists in the data set. The new variable can take on any `simstudy` distribution specified with the appropriate *formula*, *variance*, and *link* arguments.
+
+In this example, the slope of a regression line of $y$ on $x$ varies depending on the value of the predictor $x$:
+
+```{r}
+d <- defData(varname = "x", formula = 0, variance = 9, dist = "normal")
+
+dc <- defCondition(condition = "x <= -2", formula = "4 + 3*x", variance = 2, 
+                   dist = "normal")
+dc <- defCondition(dc, condition = "x > -2 & x <= 2", formula = "0 + 1*x", variance = 4, 
+                   dist = "normal")
+dc <- defCondition(dc, condition = "x > 2", formula = "-5 + 4*x", variance = 3, 
+                   dist = "normal")
+
+dd <- genData(1000, d)
+dd <- addCondition(dc, dd, newvar = "y")
+```
+
+```{r, fig.width = 5, fig.height = 3, echo=FALSE, message=FALSE}
+ggplot(data = dd, aes(y = y, x = x)) +
+  geom_point(color = " grey60", size = .5) +
+  geom_smooth(se = FALSE, size = .5) +
+  ggtheme("grey90")
+```
+
+

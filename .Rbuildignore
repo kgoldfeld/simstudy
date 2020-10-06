@@ -8,10 +8,13 @@
 ^Demo$
 ^CRAN-RELEASE$
 ^doc$
+^docs$
 ^Meta$
 ^\.github$
-^_pkgdown\.yml$
-^docs$
-^pkgdown$
 ^codecov\.yml$
+^_pkgdown\.yml$
+^pkgdown$
+^\.lintr$
+^tests/\.lintr$
 ^File_management$
+^simstudy\.code-workspace$

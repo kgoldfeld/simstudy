@@ -1,2 +1,43 @@
 destination: docs/
-url: https://kgoldfeld.github.io/simstudy
+useurl: https://kgoldfeld.github.io/simstudy
+authors:
+  Keith Goldfeld:
+    href: "https://www.rdatagen.net/"
+development: 
+  mode: auto
+reference:
+- title: Define Data
+- contents:
+  - distributions
+  - has_concept("define_data")
+
+- title: Generate Data
+- contents:
+  - has_concept("generate_data")
+
+- title: Missing Data
+  desc: Define and generate different kinds of missingness. 
+- contents:
+  - has_concept("missing")
+
+- title: Group Data
+  desc: Assign treatment groups and create longitudinal data.
+- contents:
+  - has_concept("group_data")
+
+- title: Correlated Data
+- contents:
+  - has_concept("correlated")
+
+- title: Splines
+  desc: Use splines to define and generate data.
+- contents:
+  - has_concept("splines")
+
+- title: Utility
+- contents:
+  - has_concept("utility")
+
+- title: Deprecated & Defunct
+- contents: 
+  - simstudy-deprecated

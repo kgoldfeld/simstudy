@@ -1,0 +1,121 @@
+---
+title: "Longitudinal Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Longitudinal Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(simstudy)
+library(ggplot2)
+library(scales)
+library(grid)
+library(gridExtra)
+library(survival)
+library(gee)
+
+plotcolors <- c("#B84226", "#1B8445", "#1C5974")
+
+cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
+                "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+ggtheme <- function(panelback = "white") {
+  
+  ggplot2::theme(
+    panel.background = element_rect(fill = panelback),
+    panel.grid = element_blank(),
+    axis.ticks =  element_line(colour = "black"),
+    panel.spacing =unit(0.25, "lines"),  # requires package grid
+    panel.border = element_rect(fill = NA, colour="gray90"), 
+    plot.title = element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size = 8)
+  )  
+  
+}
+
+```
+
+To simulate longitudinal data, we start with a 'cross-sectional' data set and convert it to a time-dependent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome `Y` once before and twice after intervention `T` in a randomized trial:
+
+```{r, tidy = TRUE}
+tdef <- defData(varname = "T", dist="binary", formula = 0.5)
+tdef <- defData(tdef, varname = "Y0", dist = "normal", formula = 10, variance = 1)
+tdef <- defData(tdef, varname = "Y1", dist = "normal", formula = "Y0 + 5 + 5 * T", variance = 1)
+tdef <- defData(tdef, varname = "Y2", dist = "normal", formula = "Y0 + 10 + 5 * T", variance = 1)
+
+dtTrial <- genData( 500, tdef)
+dtTrial
+```
+
+The data in longitudinal form is created with a call to **`addPeriods`**. If the cross-sectional data includes time dependent data, then the number of periods `nPeriods` must be the same as the number of time dependent columns. If a variable is not declared as one of the `timevars`, it will be repeated each time period. In this example, the treatment indicator `T` is not specified as a time dependent variable. (Note: if there are two time-dependent variables, it is best to create two data sets and merge them. This will be shown later in the vignette).
+
+```{r, tidy = TRUE}
+dtTime <- addPeriods(dtTrial, nPeriods = 3, idvars = "id", timevars = c("Y0", "Y1", "Y2"), timevarName = "Y")
+dtTime
+```
+
+This is what the longitudinal data look like:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6, fig.height = 3}
+
+avg <- dtTime[,.(Y=mean(Y)), keyby = .(T, period)]
+
+ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
+  geom_jitter(aes(color=factor(T)), size = .5, alpha = .8, width = .25) +
+  geom_line(data=avg, aes(x = factor(period), y = Y, group = T, color= factor(T)), size=1) +
+  xlab("Period") +
+  scale_color_manual(values = plotcolors[c(3,1)], 
+                     labels = c("Ctrl", "Trt")) +
+  theme(legend.title=element_blank()) +
+  ggtheme("grey90") +
+  theme(legend.key=element_rect(fill=NA))
+```
+
+### Longitudinal data with varying observation and interval times
+
+It is also possible to generate longitudinal data with varying numbers of measurement periods as well as varying time intervals between each measurement period. This is done by defining specific variables in the data set that define the number of observations per subject and the average interval time between each observation. `nCount` defines the number of measurements for an individual; `mInterval` specifies the average time between intervals for an subject; and `vInterval` specifies the variance of those interval times. If `vInterval` is set to 0 or is not defined, the interval for a subject is determined entirely by the mean interval. If `vInterval` is greater than 0, time intervals are generated using a gamma distribution with mean and dispersion specified.
+
+In this simple example, the cross-sectional data generates individuals with a different number of measurement observations and different times between each observation. Data for two of these individuals is printed:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "xbase", dist = "normal", formula = 20, variance = 3)
+def <- defData(def,varname = "nCount", dist = "noZeroPoisson", formula = 6)
+def <- defData(def, varname = "mInterval", dist = "gamma", formula = 30, variance = .01)
+def <- defData(def, varname = "vInterval", dist = "nonrandom", formula = .07)
+
+dt <- genData(200, def)
+dt[id %in% c(8,121)]                # View individuals 8 and 121
+```
+
+The resulting longitudinal data for these two subjects can be inspected after a call to `addPeriods`. Notice that no parameters need to be set since all information resides in the data set itself:
+
+```{r, tidy = TRUE}
+dtPeriod <- addPeriods(dt)
+dtPeriod[id %in% c(8,121)]  # View individuals 8 and 121 only
+```
+
+If a time sensitive measurement is added to the data set ...
+
+```{r, tidy = TRUE}
+def2 <- defDataAdd(varname = "Y", dist = "normal", formula = "15 + .1 * time", variance = 5)
+dtPeriod <- addColumns(def2, dtPeriod)
+```
+
+... a plot of a five randomly selected individuals looks like this:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6, fig.height = 3}
+
+sampledID <- sample(1:nrow(dt), 5)
+dtSample <- dtPeriod[id %in% sampledID]
+
+ggplot(data = dtSample, aes(x = time, y = Y, group=id)) +
+  geom_point(aes(color = factor(id))) +
+  geom_line(aes(color = factor(id))) +
+  xlab("Day") +
+  scale_color_manual(values = cbbPalette) +
+  theme(legend.position = "none") +
+  ggtheme("grey90")
+```

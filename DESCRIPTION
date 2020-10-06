@@ -1,13 +1,19 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.1.16
-Date: 2020-03-31
-Authors@R: person(given = "Keith",
-                  family = "Goldfeld",
-                  role = c("aut","cre"),
-                  email = "keith.goldfeld@nyumc.org",
-                  comment = c(ORCID = "0000-0002-0292-8780"))
+Version: 0.2.0
+Date: 2020-10-06
+Authors@R: 
+    c(person(given = "Keith",
+             family = "Goldfeld",
+             role = c("aut", "cre"),
+             email = "Keith.Goldfeld@nyumc.org",
+             comment = c(ORCID = "0000-0002-0292-8780")),
+      person(given = "Jacob",
+             family = "Wujciak-Jens",
+             role = "aut",
+             email = "jacob@wujciak.de",
+             comment = c(ORCID = "0000-0002-7281-3989")))
 Description: Simulates data sets in order to explore modeling
     techniques or better understand data generating processes. The user
     specifies a set of relationships between covariates, and generates
@@ -16,26 +22,36 @@ Description: Simulates data sets in order to explore modeling
     designs, and cluster randomized trials. Missingness can be generated
     using various mechanisms (MCAR, MAR, NMAR).
 License: GPL-3
-URL: https://kgoldfeld.github.io/simstudy, https://github.com/kgoldfeld/simstudy
+URL: https://github.com/kgoldfeld/simstudy,
+     https://kgoldfeld.github.io/simstudy/,
+     https://kgoldfeld.github.io/simstudy/dev/
 BugReports: https://github.com/kgoldfeld/simstudy/issues
 Depends:
     R (>= 3.2.2)
 Imports:
     data.table,
+    glue,
+    methods,
     mvnfast,
     mvtnorm,
     Rcpp
 Suggests: 
     covr,
+    dplyr,
     formatR,
+    gee,
     ggplot2,
     grid,
     gridExtra,
     hedgehog,
     knitr,
+    magrittr,
     Matrix,
     mgcv,
+    ordinal,
+    pracma,
     rmarkdown,
+    scales,
     splines,
     survival,
     testthat

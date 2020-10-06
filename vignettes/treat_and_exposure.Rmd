@@ -1,0 +1,254 @@
+---
+title: "Treatment and Exposure"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Treatment and Exposure}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message=FALSE}
+
+library(simstudy)
+library(ggplot2)
+library(scales)
+library(grid)
+library(gridExtra)
+library(survival)
+library(gee)
+library(data.table)
+
+plotcolors <- c("#B84226", "#1B8445", "#1C5974")
+
+cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
+                "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+ggtheme <- function(panelback = "white") {
+  
+  ggplot2::theme(
+    panel.background = element_rect(fill = panelback),
+    panel.grid = element_blank(),
+    axis.ticks =  element_line(colour = "black"),
+    panel.spacing =unit(0.25, "lines"),  # requires package grid
+    panel.border = element_rect(fill = NA, colour="gray90"), 
+    plot.title = element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size = 8)
+  )  
+  
+}
+
+splotfunc <- function(dt, ptitle) {
+
+  dtplot <- dt[,.N,keyby=.(male, over65, rxGrp)][, .(rxGrp, grp = male * 2 + over65 * 1, N)]
+  ggplot(dtplot, aes(factor(grp), N)) +
+    geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position = "dodge", stat="identity") +
+    scale_fill_manual(values = plotcolors) +
+    ggtitle(ptitle) +
+    theme(legend.position = "none") +
+    ggtheme() +
+    xlab("Strata") +
+    ylim(0,80)
+}
+
+aplotfunc <- function(dt, ptitle) {
+
+  dtplot <- dt[,.N,keyby=.(rxGrp)]
+  ggplot(dtplot, aes(factor(rxGrp), N)) +
+    geom_bar(aes(fill = factor(rxGrp)), alpha=.8, position="dodge", stat="identity", width=.5) +
+    scale_fill_manual(values = plotcolors) +
+    ggtitle(ptitle) +
+    theme(legend.position = "none") +
+    ggtheme() +
+    xlab("Treatment group") +
+    ylim(0,150)
+}
+
+```
+
+Treatment assignment can be accomplished through the original data generation process, using `defData` and `genData`. However, the functions `trtAssign` and `trtObserve` provide more options to generate treatment assignment.
+
+### Assigned treatment
+
+Treatment assignment can simulate how treatment is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.
+
+First, create the data definition:
+
+```{r}
+def <- defData(varname = "male", dist = "binary", 
+               formula = .5 , id="cid")
+def <- defData(def, varname = "over65", dist = "binary", 
+               formula = "-1.7 + .8*male", link="logit")
+def <- defData(def, varname = "baseDBP", dist = "normal", 
+               formula = 70, variance = 40)
+
+dtstudy <- genData(330, def)
+```
+
+*Balanced treatment assignment, stratified by gender and age category (not blood pressure)*
+```{r, tidy = TRUE}
+study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"), grpName = "rxGrp")
+
+study1
+```
+
+*Balanced treatment assignment (without stratification)*
+```{r, tidy = TRUE}
+study2 <- trtAssign(dtstudy , n=3, balanced = TRUE, grpName = "rxGrp")
+```
+
+*Random (unbalanced) treatment assignment*
+```{r, tidy = TRUE}
+study3 <- trtAssign(dtstudy , n=3, balanced = FALSE, grpName = "rxGrp")
+```
+
+*Comparison of three treatment assignment mechanisms*
+```{r, tidy = TRUE, echo = FALSE, fig.width = 4, fig.height = 6}
+p1 <- splotfunc(study1, "Balanced within strata")
+p1a <- aplotfunc(study1, "")
+
+p2 <- splotfunc(study2, "Balanced without strata")
+p2a <- aplotfunc(study2, "")
+
+p3 <- splotfunc(study3, "Random allocation")
+p3a <- aplotfunc(study3, "")
+
+grid.arrange(p1, p1a, p2, p2a, p3, p3a, ncol=2)
+```
+
+### Observed treatment
+
+If exposure or treatment is observed (rather than randomly assigned), use `trtObserved` to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:
+
+```{r, tidy = TRUE}
+formula1 <- c("-2 + 2*male - .5*over65", "-1 + 2*male + .5*over65")
+dtExp <- trtObserve(dtstudy, formulas = formula1, logit.link = TRUE, grpName = "exposure")
+```
+
+Here are the exposure distributions by gender and age:
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5}
+dtplot1 <- dtExp[,.N,keyby=.(male,exposure)]
+p1 <- ggplot(data = dtplot1, aes(x=factor(male), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("Female", "Male")) +
+  ylab("Number exposed")+
+  ggtitle("Gender")
+
+dtplot2 <- dtExp[,.N,keyby=.(over65,exposure)]
+p2 <- ggplot(data = dtplot2, aes(x=factor(over65), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("65 or younger", "Over 65")) +
+  ylab("Number exposed") +
+  ggtitle("Age")
+
+grid.arrange(p1,p2,nrow=1)
+
+```
+
+Here is a second case of three exposures where the exposure is independent of any covariates. Note that specifying the formula as `c(.35, .45)` is the same as specifying it is `c(.35, .45, .20)`. Also, when referring to probabilities, the identity link is used:
+
+```{r, tidy = TRUE}
+formula2 <- c(.35, .45)
+
+dtExp2 <- trtObserve(dtstudy, formulas = formula2, logit.link = FALSE, grpName = "exposure")
+```
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5}
+dtplot1a <- dtExp2[,.N,keyby=.(male,exposure)]
+p1a <- ggplot(data = dtplot1a, aes(x=factor(male), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("Female", "Male")) +
+  ylab("Number exposed")+
+  ggtitle("Gender")
+
+dtplot2a <- dtExp2[,.N,keyby=.(over65,exposure)]
+p2a <- ggplot(data = dtplot2a, aes(x=factor(over65), y=N)) +
+  geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
+  ggtheme() +
+  theme(axis.title.x = element_blank()) +
+  theme(legend.title = element_text(size = 8)) +
+  ylim(0, 150) +
+  scale_fill_manual(values = plotcolors, name = "Exposure") +
+  scale_x_discrete(breaks = c(0, 1), labels = c("65 or younger", "Over 65")) +
+  ylab("Number exposed") +
+  ggtitle("Age")
+
+grid.arrange(p1a,p2a,nrow=1)
+```
+
+### Stepped-wedge design
+
+Stepped-wedge designs are a special class of cluster randomized trial where each cluster is observed in both treatment arms (as opposed to the classic parallel design where only some of the clusters receive the treatment). This is a special case of a cross-over design, where the cross-over is only in one direction: control (or pre-intervention) to intervention.
+
+In this example, the data generating process looks like this:
+
+$$Y_{ict} = \beta_0 + b_c + \beta_1 * t + \beta_2*X_{ct} + e_{ict}$$
+
+where $Y_{ict}$ is the outcome for individual $i$ in cluster $c$ in time period $t$, $b_c$ is a cluster-specific effect, $X_{ct}$ is the intervention indicator that has a value 1 during periods where the cluster is under the intervention, and $e_{ict}$ is the individual-level effect. Both $b_c$ and $e_{ict}$ are normally distributed with mean 0 and variances $\sigma^2_{b}$ and $\sigma^2_{e}$, respectively. $\beta_1$ is the time trend, and $\beta_2$ is the intervention effect.
+
+We need to define the cluster-level variables (i.e. the cluster effect and the cluster size) as well as the individual specific outcome. In this case each cluster will have 15 individuals per period, and $\sigma^2_b = 0.20$. In addition, $\sigma^2_e = 1.75$.
+
+```{r}
+library(simstudy)
+library(ggplot2)
+
+defc <- defData(varname = "ceffect", formula = 0, variance = 0.20, 
+                dist = "normal", id = "cluster")
+defc <- defData(defc, "m", formula = 15, dist = "nonrandom")
+
+defa <- defDataAdd(varname = "Y", 
+                   formula = "0 + ceffect + 0.1*period + trt*1.5", 
+                   variance = 1.75, dist = "normal")
+```
+
+In this case, there will be 30 clusters and 24 time periods. With 15 individuals per cluster per period, there will be 360 observations for each cluster, and 10,800 in total. (There is no reason the cluster sizes need to be deterministic, but I just did that to simplify things a bit.)
+
+Cluster-level intervention assignment is done after generating the cluster-level and time-period data. The call to `trtStepWedge` includes 3 key arguments that specify the number of waves, the length of each wave, and the period during which the first clusters begin the intervention.  
+
+`nWaves` indicates how many clusters share the same starting period for the intervention. In this case, we have 5 waves, with 6 clusters each. `startPer` is the first period of the first wave. The earliest starting period is 0, the first period. Here, the first wave starts the intervention during period 4. `lenWaves` indicates the length between starting points for each wave. Here, a length of 4 means that the starting points will be 4, 8, 12, 16, and 20.
+
+Once the treatment assignments are made, the individual records are created and the outcome data are generated in the last step.
+
+```{r}
+set.seed(608477)
+
+dc <- genData(30, defc)
+dp <- addPeriods(dc, 24, "cluster", timevarName = "t")
+dp <- trtStepWedge(dp, "cluster", nWaves = 5, lenWaves = 4, 
+          startPer = 4, grpName = "trt")
+
+dd <- genCluster(dp, cLevelVar = "timeID", "m", "id")
+dd <- addColumns(defa, dd)
+
+dd
+```
+
+```{r}
+dSum <- dd[, .(Y = mean(Y)), keyby = .(cluster, period, trt, startTrt)]
+
+ggplot(data = dSum, 
+    aes(x = period, y = Y, group = interaction(cluster, trt))) +
+  geom_line(aes(color = factor(trt))) +
+  facet_grid(factor(startTrt, labels = c(1 : 5)) ~ .) +
+  scale_x_continuous(breaks = seq(0, 23, by = 4), name = "week") +
+  scale_color_manual(values = c("#b8cce4", "#4e81ba")) +
+  theme(panel.grid = element_blank(),
+        legend.position = "none") 
+```
+
