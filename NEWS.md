@@ -1,14 +1,40 @@
 # simstudy 0.2.0
-* Renamed catProbs to genCatFormula for naming consistency. catProbs is now deprecated. 
-* genCatFormula now warns if an additional category is created.
-* The new function genMixFormula generates mixture formulas from different Inputs.
+
+## Deprecated Functions
 * Moved genCorOrdCat's functionality into genOrdCat. genCorOrdCat is now
   deprecated.
+* Renamed catProbs to genCatFormula for naming consistency. catProbs is now
+  deprecated. 
+
+## New features
 * Introduced a new system for formula definitions and completely reworked the
   underlying code. See vignette "Dynamic Data Definition".
+* The new function genMixFormula generates mixture formulas from different
+  inputs.
+* Some simstudy functions now produce custom errors and warnings. Eventually
+  all conditions will be replaced by the new system to make error handling
+  easier for the user.
 * Added new vignettes.
-* Created documentation page: https://kgoldfeld.github.io/simstudy/
+* Created documentation pages for: 
+   - the release version https://kgoldfeld.github.io/simstudy/
+   - and development version https://kgoldfeld.github.io/simstudy/dev
+
+## Minor improvements and fixes
+* genCatFormula now warns if an additional category is created or probabilities
+  are normalized.
 * Fixed bug in trtAssign related new ratio argument.
+* Fixed bug in trtAssign when strata had count of one.
+* defData now also checks the first row in the definition table for validity.
+
+
+
+
+
+
+
+
+
+
 
 # simstudy 0.1.16
 
