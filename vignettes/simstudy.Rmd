@@ -264,7 +264,7 @@ Until this point, we have been generating new data sets, building them up from s
 
 ### defDataAdd/readDataAdd and addColumns
 
-There are several important functions that facilitate the augementation of data sets. `defDataAdd` and `readDataAdd` are similar to their counterparts `defData` and `readData`; they create data definition tables that will be used by the function `addColumns`. The formulas in these "*add*-ing" functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.
+There are several important functions that facilitate the augmentation of data sets. `defDataAdd` and `readDataAdd` are similar to their counterparts `defData` and `readData`; they create data definition tables that will be used by the function `addColumns`. The formulas in these "*add*-ing" functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.
 
 ```{r}
 d1 <- defData(varname = "x1", formula = 0, variance = 1, dist = "normal")

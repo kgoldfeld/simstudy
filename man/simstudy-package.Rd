@@ -17,9 +17,9 @@ Simulates data sets in order to explore modeling
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://kgoldfeld.github.io/simstudy}
   \item \url{https://github.com/kgoldfeld/simstudy}
-  \item \url{https://github.com/kgoldfeld/simstudy/dev}
+  \item \url{https://kgoldfeld.github.io/simstudy/}
+  \item \url{https://kgoldfeld.github.io/simstudy/dev/}
   \item Report bugs at \url{https://github.com/kgoldfeld/simstudy/issues}
 }
 

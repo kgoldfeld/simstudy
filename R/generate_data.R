@@ -182,7 +182,7 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 #' @param varname Name of field(s) to be converted.
 #' @param labels Factor level labels. If not provided, the generated factor
 #' levels will be used as the labels. Can be a vector (if only one new factor or
-#' all factors have the same labeks) or a list of character vectors of the same
+#' all factors have the same labels) or a list of character vectors of the same
 #' length as varname.
 #' @param prefix By default, the new field name will be a concatenation of "f"
 #' and the old field name. A prefix string can be provided.
@@ -482,7 +482,7 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' assign zero probability to non-relevant columns.
 #' @param catVar Name of the new categorical field. Defaults to "cat". Can be a
 #' character vector with a name for each new variable defined via `baseprobs`.
-#' Will be overriden by `prefix` if more than one variable is defined and
+#' Will be overridden by `prefix` if more than one variable is defined and
 #' `length(catVar) == 1`.
 #' @param asFactor If `asFactor == TRUE` (default), new field is returned
 #' as a factor. If `asFactor == FALSE`, new field is returned as an integer.

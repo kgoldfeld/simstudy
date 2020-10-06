@@ -32,7 +32,7 @@ assign zero probability to non-relevant columns.}
 
 \item{catVar}{Name of the new categorical field. Defaults to "cat". Can be a
 character vector with a name for each new variable defined via \code{baseprobs}.
-Will be overriden by \code{prefix} if more than one variable is defined and
+Will be overridden by \code{prefix} if more than one variable is defined and
 \code{length(catVar) == 1}.}
 
 \item{asFactor}{If \code{asFactor == TRUE} (default), new field is returned
