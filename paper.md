@@ -1,68 +1,67 @@
 ---
 title: 'simstudy: Illuminating research methods through data generation'
 tags:
-  - Python
-  - astronomy
-  - dynamics
-  - galactic dynamics
-  - milky way
+  - R
+  - statistics
+  - data-simulation
+  - statistical-models
+  - data-generation
 authors:
-  - name: Adrian M. Price-Whelan^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
-    orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author Without ORCID
+  - name: Keith Goldfeld
+    orcid: 0000-0002-0292-8780
+    affiliation: 1 
+  - name: Jacob Wujciak-Jens
+    orcid: 0000-0002-7281-3989
     affiliation: 2
-  - name: Author with no affiliation
-    affiliation: 3
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name: NYU Groosman School of Medicine.
    index: 1
- - name: Institution Name
-   index: 2
  - name: Independent Researcher
-   index: 3
-date: 13 August 2017
+   index: 2
+date: 13 October 2020
 bibliography: paper.bib
-
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx Titel anhand dieser DOI in Citavi-Projekt übernehmen <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
 ---
 
 # Summary
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+The `simstudy` package is collection of functions that allow users to generate
+simulated data sets in order to explore modeling techniques or better understand
+data generating processes. The user defines the distributions of individual
+variables, specifies relationships between covariates and outcomes, and
+generates data based on these specifications. The final data sets can represent
+randomized control trials, repeated measure designs, cluster randomized trials,
+or naturally observed data processes. Other complexities that can be added
+include survival data, correlated data, factorial study designs, step wedge
+designs, and missing data processes.
+
+Simulation using `simstudy` has two fundamental steps. The user (1) **defines**
+the data elements of a data set and (2) **generates** the data based on these
+definitions. Additional functionality exists to simulate observed or randomized
+**treatment assignment/exposures**, to create **longitudinal/panel** data, to
+create **multi-level/hierarchical** data, to create datasets with **correlated
+variables** based on a specified covariance structure, to **merge** datasets, to
+create data sets with **missing** data, and to create non-linear relationships
+with underlying **spline** curves.
+
+The overarching philosophy of `simstudy` is to create data generating processes
+that mimic the typical models used to fit those types of data. So, the
+parameterization of some of the data generating processes may not follow the
+standard parameterizations for the specific distributions. For example, in
+`simstudy` *gamma*-distributed data are generated based on the specification of
+a mean $\mu$ (or $log(\mu)$) and a dispersion $d$, rather than shape $\alpha$
+and rate $\beta$ parameters that more typically characterize the *gamma*
+distribution. When we estimate the parameters, we are modeling $\mu$ (or some
+function of $(\mu)$), so we should explicitly recover the `simstudy` parameters
+used to generate the model - illuminating the relationship between the
+underlying data generating processes and the models.
 
 # Statement of need 
-
-`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`).
-
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+To Do:
+* A clear Statement of Need that illustrates the research purpose of the software.
+* A list of key references, including to other software addressing related
+  needs.  
+* Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it.
+* Acknowledgement of any financial support.
 
 # Mathematics
 
