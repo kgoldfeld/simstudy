@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create factor variable from an existing (non-double) variable</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genFactor.R'><code>R/genFactor.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
     <div class="hidden name"><code>genFactor.Rd</code></div>
     </div>
 
@@ -123,23 +159,25 @@
     <p>Create factor variable from an existing (non-double) variable</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genFactor</span>(<span class='kw'>dtName</span>, <span class='kw'>varname</span>, labels = <span class='kw'>NULL</span>, prefix = <span class='st'>"f"</span>, replace = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>genFactor</span><span class='op'>(</span><span class='va'>dtName</span>, <span class='va'>varname</span>, labels <span class='op'>=</span> <span class='cn'>NULL</span>, prefix <span class='op'>=</span> <span class='st'>"f"</span>, replace <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dtName</th>
-      <td><p>Data table with column</p></td>
+      <td><p>Data table with columns.</p></td>
     </tr>
     <tr>
       <th>varname</th>
-      <td><p>Name of field that is to be converted</p></td>
+      <td><p>Name of field(s) to be converted.</p></td>
     </tr>
     <tr>
       <th>labels</th>
       <td><p>Factor level labels. If not provided, the generated factor
-levels will be used as the labels.</p></td>
+levels will be used as the labels. Can be a vector (if only one new factor or
+all factors have the same labeks) or a list of character vectors of the same
+length as varname.</p></td>
     </tr>
     <tr>
       <th>prefix</th>
@@ -158,50 +196,50 @@ referenced varname will be removed.</p></td>
     <pre class="examples"><div class='input'>
 <span class='co'># First example:</span>
 
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"cat"</span>, formula = <span class='st'>".2;.3;.5"</span>, dist=<span class='st'>"categorical"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"x"</span>, formula = <span class='fl'>5</span>, variance = <span class='fl'>2</span>)
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"cat"</span>, formula <span class='op'>=</span> <span class='st'>".2;.3;.5"</span>, dist <span class='op'>=</span> <span class='st'>"categorical"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"x"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>200</span>,<span class='kw'>def</span>)
-<span class='kw'>dx</span>
-</div><div class='output co'>#&gt;       id cat        x
-#&gt;   1:   1   3 5.575692
-#&gt;   2:   2   3 2.665863
-#&gt;   3:   3   3 5.780934
-#&gt;   4:   4   3 5.463594
-#&gt;   5:   5   3 7.746419
-#&gt;  ---                 
-#&gt; 196: 196   2 4.106860
-#&gt; 197: 197   3 2.282289
-#&gt; 198: 198   2 3.980982
-#&gt; 199: 199   3 5.764928
-#&gt; 200: 200   3 4.791226</div><div class='input'>
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genFactor</span>(<span class='kw'>dx</span>, <span class='st'>"cat"</span>, labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"one"</span>, <span class='st'>"two"</span>, <span class='st'>"three"</span>))
-<span class='kw'>dx</span>
-</div><div class='output co'>#&gt;       id cat        x  fcat
-#&gt;   1:   1   3 5.575692 three
-#&gt;   2:   2   3 2.665863 three
-#&gt;   3:   3   3 5.780934 three
-#&gt;   4:   4   3 5.463594 three
-#&gt;   5:   5   3 7.746419 three
-#&gt;  ---                       
-#&gt; 196: 196   2 4.106860   two
-#&gt; 197: 197   3 2.282289 three
-#&gt; 198: 198   2 3.980982   two
-#&gt; 199: 199   3 5.764928 three
-#&gt; 200: 200   3 4.791226 three</div><div class='input'>
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='va'>def</span><span class='op'>)</span>
+<span class='va'>dx</span>
+</div><div class='output co'>#&gt;       id cat         x
+#&gt;   1:   1   3 6.3663010
+#&gt;   2:   2   3 5.7637293
+#&gt;   3:   3   3 3.7086410
+#&gt;   4:   4   3 4.4492798
+#&gt;   5:   5   3 5.4322666
+#&gt;  ---                  
+#&gt; 196: 196   3 4.3121550
+#&gt; 197: 197   3 3.5968250
+#&gt; 198: 198   2 1.6055998
+#&gt; 199: 199   3 0.2882947
+#&gt; 200: 200   3 5.7856142</div><div class='input'>
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genFactor</span><span class='op'>(</span><span class='va'>dx</span>, <span class='st'>"cat"</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"one"</span>, <span class='st'>"two"</span>, <span class='st'>"three"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>dx</span>
+</div><div class='output co'>#&gt;       id cat         x  fcat
+#&gt;   1:   1   3 6.3663010 three
+#&gt;   2:   2   3 5.7637293 three
+#&gt;   3:   3   3 3.7086410 three
+#&gt;   4:   4   3 4.4492798 three
+#&gt;   5:   5   3 5.4322666 three
+#&gt;  ---                        
+#&gt; 196: 196   3 4.3121550 three
+#&gt; 197: 197   3 3.5968250 three
+#&gt; 198: 198   2 1.6055998   two
+#&gt; 199: 199   3 0.2882947 three
+#&gt; 200: 200   3 5.7856142 three</div><div class='input'>
 <span class='co'># Second example:</span>
 
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>)
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='trtAssign.html'>trtAssign</a></span>(dtName = <span class='kw'>dx</span>, <span class='fl'>2</span>, grpName = <span class='st'>"studyArm"</span>)
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genFactor</span>(<span class='kw'>dx</span>, varname = <span class='st'>"studyArm"</span>, labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"control"</span>, <span class='st'>"treatment"</span>), prefix = <span class='st'>"t_"</span>)
-<span class='kw'>dx</span>
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='trtAssign.html'>trtAssign</a></span><span class='op'>(</span>dtName <span class='op'>=</span> <span class='va'>dx</span>, <span class='fl'>2</span>, grpName <span class='op'>=</span> <span class='st'>"studyArm"</span><span class='op'>)</span>
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genFactor</span><span class='op'>(</span><span class='va'>dx</span>, varname <span class='op'>=</span> <span class='st'>"studyArm"</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"control"</span>, <span class='st'>"treatment"</span><span class='op'>)</span>, prefix <span class='op'>=</span> <span class='st'>"t_"</span><span class='op'>)</span>
+<span class='va'>dx</span>
 </div><div class='output co'>#&gt;     id studyArm t_studyArm
-#&gt;  1:  1        1  treatment
-#&gt;  2:  2        1  treatment
-#&gt;  3:  3        1  treatment
-#&gt;  4:  4        0    control
-#&gt;  5:  5        0    control
-#&gt;  6:  6        0    control
+#&gt;  1:  1        0    control
+#&gt;  2:  2        0    control
+#&gt;  3:  3        0    control
+#&gt;  4:  4        1  treatment
+#&gt;  5:  5        1  treatment
+#&gt;  6:  6        1  treatment
 #&gt;  7:  7        0    control
 #&gt;  8:  8        1  treatment
 #&gt;  9:  9        1  treatment
@@ -217,7 +255,7 @@ referenced varname will be removed.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

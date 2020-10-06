@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Generate ordinal categorical data — genOrdCat" />
-<meta property="og:description" content="Ordinal categorical data is added to an existing data set." />
+<meta property="og:description" content="Ordinal categorical data is added to an existing data set.
+Correlations can be added via correlation matrix or rho and corstr." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +90,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,15 +152,27 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate ordinal categorical data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genOrdCat.R'><code>R/genOrdCat.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
     <div class="hidden name"><code>genOrdCat.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Ordinal categorical data is added to an existing data set.</p>
+    <p>Ordinal categorical data is added to an existing data set.
+Correlations can be added via correlation matrix or <code>rho</code> and <code>corstr</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genOrdCat</span>(<span class='kw'>dtName</span>, <span class='kw'>adjVar</span>, <span class='kw'>baseprobs</span>, catVar = <span class='st'>"cat"</span>, asFactor = <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>genOrdCat</span><span class='op'>(</span>
+  <span class='va'>dtName</span>,
+  adjVar <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>baseprobs</span>,
+  catVar <span class='op'>=</span> <span class='st'>"cat"</span>,
+  asFactor <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  idname <span class='op'>=</span> <span class='st'>"id"</span>,
+  prefix <span class='op'>=</span> <span class='st'>"grp"</span>,
+  rho <span class='op'>=</span> <span class='fl'>0</span>,
+  corstr <span class='op'>=</span> <span class='st'>"ind"</span>,
+  corMatrix <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,41 +189,159 @@ link.</p></td>
     </tr>
     <tr>
       <th>baseprobs</th>
-      <td><p>Baseline probability expressed as a vector of
-probabilities. The values must sum to &lt;= 1. If sum(baseprobs) &lt; 1,
-an additional category is added with probability 1 - sum(baseprobs).</p></td>
+      <td><p>Baseline probability expressed as a vector or matrix of
+probabilities. The values (per row) must sum to &lt;= 1. If <code>rowSums(baseprobs) &lt; 1</code>, an additional category is added with probability <code>1 - rowSums(baseprobs)</code>. The number of rows represents the number of new
+categorical variables. The number of columns represents the number of
+possible responses - if an particular category has fewer possible responses,
+assign zero probability to non-relevant columns.</p></td>
     </tr>
     <tr>
       <th>catVar</th>
-      <td><p>Name of the new categorical field. Defaults to "cat"</p></td>
+      <td><p>Name of the new categorical field. Defaults to "cat". Can be a
+character vector with a name for each new variable defined via <code>baseprobs</code>.
+Will be overriden by <code>prefix</code> if more than one variable is defined and
+<code>length(catVar) == 1</code>.</p></td>
     </tr>
     <tr>
       <th>asFactor</th>
-      <td><p>If asFactor == TRUE (default), new field is returned
-as a factor. If asFactor == FALSE, new field is returned as an integer.</p></td>
+      <td><p>If <code>asFactor == TRUE</code> (default), new field is returned
+as a factor. If <code>asFactor == FALSE</code>, new field is returned as an integer.</p></td>
+    </tr>
+    <tr>
+      <th>idname</th>
+      <td><p>Name of the id column in <code>dtName</code>.</p></td>
+    </tr>
+    <tr>
+      <th>prefix</th>
+      <td><p>A string. The names of the new variables will be a
+concatenation of the prefix and a sequence of integers indicating the
+variable number.</p></td>
+    </tr>
+    <tr>
+      <th>rho</th>
+      <td><p>Correlation coefficient, -1 &lt; rho &lt; 1. Use if corMatrix is not
+provided.</p></td>
+    </tr>
+    <tr>
+      <th>corstr</th>
+      <td><p>Correlation structure of the variance-covariance matrix defined
+by sigma and rho. Options include "ind" for an independence structure, "cs"
+for a compound symmetry structure, and "ar1" for an autoregressive structure.</p></td>
+    </tr>
+    <tr>
+      <th>corMatrix</th>
+      <td><p>Correlation matrix can be entered directly. It must be
+symmetrical and positive definite. It is not a required field; if a matrix is
+not provided, then a structure and correlation coefficient rho must be
+specified. (The matrix created via <code>rho</code> and <code>corstr</code> must also be positive
+definite.)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Original data.table with added categorical field</p>
+    <p>Original data.table with added categorical field.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>#### Set definitions</span>
+    <pre class="examples"><div class='input'><span class='co'># Ordinal Categorical Data ----</span>
 
-<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"male"</span>, formula = <span class='fl'>0.45</span>, dist = <span class='st'>"binary"</span>, id = <span class='st'>"idG"</span>)
-<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def1</span>, varname = <span class='st'>"z"</span>, formula = <span class='st'>"1.2*male"</span>, dist = <span class='st'>"nonrandom"</span>)
+<span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>
+    varname <span class='op'>=</span> <span class='st'>"male"</span>,
+    formula <span class='op'>=</span> <span class='fl'>0.45</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>, id <span class='op'>=</span> <span class='st'>"idG"</span>
+<span class='op'>)</span>
+<span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def1</span>,
+    varname <span class='op'>=</span> <span class='st'>"z"</span>,
+    formula <span class='op'>=</span> <span class='st'>"1.2*male"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
+<span class='op'>)</span>
+<span class='va'>def1</span>
+</div><div class='output co'>#&gt;    varname  formula variance      dist     link
+#&gt; 1:    male     0.45        0    binary identity
+#&gt; 2:       z 1.2*male        0 nonrandom identity</div><div class='input'>
+<span class='co'>## Generate data</span>
 
-<span class='co'>#### Generate data</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20</span>)
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def1</span><span class='op'>)</span>
 
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='kw'>def1</span>)
+<span class='va'>probs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.40</span>, <span class='fl'>0.25</span>, <span class='fl'>0.15</span><span class='op'>)</span>
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genOrdCat</span><span class='op'>(</span><span class='va'>dx</span>,
+  adjVar <span class='op'>=</span> <span class='st'>"z"</span>, idname <span class='op'>=</span> <span class='st'>"idG"</span>, baseprobs <span class='op'>=</span> <span class='va'>probs</span>,
+  catVar <span class='op'>=</span> <span class='st'>"grp"</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Probabilities do not sum to 1. Adding category to all rows!</span></div><div class='input'><span class='va'>dx</span>
+</div><div class='output co'>#&gt;        idG male   z grp
+#&gt;    1:    1    1 1.2   2
+#&gt;    2:    2    1 1.2   3
+#&gt;    3:    3    0 0.0   4
+#&gt;    4:    4    0 0.0   1
+#&gt;    5:    5    1 1.2   4
+#&gt;   ---                  
+#&gt;  996:  996    1 1.2   2
+#&gt;  997:  997    0 0.0   1
+#&gt;  998:  998    0 0.0   1
+#&gt;  999:  999    0 0.0   2
+#&gt; 1000: 1000    0 0.0   1</div><div class='input'>
+<span class='co'># Correlated Ordinal Categorical Data ----</span>
 
-<span class='kw'>probs</span><span class='op'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.40</span>, <span class='fl'>0.25</span>, <span class='fl'>0.15</span>)
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genOrdCat</span>(<span class='kw'>dx</span>, adjVar = <span class='st'>"z"</span>, <span class='kw'>probs</span>, catVar = <span class='st'>"grp"</span>)
+<span class='va'>baseprobs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
+    <span class='fl'>0.2</span>, <span class='fl'>0.1</span>, <span class='fl'>0.1</span>, <span class='fl'>0.6</span>,
+    <span class='fl'>0.7</span>, <span class='fl'>0.2</span>, <span class='fl'>0.1</span>, <span class='fl'>0</span>,
+    <span class='fl'>0.5</span>, <span class='fl'>0.2</span>, <span class='fl'>0.3</span>, <span class='fl'>0</span>,
+    <span class='fl'>0.4</span>, <span class='fl'>0.2</span>, <span class='fl'>0.4</span>, <span class='fl'>0</span>,
+    <span class='fl'>0.6</span>, <span class='fl'>0.2</span>, <span class='fl'>0.2</span>, <span class='fl'>0</span>
+<span class='op'>)</span>,
+nrow <span class='op'>=</span> <span class='fl'>5</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
-</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>333</span><span class='op'>)</span>
+<span class='va'>dT</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span>
+
+<span class='va'>dX</span> <span class='op'>&lt;-</span> <span class='fu'>genOrdCat</span><span class='op'>(</span><span class='va'>dT</span>,
+    adjVar <span class='op'>=</span> <span class='cn'>NULL</span>, baseprobs <span class='op'>=</span> <span class='va'>baseprobs</span>,
+    prefix <span class='op'>=</span> <span class='st'>"q"</span>, rho <span class='op'>=</span> <span class='fl'>.125</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>, asFactor <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
+<span class='va'>dX</span>
+</div><div class='output co'>#&gt;         id q1 q2 q3 q4 q5
+#&gt;    1:    1  4  3  1  3  3
+#&gt;    2:    2  4  1  3  3  1
+#&gt;    3:    3  4  1  3  3  1
+#&gt;    4:    4  3  1  3  1  1
+#&gt;    5:    5  4  1  1  3  1
+#&gt;   ---                    
+#&gt;  996:  996  4  1  2  2  1
+#&gt;  997:  997  2  1  3  2  1
+#&gt;  998:  998  4  3  1  3  1
+#&gt;  999:  999  2  2  3  3  1
+#&gt; 1000: 1000  4  2  2  3  1</div><div class='input'>
+<span class='va'>dM</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html'>melt</a></span><span class='op'>(</span><span class='va'>dX</span>, id.vars <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
+<span class='va'>dProp</span> <span class='op'>&lt;-</span> <span class='va'>dM</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='va'>variable</span><span class='op'>]</span>
+<span class='va'>dProp</span><span class='op'>[</span>, <span class='va'>response</span> <span class='op'>:=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;     variable    V1 response
+#&gt;  1:       q1 0.192        1
+#&gt;  2:       q1 0.096        2
+#&gt;  3:       q1 0.109        3
+#&gt;  4:       q1 0.603        4
+#&gt;  5:       q2 0.672        1
+#&gt;  6:       q2 0.209        2
+#&gt;  7:       q2 0.119        3
+#&gt;  8:       q3 0.492        1
+#&gt;  9:       q3 0.190        2
+#&gt; 10:       q3 0.318        3
+#&gt; 11:       q4 0.379        1
+#&gt; 12:       q4 0.222        2
+#&gt; 13:       q4 0.399        3
+#&gt; 14:       q5 0.592        1
+#&gt; 15:       q5 0.203        2
+#&gt; 16:       q5 0.205        3</div><div class='input'>
+<span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html'>dcast</a></span><span class='op'>(</span><span class='va'>dProp</span>, <span class='va'>variable</span> <span class='op'>~</span> <span class='va'>response</span>,
+    value.var <span class='op'>=</span> <span class='st'>"V1"</span>, fill <span class='op'>=</span> <span class='fl'>0</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt;    variable     1     2     3     4
+#&gt; 1:       q1 0.192 0.096 0.109 0.603
+#&gt; 2:       q2 0.672 0.209 0.119 0.000
+#&gt; 3:       q3 0.492 0.190 0.318 0.000
+#&gt; 4:       q4 0.379 0.222 0.399 0.000
+#&gt; 5:       q5 0.592 0.203 0.205 0.000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -186,7 +353,7 @@ as a factor. If asFactor == FALSE, new field is returned as an integer.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

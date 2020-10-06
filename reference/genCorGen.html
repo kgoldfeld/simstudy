@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create multivariate (correlated) data - for general distributions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genCorGen.R'><code>R/genCorGen.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_correlated_data.R'><code>R/generate_correlated_data.R</code></a></small>
     <div class="hidden name"><code>genCorGen.Rd</code></div>
     </div>
 
@@ -123,20 +159,20 @@
     <p>Create multivariate (correlated) data - for general distributions</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genCorGen</span>(
-  <span class='kw'>n</span>,
-  <span class='kw'>nvars</span>,
-  <span class='kw'>params1</span>,
-  params2 = <span class='kw'>NULL</span>,
-  <span class='kw'>dist</span>,
-  <span class='kw'>rho</span>,
-  <span class='kw'>corstr</span>,
-  corMatrix = <span class='kw'>NULL</span>,
-  wide = <span class='fl'>FALSE</span>,
-  cnames = <span class='kw'>NULL</span>,
-  method = <span class='st'>"copula"</span>,
-  idname = <span class='st'>"id"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>genCorGen</span><span class='op'>(</span>
+  <span class='va'>n</span>,
+  <span class='va'>nvars</span>,
+  <span class='va'>params1</span>,
+  params2 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>dist</span>,
+  <span class='va'>rho</span>,
+  <span class='va'>corstr</span>,
+  corMatrix <span class='op'>=</span> <span class='cn'>NULL</span>,
+  wide <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  cnames <span class='op'>=</span> <span class='cn'>NULL</span>,
+  method <span class='op'>=</span> <span class='st'>"copula"</span>,
+  idname <span class='op'>=</span> <span class='st'>"id"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,9 +233,9 @@ represents the column.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Two methods are available to generate correlated data. (1) "copula" uses 
+      <td><p>Two methods are available to generate correlated data. (1) "copula" uses
 the multivariate Gaussian copula method that is applied to all other distributions; this
-applies to all available distributions. (2) "ep" uses an algorithm developed by 
+applies to all available distributions. (2) "ep" uses an algorithm developed by
 Emrich and Piedmonte.</p></td>
     </tr>
     <tr>
@@ -213,10 +249,10 @@ Emrich and Piedmonte.</p></td>
     <p>data.table with added column(s) of correlated data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>23432</span>)
-<span class='kw'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8</span>, <span class='fl'>10</span>, <span class='fl'>12</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>23432</span><span class='op'>)</span>
+<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8</span>, <span class='fl'>10</span>, <span class='fl'>12</span><span class='op'>)</span>
 
-<span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='kw'>l</span>, dist = <span class='st'>"poisson"</span>, rho = <span class='fl'>.7</span>, corstr = <span class='st'>"cs"</span>)
+<span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         id period  X
 #&gt;    1:    1      0  4
 #&gt;    2:    1      1  5
@@ -228,7 +264,7 @@ Emrich and Piedmonte.</p></td>
 #&gt; 2997:  999      2 10
 #&gt; 2998: 1000      0 14
 #&gt; 2999: 1000      1 13
-#&gt; 3000: 1000      2 21</div><div class='input'><span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='fl'>5</span>, dist = <span class='st'>"poisson"</span>, rho = <span class='fl'>.7</span>, corstr = <span class='st'>"cs"</span>)
+#&gt; 3000: 1000      2 21</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fl'>5</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         id period X
 #&gt;    1:    1      0 3
 #&gt;    2:    1      1 3
@@ -240,7 +276,7 @@ Emrich and Piedmonte.</p></td>
 #&gt; 2997:  999      2 6
 #&gt; 2998: 1000      0 3
 #&gt; 2999: 1000      1 3
-#&gt; 3000: 1000      2 3</div><div class='input'><span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='kw'>l</span>, dist = <span class='st'>"poisson"</span>, rho = <span class='fl'>.7</span>, corstr = <span class='st'>"cs"</span>, wide = <span class='fl'>TRUE</span>)
+#&gt; 3000: 1000      2 3</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         id V1 V2 V3
 #&gt;    1:    1  5 11  9
 #&gt;    2:    2  8 12 14
@@ -252,7 +288,7 @@ Emrich and Piedmonte.</p></td>
 #&gt;  997:  997  8  6 10
 #&gt;  998:  998  5  6  8
 #&gt;  999:  999  5 11 11
-#&gt; 1000: 1000  5  6 11</div><div class='input'><span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='fl'>5</span>, dist = <span class='st'>"poisson"</span>, rho = <span class='fl'>.7</span>, corstr = <span class='st'>"cs"</span>, wide = <span class='fl'>TRUE</span>)
+#&gt; 1000: 1000  5  6 11</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fl'>5</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         id V1 V2 V3
 #&gt;    1:    1  4 10  3
 #&gt;    2:    2  3  4  6
@@ -265,8 +301,10 @@ Emrich and Piedmonte.</p></td>
 #&gt;  998:  998  4  0  2
 #&gt;  999:  999  5  7  8
 #&gt; 1000: 1000  3  3  6</div><div class='input'>
-<span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='kw'>l</span>, dist = <span class='st'>"poisson"</span>, rho = <span class='fl'>.7</span>, corstr = <span class='st'>"cs"</span>,
-          cnames = <span class='st'>"new_var"</span>)
+<span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
+  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
+  cnames <span class='op'>=</span> <span class='st'>"new_var"</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt;         id period new_var
 #&gt;    1:    1      0      11
 #&gt;    2:    1      1      12
@@ -278,8 +316,10 @@ Emrich and Piedmonte.</p></td>
 #&gt; 2997:  999      2       8
 #&gt; 2998: 1000      0      10
 #&gt; 2999: 1000      1      12
-#&gt; 3000: 1000      2      13</div><div class='input'><span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='kw'>l</span>, dist = <span class='st'>"poisson"</span>, rho = <span class='fl'>.7</span>, corstr = <span class='st'>"cs"</span>,
-          wide = <span class='fl'>TRUE</span>, cnames = <span class='st'>"a, b, c"</span>)
+#&gt; 3000: 1000      2      13</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
+  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
+  wide <span class='op'>=</span> <span class='cn'>TRUE</span>, cnames <span class='op'>=</span> <span class='st'>"a, b, c"</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt;         id a  b  c
 #&gt;    1:    1 8 10 10
 #&gt;    2:    2 5  9 10
@@ -292,7 +332,7 @@ Emrich and Piedmonte.</p></td>
 #&gt;  998:  998 4 10 11
 #&gt;  999:  999 9 10 13
 #&gt; 1000: 1000 5  9  7</div><div class='input'>
-<span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span>), dist = <span class='st'>"binary"</span>, rho = <span class='fl'>.3</span>, corstr = <span class='st'>"cs"</span>)
+<span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         id period X
 #&gt;    1:    1      0 1
 #&gt;    2:    1      1 0
@@ -304,8 +344,10 @@ Emrich and Piedmonte.</p></td>
 #&gt; 2997:  999      2 1
 #&gt; 2998: 1000      0 0
 #&gt; 2999: 1000      1 0
-#&gt; 3000: 1000      2 1</div><div class='input'><span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='kw'>l</span>, params2 = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>), dist = <span class='st'>"gamma"</span>, rho = <span class='fl'>.3</span>,
-          corstr = <span class='st'>"cs"</span>, wide = <span class='fl'>TRUE</span>)
+#&gt; 3000: 1000      2 1</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
+  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, params2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>,
+  corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt;         id        V1        V2         V3
 #&gt;    1:    1  3.651421  4.493988 11.6813305
 #&gt;    2:    2  1.414711  2.286705  3.4485920
@@ -317,9 +359,11 @@ Emrich and Piedmonte.</p></td>
 #&gt;  997:  997  1.173825 28.220637 12.4952549
 #&gt;  998:  998  2.208063  2.455229  0.3416593
 #&gt;  999:  999  4.558461 10.266519  1.7471471
-#&gt; 1000: 1000  4.625952 10.278182  1.3732234</div><div class='input'>          
-<span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span>), dist = <span class='st'>"binary"</span>, 
-          corMatrix = <span class='fu'><a href='genCorMat.html'>genCorMat</a></span>(<span class='fl'>3</span>), method = <span class='st'>"ep"</span>)
+#&gt; 1000: 1000  4.625952 10.278182  1.3732234</div><div class='input'>
+<span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
+  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>,
+  corMatrix <span class='op'>=</span> <span class='fu'><a href='genCorMat.html'>genCorMat</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>"ep"</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt;         id period X
 #&gt;    1:    1      0 1
 #&gt;    2:    1      1 1
@@ -331,8 +375,10 @@ Emrich and Piedmonte.</p></td>
 #&gt; 2997:  999      2 0
 #&gt; 2998: 1000      0 0
 #&gt; 2999: 1000      1 0
-#&gt; 3000: 1000      2 1</div><div class='input'><span class='fu'>genCorGen</span>(<span class='fl'>1000</span>, nvars = <span class='fl'>3</span>, params1 = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span>), dist = <span class='st'>"binary"</span>, 
-          corMatrix = <span class='fu'><a href='genCorMat.html'>genCorMat</a></span>(<span class='fl'>3</span>), method = <span class='st'>"copula"</span>)
+#&gt; 3000: 1000      2 1</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
+  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>,
+  corMatrix <span class='op'>=</span> <span class='fu'><a href='genCorMat.html'>genCorMat</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>"copula"</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt;         id period X
 #&gt;    1:    1      0 0
 #&gt;    2:    1      1 1
@@ -344,8 +390,7 @@ Emrich and Piedmonte.</p></td>
 #&gt; 2997:  999      2 0
 #&gt; 2998: 1000      0 0
 #&gt; 2999: 1000      1 0
-#&gt; 3000: 1000      2 0</div><div class='input'>
-</div></pre>
+#&gt; 3000: 1000      2 0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -357,7 +402,7 @@ Emrich and Piedmonte.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

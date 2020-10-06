@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot basis spline functions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/viewBasis.R'><code>R/viewBasis.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/utility.R'><code>R/utility.R</code></a></small>
     <div class="hidden name"><code>viewBasis.Rd</code></div>
     </div>
 
@@ -123,7 +159,7 @@
     <p>Plot basis spline functions</p>
     </div>
 
-    <pre class="usage"><span class='fu'>viewBasis</span>(<span class='kw'>knots</span>, <span class='kw'>degree</span>)</pre>
+    <pre class="usage"><span class='fu'>viewBasis</span><span class='op'>(</span><span class='va'>knots</span>, <span class='va'>degree</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,14 +180,14 @@
 will be length(knots) + degree + 1 functions plotted.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.50</span>, <span class='fl'>0.75</span> )
-<span class='fu'>viewBasis</span>(<span class='kw'>knots</span>, degree = <span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='va'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.50</span>, <span class='fl'>0.75</span><span class='op'>)</span>
+<span class='fu'>viewBasis</span><span class='op'>(</span><span class='va'>knots</span>, degree <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='img'><img src='viewBasis-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='kw'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.50</span>, <span class='fl'>0.75</span> )
-<span class='fu'>viewBasis</span>(<span class='kw'>knots</span>, degree = <span class='fl'>2</span>)
+<span class='va'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.50</span>, <span class='fl'>0.75</span><span class='op'>)</span>
+<span class='fu'>viewBasis</span><span class='op'>(</span><span class='va'>knots</span>, degree <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 </div><div class='img'><img src='viewBasis-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='kw'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.25</span>, <span class='fl'>0.50</span>, <span class='fl'>0.75</span> )
-<span class='fu'>viewBasis</span>(<span class='kw'>knots</span>, degree = <span class='fl'>3</span>)
+<span class='va'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>0.50</span>, <span class='fl'>0.75</span><span class='op'>)</span>
+<span class='fu'>viewBasis</span><span class='op'>(</span><span class='va'>knots</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='img'><img src='viewBasis-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -164,7 +200,7 @@ will be length(knots) + degree + 1 functions plotted.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

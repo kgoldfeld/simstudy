@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -88,6 +88,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -117,90 +153,122 @@
       <small>Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="simstudy-011" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.1">
-<a href="#simstudy-011" class="anchor"></a>simstudy 0.1.1<small> 2016-06-21 </small>
+    <div id="simstudy-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#simstudy-020" class="anchor"></a>simstudy 0.2.0<small> Unreleased </small>
 </h1>
+<div id="deprecated-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecated-functions" class="anchor"></a>Deprecated Functions</h2>
 <ul>
-<li>This is the first submission of simstudy, so there is no news yet!</li>
+<li>Moved genCorOrdCat’s functionality into genOrdCat. genCorOrdCat is now deprecated.</li>
+<li>Renamed catProbs to genCatFormula for naming consistency. catProbs is now deprecated.</li>
 </ul>
 </div>
-    <div id="simstudy-012" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.2">
-<a href="#simstudy-012" class="anchor"></a>simstudy 0.1.2<small> 2016-12-07 </small>
-</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
 <ul>
-<li>Fixed index variable issue related to generating categorical data</li>
-<li>Fixed index variable issue related to generating longitudinal data</li>
-<li>Fixed issue that arose when creating categorical variable in first field</li>
-<li>Increased speed required to generate categorical data with large sample sizes</li>
-<li>Categorical data can now accommodate probabilities condition on covariates</li>
-<li>Fix: package data.table 1.10.0 broke genMissDataMat. genMissDataMat has been updated.</li>
+<li>Introduced a new system for formula definitions and completely reworked the underlying code. See vignette “Dynamic Data Definition”.</li>
+<li>The new function genMixFormula generates mixture formulas from different inputs.</li>
+<li>Some simstudy functions now produce custom errors and warnings. Eventually all conditions will be replaced by the new system to make error handling easier for the user.</li>
+<li>Added new vignettes.</li>
+<li>Created documentation pages for:
+<ul>
+<li>the release version <a href="https://kgoldfeld.github.io/simstudy/" class="uri">https://kgoldfeld.github.io/simstudy/</a>
+</li>
+<li>and development version <a href="https://kgoldfeld.github.io/simstudy/dev" class="uri">https://kgoldfeld.github.io/simstudy/dev</a>
+</li>
+</ul>
+</li>
 </ul>
 </div>
-    <div id="simstudy-013" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.3">
-<a href="#simstudy-013" class="anchor"></a>simstudy 0.1.3<small> 2017-07-03 </small>
-</h1>
+<div id="minor-improvements-and-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-improvements-and-fixes" class="anchor"></a>Minor improvements and fixes</h2>
 <ul>
-<li>Modified “nonrandom” data generation to allow “log”" and “logit”" link options.</li>
-<li>Added function genCorGen - generate a new data.table with correlated data from various distributions.</li>
-<li>Added function addCorData - add correlated data from various distributions to existing data.tables.</li>
+<li>genCatFormula now warns if an additional category is created or probabilities are normalized.</li>
+<li>Fixed bug in trtAssign related new ratio argument.</li>
+<li>Fixed bug in trtAssign when strata had count of one.</li>
+<li>defData now also checks the first row in the definition table for validity.</li>
 </ul>
 </div>
-    <div id="simstudy-014" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.4">
-<a href="#simstudy-014" class="anchor"></a>simstudy 0.1.4<small> 2017-09-20 </small>
+</div>
+    <div id="simstudy-0116" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.16">
+<a href="#simstudy-0116" class="anchor"></a>simstudy 0.1.16<small> 2020-03-31 </small>
 </h1>
 <ul>
-<li>Added error check to verify that specified distributions are valid</li>
-<li>Added function genFactor - converts an existing (non-double) field in a data.table to a factor</li>
-<li>Added function genDummy - creates dummy variables from an integer or factor field in a data.table</li>
-<li>Added function defCondition - define distribution conditional on existing fields</li>
-<li>Added function defReadCond - read in conditional definitions from external csv file</li>
-<li>Added function addCondition - generate data based on conditional definition</li>
+<li>Added “mixture” distribution that takes a value from an existing column with a specified probability.</li>
+<li>Modified function trtAssign to improve speed performance of stratified sampling with very large numbers of strata.</li>
+<li>Add argument “ratio” to function trtAssign to allow users to specify more than 1:1 randomization.</li>
 </ul>
 </div>
-    <div id="simstudy-015" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.5">
-<a href="#simstudy-015" class="anchor"></a>simstudy 0.1.5<small> 2017-10-03 </small>
+    <div id="simstudy-0115" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.15">
+<a href="#simstudy-0115" class="anchor"></a>simstudy 0.1.15<small> 2019-10-16 </small>
 </h1>
 <ul>
-<li>Added uniform integer distribution (uniformInt)</li>
-<li>Added negative binomial distribution (negBinomial)</li>
-<li>Added exponential distribution (exponential)</li>
-<li>Added function delColumns - deletes one or more columns from data.table</li>
+<li>Added function trimData (that uses new rcpp function clipVec) to clip or truncate a longitudinal data set after a certain event has occurred.</li>
+<li>Fixed bug in addMarkov, added trimvalue argument to use trimData function</li>
+<li>Added trimvalue argument in genMarkov</li>
 </ul>
 </div>
-    <div id="simstudy-016" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.6">
-<a href="#simstudy-016" class="anchor"></a>simstudy 0.1.6<small> 2017-10-18 </small>
+    <div id="simstudy-0114" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.14">
+<a href="#simstudy-0114" class="anchor"></a>simstudy 0.1.14<small> 2019-08-09 </small>
 </h1>
 <ul>
-<li>Fixed function genSurv</li>
-<li>Added spline generating functions</li>
+<li>Added functions genMarkov and addMarkov to create data.table with (or add to existing data.table) individual chains of Markov processes.</li>
+<li>Added function genNthEvent to create data.table with binary event outcome in a longitudinal setting.</li>
+<li>Updated function genCluster so that cluster size can be specified as an integer, and will be constant across all clusters.</li>
+<li>Updated function addPeriods that period name can be specified.</li>
+<li>Updated function trtStepWedge so that a transition period can be included.</li>
+<li>Fixed bug in function delColumns related to multiple keys.</li>
 </ul>
 </div>
-    <div id="simstudy-017" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.7">
-<a href="#simstudy-017" class="anchor"></a>simstudy 0.1.7<small> 2017-11-02 </small>
+    <div id="simstudy-0113" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.13">
+<a href="#simstudy-0113" class="anchor"></a>simstudy 0.1.13<small> 2019-05-16 </small>
 </h1>
 <ul>
-<li>Added function genOrdCat - creates ordinal categorical data</li>
-<li>Added function genFormula - creates a linear formula in the form of a string</li>
-<li>Added function updateDef - modify existing data definition table (to be used in genData())</li>
-<li>Added function updateDefData - modify existing data def table (to be used in addColumns())</li>
+<li>Added negative binomial distribution as an option to function iccRE</li>
+<li>Fixed function genCorOrdCat so that it can accept user-specified correlation matrix</li>
+<li>Added function trtStepWedge to generate treatment assignment for a stepped-wedge design cluster randomized trial.</li>
 </ul>
 </div>
-    <div id="simstudy-018" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.8">
-<a href="#simstudy-018" class="anchor"></a>simstudy 0.1.8<small> 2018-01-08 </small>
+    <div id="simstudy-0112" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.12">
+<a href="#simstudy-0112" class="anchor"></a>simstudy 0.1.12<small> 2019-02-26 </small>
 </h1>
 <ul>
-<li>Fixed function updateDef</li>
-<li>Fixed bug in internal function genbinom</li>
-<li>Added function genCorFlex - generate correlated data from variables that have different marginal distributions</li>
-<li>Added function genCorFlex - generate correlated data from variables that have different marginal distributions, can be dependent on previously defined data</li>
+<li>Fixed genCorFlex and addMultiFac to accommodate bug fixes with package data.table</li>
+</ul>
+</div>
+    <div id="simstudy-0111" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.11">
+<a href="#simstudy-0111" class="anchor"></a>simstudy 0.1.11<small> 2019-02-07 </small>
+</h1>
+<ul>
+<li>Added negative binomial option to genCorGen, addCorGen, genCorFlex, and addCorFlex</li>
+<li>Fixed bug in function genFactor</li>
+<li>Added LAG() functionality to missing data generation - updated functions genMiss and added two new internal functions .checkLags and .addLags</li>
+<li>Function catProbs now accepts a vector of probabilities or weights as an argument</li>
+<li>Fixed bugs in function addCondition</li>
+</ul>
+</div>
+    <div id="simstudy-0110" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.10">
+<a href="#simstudy-0110" class="anchor"></a>simstudy 0.1.10<small> 2018-09-16 </small>
+</h1>
+<ul>
+<li>Added function genCorMat - generate an n x n correlation matrix</li>
+<li>Added function genCorOrdCat - generate correlated ordinal categorical data</li>
+<li>Added beta distribution option to function defData (and associated functions)</li>
+<li>Added function betaGetShapes</li>
+<li>Implemented Emrich and Piedmonte algorithm for correlated binary data for function genCorGen and addCorGen</li>
+<li>Modified function genOrdCat - allows adjVar = NULL</li>
+<li>Fixed bug in function addCorFlex</li>
 </ul>
 </div>
     <div id="simstudy-019" class="section level1">
@@ -219,81 +287,90 @@
 <li>Fixed bug in function addCondition</li>
 </ul>
 </div>
-    <div id="simstudy-0110" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.10">
-<a href="#simstudy-0110" class="anchor"></a>simstudy 0.1.10<small> 2018-09-16 </small>
+    <div id="simstudy-018" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.8">
+<a href="#simstudy-018" class="anchor"></a>simstudy 0.1.8<small> 2018-01-08 </small>
 </h1>
 <ul>
-<li>Added function genCorMat - generate an n x n correlation matrix</li>
-<li>Added function genCorOrdCat - generate correlated ordinal categorical data</li>
-<li>Added beta distribution option to function defData (and associated functions)</li>
-<li>Added function betaGetShapes</li>
-<li>Implemented Emrich and Piedmonte algorithm for correlated binary data for function genCorGen and addCorGen</li>
-<li>Modified function genOrdCat - allows adjVar = NULL</li>
-<li>Fixed bug in function addCorFlex</li>
+<li>Fixed function updateDef</li>
+<li>Fixed bug in internal function genbinom</li>
+<li>Added function genCorFlex - generate correlated data from variables that have different marginal distributions</li>
+<li>Added function genCorFlex - generate correlated data from variables that have different marginal distributions, can be dependent on previously defined data</li>
 </ul>
 </div>
-    <div id="simstudy-0111" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.11">
-<a href="#simstudy-0111" class="anchor"></a>simstudy 0.1.11<small> 2019-02-07 </small>
+    <div id="simstudy-017" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.7">
+<a href="#simstudy-017" class="anchor"></a>simstudy 0.1.7<small> 2017-11-02 </small>
 </h1>
 <ul>
-<li>Added negative binomial option to genCorGen, addCorGen, genCorFlex, and addCorFlex</li>
-<li>Fixed bug in function genFactor</li>
-<li>Added LAG() functionality to missing data generation - updated functions genMiss and added two new internal functions .checkLags and .addLags</li>
-<li>Function catProbs now accepts a vector of probabilities or weights as an argument</li>
-<li>Fixed bugs in function addCondition</li>
+<li>Added function genOrdCat - creates ordinal categorical data</li>
+<li>Added function genFormula - creates a linear formula in the form of a string</li>
+<li>Added function updateDef - modify existing data definition table (to be used in genData())</li>
+<li>Added function updateDefData - modify existing data def table (to be used in addColumns())</li>
 </ul>
 </div>
-    <div id="simstudy-0112" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.12">
-<a href="#simstudy-0112" class="anchor"></a>simstudy 0.1.12<small> 2019-02-26 </small>
+    <div id="simstudy-016" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.6">
+<a href="#simstudy-016" class="anchor"></a>simstudy 0.1.6<small> 2017-10-18 </small>
 </h1>
 <ul>
-<li>Fixed genCorFlex and addMultiFac to accommodate bug fixes with package data.table</li>
+<li>Fixed function genSurv</li>
+<li>Added spline generating functions</li>
 </ul>
 </div>
-    <div id="simstudy-0113" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.13">
-<a href="#simstudy-0113" class="anchor"></a>simstudy 0.1.13<small> 2019-05-16 </small>
+    <div id="simstudy-015" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.5">
+<a href="#simstudy-015" class="anchor"></a>simstudy 0.1.5<small> 2017-10-03 </small>
 </h1>
 <ul>
-<li>Added negative binomial distribution as an option to function iccRE</li>
-<li>Fixed function genCorOrdCat so that it can accept user-specified correlation matrix</li>
-<li>Added function trtStepWedge to generate treatment assignment for a stepped-wedge design cluster randomized trial.</li>
+<li>Added uniform integer distribution (uniformInt)</li>
+<li>Added negative binomial distribution (negBinomial)</li>
+<li>Added exponential distribution (exponential)</li>
+<li>Added function delColumns - deletes one or more columns from data.table</li>
 </ul>
 </div>
-    <div id="simstudy-0114" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.14">
-<a href="#simstudy-0114" class="anchor"></a>simstudy 0.1.14<small> 2019-08-09 </small>
+    <div id="simstudy-014" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.4">
+<a href="#simstudy-014" class="anchor"></a>simstudy 0.1.4<small> 2017-09-20 </small>
 </h1>
 <ul>
-<li>Added functions genMarkov and addMarkov to create data.table with (or add to existing data.table) individual chains of Markov processes.</li>
-<li>Added function genNthEvent to create data.table with binary event outcome in a longitudinal setting.</li>
-<li>Updated function genCluster so that cluster size can be specified as an integer, and will be constant across all clusters.</li>
-<li>Updated function addPeriods that period name can be specified.</li>
-<li>Updated function trtStepWedge so that a transition period can be included.</li>
-<li>Fixed bug in function delColumns related to multiple keys.</li>
+<li>Added error check to verify that specified distributions are valid</li>
+<li>Added function genFactor - converts an existing (non-double) field in a data.table to a factor</li>
+<li>Added function genDummy - creates dummy variables from an integer or factor field in a data.table</li>
+<li>Added function defCondition - define distribution conditional on existing fields</li>
+<li>Added function defReadCond - read in conditional definitions from external csv file</li>
+<li>Added function addCondition - generate data based on conditional definition</li>
 </ul>
 </div>
-    <div id="simstudy-0115" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.15">
-<a href="#simstudy-0115" class="anchor"></a>simstudy 0.1.15<small> 2019-10-16 </small>
+    <div id="simstudy-013" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.3">
+<a href="#simstudy-013" class="anchor"></a>simstudy 0.1.3<small> 2017-07-03 </small>
 </h1>
 <ul>
-<li>Added function trimData (that uses new rcpp function clipVec) to clip or truncate a longitudinal data set after a certain event has occurred.</li>
-<li>Fixed bug in addMarkov, added trimvalue argument to use trimData function</li>
-<li>Added trimvalue argument in genMarkov</li>
+<li>Modified “nonrandom” data generation to allow “log”" and “logit”" link options.</li>
+<li>Added function genCorGen - generate a new data.table with correlated data from various distributions.</li>
+<li>Added function addCorData - add correlated data from various distributions to existing data.tables.</li>
 </ul>
 </div>
-    <div id="simstudy-0116" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.16">
-<a href="#simstudy-0116" class="anchor"></a>simstudy 0.1.16<small> 2020-03-31 </small>
+    <div id="simstudy-012" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.2">
+<a href="#simstudy-012" class="anchor"></a>simstudy 0.1.2<small> 2016-12-07 </small>
 </h1>
 <ul>
-<li>Added “mixture” distribution that takes a value from an existing column with a specified probability.</li>
-<li>Modified function trtAssign to improve speed performance of stratified sampling with very large numbers of strata.</li>
-<li>Add argument “ratio” to function trtAssign to allow users to specify more than 1:1 randomization.</li>
+<li>Fixed index variable issue related to generating categorical data</li>
+<li>Fixed index variable issue related to generating longitudinal data</li>
+<li>Fixed issue that arose when creating categorical variable in first field</li>
+<li>Increased speed required to generate categorical data with large sample sizes</li>
+<li>Categorical data can now accommodate probabilities condition on covariates</li>
+<li>Fix: package data.table 1.10.0 broke genMissDataMat. genMissDataMat has been updated.</li>
+</ul>
+</div>
+    <div id="simstudy-011" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.1">
+<a href="#simstudy-011" class="anchor"></a>simstudy 0.1.1<small> 2016-06-21 </small>
+</h1>
+<ul>
+<li>This is the first submission of simstudy, so there is no news yet!</li>
 </ul>
 </div>
   </div>
@@ -309,7 +386,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

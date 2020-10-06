@@ -74,7 +74,7 @@ or defRead use updateDef.)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -91,6 +91,42 @@ or defRead use updateDef.)" />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -117,7 +153,7 @@ or defRead use updateDef.)" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Update definition table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/updateDefAdd.R'><code>R/updateDefAdd.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/utility.R'><code>R/utility.R</code></a></small>
     <div class="hidden name"><code>updateDefAdd.Rd</code></div>
     </div>
 
@@ -127,15 +163,15 @@ defDataAdd and defReadAdd. (For tables created using defData
 or defRead use updateDef.)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>updateDefAdd</span>(
-  <span class='kw'>dtDefs</span>,
-  <span class='kw'>changevar</span>,
-  newformula = <span class='kw'>NULL</span>,
-  newvariance = <span class='kw'>NULL</span>,
-  newdist = <span class='kw'>NULL</span>,
-  newlink = <span class='kw'>NULL</span>,
-  remove = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>updateDefAdd</span><span class='op'>(</span>
+  <span class='va'>dtDefs</span>,
+  <span class='va'>changevar</span>,
+  newformula <span class='op'>=</span> <span class='cn'>NULL</span>,
+  newvariance <span class='op'>=</span> <span class='cn'>NULL</span>,
+  newdist <span class='op'>=</span> <span class='cn'>NULL</span>,
+  newlink <span class='op'>=</span> <span class='cn'>NULL</span>,
+  remove <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,18 +214,18 @@ or defRead use updateDef.)</p>
     <pre class="examples"><div class='input'>
 <span class='co'># Define original data</span>
 
-<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"w"</span>, formula = <span class='fl'>0</span>, variance = <span class='fl'>3</span>, dist = <span class='st'>"normal"</span>)
-<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>defs</span>, varname = <span class='st'>"x"</span>, formula = <span class='st'>"1 + w"</span>, variance = <span class='fl'>1</span>, dist = <span class='st'>"normal"</span>)
-<span class='kw'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>defs</span>, varname = <span class='st'>"z"</span>, formula = <span class='fl'>4</span>, variance = <span class='fl'>1</span>, dist = <span class='st'>"normal"</span>)
+<span class='va'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"w"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>3</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span>
+<span class='va'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>defs</span>, varname <span class='op'>=</span> <span class='st'>"x"</span>, formula <span class='op'>=</span> <span class='st'>"1 + w"</span>, variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span>
+<span class='va'>defs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>defs</span>, varname <span class='op'>=</span> <span class='st'>"z"</span>, formula <span class='op'>=</span> <span class='fl'>4</span>, variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span>
 
 <span class='co'># Define additional columns</span>
 
-<span class='kw'>defsA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(varname = <span class='st'>"a"</span>, formula = <span class='st'>"w + x + z"</span>, variance = <span class='fl'>2</span>, dist = <span class='st'>"normal"</span>)
+<span class='va'>defsA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"a"</span>, formula <span class='op'>=</span> <span class='st'>"w + x + z"</span>, variance <span class='op'>=</span> <span class='fl'>2</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2001</span>)
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>, <span class='kw'>defs</span>)
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span>(<span class='kw'>defsA</span>, <span class='kw'>dt</span>)
-<span class='kw'>dt</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2001</span><span class='op'>)</span>
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>defs</span><span class='op'>)</span>
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span><span class='op'>(</span><span class='va'>defsA</span>, <span class='va'>dt</span><span class='op'>)</span>
+<span class='va'>dt</span>
 </div><div class='output co'>#&gt;     id          w          x        z         a
 #&gt;  1:  1  1.2158956  1.8776472 4.369858 10.132815
 #&gt;  2:  2 -1.3472119  0.5506687 3.333151  2.266872
@@ -203,12 +239,12 @@ or defRead use updateDef.)</p>
 #&gt; 10: 10 -1.9180111 -1.3006321 3.804297  3.018696</div><div class='input'>
 <span class='co'># Modify definition of additional column</span>
 
-<span class='kw'>defsA</span> <span class='op'>&lt;-</span> <span class='fu'>updateDefAdd</span>(dtDefs = <span class='kw'>defsA</span>, changevar = <span class='st'>"a"</span>, newformula = <span class='st'>"w+z"</span>, newvariance = <span class='fl'>1</span>)
+<span class='va'>defsA</span> <span class='op'>&lt;-</span> <span class='fu'>updateDefAdd</span><span class='op'>(</span>dtDefs <span class='op'>=</span> <span class='va'>defsA</span>, changevar <span class='op'>=</span> <span class='st'>"a"</span>, newformula <span class='op'>=</span> <span class='st'>"w+z"</span>, newvariance <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2001</span>)
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>, <span class='kw'>defs</span>)
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span>(<span class='kw'>defsA</span>, <span class='kw'>dt</span>)
-<span class='kw'>dt</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2001</span><span class='op'>)</span>
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>defs</span><span class='op'>)</span>
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span><span class='op'>(</span><span class='va'>defsA</span>, <span class='va'>dt</span><span class='op'>)</span>
+<span class='va'>dt</span>
 </div><div class='output co'>#&gt;     id          w          x        z        a
 #&gt;  1:  1  1.2158956  1.8776472 4.369858 7.473314
 #&gt;  2:  2 -1.3472119  0.5506687 3.333151 1.795207
@@ -219,8 +255,7 @@ or defRead use updateDef.)</p>
 #&gt;  7:  7  1.3448178  1.9995249 3.694742 4.533542
 #&gt;  8:  8  1.0950940  1.9766475 3.351756 4.280585
 #&gt;  9:  9  0.7941251  2.3586308 5.194538 7.303185
-#&gt; 10: 10 -1.9180111 -1.3006321 3.804297 3.606706</div><div class='input'>
-</div></pre>
+#&gt; 10: 10 -1.9180111 -1.3006321 3.804297 3.606706</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -232,7 +267,7 @@ or defRead use updateDef.)</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

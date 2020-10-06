@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a correlation matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genCorMat.R'><code>R/genCorMat.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_correlated_data.R'><code>R/generate_correlated_data.R</code></a></small>
     <div class="hidden name"><code>genCorMat.Rd</code></div>
     </div>
 
@@ -123,7 +159,7 @@
     <p>Create a correlation matrix</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genCorMat</span>(<span class='kw'>nvars</span>, cors = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>genCorMat</span><span class='op'>(</span><span class='va'>nvars</span>, cors <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,26 +181,26 @@
 
     <p>If the vector cors is not specified, a random correlation matrix is generated with no assumptions.
 If the vector is provided, it should be interpreted as the lower triangle of the correlation
-matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and 
+matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and
 nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span>))
+    <pre class="examples"><div class='input'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      [,1] [,2] [,3]
 #&gt; [1,]  1.0  0.3 -0.2
 #&gt; [2,]  0.3  1.0  0.1
-#&gt; [3,] -0.2  0.1  1.0</div><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>3</span>)
+#&gt; [3,] -0.2  0.1  1.0</div><div class='input'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;            [,1]        [,2]        [,3]
 #&gt; [1,]  1.0000000 -0.05721830 -0.26562439
 #&gt; [2,] -0.0572183  1.00000000 -0.08206648
 #&gt; [3,] -0.2656244 -0.08206648  1.00000000</div><div class='input'>
-<span class='fu'>genCorMat</span>(<span class='fl'>5</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.2</span>, <span class='op'>-</span><span class='fl'>.1</span>, <span class='fl'>.3</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>))
+<span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>5</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.2</span>, <span class='op'>-</span><span class='fl'>.1</span>, <span class='fl'>.3</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4] [,5]
 #&gt; [1,]  1.0  0.3 -0.2  0.1  0.2
 #&gt; [2,]  0.3  1.0  0.5  0.2 -0.1
 #&gt; [3,] -0.2  0.5  1.0  0.3  0.1
 #&gt; [4,]  0.1  0.2  0.3  1.0  0.2
-#&gt; [5,]  0.2 -0.1  0.1  0.2  1.0</div><div class='input'><span class='fu'>genCorMat</span>(<span class='fl'>5</span>)
+#&gt; [5,]  0.2 -0.1  0.1  0.2  1.0</div><div class='input'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;             [,1]        [,2]        [,3]       [,4]        [,5]
 #&gt; [1,]  1.00000000  0.18378060 -0.08859631 0.07366686  0.04571161
 #&gt; [2,]  0.18378060  1.00000000  0.34041009 0.03797508 -0.48391898
@@ -182,7 +218,7 @@ nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].</p
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate multi-factorial data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genMultiFac.R'><code>R/genMultiFac.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_data.R'><code>R/generate_data.R</code></a></small>
     <div class="hidden name"><code>genMultiFac.Rd</code></div>
     </div>
 
@@ -123,14 +159,14 @@
     <p>Generate multi-factorial data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genMultiFac</span>(
-  <span class='kw'>nFactors</span>,
-  <span class='kw'>each</span>,
-  levels = <span class='fl'>2</span>,
-  coding = <span class='st'>"dummy"</span>,
-  colNames = <span class='kw'>NULL</span>,
-  idName = <span class='st'>"id"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>genMultiFac</span><span class='op'>(</span>
+  <span class='va'>nFactors</span>,
+  <span class='va'>each</span>,
+  levels <span class='op'>=</span> <span class='fl'>2</span>,
+  coding <span class='op'>=</span> <span class='st'>"dummy"</span>,
+  colNames <span class='op'>=</span> <span class='cn'>NULL</span>,
+  idName <span class='op'>=</span> <span class='st'>"id"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,7 +209,7 @@ represent the name for each factor.</p></td>
 an integer.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>genMultiFac</span>(nFactors = <span class='fl'>2</span>, each = <span class='fl'>5</span>)
+    <pre class="examples"><div class='input'><span class='fu'>genMultiFac</span><span class='op'>(</span>nFactors <span class='op'>=</span> <span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     id Var1 Var2
 #&gt;  1:  1    0    0
 #&gt;  2:  2    0    0
@@ -194,7 +230,7 @@ an integer.</p>
 #&gt; 17: 17    1    1
 #&gt; 18: 18    1    1
 #&gt; 19: 19    1    1
-#&gt; 20: 20    1    1</div><div class='input'><span class='fu'>genMultiFac</span>(nFactors = <span class='fl'>2</span>, each = <span class='fl'>4</span>, levels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>3</span>))
+#&gt; 20: 20    1    1</div><div class='input'><span class='fu'>genMultiFac</span><span class='op'>(</span>nFactors <span class='op'>=</span> <span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>4</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     id Var1 Var2
 #&gt;  1:  1    1    1
 #&gt;  2:  2    1    1
@@ -220,8 +256,10 @@ an integer.</p>
 #&gt; 22: 22    2    3
 #&gt; 23: 23    2    3
 #&gt; 24: 24    2    3
-#&gt;     id Var1 Var2</div><div class='input'><span class='fu'>genMultiFac</span>(nFactors = <span class='fl'>3</span>, each = <span class='fl'>1</span>, coding = <span class='st'>"effect"</span>, 
-   colNames = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Fac1"</span>,<span class='st'>"Fac2"</span>, <span class='st'>"Fac3"</span>), id = <span class='st'>"block"</span>)
+#&gt;     id Var1 Var2</div><div class='input'><span class='fu'>genMultiFac</span><span class='op'>(</span>
+  nFactors <span class='op'>=</span> <span class='fl'>3</span>, each <span class='op'>=</span> <span class='fl'>1</span>, coding <span class='op'>=</span> <span class='st'>"effect"</span>,
+  colNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Fac1"</span>, <span class='st'>"Fac2"</span>, <span class='st'>"Fac3"</span><span class='op'>)</span>, id <span class='op'>=</span> <span class='st'>"block"</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt;    block Fac1 Fac2 Fac3
 #&gt; 1:     1   -1   -1   -1
 #&gt; 2:     2    1   -1   -1
@@ -242,7 +280,7 @@ an integer.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

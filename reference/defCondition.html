@@ -75,7 +75,7 @@ existing definitions table" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -92,6 +92,42 @@ existing definitions table" />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -119,7 +155,7 @@ existing definitions table" />
     <div class="page-header">
     <h1>Add single row to definitions table of conditions that will be used to add data to an
 existing definitions table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/defCondition.R'><code>R/defCondition.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/define_data.R'><code>R/define_data.R</code></a></small>
     <div class="hidden name"><code>defCondition.Rd</code></div>
     </div>
 
@@ -128,14 +164,14 @@ existing definitions table</h1>
 existing definitions table</p>
     </div>
 
-    <pre class="usage"><span class='fu'>defCondition</span>(
-  dtDefs = <span class='kw'>NULL</span>,
-  <span class='kw'>condition</span>,
-  <span class='kw'>formula</span>,
-  variance = <span class='fl'>0</span>,
-  dist = <span class='st'>"normal"</span>,
-  link = <span class='st'>"identity"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>defCondition</span><span class='op'>(</span>
+  dtDefs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>condition</span>,
+  <span class='va'>formula</span>,
+  variance <span class='op'>=</span> <span class='fl'>0</span>,
+  dist <span class='op'>=</span> <span class='st'>"normal"</span>,
+  link <span class='op'>=</span> <span class='st'>"identity"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,35 +205,44 @@ existing definitions table</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.table named dtName that is an updated data definitions table</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='distributions.html'>distributions</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># New data set</span>
 
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"x"</span>, dist = <span class='st'>"noZeroPoisson"</span>, formula=<span class='fl'>5</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname=<span class='st'>"y"</span>, dist=<span class='st'>"normal"</span>, formula=<span class='fl'>0</span>, variance=<span class='fl'>9</span>)
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"x"</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span>, formula <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"y"</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>9</span><span class='op'>)</span>
 
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>, <span class='kw'>def</span>)
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>def</span><span class='op'>)</span>
 
 <span class='co'># Add columns to dt</span>
 
-<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span>(condition = <span class='st'>"x == 1"</span>, formula = <span class='st'>"5 + 2*y"</span>,
-                     variance = <span class='fl'>1</span>,dist = <span class='st'>"normal"</span>)
+<span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span>
+  condition <span class='op'>=</span> <span class='st'>"x == 1"</span>, formula <span class='op'>=</span> <span class='st'>"5 + 2*y"</span>,
+  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>
+<span class='op'>)</span>
 
-<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span>(<span class='kw'>defC</span>, condition = <span class='st'>"x &lt;= 5 &amp; x &gt;= 2"</span>, formula = <span class='st'>"3 - 2*y"</span>,
-                     variance = <span class='fl'>1</span>, dist=<span class='st'>"normal"</span>)
+<span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span><span class='va'>defC</span>,
+  condition <span class='op'>=</span> <span class='st'>"x &lt;= 5 &amp; x &gt;= 2"</span>, formula <span class='op'>=</span> <span class='st'>"3 - 2*y"</span>,
+  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>
+<span class='op'>)</span>
 
-<span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span>(<span class='kw'>defC</span>, condition = <span class='st'>"x &gt;= 6"</span>, formula = <span class='fl'>1</span>,
-                     variance = <span class='fl'>1</span>, dist=<span class='st'>"normal"</span>)
+<span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span><span class='va'>defC</span>,
+  condition <span class='op'>=</span> <span class='st'>"x &gt;= 6"</span>, formula <span class='op'>=</span> <span class='fl'>1</span>,
+  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>
+<span class='op'>)</span>
 
-<span class='kw'>defC</span>
+<span class='va'>defC</span>
 </div><div class='output co'>#&gt;          condition formula variance   dist     link
 #&gt; 1:          x == 1 5 + 2*y        1 normal identity
 #&gt; 2: x &lt;= 5 &amp; x &gt;= 2 3 - 2*y        1 normal identity
 #&gt; 3:          x &gt;= 6       1        1 normal identity</div><div class='input'>
 <span class='co'># Add conditional column with field name "z"</span>
 
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCondition.html'>addCondition</a></span>(<span class='kw'>defC</span>, <span class='kw'>dt</span>, <span class='st'>"z"</span>)
-<span class='kw'>dt</span>
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCondition.html'>addCondition</a></span><span class='op'>(</span><span class='va'>defC</span>, <span class='va'>dt</span>, <span class='st'>"z"</span><span class='op'>)</span>
+<span class='va'>dt</span>
 </div><div class='output co'>#&gt;     id           z  x          y
 #&gt;  1:  1 12.60493882  5 -4.8401325
 #&gt;  2:  2  0.06657201  4  1.1153079
@@ -220,7 +265,7 @@ existing definitions table</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

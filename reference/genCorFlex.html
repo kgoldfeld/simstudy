@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create multivariate (correlated) data - for general distributions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/genCorFlex.R'><code>R/genCorFlex.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/generate_correlated_data.R'><code>R/generate_correlated_data.R</code></a></small>
     <div class="hidden name"><code>genCorFlex.Rd</code></div>
     </div>
 
@@ -123,7 +159,7 @@
     <p>Create multivariate (correlated) data - for general distributions</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genCorFlex</span>(<span class='kw'>n</span>, <span class='kw'>defs</span>, rho = <span class='fl'>0</span>, tau = <span class='kw'>NULL</span>, corstr = <span class='st'>"cs"</span>, corMatrix = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>genCorFlex</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>defs</span>, rho <span class='op'>=</span> <span class='fl'>0</span>, tau <span class='op'>=</span> <span class='cn'>NULL</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>, corMatrix <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,19 +204,19 @@ is not specified.</p></td>
     <p>data.table with added column(s) of correlated data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"xNorm"</span>, formula = <span class='fl'>0</span>, variance = <span class='fl'>4</span>, dist = <span class='st'>"normal"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xGamma1"</span>, formula = <span class='fl'>15</span>, variance = <span class='fl'>2</span>, dist = <span class='st'>"gamma"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xBin"</span>, formula = <span class='fl'>0.5</span>, dist = <span class='st'>"binary"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xUnif1"</span>, formula = <span class='st'>"0;10"</span>, dist = <span class='st'>"uniform"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xPois"</span>, formula = <span class='fl'>15</span>, dist = <span class='st'>"poisson"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xUnif2"</span>, formula = <span class='st'>"23;28"</span>, dist = <span class='st'>"uniform"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xUnif3"</span>, formula = <span class='st'>"100;150"</span>, dist = <span class='st'>"uniform"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xGamma2"</span>, formula = <span class='fl'>150</span>, variance = <span class='fl'>0.003</span>, dist = <span class='st'>"gamma"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"xNegBin"</span>, formula = <span class='fl'>5</span>, variance = <span class='fl'>.8</span>, dist = <span class='st'>"negBinomial"</span>)
+    <pre class="examples"><div class='input'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xNorm"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>4</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xGamma1"</span>, formula <span class='op'>=</span> <span class='fl'>15</span>, variance <span class='op'>=</span> <span class='fl'>2</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xBin"</span>, formula <span class='op'>=</span> <span class='fl'>0.5</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif1"</span>, formula <span class='op'>=</span> <span class='st'>"0;10"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xPois"</span>, formula <span class='op'>=</span> <span class='fl'>15</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif2"</span>, formula <span class='op'>=</span> <span class='st'>"23;28"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif3"</span>, formula <span class='op'>=</span> <span class='st'>"100;150"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xGamma2"</span>, formula <span class='op'>=</span> <span class='fl'>150</span>, variance <span class='op'>=</span> <span class='fl'>0.003</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xNegBin"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.8</span>, dist <span class='op'>=</span> <span class='st'>"negBinomial"</span><span class='op'>)</span>
 
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>genCorFlex</span>(<span class='fl'>1000</span>, <span class='kw'>def</span>, tau = <span class='fl'>0.3</span> , corstr = <span class='st'>"cs"</span>)
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>genCorFlex</span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def</span>, tau <span class='op'>=</span> <span class='fl'>0.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dt</span>[,<span class='op'>-</span><span class='st'>"id"</span>])
+<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;             xNorm   xGamma1      xBin    xUnif1     xPois    xUnif2    xUnif3
 #&gt; xNorm   1.0000000 0.3635256 0.3502807 0.4348943 0.4406840 0.4334729 0.4736992
 #&gt; xGamma1 0.3635256 1.0000000 0.2703809 0.3329087 0.3614445 0.3549100 0.3569301
@@ -200,7 +236,7 @@ is not specified.</p></td>
 #&gt; xUnif2  0.4318113 0.3944300
 #&gt; xUnif3  0.4327878 0.3963623
 #&gt; xGamma2 1.0000000 0.4169939
-#&gt; xNegBin 0.4169939 1.0000000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>dt</span>[,<span class='op'>-</span><span class='st'>"id"</span>], method = <span class='st'>"kendall"</span>)
+#&gt; xNegBin 0.4169939 1.0000000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span>, method <span class='op'>=</span> <span class='st'>"kendall"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;             xNorm   xGamma1      xBin    xUnif1     xPois    xUnif2    xUnif3
 #&gt; xNorm   1.0000000 0.3242362 0.2873684 0.2963604 0.2956935 0.2904905 0.3192192
 #&gt; xGamma1 0.3242362 1.0000000 0.2812001 0.3005405 0.2907424 0.2985946 0.3004324
@@ -220,7 +256,7 @@ is not specified.</p></td>
 #&gt; xUnif2  0.2859900 0.2982413
 #&gt; xUnif3  0.2905105 0.3088064
 #&gt; xGamma2 1.0000000 0.3065857
-#&gt; xNegBin 0.3065857 1.0000000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='kw'>dt</span>[,<span class='op'>-</span><span class='st'>"id"</span>])
+#&gt; xNegBin 0.3065857 1.0000000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;              xNorm    xGamma1      xBin     xUnif1      xPois     xUnif2
 #&gt; xNorm    4.0367045  15.923185 0.3517784  2.5255407  3.4066156  1.2386201
 #&gt; xGamma1 15.9231852 475.294680 2.9464367 20.9779896 30.3183438 11.0042976
@@ -240,12 +276,11 @@ is not specified.</p></td>
 #&gt; xUnif2    9.101989  5.020490  2.8221286
 #&gt; xUnif3  213.754068 51.727513 29.1537033
 #&gt; xGamma2  51.727513 66.831134 17.1499675
-#&gt; xNegBin  29.153703 17.149968 25.3097808</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>dt</span>[,<span class='op'>-</span><span class='st'>"id"</span>], <span class='fl'>2</span>, <span class='kw'>mean</span>)
+#&gt; xNegBin  29.153703 17.149968 25.3097808</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span>, <span class='fl'>2</span>, <span class='va'>mean</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        xNorm      xGamma1         xBin       xUnif1        xPois       xUnif2 
 #&gt;  -0.04650213  14.30170908   0.48000000   4.99250585  14.98300000  25.40058719 
 #&gt;       xUnif3      xGamma2      xNegBin 
-#&gt; 124.21462961 149.86789726   4.72700000 </div><div class='input'>
-</div></pre>
+#&gt; 124.21462961 149.86789726   4.72700000 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -257,7 +292,7 @@ is not specified.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

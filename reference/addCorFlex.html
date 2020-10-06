@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create multivariate (correlated) data - for general distributions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/addCorFlex.R'><code>R/addCorFlex.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/add_correlated_data.R'><code>R/add_correlated_data.R</code></a></small>
     <div class="hidden name"><code>addCorFlex.Rd</code></div>
     </div>
 
@@ -123,7 +159,15 @@
     <p>Create multivariate (correlated) data - for general distributions</p>
     </div>
 
-    <pre class="usage"><span class='fu'>addCorFlex</span>(<span class='kw'>dt</span>, <span class='kw'>defs</span>, rho = <span class='fl'>0</span>, tau = <span class='kw'>NULL</span>, corstr = <span class='st'>"cs"</span>, corMatrix = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>addCorFlex</span><span class='op'>(</span>
+  <span class='va'>dt</span>,
+  <span class='va'>defs</span>,
+  rho <span class='op'>=</span> <span class='fl'>0</span>,
+  tau <span class='op'>=</span> <span class='cn'>NULL</span>,
+  corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
+  corMatrix <span class='op'>=</span> <span class='cn'>NULL</span>,
+  envir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,29 +178,36 @@
     </tr>
     <tr>
       <th>defs</th>
-      <td><p>Field definition table created by function `defDataAdd`.</p></td>
+      <td><p>Field definition table created by function <code>defDataAdd</code>.</p></td>
     </tr>
     <tr>
       <th>rho</th>
-      <td><p>Correlation coefficient, -1 &lt;= rho &lt;= 1. Use if corMatrix is not provided.</p></td>
+      <td><p>Correlation coefficient, -1 &lt;= rho &lt;= 1. Use if corMatrix is not
+provided.</p></td>
     </tr>
     <tr>
       <th>tau</th>
-      <td><p>Correlation based on Kendall's tau. If tau is specified, then it is
-used as the correlation even if rho is specified. If tau is NULL, then the specified
-value of rho is used, or rho defaults to 0.</p></td>
+      <td><p>Correlation based on Kendall's tau. If tau is specified, then it
+is used as the correlation even if rho is specified. If tau is NULL, then the
+specified value of rho is used, or rho defaults to 0.</p></td>
     </tr>
     <tr>
       <th>corstr</th>
-      <td><p>Correlation structure of the variance-covariance matrix
-defined by sigma and rho. Options include "cs" for a compound symmetry structure
+      <td><p>Correlation structure of the variance-covariance matrix defined
+by sigma and rho. Options include "cs" for a compound symmetry structure
 and "ar1" for an autoregressive structure. Defaults to "cs".</p></td>
     </tr>
     <tr>
       <th>corMatrix</th>
-      <td><p>Correlation matrix can be entered directly. It must be symmetrical and
-positive semi-definite. It is not a required field; if a matrix is not provided, then a
-structure and correlation coefficient rho must be specified.</p></td>
+      <td><p>Correlation matrix can be entered directly. It must be
+symmetrical and positive semi-definite. It is not a required field; if a
+matrix is not provided, then a structure and correlation coefficient rho must
+be specified.</p></td>
+    </tr>
+    <tr>
+      <th>envir</th>
+      <td><p>Environment the data definitions are evaluated in.
+Defaults to <a href='https://rdrr.io/r/base/sys.parent.html'>base::parent.frame</a>.</p></td>
     </tr>
     </table>
 
@@ -165,34 +216,48 @@ structure and correlation coefficient rho must be specified.</p></td>
     <p>data.table with added column(s) of correlated data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"nInds"</span>, formula = <span class='fl'>50</span>, dist = <span class='st'>"noZeroPoisson"</span>, id = <span class='st'>"idClust"</span>)
+    <pre class="examples"><div class='input'><span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>
+  varname <span class='op'>=</span> <span class='st'>"nInds"</span>, formula <span class='op'>=</span> <span class='fl'>50</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span>,
+  id <span class='op'>=</span> <span class='st'>"idClust"</span>
+<span class='op'>)</span>
 
-<span class='kw'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>10</span>, <span class='kw'>defC</span>)
+<span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>defC</span><span class='op'>)</span>
 <span class='co'>#### Normal only</span>
 
-<span class='kw'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCorData.html'>addCorData</a></span>(<span class='kw'>dc</span>, mu = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), sigma = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>), rho = <span class='fl'>.2</span>,
-                 corstr = <span class='st'>"cs"</span>, cnames = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>,<span class='st'>"b"</span>,<span class='st'>"c"</span>,<span class='st'>"d"</span>), idname = <span class='st'>"idClust"</span>)
+<span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCorData.html'>addCorData</a></span><span class='op'>(</span><span class='va'>dc</span>,
+  mu <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, sigma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>, rho <span class='op'>=</span> <span class='fl'>.2</span>,
+  corstr <span class='op'>=</span> <span class='st'>"cs"</span>, cnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span><span class='op'>)</span>,
+  idname <span class='op'>=</span> <span class='st'>"idClust"</span>
+<span class='op'>)</span>
 
-<span class='kw'>di</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genCluster.html'>genCluster</a></span>(<span class='kw'>dc</span>, <span class='st'>"idClust"</span>, <span class='st'>"nInds"</span>, <span class='st'>"id"</span>)
+<span class='va'>di</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genCluster.html'>genCluster</a></span><span class='op'>(</span><span class='va'>dc</span>, <span class='st'>"idClust"</span>, <span class='st'>"nInds"</span>, <span class='st'>"id"</span><span class='op'>)</span>
 
-<span class='kw'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(varname = <span class='st'>"A"</span>, formula = <span class='st'>"-1 + a"</span>, variance = <span class='fl'>3</span>,
-                   dist = <span class='st'>"normal"</span>)
-<span class='kw'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>defI</span>, varname = <span class='st'>"B"</span>, formula = <span class='st'>"4.5 + b"</span>, variance = <span class='fl'>.5</span>,
-                   dist = <span class='st'>"normal"</span>)
-<span class='kw'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>defI</span>, varname = <span class='st'>"C"</span>, formula = <span class='st'>"5*c"</span>, variance = <span class='fl'>3</span>,
-                   dist = <span class='st'>"normal"</span>)
-<span class='kw'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>defI</span>, varname = <span class='st'>"D"</span>, formula = <span class='st'>"1.6 + d"</span>, variance = <span class='fl'>1</span>,
-                   dist = <span class='st'>"normal"</span>)
+<span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span>
+  varname <span class='op'>=</span> <span class='st'>"A"</span>, formula <span class='op'>=</span> <span class='st'>"-1 + a"</span>, variance <span class='op'>=</span> <span class='fl'>3</span>,
+  dist <span class='op'>=</span> <span class='st'>"normal"</span>
+<span class='op'>)</span>
+<span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,
+  varname <span class='op'>=</span> <span class='st'>"B"</span>, formula <span class='op'>=</span> <span class='st'>"4.5 + b"</span>, variance <span class='op'>=</span> <span class='fl'>.5</span>,
+  dist <span class='op'>=</span> <span class='st'>"normal"</span>
+<span class='op'>)</span>
+<span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,
+  varname <span class='op'>=</span> <span class='st'>"C"</span>, formula <span class='op'>=</span> <span class='st'>"5*c"</span>, variance <span class='op'>=</span> <span class='fl'>3</span>,
+  dist <span class='op'>=</span> <span class='st'>"normal"</span>
+<span class='op'>)</span>
+<span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,
+  varname <span class='op'>=</span> <span class='st'>"D"</span>, formula <span class='op'>=</span> <span class='st'>"1.6 + d"</span>, variance <span class='op'>=</span> <span class='fl'>1</span>,
+  dist <span class='op'>=</span> <span class='st'>"normal"</span>
+<span class='op'>)</span>
 
 <span class='co'>#### Generate new data</span>
 
-<span class='kw'>di</span> <span class='op'>&lt;-</span> <span class='fu'>addCorFlex</span>(<span class='kw'>di</span>, <span class='kw'>defI</span>, rho = <span class='fl'>0.4</span>, corstr = <span class='st'>"cs"</span>)
+<span class='va'>di</span> <span class='op'>&lt;-</span> <span class='fu'>addCorFlex</span><span class='op'>(</span><span class='va'>di</span>, <span class='va'>defI</span>, rho <span class='op'>=</span> <span class='fl'>0.4</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
 
 <span class='co'># Check correlations by cluster</span>
 
-<span class='co'>for</span> (<span class='kw'>i</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>dc</span>)) {
-  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>di</span>[<span class='kw'>idClust</span> <span class='op'>==</span> <span class='kw'>i</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>A</span>, <span class='kw'>B</span>, <span class='kw'>C</span>, <span class='kw'>D</span>)]))
-}
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>dc</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>di</span><span class='op'>[</span><span class='va'>idClust</span> <span class='op'>==</span> <span class='va'>i</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span>, <span class='va'>C</span>, <span class='va'>D</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt;           A         B         C         D
 #&gt; A 1.0000000 0.3062024 0.4470299 0.3869610
 #&gt; B 0.3062024 1.0000000 0.3060284 0.4224323
@@ -244,7 +309,7 @@ structure and correlation coefficient rho must be specified.</p></td>
 #&gt; C 0.5068051 0.5209270 1.0000000 0.4710229
 #&gt; D 0.4542754 0.3794740 0.4710229 1.0000000</div><div class='input'>
 <span class='co'># Check global correlations - should not be as correlated</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='kw'>di</span>[, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>A</span>, <span class='kw'>B</span>, <span class='kw'>C</span>, <span class='kw'>D</span>)])
+<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>di</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span>, <span class='va'>C</span>, <span class='va'>D</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;           A          B         C          D
 #&gt; A 1.0000000 0.51793243 0.4445728 0.38325573
 #&gt; B 0.5179324 1.00000000 0.1232242 0.09727062
@@ -261,7 +326,7 @@ structure and correlation coefficient rho must be specified.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

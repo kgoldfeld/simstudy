@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create multivariate (correlated) data - for general distributions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/addCorGen.R'><code>R/addCorGen.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/add_correlated_data.R'><code>R/add_correlated_data.R</code></a></small>
     <div class="hidden name"><code>addCorGen.Rd</code></div>
     </div>
 
@@ -123,21 +159,21 @@
     <p>Create multivariate (correlated) data - for general distributions</p>
     </div>
 
-    <pre class="usage"><span class='fu'>addCorGen</span>(
-  <span class='kw'>dtOld</span>,
-  <span class='kw'>nvars</span>,
-  idvar = <span class='st'>"id"</span>,
-  <span class='kw'>rho</span>,
-  <span class='kw'>corstr</span>,
-  corMatrix = <span class='kw'>NULL</span>,
-  <span class='kw'>dist</span>,
-  <span class='kw'>param1</span>,
-  param2 = <span class='kw'>NULL</span>,
-  cnames = <span class='kw'>NULL</span>,
-  method = <span class='st'>"copula"</span>,
-  formSpec = <span class='kw'>NULL</span>,
-  periodvar = <span class='st'>"period"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>addCorGen</span><span class='op'>(</span>
+  <span class='va'>dtOld</span>,
+  <span class='va'>nvars</span>,
+  idvar <span class='op'>=</span> <span class='st'>"id"</span>,
+  <span class='va'>rho</span>,
+  <span class='va'>corstr</span>,
+  corMatrix <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>dist</span>,
+  <span class='va'>param1</span>,
+  param2 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cnames <span class='op'>=</span> <span class='cn'>NULL</span>,
+  method <span class='op'>=</span> <span class='st'>"copula"</span>,
+  formSpec <span class='op'>=</span> <span class='cn'>NULL</span>,
+  periodvar <span class='op'>=</span> <span class='st'>"period"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,9 +233,9 @@ represents the column.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Two methods are available to generate correlated data. (1) "copula" uses 
+      <td><p>Two methods are available to generate correlated data. (1) "copula" uses
 the multivariate Gaussian copula method that is applied to all other distributions; this
-applies to all available distributions. (2) "ep" uses an algorithm developed by 
+applies to all available distributions. (2) "ep" uses an algorithm developed by
 Emrich and Piedmonte.</p></td>
     </tr>
     <tr>
@@ -222,45 +258,72 @@ the repeated measurement for an individual unit. The value defaults to "period".
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Wide example</span>
 
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"xbase"</span>, formula = <span class='fl'>5</span>, variance = <span class='fl'>.4</span>, dist = <span class='st'>"gamma"</span>, id = <span class='st'>"cid"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"lambda"</span>, formula = <span class='st'>".5 + .1*xbase"</span>, dist=<span class='st'>"nonrandom"</span>, link = <span class='st'>"log"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, varname = <span class='st'>"p"</span>, formula = <span class='st'>"-2 + .3*xbase"</span>, dist=<span class='st'>"nonrandom"</span>, link = <span class='st'>"logit"</span>)
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xbase"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.4</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, id <span class='op'>=</span> <span class='st'>"cid"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"lambda"</span>, formula <span class='op'>=</span> <span class='st'>".5 + .1*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='st'>"-2 + .3*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span>
 
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>500</span>, <span class='kw'>def</span>)
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>500</span>, <span class='va'>def</span><span class='op'>)</span>
 
-<span class='kw'>dtX1</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span>(dtOld = <span class='kw'>dt</span>, idvar = <span class='st'>"cid"</span>, nvars = <span class='fl'>3</span>, rho = <span class='fl'>.7</span>, corstr = <span class='st'>"cs"</span>,
-                    dist = <span class='st'>"poisson"</span>, param1 = <span class='st'>"lambda"</span>)
+<span class='va'>dtX1</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
+  dtOld <span class='op'>=</span> <span class='va'>dt</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
+  dist <span class='op'>=</span> <span class='st'>"poisson"</span>, param1 <span class='op'>=</span> <span class='st'>"lambda"</span>
+<span class='op'>)</span>
 
-<span class='kw'>dtX2</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span>(dtOld = <span class='kw'>dt</span>, idvar = <span class='st'>"cid"</span>, nvars = <span class='fl'>4</span>, rho = <span class='fl'>.4</span>, corstr = <span class='st'>"ar1"</span>,
-                    dist = <span class='st'>"binary"</span>, param1 = <span class='st'>"p"</span>)
+<span class='va'>dtX2</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
+  dtOld <span class='op'>=</span> <span class='va'>dt</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>4</span>, rho <span class='op'>=</span> <span class='fl'>.4</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,
+  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span>
+<span class='op'>)</span>
 
 <span class='co'># Long example</span>
 
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"xbase"</span>, formula = <span class='fl'>5</span>, variance = <span class='fl'>.4</span>, dist = <span class='st'>"gamma"</span>, id = <span class='st'>"cid"</span>)
-<span class='kw'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def</span>, <span class='st'>"nperiods"</span>, formula = <span class='fl'>3</span>, dist = <span class='st'>"noZeroPoisson"</span>)
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xbase"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.4</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, id <span class='op'>=</span> <span class='st'>"cid"</span><span class='op'>)</span>
+<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, <span class='st'>"nperiods"</span>, formula <span class='op'>=</span> <span class='fl'>3</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span><span class='op'>)</span>
 
-<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(varname = <span class='st'>"lambda"</span>, formula = <span class='st'>".5+.5*period + .1*xbase"</span>,
-                   dist=<span class='st'>"nonrandom"</span>, link = <span class='st'>"log"</span>)
-<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>def2</span>, varname = <span class='st'>"p"</span>, formula = <span class='st'>"-3+.2*period + .3*xbase"</span>,
-                   dist=<span class='st'>"nonrandom"</span>, link = <span class='st'>"logit"</span>)
-<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>def2</span>, varname = <span class='st'>"gammaMu"</span>, formula = <span class='st'>".2*period + .3*xbase"</span>,
-                   dist=<span class='st'>"nonrandom"</span>, link = <span class='st'>"log"</span>)
-<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>def2</span>, varname = <span class='st'>"gammaDis"</span>, formula = <span class='fl'>1</span>, dist=<span class='st'>"nonrandom"</span>)
-<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>def2</span>, varname = <span class='st'>"normMu"</span>, formula = <span class='st'>"5+period + .5*xbase"</span>, dist=<span class='st'>"nonrandom"</span>)
-<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>def2</span>, varname = <span class='st'>"normVar"</span>, formula = <span class='fl'>4</span>, dist=<span class='st'>"nonrandom"</span>)
-<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>def2</span>, varname = <span class='st'>"unifMin"</span>, formula = <span class='st'>"5 + 2*period + .2*xbase"</span>, dist=<span class='st'>"nonrandom"</span>)
-<span class='kw'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(<span class='kw'>def2</span>, varname = <span class='st'>"unifMax"</span>, formula = <span class='st'>"unifMin + 20"</span>, dist=<span class='st'>"nonrandom"</span>)
+<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span>
+  varname <span class='op'>=</span> <span class='st'>"lambda"</span>, formula <span class='op'>=</span> <span class='st'>".5+.5*period + .1*xbase"</span>,
+  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span>
+<span class='op'>)</span>
+<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
+  varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='st'>"-3+.2*period + .3*xbase"</span>,
+  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span>
+<span class='op'>)</span>
+<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
+  varname <span class='op'>=</span> <span class='st'>"gammaMu"</span>, formula <span class='op'>=</span> <span class='st'>".2*period + .3*xbase"</span>,
+  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span>
+<span class='op'>)</span>
+<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
+  varname <span class='op'>=</span> <span class='st'>"gammaDis"</span>,
+  formula <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
+<span class='op'>)</span>
+<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
+  varname <span class='op'>=</span> <span class='st'>"normMu"</span>,
+  formula <span class='op'>=</span> <span class='st'>"5+period + .5*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
+<span class='op'>)</span>
+<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
+  varname <span class='op'>=</span> <span class='st'>"normVar"</span>, formula <span class='op'>=</span> <span class='fl'>4</span>,
+  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
+<span class='op'>)</span>
+<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
+  varname <span class='op'>=</span> <span class='st'>"unifMin"</span>,
+  formula <span class='op'>=</span> <span class='st'>"5 + 2*period + .2*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
+<span class='op'>)</span>
+<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
+  varname <span class='op'>=</span> <span class='st'>"unifMax"</span>,
+  formula <span class='op'>=</span> <span class='st'>"unifMin + 20"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
+<span class='op'>)</span>
 
-<span class='kw'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='kw'>def</span>)
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def</span><span class='op'>)</span>
 
-<span class='kw'>dtLong</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span>(<span class='kw'>dt</span>, idvars = <span class='st'>"cid"</span>, nPeriods = <span class='fl'>3</span>)
-<span class='kw'>dtLong</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span>(<span class='kw'>def2</span>, <span class='kw'>dtLong</span>)
+<span class='va'>dtLong</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dt</span>, idvars <span class='op'>=</span> <span class='st'>"cid"</span>, nPeriods <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>dtLong</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span><span class='op'>(</span><span class='va'>def2</span>, <span class='va'>dtLong</span><span class='op'>)</span>
 
 <span class='co'># Poisson distribution</span>
 
-<span class='kw'>dtX3</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span>(dtOld = <span class='kw'>dtLong</span>, idvar = <span class='st'>"cid"</span>, nvars = <span class='fl'>3</span>, rho = <span class='fl'>.6</span>, corstr = <span class='st'>"cs"</span>,
-                  dist = <span class='st'>"poisson"</span>, param1 = <span class='st'>"lambda"</span>, cnames = <span class='st'>"NewPois"</span>)
-<span class='kw'>dtX3</span>
+<span class='va'>dtX3</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
+  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
+  dist <span class='op'>=</span> <span class='st'>"poisson"</span>, param1 <span class='op'>=</span> <span class='st'>"lambda"</span>, cnames <span class='op'>=</span> <span class='st'>"NewPois"</span>
+<span class='op'>)</span>
+<span class='va'>dtX3</span>
 </div><div class='output co'>#&gt;        cid period     xbase nperiods timeID    lambda          p   gammaMu
 #&gt;    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322
 #&gt;    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774
@@ -287,10 +350,12 @@ the repeated measurement for an individual unit. The value defaults to "period".
 #&gt; 3000:        1 12.232125       4 11.092850 31.09285      11</div><div class='input'>
 <span class='co'># Binomial distribution - copula method</span>
 
-<span class='kw'>dtX4</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span>(dtOld = <span class='kw'>dtLong</span>, idvar = <span class='st'>"cid"</span>, nvars = <span class='fl'>3</span>, rho = <span class='fl'>.6</span>, corstr = <span class='st'>"cs"</span>,
-                  dist = <span class='st'>"binary"</span>, param1 = <span class='st'>"p"</span>, cnames = <span class='st'>"NewBin"</span>)
+<span class='va'>dtX4</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
+  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
+  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span>, cnames <span class='op'>=</span> <span class='st'>"NewBin"</span>
+<span class='op'>)</span>
 
-<span class='kw'>dtX4</span>
+<span class='va'>dtX4</span>
 </div><div class='output co'>#&gt;        cid period     xbase nperiods timeID    lambda          p   gammaMu
 #&gt;    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322
 #&gt;    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774
@@ -317,11 +382,13 @@ the repeated measurement for an individual unit. The value defaults to "period".
 #&gt; 3000:        1 12.232125       4 11.092850 31.09285      0</div><div class='input'>
 <span class='co'># Gamma distribution</span>
 
-<span class='kw'>dtX6</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span>(dtOld = <span class='kw'>dtLong</span>, idvar = <span class='st'>"cid"</span>, nvars = <span class='fl'>3</span>, rho = <span class='fl'>.6</span>, corstr = <span class='st'>"ar1"</span>,
-                  dist = <span class='st'>"gamma"</span>, param1 = <span class='st'>"gammaMu"</span>, param2 = <span class='st'>"gammaDis"</span>,
-                  cnames = <span class='st'>"NewGamma"</span>)
+<span class='va'>dtX6</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
+  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,
+  dist <span class='op'>=</span> <span class='st'>"gamma"</span>, param1 <span class='op'>=</span> <span class='st'>"gammaMu"</span>, param2 <span class='op'>=</span> <span class='st'>"gammaDis"</span>,
+  cnames <span class='op'>=</span> <span class='st'>"NewGamma"</span>
+<span class='op'>)</span>
 
-<span class='kw'>dtX6</span>
+<span class='va'>dtX6</span>
 </div><div class='output co'>#&gt;        cid period     xbase nperiods timeID    lambda          p   gammaMu
 #&gt;    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322
 #&gt;    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774
@@ -348,27 +415,32 @@ the repeated measurement for an individual unit. The value defaults to "period".
 #&gt; 3000:        1 12.232125       4 11.092850 31.09285 13.0286195</div><div class='input'>
 <span class='co'># Normal distribution</span>
 
-<span class='kw'>dtX7</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span>(dtOld = <span class='kw'>dtLong</span>, idvar = <span class='st'>"cid"</span>, nvars = <span class='fl'>3</span>, rho = <span class='fl'>.6</span>, corstr = <span class='st'>"ar1"</span>,
-                  dist = <span class='st'>"normal"</span>, param1 = <span class='st'>"normMu"</span>, param2 = <span class='st'>"normVar"</span>,
-                  cnames = <span class='st'>"NewNorm"</span>)
+<span class='va'>dtX7</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
+  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,
+  dist <span class='op'>=</span> <span class='st'>"normal"</span>, param1 <span class='op'>=</span> <span class='st'>"normMu"</span>, param2 <span class='op'>=</span> <span class='st'>"normVar"</span>,
+  cnames <span class='op'>=</span> <span class='st'>"NewNorm"</span>
+<span class='op'>)</span>
 
 <span class='co'># Binary outcome - ep method</span>
 
-<span class='kw'>probform</span> <span class='op'>&lt;-</span> <span class='st'>"-2 + .3*period"</span>
+<span class='va'>probform</span> <span class='op'>&lt;-</span> <span class='st'>"-2 + .3*period"</span>
 
-<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span>(varname = <span class='st'>"p"</span>, formula = <span class='kw'>probform</span>, 
-                   dist = <span class='st'>"nonrandom"</span>, link = <span class='st'>"logit"</span>)
+<span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span>
+  varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='va'>probform</span>,
+  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span>
+<span class='op'>)</span>
 
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>100</span>)
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span>(<span class='kw'>dx</span>, nPeriods = <span class='fl'>4</span>)
-<span class='kw'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span>(<span class='kw'>def1</span>, <span class='kw'>dx</span>)
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dx</span>, nPeriods <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span><span class='op'>(</span><span class='va'>def1</span>, <span class='va'>dx</span><span class='op'>)</span>
 
-<span class='kw'>dg</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span>(<span class='kw'>dx</span>,nvars = <span class='fl'>4</span>,   
-              corMatrix = <span class='kw'>NULL</span>, rho = <span class='fl'>.3</span>, corstr = <span class='st'>"cs"</span>, 
-              dist = <span class='st'>"binary"</span>, param1 = <span class='st'>"p"</span>, 
-              method = <span class='st'>"ep"</span>, formSpec = <span class='kw'>probform</span>, 
-              periodvar = <span class='st'>"period"</span>)
-
+<span class='va'>dg</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span><span class='va'>dx</span>,
+  nvars <span class='op'>=</span> <span class='fl'>4</span>,
+  corMatrix <span class='op'>=</span> <span class='cn'>NULL</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
+  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span>,
+  method <span class='op'>=</span> <span class='st'>"ep"</span>, formSpec <span class='op'>=</span> <span class='va'>probform</span>,
+  periodvar <span class='op'>=</span> <span class='st'>"period"</span>
+<span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -381,7 +453,7 @@ the repeated measurement for an individual unit. The value defaults to "period".
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

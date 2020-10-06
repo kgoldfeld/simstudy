@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,7 +151,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Definitions for missing data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/defMiss.R'><code>R/defMiss.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/missing_data.R'><code>R/missing_data.R</code></a></small>
     <div class="hidden name"><code>defMiss.Rd</code></div>
     </div>
 
@@ -123,14 +159,14 @@
     <p>Add single row to definitions table for missing data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>defMiss</span>(
-  dtDefs = <span class='kw'>NULL</span>,
-  <span class='kw'>varname</span>,
-  <span class='kw'>formula</span>,
-  logit.link = <span class='fl'>FALSE</span>,
-  baseline = <span class='fl'>FALSE</span>,
-  monotonic = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>defMiss</span><span class='op'>(</span>
+  dtDefs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>varname</span>,
+  <span class='va'>formula</span>,
+  logit.link <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  baseline <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  monotonic <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,19 +209,19 @@ by missingness at all follow-up times &gt; t.</p></td>
     <div class='dont-index'><p><code><a href='genMiss.html'>genMiss</a></code>, <code><a href='genObs.html'>genObs</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(varname = <span class='st'>"m"</span>, dist = <span class='st'>"binary"</span>, formula = <span class='fl'>.5</span>)
-<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def1</span>, <span class='st'>"u"</span>, dist = <span class='st'>"binary"</span>, formula = <span class='fl'>.5</span>)
-<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def1</span>, <span class='st'>"x1"</span>, dist=<span class='st'>"normal"</span>, formula = <span class='st'>"20*m + 20*u"</span>, variance = <span class='fl'>2</span>)
-<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def1</span>, <span class='st'>"x2"</span>, dist=<span class='st'>"normal"</span>, formula = <span class='st'>"20*m + 20*u"</span>, variance = <span class='fl'>2</span>)
-<span class='kw'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span>(<span class='kw'>def1</span>, <span class='st'>"x3"</span>, dist=<span class='st'>"normal"</span>, formula = <span class='st'>"20*m + 20*u"</span>, variance = <span class='fl'>2</span>)
+    <pre class="examples"><div class='input'><span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"m"</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>, formula <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span>
+<span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def1</span>, <span class='st'>"u"</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>, formula <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span>
+<span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def1</span>, <span class='st'>"x1"</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>, formula <span class='op'>=</span> <span class='st'>"20*m + 20*u"</span>, variance <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def1</span>, <span class='st'>"x2"</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>, formula <span class='op'>=</span> <span class='st'>"20*m + 20*u"</span>, variance <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def1</span>, <span class='st'>"x3"</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>, formula <span class='op'>=</span> <span class='st'>"20*m + 20*u"</span>, variance <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='kw'>dtAct</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span>(<span class='fl'>1000</span>, <span class='kw'>def1</span>)
+<span class='va'>dtAct</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def1</span><span class='op'>)</span>
 
-<span class='kw'>defM</span> <span class='op'>&lt;-</span> <span class='fu'>defMiss</span>(varname = <span class='st'>"x1"</span>, formula = <span class='fl'>.15</span>, logit.link = <span class='fl'>FALSE</span>)
-<span class='kw'>defM</span> <span class='op'>&lt;-</span> <span class='fu'>defMiss</span>(<span class='kw'>defM</span>, varname = <span class='st'>"x2"</span>, formula = <span class='st'>".05 + m * 0.25"</span>, logit.link = <span class='fl'>FALSE</span>)
-<span class='kw'>defM</span> <span class='op'>&lt;-</span> <span class='fu'>defMiss</span>(<span class='kw'>defM</span>, varname = <span class='st'>"x3"</span>, formula = <span class='st'>".05 + u * 0.25"</span>, logit.link = <span class='fl'>FALSE</span>)
-<span class='kw'>defM</span> <span class='op'>&lt;-</span> <span class='fu'>defMiss</span>(<span class='kw'>defM</span>, varname = <span class='st'>"u"</span>, formula = <span class='fl'>1</span>, logit.link = <span class='fl'>FALSE</span>) <span class='co'># not observed</span>
-<span class='kw'>defM</span>
+<span class='va'>defM</span> <span class='op'>&lt;-</span> <span class='fu'>defMiss</span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"x1"</span>, formula <span class='op'>=</span> <span class='fl'>.15</span>, logit.link <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='va'>defM</span> <span class='op'>&lt;-</span> <span class='fu'>defMiss</span><span class='op'>(</span><span class='va'>defM</span>, varname <span class='op'>=</span> <span class='st'>"x2"</span>, formula <span class='op'>=</span> <span class='st'>".05 + m * 0.25"</span>, logit.link <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='va'>defM</span> <span class='op'>&lt;-</span> <span class='fu'>defMiss</span><span class='op'>(</span><span class='va'>defM</span>, varname <span class='op'>=</span> <span class='st'>"x3"</span>, formula <span class='op'>=</span> <span class='st'>".05 + u * 0.25"</span>, logit.link <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='va'>defM</span> <span class='op'>&lt;-</span> <span class='fu'>defMiss</span><span class='op'>(</span><span class='va'>defM</span>, varname <span class='op'>=</span> <span class='st'>"u"</span>, formula <span class='op'>=</span> <span class='fl'>1</span>, logit.link <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># not observed</span>
+<span class='va'>defM</span>
 </div><div class='output co'>#&gt;    varname        formula logit.link baseline monotonic
 #&gt; 1:      x1           0.15      FALSE    FALSE     FALSE
 #&gt; 2:      x2 .05 + m * 0.25      FALSE    FALSE     FALSE
@@ -193,8 +229,8 @@ by missingness at all follow-up times &gt; t.</p></td>
 #&gt; 4:       u              1      FALSE    FALSE     FALSE</div><div class='input'>
 <span class='co'># Generate missing data matrix</span>
 
-<span class='kw'>missMat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genMiss.html'>genMiss</a></span>(dtName = <span class='kw'>dtAct</span>, missDefs = <span class='kw'>defM</span>, idvars = <span class='st'>"id"</span>)
-<span class='kw'>missMat</span>
+<span class='va'>missMat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genMiss.html'>genMiss</a></span><span class='op'>(</span>dtName <span class='op'>=</span> <span class='va'>dtAct</span>, missDefs <span class='op'>=</span> <span class='va'>defM</span>, idvars <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
+<span class='va'>missMat</span>
 </div><div class='output co'>#&gt;         id x1 x2 x3 u m
 #&gt;    1:    1  0  0  1 1 0
 #&gt;    2:    2  1  0  0 1 0
@@ -209,8 +245,8 @@ by missingness at all follow-up times &gt; t.</p></td>
 #&gt; 1000: 1000  1  0  0 1 0</div><div class='input'>
 <span class='co'># Generate observed data from actual data and missing data matrix</span>
 
-<span class='kw'>dtObs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genObs.html'>genObs</a></span>(<span class='kw'>dtAct</span>, <span class='kw'>missMat</span>, idvars = <span class='st'>"id"</span>)
-<span class='kw'>dtObs</span>
+<span class='va'>dtObs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genObs.html'>genObs</a></span><span class='op'>(</span><span class='va'>dtAct</span>, <span class='va'>missMat</span>, idvars <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
+<span class='va'>dtObs</span>
 </div><div class='output co'>#&gt;         id m  u        x1          x2        x3
 #&gt;    1:    1 0 NA 21.820790 20.43769558        NA
 #&gt;    2:    2 1 NA        NA 41.30834431 41.063218
@@ -234,7 +270,7 @@ by missingness at all follow-up times &gt; t.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

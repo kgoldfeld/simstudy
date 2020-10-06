@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a semi-colon delimited string of probabilities to be used to define categorical data — catProbs • simstudy</title>
+<title>Generate Categorical Formula — catProbs • simstudy</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Create a semi-colon delimited string of probabilities to be used to define categorical data — catProbs" />
-<meta property="og:description" content="Create a semi-colon delimited string of probabilities to be used to define categorical data" />
+<meta property="og:title" content="Generate Categorical Formula — catProbs" />
+<meta property="og:description" content="This function is deprecated, please use genCatFormula instead." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -89,6 +89,42 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="../articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="../articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="../articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="../articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -114,50 +150,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a semi-colon delimited string of probabilities to be used to define categorical data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/catProbs.R'><code>R/catProbs.R</code></a></small>
+    <h1>Generate Categorical Formula</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kgoldfeld/simstudy/blob/master/R/utility.R'><code>R/utility.R</code></a></small>
     <div class="hidden name"><code>catProbs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a semi-colon delimited string of probabilities to be used to define categorical data</p>
+    <p>This function is deprecated, please use <a href='genCatFormula.html'>genCatFormula</a> instead.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>catProbs</span>(<span class='kw'>...</span>, n = <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='fu'>catProbs</span><span class='op'>(</span><span class='va'>...</span>, n <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>...</th>
-      <td><p>one or more numeric values to be concatenated, delimited by ";".</p></td>
-    </tr>
-    <tr>
-      <th>n</th>
-      <td><p>number of probabilities (categories) to be generated - all with equal probability.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>string with multinomial probabilities.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The function accepts a number of probabilities or a value of n, but not both.</p>
-<p>If probabilities are passed, the string that is returned depends on the nature of those probabilities.
-If the sum of the probabilities is less than 1, an additional category is created with the probability
-1 - sum(provided probabilities). If the sum of the probabilities is equal to 1, then the number of
-categories is set to the number of probabilities provided. If the sum of the probabilities exceeds one
-(and there is more than one probability), the probabilities are standardized by dividing by the sum
-of the probabilities provided.</p>
-<p>If n is provided, n probabilities are included in the string, each with a probability equal to 1/n.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>catProbs</span>(<span class='fl'>0.25</span>, <span class='fl'>0.25</span>, <span class='fl'>0.50</span>)
-</div><div class='output co'>#&gt; [1] "0.25;0.25;0.5"</div><div class='input'><span class='fu'>catProbs</span>(<span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>2</span>)
-</div><div class='output co'>#&gt; [1] "0.333333333333333;0.5;0.166666666666667"</div><div class='input'><span class='fu'>catProbs</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)
-</div><div class='output co'>#&gt; [1] "0.166666666666667;0.333333333333333;0.5"</div><div class='input'><span class='fu'>catProbs</span>(n=<span class='fl'>5</span>)
-</div><div class='output co'>#&gt; [1] "0.2;0.2;0.2;0.2;0.2"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -169,7 +174,7 @@ of the probabilities provided.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href='https://www.rdatagen.net/'>Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">

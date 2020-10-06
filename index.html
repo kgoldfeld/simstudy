@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -54,6 +54,42 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="articles/longitudinal.html">Longitudinal Data</a>
+    </li>
+    <li>
+      <a href="articles/missing.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="articles/ordinal.html">Ordinal Categorical Data</a>
+    </li>
+    <li>
+      <a href="articles/spline.html">Spline Data</a>
+    </li>
+    <li>
+      <a href="articles/survival.html">Survival Data</a>
+    </li>
+    <li>
+      <a href="articles/treat_and_exposure.html">Treatment and Exposure</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -81,34 +117,50 @@
 <div id="simstudy" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#simstudy" class="anchor"></a>simstudy</h1></div>
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-<p>The simstudy package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user specifies a set of relationships between covariates, and generates data based on these specifications. The final data sets can represent data from randomized control trials, repeated measure (longitudinal) designs, and cluster randomized trials. Missingness can be generated using various mechanisms (MCAR, MAR, NMAR).</p>
-<p>Here is some simple sample code, much more in the vignette:</p>
+<p>The <code>simstudy</code> package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
+<p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create datasets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> datasets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
+<p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean <span class="math inline"><em>μ</em></span> (or <span class="math inline"><em>l</em><em>o</em><em>g</em>(<em>μ</em>)</span>) and a dispersion <span class="math inline"><em>d</em></span>, rather than shape <span class="math inline"><em>α</em></span> and rate <span class="math inline"><em>β</em></span> parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling <span class="math inline"><em>μ</em></span> (or some function of <span class="math inline">(<em>μ</em>)</span>), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>You can install the released version of simstudy from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://kgoldfeld.github.io/simstudy">simstudy</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"simstudy"</span><span class="op">)</span></pre></div>
+<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"kgoldfeld/simstudy"</span><span class="op">)</span></pre></div>
+</div>
+<div id="example" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example" class="anchor"></a>Example</h2>
+<p>Here is some simple sample code, much more in the vignettes:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://kgoldfeld.github.io/simstudy">simstudy</a></span><span class="op">)</span>
 
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span>(varname=<span class="st">"x"</span>, formula = <span class="fl">10</span>, variance = <span class="fl">2</span>)
-<span class="kw">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span>(<span class="kw">def</span>, varname=<span class="st">"y"</span>, formula = <span class="st">"3 + 0.5 * x"</span>, variance = <span class="fl">1</span>)
-<span class="kw">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/genData.html">genData</a></span>(<span class="fl">250</span>, <span class="kw">def</span>)
+<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span><span class="op">(</span>varname<span class="op">=</span><span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname<span class="op">=</span><span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"3 + 0.5 * x"</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">250</span>, <span class="va">def</span><span class="op">)</span>
 
-<span class="kw">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/trtAssign.html">trtAssign</a></span>(<span class="kw">dt</span>, nTrt = <span class="fl">4</span>, grpName = <span class="st">"grp"</span>, balanced = <span class="fl">TRUE</span>)
+<span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, nTrt <span class="op">=</span> <span class="fl">4</span>, grpName <span class="op">=</span> <span class="st">"grp"</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="kw">dt</span>
-</pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">##       id         x         y grp</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="co">##   1:   1  8.314181  7.063609   2</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co">##   2:   2 10.465894  7.773591   1</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co">##   3:   3 12.441911 10.323158   1</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">##   4:   4  9.765096  8.575847   3</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">##   5:   5 10.237149 10.476723   1</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co">##  ---                            </span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">## 246: 246  8.789552  5.888775   3</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="co">## 247: 247  9.520327  8.173849   1</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">## 248: 248  8.803506  7.257983   2</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">## 249: 249  8.916332  7.011706   1</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="co">## 250: 250  8.371343  7.092098   2</span></span></code></pre></div>
+<span class="va">dd</span>
+<span class="co">#&gt;       id         x        y grp</span>
+<span class="co">#&gt;   1:   1  9.614759 8.388761   3</span>
+<span class="co">#&gt;   2:   2  8.286225 7.616225   2</span>
+<span class="co">#&gt;   3:   3 11.035302 9.420590   1</span>
+<span class="co">#&gt;   4:   4 10.333926 8.248654   1</span>
+<span class="co">#&gt;   5:   5 11.199110 9.349459   3</span>
+<span class="co">#&gt;  ---                           </span>
+<span class="co">#&gt; 246: 246  9.276009 7.984796   2</span>
+<span class="co">#&gt; 247: 247  9.086318 6.618701   2</span>
+<span class="co">#&gt; 248: 248  8.628892 5.750542   1</span>
+<span class="co">#&gt; 249: 249  8.823797 8.543863   4</span>
+<span class="co">#&gt; 250: 250 11.527290 9.584074   3</span></pre></div>
+</div>
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">
 <a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
@@ -145,7 +197,9 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Keith Goldfeld <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-0292-8780" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="https://www.rdatagen.net/">Keith Goldfeld</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-0292-8780" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Jacob Wujciak-Jens <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7281-3989" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
@@ -154,7 +208,9 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/kgoldfeld/simstudy/actions"><img src="https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main" alt="R build status"></a></li>
 <li><a href="https://CRAN.R-project.org/package=simstudy"><img src="https://www.r-pkg.org/badges/version/simstudy" alt="CRAN status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=simstudy"><img src="https://cranlogs.r-pkg.org/badges/grand-total/simstudy" alt="CRAN downloads"></a></li>
 <li><a href="https://codecov.io/gh/kgoldfeld/simstudy"><img src="https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#stable"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 </ul>
 </div>
 </div>
@@ -162,7 +218,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Keith Goldfeld.</p>
+  <p>Developed by <a href="https://www.rdatagen.net/">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">
