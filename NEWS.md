@@ -1,4 +1,4 @@
-# simstudy (development version)
+# simstudy 0.2.1
 
 # simstudy 0.2.0
 
