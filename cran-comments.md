@@ -1,6 +1,6 @@
-## Resubmission 2020OCT06
+## Resubmission 2020OCT07
 
-This is a resubmission of version 0.2.0
+This is a resubmission of version 0.2.1
 
 Developed with R Version 4.0.2
 
