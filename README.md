@@ -1,17 +1,6 @@
 simstudy
 ================
 
-<!-- badges: start -->
-
-[![R build
-status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
-<!-- badges: end -->
-
-# simstudy
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <!-- badges: start -->
@@ -92,17 +81,17 @@ dd <- trtAssign(dd, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dd
 #>       id         x        y grp
-#>   1:   1  9.614759 8.388761   3
-#>   2:   2  8.286225 7.616225   2
-#>   3:   3 11.035302 9.420590   1
-#>   4:   4 10.333926 8.248654   1
-#>   5:   5 11.199110 9.349459   3
+#>   1:   1  9.902079 7.917103   4
+#>   2:   2  7.994863 7.221989   2
+#>   3:   3 10.365323 8.464112   2
+#>   4:   4  9.264081 8.419645   2
+#>   5:   5  9.450214 8.358625   1
 #>  ---                           
-#> 246: 246  9.276009 7.984796   2
-#> 247: 247  9.086318 6.618701   2
-#> 248: 248  8.628892 5.750542   1
-#> 249: 249  8.823797 8.543863   4
-#> 250: 250 11.527290 9.584074   3
+#> 246: 246 11.362939 8.683527   3
+#> 247: 247  8.369095 8.927575   2
+#> 248: 248 10.212344 9.199797   2
+#> 249: 249  8.040004 7.548118   2
+#> 250: 250  9.190482 6.613247   4
 ```
 
 ## Code of Conduct
