@@ -1,4 +1,6 @@
-# simstudy (development version)
+# simstudy 0.2.1
+* Add 'backports' for compatibility with R < 4.0 
+* Fix a bug on R < 4.0 in genOrdCat
 
 # simstudy 0.2.0
 
@@ -27,16 +29,6 @@
 * Fixed bug in trtAssign related new ratio argument.
 * Fixed bug in trtAssign when strata had count of one.
 * defData now also checks the first row in the definition table for validity.
-
-
-
-
-
-
-
-
-
-
 
 # simstudy 0.1.16
 
