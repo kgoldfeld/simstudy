@@ -34,7 +34,8 @@ Imports:
     methods,
     mvnfast,
     mvtnorm,
-    Rcpp
+    Rcpp,
+    backports
 Suggests: 
     covr,
     dplyr,
