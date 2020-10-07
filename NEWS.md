@@ -30,16 +30,6 @@
 * Fixed bug in trtAssign when strata had count of one.
 * defData now also checks the first row in the definition table for validity.
 
-
-
-
-
-
-
-
-
-
-
 # simstudy 0.1.16
 
 * Added "mixture" distribution that takes a value from an existing column with a specified probability.
