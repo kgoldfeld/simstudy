@@ -1,4 +1,6 @@
 # simstudy 0.2.1
+* Add 'backports' for compatibility with R < 4.0 
+* Fix a bug on R < 4.0 in genOrdCat
 
 # simstudy 0.2.0
 
