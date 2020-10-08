@@ -132,34 +132,34 @@
 <span class="va">dtTrial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500</span>, <span class="va">tdef</span><span class="op">)</span>
 <span class="va">dtTrial</span></pre></div>
 <pre><code>##       id T        Y0       Y1       Y2
-##   1:   1 1 10.350438 20.09063 23.26054
-##   2:   2 1  9.432900 18.02894 24.89470
-##   3:   3 0 10.578183 16.11475 20.58189
-##   4:   4 0  9.562847 15.23094 19.96509
-##   5:   5 1  8.885236 18.95937 23.70584
+##   1:   1 1 11.104622 20.44959 24.24267
+##   2:   2 1 10.556308 19.58099 25.92500
+##   3:   3 1 10.540632 19.90334 24.83316
+##   4:   4 1 11.845892 22.43898 25.53420
+##   5:   5 0 10.467021 15.46256 20.82101
 ##  ---                                  
-## 496: 496 1 10.634828 21.41677 27.33501
-## 497: 497 0  9.649151 15.23844 20.80715
-## 498: 498 0 11.587244 17.02543 19.38425
-## 499: 499 1  9.179444 17.76597 22.80195
-## 500: 500 0 10.143515 14.78159 19.39900</code></pre>
+## 496: 496 0  8.990915 12.39757 20.25040
+## 497: 497 1 11.603842 21.38704 26.62146
+## 498: 498 0 10.553121 15.26691 20.64723
+## 499: 499 0 11.497805 16.55391 21.52993
+## 500: 500 1  9.923450 18.73781 24.67935</code></pre>
 <p>The data in longitudinal form is created with a call to <strong><code>addPeriods</code></strong>. If the cross-sectional data includes time dependent data, then the number of periods <code>nPeriods</code> must be the same as the number of time dependent columns. If a variable is not declared as one of the <code>timevars</code>, it will be repeated each time period. In this example, the treatment indicator <code>T</code> is not specified as a time dependent variable. (Note: if there are two time-dependent variables, it is best to create two data sets and merge them. This will be shown later in the vignette).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">dtTrial</span>, nPeriods <span class="op">=</span> <span class="fl">3</span>, idvars <span class="op">=</span> <span class="st">"id"</span>, timevars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y0"</span>, <span class="st">"Y1"</span>, 
     <span class="st">"Y2"</span><span class="op">)</span>, timevarName <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span>
 <span class="va">dtTime</span></pre></div>
 <pre><code>##        id period T        Y timeID
-##    1:   1      0 1 10.35044      1
-##    2:   1      1 1 20.09063      2
-##    3:   1      2 1 23.26054      3
-##    4:   2      0 1  9.43290      4
-##    5:   2      1 1 18.02894      5
+##    1:   1      0 1 11.10462      1
+##    2:   1      1 1 20.44959      2
+##    3:   1      2 1 24.24267      3
+##    4:   2      0 1 10.55631      4
+##    5:   2      1 1 19.58099      5
 ##   ---                             
-## 1496: 499      1 1 17.76597   1496
-## 1497: 499      2 1 22.80195   1497
-## 1498: 500      0 0 10.14352   1498
-## 1499: 500      1 0 14.78159   1499
-## 1500: 500      2 0 19.39900   1500</code></pre>
+## 1496: 499      1 0 16.55391   1496
+## 1497: 499      2 0 21.52993   1497
+## 1498: 500      0 1  9.92345   1498
+## 1499: 500      1 1 18.73781   1499
+## 1500: 500      2 1 24.67935   1500</code></pre>
 <p>This is what the longitudinal data look like:</p>
 <p><img src="longitudinal_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <div id="longitudinal-data-with-varying-observation-and-interval-times" class="section level3">
@@ -176,25 +176,25 @@
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">def</span><span class="op">)</span>
 <span class="va">dt</span><span class="op">[</span><span class="va">id</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span>  <span class="co"># View individuals 8 and 121</span></pre></div>
 <pre><code>##     id    xbase nCount mInterval vInterval
-## 1:   8 19.09629      4  27.97734      0.07
-## 2: 121 20.49590      8  27.43027      0.07</code></pre>
+## 1:   8 18.67130      3  27.39940      0.07
+## 2: 121 19.80755      9  33.70506      0.07</code></pre>
 <p>The resulting longitudinal data for these two subjects can be inspected after a call to <code>addPeriods</code>. Notice that no parameters need to be set since all information resides in the data set itself:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="va">dtPeriod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span>
 <span class="va">dtPeriod</span><span class="op">[</span><span class="va">id</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span>  <span class="co"># View individuals 8 and 121 only</span></pre></div>
 <pre><code>##      id period    xbase time timeID
-##  1:   8      0 19.09629    0     41
-##  2:   8      1 19.09629   25     42
-##  3:   8      2 19.09629   51     43
-##  4:   8      3 19.09629   70     44
-##  5: 121      0 20.49590    0    690
-##  6: 121      1 20.49590   22    691
-##  7: 121      2 20.49590   39    692
-##  8: 121      3 20.49590   75    693
-##  9: 121      4 20.49590   93    694
-## 10: 121      5 20.49590  120    695
-## 11: 121      6 20.49590  140    696
-## 12: 121      7 20.49590  170    697</code></pre>
+##  1:   8      0 18.67130    0     51
+##  2:   8      1 18.67130   23     52
+##  3:   8      2 18.67130   40     53
+##  4: 121      0 19.80755    0    737
+##  5: 121      1 19.80755   32    738
+##  6: 121      2 19.80755   59    739
+##  7: 121      3 19.80755  105    740
+##  8: 121      4 19.80755  143    741
+##  9: 121      5 19.80755  183    742
+## 10: 121      6 19.80755  208    743
+## 11: 121      7 19.80755  242    744
+## 12: 121      8 19.80755  286    745</code></pre>
 <p>If a time sensitive measurement is added to the data set …</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Y"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"15 + .1 * time"</span>, variance <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>

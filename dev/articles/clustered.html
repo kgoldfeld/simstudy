@@ -133,14 +133,14 @@
 
 <span class="va">dtSchool</span></pre></div>
 <pre><code>##    idSchool          s0 nClasses trtGrp
-## 1:        1 -0.88106871        3      0
-## 2:        2 -0.74377005        2      1
-## 3:        3  0.10196781        2      1
-## 4:        4 -1.10931868        1      0
-## 5:        5 -2.62456940        3      0
-## 6:        6  1.51254904        3      1
-## 7:        7  0.02375377        3      0
-## 8:        8 -0.57691314        5      1</code></pre>
+## 1:        1 -0.10476035        2      0
+## 2:        2 -2.84308350        1      1
+## 3:        3 -2.81957499        2      1
+## 4:        4 -1.42106977        3      0
+## 5:        5  0.14001630        1      1
+## 6:        6  0.06797246        1      0
+## 7:        7  1.75754930        4      0
+## 8:        8  1.15495534        2      1</code></pre>
 <p>The classroom level data are generated with a call to <code>genCluster</code>, and then school level data is added by a call to <code>addColumns</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="va">gen.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"c0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
@@ -151,17 +151,17 @@
 <span class="va">dtClass</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">gen.class</span>, <span class="va">dtClass</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dtClass</span>, <span class="fl">10</span><span class="op">)</span></pre></div>
-<pre><code>##     idSchool         s0 nClasses trtGrp idClass          c0 nStudents
-##  1:        1 -0.8810687        3      0       1 -1.32604043        11
-##  2:        1 -0.8810687        3      0       2  1.08473746        14
-##  3:        1 -0.8810687        3      0       3  0.14246143        16
-##  4:        2 -0.7437701        2      1       4 -0.13054177        20
-##  5:        2 -0.7437701        2      1       5  0.81723205        15
-##  6:        3  0.1019678        2      1       6  2.37710854        23
-##  7:        3  0.1019678        2      1       7 -1.19246445        25
-##  8:        4 -1.1093187        1      0       8 -0.09978851        21
-##  9:        5 -2.6245694        3      0       9  1.91138497        27
-## 10:        5 -2.6245694        3      0      10 -0.06867483        17</code></pre>
+<pre><code>##     idSchool          s0 nClasses trtGrp idClass         c0 nStudents
+##  1:        1 -0.10476035        2      0       1 -1.0151319        26
+##  2:        1 -0.10476035        2      0       2 -0.5004265        21
+##  3:        2 -2.84308350        1      1       3 -1.5612310        24
+##  4:        3 -2.81957499        2      1       4 -1.0236375        13
+##  5:        3 -2.81957499        2      1       5  0.3953478        21
+##  6:        4 -1.42106977        3      0       6 -0.2297242        24
+##  7:        4 -1.42106977        3      0       7 -0.9453503        25
+##  8:        4 -1.42106977        3      0       8  1.4559964        21
+##  9:        5  0.14001630        1      1       9 -3.4685518        17
+## 10:        6  0.06797246        1      0      10  1.1917661        20</code></pre>
 <p>Finally, the student level data are added using the same process:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, 
