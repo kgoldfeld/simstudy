@@ -18,8 +18,8 @@ affiliations:
    index: 1
  - name: Independent Researcher
    index: 2
-date: 13 October 2020
-bibliography: paper.bib
+date: 18 October 2020
+bibliography: simstudy.bib
 ---
 
 # Summary
@@ -56,59 +56,40 @@ used to generate the model - illuminating the relationship between the
 underlying data generating processes and the models.
 
 # Statement of need 
-To Do:
-* A clear Statement of Need that illustrates the research purpose of the software.
-* A list of key references, including to other software addressing related
-  needs.  
-* Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it.
-* Acknowledgement of any financial support.
 
-# Mathematics
+Empiricism and statistical analysis are cornerstones of scientific research
+but they can crumble if used incorrectly. Choosing the right methodology for the
+hypothesis and expected data is crucial for useful, valid results. Data
+simulated with `simstudy` under the assumptions derived from the hypothesis
+enables researchers to test and refine their analysis methodology without the
+need for time-intensive, expensive pre-tests. Additionally data generated with
+`simstudy` can be used in generalised, theoretical simulation studies to further
+the field of methodology.
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+There are several `R`-packages that allow for data generation under different
+assumptions. Most of these packages have a very narrow scope that focuses on a
+certain kind a data to generate, like `CorBin` [@song2019], `ICCbin`
+[@hossain2017], `BinNonNor` [@inan2020] and `genSurv`[@meira-machado2014]. Some
+target specific fields and their needs like the psychology focused `psych`
+Package [@revelle2020] or the `conjurer` Package [@macherla2020] that provides
+methods to generate synthetic customer data for industry use. `simstudy` is
+unique with it's philosophy of data generating processes that mimic the models
+used in analysis and the possibility to generate a wide range of complex data
+through these processes. The `SimDesign` Package [@chalmers2020] follows a
+similar line of thought but focuses on the analysis and summary of the simulated
+data.
 
-Double dollars make self-standing equations:
-
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
-
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
-
-# Citations
-
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
-
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
-
-# Figures
-
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
-
-Fenced code blocks are rendered with syntax highlighting:
-```python
-for n in range(10):
-    yield f(n)
-```	
+`simstudy` has been used in a variety of fields for theoretical exploration of
+research methodology
+[@anderson2019;@kirasich2018;@krzykalla2020;@liu2019;@nickodem2020;@thoya2018;@wang2020;@elalili2020],
+power calculation for trials [@wei2019] and other simulation tasks supporting
+researchers in their quest for knowledge
+[@forthun2020;@horry2020;@renson2017;chukwu2019].
 
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+We acknowledge contributions from James Balamuta, Michael Bradley,  Gertjan
+Verhoeven. For the generation of multivariate binary data the algorithm by
+@emrich1991 is used.
 
 # References
