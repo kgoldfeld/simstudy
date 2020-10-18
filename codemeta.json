@@ -15,7 +15,7 @@
   ],
   "issueTracker": "https://github.com/kgoldfeld/simstudy/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -277,7 +277,7 @@
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
-      "version": ">= 3.2.2"
+      "version": ">= 3.3.0"
     },
     {
       "@type": "SoftwareApplication",
@@ -343,11 +343,23 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "backports",
+      "name": "backports",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=backports"
     }
   ],
-  "releaseNotes": "https://github.com/kgoldfeld/simstudy/blob/main/NEWS.md",
+  "releaseNotes": "https://github.com/kgoldfeld/simstudy/blob/master/NEWS.md",
   "readme": "https://github.com/kgoldfeld/simstudy/blob/main/README.md",
-  "fileSize": "7855.855KB",
+  "fileSize": "8047.515KB",
   "contIntegration": "https://codecov.io/gh/kgoldfeld/simstudy",
   "developmentStatus": "https://www.tidyverse.org/lifecycle/#stable",
   "keywords": [
