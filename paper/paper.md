@@ -14,7 +14,7 @@ authors:
     orcid: 0000-0002-7281-3989
     affiliation: 2
 affiliations:
- - name: NYU Groosman School of Medicine.
+ - name: NYU Grossman School of Medicine.
    index: 1
  - name: Independent Researcher
    index: 2
@@ -58,34 +58,30 @@ underlying data generating processes and the models.
 # Statement of need 
 
 Empiricism and statistical analysis are cornerstones of scientific research
-but they can crumble if used incorrectly. Choosing the right methodology for the
+but they can lead us astray if used incorrectly. Choosing the right methodology for the
 hypothesis and expected data is crucial for useful, valid results. Data
-simulated with `simstudy` under the assumptions derived from the hypothesis
+simulated with `simstudy` under the assumptions derived from a hypothesis
 enables researchers to test and refine their analysis methodology without the
-need for time-intensive, expensive pre-tests. Additionally data generated with
-`simstudy` can be used in generalised, theoretical simulation studies to further
-the field of methodology.
+need for time-intensive, expensive pre-tests or collection of actual data. Additionally data generated with `simstudy` can be used in generalized, theoretical simulation studies to further the field of methodology.
 
 There are several `R`-packages that allow for data generation under different
-assumptions. Most of these packages have a very narrow scope that focuses on a
-certain kind a data to generate, like `ICCbin` [@hossain2017], `BinNonNor`
+assumptions. Most of these packages have a narrower scope that focuses on
+a specific class of data, like `ICCbin` [@hossain2017], `BinNonNor`
 [@inan2020] and `genSurv` [@meira-machado2014]. Some do not seem to be actively
 maintained [@hofert2016;@chan2014;@alfons2010;@bien2016], which can cause
-compatibility issues. Some target specific fields and their needs like the
-psychology focused `psych` Package [@revelle2020] or the `conjurer` Package
+compatibility issues. Some target specific fields of study and their needs, like the
+psychology-focused `psych` package [@revelle2020] or the `conjurer` package
 [@macherla2020] that provides methods to generate synthetic customer data for
-industry use. `simstudy` is unique with it's philosophy of data generating
-processes that mimic the models used in analysis and the possibility to generate
-a wide range of complex data through these processes. The `SimDesign` Package
+industry use. `simstudy` is unique with its philosophy of data generating
+processes that mimic the models used in analysis and allowing for the possibility of generating a wide range of complex data through these processes. The `SimDesign` Package
 [@chalmers2020] and the related `MonteCarlo` Package [@leschinski2019] follow a
-similar line of thought but focus on the analysis and summary of the simulated
-data.
+similar line of thought but focus on easy replication of the analyses and providing summaries of simulated data.
 
 `simstudy` has been used in a variety of fields for theoretical exploration of
 research methodology
 [@anderson2019;@kirasich2018;@krzykalla2020;@liu2019;@nickodem2020;@thoya2018;@wang2020;@elalili2020],
 power calculation for trials [@wei2019] and other simulation tasks supporting
-researchers in their quest for knowledge
+researchers
 [@forthun2020;@horry2020;@renson2017;@chukwu2019].
 
 # Acknowledgements
