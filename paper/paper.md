@@ -68,15 +68,17 @@ the field of methodology.
 
 There are several `R`-packages that allow for data generation under different
 assumptions. Most of these packages have a very narrow scope that focuses on a
-certain kind a data to generate, like `CorBin` [@song2019], `ICCbin`
-[@hossain2017], `BinNonNor` [@inan2020] and `genSurv`[@meira-machado2014]. Some
-target specific fields and their needs like the psychology focused `psych`
-Package [@revelle2020] or the `conjurer` Package [@macherla2020] that provides
-methods to generate synthetic customer data for industry use. `simstudy` is
-unique with it's philosophy of data generating processes that mimic the models
-used in analysis and the possibility to generate a wide range of complex data
-through these processes. The `SimDesign` Package [@chalmers2020] follows a
-similar line of thought but focuses on the analysis and summary of the simulated
+certain kind a data to generate, like `ICCbin` [@hossain2017], `BinNonNor`
+[@inan2020] and `genSurv`[@meira-machado2014]. Some do not seem to be actively
+maintained [@hofert2016;@chan2014;@alfons2010;bien2016:], which can cause
+compatibility issues. Some target specific fields and their needs like the
+psychology focused `psych` Package [@revelle2020] or the `conjurer` Package
+[@macherla2020] that provides methods to generate synthetic customer data for
+industry use. `simstudy` is unique with it's philosophy of data generating
+processes that mimic the models used in analysis and the possibility to generate
+a wide range of complex data through these processes. The `SimDesign` Package
+[@chalmers2020] and the related `MonteCarlo` Package [@leschinski2019] follow a
+similar line of thought but focus on the analysis and summary of the simulated
 data.
 
 `simstudy` has been used in a variety of fields for theoretical exploration of
