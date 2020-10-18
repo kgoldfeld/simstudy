@@ -69,8 +69,8 @@ the field of methodology.
 There are several `R`-packages that allow for data generation under different
 assumptions. Most of these packages have a very narrow scope that focuses on a
 certain kind a data to generate, like `ICCbin` [@hossain2017], `BinNonNor`
-[@inan2020] and `genSurv`[@meira-machado2014]. Some do not seem to be actively
-maintained [@hofert2016;@chan2014;@alfons2010;bien2016:], which can cause
+[@inan2020] and `genSurv` [@meira-machado2014]. Some do not seem to be actively
+maintained [@hofert2016;@chan2014;@alfons2010;@bien2016;], which can cause
 compatibility issues. Some target specific fields and their needs like the
 psychology focused `psych` Package [@revelle2020] or the `conjurer` Package
 [@macherla2020] that provides methods to generate synthetic customer data for
@@ -86,7 +86,7 @@ research methodology
 [@anderson2019;@kirasich2018;@krzykalla2020;@liu2019;@nickodem2020;@thoya2018;@wang2020;@elalili2020],
 power calculation for trials [@wei2019] and other simulation tasks supporting
 researchers in their quest for knowledge
-[@forthun2020;@horry2020;@renson2017;chukwu2019].
+[@forthun2020;@horry2020;@renson2017;@chukwu2019;].
 
 # Acknowledgements
 
