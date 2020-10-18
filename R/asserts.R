@@ -251,10 +251,12 @@ ensureLength <- function(..., n,
 ensureMatrix <- function(var) {
     stopifnot(is(var, "matrix") || is(var, "vector"))
 
+    if (is(var, "matrix")) {
+        return(var)
+    }
+
     if (is(var, "vector")) {
         return(matrix(var, nrow = 1))
-    } else {
-        return(var)
     }
 }
 
