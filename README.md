@@ -73,25 +73,25 @@ Here is some simple sample code, much more in the vignettes:
 ``` r
 library(simstudy)
 
-def <- defData(varname="x", formula = 10, variance = 2)
-def <- defData(def, varname="y", formula = "3 + 0.5 * x", variance = 1)
+def <- defData(varname="x", formula = 10, variance = 2, dist = "normal")
+def <- defData(def, varname="y", formula = "3 + 0.5 * x", variance = 1, dist = "normal")
 dd <- genData(250, def)
 
 dd <- trtAssign(dd, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dd
 #>       id         x        y grp
-#>   1:   1  6.585157 7.350875   3
-#>   2:   2 10.765188 8.013749   2
-#>   3:   3  7.083487 8.750912   3
-#>   4:   4 10.080743 7.375039   3
-#>   5:   5  9.399214 7.014129   2
+#>   1:   1 10.343550 7.896122   1
+#>   2:   2 12.546128 8.213661   2
+#>   3:   3 11.589142 9.335444   4
+#>   4:   4  6.780056 6.561719   3
+#>   5:   5 10.826578 7.601935   1
 #>  ---                           
-#> 246: 246 10.798360 9.751585   4
-#> 247: 247 10.124999 8.798157   2
-#> 248: 248 10.663699 7.355848   3
-#> 249: 249  9.806569 8.880444   4
-#> 250: 250  8.337997 6.901783   2
+#> 246: 246 10.050552 6.066714   3
+#> 247: 247 11.833109 7.482641   2
+#> 248: 248 10.065499 8.740391   2
+#> 249: 249  9.853735 6.735114   1
+#> 250: 250  8.823834 5.438522   2
 ```
 
 ## Code of Conduct
