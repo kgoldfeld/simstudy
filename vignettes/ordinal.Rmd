@@ -39,7 +39,7 @@ ggtheme <- function(panelback = "white") {
 
 ```
 
-Using the `defData` and `genData` functions, it is is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on five possible values: (1) strongly disagree, (2) disagree, (3) neutral, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.
+Using the `defData` and `genData` functions, it is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related to strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on five possible values: (1) strongly disagree, (2) disagree, (3) neutral, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.
 
 It is common to summarize the data by looking at *cumulative* probabilities, odds, or log-odds.  Comparisons of different exposures or individual characteristics typically look at how these cumulative measures vary across the different exposures or characteristics. So, if we were interested in cumulative odds, we would compare
 $$\small{\frac{P(response = 1|exposed)}{P(response > 1|exposed)} \ \ vs. \ \frac{P(response = 1|unexposed)}{P(response > 1|unexposed)}},$$
