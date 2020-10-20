@@ -139,17 +139,17 @@
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCorData.html">genCorData</a></span><span class="op">(</span><span class="fl">1000</span>, mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span>, <span class="fl">3</span><span class="op">)</span>, sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, corMatrix <span class="op">=</span> <span class="va">C</span><span class="op">)</span>
 <span class="va">dt</span></pre></div>
 <pre><code>##         id       V1        V2        V3
-##    1:    1 4.164467 11.696154  2.699639
-##    2:    2 4.756568 16.962647 12.085330
-##    3:    3 5.236440 12.329317  3.308842
-##    4:    4 3.506286 12.963928  6.014918
-##    5:    5 3.830703 12.980717  7.211660
+##    1:    1 4.419901 13.167473  3.788763
+##    2:    2 6.845694 16.311406  3.954682
+##    3:    3 3.838780 11.012305  3.867170
+##    4:    4 4.866030 13.149499  4.243277
+##    5:    5 3.516044 14.139269  8.847336
 ##   ---                                  
-##  996:  996 2.967126 13.176571  8.576592
-##  997:  997 4.659462 12.186283  1.477001
-##  998:  998 5.216946 14.420482  6.271200
-##  999:  999 4.065741 15.142034  9.910363
-## 1000: 1000 2.057610  8.344372  1.521514</code></pre>
+##  996:  996 4.095792 11.768782  2.473031
+##  997:  997 3.132181 12.233688  4.841086
+##  998:  998 3.513116  8.406453 -3.980804
+##  999:  999 1.094307  9.069492  2.985041
+## 1000: 1000 3.837043 11.525497  3.102882</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="co"># estimate correlation matrix</span>
 <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span></pre></div>
@@ -171,30 +171,30 @@
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCorData.html">genCorData</a></span><span class="op">(</span><span class="fl">1000</span>, mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span>, <span class="fl">3</span><span class="op">)</span>, sigma <span class="op">=</span> <span class="fl">3</span>, rho <span class="op">=</span> <span class="fl">0.4</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, cnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x0"</span>, 
     <span class="st">"x1"</span>, <span class="st">"x2"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">dt</span></pre></div>
-<pre><code>##         id         x0        x1          x2
-##    1:    1  3.2576918 11.283356  0.70433896
-##    2:    2  2.2544821 11.719461 -0.01975974
-##    3:    3  1.1353362  9.585821  1.83574054
-##    4:    4 11.9846262 19.537607  7.01788507
-##    5:    5  4.0340807 16.136738  3.38933191
-##   ---                                      
-##  996:  996  2.2102654 14.024056  5.44435633
-##  997:  997  2.7927766 13.329080 -3.87864486
-##  998:  998  5.9758836 10.798603  1.81318333
-##  999:  999 -0.9947966  7.818257  1.01713521
-## 1000: 1000 10.3392866 16.819176  5.42573562</code></pre>
+<pre><code>##         id        x0        x1         x2
+##    1:    1 -1.294144  6.812070 -3.4742095
+##    2:    2  3.705671 12.965170  4.9856283
+##    3:    3  1.727990 11.335997  1.7617153
+##    4:    4  1.485836 11.950173  3.5221777
+##    5:    5  4.660451  8.106801  3.3593851
+##   ---                                    
+##  996:  996  4.168745  9.698251  5.9697573
+##  997:  997 11.877232 14.620039  7.6747786
+##  998:  998 -1.327473 10.559214 -0.6782381
+##  999:  999  6.632625 14.452522  5.2568356
+## 1000: 1000  1.307341 11.805913  4.1521458</code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="co"># estimate correlation matrix</span>
 <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">x0</span>, <span class="va">x1</span>, <span class="va">x2</span><span class="op">)</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span></pre></div>
 <pre><code>##     x0  x1  x2
-## x0 1.0 0.4 0.4
+## x0 1.0 0.4 0.3
 ## x1 0.4 1.0 0.4
-## x2 0.4 0.4 1.0</code></pre>
+## x2 0.3 0.4 1.0</code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit">
 <span class="co"># estimate standard deviation</span>
 <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">x0</span>, <span class="va">x1</span>, <span class="va">x2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span></pre></div>
-<pre><code>##  x0  x1  x2 
-## 2.9 3.0 2.9</code></pre>
+<pre><code>## x0 x1 x2 
+##  3  3  3</code></pre>
 <p>The new data generated by <code>genCorData</code> can be merged with an existing data set. Alternatively, <code>addCorData</code> will do this directly:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit">
 <span class="co"># define and generate the original data set</span>
@@ -206,18 +206,18 @@
     corstr <span class="op">=</span> <span class="st">"cs"</span>, cnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a0"</span>, <span class="st">"a1"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">dt</span></pre></div>
-<pre><code>##        cid           x          a0          a1
-##    1:    1  0.77999789  3.03154201  0.03045562
-##    2:    2 -0.72990583 -0.34988465  0.17168349
-##    3:    3 -1.73220570 -1.45770702  0.09644419
-##    4:    4 -1.55513018  2.10946768  0.26799423
-##    5:    5 -0.25259956  2.57759703 -0.02621452
-##   ---                                         
-##  996:  996 -0.05077013  0.02634075 -0.02729235
-##  997:  997  1.26784087 -0.65533893 -0.12103709
-##  998:  998 -1.31093896  3.15637218 -0.26650385
-##  999:  999 -0.94138560  0.55829378  0.15600891
-## 1000: 1000  0.58956516  2.07570276 -0.04206145</code></pre>
+<pre><code>##        cid           x         a0          a1
+##    1:    1  0.93274547  0.7977723  0.19267522
+##    2:    2 -0.03581861  0.2024757 -0.10859012
+##    3:    3  0.31124286 -2.1754142  0.40759407
+##    4:    4  0.67168269  2.3005413  0.07008994
+##    5:    5 -0.69963183  2.9004307 -0.21611166
+##   ---                                        
+##  996:  996 -1.68291121 -0.6808971 -0.28377830
+##  997:  997 -0.44447207 -3.7584703  0.13958346
+##  998:  998 -0.71388324 -0.2640886  0.21467724
+##  999:  999  0.68563062  0.4478402  0.06024408
+## 1000: 1000  1.58798326  0.2132811  0.30972655</code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit">
 <span class="co"># estimate correlation matrix</span>
 <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">a0</span>, <span class="va">a1</span><span class="op">)</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span></pre></div>
@@ -240,76 +240,76 @@
 <span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCorGen.html">genCorGen</a></span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">l</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.3</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">dx</span></pre></div>
 <pre><code>##         id V1 V2 V3
-##    1:    1  6  8 11
-##    2:    2  3  8  4
-##    3:    3 13 13 11
-##    4:    4  9 13 12
-##    5:    5  7  6 11
+##    1:    1 17 13 15
+##    2:    2 10 10 13
+##    3:    3  7  5 13
+##    4:    4 11 11 15
+##    5:    5  9  7 10
 ##   ---              
-##  996:  996  3 12 11
-##  997:  997  6  6 11
-##  998:  998  8  9 16
-##  999:  999  8 14 11
-## 1000: 1000  7 10  7</code></pre>
+##  996:  996 13 11 13
+##  997:  997 10 12 11
+##  998:  998  4  7  8
+##  999:  999 10  9  9
+## 1000: 1000  5 14 16</code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">dx</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></pre></div>
 <pre><code>##      V1   V2   V3
-## V1 1.00 0.30 0.29
-## V2 0.30 1.00 0.34
-## V3 0.29 0.34 1.00</code></pre>
+## V1 1.00 0.32 0.26
+## V2 0.32 1.00 0.30
+## V3 0.26 0.30 1.00</code></pre>
 <p>We can also generate correlated binary data by specifying the probabilities:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit">
 <span class="fu"><a href="../reference/genCorGen.html">genCorGen</a></span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.5</span>, <span class="fl">.7</span><span class="op">)</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, rho <span class="op">=</span> <span class="fl">.8</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
 <pre><code>##         id V1 V2 V3
-##    1:    1  1  0  1
-##    2:    2  0  1  1
-##    3:    3  0  0  0
-##    4:    4  0  1  1
-##    5:    5  0  0  0
+##    1:    1  0  1  1
+##    2:    2  0  0  1
+##    3:    3  1  1  1
+##    4:    4  0  0  0
+##    5:    5  1  1  1
 ##   ---              
-##  996:  996  1  0  1
-##  997:  997  0  0  1
-##  998:  998  0  0  0
+##  996:  996  0  0  0
+##  997:  997  1  1  1
+##  998:  998  1  1  1
 ##  999:  999  1  1  1
-## 1000: 1000  0  0  0</code></pre>
+## 1000: 1000  1  1  1</code></pre>
 <p>The gamma distribution requires two parameters - the mean and dispersion. (These are converted into shape and rate parameters more commonly used.)</p>
 <div class="sourceCode" id="cb27"><pre class="downlit">
 <span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCorGen.html">genCorGen</a></span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">l</span>, params2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span>, cnames<span class="op">=</span><span class="st">"a, b, c"</span><span class="op">)</span>
 <span class="va">dx</span></pre></div>
-<pre><code>##         id         a         b         c
-##    1:    1  4.330130 11.582255 12.686680
-##    2:    2 16.798632 18.395327 31.306039
-##    3:    3  7.529771 21.689216 22.709608
-##    4:    4  3.405587  8.236919 14.904912
-##    5:    5  4.860909  6.225119 10.246594
-##   ---                                   
-##  996:  996 20.093465 20.656346 47.904598
-##  997:  997 12.684008 10.174541  8.284565
-##  998:  998  5.831487  5.790960 10.027395
-##  999:  999 23.796447 13.665925 54.923944
-## 1000: 1000  8.415480  3.668018  8.374076</code></pre>
+<pre><code>##         id         a           b           c
+##    1:    1 1.0211751  0.05151885  0.26529518
+##    2:    2 6.0394222  6.27115957  8.25420024
+##    3:    3 0.3826287  5.40963325  4.98368351
+##    4:    4 2.5698611  7.15407116  6.60116039
+##    5:    5 0.9916335  2.96519040  2.82515102
+##   ---                                       
+##  996:  996 7.1297218  9.99942273 15.86511652
+##  997:  997 5.0624106 21.85012553 15.35520233
+##  998:  998 7.0585296  5.15516678  5.85155486
+##  999:  999 6.0182540  5.56119443  0.07561348
+## 1000: 1000 3.2407914  4.05843572  0.16635049</code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">dx</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, <span class="va">c</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></pre></div>
 <pre><code>##      a    b    c
-## a 1.00 0.65 0.62
-## b 0.65 1.00 0.64
-## c 0.62 0.64 1.00</code></pre>
+## a 1.00 0.68 0.69
+## b 0.68 1.00 0.66
+## c 0.69 0.66 1.00</code></pre>
 <p>These data sets can be generated in either <em>wide</em> or <em>long</em> form. So far, we have generated <em>wide</em> form data, where there is one row per unique id. Now, we will generate data using the <em>long</em> form, where the correlated data are on different rows, so that there are repeated measurements for each id. An id will have multiple records (i.e. one id will appear on multiple rows):</p>
 <div class="sourceCode" id="cb31"><pre class="downlit">
 <span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCorGen.html">genCorGen</a></span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">l</span>, params2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span>, cnames<span class="op">=</span><span class="st">"NewCol"</span><span class="op">)</span>
 <span class="va">dx</span></pre></div>
 <pre><code>##         id period    NewCol
-##    1:    1      0  9.954455
-##    2:    1      1 26.883661
-##    3:    1      2 17.174032
-##    4:    2      0  6.531566
-##    5:    2      1  3.403454
+##    1:    1      0  7.836969
+##    2:    1      1 26.538521
+##    3:    1      2 13.449118
+##    4:    2      0  9.929979
+##    5:    2      1  4.295008
 ##   ---                      
-## 2996:  999      1  0.964943
-## 2997:  999      2  1.597894
-## 2998: 1000      0  1.831878
-## 2999: 1000      1  2.986392
-## 3000: 1000      2  8.082821</code></pre>
+## 2996:  999      1  3.073842
+## 2997:  999      2  6.639229
+## 2998: 1000      0  6.291354
+## 2999: 1000      1 17.683221
+## 3000: 1000      2  9.920271</code></pre>
 <p><code>addCorGen</code> allows us to create correlated data from an existing data set, as one can already do using <code>addCorData</code>. In the case of <code>addCorGen</code>, the parameter(s) used to define the distribution are created as a field (or fields) in the dataset. The correlated data are added to the existing data set. In the example below, we are going to generate three sets (poisson, binary, and gamma) of correlated data with means that are a function of the variable <code>xbase</code>, which varies by id.</p>
 <p>First we define the data and generate a data set:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit">
@@ -321,81 +321,81 @@
 
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">10000</span>, <span class="va">def</span><span class="op">)</span>
 <span class="va">dt</span></pre></div>
-<pre><code>##          cid     xbase   lambda         p   gammaMu gammaDis
-##     1:     1  8.294184 3.778845 0.6196953  8.661058        1
-##     2:     2  7.238734 3.400333 0.5428000  7.012868        1
-##     3:     3  4.902851 2.692002 0.3707164  4.395451        1
-##     4:     4  3.937991 2.444399 0.3060603  3.624072        1
-##     5:     5  8.476307 3.848297 0.6324849  8.982348        1
-##    ---                                                      
-##  9996:  9996  5.682806 2.910371 0.4267415  5.137472        1
-##  9997:  9997  1.591633 1.933174 0.1790922  2.266704        1
-##  9998:  9998  6.525874 3.166375 0.4894421  6.081034        1
-##  9999:  9999 11.439819 5.175738 0.8072043 16.247902        1
-## 10000: 10000  4.017684 2.463956 0.3111615  3.682297        1</code></pre>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis
+##     1:     1 5.631754 2.895551 0.4229991 5.085284        1
+##     2:     2 6.832465 3.264957 0.5124323 6.465582        1
+##     3:     3 6.097546 3.033614 0.4574193 5.581788        1
+##     4:     4 5.790921 2.942007 0.4346943 5.249769        1
+##     5:     5 5.665687 2.905393 0.4254857 5.119913        1
+##    ---                                                    
+##  9996:  9996 1.201659 1.859236 0.1625328 2.096631        1
+##  9997:  9997 4.760722 2.654011 0.3608254 4.272267        1
+##  9998:  9998 5.555265 2.873488 0.4174086 5.008082        1
+##  9999:  9999 3.310732 2.295781 0.2676104 3.196788        1
+## 10000: 10000 3.029176 2.232044 0.2513835 3.021747        1</code></pre>
 <p>The Poisson distribution has a single parameter, lambda:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit">
 <span class="va">dtX1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addCorGen.html">addCorGen</a></span><span class="op">(</span>dtOld <span class="op">=</span> <span class="va">dt</span>, idvar <span class="op">=</span> <span class="st">"cid"</span>, nvars <span class="op">=</span> <span class="fl">3</span>, rho <span class="op">=</span> <span class="fl">.1</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>,
                     dist <span class="op">=</span> <span class="st">"poisson"</span>, param1 <span class="op">=</span> <span class="st">"lambda"</span>, cnames <span class="op">=</span> <span class="st">"a, b, c"</span><span class="op">)</span>
 <span class="va">dtX1</span></pre></div>
-<pre><code>##          cid     xbase   lambda         p   gammaMu gammaDis a b c
-##     1:     1  8.294184 3.778845 0.6196953  8.661058        1 4 6 6
-##     2:     2  7.238734 3.400333 0.5428000  7.012868        1 4 2 4
-##     3:     3  4.902851 2.692002 0.3707164  4.395451        1 1 3 4
-##     4:     4  3.937991 2.444399 0.3060603  3.624072        1 1 2 3
-##     5:     5  8.476307 3.848297 0.6324849  8.982348        1 1 1 3
-##    ---                                                            
-##  9996:  9996  5.682806 2.910371 0.4267415  5.137472        1 0 0 0
-##  9997:  9997  1.591633 1.933174 0.1790922  2.266704        1 2 2 3
-##  9998:  9998  6.525874 3.166375 0.4894421  6.081034        1 3 8 9
-##  9999:  9999 11.439819 5.175738 0.8072043 16.247902        1 2 2 5
-## 10000: 10000  4.017684 2.463956 0.3111615  3.682297        1 1 3 2</code></pre>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis a b c
+##     1:     1 5.631754 2.895551 0.4229991 5.085284        1 1 2 5
+##     2:     2 6.832465 3.264957 0.5124323 6.465582        1 3 2 5
+##     3:     3 6.097546 3.033614 0.4574193 5.581788        1 3 6 4
+##     4:     4 5.790921 2.942007 0.4346943 5.249769        1 2 2 4
+##     5:     5 5.665687 2.905393 0.4254857 5.119913        1 2 4 4
+##    ---                                                          
+##  9996:  9996 1.201659 1.859236 0.1625328 2.096631        1 1 1 1
+##  9997:  9997 4.760722 2.654011 0.3608254 4.272267        1 1 0 2
+##  9998:  9998 5.555265 2.873488 0.4174086 5.008082        1 4 2 0
+##  9999:  9999 3.310732 2.295781 0.2676104 3.196788        1 3 0 1
+## 10000: 10000 3.029176 2.232044 0.2513835 3.021747        1 0 0 3</code></pre>
 <p>The Bernoulli (binary) distribution has a single parameter, p:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit">
 <span class="va">dtX2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addCorGen.html">addCorGen</a></span><span class="op">(</span>dtOld <span class="op">=</span> <span class="va">dt</span>, idvar <span class="op">=</span> <span class="st">"cid"</span>, nvars <span class="op">=</span> <span class="fl">4</span>, rho <span class="op">=</span> <span class="fl">.4</span>, corstr <span class="op">=</span> <span class="st">"ar1"</span>,
                     dist <span class="op">=</span> <span class="st">"binary"</span>, param1 <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span>
 <span class="va">dtX2</span></pre></div>
-<pre><code>##          cid     xbase   lambda         p   gammaMu gammaDis V1 V2 V3 V4
-##     1:     1  8.294184 3.778845 0.6196953  8.661058        1  0  0  0  1
-##     2:     2  7.238734 3.400333 0.5428000  7.012868        1  0  0  1  1
-##     3:     3  4.902851 2.692002 0.3707164  4.395451        1  0  1  1  1
-##     4:     4  3.937991 2.444399 0.3060603  3.624072        1  1  0  1  1
-##     5:     5  8.476307 3.848297 0.6324849  8.982348        1  1  1  1  1
-##    ---                                                                  
-##  9996:  9996  5.682806 2.910371 0.4267415  5.137472        1  0  0  0  0
-##  9997:  9997  1.591633 1.933174 0.1790922  2.266704        1  0  0  0  0
-##  9998:  9998  6.525874 3.166375 0.4894421  6.081034        1  1  1  1  1
-##  9999:  9999 11.439819 5.175738 0.8072043 16.247902        1  0  0  1  1
-## 10000: 10000  4.017684 2.463956 0.3111615  3.682297        1  0  1  1  1</code></pre>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis V1 V2 V3 V4
+##     1:     1 5.631754 2.895551 0.4229991 5.085284        1  0  0  1  0
+##     2:     2 6.832465 3.264957 0.5124323 6.465582        1  1  0  0  0
+##     3:     3 6.097546 3.033614 0.4574193 5.581788        1  1  0  1  1
+##     4:     4 5.790921 2.942007 0.4346943 5.249769        1  0  0  0  0
+##     5:     5 5.665687 2.905393 0.4254857 5.119913        1  0  0  0  0
+##    ---                                                                
+##  9996:  9996 1.201659 1.859236 0.1625328 2.096631        1  1  0  0  1
+##  9997:  9997 4.760722 2.654011 0.3608254 4.272267        1  1  0  0  0
+##  9998:  9998 5.555265 2.873488 0.4174086 5.008082        1  0  0  0  0
+##  9999:  9999 3.310732 2.295781 0.2676104 3.196788        1  1  1  0  0
+## 10000: 10000 3.029176 2.232044 0.2513835 3.021747        1  0  0  0  0</code></pre>
 <p>The Gamma distribution has two parameters - in <code>simstudy</code> the mean and dispersion are specified:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit">
 <span class="va">dtX3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addCorGen.html">addCorGen</a></span><span class="op">(</span>dtOld <span class="op">=</span> <span class="va">dt</span>, idvar <span class="op">=</span> <span class="st">"cid"</span>, nvars <span class="op">=</span> <span class="fl">4</span>, rho <span class="op">=</span> <span class="fl">.4</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>,
                   dist <span class="op">=</span> <span class="st">"gamma"</span>, param1 <span class="op">=</span> <span class="st">"gammaMu"</span>, param2 <span class="op">=</span> <span class="st">"gammaDis"</span><span class="op">)</span>
 <span class="va">dtX3</span></pre></div>
-<pre><code>##          cid     xbase   lambda         p   gammaMu gammaDis         V1
-##     1:     1  8.294184 3.778845 0.6196953  8.661058        1  8.0933918
-##     2:     2  7.238734 3.400333 0.5428000  7.012868        1  0.6228741
-##     3:     3  4.902851 2.692002 0.3707164  4.395451        1  3.7232214
-##     4:     4  3.937991 2.444399 0.3060603  3.624072        1  9.3259354
-##     5:     5  8.476307 3.848297 0.6324849  8.982348        1  6.9824967
-##    ---                                                                 
-##  9996:  9996  5.682806 2.910371 0.4267415  5.137472        1  4.8089691
-##  9997:  9997  1.591633 1.933174 0.1790922  2.266704        1  3.1223165
-##  9998:  9998  6.525874 3.166375 0.4894421  6.081034        1  3.3902876
-##  9999:  9999 11.439819 5.175738 0.8072043 16.247902        1 31.1095354
-## 10000: 10000  4.017684 2.463956 0.3111615  3.682297        1 20.0813092
-##                V2         V3         V4
-##     1: 26.6274607  6.8798557 11.5239969
-##     2:  1.3473910  0.5887601  3.7386388
-##     3:  2.6644968  0.7597354  2.5290407
-##     4: 10.4377268 16.9655140 14.2447557
-##     5: 16.3839656  7.6407594  8.8180168
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis         V1
+##     1:     1 5.631754 2.895551 0.4229991 5.085284        1  2.6509102
+##     2:     2 6.832465 3.264957 0.5124323 6.465582        1  1.0818964
+##     3:     3 6.097546 3.033614 0.4574193 5.581788        1  3.9068777
+##     4:     4 5.790921 2.942007 0.4346943 5.249769        1  0.2242157
+##     5:     5 5.665687 2.905393 0.4254857 5.119913        1  0.4284896
+##    ---                                                               
+##  9996:  9996 1.201659 1.859236 0.1625328 2.096631        1  1.1835068
+##  9997:  9997 4.760722 2.654011 0.3608254 4.272267        1  2.5888486
+##  9998:  9998 5.555265 2.873488 0.4174086 5.008082        1 12.3620665
+##  9999:  9999 3.310732 2.295781 0.2676104 3.196788        1  5.8508078
+## 10000: 10000 3.029176 2.232044 0.2513835 3.021747        1  1.1353198
+##                V2          V3        V4
+##     1:  3.4986755  0.11578622 2.9553502
+##     2:  2.0318778  1.62681433 0.7691659
+##     3:  3.0751529  5.10377045 7.3490460
+##     4:  0.2755503  0.04095851 0.8929639
+##     5:  0.1039889  1.83660221 1.8385084
 ##    ---                                 
-##  9996:  2.8176181  3.5666634  7.5947294
-##  9997:  0.4583447  0.3138268  2.7488489
-##  9998:  2.5900706  0.4275453  0.8711668
-##  9999: 32.2246559  0.8535877  9.7228697
-## 10000:  0.7909469  1.8444084  3.1998538</code></pre>
+##  9996:  0.8958412  2.47735429 0.6786426
+##  9997:  7.5188374  5.15676093 8.6612713
+##  9998:  1.9023728  6.56547368 6.5677658
+##  9999: 10.8647568 17.31619887 0.5047384
+## 10000:  0.1895192  0.89551958 1.6678663</code></pre>
 <p>If we have data in <em>long</em> form (e.g. longitudinal data), the function will recognize the structure:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit">
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xbase"</span>, formula <span class="op">=</span> <span class="fl">5</span>, variance <span class="op">=</span> <span class="fl">.4</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, id <span class="op">=</span> <span class="st">"cid"</span><span class="op">)</span>
@@ -409,49 +409,49 @@
 <span class="va">dtLong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">def2</span>, <span class="va">dtLong</span><span class="op">)</span>
 
 <span class="va">dtLong</span></pre></div>
-<pre><code>##        cid period     xbase nperiods timeID    lambda
-##    1:    1      0  5.218290        3      1  2.778272
-##    2:    1      1  5.218290        3      2  4.580595
-##    3:    1      2  5.218290        3      3  7.552125
-##    4:    2      0 10.127615        3      4  4.539249
-##    5:    2      1 10.127615        3      5  7.483956
-##   ---                                                
-## 2996:  999      1  3.040051        2   2996  3.684022
-## 2997:  999      2  3.040051        2   2997  6.073925
-## 2998: 1000      0 12.925095        4   2998  6.004502
-## 2999: 1000      1 12.925095        4   2999  9.899750
-## 3000: 1000      2 12.925095        4   3000 16.321928</code></pre>
+<pre><code>##        cid period    xbase nperiods timeID   lambda
+##    1:    1      0 3.099634        2      1 2.247826
+##    2:    1      1 3.099634        2      2 3.706038
+##    3:    1      2 3.099634        2      3 6.110224
+##    4:    2      0 4.080470        3      4 2.479475
+##    5:    2      1 4.080470        3      5 4.087964
+##   ---                                              
+## 2996:  999      1 6.765956        2   2996 5.347320
+## 2997:  999      2 6.765956        2   2997 8.816241
+## 2998: 1000      0 7.699248        3   2998 3.560585
+## 2999: 1000      1 7.699248        3   2999 5.870412
+## 3000: 1000      2 7.699248        3   3000 9.678673</code></pre>
 <div class="sourceCode" id="cb43"><pre class="downlit">
 <span class="co">### Generate the data </span>
 
 <span class="va">dtX3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addCorGen.html">addCorGen</a></span><span class="op">(</span>dtOld <span class="op">=</span> <span class="va">dtLong</span>, idvar <span class="op">=</span> <span class="st">"cid"</span>, nvars <span class="op">=</span> <span class="fl">3</span>, rho <span class="op">=</span> <span class="fl">.6</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>,
                   dist <span class="op">=</span> <span class="st">"poisson"</span>, param1 <span class="op">=</span> <span class="st">"lambda"</span>, cnames <span class="op">=</span> <span class="st">"NewPois"</span><span class="op">)</span>
 <span class="va">dtX3</span></pre></div>
-<pre><code>##        cid period     xbase nperiods timeID    lambda NewPois
-##    1:    1      0  5.218290        3      1  2.778272       6
-##    2:    1      1  5.218290        3      2  4.580595       5
-##    3:    1      2  5.218290        3      3  7.552125      10
-##    4:    2      0 10.127615        3      4  4.539249       9
-##    5:    2      1 10.127615        3      5  7.483956      12
-##   ---                                                        
-## 2996:  999      1  3.040051        2   2996  3.684022       3
-## 2997:  999      2  3.040051        2   2997  6.073925       4
-## 2998: 1000      0 12.925095        4   2998  6.004502       3
-## 2999: 1000      1 12.925095        4   2999  9.899750       7
-## 3000: 1000      2 12.925095        4   3000 16.321928      12</code></pre>
+<pre><code>##        cid period    xbase nperiods timeID   lambda NewPois
+##    1:    1      0 3.099634        2      1 2.247826       2
+##    2:    1      1 3.099634        2      2 3.706038       3
+##    3:    1      2 3.099634        2      3 6.110224       5
+##    4:    2      0 4.080470        3      4 2.479475       2
+##    5:    2      1 4.080470        3      5 4.087964       2
+##   ---                                                      
+## 2996:  999      1 6.765956        2   2996 5.347320       4
+## 2997:  999      2 6.765956        2   2997 8.816241       9
+## 2998: 1000      0 7.699248        3   2998 3.560585       4
+## 2999: 1000      1 7.699248        3   2999 5.870412       6
+## 3000: 1000      2 7.699248        3   3000 9.678673      12</code></pre>
 <p>We can fit a generalized estimating equation (GEE) model and examine the coefficients and the working correlation matrix. They match closely to the data generating parameters:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit">
 <span class="va">geefit</span> <span class="op">&lt;-</span> <span class="fu">gee</span><span class="op">(</span><span class="va">NewPois</span> <span class="op">~</span> <span class="va">period</span> <span class="op">+</span> <span class="va">xbase</span>, data <span class="op">=</span> <span class="va">dtX3</span>, id <span class="op">=</span> <span class="va">cid</span>, family <span class="op">=</span> <span class="va">poisson</span>, corstr <span class="op">=</span> <span class="st">"exchangeable"</span><span class="op">)</span></pre></div>
 <pre><code>## Beginning Cgee S-function, @(#) geeformula.q 4.13 98/01/27</code></pre>
 <pre><code>## running glm to get initial regression estimate</code></pre>
 <pre><code>## (Intercept)      period       xbase 
-##  0.50314428  0.50149899  0.09761211</code></pre>
+##   0.5002203   0.5028723   0.0987755</code></pre>
 <div class="sourceCode" id="cb49"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">geefit</span><span class="op">)</span><span class="op">$</span><span class="va">working.correlation</span>, <span class="fl">2</span><span class="op">)</span></pre></div>
 <pre><code>##      [,1] [,2] [,3]
-## [1,]  1.0  0.6  0.6
-## [2,]  0.6  1.0  0.6
-## [3,]  0.6  0.6  1.0</code></pre>
+## [1,] 1.00 0.57 0.57
+## [2,] 0.57 1.00 0.57
+## [3,] 0.57 0.57 1.00</code></pre>
 </div>
 </div>
   </div>
