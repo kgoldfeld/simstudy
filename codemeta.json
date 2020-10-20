@@ -357,9 +357,9 @@
       "sameAs": "https://CRAN.R-project.org/package=backports"
     }
   ],
-  "releaseNotes": "https://github.com/kgoldfeld/simstudy/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/kgoldfeld/simstudy/blob/main/NEWS.md",
   "readme": "https://github.com/kgoldfeld/simstudy/blob/main/README.md",
-  "fileSize": "8047.515KB",
+  "fileSize": "8053.23KB",
   "contIntegration": "https://codecov.io/gh/kgoldfeld/simstudy",
   "developmentStatus": "https://www.tidyverse.org/lifecycle/#stable",
   "keywords": [
