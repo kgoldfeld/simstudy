@@ -14,14 +14,14 @@ knitr::opts_chunk$set(
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
-[![R build status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
-[![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![R build status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions){target="_blank"}
+[![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy){target="_blank"}
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy){target="_blank"}
+[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy){target="_blank"}
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable){target="_blank"}
 <!-- badges: end -->
 
-The `simstudy` package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.
+The `simstudy` package is a collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.
 
 Simulation using `simstudy` has two fundamental steps. The user (1) **defines** the data elements of a data set and (2) **generates** the data based on these definitions. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, to create data sets with **missing** data, and to create non-linear relationships with underlying **spline** curves.
 
@@ -30,13 +30,13 @@ The overarching philosophy of `simstudy` is to create data generating processes 
 
 ## Installation
 
-You can install the released version of simstudy from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of simstudy from [CRAN](https://CRAN.R-project.org){target="_blank"} with:
 
 ``` r
 install.packages("simstudy")
 ```
 
-And the development version from [GitHub](https://github.com/) with:
+And the development version from [GitHub](https://github.com/){target="_blank"} with:
 
 ``` r
 # install.packages("devtools")
@@ -61,8 +61,8 @@ dd
 
 ## Contributing & Support
 
-If you find a bug or need help, please file an issue with a [reprex](https://www.tidyverse.org/help/) on [Github](https://github.com/kgoldfeld/simstudy/issues). We are happy to accept contributions to simstudy. More information on how to propose changes or fix bugs can be found [here](https://kgoldfeld.github.io/simstudy/CONTRIBUTING.html).
+If you find a bug or need help, please file an issue with a [reprex](https://www.tidyverse.org/help/){target="_blank"} on [Github](https://github.com/kgoldfeld/simstudy/issues){target="_blank"}. We are happy to accept contributions to simstudy. More information on how to propose changes or fix bugs can be found [here](https://kgoldfeld.github.io/simstudy/CONTRIBUTING.html){target="_blank"}.
 
 ## Code of Conduct
 
-Please note that the simstudy project is released with a [Contributor Code of Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the simstudy project is released with a [Contributor Code of Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html){target="_blank"}. By contributing to this project, you agree to abide by its terms.

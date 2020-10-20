@@ -16,7 +16,7 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
-The `simstudy` package is collection of functions that allow users to
+The `simstudy` package is a collection of functions that allow users to
 generate simulated data sets in order to explore modeling techniques or
 better understand data generating processes. The user defines the
 distributions of individual variables, specifies relationships between
