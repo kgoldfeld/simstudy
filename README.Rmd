@@ -48,6 +48,7 @@ Here is some simple sample code, much more in the vignettes:
 
 ```{r, echo = TRUE}
 library(simstudy)
+set.seed(1965)
 
 def <- defData(varname="x", formula = 10, variance = 2, dist = "normal")
 def <- defData(def, varname="y", formula = "3 + 0.5 * x", variance = 1, dist = "normal")
