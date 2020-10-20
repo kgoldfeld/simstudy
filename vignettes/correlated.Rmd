@@ -42,12 +42,14 @@ ggtheme <- function(panelback = "white") {
 
 Sometimes it is desirable to simulate correlated data from a correlation matrix directly. For example, a simulation might require two random effects (e.g. a random intercept and a random slope). Correlated data like this could be generated using the `defData` functionality, but it may be more natural to do this with `genCorData` or `addCorData`. Currently, simstudy can only generate multivariate normal using these functions. (In the future, additional distributions will be available.)
 
-`genCorData` requires the user to specify a mean vector `mu`, a single standard deviation or a vector of standard deviations `sigma`, and either a correlation matrix `corMatrix` or a correlation coefficient `rho` and a correlation structure `corsrt`. It is easy to see how this can be used from a few different examples.
+`genCorData` requires the user to specify a mean vector `mu`, a single standard deviation or a vector of standard deviations `sigma`, and either a correlation matrix `corMatrix` or a correlation coefficient `rho` and a correlation structure `corsrt`. Here are a few examples:
 
 ```{r, tidy=TRUE}
 # specifying a specific correlation matrix C
 C <- matrix(c(1,.7,.2, .7, 1, .8, .2, .8, 1),nrow = 3)
 C
+
+set.seed(282726)
 
 # generate 3 correlated variables with different location and scale for each field
 dt <- genCorData(1000, mu=c(4,12,3), sigma = c(1,2,3), corMatrix=C)

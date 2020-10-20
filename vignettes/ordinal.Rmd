@@ -113,7 +113,7 @@ In the cumulative logit model, the underlying assumption is that the odds ratio 
 
 $$\small{\frac{codds(P(Resp = 1 | exposed))}{codds(P(Resp = 1 | unexposed))} = \frac{codds(P(Resp \leq 2 | exposed))}{codds(P(Resp \leq 2 | unexposed))} = \ ... \ = \frac{codds(P(Resp \leq 4 | exposed))}{codds(P(Resp \leq 4 | unexposed))}}$$
 
-In terms of the underlying process, this means that each of the thresholds shifts the same amount, as shown below, where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.
+In terms of the underlying process, this means that each of the thresholds shifts the same amount (as shown below) where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.
 
 ```{r plotB, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
 
@@ -219,7 +219,7 @@ logOdds.expos - logOdds.unexp
 
 ### Correlated multivariate ordinal data
 
-Function `genOrdCat` generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale, and is specified with a value of `rho` and a correlation structure (*independence*, *compound symmetry*, or *AR-1*). Alternatively, a correlation matrix can be specified.
+Function `genOrdCat` generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale and is specified with a value of `rho` and a correlation structure (*independence*, *compound symmetry*, or *AR-1*). Alternatively, a correlation matrix can be specified.
 
 In this example, there are 5 questions, each of which has three possible responses: "none", "some", "a lot". The probabilities of response are specified in a $5 \times 3$ matrix, and the rows sum to 1:
 
@@ -276,3 +276,4 @@ dProp[, response := rep(seq(3), 5)]
 
 # probabilities
 dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
+```

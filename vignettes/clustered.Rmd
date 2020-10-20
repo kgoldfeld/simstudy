@@ -39,9 +39,9 @@ ggtheme <- function(panelback = "white") {
 
 ```
 
-The function `genCluster` generates multilevel or clustered data based on a previously generated data set that is one "level" up from the clustered data. For example, if there is a data set that contains school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)
+The function `genCluster` generates multilevel or clustered data based on a previously generated data set that is one "level" up from the clustered data. For example, if there is a data set that contains the school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)
 
-In the example here, we do in fact generate school, class, and student level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides *random effects* at each of these levels.
+In the example here, we do in fact generate school-, class-, and student-level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides *random effects* at each of these levels.
 
 We start by defining the school level data:
 
@@ -52,6 +52,8 @@ gen.school <- defData(varname="s0", dist = "normal",
 gen.school <- defData(gen.school, varname = "nClasses", 
                       dist = "noZeroPoisson", formula = 3
 )
+
+set.seed(282721)
 
 dtSchool <- genData(8, gen.school)
 dtSchool <- trtAssign(dtSchool, n = 2)
