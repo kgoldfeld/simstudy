@@ -70,7 +70,7 @@ Treatment assignment can be accomplished through the original data generation pr
 
 ### Assigned treatment
 
-Treatment assignment can simulate how treatment is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.
+Treatment assignment can simulate how the treatment allocation is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.
 
 First, create the data definition:
 
@@ -194,7 +194,7 @@ grid.arrange(p1a,p2a,nrow=1)
 
 ### Stepped-wedge design
 
-Stepped-wedge designs are a special class of cluster randomized trial where each cluster is observed in both treatment arms (as opposed to the classic parallel design where only some of the clusters receive the treatment). This is a special case of a cross-over design, where the cross-over is only in one direction: control (or pre-intervention) to intervention.
+Stepped-wedge designs are a special class of cluster randomized trials where each cluster is observed in both treatment arms (as opposed to the classic parallel design where only some of the clusters receive the treatment). This is a special case of a cross-over design, where the cross-over is only in one direction: control (or pre-intervention) to intervention.
 
 In this example, the data generating process looks like this:
 

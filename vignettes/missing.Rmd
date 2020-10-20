@@ -67,7 +67,7 @@ ggtheme <- function(panelback = "white") {
 
 After generating a complete data set, it is possible to generate missing data. `defMiss` defines the parameters of missingness. `genMiss` generates a missing data matrix of indicators for each field. Indicators are set to 1 if the data are missing for a subject, 0 otherwise. `genObs` creates a data set that reflects what would have been observed had data been missing; this is a replicate of the original data set with "NAs" replacing values where missing data has been generated.
 
-By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) *missing completely at random* (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) *missing at random* (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) *not missing at random* (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with measure.
+By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) *missing completely at random* (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) *missing at random* (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) *not missing at random* (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with the measure.
 
 These possibilities are illustrated with an example. A data set of 1000 observations with three "outcome" measures" `x1`, `x2`, and `x3` is defined. This data set also includes two independent predictors, `m` and `u` that largely determine the value of each outcome (subject to random noise).
 
@@ -88,6 +88,8 @@ defM <- defMiss(varname = "x1", formula = .15, logit.link = FALSE)
 defM <- defMiss(defM, varname = "x2", formula = ".05 + m * 0.25", logit.link = FALSE)
 defM <- defMiss(defM, varname = "x3", formula = ".05 + u * 0.25", logit.link = FALSE)
 defM <- defMiss(defM, varname = "u", formula = 1, logit.link = FALSE) # not observed
+
+set.seed(283726)
 
 missMat <- genMiss(dtAct, defM, idvars = "id")
 dtObs <- genObs(dtAct, missMat, idvars = "id")
@@ -146,7 +148,7 @@ The following two examples describe an outcome variable `y` that is measured ove
 
 ```{r, tidy = TRUE}
 
-# use baseline definitions from previous example
+# use baseline definitions from the previous example
 
 dtAct <- genData(120, def1)
 dtAct <- trtObserve(dtAct, formulas = .5, logit.link = FALSE, grpName = "rx")
@@ -232,6 +234,4 @@ grid.arrange(xp10, xp20, xp11, xp21,
              bottom = textGrob("Periods", gp = gpar(cex=.8)) #,
 #             left = textGrob("ID", gp = gpar(cex = .8), rot = 90)
 )
-
-
 ```

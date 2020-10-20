@@ -15,8 +15,6 @@ library(ggplot2)
 library(knitr)
 library(data.table)
 
-set.seed(33333)
-
 options(digits = 3)
 
 opts_chunk$set(tidy.opts=list(width.cutoff=55), tidy=TRUE)
@@ -42,7 +40,7 @@ ggtheme <- function(panelback = "white") {
 }
 ```
 
-The `simstudy` package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.
+The `simstudy` package is a collection of functions that allows users to generate simulated data sets to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster-randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.
 
 Simulation using `simstudy` has two fundamental steps. The user (1) **defines** the data elements of a data set and (2) **generates** the data based on these definitions. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, to create data sets with **missing** data, and to create non-linear relationships with underlying **spline** curves.
 
@@ -54,7 +52,7 @@ This introduction provides a brief overview to the basics of defining and genera
 
 ### Defining the Data
 
-The key to simulating data in `simstudy` is the creation of series of data definition tables that look like this:
+The key to simulating data in `simstudy` is the creation of a series of data definition tables that look like this:
 
 ```{r,  echo=FALSE}
 def <- defData(varname="age", dist="normal", formula=10, variance = 2)
@@ -66,7 +64,7 @@ def <- defData(def,varname="visits", dist="poisson",
 knitr::kable(def)
 ```
 
-These definition tables can be generated two ways. One option is to to use any external editor that allows the creation of .csv files, which can be read in with a call to `defRead`. An  alternative is to make repeated calls to the function `defData`. This script builds a definition table internally:
+These definition tables can be generated in two ways. One option is to use any external editor that allows the creation of .csv files, which can be read in with a call to `defRead`. An alternative is to make repeated calls to the function `defData`. This script builds a definition table internally:
 
 ```{r}
 def <- defData(varname="age", dist="normal", formula=10, variance = 2)
@@ -76,7 +74,7 @@ def <- defData(def,varname="visits", dist="poisson",
   formula="1.5 - 0.2 * age + 0.5 * female", link="log")
 ```
 
-The data definition table includes a row for each variable that is to be generated, and has the following fields: **varname**, **formula**, **variance**, **dist**, and **link**. **varname** is a provides the name of the variable to be generated. **formula** is either a value or string representing any valid R formula (which can include function calls) that in most cases defines the mean of the distribution. **variance** is a value or string that specifies either the variance or other parameter that characterizes the distribution; the default is 0. **dist** is defines the distribution of the variable to be generated; the default is *normal*. The **link** is a function that defines the relationship of the formula with the mean value, and can either *identity*, *log*, or *logit*, depending on the distribution; the default is *identity*.
+The data definition table includes a row for each variable that is to be generated, and has the following fields: **varname**, **formula**, **variance**, **dist**, and **link**. **varname** provides the name of the variable to be generated. **formula** is either a value or string representing any valid R formula (which can include function calls) that in most cases defines the mean of the distribution. **variance** is a value or string that specifies either the variance or other parameter that characterizes the distribution; the default is 0. **dist** is defines the distribution of the variable to be generated; the default is *normal*. The **link** is a function that defines the relationship of the formula with the mean value, and can either *identity*, *log*, or *logit*, depending on the distribution; the default is *identity*.
 
 If using `defData` to create the definition table, the first call to `defData` without specifying a definition name (in this example the definition name is *def*) creates a **new** data.table with a single row. An additional row is added to the table `def` each time the function `defData` is called. Each of these calls is the definition of a new field in the data set that will be generated.
 
@@ -85,11 +83,13 @@ If using `defData` to create the definition table, the first call to `defData` w
 After the data set definitions have been created, a new data set with \(n\) observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set definitions in **`def`**, and then stored in the object **`dd`**:
 
 ```{r}
+set.seed(87261)
+
 dd <- genData(1000, def)
 dd
 ```
 
-If no data definition is provided, a simple data is created with just id's.
+If no data definition is provided, a simple data set is created with just id's.
 
 ```{r}
 genData(1000)
@@ -112,7 +112,7 @@ This section elaborates on the data definition process to provide more details o
 
 ### Formulas
 
-The data definition table for a new data set is constructed sequentially. As each new row or variable is added, the formula (and in some cases the variance) can refer back to a previously defined variable. The first row by necessity cannot refer to another variable, so the formula must be a specific value (i.e. not a string formula). Starting with second row, the formula can either be a value or any valid `R` equation with quotes, and can include any variables previously defined.
+The data definition table for a new data set is constructed sequentially. As each new row or variable is added, the formula (and in some cases the variance) can refer back to a previously defined variable. The first row by necessity cannot refer to another variable, so the formula must be a specific value (i.e. not a string formula). Starting with the second row, the formula can either be a value or any valid `R` equation with quotes and can include any variables previously defined.
 
 In the definition we created above, the probability being **female** is a function of **age**, which was previously defined. Likewise, the number of **visits** is a function of both **age** and **female**. Since **age** is the first row in the table, we had to use a scalar to define the mean.
 
@@ -232,7 +232,7 @@ The *mixture* distribution is a mixture of other predefined variables, which can
 
 #### negBinomial
 
-A *negative binomial* distribution is a discrete data distribution that represents the number of successes that occur in sequence of *Bernoulli* trials before a specified number of failures occurs. It is often used to model count data more generally when a *Poisson* distribution is not considered appropriate; the variance of the negative binomial distribution is larger than the *Poisson* distribution. The *formula* specifies the mean $\mu$ or the log of the mean. The variance field represents a dispersion value $d$. The variance $\sigma^2$ will be $\mu + d\mu^2$.
+A *negative binomial* distribution is a discrete data distribution that represents the number of successes that occur in a sequence of *Bernoulli* trials before a specified number of failures occurs. It is often used to model count data more generally when a *Poisson* distribution is not considered appropriate; the variance of the negative binomial distribution is larger than the *Poisson* distribution. The *formula* specifies the mean $\mu$ or the log of the mean. The variance field represents a dispersion value $d$. The variance $\sigma^2$ will be $\mu + d\mu^2$.
 
 #### nonrandom
 
@@ -260,7 +260,7 @@ A $uniform integer$ distribution is a discrete data distribution that takes on v
 
 ## Adding data to an existing data table
 
-Until this point, we have been generating new data sets, building them up from scratch. However, it is often necessary to generate the data in multiple stages so that we would need to add data as we go along. For example we may have multi-level data with clusters that contain collections of individual observations. The data generation might begin with defining and generating cluster-level variables, followed by the definition and generation of the individual-level data; the individual-level data set would be adding to the cluster-level data set.
+Until this point, we have been generating new data sets, building them up from scratch. However, it is often necessary to generate the data in multiple stages so that we would need to add data as we go along. For example, we may have multi-level data with clusters that contain collections of individual observations. The data generation might begin with defining and generating cluster-level variables, followed by the definition and generation of the individual-level data; the individual-level data set would be adding to the cluster-level data set.
 
 ### defDataAdd/readDataAdd and addColumns
 
