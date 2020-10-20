@@ -24,7 +24,7 @@ bibliography: simstudy.bib
 
 # Summary
 
-The `simstudy` package is collection of functions that allow users to generate
+The `simstudy` package is a collection of functions that allow users to generate
 simulated data sets in order to explore modeling techniques or better understand
 data generating processes. The user defines the distributions of individual
 variables, specifies relationships between covariates and outcomes, and
