@@ -16,7 +16,7 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
-The `simstudy` package is collection of functions that allow users to
+The `simstudy` package is a collection of functions that allow users to
 generate simulated data sets in order to explore modeling techniques or
 better understand data generating processes. The user defines the
 distributions of individual variables, specifies relationships between
@@ -42,13 +42,13 @@ processes that mimic the typical models used to fit those types of data.
 So, the parameterization of some of the data generating processes may
 not follow the standard parameterizations for the specific
 distributions. For example, in `simstudy` *gamma*-distributed data are
-generated based on the specification of a mean \(\mu\) (or \(log(\mu)\))
-and a dispersion \(d\), rather than shape \(\alpha\) and rate \(\beta\)
-parameters that more typically characterize the *gamma* distribution.
-When we estimate the parameters, we are modeling \(\mu\) (or some
-function of \((\mu)\)), so we should explicitly recover the `simstudy`
-parameters used to generate the model - illuminating the relationship
-between the underlying data generating processes and the models.
+generated based on the specification of a mean μ (or log(μ)) and a
+dispersion \(d\), rather than shape α and rate β parameters that more
+typically characterize the *gamma* distribution. When we estimate the
+parameters, we are modeling μ (or some function of μ), so we should
+explicitly recover the `simstudy` parameters used to generate the model,
+thus illuminating the relationship between the underlying data
+generating processes and the models.
 
 ## Installation
 
@@ -72,27 +72,37 @@ Here is some simple sample code, much more in the vignettes:
 
 ``` r
 library(simstudy)
+set.seed(1965)
 
-def <- defData(varname="x", formula = 10, variance = 2)
-def <- defData(def, varname="y", formula = "3 + 0.5 * x", variance = 1)
+def <- defData(varname="x", formula = 10, variance = 2, dist = "normal")
+def <- defData(def, varname="y", formula = "3 + 0.5 * x", variance = 1, dist = "normal")
 dd <- genData(250, def)
 
 dd <- trtAssign(dd, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dd
 #>       id         x        y grp
-#>   1:   1 11.346165 9.347879   3
-#>   2:   2  9.589646 8.984039   2
-#>   3:   3  6.720520 7.109220   2
-#>   4:   4 12.590975 8.911840   1
-#>   5:   5 10.717651 9.085308   3
+#>   1:   1 11.191960 8.949389   4
+#>   2:   2 10.418375 7.372060   2
+#>   3:   3  8.512109 6.925844   4
+#>   4:   4 11.361632 9.850340   4
+#>   5:   5  9.928811 6.515463   2
 #>  ---                           
-#> 246: 246  7.427705 6.288353   3
-#> 247: 247 11.171565 7.848051   2
-#> 248: 248  9.770797 6.289110   3
-#> 249: 249  6.725639 7.256604   2
-#> 250: 250  8.313067 6.656528   1
+#> 246: 246  8.220609 7.898416   4
+#> 247: 247  8.531483 8.681783   4
+#> 248: 248 10.507370 8.552350   4
+#> 249: 249  8.621339 6.652300   1
+#> 250: 250  9.508164 7.083845   4
 ```
+
+## Contributing & Support
+
+If you find a bug or need help, please file an issue with a
+[reprex](https://www.tidyverse.org/help/) on
+[Github](https://github.com/kgoldfeld/simstudy/issues). We are happy to
+accept contributions to simstudy. More information on how to propose
+changes or fix bugs can be found
+[here](https://kgoldfeld.github.io/simstudy/CONTRIBUTING.html).
 
 ## Code of Conduct
 
