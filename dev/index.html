@@ -123,7 +123,7 @@
 
 <p>The <code>simstudy</code> package is collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
 <p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create datasets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> datasets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
-<p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean <span class="math inline"><em>μ</em></span> (or <span class="math inline"><em>l</em><em>o</em><em>g</em>(<em>μ</em>)</span>) and a dispersion <span class="math inline"><em>d</em></span>, rather than shape <span class="math inline"><em>α</em></span> and rate <span class="math inline"><em>β</em></span> parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling <span class="math inline"><em>μ</em></span> (or some function of <span class="math inline">(<em>μ</em>)</span>), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.</p>
+<p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean &amp;mu (or <span class="math inline"><em>l</em><em>o</em><em>g</em>(<em>μ</em>)</span>) and a dispersion <span class="math inline"><em>d</em></span>, rather than shape <span class="math inline"><em>α</em></span> and rate <span class="math inline"><em>β</em></span> parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling <span class="math inline"><em>μ</em></span> (or some function of <span class="math inline">(<em>μ</em>)</span>), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -141,6 +141,7 @@
 <p>Here is some simple sample code, much more in the vignettes:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy">simstudy</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1965</span><span class="op">)</span>
 
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span><span class="op">(</span>varname<span class="op">=</span><span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">2</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname<span class="op">=</span><span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"3 + 0.5 * x"</span>, variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
@@ -150,17 +151,17 @@
 
 <span class="va">dd</span>
 <span class="co">#&gt;       id         x        y grp</span>
-<span class="co">#&gt;   1:   1 10.343550 7.896122   1</span>
-<span class="co">#&gt;   2:   2 12.546128 8.213661   2</span>
-<span class="co">#&gt;   3:   3 11.589142 9.335444   4</span>
-<span class="co">#&gt;   4:   4  6.780056 6.561719   3</span>
-<span class="co">#&gt;   5:   5 10.826578 7.601935   1</span>
+<span class="co">#&gt;   1:   1 11.191960 8.949389   4</span>
+<span class="co">#&gt;   2:   2 10.418375 7.372060   2</span>
+<span class="co">#&gt;   3:   3  8.512109 6.925844   4</span>
+<span class="co">#&gt;   4:   4 11.361632 9.850340   4</span>
+<span class="co">#&gt;   5:   5  9.928811 6.515463   2</span>
 <span class="co">#&gt;  ---                           </span>
-<span class="co">#&gt; 246: 246 10.050552 6.066714   3</span>
-<span class="co">#&gt; 247: 247 11.833109 7.482641   2</span>
-<span class="co">#&gt; 248: 248 10.065499 8.740391   2</span>
-<span class="co">#&gt; 249: 249  9.853735 6.735114   1</span>
-<span class="co">#&gt; 250: 250  8.823834 5.438522   2</span></pre></div>
+<span class="co">#&gt; 246: 246  8.220609 7.898416   4</span>
+<span class="co">#&gt; 247: 247  8.531483 8.681783   4</span>
+<span class="co">#&gt; 248: 248 10.507370 8.552350   4</span>
+<span class="co">#&gt; 249: 249  8.621339 6.652300   1</span>
+<span class="co">#&gt; 250: 250  9.508164 7.083845   4</span></pre></div>
 </div>
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">
