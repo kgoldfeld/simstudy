@@ -158,7 +158,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="../reference/viewSplines.html">viewSplines</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span>, <span class="va">theta2</span><span class="op">)</span></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-3-2.png" width="576"></p>
-<p>We can generate data using a predictor in an existing data set by specifying the <em>knots</em> (in terms of quantiles), a vector of coefficients in <em>theta</em>, the degree of polynomial, as well as a range</p>
+<p>We can generate data using a predictor in an existing data set by specifying the <em>knots</em> (in terms of quantiles), a vector of coefficients in <em>theta</em>, the degree of the polynomial, as well as a range</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="va">ddef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"age"</span>, formula <span class="op">=</span> <span class="st">"20;60"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span><span class="op">)</span>
 
@@ -171,6 +171,7 @@
 <p>Now we specify the variables in the data set and generate the data:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">234</span><span class="op">)</span>
+
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">ddef</span><span class="op">)</span>
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSpline.html">genSpline</a></span><span class="op">(</span>dt <span class="op">=</span> <span class="va">dt</span>, newvar <span class="op">=</span> <span class="st">"weight"</span>,
                 predictor <span class="op">=</span> <span class="st">"age"</span>, theta <span class="op">=</span> <span class="va">theta1</span>,

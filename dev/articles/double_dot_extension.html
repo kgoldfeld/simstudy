@@ -120,7 +120,7 @@
 
     
     
-<p>Often, we’d like to explore data generation and modeling under different scenarios. For example, we might want to understand the operating characteristics of a model given different variance or other parametric assumptions. There is functionality built into <code>simstudy</code> to facilitate this type of dynamic exploration. First, there are functions <code>updateDef</code> and <code>updateDefAdd</code> that essentially allow one to edit lines of existing data definition tables. Second, there is a built in mechanism - called <em>double-dot</em> reference - to access external variables that do not exist in a defined data set or data definition.</p>
+<p>Often, we’d like to explore data generation and modeling under different scenarios. For example, we might want to understand the operating characteristics of a model given different variance or other parametric assumptions. There is functionality built into <code>simstudy</code> to facilitate this type of dynamic exploration. First, the functions <code>updateDef</code> and <code>updateDefAdd</code> essentially allow us to edit lines of existing data definition tables. Second, there is a built-in mechanism - called <em>double-dot</em> reference - to access external variables that do not exist in a defined data set or data definition.</p>
 <div id="updating-existing-definition-tables" class="section level3">
 <h3 class="hasAnchor">
 <a href="#updating-existing-definition-tables" class="anchor"></a>Updating existing definition tables</h3>
@@ -180,6 +180,7 @@
 <span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fl">9</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">716251</span><span class="op">)</span>
+
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">100</span>, <span class="va">def</span><span class="op">)</span>
 
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span><span class="op">)</span>
