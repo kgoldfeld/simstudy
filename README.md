@@ -95,6 +95,15 @@ dd
 #> 250: 250  9.508164 7.083845   4
 ```
 
+## Contributing & Support
+
+If you find a bug or need help, please file an issue with a
+[reprex](https://www.tidyverse.org/help/) on
+[Github](https://github.com/kgoldfeld/simstudy/issues). We are happy to
+accept contributions to simstudy. More information on how to propose
+changes or fix bugs can be found
+[here](https://kgoldfeld.github.io/simstudy/CONTRIBUTING.html).
+
 ## Code of Conduct
 
 Please note that the simstudy project is released with a [Contributor
