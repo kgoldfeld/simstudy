@@ -75,7 +75,7 @@ theta2
 viewSplines(knots, degree = 3, theta2)
 ```
 
-We can generate data using a predictor in an existing data set by specifying the *knots* (in terms of quantiles), a vector of coefficients in *theta*, the degree of polynomial, as well as a range 
+We can generate data using a predictor in an existing data set by specifying the *knots* (in terms of quantiles), a vector of coefficients in *theta*, the degree of the polynomial, as well as a range 
 
 ```{r}
 ddef <- defData(varname = "age", formula = "20;60", dist = "uniform")
@@ -94,6 +94,7 @@ Now we specify the variables in the data set and generate the data:
 
 ```{r}
 set.seed(234)
+
 dt <- genData(1000, ddef)
 dt <- genSpline(dt = dt, newvar = "weight",
                 predictor = "age", theta = theta1,
