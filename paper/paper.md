@@ -24,15 +24,15 @@ bibliography: simstudy.bib
 
 # Summary
 
-The `simstudy` package is a collection of functions that allow users to generate
-simulated data sets in order to explore modeling techniques or better understand
-data generating processes. The user defines the distributions of individual
-variables, specifies relationships between covariates and outcomes, and
-generates data based on these specifications. The final data sets can represent
-randomized control trials, repeated measure designs, cluster randomized trials,
-or naturally observed data processes. Other complexities that can be added
-include survival data, correlated data, factorial study designs, step wedge
-designs, and missing data processes.
+The `simstudy` package is a collection of functions for R [@rcoreteam2020], that
+allow users to generate simulated data sets in order to explore modeling
+techniques or better understand data generating processes. The user defines the
+distributions of individual variables, specifies relationships between
+covariates and outcomes, and generates data based on these specifications. The
+final data sets can represent randomized control trials, repeated measure
+designs, cluster-randomized trials, or naturally observed data processes. Other
+complexities that can be added include survival data, correlated data, factorial
+study designs, step wedge designs, and missing data processes.
 
 Simulation using `simstudy` has two fundamental steps. The user (1) **defines**
 the data elements of a data set and (2) **generates** the data based on these
@@ -48,12 +48,27 @@ that mimic the typical models used to fit those types of data. So, the
 parameterization of some of the data generating processes may not follow the
 standard parameterizations for the specific distributions. For example, in
 `simstudy` *gamma*-distributed data are generated based on the specification of
-a mean $\mu$ (or $log(\mu)$) and a dispersion $d$, rather than shape $\alpha$
+a mean $\mu$ (or $\log(\mu)$) and a dispersion $d$, rather than shape $\alpha$
 and rate $\beta$ parameters that more typically characterize the *gamma*
 distribution. When we estimate the parameters, we are modeling $\mu$ (or some
 function of $(\mu)$), so we should explicitly recover the `simstudy` parameters
 used to generate the model - illuminating the relationship between the
-underlying data generating processes and the models.
+underlying data generating processes and the models. For more details on the
+package, use cases, examples, and function reference see the [documentation page](https://kgoldfeld.github.io/simstudy/articles/simstudy.html).
+
+`simstudy` is available on [CRAN](https://cran.r-project.org/package=simstudy)
+and can be installed with:
+
+``` r
+install.packages("simstudy")
+```
+
+Alternatively, the newest development version can be installed from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("kgoldfeld/simstudy")
+```
 
 # Statement of need 
 

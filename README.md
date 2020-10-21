@@ -42,13 +42,15 @@ processes that mimic the typical models used to fit those types of data.
 So, the parameterization of some of the data generating processes may
 not follow the standard parameterizations for the specific
 distributions. For example, in `simstudy` *gamma*-distributed data are
-generated based on the specification of a mean μ (or log(μ)) and a
-dispersion \(d\), rather than shape α and rate β parameters that more
+generated based on the specification of a mean μ (or \(\log(&mu;)\)) and
+a dispersion \(d\), rather than shape α and rate β parameters that more
 typically characterize the *gamma* distribution. When we estimate the
 parameters, we are modeling μ (or some function of μ), so we should
 explicitly recover the `simstudy` parameters used to generate the model,
 thus illuminating the relationship between the underlying data
-generating processes and the models.
+generating processes and the models. For more details on the package,
+use cases, examples, and function reference see the [documentation
+page](https://kgoldfeld.github.io/simstudy/articles/simstudy.html).
 
 ## Installation
 
