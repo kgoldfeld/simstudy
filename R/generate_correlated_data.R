@@ -250,10 +250,12 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = 
 #' @param method Two methods are available to generate correlated data. (1) "copula" uses
 #' the multivariate Gaussian copula method that is applied to all other distributions; this
 #' applies to all available distributions. (2) "ep" uses an algorithm developed by
-#' Emrich and Piedmonte.
+#' Emrich and Piedmonte (1991).
 #' @param idname Character value that specifies the name of the id variable.
 #'
 #' @return data.table with added column(s) of correlated data
+#' @references Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
+#' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
 #' @examples
 #' set.seed(23432)
 #' l <- c(8, 10, 12)
