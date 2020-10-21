@@ -107,7 +107,8 @@
 
       
 
-      </header><script src="correlated_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="correlated_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="correlated_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="correlated_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Correlated Data</h1>
@@ -123,7 +124,7 @@
 <div id="correlated-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#correlated-data" class="anchor"></a>Correlated data</h2>
-<p>Sometimes it is desirable to simulate correlated data from a correlation matrix directly. For example, a simulation might require two random effects (e.g. a random intercept and a random slope). Correlated data like this could be generated using the <code>defData</code> functionality, but it may be more natural to do this with <code>genCorData</code> or <code>addCorData</code>. Currently, simstudy can only generate multivariate normal using these functions. (In the future, additional distributions will be available.)</p>
+<p>Sometimes it is desirable to simulate correlated data from a correlation matrix directly. For example, a simulation might require two random effects (e.g. a random intercept and a random slope). Correlated data like this could be generated using the <code>defData</code> functionality, but it may be more natural to do this with <code>genCorData</code> or <code>addCorData</code>. Currently, simstudy can only generate multivariate normal using these functions.</p>
 <p><code>genCorData</code> requires the user to specify a mean vector <code>mu</code>, a single standard deviation or a vector of standard deviations <code>sigma</code>, and either a correlation matrix <code>corMatrix</code> or a correlation coefficient <code>rho</code> and a correlation structure <code>corsrt</code>. Here are a few examples:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="co"># specifying a specific correlation matrix C</span>
@@ -235,7 +236,7 @@
 <h3 class="hasAnchor">
 <a href="#correlated-data-additional-distributions" class="anchor"></a>Correlated data: additional distributions</h3>
 <p>Two additional functions facilitate the generation of correlated data from <em>binomial</em>, <em>poisson</em>, <em>gamma</em>, and <em>uniform</em> distributions: <code>genCorGen</code> and <code>addCorGen</code>.</p>
-<p><code>genCorGen</code> is an extension of <code>genCorData</code>. In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.</p>
+<p><code>genCorGen</code> is an extension of <code>genCorData</code>. These functions draw on copula-based methods to generate the data. (This <a href="https://bit.ly/31vAxFf">Wikipedia page</a> provides a general introduction and copula-based modeling can be conducted in <code>R</code> using package <a href="https://cran.r-project.org/web/packages/copula/index.html">copula</a>.) In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit">
 <span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">12</span><span class="op">)</span> <span class="co"># lambda for each new variable</span>
 
