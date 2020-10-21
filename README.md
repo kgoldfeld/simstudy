@@ -9,6 +9,7 @@ simstudy
 status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
+[![status](https://joss.theoj.org/papers/640fd4333948933b2817343e86df3424/status.svg)](https://joss.theoj.org/papers/640fd4333948933b2817343e86df3424)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
@@ -42,8 +43,8 @@ processes that mimic the typical models used to fit those types of data.
 So, the parameterization of some of the data generating processes may
 not follow the standard parameterizations for the specific
 distributions. For example, in `simstudy` *gamma*-distributed data are
-generated based on the specification of a mean μ (or \(\log(&mu;)\)) and
-a dispersion \(d\), rather than shape α and rate β parameters that more
+generated based on the specification of a mean μ (or log(μ)) and a
+dispersion \(d\), rather than shape α and rate β parameters that more
 typically characterize the *gamma* distribution. When we estimate the
 parameters, we are modeling μ (or some function of μ), so we should
 explicitly recover the `simstudy` parameters used to generate the model,
