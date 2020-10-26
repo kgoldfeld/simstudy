@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -106,7 +106,8 @@
 
       
 
-      </header><script src="ordinal_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="ordinal_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="ordinal_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="ordinal_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Ordinal Categorical Data</h1>
@@ -119,7 +120,7 @@
 
     
     
-<p>Using the <code>defData</code> and <code>genData</code> functions, it is is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on five possible values: (1) strongly disagree, (2) disagree, (3) neutral, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.</p>
+<p>Using the <code>defData</code> and <code>genData</code> functions, it is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related to strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on five possible values: (1) strongly disagree, (2) disagree, (3) neutral, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.</p>
 <p>It is common to summarize the data by looking at <em>cumulative</em> probabilities, odds, or log-odds. Comparisons of different exposures or individual characteristics typically look at how these cumulative measures vary across the different exposures or characteristics. So, if we were interested in cumulative odds, we would compare <span class="math display">\[\small{\frac{P(response = 1|exposed)}{P(response &gt; 1|exposed)} \ \ vs. \ \frac{P(response = 1|unexposed)}{P(response &gt; 1|unexposed)}},\]</span></p>
 <p><span class="math display">\[\small{\frac{P(response \le 2|exposed)}{P(response &gt; 2|exposed)} \ \ vs. \ \frac{P(response \le 2|unexposed)}{P(response &gt; 2|unexposed)}},\]</span></p>
 <p>and continue until the last (in this case, fourth) comparison</p>
@@ -131,7 +132,7 @@
 <a href="#comparing-response-distributions-of-different-populations" class="anchor"></a>Comparing response distributions of different populations</h3>
 <p>In the cumulative logit model, the underlying assumption is that the odds ratio of one population relative to another is constant across all the possible responses. This means that all of the cumulative odds ratios are equal:</p>
 <p><span class="math display">\[\small{\frac{codds(P(Resp = 1 | exposed))}{codds(P(Resp = 1 | unexposed))} = \frac{codds(P(Resp \leq 2 | exposed))}{codds(P(Resp \leq 2 | unexposed))} = \ ... \ = \frac{codds(P(Resp \leq 4 | exposed))}{codds(P(Resp \leq 4 | unexposed))}}\]</span></p>
-<p>In terms of the underlying process, this means that each of the thresholds shifts the same amount, as shown below, where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.</p>
+<p>In terms of the underlying process, this means that each of the thresholds shifts the same amount (as shown below) where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.</p>
 <p><img src="ordinal_files/figure-html/plotB-1.png" width="504"></p>
 </div>
 <div id="the-cumulative-proportional-odds-model" class="section level3">
@@ -200,7 +201,7 @@
 <div id="correlated-multivariate-ordinal-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#correlated-multivariate-ordinal-data" class="anchor"></a>Correlated multivariate ordinal data</h3>
-<p>Function <code>genOrdCat</code> generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale, and is specified with a value of <code>rho</code> and a correlation structure (<em>independence</em>, <em>compound symmetry</em>, or <em>AR-1</em>). Alternatively, a correlation matrix can be specified.</p>
+<p>Function <code>genOrdCat</code> generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale and is specified with a value of <code>rho</code> and a correlation structure (<em>independence</em>, <em>compound symmetry</em>, or <em>AR-1</em>). Alternatively, a correlation matrix can be specified.</p>
 <p>In this example, there are 5 questions, each of which has three possible responses: “none”, “some”, “a lot”. The probabilities of response are specified in a <span class="math inline">\(5 \times 3\)</span> matrix, and the rows sum to 1:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="va">baseprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.7</span>,

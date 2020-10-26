@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -106,7 +106,8 @@
 
       
 
-      </header><script src="treat_and_exposure_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="treat_and_exposure_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="treat_and_exposure_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="treat_and_exposure_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Treatment and Exposure</h1>
@@ -123,7 +124,7 @@
 <div id="assigned-treatment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#assigned-treatment" class="anchor"></a>Assigned treatment</h3>
-<p>Treatment assignment can simulate how treatment is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.</p>
+<p>Treatment assignment can simulate how the treatment allocation is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.</p>
 <p>First, create the data definition:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, 
@@ -141,17 +142,17 @@
 
 <span class="va">study1</span></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    0      0 74.94327     1
-##   2:   2    0      0 66.21864     2
-##   3:   3    0      0 71.67308     2
-##   4:   4    1      1 75.46253     2
-##   5:   5    1      1 60.74898     3
+##   1:   1    0      0 63.16027     3
+##   2:   2    1      1 71.92033     1
+##   3:   3    1      0 69.22485     2
+##   4:   4    0      0 59.57693     1
+##   5:   5    1      0 75.96862     2
 ##  ---                               
-## 326: 326    1      0 74.67145     2
-## 327: 327    1      0 68.64934     1
-## 328: 328    0      0 75.80652     3
-## 329: 329    1      0 56.56463     1
-## 330: 330    1      0 72.59145     2</code></pre>
+## 326: 326    0      0 77.19165     1
+## 327: 327    0      1 78.42484     3
+## 328: 328    0      1 71.03865     2
+## 329: 329    1      0 61.86369     3
+## 330: 330    0      1 69.32916     2</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></pre></div>
@@ -179,7 +180,7 @@
 <div id="stepped-wedge-design" class="section level3">
 <h3 class="hasAnchor">
 <a href="#stepped-wedge-design" class="anchor"></a>Stepped-wedge design</h3>
-<p>Stepped-wedge designs are a special class of cluster randomized trial where each cluster is observed in both treatment arms (as opposed to the classic parallel design where only some of the clusters receive the treatment). This is a special case of a cross-over design, where the cross-over is only in one direction: control (or pre-intervention) to intervention.</p>
+<p>Stepped-wedge designs are a special class of cluster randomized trials where each cluster is observed in both treatment arms (as opposed to the classic parallel design where only some of the clusters receive the treatment). This is a special case of a cross-over design, where the cross-over is only in one direction: control (or pre-intervention) to intervention.</p>
 <p>In this example, the data generating process looks like this:</p>
 <p><span class="math display">\[Y_{ict} = \beta_0 + b_c + \beta_1 * t + \beta_2*X_{ct} + e_{ict}\]</span></p>
 <p>where <span class="math inline">\(Y_{ict}\)</span> is the outcome for individual <span class="math inline">\(i\)</span> in cluster <span class="math inline">\(c\)</span> in time period <span class="math inline">\(t\)</span>, <span class="math inline">\(b_c\)</span> is a cluster-specific effect, <span class="math inline">\(X_{ct}\)</span> is the intervention indicator that has a value 1 during periods where the cluster is under the intervention, and <span class="math inline">\(e_{ict}\)</span> is the individual-level effect. Both <span class="math inline">\(b_c\)</span> and <span class="math inline">\(e_{ict}\)</span> are normally distributed with mean 0 and variances <span class="math inline">\(\sigma^2_{b}\)</span> and <span class="math inline">\(\sigma^2_{e}\)</span>, respectively. <span class="math inline">\(\beta_1\)</span> is the time trend, and <span class="math inline">\(\beta_2\)</span> is the intervention effect.</p>

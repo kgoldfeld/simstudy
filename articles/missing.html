@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -106,7 +106,8 @@
 
       
 
-      </header><script src="missing_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="missing_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="missing_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="missing_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Missing Data</h1>
@@ -120,7 +121,7 @@
     
     
 <p>After generating a complete data set, it is possible to generate missing data. <code>defMiss</code> defines the parameters of missingness. <code>genMiss</code> generates a missing data matrix of indicators for each field. Indicators are set to 1 if the data are missing for a subject, 0 otherwise. <code>genObs</code> creates a data set that reflects what would have been observed had data been missing; this is a replicate of the original data set with “NAs” replacing values where missing data has been generated.</p>
-<p>By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) <em>missing completely at random</em> (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) <em>missing at random</em> (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) <em>not missing at random</em> (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with measure.</p>
+<p>By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) <em>missing completely at random</em> (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) <em>missing at random</em> (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) <em>not missing at random</em> (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with the measure.</p>
 <p>These possibilities are illustrated with an example. A data set of 1000 observations with three “outcome” measures" <code>x1</code>, <code>x2</code>, and <code>x3</code> is defined. This data set also includes two independent predictors, <code>m</code> and <code>u</code> that largely determine the value of each outcome (subject to random noise).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"m"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
@@ -137,6 +138,8 @@
 <span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x3"</span>, formula <span class="op">=</span> <span class="st">".05 + u * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"u"</span>, formula <span class="op">=</span> <span class="fl">1</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># not observed</span>
 
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">283726</span><span class="op">)</span>
+
 <span class="va">missMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genMiss.html">genMiss</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">defM</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span>
 <span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genObs.html">genObs</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">missMat</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit">
@@ -144,29 +147,29 @@
 <pre><code>##         id x1 x2 x3 u m
 ##    1:    1  0  0  0 1 0
 ##    2:    2  0  0  0 1 0
-##    3:    3  1  1  0 1 0
-##    4:    4  0  0  0 1 0
-##    5:    5  0  0  0 1 0
+##    3:    3  1  0  0 1 0
+##    4:    4  1  0  0 1 0
+##    5:    5  1  1  0 1 0
 ##   ---                  
 ##  996:  996  0  0  0 1 0
-##  997:  997  0  1  0 1 0
-##  998:  998  1  0  1 1 0
-##  999:  999  0  0  1 1 0
+##  997:  997  1  0  1 1 0
+##  998:  998  0  0  0 1 0
+##  999:  999  0  0  0 1 0
 ## 1000: 1000  0  0  0 1 0</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">dtObs</span></pre></div>
-<pre><code>##         id m  u        x1         x2        x3
-##    1:    1 0 NA 21.827743 20.5719921 20.758490
-##    2:    2 0 NA  1.122466  0.1524934  1.534577
-##    3:    3 1 NA        NA         NA 20.229226
-##    4:    4 0 NA 19.615061 18.6536506 21.801945
-##    5:    5 1 NA 22.050285 19.9487028 20.863627
-##   ---                                         
-##  996:  996 1 NA 38.411899 41.6903955 40.216477
-##  997:  997 1 NA 18.649473         NA 19.432174
-##  998:  998 0 NA        NA 20.2949421        NA
-##  999:  999 1 NA 38.727377 39.4612649        NA
-## 1000: 1000 0 NA 22.313358 20.4837873 20.979849</code></pre>
+<pre><code>##         id m  u         x1         x2         x3
+##    1:    1 0 NA -1.0470073  3.6976385  1.1773706
+##    2:    2 1 NA 37.7016446 38.6445468 40.1291761
+##    3:    3 1 NA         NA 42.3835492 41.4593958
+##    4:    4 1 NA         NA 19.1998720 21.5308830
+##    5:    5 1 NA         NA         NA 39.9907045
+##   ---                                           
+##  996:  996 0 NA -0.6970442  0.4634872 -0.8588669
+##  997:  997 0 NA         NA 17.8357998         NA
+##  998:  998 0 NA  0.4872474  0.1678724  1.9330914
+##  999:  999 1 NA 19.5751706 18.9628603 18.0742193
+## 1000: 1000 1 NA 19.2024422 20.2697473 22.0805539</code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the “true” data set without missing data as a comparison for the “observed” data set. Since <code>x1</code> is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for <code>x2</code> and <code>x3</code> are biased, as the difference between observed and actual is not close to 0:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="co"># Two functions to calculate means and compare them</span>
@@ -188,9 +191,9 @@
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     20.5 20.5 20.5
-## Observed   20.5 18.7 19.1
-## Difference  0.0  1.8  1.4</code></pre>
+## Actual     20.1 20.2 20.2
+## Observed   20.0 18.6 19.1
+## Difference  0.1  1.6  1.1</code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias for the estimate of the mean of <code>x2</code> is mitigated, but not for <code>x3</code>, since <code>u</code> is not observed:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="va">meanActm</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span>
@@ -200,24 +203,24 @@
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     10.5 10.5 10.7
-## Observed   10.2 10.6  9.0
-## Difference  0.3 -0.1  1.7</code></pre>
+## Actual     10.5 10.5 10.5
+## Observed   10.5 10.5  8.9
+## Difference  0.0  0.0  1.6</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit">
 <span class="co"># compare observed and actual when m = 1</span>
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     30.1 30.1 29.9
-## Observed   30.4 30.0 28.4
-## Difference -0.3  0.1  1.5</code></pre>
+## Actual     29.3 29.4 29.4
+## Observed   29.1 29.3 28.1
+## Difference  0.2  0.1  1.3</code></pre>
 <div id="longitudinal-data-with-missingness" class="section level2">
 <h2 class="hasAnchor">
 <a href="#longitudinal-data-with-missingness" class="anchor"></a>Longitudinal data with missingness</h2>
 <p>Missingness can occur, of course, in the context of longitudinal data. <code>missDef</code> provides two additional arguments that are relevant for these types of data: <code>baseline</code> and <code>monotonic</code>. In the case of variables that are measured at baseline only, a missing value would be reflected throughout the course of the study. In the case where a variable is time-dependent (i.e it is measured at each time point), it is possible to declare missingness to be <em>monotonic</em>. This means that if a value for this field is missing at time <code>t</code>, then values will also be missing at all times <code>T &gt; t</code> as well. The call to <code>genMiss</code> must set <code>repeated</code> to TRUE.</p>
 <p>The following two examples describe an outcome variable <code>y</code> that is measured over time, whose value is a function of time and an observed exposure:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="co"># use baseline definitions from previous example</span>
+<span class="co"># use baseline definitions from the previous example</span>
 
 <span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">120</span>, <span class="va">def1</span><span class="op">)</span>
 <span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtAct</span>, formulas <span class="op">=</span> <span class="fl">0.5</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span>

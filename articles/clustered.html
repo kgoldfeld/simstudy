@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -106,7 +106,8 @@
 
       
 
-      </header><script src="clustered_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="clustered_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="clustered_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="clustered_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Clustered Data</h1>
@@ -119,27 +120,29 @@
 
     
     
-<p>The function <code>genCluster</code> generates multilevel or clustered data based on a previously generated data set that is one “level” up from the clustered data. For example, if there is a data set that contains school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)</p>
-<p>In the example here, we do in fact generate school, class, and student level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides <em>random effects</em> at each of these levels.</p>
+<p>The function <code>genCluster</code> generates multilevel or clustered data based on a previously generated data set that is one “level” up from the clustered data. For example, if there is a data set that contains the school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)</p>
+<p>In the example here, we do in fact generate school-, class-, and student-level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides <em>random effects</em> at each of these levels.</p>
 <p>We start by defining the school level data:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="va">gen.school</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"s0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">3</span>, 
     id <span class="op">=</span> <span class="st">"idSchool"</span><span class="op">)</span>
 <span class="va">gen.school</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">gen.school</span>, varname <span class="op">=</span> <span class="st">"nClasses"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">282721</span><span class="op">)</span>
+
 <span class="va">dtSchool</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">8</span>, <span class="va">gen.school</span><span class="op">)</span>
 <span class="va">dtSchool</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtSchool</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 
 <span class="va">dtSchool</span></pre></div>
-<pre><code>##    idSchool          s0 nClasses trtGrp
-## 1:        1 1.945420331        4      1
-## 2:        2 1.526958713        5      0
-## 3:        3 0.003284838        2      0
-## 4:        4 0.612765857        2      1
-## 5:        5 1.960057080        6      1
-## 6:        6 0.498932059        1      1
-## 7:        7 0.159291817        4      0
-## 8:        8 1.393972079        7      0</code></pre>
+<pre><code>##    idSchool         s0 nClasses trtGrp
+## 1:        1  0.9732297        3      1
+## 2:        2  3.5741932        4      1
+## 3:        3  0.1121028        3      0
+## 4:        4  0.5147236        4      1
+## 5:        5  0.4594058        1      0
+## 6:        6 -0.1287554        4      0
+## 7:        7  2.4400170        2      1
+## 8:        8 -1.2496060        1      0</code></pre>
 <p>The classroom level data are generated with a call to <code>genCluster</code>, and then school level data is added by a call to <code>addColumns</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="va">gen.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"c0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
@@ -150,17 +153,17 @@
 <span class="va">dtClass</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">gen.class</span>, <span class="va">dtClass</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dtClass</span>, <span class="fl">10</span><span class="op">)</span></pre></div>
-<pre><code>##     idSchool          s0 nClasses trtGrp idClass         c0 nStudents
-##  1:        1 1.945420331        4      1       1 -1.4728770        11
-##  2:        1 1.945420331        4      1       2 -0.7188835        14
-##  3:        1 1.945420331        4      1       3 -0.6277657        14
-##  4:        1 1.945420331        4      1       4  3.6833218        15
-##  5:        2 1.526958713        5      0       5  1.7518075        20
-##  6:        2 1.526958713        5      0       6  1.0242532        21
-##  7:        2 1.526958713        5      0       7  0.6188060        15
-##  8:        2 1.526958713        5      0       8 -0.4383466        18
-##  9:        2 1.526958713        5      0       9  1.3916168        21
-## 10:        3 0.003284838        2      0      10 -2.3319018        19</code></pre>
+<pre><code>##     idSchool        s0 nClasses trtGrp idClass          c0 nStudents
+##  1:        1 0.9732297        3      1       1  1.62726560        16
+##  2:        1 0.9732297        3      1       2 -0.69640102        16
+##  3:        1 0.9732297        3      1       3  1.53921338        13
+##  4:        2 3.5741932        4      1       4 -1.58765603        30
+##  5:        2 3.5741932        4      1       5 -2.35483046        26
+##  6:        2 3.5741932        4      1       6  0.45956895        20
+##  7:        2 3.5741932        4      1       7 -0.88401500        26
+##  8:        3 0.1121028        3      0       8 -1.46100446        19
+##  9:        3 0.1121028        3      0       9  0.07024057        19
+## 10:        3 0.1121028        3      0      10  1.09465368        21</code></pre>
 <p>Finally, the student level data are added using the same process:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, 
