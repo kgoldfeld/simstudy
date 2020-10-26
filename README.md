@@ -9,6 +9,7 @@ simstudy
 status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
+[![status](https://joss.theoj.org/papers/640fd4333948933b2817343e86df3424/status.svg)](https://joss.theoj.org/papers/640fd4333948933b2817343e86df3424)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
 [![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
@@ -48,7 +49,9 @@ typically characterize the *gamma* distribution. When we estimate the
 parameters, we are modeling μ (or some function of μ), so we should
 explicitly recover the `simstudy` parameters used to generate the model,
 thus illuminating the relationship between the underlying data
-generating processes and the models.
+generating processes and the models. For more details on the package,
+use cases, examples, and function reference see the [documentation
+page](https://kgoldfeld.github.io/simstudy/articles/simstudy.html).
 
 ## Installation
 
@@ -83,16 +86,16 @@ dd <- trtAssign(dd, nTrt = 4, grpName = "grp", balanced = TRUE)
 dd
 #>       id         x        y grp
 #>   1:   1 11.191960 8.949389   4
-#>   2:   2 10.418375 7.372060   2
-#>   3:   3  8.512109 6.925844   4
+#>   2:   2 10.418375 7.372060   4
+#>   3:   3  8.512109 6.925844   3
 #>   4:   4 11.361632 9.850340   4
-#>   5:   5  9.928811 6.515463   2
+#>   5:   5  9.928811 6.515463   4
 #>  ---                           
-#> 246: 246  8.220609 7.898416   4
-#> 247: 247  8.531483 8.681783   4
-#> 248: 248 10.507370 8.552350   4
+#> 246: 246  8.220609 7.898416   2
+#> 247: 247  8.531483 8.681783   2
+#> 248: 248 10.507370 8.552350   3
 #> 249: 249  8.621339 6.652300   1
-#> 250: 250  9.508164 7.083845   4
+#> 250: 250  9.508164 7.083845   3
 ```
 
 ## Contributing & Support

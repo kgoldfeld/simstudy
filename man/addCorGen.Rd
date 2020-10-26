@@ -57,7 +57,7 @@ represents the column.}
 \item{method}{Two methods are available to generate correlated data. (1) "copula" uses
 the multivariate Gaussian copula method that is applied to all other distributions; this
 applies to all available distributions. (2) "ep" uses an algorithm developed by
-Emrich and Piedmonte.}
+Emrich and Piedmonte (1991).}
 
 \item{formSpec}{The formula (as a string) that was used to generate the binary
 outcome in the `defDataAdd` statement. This is only necessary when method "ep" is
@@ -189,5 +189,9 @@ dg <- addCorGen(dx,
   method = "ep", formSpec = probform,
   periodvar = "period"
 )
+}
+\references{
+Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
+Multivariate Binary Variates. The American Statistician 1991;45:302-4.
 }
 \concept{correlated}

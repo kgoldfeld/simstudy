@@ -292,13 +292,15 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' @param method Two methods are available to generate correlated data. (1) "copula" uses
 #' the multivariate Gaussian copula method that is applied to all other distributions; this
 #' applies to all available distributions. (2) "ep" uses an algorithm developed by
-#' Emrich and Piedmonte.
+#' Emrich and Piedmonte (1991).
 #' @param formSpec The formula (as a string) that was used to generate the binary
 #' outcome in the `defDataAdd` statement. This is only necessary when method "ep" is
 #' requested.
 #' @param periodvar A string value that indicates the name of the field that indexes
 #' the repeated measurement for an individual unit. The value defaults to "period".
 #' @return Original data.table with added column(s) of correlated data
+#' @references Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
+#' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
 #' @examples
 #' # Wide example
 #'

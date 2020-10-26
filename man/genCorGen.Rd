@@ -57,7 +57,7 @@ represents the column.}
 \item{method}{Two methods are available to generate correlated data. (1) "copula" uses
 the multivariate Gaussian copula method that is applied to all other distributions; this
 applies to all available distributions. (2) "ep" uses an algorithm developed by
-Emrich and Piedmonte.}
+Emrich and Piedmonte (1991).}
 
 \item{idname}{Character value that specifies the name of the id variable.}
 }
@@ -99,5 +99,9 @@ genCorGen(1000,
   nvars = 3, params1 = c(.3, .5, .7), dist = "binary",
   corMatrix = genCorMat(3), method = "copula"
 )
+}
+\references{
+Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
+Multivariate Binary Variates. The American Statistician 1991;45:302-4.
 }
 \concept{correlated}

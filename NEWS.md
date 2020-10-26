@@ -1,4 +1,5 @@
-# simstudy (development version)
+# simstudy 0.2.2
+* Improve documentation and vignettes.
 
 # simstudy 0.2.1
 * Add 'backports' for compatibility with R < 4.0 
