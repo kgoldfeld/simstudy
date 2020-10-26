@@ -15,7 +15,7 @@
   ],
   "issueTracker": "https://github.com/kgoldfeld/simstudy/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -359,7 +359,7 @@
   ],
   "releaseNotes": "https://github.com/kgoldfeld/simstudy/blob/main/NEWS.md",
   "readme": "https://github.com/kgoldfeld/simstudy/blob/main/README.md",
-  "fileSize": "8053.23KB",
+  "fileSize": "8057.013KB",
   "contIntegration": "https://codecov.io/gh/kgoldfeld/simstudy",
   "developmentStatus": "https://www.tidyverse.org/lifecycle/#stable",
   "keywords": [
