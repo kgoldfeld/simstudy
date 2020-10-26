@@ -24,14 +24,14 @@ bibliography: simstudy.bib
 
 # Summary
 
-The `simstudy` package is a collection of functions for R [@rcoreteam2020], that
+The `simstudy` package is a collection of functions for R [@rcoreteam2020] that
 allow users to generate simulated data sets in order to explore modeling
 techniques or better understand data generating processes. The user defines the
 distributions of individual variables, specifies relationships between
 covariates and outcomes, and generates data based on these specifications. The
 final data sets can represent randomized control trials, repeated measure
-designs, cluster-randomized trials, or naturally observed data processes. Other
-complexities that can be added include survival data, correlated data, factorial
+designs, cluster-randomized trials, or naturally observed data processes. Many other
+complexities can be added, including survival data, correlated data, factorial
 study designs, step wedge designs, and missing data processes.
 
 Simulation using `simstudy` has two fundamental steps. The user (1) **defines**
@@ -76,7 +76,7 @@ Empiricism and statistical analysis are cornerstones of scientific research
 but they can lead us astray if used incorrectly. Choosing the right methodology for the
 hypothesis and expected data is crucial for useful, valid results. Data
 simulated with `simstudy` under the assumptions derived from a hypothesis
-enables researchers to test and refine their analysis methodology without the
+enables researchers to test and refine their analysis methodologies without the
 need for time-intensive, expensive pre-tests or collection of actual data. Additionally data generated with `simstudy` can be used in generalized, theoretical simulation studies to further the field of methodology.
 
 There are several `R`-packages that allow for data generation under different
