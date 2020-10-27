@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.1.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
       </span>
     </div>
 
@@ -143,17 +143,17 @@
 
 <span class="va">study1</span></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    1      0 70.58170     3
-##   2:   2    1      1 87.89320     1
-##   3:   3    0      1 63.97488     2
-##   4:   4    1      0 65.92255     3
-##   5:   5    1      0 77.85044     1
+##   1:   1    0      0 70.24317     3
+##   2:   2    0      0 67.55666     1
+##   3:   3    1      0 73.41713     1
+##   4:   4    0      0 69.47404     3
+##   5:   5    1      0 59.30825     2
 ##  ---                               
-## 326: 326    0      0 78.21398     3
-## 327: 327    0      0 68.56454     3
-## 328: 328    0      1 79.03697     2
-## 329: 329    0      0 74.12289     2
-## 330: 330    1      1 73.14467     1</code></pre>
+## 326: 326    0      0 68.86390     1
+## 327: 327    1      0 63.08612     2
+## 328: 328    1      0 77.76260     3
+## 329: 329    1      0 73.02821     3
+## 330: 330    1      0 63.40470     3</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></pre></div>
