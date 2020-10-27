@@ -1,3 +1,6 @@
+# simstudy (development version)
+* Added CITATION
+
 # simstudy 0.2.2
 * Improve documentation and vignettes.
 
