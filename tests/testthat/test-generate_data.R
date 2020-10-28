@@ -8,8 +8,10 @@ test_that("data is generated as expected", {
   def <- defData(def, varname = "cat", formula = "test;test2", dist = "categorical")
 
   expect_silent(genData(n, def))
+  expect_warning(genData(n, def, "not-id"), class = "simstudy::valueWarning")
   expect_warning(genData(n, def2), "will be normalized")
   expect_warning(genData(n, def3), "Adding category")
+  # TODO expand test with hedgehog
 })
 
 # genOrdCat ----
@@ -18,7 +20,7 @@ test_that("genOrdCat throws errors.", {
   expect_error(genOrdCat(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
   expect_error(genOrdCat(NULL, NULL, NULL), class = "simstudy::noValue")
   expect_warning(genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "notValid"), class = "simstudy::invalidOption")
-  
+
 })
 
 library(magrittr)

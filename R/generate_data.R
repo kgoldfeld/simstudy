@@ -59,6 +59,17 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
   } else { # existing definitions
     assertClass(dtDefs = dtDefs, class = "data.table")
 
+    if (id != attr(dtDefs, "id") && id != "id") {
+      valueWarning(
+        names = "id",
+        msg = list(
+          "The '{names}' parameter is only ",
+          "valid when no definition is supplied ",
+          "and will be ignored."
+        )
+      )
+    }
+
     idname <- attr(dtDefs, "id")
 
     dfSimulate <- data.frame(c(1:n)) # initialize simulated data with ids
