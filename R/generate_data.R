@@ -62,11 +62,11 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
 
     if (id != attr(dtDefs, "id") && !missing(id)) {
       valueWarning(
-        names = "id",
+        names = id,
         msg = list(
-          "The '{names}' parameter is only ",
-          "valid when no definition is supplied ",
-          "and will be ignored."
+          "The 'id' parameter is not valid when previously defined ",
+          "in call to 'defData'. ",
+          "The current specification '{names}' is ignored."
         )
       )
     }
