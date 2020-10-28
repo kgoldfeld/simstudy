@@ -4,7 +4,8 @@
 #' @param dtDefs name of definitions data.table/data.frame. If no definitions
 #'  are provided
 #' a data set with ids only is generated.
-#' @param id The string defining the id of the record
+#' @param id The string defining the id of the record. Only valid if no `dtDefs`
+#' is supplied or `id` matches the id name of the definition.
 #' @param envir Environment the data definitions are evaluated in.
 #'  Defaults to [base::parent.frame].
 #' @return A data.table that contains the simulated data.
@@ -58,6 +59,17 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
     data.table::setkeyv(dt, id)
   } else { # existing definitions
     assertClass(dtDefs = dtDefs, class = "data.table")
+
+    if (id != attr(dtDefs, "id") && !missing(id)) {
+      valueWarning(
+        names = id,
+        msg = list(
+          "The 'id' parameter is not valid when previously defined ",
+          "in call to 'defData'. ",
+          "The current specification '{names}' is ignored."
+        )
+      )
+    }
 
     idname <- attr(dtDefs, "id")
 
