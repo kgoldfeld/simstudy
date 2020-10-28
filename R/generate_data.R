@@ -59,7 +59,7 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
   } else { # existing definitions
     assertClass(dtDefs = dtDefs, class = "data.table")
 
-    if (id != attr(dtDefs, "id") && id != "id") {
+    if (id != attr(dtDefs, "id") && !missing(id)) {
       valueWarning(
         names = "id",
         msg = list(

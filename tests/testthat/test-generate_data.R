@@ -9,6 +9,7 @@ test_that("data is generated as expected", {
 
   expect_silent(genData(n, def))
   expect_warning(genData(n, def, "not-id"), class = "simstudy::valueWarning")
+  expect_silent(genData(n, def, "id"))
   expect_warning(genData(n, def2), "will be normalized")
   expect_warning(genData(n, def3), "Adding category")
   # TODO expand test with hedgehog
