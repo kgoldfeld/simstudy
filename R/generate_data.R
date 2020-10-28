@@ -4,7 +4,8 @@
 #' @param dtDefs name of definitions data.table/data.frame. If no definitions
 #'  are provided
 #' a data set with ids only is generated.
-#' @param id The string defining the id of the record
+#' @param id The string defining the id of the record. Only valid if no `dtDefs`
+#' is supplied or `id` matches the id name of the definition.
 #' @param envir Environment the data definitions are evaluated in.
 #'  Defaults to [base::parent.frame].
 #' @return A data.table that contains the simulated data.
