@@ -1,6 +1,10 @@
 # simstudy (development version)
 * Added CITATION
-
+* genData now warns that it will ignore an 'id' parameter in case a definition
+  table is also passed.
+* Fix an error in genOrdCat when only a single adjustment variable is given but
+  more than one new category will be created.
+  
 # simstudy 0.2.2
 * Improve documentation and vignettes.
 

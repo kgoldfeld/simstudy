@@ -33,7 +33,8 @@ test_that("ordinal categorical data is generated correctly.", {
   probs_short <- c(.2, .4, .2)
   probs <- c(.2, .2, .6)
   data <- genData(n)
-
+  # TODO more test variable parameter combinations
+  expect_silent(genOrdCat(dtName = data, adjVar = "id", baseprobs = rbind(probs,probs), asFactor = FALSE))
   expect_equal(
     {
       data %>%
