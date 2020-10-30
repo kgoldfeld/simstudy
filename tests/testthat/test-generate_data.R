@@ -33,7 +33,7 @@ test_that("ordinal categorical data is generated correctly.", {
   probs_short <- c(.2, .4, .2)
   probs <- c(.2, .2, .6)
   data <- genData(n)
-
+  # TODO more test variable parameter combinations
   expect_equal(
     {
       data %>%
@@ -65,6 +65,7 @@ test_that("ordinal categorical data is generated correctly.", {
     classes = "simstudy::optionInvalid")
   })
   set.seed(oldSeed)
+  expect_silent(genOrdCat(dtName = data, adjVar = "id", baseprobs = rbind(probs,probs), asFactor = FALSE))
 })
 
 test_that("deprecation warning shows up.", {
