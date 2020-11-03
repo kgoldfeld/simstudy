@@ -136,21 +136,42 @@ dm <- sim.melt(dd, c("L", "A"), baseline = c("Y", "U"))
 setkey(dm, "id")
 dm
 
-
 d1 <- defDataAdd(varname = "U", formula = 0, variance = 1)
 d1 <- defDataAdd(d1, varname = "L0", formula = "-1 + U", dist = "binary", link="logit")
 d1 <- defDataAdd(d1, varname = "A0", formula = "-1 + 0.3*L0", dist = "binary", link = "logit")
 d1 <- defDataAdd(d1, varname = "L<t>", formula = "-1 - 0.5*A<t-1> + 0.5*L<t-1> + U", dist = "binary", link="logit")
 d1 <- defDataAdd(d1, varname = "A<t>", formula = "-1 + 2*A<t-1>+ 0.3*L<t-1>", dist = "binary", link = "logit")
-d1 <- defDataAdd(d1, varname = "Y", 
-                 formula = "2*U + 4*A0 + 3*A1 + 2*A2 + 1*A3 + 0.5*A4", variance = 4)
+d1 <- defDataAdd(d1, varname = "Y", formula = "2*U + 5*A0 + 3*A1 + 2*A2 + 1*A3", variance = 4)
 
-d1 <- seqDef(d1, 1, 4)
+d1 <- seqDef(d1, 1, 3)
 
-dd <- genData(n = 10)
+dd <- genData(n = 1000)
 dd <- addColumns(d1, dd)
 
-dm <- sim.melt(dd, c("L", "A"), baseline = c("Y", "U"))
-setkey(dm, "id")
-dm
+getWeight <- function(predA0, actA0, predA1, actA1,
+                      predA2, actA2, predA3, actA3) {
+  predActA0 <- actA0*predA0 + (1-actA0)*(1-predA0)
+  predActA1 <- actA1*predA1 + (1-actA1)*(1-predA1)
+  predActA2 <- actA2*predA2 + (1-actA2)*(1-predA2)
+  predActA3 <- actA3*predA3 + (1-actA3)*(1-predA3)
+  
+  p <- predActA0 * predActA1 * predActA2 * predActA3
+  return(1/p)
+}
+
+fitA0 <- glm(A0 ~ L0, data = dd, family=binomial)
+fitA1 <- glm(A1 ~ L0 + A0 + L1, data = dd, family=binomial)
+fitA2 <- glm(A2 ~ L0 + A0 + L1 + A1 + L2, data = dd, family=binomial)
+fitA3 <- glm(A3 ~ L0 + A0 + L1 + A1 + L2 + A2 + L3, data = dd, family=binomial)
+
+
+dd[, predA0 := predict(fitA0, type = "response")]
+dd[, predA1 := predict(fitA1, type = "response")]
+dd[, predA2 := predict(fitA2, type = "response")]
+dd[, predA3 := predict(fitA3, type = "response")]
+
+dd[, wgt := getWeight(predA0, A0, predA1, A1, 
+                      predA2, A2, predA3, A3)]
+
+broom::tidy(lm(Y ~ A0 + A1 + A2 + A3, weights = wgt, data = dd))
 
