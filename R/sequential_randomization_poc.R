@@ -3,7 +3,9 @@ library(data.table)
 library(simstudy)
 library(stringr)
 
-sim.melt <- function(dd, vars, baseline) {
+set.seed(28229)
+
+sim.melt <- function(dd, vars, baseline=NULL) {
   
   dm <- melt(
     dd, 
@@ -90,11 +92,7 @@ seqDef <- function(dd, t.start, t.end) {
   dd[]
 }
 
-###
-
-library(glue)
-library(data.table)
-library(simstudy)
+#--- Example 1
 
 d1 <- defDataAdd(varname = "y0", formula = 0, variance = 2)
 d1 <- defDataAdd(d1, varname = "x0", formula = 0, variance = 4)
@@ -105,9 +103,9 @@ d1 <- seqDef(d1, 1, 30)
 
 dd <- genData(n = 10)
 dd <- addColumns(d1, dd)
+dd
 
-###
-
+# Convert to long format
 
 dm <- sim.melt(dd, c("y", "x"))
 setkey(dm, "id")
@@ -119,22 +117,7 @@ ggplot(data = dm, aes(x = period, y = y, group = id)) +
 ggplot(data = dm, aes(x = period, y = x, group = id)) +
   geom_line()
 
-d1 <- defDataAdd(varname = "U", formula = 0, variance = 1)
-d1 <- defDataAdd(d1, varname = "L0", formula = "-2 + U", dist = "binary", link="logit")
-d1 <- defDataAdd(d1, varname = "A0", formula = "-1 + 0.3*L0", dist = "binary", link = "logit")
-d1 <- defDataAdd(d1, varname = "L<t>", formula = "-2 - A<t-1> + 0.5*L<t-1> + U", dist = "binary", link="logit")
-d1 <- defDataAdd(d1, varname = "A<t>", formula = "-1 + 1*A<t-1>+ 0.3*L<t-1>", dist = "binary", link = "logit")
-d1 <- defDataAdd(d1, varname = "Y", 
-                 formula = "2*U + 4*A0 + 3*A1 + 2*A2 + 1*A3 + 0.5*A4", variance = 4)
-
-d1 <- seqDef(d1, 1, 4)
-
-dd <- genData(n = 10)
-dd <- addColumns(d1, dd)
-
-dm <- sim.melt(dd, c("L", "A"), baseline = c("Y", "U"))
-setkey(dm, "id")
-dm
+#--- Example 2 - Marginal Structural Model
 
 d1 <- defDataAdd(varname = "U", formula = 0, variance = 1)
 d1 <- defDataAdd(d1, varname = "L0", formula = "-1 + U", dist = "binary", link="logit")
@@ -144,9 +127,10 @@ d1 <- defDataAdd(d1, varname = "A<t>", formula = "-1 + 2*A<t-1>+ 0.3*L<t-1>", di
 d1 <- defDataAdd(d1, varname = "Y", formula = "2*U + 5*A0 + 3*A1 + 2*A2 + 1*A3", variance = 4)
 
 d1 <- seqDef(d1, 1, 3)
-
 dd <- genData(n = 1000)
 dd <- addColumns(d1, dd)
+
+# Fitting MSM
 
 getWeight <- function(predA0, actA0, predA1, actA1,
                       predA2, actA2, predA3, actA3) {
@@ -163,7 +147,6 @@ fitA0 <- glm(A0 ~ L0, data = dd, family=binomial)
 fitA1 <- glm(A1 ~ L0 + A0 + L1, data = dd, family=binomial)
 fitA2 <- glm(A2 ~ L0 + A0 + L1 + A1 + L2, data = dd, family=binomial)
 fitA3 <- glm(A3 ~ L0 + A0 + L1 + A1 + L2 + A2 + L3, data = dd, family=binomial)
-
 
 dd[, predA0 := predict(fitA0, type = "response")]
 dd[, predA1 := predict(fitA1, type = "response")]
