@@ -124,9 +124,28 @@ d1 <- defDataAdd(d1, varname = "L0", formula = "-2 + U", dist = "binary", link="
 d1 <- defDataAdd(d1, varname = "A0", formula = "-1 + 0.3*L0", dist = "binary", link = "logit")
 d1 <- defDataAdd(d1, varname = "L<t>", formula = "-2 - A<t-1> + 0.5*L<t-1> + U", dist = "binary", link="logit")
 d1 <- defDataAdd(d1, varname = "A<t>", formula = "-1 + 1*A<t-1>+ 0.3*L<t-1>", dist = "binary", link = "logit")
-d1 <- defDataAdd(d1, varname = "Y", formula = "2*U + 3*A8", variance = 4)
+d1 <- defDataAdd(d1, varname = "Y", 
+                 formula = "2*U + 4*A0 + 3*A1 + 2*A2 + 1*A3 + 0.5*A4", variance = 4)
 
-d1 <- seqDef(d1, 1, 8)
+d1 <- seqDef(d1, 1, 4)
+
+dd <- genData(n = 10)
+dd <- addColumns(d1, dd)
+
+dm <- sim.melt(dd, c("L", "A"), baseline = c("Y", "U"))
+setkey(dm, "id")
+dm
+
+
+d1 <- defDataAdd(varname = "U", formula = 0, variance = 1)
+d1 <- defDataAdd(d1, varname = "L0", formula = "-1 + U", dist = "binary", link="logit")
+d1 <- defDataAdd(d1, varname = "A0", formula = "-1 + 0.3*L0", dist = "binary", link = "logit")
+d1 <- defDataAdd(d1, varname = "L<t>", formula = "-1 - 0.5*A<t-1> + 0.5*L<t-1> + U", dist = "binary", link="logit")
+d1 <- defDataAdd(d1, varname = "A<t>", formula = "-1 + 2*A<t-1>+ 0.3*L<t-1>", dist = "binary", link = "logit")
+d1 <- defDataAdd(d1, varname = "Y", 
+                 formula = "2*U + 4*A0 + 3*A1 + 2*A2 + 1*A3 + 0.5*A4", variance = 4)
+
+d1 <- seqDef(d1, 1, 4)
 
 dd <- genData(n = 10)
 dd <- addColumns(d1, dd)
