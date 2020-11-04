@@ -140,10 +140,4 @@ dd[, wgt := getWeight(predA0, A0, predA1, A1,
 
 broom::tidy(lm(Y ~ A0 + A1 + A2 + A3, weights = wgt, data = dd))
 
-###
-
-glue("{<}")
-
-x <- "<x>"
-str_replace_all(x, c("<" = "<nn(", ">" = ")>"))
 
