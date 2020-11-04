@@ -35,28 +35,10 @@ seqDef <- function(dd, t.start, t.end) {
   dd[, .n := .I]
   rows <- (str_detect(dd$varname, "<*>") | str_detect(dd$formula, "<*>")) 
   d..1 <- dd[rows]
-  
-  d..1 <- d..1[, .(varname = gsub("<", "<nn(", varname),
-                   formula = gsub("<", "<nn(", formula),
-                   variance,
-                   dist,
-                   link,
-                   .n
-  ), 
-  by = .(row.names(d..1))]
-  
-  d..1 <- d..1[, .(varname = gsub(">", ")>", varname),
-                   formula = gsub(">", ")>", formula),
-                   variance,
-                   dist,
-                   link,
-                   .n
-  ), 
-  by = .(row.names(d..1))]
-  
-  d..1 <- d..1[, .(t = c(t.start:t.end), 
-                   varname,
-                   formula,
+       
+  d..1 <- d..1[, .(t = c(t.start:t.end),
+                   varname = str_replace_all(varname, c("<" = "<nn(", ">" = ")>")),
+                   formula = str_replace_all(formula, c("<" = "<nn(", ">" = ")>")),
                    variance,
                    dist,
                    link,
@@ -71,11 +53,11 @@ seqDef <- function(dd, t.start, t.end) {
                    dist,
                    link,
                    .n
-  ), 
+  ),
   by = .(row.names(d..1))]
   
   setkey(d..1, "t")  
-  d..1 <- d..1[, -c(1, 2)]
+  d..1[, `:=`(row.names = NULL, t = NULL)]
   d..1[, `:=`(.n = min(.n), seq = .I)]
   
   class(d..1$varname) <- "character"
@@ -157,4 +139,11 @@ dd[, wgt := getWeight(predA0, A0, predA1, A1,
                       predA2, A2, predA3, A3)]
 
 broom::tidy(lm(Y ~ A0 + A1 + A2 + A3, weights = wgt, data = dd))
+
+###
+
+glue("{<}")
+
+x <- "<x>"
+str_replace_all(x, c("<" = "<nn(", ">" = ")>"))
 
