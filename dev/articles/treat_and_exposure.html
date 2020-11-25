@@ -127,55 +127,55 @@
 <a href="#assigned-treatment" class="anchor"></a>Assigned treatment</h3>
 <p>Treatment assignment can simulate how the treatment allocation is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.</p>
 <p>First, create the data definition:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, 
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, 
                formula <span class="op">=</span> <span class="fl">.5</span> , id<span class="op">=</span><span class="st">"cid"</span><span class="op">)</span>
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"over65"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, 
                formula <span class="op">=</span> <span class="st">"-1.7 + .8*male"</span>, link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"baseDBP"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, 
                formula <span class="op">=</span> <span class="fl">70</span>, variance <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>
 
-<span class="va">dtstudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">330</span>, <span class="va">def</span><span class="op">)</span></pre></div>
+<span class="va">dtstudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">330</span>, <span class="va">def</span><span class="op">)</span></code></pre></div>
 <p><em>Balanced treatment assignment, stratified by gender and age category (not blood pressure)</em></p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">study1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, strata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"male"</span>, <span class="st">"over65"</span><span class="op">)</span>, 
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">study1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, strata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"male"</span>, <span class="st">"over65"</span><span class="op">)</span>, 
     grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span>
 
-<span class="va">study1</span></pre></div>
+<span class="va">study1</span></code></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    0      0 66.19557     1
-##   2:   2    0      1 58.70565     1
-##   3:   3    0      0 61.29824     3
-##   4:   4    0      0 65.35421     1
-##   5:   5    1      0 69.74175     1
+##   1:   1    1      1 72.62072     1
+##   2:   2    1      1 54.92601     3
+##   3:   3    1      1 62.47288     3
+##   4:   4    1      0 69.53652     1
+##   5:   5    1      0 72.80714     3
 ##  ---                               
-## 326: 326    0      0 64.25808     3
-## 327: 327    1      1 72.13398     2
-## 328: 328    0      0 63.46657     3
-## 329: 329    1      0 74.11982     1
-## 330: 330    0      0 81.16919     1</code></pre>
+## 326: 326    1      0 66.35211     3
+## 327: 327    0      0 65.66094     1
+## 328: 328    1      1 78.69355     1
+## 329: 329    1      0 63.62601     2
+## 330: 330    1      0 66.68337     3</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></code></pre></div>
 <p><em>Random (unbalanced) treatment assignment</em></p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">study3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">study3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></code></pre></div>
 <p><em>Comparison of three treatment assignment mechanisms</em> <img src="treat_and_exposure_files/figure-html/unnamed-chunk-6-1.png" width="384"></p>
 </div>
 <div id="observed-treatment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#observed-treatment" class="anchor"></a>Observed treatment</h3>
 <p>If exposure or treatment is observed (rather than randomly assigned), use <code>trtObserved</code> to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">formula1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"-2 + 2*male - .5*over65"</span>, <span class="st">"-1 + 2*male + .5*over65"</span><span class="op">)</span>
-<span class="va">dtExp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula1</span>, logit.link <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">formula1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"-2 + 2*male - .5*over65"</span>, <span class="st">"-1 + 2*male + .5*over65"</span><span class="op">)</span>
+<span class="va">dtExp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula1</span>, logit.link <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></code></pre></div>
 <p>Here are the exposure distributions by gender and age:</p>
 <p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-8-1.png" width="624"></p>
 <p>Here is a second case of three exposures where the exposure is independent of any covariates. Note that specifying the formula as <code><a href="https://rdrr.io/r/base/c.html">c(.35, .45)</a></code> is the same as specifying it is <code><a href="https://rdrr.io/r/base/c.html">c(.35, .45, .20)</a></code>. Also, when referring to probabilities, the identity link is used:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">formula2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.45</span><span class="op">)</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">formula2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.45</span><span class="op">)</span>
 
-<span class="va">dtExp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula2</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></pre></div>
+<span class="va">dtExp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula2</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></code></pre></div>
 <p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-10-1.png" width="624"></p>
 </div>
 <div id="stepped-wedge-design" class="section level3">
@@ -186,8 +186,8 @@
 <p><span class="math display">\[Y_{ict} = \beta_0 + b_c + \beta_1 * t + \beta_2*X_{ct} + e_{ict}\]</span></p>
 <p>where <span class="math inline">\(Y_{ict}\)</span> is the outcome for individual <span class="math inline">\(i\)</span> in cluster <span class="math inline">\(c\)</span> in time period <span class="math inline">\(t\)</span>, <span class="math inline">\(b_c\)</span> is a cluster-specific effect, <span class="math inline">\(X_{ct}\)</span> is the intervention indicator that has a value 1 during periods where the cluster is under the intervention, and <span class="math inline">\(e_{ict}\)</span> is the individual-level effect. Both <span class="math inline">\(b_c\)</span> and <span class="math inline">\(e_{ict}\)</span> are normally distributed with mean 0 and variances <span class="math inline">\(\sigma^2_{b}\)</span> and <span class="math inline">\(\sigma^2_{e}\)</span>, respectively. <span class="math inline">\(\beta_1\)</span> is the time trend, and <span class="math inline">\(\beta_2\)</span> is the intervention effect.</p>
 <p>We need to define the cluster-level variables (i.e. the cluster effect and the cluster size) as well as the individual specific outcome. In this case each cluster will have 15 individuals per period, and <span class="math inline">\(\sigma^2_b = 0.20\)</span>. In addition, <span class="math inline">\(\sigma^2_e = 1.75\)</span>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy">simstudy</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy">simstudy</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">defc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"ceffect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">0.20</span>, 
@@ -196,13 +196,13 @@
 
 <span class="va">defa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Y"</span>, 
                    formula <span class="op">=</span> <span class="st">"0 + ceffect + 0.1*period + trt*1.5"</span>, 
-                   variance <span class="op">=</span> <span class="fl">1.75</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></pre></div>
+                   variance <span class="op">=</span> <span class="fl">1.75</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></code></pre></div>
 <p>In this case, there will be 30 clusters and 24 time periods. With 15 individuals per cluster per period, there will be 360 observations for each cluster, and 10,800 in total. (There is no reason the cluster sizes need to be deterministic, but I just did that to simplify things a bit.)</p>
 <p>Cluster-level intervention assignment is done after generating the cluster-level and time-period data. The call to <code>trtStepWedge</code> includes 3 key arguments that specify the number of waves, the length of each wave, and the period during which the first clusters begin the intervention.</p>
 <p><code>nWaves</code> indicates how many clusters share the same starting period for the intervention. In this case, we have 5 waves, with 6 clusters each. <code>startPer</code> is the first period of the first wave. The earliest starting period is 0, the first period. Here, the first wave starts the intervention during period 4. <code>lenWaves</code> indicates the length between starting points for each wave. Here, a length of 4 means that the starting points will be 4, 8, 12, 16, and 20.</p>
 <p>Once the treatment assignments are made, the individual records are created and the outcome data are generated in the last step.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">608477</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">608477</span><span class="op">)</span>
 
 <span class="va">dc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">30</span>, <span class="va">defc</span><span class="op">)</span>
 <span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">dc</span>, <span class="fl">24</span>, <span class="st">"cluster"</span>, timevarName <span class="op">=</span> <span class="st">"t"</span><span class="op">)</span>
@@ -212,7 +212,7 @@
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCluster.html">genCluster</a></span><span class="op">(</span><span class="va">dp</span>, cLevelVar <span class="op">=</span> <span class="st">"timeID"</span>, <span class="st">"m"</span>, <span class="st">"id"</span><span class="op">)</span>
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">defa</span>, <span class="va">dd</span><span class="op">)</span>
 
-<span class="va">dd</span></pre></div>
+<span class="va">dd</span></code></pre></div>
 <pre><code>##        cluster period     ceffect  m timeID startTrt trt    id          Y
 ##     1:       1      0  0.62775229 15      1        4   0     1  1.5236098
 ##     2:       1      0  0.62775229 15      1        4   0     2  0.9863920
@@ -225,8 +225,8 @@
 ## 10798:      30     23 -0.09828129 15    720       20   1 10798  4.1182178
 ## 10799:      30     23 -0.09828129 15    720       20   1 10799  4.5691583
 ## 10800:      30     23 -0.09828129 15    720       20   1 10800  3.6557608</code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">dSum</span> <span class="op">&lt;-</span> <span class="va">dd</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">cluster</span>, <span class="va">period</span>, <span class="va">trt</span>, <span class="va">startTrt</span><span class="op">)</span><span class="op">]</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dSum</span> <span class="op">&lt;-</span> <span class="va">dd</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">cluster</span>, <span class="va">period</span>, <span class="va">trt</span>, <span class="va">startTrt</span><span class="op">)</span><span class="op">]</span>
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dSum</span>, 
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">Y</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html">interaction</a></span><span class="op">(</span><span class="va">cluster</span>, <span class="va">trt</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -235,7 +235,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">23</span>, by <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"week"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#b8cce4"</span>, <span class="st">"#4e81ba"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>panel.grid <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
-        legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> </pre></div>
+        legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> </code></pre></div>
 <p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
   </div>
