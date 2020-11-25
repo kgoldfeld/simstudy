@@ -11,7 +11,7 @@
 \alias{categorical}
 \alias{gamma}
 \alias{beta}
-\alias{negBinomia}
+\alias{negBinomial}
 \alias{nonrandom}
 \alias{exponential}
 \alias{mixture}
