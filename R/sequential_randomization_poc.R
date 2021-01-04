@@ -93,11 +93,11 @@ dm <- sim.melt(dd, c("y", "x"))
 setkey(dm, "id")
 dm
 
-ggplot(data = dm, aes(x = period, y = y, group = id)) +
-  geom_line()
-
-ggplot(data = dm, aes(x = period, y = x, group = id)) +
-  geom_line()
+# ggplot(data = dm, aes(x = period, y = y, group = id)) +
+#   geom_line()
+# 
+# ggplot(data = dm, aes(x = period, y = x, group = id)) +
+#   geom_line()
 
 #--- Example 2 - Marginal Structural Model
 
