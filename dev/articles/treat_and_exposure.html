@@ -40,7 +40,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +93,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -107,8 +107,7 @@
 
       
 
-      </header><script src="treat_and_exposure_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="treat_and_exposure_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="treat_and_exposure_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="treat_and_exposure_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Treatment and Exposure</h1>
@@ -143,17 +142,17 @@
 
 <span class="va">study1</span></code></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    1      1 72.62072     1
-##   2:   2    1      1 54.92601     3
-##   3:   3    1      1 62.47288     3
-##   4:   4    1      0 69.53652     1
-##   5:   5    1      0 72.80714     3
+##   1:   1    0      0 73.44024     2
+##   2:   2    0      0 63.18828     1
+##   3:   3    0      1 68.02104     3
+##   4:   4    1      1 69.52210     1
+##   5:   5    1      0 71.17652     2
 ##  ---                               
-## 326: 326    1      0 66.35211     3
-## 327: 327    0      0 65.66094     1
-## 328: 328    1      1 78.69355     1
-## 329: 329    1      0 63.62601     2
-## 330: 330    1      0 66.68337     3</code></pre>
+## 326: 326    0      0 46.02740     3
+## 327: 327    0      0 63.87897     1
+## 328: 328    0      1 76.05768     2
+## 329: 329    0      0 69.83348     2
+## 330: 330    0      0 70.53913     1</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></code></pre></div>
@@ -188,7 +187,7 @@
 <p>We need to define the cluster-level variables (i.e. the cluster effect and the cluster size) as well as the individual specific outcome. In this case each cluster will have 15 individuals per period, and <span class="math inline">\(\sigma^2_b = 0.20\)</span>. In addition, <span class="math inline">\(\sigma^2_e = 1.75\)</span>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy">simstudy</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">defc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"ceffect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">0.20</span>, 
                 dist <span class="op">=</span> <span class="st">"normal"</span>, id <span class="op">=</span> <span class="st">"cluster"</span><span class="op">)</span>
