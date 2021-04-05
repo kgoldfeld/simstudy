@@ -13,8 +13,9 @@ genData(n, dtDefs = NULL, id = "id", envir = parent.frame())
 are provided
 a data set with ids only is generated.}
 
-\item{id}{The string defining the id of the record. Only valid if no \code{dtDefs}
-is supplied or \code{id} matches the id name of the definition.}
+\item{id}{The string defining the id of the record. Will override previously
+set id name with a warning (unless the old value is 'id'). If the
+id attribute in dtDefs is NULL will default to 'id'.}
 
 \item{envir}{Environment the data definitions are evaluated in.
 Defaults to \link[base:sys.parent]{base::parent.frame}.}

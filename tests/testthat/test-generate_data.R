@@ -1,15 +1,24 @@
 # genData ----
 test_that("data is generated as expected", {
   n <- 20
-  def <- defData(varname = "test", formula = .3, dist = "nonrandom")
+  
+  null_def <- defData(varname = "test", formula = .3, dist = "nonrandom", id = NULL)
+  def <- defData(varname = "test", formula = .3, dist = "nonrandom", id = "some_id")
   def <- defData(def, varname = "test2", formula = .7, dist = "nonrandom")
   def2 <- defData(def, varname = "cat", formula = "test2;.4", dist = "categorical")
   def3 <- defData(def, varname = "cat", formula = "test2;.2", dist = "categorical")
   def <- defData(def, varname = "cat", formula = "test;test2", dist = "categorical")
 
   expect_silent(genData(n, def))
+  expect_silent(genData(n, null_def))
+
   expect_warning(genData(n, def, "not-id"), class = "simstudy::valueWarning")
-  expect_silent(genData(n, def, "id"))
+  expect_equal({
+    data <- suppressWarnings(genData(n, def, "not-id"))
+    names(data)[1]
+  }, "not-id")
+  expect_silent(genData(n, def, "some_id"))
+
   expect_warning(genData(n, def2), "will be normalized")
   expect_warning(genData(n, def3), "Adding category")
   # TODO expand test with hedgehog

@@ -4,8 +4,9 @@
 #' @param dtDefs name of definitions data.table/data.frame. If no definitions
 #'  are provided
 #' a data set with ids only is generated.
-#' @param id The string defining the id of the record. Only valid if no `dtDefs`
-#' is supplied or `id` matches the id name of the definition.
+#' @param id The string defining the id of the record. Will override previously
+#'  set id name with a warning (unless the old value is 'id'). If the 
+#' id attribute in dtDefs is NULL will default to 'id'.
 #' @param envir Environment the data definitions are evaluated in.
 #'  Defaults to [base::parent.frame].
 #' @return A data.table that contains the simulated data.
@@ -60,21 +61,24 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
   } else { # existing definitions
     assertClass(dtDefs = dtDefs, class = "data.table")
 
-    if (id != attr(dtDefs, "id") && !missing(id)) {
-      valueWarning(
-        names = id,
-        msg = list(
-          "The 'id' parameter is not valid when previously defined ",
-          "in call to 'defData'. ",
-          "The current specification '{names}' is ignored."
+    oldId <- attr(dtDefs, "id")
+    if (!is.null(oldId) && id != oldId && !missing(id)) {
+      if (oldId != "id") {
+        valueWarning(
+          var = oldId,
+          names = id,
+          msg = list(
+            "Previously defined 'id'-column found: '{var}'. ",
+            "The current specification '{names}' will override it."
+          )
         )
-      )
+      }
+    } else {
+      id <- oldId %||% id
     }
 
-    idname <- attr(dtDefs, "id")
-
     dfSimulate <- data.frame(c(1:n)) # initialize simulated data with ids
-    names(dfSimulate) <- attr(dtDefs, "id") # name first column attribute "id"
+    names(dfSimulate) <- id # name first column attribute "id"
     iter <- nrow(dtDefs) # generate a column of data for each row of dtDefs
 
     for (i in (1:iter)) {
@@ -82,13 +86,13 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
         args = dtDefs[i, ],
         n = n,
         dfSim = dfSimulate,
-        idname = idname,
+        idname = id,
         envir = envir
       )
     }
 
     dt <- data.table::data.table(dfSimulate)
-    data.table::setkeyv(dt, idname)
+    data.table::setkeyv(dt, id)
   }
 
   return(dt[])
