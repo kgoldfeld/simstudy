@@ -1,6 +1,8 @@
 # genData ----
 test_that("data is generated as expected", {
   n <- 20
+  
+  null_def <- defData(varname = "test", formula = .3, dist = "nonrandom", id = NULL)
   def <- defData(varname = "test", formula = .3, dist = "nonrandom", id = "some_id")
   def <- defData(def, varname = "test2", formula = .7, dist = "nonrandom")
   def2 <- defData(def, varname = "cat", formula = "test2;.4", dist = "categorical")
@@ -8,6 +10,7 @@ test_that("data is generated as expected", {
   def <- defData(def, varname = "cat", formula = "test;test2", dist = "categorical")
 
   expect_silent(genData(n, def))
+  expect_silent(genData(n, null_def))
 
   expect_warning(genData(n, def, "not-id"), class = "simstudy::valueWarning")
   expect_equal({

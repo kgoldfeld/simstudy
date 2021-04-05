@@ -4,8 +4,9 @@
 #' @param dtDefs name of definitions data.table/data.frame. If no definitions
 #'  are provided
 #' a data set with ids only is generated.
-#' @param id The string defining the id of the record.
-#' Will override previously set id name with a warning (unless the old value is 'id').
+#' @param id The string defining the id of the record. Will override previously
+#'  set id name with a warning (unless the old value is 'id'). If the 
+#' id attribute in dtDefs is NULL will default to 'id'.
 #' @param envir Environment the data definitions are evaluated in.
 #'  Defaults to [base::parent.frame].
 #' @return A data.table that contains the simulated data.
@@ -61,7 +62,7 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
     assertClass(dtDefs = dtDefs, class = "data.table")
 
     oldId <- attr(dtDefs, "id")
-    if (id != oldId && !missing(id)) {
+    if (!is.null(oldId) && id != oldId && !missing(id)) {
       if (oldId != "id") {
         valueWarning(
           var = oldId,
