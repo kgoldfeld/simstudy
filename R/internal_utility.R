@@ -388,3 +388,13 @@ zeroPadInts <- function(ints, width = max(nchar(ints))) {
   glueFormat <- glue("[i:0{s}d]", s = width)
   glueFmt(glueFormat, i = ints, .open = "[", .close = "]")
 }
+
+#' if x is.null y "%||%"
+#'
+#' @return x unless thats NULL then y
+#' @noRd
+`%||%` <- function(x, y) {
+    if (is.null(x))
+        y
+    else x
+}
