@@ -74,7 +74,7 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
         )
       }
     } else {
-      id <- oldId %||% "id"
+      id <- oldId %||% id
     }
 
     dfSimulate <- data.frame(c(1:n)) # initialize simulated data with ids
