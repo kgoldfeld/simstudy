@@ -176,8 +176,9 @@ a data set with ids only is generated.</p></td>
     </tr>
     <tr>
       <th>id</th>
-      <td><p>The string defining the id of the record. Only valid if no <code>dtDefs</code>
-is supplied or <code>id</code> matches the id name of the definition.</p></td>
+      <td><p>The string defining the id of the record. Will override previously
+set id name with a warning (unless the old value is 'id'). If the
+id attribute in dtDefs is NULL will default to 'id'.</p></td>
     </tr>
     <tr>
       <th>envir</th>

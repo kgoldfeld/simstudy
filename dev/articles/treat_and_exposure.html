@@ -142,17 +142,17 @@
 
 <span class="va">study1</span></code></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    0      0 73.44024     2
-##   2:   2    0      0 63.18828     1
-##   3:   3    0      1 68.02104     3
-##   4:   4    1      1 69.52210     1
-##   5:   5    1      0 71.17652     2
+##   1:   1    1      0 70.66692     3
+##   2:   2    1      1 70.22707     2
+##   3:   3    1      1 71.50377     3
+##   4:   4    1      1 75.23517     3
+##   5:   5    1      1 71.49491     3
 ##  ---                               
-## 326: 326    0      0 46.02740     3
-## 327: 327    0      0 63.87897     1
-## 328: 328    0      1 76.05768     2
-## 329: 329    0      0 69.83348     2
-## 330: 330    0      0 70.53913     1</code></pre>
+## 326: 326    0      0 69.55353     3
+## 327: 327    1      0 59.71529     1
+## 328: 328    1      1 74.68070     1
+## 329: 329    1      0 69.68860     3
+## 330: 330    0      1 76.16199     2</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></code></pre></div>
