@@ -4,7 +4,7 @@
 #' @param dtDefs name of definitions data.table/data.frame. If no definitions
 #'  are provided
 #' a data set with ids only is generated.
-#' @param id The string defining the id of the record. 
+#' @param id The string defining the id of the record.
 #' Will override previously set id name with a warning (unless the old value is 'id').
 #' @param envir Environment the data definitions are evaluated in.
 #'  Defaults to [base::parent.frame].
@@ -61,21 +61,23 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
     assertClass(dtDefs = dtDefs, class = "data.table")
 
     oldId <- attr(dtDefs, "id")
-    if (id != oldId && !missing(id) && oldId != "id") {
-      valueWarning(
-        var = oldId,
-        names = id,
-        msg = list(
-          "Previously defined 'id'-column found: '{var}'. ",
-          "The current specification '{names}' will override it."
+    if (id != oldId && !missing(id)) {
+      if (oldId != "id") {
+        valueWarning(
+          var = oldId,
+          names = id,
+          msg = list(
+            "Previously defined 'id'-column found: '{var}'. ",
+            "The current specification '{names}' will override it."
+          )
         )
-      )
+      }
+    } else {
+      id <- oldId %||% "id"
     }
 
-    idname <- attr(dtDefs, "id")
-
     dfSimulate <- data.frame(c(1:n)) # initialize simulated data with ids
-    names(dfSimulate) <- attr(dtDefs, "id") # name first column attribute "id"
+    names(dfSimulate) <- id # name first column attribute "id"
     iter <- nrow(dtDefs) # generate a column of data for each row of dtDefs
 
     for (i in (1:iter)) {
@@ -83,13 +85,13 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
         args = dtDefs[i, ],
         n = n,
         dfSim = dfSimulate,
-        idname = idname,
+        idname = id,
         envir = envir
       )
     }
 
     dt <- data.table::data.table(dfSimulate)
-    data.table::setkeyv(dt, idname)
+    data.table::setkeyv(dt, id)
   }
 
   return(dt[])
