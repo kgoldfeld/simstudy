@@ -681,7 +681,7 @@ genOrdCat <- function(dtName,
 }
 
 #' @title Generate ordinal categorical data without proportionality assumption
-#' @description Ordinal categorical data without the proportionality assumption is 
+#' @description Ordinal categorical data without the proportionality assumption is
 #' added to an existing data set.
 #' @param dtName Name of complete data set
 #' @param adjVar Adjustment variable  name in dtName - determines
@@ -694,7 +694,7 @@ genOrdCat <- function(dtName,
 #' categorical variables. The number of columns represents the number of
 #' possible responses - if an particular category has fewer possible responses,
 #' assign zero probability to non-relevant columns.
-#' @param npVar Name(s) of field(s) that break the non-proportionality assumption. 
+#' @param npVar Name(s) of field(s) that break the non-proportionality assumption.
 #' A string or vector of strings.
 #' @param npAdj Vector or matrix of adjustments. Length of vector or number of
 #' columns must be the same number of response levels. The last column will be
@@ -722,18 +722,18 @@ genOrdCat <- function(dtName,
 #' @return Original data.table with added categorical field.
 #' @examples
 #' # Ordinal Categorical Data without proportionality assumption ----
-#'
-#'d1 <- defData(varname = "z", formula = 0, variance = .25)
-#'
-#'dd <- genData(10, d1)
-#'dd <- trtAssign(dd, grpName = "rx")
-#'
-#'baseprobs <- c(.4, .3, .2, .1)
-#'npAdj <- c(0, 0.1, 0.3, 0)
-#'
-#'dd <- genOrdCatNP(dtName = dd, adjVar = "z", baseprobs = baseprobs, 
+#' 
+#' d1 <- defData(varname = "z", formula = 0, variance = .25)
+#' 
+#' dd <- genData(10, d1)
+#' dd <- trtAssign(dd, grpName = "rx")
+#' 
+#' baseprobs <- c(.4, .3, .2, .1)
+#' npAdj <- c(0, 0.1, 0.3, 0)
+#' 
+#' dd <- genOrdCatNP(dtName = dd, adjVar = "z", baseprobs = baseprobs,
 #'                  npVar = "rx", npAdj = npAdj)
-#'
+
 #' @export
 #' @md
 #' @concept generate_data
@@ -820,8 +820,8 @@ genOrdCatNP <- function(dtName,
   dcat <- data.table::rbindlist(mycat)
   cats <- data.table::dcast(dcat, id ~ var, value.var = "cat")
   
-  setnames(cats, "id", idname)
-  setkeyv(cats, idname)
+  data.table::setnames(cats, "id", idname)
+  data.table::setkeyv(cats, idname)
   dt <- dt[cats]
   
   if (asFactor) {

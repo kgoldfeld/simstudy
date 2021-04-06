@@ -84,9 +84,8 @@ dd <- trtAssign(dd, grpName = "rx")
 baseprobs <- c(.4, .3, .2, .1)
 npAdj <- c(0, 0.1, 0.3, 0)
 
-dd <- genOrdCatNP(dtName = dd, adjVar = "z", baseprobs = baseprobs, 
+dd <- genOrdCatNP(dtName = dd, adjVar = "z", baseprobs = baseprobs,
                  npVar = "rx", npAdj = npAdj)
-
 }
 \concept{categorical}
 \concept{correlated}
