@@ -721,3 +721,16 @@ viewSplines <- function(knots, degree, theta) {
 
   return(p)
 }
+
+#' arm64 test
+#'
+#' @param x A number
+#' @param y Another number
+#' @return A third number.
+#' @examples
+#' arm64test(7, 1)
+#' @export
+#' @concept utility
+arm64test <- function(x, y) {
+  return(x * y)
+}

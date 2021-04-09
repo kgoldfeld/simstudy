@@ -79,3 +79,8 @@ test_that("genMixFormula works.", {
     "..a[[1]] | 0.333333333333333 + ..a[[2]] | 0.333333333333333 + ..a[[3]] | 0.333333333333333"
   )
 })
+
+test_that("arm64test works.", {
+  expect_equal(arm64test(3, 4), 12)
+  expect_equal(arm64test(7, 0), 0)
+})
