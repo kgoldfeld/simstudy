@@ -42,7 +42,7 @@
 <meta property="og:title" content="Update definition table — updateDef" />
 <meta property="og:description" content="Updates row definition table created by function
 defData or defRead. (For tables created using defDataAdd
-and defReadAdd use updateDefAdd.)" />
+and defReadAdd use updateDefAdd.) Does not modify in-place." />
 
 
 <meta name="robots" content="noindex">
@@ -160,7 +160,7 @@ and defReadAdd use updateDefAdd.)" />
     <div class="ref-description">
     <p>Updates row definition table created by function
 defData or defRead. (For tables created using defDataAdd
-and defReadAdd use updateDefAdd.)</p>
+and defReadAdd use updateDefAdd.) Does not modify in-place.</p>
     </div>
 
     <pre class="usage"><span class='fu'>updateDef</span><span class='op'>(</span>
@@ -202,13 +202,14 @@ and defReadAdd use updateDefAdd.)</p>
     </tr>
     <tr>
       <th>remove</th>
-      <td><p>If set to TRUE, remove definition (defaults to FALSE)</p></td>
+      <td><p>If set to TRUE, remove `changevar`from
+definition (defaults to FALSE).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string that represents the desired formula</p>
+    <p>The updated data definition table.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -249,7 +250,13 @@ and defReadAdd use updateDefAdd.)</p>
 #&gt; 2:       z       4        1 normal identity</div><div class='input'><span class='fu'>updateDef</span><span class='op'>(</span>dtDefs <span class='op'>=</span> <span class='va'>defs</span>, changevar <span class='op'>=</span> <span class='st'>"z"</span>, remove <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    varname formula variance   dist     link
 #&gt; 1:       w       0        3 normal identity
-#&gt; 2:       x   1 + w        1 normal identity</div></pre>
+#&gt; 2:       x   1 + w        1 normal identity</div><div class='input'>
+<span class='co'># No changes to original definition:</span>
+<span class='va'>defs</span>
+</div><div class='output co'>#&gt;    varname formula variance   dist     link
+#&gt; 1:       w       0        3 normal identity
+#&gt; 2:       x   1 + w        1 normal identity
+#&gt; 3:       z       4        1 normal identity</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
