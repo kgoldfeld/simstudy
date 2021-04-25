@@ -407,15 +407,16 @@ trimData <- function(dtOld, seqvar, eventvar, idvar = "id") {
 #' @title Update definition table
 #' @description Updates row definition table created by function
 #' defData or defRead. (For tables created using defDataAdd
-#' and defReadAdd use updateDefAdd.)
+#' and defReadAdd use updateDefAdd.) Does not modify in-place.
 #' @param dtDefs Definition table that will be modified
 #' @param changevar Name of field definition that will be changed
 #' @param newformula New formula definition (defaults to NULL)
 #' @param newvariance New variance specification (defaults to NULL)
 #' @param newdist New distribution definition (defaults to NULL)
 #' @param newlink New link specification (defaults to NULL)
-#' @param remove If set to TRUE, remove definition (defaults to FALSE)
-#' @return A string that represents the desired formula
+#' @param remove If set to TRUE, remove `changevar`from
+#'  definition (defaults to FALSE).
+#' @return The updated data definition table.
 #' @examples
 #'
 #' # Example 1
@@ -439,6 +440,9 @@ trimData <- function(dtOld, seqvar, eventvar, idvar = "id") {
 #'
 #' updateDef(dtDefs = defs, changevar = "x", remove = TRUE)
 #' updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
+#'
+#' # No changes to original definition:
+#' defs
 #' @export
 #' @concept utility
 #' @concept define_data
@@ -466,6 +470,7 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
   # checks completed
 
   xdef <- copy(dtDefs)
+  xdef[] <- lapply(xdef, as.character)
   rowvar <- which(changevar == xdef$varname)
 
   if (!is.null(newformula)) {
