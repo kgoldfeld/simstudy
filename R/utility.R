@@ -440,10 +440,9 @@ trimData <- function(dtOld, seqvar, eventvar, idvar = "id") {
 #'
 #' updateDef(dtDefs = defs, changevar = "x", remove = TRUE)
 #' updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
-#' 
+#'
 #' # No changes to original definition:
 #' defs
-#' 
 #' @export
 #' @concept utility
 #' @concept define_data

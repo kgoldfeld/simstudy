@@ -27,15 +27,16 @@ updateDef(
 
 \item{newlink}{New link specification (defaults to NULL)}
 
-\item{remove}{If set to TRUE, remove definition (defaults to FALSE)}
+\item{remove}{If set to TRUE, remove `changevar`from
+definition (defaults to FALSE).}
 }
 \value{
-A string that represents the desired formula
+The updated data definition table.
 }
 \description{
 Updates row definition table created by function
 defData or defRead. (For tables created using defDataAdd
-and defReadAdd use updateDefAdd.)
+and defReadAdd use updateDefAdd.) Does not modify in-place.
 }
 \examples{
 
@@ -60,6 +61,9 @@ defs
 
 updateDef(dtDefs = defs, changevar = "x", remove = TRUE)
 updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
+
+# No changes to original definition:
+defs
 }
 \concept{define_data}
 \concept{utility}
