@@ -466,6 +466,7 @@ updateDef <- function(dtDefs, changevar, newformula = NULL,
   # checks completed
 
   xdef <- copy(dtDefs)
+  xdef[] <- lapply(xdef, as.character)
   rowvar <- which(changevar == xdef$varname)
 
   if (!is.null(newformula)) {
