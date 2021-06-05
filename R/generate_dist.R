@@ -187,8 +187,9 @@
 # @param formula String that specifies the mean (lambda)
 # @return A data.frame column with the updated simulated data
 
-.getBetaMean <- function(dtSim, formula, link, n = nrow(dtSim)) {
-  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.getBetaMean <- function(dtSim, formula, link, n = nrow(dtSim),
+                         envir = parent.frame()) {
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
   if (link == "logit") {
     mean <- 1 / (1 + exp(-mean))
   }
@@ -198,7 +199,7 @@
 
 # TODO document internal functions
 .genbeta <- function(n, formula, precision, link = "identity", dtSim, envir) {
-  mean <- .getBetaMean(dtSim, formula, link, n)
+  mean <- .getBetaMean(dtSim, formula, link, n, envir)
 
   d <- .evalWith(precision, .parseDotVars(precision, envir), dtSim, n)
 
@@ -374,7 +375,8 @@
 # @param formula String that specifies the mean
 # @return A data.frame column with the updated simulated data
 
-.getNBmean <- function(dtSim, formula, link, n = nrow(dtSim), envir = parent.frame()) {
+.getNBmean <- function(dtSim, formula, link, n = nrow(dtSim),
+                       envir = parent.frame()) {
   mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
