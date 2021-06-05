@@ -143,7 +143,7 @@ gen_arb_fun <-
       formula <- gsub("..", "", formula, fixed = T)
       assign(name, eval(parse(text = paste(
         "function(p)", formula
-      ))), pos = .GlobalEnv)
+      ))), envir = .GlobalEnv)
       paste0(name, "(%s)")
     }, gen_formula("p"))
   })

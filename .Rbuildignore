@@ -20,3 +20,4 @@
 ^simstudy\.code-workspace$
 ^codemeta\.json$
 ^paper$
+^bench$
