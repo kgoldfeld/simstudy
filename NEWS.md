@@ -4,7 +4,7 @@
 * genData now handles NULL as 'id' value in data definitions (e.g. when definitions are not created via defData etc.) by defaulting to 'id'.
 * Fix an error in genOrdCat when only a single adjustment variable is given but
   more than one new category will be created.
-  
+* Fix a bug where ..variables did not work within a function using the `dist="beta"`  
 # simstudy 0.2.2
 * Improve documentation and vignettes.
 
