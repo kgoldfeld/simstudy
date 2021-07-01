@@ -42,6 +42,7 @@
     categorical = .gencat(
       n = n,
       formula = args$formula,
+      variance = args$variance,
       link = args$link,
       dfSim = dfSim,
       envir = envir
@@ -254,9 +255,11 @@
 # @param envir Environment the data definitions are evaluated in.
 #  Defaults to [base::parent.frame].
 # @return A data.frame column with the updated simulated data
-.gencat <- function(n, formula, link, dfSim, envir) {
+.gencat <- function(n, formula, variance, link, dfSim, envir) {
   formulas <- .splitFormula(formula)
 
+  
+  
   if (length(formulas) < 2) {
     stop(paste0(
       "The formula for 'categorical' must contain atleast",
@@ -276,7 +279,16 @@
 
   parsedProbs <- cbind(parsedProbs, 1 - rowSums(parsedProbs))
 
-  .Call(`_simstudy_matMultinom`, parsedProbs, PACKAGE = "simstudy")
+  c <- .Call(`_simstudy_matMultinom`, parsedProbs, PACKAGE = "simstudy")
+
+  if (variance != 0 && !is.null(variance)) {
+    variance <- .splitFormula(variance)
+    assertLength(variance = variance, length = length(formulas))
+    c <- variance[c]
+  }
+
+  c
+
 }
 
 # Internal function called by .generate - returns non-random data
