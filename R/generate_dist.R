@@ -258,8 +258,6 @@
 .gencat <- function(n, formula, variance, link, dfSim, envir) {
   formulas <- .splitFormula(formula)
 
-  
-  
   if (length(formulas) < 2) {
     stop(paste0(
       "The formula for 'categorical' must contain atleast",
@@ -284,13 +282,20 @@
   if (variance != 0 && !is.null(variance)) {
     variance <- .splitFormula(variance)
     assertLength(variance = variance, length = length(formulas))
+
+    numVariance <- suppressWarnings(as.numeric(variance))
+    nonNA <- all(!is.na(numVariance))
+
+    if (nonNA) {
+      variance <- numVariance
+    }
+
     c <- variance[c]
   }
 
   c
-
 }
-
+assertNotMissing()
 # Internal function called by .generate - returns non-random data
 #
 # @param n The number of observations required in the data set
