@@ -251,6 +251,9 @@
 #
 # @param n The number of observations required in the data set
 # @param formula String that specifies the probabilities, each separated by ";"
+# @param variance String that specifies the categorical values, each separated
+#   by ",". If all the values are numeric, the class of the generated vector
+#   will be numeric.
 # @param dfSim Incomplete simulated data set
 # @param idkey Key of incomplete data set
 # @param envir Environment the data definitions are evaluated in.
