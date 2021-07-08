@@ -42,6 +42,7 @@
     categorical = .gencat(
       n = n,
       formula = args$formula,
+      variance = args$variance,
       link = args$link,
       dfSim = dfSim,
       envir = envir
@@ -250,12 +251,15 @@
 #
 # @param n The number of observations required in the data set
 # @param formula String that specifies the probabilities, each separated by ";"
+# @param variance String that specifies the categorical values, each separated
+#   by ",". If all the values are numeric, the class of the generated vector
+#   will be numeric.
 # @param dfSim Incomplete simulated data set
 # @param idkey Key of incomplete data set
 # @param envir Environment the data definitions are evaluated in.
 #  Defaults to [base::parent.frame].
 # @return A data.frame column with the updated simulated data
-.gencat <- function(n, formula, link, dfSim, envir) {
+.gencat <- function(n, formula, variance, link, dfSim, envir) {
   formulas <- .splitFormula(formula)
 
   if (length(formulas) < 2) {
@@ -277,9 +281,25 @@
 
   parsedProbs <- cbind(parsedProbs, 1 - rowSums(parsedProbs))
 
-  .Call(`_simstudy_matMultinom`, parsedProbs, PACKAGE = "simstudy")
-}
+  c <- .Call(`_simstudy_matMultinom`, parsedProbs, PACKAGE = "simstudy")
 
+  if (variance != 0 && !is.null(variance)) {
+    variance <- .splitFormula(variance)
+    assertLength(variance = variance, length = length(formulas))
+
+    numVariance <- suppressWarnings(as.numeric(variance))
+    nonNA <- all(!is.na(numVariance))
+
+    if (nonNA) {
+      variance <- numVariance
+    }
+
+    c <- variance[c]
+  }
+
+  c
+}
+assertNotMissing()
 # Internal function called by .generate - returns non-random data
 #
 # @param n The number of observations required in the data set
