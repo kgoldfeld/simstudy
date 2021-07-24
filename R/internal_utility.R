@@ -65,16 +65,23 @@
   e <- list2env(extVars)
 
   if (!missing(dtSim) && !is.null(dtSim)) {
-    e <- list2env(dtSim, e)
+    # e <- list2env(dtSim, e)
+
+    e$dtSim <- as.data.table(dtSim)
+    e$def_id <- names(dtSim)[[1]]
   }
 
   if (!is.null(e$formula2parse)) {
     stop("'formula2parse' is a reserved variable name!")
   }
 
-  evalFormula <- function(x) {
-    e$formula2parse <- x
-    res <- with(e, eval(parse(text = formula2parse)))
+  evalFormula <- function(formula) {
+    e$formula2parse <- formula
+
+    res <- with(e, {
+      dtSim[, newVar := eval(parse(text = as.character(formula2parse))), keyby = def_id]
+      copy(dtSim$newVar)
+    })
 
     if (length(res) == 1) {
       rep(res, n)
@@ -82,8 +89,9 @@
       res
     }
   }
+ 
   parsedValues <- sapply(formula, evalFormula)
-
+  
   # If only a single formula with 1 rep is eval'ed output would be not be
   # matrix, so transpose for uniform output.
   if (!is.matrix(parsedValues)) {
@@ -394,7 +402,9 @@ zeroPadInts <- function(ints, width = max(nchar(ints))) {
 #' @return x unless thats NULL then y
 #' @noRd
 `%||%` <- function(x, y) {
-    if (is.null(x))
-        y
-    else x
+  if (is.null(x)) {
+    y
+  } else {
+    x
+  }
 }
