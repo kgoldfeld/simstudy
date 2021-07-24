@@ -299,7 +299,7 @@
 
   c
 }
-assertNotMissing()
+
 # Internal function called by .generate - returns non-random data
 #
 # @param n The number of observations required in the data set
