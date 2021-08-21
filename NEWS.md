@@ -5,7 +5,9 @@
 * Fix an error in genOrdCat when only a single adjustment variable is given but
   more than one new category will be created.
 * Fixed a bug in updateDef that caused an error when changing a numeric column to character.
-  
+* The 'categorical' distribution now supports the variance parameter to introduce categories other than 1...n
+* Fix a bug where ..variables did not work within a function using the `dist="beta"`  
+
 # simstudy 0.2.2
 * Improve documentation and vignettes.
 

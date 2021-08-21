@@ -32,7 +32,7 @@ NULL
 #' | beta            | mean                   | String or Number                         | dispersion value | identity or logit |
 #' | binary          | probability for 1      | String or Number                         | NA             | identity or logit |
 #' | binomial        | probability of success | String or Number                         | number of trials | identity or logit |
-#' | categorical     | probabilities          | `p_1;p_2;..;p_n`                         | NA             | NA              |
+#' | categorical     | probabilities          | `p_1;p_2;..;p_n`                         | category labels: `a;b;c` , `50;130;20`| identity or logit |
 #' | exponential     | mean (lambda)          | String or Number                         | NA             | identity or log   |
 #' | gamma           | mean                   | String or Number                         | dispersion value | identity or log   |
 #' | mixture         | formula                | `x_1 `\|` p_1 + x_2 `\|` p_2 ... x_n `\|` p_n` | NA             | NA              |
