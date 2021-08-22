@@ -1,0 +1,14 @@
+# https://github.com/styfle/cancel-workflow-action
+name: Cancel
+on:
+  workflow_run:
+    workflows: ["Continuous Benchmarks (Comment)", "Continuous Benchmarks (Receive)"] # list by name as in `name:` of the workflow file
+    types:
+      - requested
+jobs:
+  cancel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: styfle/cancel-workflow-action@0.8.0
+      with:
+        workflow_id: ${{ github.event.workflow.id }}
