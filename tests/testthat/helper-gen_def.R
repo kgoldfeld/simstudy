@@ -1,4 +1,4 @@
-library(hedgehog)
+attach(loadNamespace("hedgehog"))
 # Generators:
 #   This file implements helper functions and generators used in property based
 #   testing using the hedgehog package. Generators do not just return one value
@@ -9,7 +9,7 @@ library(hedgehog)
 
 # General Generators ----
 distributions <- .getDists()
-gen_dist <- gen.no.shrink(gen.element(distributions))
+gen_dist <- hedgehog::gen.no.shrink(hedgehog::gen.element(distributions))
 
 # beta dist variance
 gen_precision <- function(...) {
