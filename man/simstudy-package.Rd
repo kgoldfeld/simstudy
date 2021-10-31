@@ -6,13 +6,7 @@
 \alias{simstudy-package}
 \title{simstudy: Simulation of Study Data}
 \description{
-Simulates data sets in order to explore modeling
-    techniques or better understand data generating processes. The user
-    specifies a set of relationships between covariates, and generates
-    data based on these specifications. The final data sets can represent
-    data from randomized control trials, repeated measure (longitudinal)
-    designs, and cluster randomized trials. Missingness can be generated
-    using various mechanisms (MCAR, MAR, NMAR).
+Simulates data sets in order to explore modeling techniques or better understand data generating processes. The user specifies a set of relationships between covariates, and generates data based on these specifications. The final data sets can represent data from randomized control trials, repeated measure (longitudinal) designs, and cluster randomized trials. Missingness can be generated using various mechanisms (MCAR, MAR, NMAR).
 }
 \seealso{
 Useful links:

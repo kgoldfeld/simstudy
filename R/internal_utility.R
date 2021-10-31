@@ -69,7 +69,7 @@
     e$def_id <- names(dtSim)[[1]]
   }
 
-  if(missing(dtSim) || is.null(dtSim)){
+  if (missing(dtSim) || is.null(dtSim)) {
     e$dtSim <- genData(n)
     e$def_id <- "id"
   }
@@ -82,7 +82,17 @@
     e$formula2parse <- formula
 
     res <- with(e, {
-      dtSim[, newVar := eval(parse(text = as.character(formula2parse))), keyby = def_id]
+      expr <- parse(text = as.character(formula2parse))
+      tryCatch(
+        expr = dtSim[, newVar := eval(expr), keyby = def_id],
+        error = function(err) {
+          if (grepl("RHS length must either be 1", gettext(err), fixed = T)) {
+            dtSim[, newVar := eval(expr)]
+          } else {
+            stop(gettext(err))
+          }
+        }
+      )
       copy(dtSim$newVar)
     })
 
@@ -92,9 +102,9 @@
       res
     }
   }
- 
+
   parsedValues <- sapply(formula, evalFormula)
-  
+
   # If only a single formula with 1 rep is eval'ed output would be not be
   # matrix, so transpose for uniform output.
   if (!is.matrix(parsedValues)) {
@@ -200,8 +210,7 @@
         )), silent = TRUE)
       )
     }
-  }
-  else if (is.numeric(formula)) {
+  } else if (is.numeric(formula)) {
     TRUE
   } else {
     FALSE
