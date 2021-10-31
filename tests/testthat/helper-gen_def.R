@@ -1,4 +1,4 @@
-library(hedgehog)
+library(hedgehog, pos = 3)
 # Generators:
 #   This file implements helper functions and generators used in property based
 #   testing using the hedgehog package. Generators do not just return one value
