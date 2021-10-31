@@ -49,7 +49,7 @@
 #' @noRd
 .evalWith <- function(formula,
                       extVars,
-                      dtSim = data.frame(),
+                      dtSim = data.table(),
                       n = nrow(dtSim)) {
   if (missing(dtSim) && missing(n)) {
     n <- 1
@@ -65,10 +65,13 @@
   e <- list2env(extVars)
 
   if (!missing(dtSim) && !is.null(dtSim)) {
-    # e <- list2env(dtSim, e)
-
     e$dtSim <- as.data.table(dtSim)
     e$def_id <- names(dtSim)[[1]]
+  }
+
+  if(missing(dtSim) || is.null(dtSim)){
+    e$dtSim <- genData(n)
+    e$def_id <- "id"
   }
 
   if (!is.null(e$formula2parse)) {
