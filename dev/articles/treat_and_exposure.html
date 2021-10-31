@@ -142,17 +142,17 @@
 
 <span class="va">study1</span></code></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    0      0 70.06607     1
-##   2:   2    0      0 69.13714     1
-##   3:   3    0      1 60.52218     1
-##   4:   4    1      1 72.60331     1
-##   5:   5    0      0 83.05061     2
+##   1:   1    0      0 68.72774     3
+##   2:   2    0      0 63.75161     2
+##   3:   3    1      0 66.56387     3
+##   4:   4    0      0 67.58971     2
+##   5:   5    0      1 58.92299     3
 ##  ---                               
-## 326: 326    1      0 68.11235     1
-## 327: 327    1      0 72.78578     2
-## 328: 328    0      0 76.67997     3
-## 329: 329    1      0 68.02019     3
-## 330: 330    0      0 70.41157     2</code></pre>
+## 326: 326    1      1 81.43611     3
+## 327: 327    0      0 74.77243     1
+## 328: 328    1      1 74.05269     2
+## 329: 329    1      1 68.61668     2
+## 330: 330    1      0 82.81602     3</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></code></pre></div>
@@ -170,7 +170,7 @@
 <span class="va">dtExp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula1</span>, logit.link <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></code></pre></div>
 <p>Here are the exposure distributions by gender and age:</p>
 <p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-8-1.png" width="624"></p>
-<p>Here is a second case of three exposures where the exposure is independent of any covariates. Note that specifying the formula as <code><a href="https://rdrr.io/r/base/c.html">c(.35, .45)</a></code> is the same as specifying it is <code><a href="https://rdrr.io/r/base/c.html">c(.35, .45, .20)</a></code>. Also, when referring to probabilities, the identity link is used:</p>
+<p>Here is a second case of three exposures where the exposure is independent of any covariates. Note that specifying the formula as <code>c(.35, .45)</code> is the same as specifying it is <code>c(.35, .45, .20)</code>. Also, when referring to probabilities, the identity link is used:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">formula2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.45</span><span class="op">)</span>
 

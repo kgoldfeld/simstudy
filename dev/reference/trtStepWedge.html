@@ -222,51 +222,53 @@ indicates whether the cluster status is in transition status</p></td>
     <div class='dont-index'><p><code><a href='trtObserve.html'>trtObserve</a> <a href='trtAssign.html'>trtAssign</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>defc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>
-  varname <span class='op'>=</span> <span class='st'>"ceffect"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>0.10</span>,
-  dist <span class='op'>=</span> <span class='st'>"normal"</span>, id <span class='op'>=</span> <span class='st'>"cluster"</span>
-<span class='op'>)</span>
-<span class='va'>defc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>defc</span>, <span class='st'>"m"</span>, formula <span class='op'>=</span> <span class='fl'>10</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span><span class='op'>)</span>
-
-<span class='co'># Will generate 3 waves of 4 clusters each - starting 2, 5, and 8</span>
-
-<span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='va'>defc</span><span class='op'>)</span>
-<span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dc</span>, <span class='fl'>12</span>, <span class='st'>"cluster"</span><span class='op'>)</span>
-<span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'>trtStepWedge</span><span class='op'>(</span><span class='va'>dp</span>, <span class='st'>"cluster"</span>,
-  nWaves <span class='op'>=</span> <span class='fl'>3</span>,
-  lenWaves <span class='op'>=</span> <span class='fl'>3</span>, startPer <span class='op'>=</span> <span class='fl'>2</span>
-<span class='op'>)</span>
-<span class='va'>dp</span>
-</div><div class='output co'>#&gt;      cluster period     ceffect  m timeID startTrt rx
-#&gt;   1:       1      0 -0.03387530 10      1        2  0
-#&gt;   2:       1      1 -0.03387530 10      2        2  0
-#&gt;   3:       1      2 -0.03387530 10      3        2  1
-#&gt;   4:       1      3 -0.03387530 10      4        2  1
-#&gt;   5:       1      4 -0.03387530 10      5        2  1
-#&gt;  ---                                                 
-#&gt; 140:      12      7 -0.06267344 10    140        8  0
-#&gt; 141:      12      8 -0.06267344 10    141        8  1
-#&gt; 142:      12      9 -0.06267344 10    142        8  1
-#&gt; 143:      12     10 -0.06267344 10    143        8  1
-#&gt; 144:      12     11 -0.06267344 10    144        8  1</div><div class='input'>
-<span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dc</span>, <span class='fl'>12</span>, <span class='st'>"cluster"</span><span class='op'>)</span>
-<span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'>trtStepWedge</span><span class='op'>(</span><span class='va'>dp</span>, <span class='st'>"cluster"</span>,
-  nWaves <span class='op'>=</span> <span class='fl'>2</span>,
-  lenWaves <span class='op'>=</span> <span class='fl'>1</span>, startPer <span class='op'>=</span> <span class='fl'>4</span>, lag <span class='op'>=</span> <span class='fl'>3</span>
-<span class='op'>)</span>
-<span class='va'>dp</span>
-</div><div class='output co'>#&gt;      cluster period     ceffect  m timeID startTrt xr rx
-#&gt;   1:       1      0 -0.03387530 10      1        4  0  0
-#&gt;   2:       1      1 -0.03387530 10      2        4  0  0
-#&gt;   3:       1      2 -0.03387530 10      3        4  0  0
-#&gt;   4:       1      3 -0.03387530 10      4        4  0  0
-#&gt;   5:       1      4 -0.03387530 10      5        4  1  0
-#&gt;  ---                                                    
-#&gt; 140:      12      7 -0.06267344 10    140        5  1  0
-#&gt; 141:      12      8 -0.06267344 10    141        5  0  1
-#&gt; 142:      12      9 -0.06267344 10    142        5  0  1
-#&gt; 143:      12     10 -0.06267344 10    143        5  0  1
-#&gt; 144:      12     11 -0.06267344 10    144        5  0  1</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>defc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span></span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"ceffect"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>0.10</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"normal"</span>, id <span class='op'>=</span> <span class='st'>"cluster"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>defc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>defc</span>, <span class='st'>"m"</span>, formula <span class='op'>=</span> <span class='fl'>10</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Will generate 3 waves of 4 clusters each - starting 2, 5, and 8</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='va'>defc</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dc</span>, <span class='fl'>12</span>, <span class='st'>"cluster"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'>trtStepWedge</span><span class='op'>(</span><span class='va'>dp</span>, <span class='st'>"cluster"</span>,</span>
+<span class='r-in'>  nWaves <span class='op'>=</span> <span class='fl'>3</span>,</span>
+<span class='r-in'>  lenWaves <span class='op'>=</span> <span class='fl'>3</span>, startPer <span class='op'>=</span> <span class='fl'>2</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dp</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      cluster period     ceffect  m timeID startTrt rx</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:       1      0 -0.03387530 10      1        2  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:       1      1 -0.03387530 10      2        2  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:       1      2 -0.03387530 10      3        2  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:       1      3 -0.03387530 10      4        2  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:       1      4 -0.03387530 10      5        2  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 140:      12      7 -0.06267344 10    140        8  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 141:      12      8 -0.06267344 10    141        8  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 142:      12      9 -0.06267344 10    142        8  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 143:      12     10 -0.06267344 10    143        8  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 144:      12     11 -0.06267344 10    144        8  1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dc</span>, <span class='fl'>12</span>, <span class='st'>"cluster"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'>trtStepWedge</span><span class='op'>(</span><span class='va'>dp</span>, <span class='st'>"cluster"</span>,</span>
+<span class='r-in'>  nWaves <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span class='r-in'>  lenWaves <span class='op'>=</span> <span class='fl'>1</span>, startPer <span class='op'>=</span> <span class='fl'>4</span>, lag <span class='op'>=</span> <span class='fl'>3</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dp</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      cluster period     ceffect  m timeID startTrt xr rx</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:       1      0 -0.03387530 10      1        4  0  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:       1      1 -0.03387530 10      2        4  0  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:       1      2 -0.03387530 10      3        4  0  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:       1      3 -0.03387530 10      4        4  0  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:       1      4 -0.03387530 10      5        4  1  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 140:      12      7 -0.06267344 10    140        5  1  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 141:      12      8 -0.06267344 10    141        5  0  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 142:      12      9 -0.06267344 10    142        5  0  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 143:      12     10 -0.06267344 10    143        5  0  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 144:      12     11 -0.06267344 10    144        5  0  1</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

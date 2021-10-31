@@ -216,17 +216,19 @@ part of the new distribution <code>x_1,...,X_n</code> is assigned a probability
 <a href='https://www.rdatagen.net/post/adding-mixture-distributions-to-simstudy/'>rdatagen.net</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>ext_var</span> <span class='op'>&lt;-</span> <span class='fl'>2.9</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"external"</span>, formula <span class='op'>=</span> <span class='st'>"3 + log(..ext_var)"</span>, variance <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span>
-<span class='va'>def</span>
-</div><div class='output co'>#&gt;     varname            formula variance   dist     link
-#&gt; 1: external 3 + log(..ext_var)      0.5 normal identity</div><div class='input'><span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='va'>def</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    id external
-#&gt; 1:  1 4.864108
-#&gt; 2:  2 3.665887
-#&gt; 3:  3 5.448120
-#&gt; 4:  4 3.531613
-#&gt; 5:  5 5.689579</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>ext_var</span> <span class='op'>&lt;-</span> <span class='fl'>2.9</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"external"</span>, formula <span class='op'>=</span> <span class='st'>"3 + log(..ext_var)"</span>, variance <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     varname            formula variance   dist     link</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: external 3 + log(..ext_var)      0.5 normal identity</span>
+<span class='r-in'><span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='va'>def</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    id external</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  1 4.864108</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  2 3.665887</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:  3 5.448120</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  4 3.531613</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:  5 5.689579</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -216,105 +216,107 @@ Defaults to <a href='https://rdrr.io/r/base/sys.parent.html'>base::parent.frame<
     <p>data.table with added column(s) of correlated data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>
-  varname <span class='op'>=</span> <span class='st'>"nInds"</span>, formula <span class='op'>=</span> <span class='fl'>50</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span>,
-  id <span class='op'>=</span> <span class='st'>"idClust"</span>
-<span class='op'>)</span>
-
-<span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>defC</span><span class='op'>)</span>
-<span class='co'>#### Normal only</span>
-
-<span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCorData.html'>addCorData</a></span><span class='op'>(</span><span class='va'>dc</span>,
-  mu <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, sigma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>, rho <span class='op'>=</span> <span class='fl'>.2</span>,
-  corstr <span class='op'>=</span> <span class='st'>"cs"</span>, cnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span><span class='op'>)</span>,
-  idname <span class='op'>=</span> <span class='st'>"idClust"</span>
-<span class='op'>)</span>
-
-<span class='va'>di</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genCluster.html'>genCluster</a></span><span class='op'>(</span><span class='va'>dc</span>, <span class='st'>"idClust"</span>, <span class='st'>"nInds"</span>, <span class='st'>"id"</span><span class='op'>)</span>
-
-<span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span>
-  varname <span class='op'>=</span> <span class='st'>"A"</span>, formula <span class='op'>=</span> <span class='st'>"-1 + a"</span>, variance <span class='op'>=</span> <span class='fl'>3</span>,
-  dist <span class='op'>=</span> <span class='st'>"normal"</span>
-<span class='op'>)</span>
-<span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,
-  varname <span class='op'>=</span> <span class='st'>"B"</span>, formula <span class='op'>=</span> <span class='st'>"4.5 + b"</span>, variance <span class='op'>=</span> <span class='fl'>.5</span>,
-  dist <span class='op'>=</span> <span class='st'>"normal"</span>
-<span class='op'>)</span>
-<span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,
-  varname <span class='op'>=</span> <span class='st'>"C"</span>, formula <span class='op'>=</span> <span class='st'>"5*c"</span>, variance <span class='op'>=</span> <span class='fl'>3</span>,
-  dist <span class='op'>=</span> <span class='st'>"normal"</span>
-<span class='op'>)</span>
-<span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,
-  varname <span class='op'>=</span> <span class='st'>"D"</span>, formula <span class='op'>=</span> <span class='st'>"1.6 + d"</span>, variance <span class='op'>=</span> <span class='fl'>1</span>,
-  dist <span class='op'>=</span> <span class='st'>"normal"</span>
-<span class='op'>)</span>
-
-<span class='co'>#### Generate new data</span>
-
-<span class='va'>di</span> <span class='op'>&lt;-</span> <span class='fu'>addCorFlex</span><span class='op'>(</span><span class='va'>di</span>, <span class='va'>defI</span>, rho <span class='op'>=</span> <span class='fl'>0.4</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
-
-<span class='co'># Check correlations by cluster</span>
-
-<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>dc</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>di</span><span class='op'>[</span><span class='va'>idClust</span> <span class='op'>==</span> <span class='va'>i</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span>, <span class='va'>C</span>, <span class='va'>D</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.3062024 0.4470299 0.3869610
-#&gt; B 0.3062024 1.0000000 0.3060284 0.4224323
-#&gt; C 0.4470299 0.3060284 1.0000000 0.6152698
-#&gt; D 0.3869610 0.4224323 0.6152698 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.4502677 0.4758974 0.2090688
-#&gt; B 0.4502677 1.0000000 0.6720441 0.3670891
-#&gt; C 0.4758974 0.6720441 1.0000000 0.3709190
-#&gt; D 0.2090688 0.3670891 0.3709190 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.3151178 0.2666300 0.2319625
-#&gt; B 0.3151178 1.0000000 0.3670170 0.3673458
-#&gt; C 0.2666300 0.3670170 1.0000000 0.3757361
-#&gt; D 0.2319625 0.3673458 0.3757361 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.4702654 0.4228648 0.4269063
-#&gt; B 0.4702654 1.0000000 0.6511097 0.4654823
-#&gt; C 0.4228648 0.6511097 1.0000000 0.5140927
-#&gt; D 0.4269063 0.4654823 0.5140927 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.3025460 0.3653579 0.2985908
-#&gt; B 0.3025460 1.0000000 0.3719276 0.2709871
-#&gt; C 0.3653579 0.3719276 1.0000000 0.4309840
-#&gt; D 0.2985908 0.2709871 0.4309840 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.4164247 0.3527294 0.1922481
-#&gt; B 0.4164247 1.0000000 0.5163798 0.4001157
-#&gt; C 0.3527294 0.5163798 1.0000000 0.3981343
-#&gt; D 0.1922481 0.4001157 0.3981343 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.5267601 0.4256210 0.4790293
-#&gt; B 0.5267601 1.0000000 0.4849352 0.4944706
-#&gt; C 0.4256210 0.4849352 1.0000000 0.3851054
-#&gt; D 0.4790293 0.4944706 0.3851054 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.2726211 0.2500102 0.3504211
-#&gt; B 0.2726211 1.0000000 0.3343043 0.3675255
-#&gt; C 0.2500102 0.3343043 1.0000000 0.4198390
-#&gt; D 0.3504211 0.3675255 0.4198390 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.3400145 0.2629416 0.3527861
-#&gt; B 0.3400145 1.0000000 0.4845887 0.3238015
-#&gt; C 0.2629416 0.4845887 1.0000000 0.4974922
-#&gt; D 0.3527861 0.3238015 0.4974922 1.0000000
-#&gt;           A         B         C         D
-#&gt; A 1.0000000 0.3139947 0.5068051 0.4542754
-#&gt; B 0.3139947 1.0000000 0.5209270 0.3794740
-#&gt; C 0.5068051 0.5209270 1.0000000 0.4710229
-#&gt; D 0.4542754 0.3794740 0.4710229 1.0000000</div><div class='input'>
-<span class='co'># Check global correlations - should not be as correlated</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>di</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span>, <span class='va'>C</span>, <span class='va'>D</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           A          B         C          D
-#&gt; A 1.0000000 0.51793243 0.4445728 0.38325573
-#&gt; B 0.5179324 1.00000000 0.1232242 0.09727062
-#&gt; C 0.4445728 0.12322415 1.0000000 0.70672855
-#&gt; D 0.3832557 0.09727062 0.7067286 1.00000000</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span></span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"nInds"</span>, formula <span class='op'>=</span> <span class='fl'>50</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span>,</span>
+<span class='r-in'>  id <span class='op'>=</span> <span class='st'>"idClust"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>defC</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'>#### Normal only</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCorData.html'>addCorData</a></span><span class='op'>(</span><span class='va'>dc</span>,</span>
+<span class='r-in'>  mu <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, sigma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>, rho <span class='op'>=</span> <span class='fl'>.2</span>,</span>
+<span class='r-in'>  corstr <span class='op'>=</span> <span class='st'>"cs"</span>, cnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  idname <span class='op'>=</span> <span class='st'>"idClust"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>di</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genCluster.html'>genCluster</a></span><span class='op'>(</span><span class='va'>dc</span>, <span class='st'>"idClust"</span>, <span class='st'>"nInds"</span>, <span class='st'>"id"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span></span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"A"</span>, formula <span class='op'>=</span> <span class='st'>"-1 + a"</span>, variance <span class='op'>=</span> <span class='fl'>3</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"normal"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"B"</span>, formula <span class='op'>=</span> <span class='st'>"4.5 + b"</span>, variance <span class='op'>=</span> <span class='fl'>.5</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"normal"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"C"</span>, formula <span class='op'>=</span> <span class='st'>"5*c"</span>, variance <span class='op'>=</span> <span class='fl'>3</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"normal"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>defI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>defI</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"D"</span>, formula <span class='op'>=</span> <span class='st'>"1.6 + d"</span>, variance <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"normal"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#### Generate new data</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>di</span> <span class='op'>&lt;-</span> <span class='fu'>addCorFlex</span><span class='op'>(</span><span class='va'>di</span>, <span class='va'>defI</span>, rho <span class='op'>=</span> <span class='fl'>0.4</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Check correlations by cluster</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>dc</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>di</span><span class='op'>[</span><span class='va'>idClust</span> <span class='op'>==</span> <span class='va'>i</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span>, <span class='va'>C</span>, <span class='va'>D</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.3062024 0.4470299 0.3869610</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.3062024 1.0000000 0.3060284 0.4224323</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.4470299 0.3060284 1.0000000 0.6152698</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.3869610 0.4224323 0.6152698 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.4502677 0.4758974 0.2090688</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.4502677 1.0000000 0.6720441 0.3670891</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.4758974 0.6720441 1.0000000 0.3709190</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.2090688 0.3670891 0.3709190 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.3151178 0.2666300 0.2319625</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.3151178 1.0000000 0.3670170 0.3673458</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.2666300 0.3670170 1.0000000 0.3757361</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.2319625 0.3673458 0.3757361 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.4702654 0.4228648 0.4269063</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.4702654 1.0000000 0.6511097 0.4654823</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.4228648 0.6511097 1.0000000 0.5140927</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.4269063 0.4654823 0.5140927 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.3025460 0.3653579 0.2985908</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.3025460 1.0000000 0.3719276 0.2709871</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.3653579 0.3719276 1.0000000 0.4309840</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.2985908 0.2709871 0.4309840 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.4164247 0.3527294 0.1922481</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.4164247 1.0000000 0.5163798 0.4001157</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.3527294 0.5163798 1.0000000 0.3981343</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.1922481 0.4001157 0.3981343 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.5267601 0.4256210 0.4790293</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.5267601 1.0000000 0.4849352 0.4944706</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.4256210 0.4849352 1.0000000 0.3851054</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.4790293 0.4944706 0.3851054 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.2726211 0.2500102 0.3504211</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.2726211 1.0000000 0.3343043 0.3675255</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.2500102 0.3343043 1.0000000 0.4198390</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.3504211 0.3675255 0.4198390 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.3400145 0.2629416 0.3527861</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.3400145 1.0000000 0.4845887 0.3238015</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.2629416 0.4845887 1.0000000 0.4974922</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.3527861 0.3238015 0.4974922 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A         B         C         D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.3139947 0.5068051 0.4542754</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.3139947 1.0000000 0.5209270 0.3794740</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.5068051 0.5209270 1.0000000 0.4710229</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.4542754 0.3794740 0.4710229 1.0000000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Check global correlations - should not be as correlated</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>di</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span>, <span class='va'>C</span>, <span class='va'>D</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A          B         C          D</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A 1.0000000 0.51793243 0.4445728 0.38325573</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B 0.5179324 1.00000000 0.1232242 0.09727062</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C 0.4445728 0.12322415 1.0000000 0.70672855</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> D 0.3832557 0.09727062 0.7067286 1.00000000</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

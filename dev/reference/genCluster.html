@@ -199,52 +199,55 @@ only includes the Levels 1 and 2 ids.</p></td>
     <p>A simulated data table with level "1" data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>gen.school</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>
-  varname <span class='op'>=</span> <span class='st'>"s0"</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>,
-  formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>3</span>, id <span class='op'>=</span> <span class='st'>"idSchool"</span>
-<span class='op'>)</span>
-<span class='va'>gen.school</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>gen.school</span>,
-  varname <span class='op'>=</span> <span class='st'>"nClasses"</span>,
-  dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span>, formula <span class='op'>=</span> <span class='fl'>3</span>
-<span class='op'>)</span>
-
-<span class='va'>dtSchool</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='va'>gen.school</span><span class='op'>)</span> <span class='co'>#'</span>
-<span class='va'>dtSchool</span>
-</div><div class='output co'>#&gt;    idSchool          s0 nClasses
-#&gt; 1:        1 -2.47606482        3
-#&gt; 2:        2 -0.68211482        3
-#&gt; 3:        3  0.02383165        4</div><div class='input'>
-<span class='va'>dtClass</span> <span class='op'>&lt;-</span> <span class='fu'>genCluster</span><span class='op'>(</span><span class='va'>dtSchool</span>,
-  cLevelVar <span class='op'>=</span> <span class='st'>"idSchool"</span>,
-  numIndsVar <span class='op'>=</span> <span class='st'>"nClasses"</span>, level1ID <span class='op'>=</span> <span class='st'>"idClass"</span>
-<span class='op'>)</span>
-<span class='va'>dtClass</span>
-</div><div class='output co'>#&gt;     idSchool          s0 nClasses idClass
-#&gt;  1:        1 -2.47606482        3       1
-#&gt;  2:        1 -2.47606482        3       2
-#&gt;  3:        1 -2.47606482        3       3
-#&gt;  4:        2 -0.68211482        3       4
-#&gt;  5:        2 -0.68211482        3       5
-#&gt;  6:        2 -0.68211482        3       6
-#&gt;  7:        3  0.02383165        4       7
-#&gt;  8:        3  0.02383165        4       8
-#&gt;  9:        3  0.02383165        4       9
-#&gt; 10:        3  0.02383165        4      10</div><div class='input'>
-<span class='va'>dtClass</span> <span class='op'>&lt;-</span> <span class='fu'>genCluster</span><span class='op'>(</span><span class='va'>dtSchool</span>,
-  cLevelVar <span class='op'>=</span> <span class='st'>"idSchool"</span>,
-  numIndsVar <span class='op'>=</span> <span class='fl'>3</span>, level1ID <span class='op'>=</span> <span class='st'>"idClass"</span>
-<span class='op'>)</span>
-<span class='va'>dtClass</span>
-</div><div class='output co'>#&gt;    idSchool          s0 nClasses idClass
-#&gt; 1:        1 -2.47606482        3       1
-#&gt; 2:        1 -2.47606482        3       2
-#&gt; 3:        1 -2.47606482        3       3
-#&gt; 4:        2 -0.68211482        3       4
-#&gt; 5:        2 -0.68211482        3       5
-#&gt; 6:        2 -0.68211482        3       6
-#&gt; 7:        3  0.02383165        4       7
-#&gt; 8:        3  0.02383165        4       8
-#&gt; 9:        3  0.02383165        4       9</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>gen.school</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span></span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"s0"</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>3</span>, id <span class='op'>=</span> <span class='st'>"idSchool"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gen.school</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>gen.school</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"nClasses"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span>, formula <span class='op'>=</span> <span class='fl'>3</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtSchool</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='va'>gen.school</span><span class='op'>)</span> <span class='co'>#'</span></span>
+<span class='r-in'><span class='va'>dtSchool</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    idSchool          s0 nClasses</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:        1 -2.47606482        3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:        2 -0.68211482        3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:        3  0.02383165        4</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtClass</span> <span class='op'>&lt;-</span> <span class='fu'>genCluster</span><span class='op'>(</span><span class='va'>dtSchool</span>,</span>
+<span class='r-in'>  cLevelVar <span class='op'>=</span> <span class='st'>"idSchool"</span>,</span>
+<span class='r-in'>  numIndsVar <span class='op'>=</span> <span class='st'>"nClasses"</span>, level1ID <span class='op'>=</span> <span class='st'>"idClass"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dtClass</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     idSchool          s0 nClasses idClass</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:        1 -2.47606482        3       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:        1 -2.47606482        3       2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:        1 -2.47606482        3       3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:        2 -0.68211482        3       4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5:        2 -0.68211482        3       5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:        2 -0.68211482        3       6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:        3  0.02383165        4       7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:        3  0.02383165        4       8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:        3  0.02383165        4       9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10:        3  0.02383165        4      10</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtClass</span> <span class='op'>&lt;-</span> <span class='fu'>genCluster</span><span class='op'>(</span><span class='va'>dtSchool</span>,</span>
+<span class='r-in'>  cLevelVar <span class='op'>=</span> <span class='st'>"idSchool"</span>,</span>
+<span class='r-in'>  numIndsVar <span class='op'>=</span> <span class='fl'>3</span>, level1ID <span class='op'>=</span> <span class='st'>"idClass"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dtClass</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    idSchool          s0 nClasses idClass</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:        1 -2.47606482        3       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:        1 -2.47606482        3       2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:        1 -2.47606482        3       3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:        2 -0.68211482        3       4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:        2 -0.68211482        3       5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:        2 -0.68211482        3       6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:        3  0.02383165        4       7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:        3  0.02383165        4       8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9:        3  0.02383165        4       9</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

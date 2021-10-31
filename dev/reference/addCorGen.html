@@ -260,192 +260,195 @@ the repeated measurement for an individual unit. The value defaults to "period".
 Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Wide example</span>
-
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xbase"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.4</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, id <span class='op'>=</span> <span class='st'>"cid"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"lambda"</span>, formula <span class='op'>=</span> <span class='st'>".5 + .1*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='st'>"-2 + .3*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span>
-
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>500</span>, <span class='va'>def</span><span class='op'>)</span>
-
-<span class='va'>dtX1</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
-  dtOld <span class='op'>=</span> <span class='va'>dt</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
-  dist <span class='op'>=</span> <span class='st'>"poisson"</span>, param1 <span class='op'>=</span> <span class='st'>"lambda"</span>
-<span class='op'>)</span>
-
-<span class='va'>dtX2</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
-  dtOld <span class='op'>=</span> <span class='va'>dt</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>4</span>, rho <span class='op'>=</span> <span class='fl'>.4</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,
-  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span>
-<span class='op'>)</span>
-
-<span class='co'># Long example</span>
-
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xbase"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.4</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, id <span class='op'>=</span> <span class='st'>"cid"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, <span class='st'>"nperiods"</span>, formula <span class='op'>=</span> <span class='fl'>3</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span><span class='op'>)</span>
-
-<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span>
-  varname <span class='op'>=</span> <span class='st'>"lambda"</span>, formula <span class='op'>=</span> <span class='st'>".5+.5*period + .1*xbase"</span>,
-  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span>
-<span class='op'>)</span>
-<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
-  varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='st'>"-3+.2*period + .3*xbase"</span>,
-  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span>
-<span class='op'>)</span>
-<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
-  varname <span class='op'>=</span> <span class='st'>"gammaMu"</span>, formula <span class='op'>=</span> <span class='st'>".2*period + .3*xbase"</span>,
-  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span>
-<span class='op'>)</span>
-<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
-  varname <span class='op'>=</span> <span class='st'>"gammaDis"</span>,
-  formula <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
-<span class='op'>)</span>
-<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
-  varname <span class='op'>=</span> <span class='st'>"normMu"</span>,
-  formula <span class='op'>=</span> <span class='st'>"5+period + .5*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
-<span class='op'>)</span>
-<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
-  varname <span class='op'>=</span> <span class='st'>"normVar"</span>, formula <span class='op'>=</span> <span class='fl'>4</span>,
-  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
-<span class='op'>)</span>
-<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
-  varname <span class='op'>=</span> <span class='st'>"unifMin"</span>,
-  formula <span class='op'>=</span> <span class='st'>"5 + 2*period + .2*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
-<span class='op'>)</span>
-<span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,
-  varname <span class='op'>=</span> <span class='st'>"unifMax"</span>,
-  formula <span class='op'>=</span> <span class='st'>"unifMin + 20"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>
-<span class='op'>)</span>
-
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def</span><span class='op'>)</span>
-
-<span class='va'>dtLong</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dt</span>, idvars <span class='op'>=</span> <span class='st'>"cid"</span>, nPeriods <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-<span class='va'>dtLong</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span><span class='op'>(</span><span class='va'>def2</span>, <span class='va'>dtLong</span><span class='op'>)</span>
-
-<span class='co'># Poisson distribution</span>
-
-<span class='va'>dtX3</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
-  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
-  dist <span class='op'>=</span> <span class='st'>"poisson"</span>, param1 <span class='op'>=</span> <span class='st'>"lambda"</span>, cnames <span class='op'>=</span> <span class='st'>"NewPois"</span>
-<span class='op'>)</span>
-<span class='va'>dtX3</span>
-</div><div class='output co'>#&gt;        cid period     xbase nperiods timeID    lambda          p   gammaMu
-#&gt;    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322
-#&gt;    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774
-#&gt;    3:    1      2  2.033135        4      3  5.492116 0.12025058  2.745438
-#&gt;    4:    2      0 12.657813        5      4  5.846138 0.68940602 44.582609
-#&gt;    5:    2      1 12.657813        5      5  9.638652 0.73053603 54.453321
-#&gt;   ---                                                                     
-#&gt; 2996:  999      1  2.023406        2   2996  3.327897 0.10038284  2.241224
-#&gt; 2997:  999      2  2.023406        2   2997  5.486775 0.11994215  2.737437
-#&gt; 2998: 1000      0 10.464250        1   2998  4.694657 0.53476256 23.087121
-#&gt; 2999: 1000      1 10.464250        1   2999  7.740180 0.58401438 28.198673
-#&gt; 3000: 1000      2 10.464250        1   3000 12.761400 0.63164373 34.441937
-#&gt;       gammaDis    normMu normVar   unifMin  unifMax NewPois
-#&gt;    1:        1  6.016568       4  5.406627 25.40663       2
-#&gt;    2:        1  7.016568       4  7.406627 27.40663       4
-#&gt;    3:        1  8.016568       4  9.406627 29.40663       7
-#&gt;    4:        1 11.328906       4  7.531563 27.53156       5
-#&gt;    5:        1 12.328906       4  9.531563 29.53156       8
-#&gt;   ---                                                      
-#&gt; 2996:        1  7.011703       4  7.404681 27.40468       3
-#&gt; 2997:        1  8.011703       4  9.404681 29.40468       3
-#&gt; 2998:        1 10.232125       4  7.092850 27.09285       3
-#&gt; 2999:        1 11.232125       4  9.092850 29.09285       7
-#&gt; 3000:        1 12.232125       4 11.092850 31.09285      11</div><div class='input'>
-<span class='co'># Binomial distribution - copula method</span>
-
-<span class='va'>dtX4</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
-  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
-  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span>, cnames <span class='op'>=</span> <span class='st'>"NewBin"</span>
-<span class='op'>)</span>
-
-<span class='va'>dtX4</span>
-</div><div class='output co'>#&gt;        cid period     xbase nperiods timeID    lambda          p   gammaMu
-#&gt;    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322
-#&gt;    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774
-#&gt;    3:    1      2  2.033135        4      3  5.492116 0.12025058  2.745438
-#&gt;    4:    2      0 12.657813        5      4  5.846138 0.68940602 44.582609
-#&gt;    5:    2      1 12.657813        5      5  9.638652 0.73053603 54.453321
-#&gt;   ---                                                                     
-#&gt; 2996:  999      1  2.023406        2   2996  3.327897 0.10038284  2.241224
-#&gt; 2997:  999      2  2.023406        2   2997  5.486775 0.11994215  2.737437
-#&gt; 2998: 1000      0 10.464250        1   2998  4.694657 0.53476256 23.087121
-#&gt; 2999: 1000      1 10.464250        1   2999  7.740180 0.58401438 28.198673
-#&gt; 3000: 1000      2 10.464250        1   3000 12.761400 0.63164373 34.441937
-#&gt;       gammaDis    normMu normVar   unifMin  unifMax NewBin
-#&gt;    1:        1  6.016568       4  5.406627 25.40663      0
-#&gt;    2:        1  7.016568       4  7.406627 27.40663      0
-#&gt;    3:        1  8.016568       4  9.406627 29.40663      0
-#&gt;    4:        1 11.328906       4  7.531563 27.53156      0
-#&gt;    5:        1 12.328906       4  9.531563 29.53156      1
-#&gt;   ---                                                     
-#&gt; 2996:        1  7.011703       4  7.404681 27.40468      0
-#&gt; 2997:        1  8.011703       4  9.404681 29.40468      0
-#&gt; 2998:        1 10.232125       4  7.092850 27.09285      0
-#&gt; 2999:        1 11.232125       4  9.092850 29.09285      0
-#&gt; 3000:        1 12.232125       4 11.092850 31.09285      0</div><div class='input'>
-<span class='co'># Gamma distribution</span>
-
-<span class='va'>dtX6</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
-  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,
-  dist <span class='op'>=</span> <span class='st'>"gamma"</span>, param1 <span class='op'>=</span> <span class='st'>"gammaMu"</span>, param2 <span class='op'>=</span> <span class='st'>"gammaDis"</span>,
-  cnames <span class='op'>=</span> <span class='st'>"NewGamma"</span>
-<span class='op'>)</span>
-
-<span class='va'>dtX6</span>
-</div><div class='output co'>#&gt;        cid period     xbase nperiods timeID    lambda          p   gammaMu
-#&gt;    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322
-#&gt;    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774
-#&gt;    3:    1      2  2.033135        4      3  5.492116 0.12025058  2.745438
-#&gt;    4:    2      0 12.657813        5      4  5.846138 0.68940602 44.582609
-#&gt;    5:    2      1 12.657813        5      5  9.638652 0.73053603 54.453321
-#&gt;   ---                                                                     
-#&gt; 2996:  999      1  2.023406        2   2996  3.327897 0.10038284  2.241224
-#&gt; 2997:  999      2  2.023406        2   2997  5.486775 0.11994215  2.737437
-#&gt; 2998: 1000      0 10.464250        1   2998  4.694657 0.53476256 23.087121
-#&gt; 2999: 1000      1 10.464250        1   2999  7.740180 0.58401438 28.198673
-#&gt; 3000: 1000      2 10.464250        1   3000 12.761400 0.63164373 34.441937
-#&gt;       gammaDis    normMu normVar   unifMin  unifMax   NewGamma
-#&gt;    1:        1  6.016568       4  5.406627 25.40663  1.7635282
-#&gt;    2:        1  7.016568       4  7.406627 27.40663  2.6140461
-#&gt;    3:        1  8.016568       4  9.406627 29.40663  1.7093672
-#&gt;    4:        1 11.328906       4  7.531563 27.53156 16.9854522
-#&gt;    5:        1 12.328906       4  9.531563 29.53156 50.6781317
-#&gt;   ---                                                         
-#&gt; 2996:        1  7.011703       4  7.404681 27.40468  0.1006445
-#&gt; 2997:        1  8.011703       4  9.404681 29.40468  0.9576648
-#&gt; 2998:        1 10.232125       4  7.092850 27.09285  5.0278293
-#&gt; 2999:        1 11.232125       4  9.092850 29.09285  2.2798681
-#&gt; 3000:        1 12.232125       4 11.092850 31.09285 13.0286195</div><div class='input'>
-<span class='co'># Normal distribution</span>
-
-<span class='va'>dtX7</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span>
-  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,
-  dist <span class='op'>=</span> <span class='st'>"normal"</span>, param1 <span class='op'>=</span> <span class='st'>"normMu"</span>, param2 <span class='op'>=</span> <span class='st'>"normVar"</span>,
-  cnames <span class='op'>=</span> <span class='st'>"NewNorm"</span>
-<span class='op'>)</span>
-
-<span class='co'># Binary outcome - ep method</span>
-
-<span class='va'>probform</span> <span class='op'>&lt;-</span> <span class='st'>"-2 + .3*period"</span>
-
-<span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span>
-  varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='va'>probform</span>,
-  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span>
-<span class='op'>)</span>
-
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dx</span>, nPeriods <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span><span class='op'>(</span><span class='va'>def1</span>, <span class='va'>dx</span><span class='op'>)</span>
-
-<span class='va'>dg</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span><span class='va'>dx</span>,
-  nvars <span class='op'>=</span> <span class='fl'>4</span>,
-  corMatrix <span class='op'>=</span> <span class='cn'>NULL</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
-  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span>,
-  method <span class='op'>=</span> <span class='st'>"ep"</span>, formSpec <span class='op'>=</span> <span class='va'>probform</span>,
-  periodvar <span class='op'>=</span> <span class='st'>"period"</span>
-<span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Wide example</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xbase"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.4</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, id <span class='op'>=</span> <span class='st'>"cid"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"lambda"</span>, formula <span class='op'>=</span> <span class='st'>".5 + .1*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='st'>"-2 + .3*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>500</span>, <span class='va'>def</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtX1</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span></span>
+<span class='r-in'>  dtOld <span class='op'>=</span> <span class='va'>dt</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"poisson"</span>, param1 <span class='op'>=</span> <span class='st'>"lambda"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtX2</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span></span>
+<span class='r-in'>  dtOld <span class='op'>=</span> <span class='va'>dt</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>4</span>, rho <span class='op'>=</span> <span class='fl'>.4</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Long example</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xbase"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.4</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, id <span class='op'>=</span> <span class='st'>"cid"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, <span class='st'>"nperiods"</span>, formula <span class='op'>=</span> <span class='fl'>3</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span></span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"lambda"</span>, formula <span class='op'>=</span> <span class='st'>".5+.5*period + .1*xbase"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='st'>"-3+.2*period + .3*xbase"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"gammaMu"</span>, formula <span class='op'>=</span> <span class='st'>".2*period + .3*xbase"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"log"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"gammaDis"</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"normMu"</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='st'>"5+period + .5*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"normVar"</span>, formula <span class='op'>=</span> <span class='fl'>4</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"unifMin"</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='st'>"5 + 2*period + .2*xbase"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span><span class='va'>def2</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"unifMax"</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='st'>"unifMin + 20"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtLong</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dt</span>, idvars <span class='op'>=</span> <span class='st'>"cid"</span>, nPeriods <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dtLong</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span><span class='op'>(</span><span class='va'>def2</span>, <span class='va'>dtLong</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Poisson distribution</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtX3</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span></span>
+<span class='r-in'>  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"poisson"</span>, param1 <span class='op'>=</span> <span class='st'>"lambda"</span>, cnames <span class='op'>=</span> <span class='st'>"NewPois"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dtX3</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        cid period     xbase nperiods timeID    lambda          p   gammaMu</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2  2.033135        4      3  5.492116 0.12025058  2.745438</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0 12.657813        5      4  5.846138 0.68940602 44.582609</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1 12.657813        5      5  9.638652 0.73053603 54.453321</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                                                                     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1  2.023406        2   2996  3.327897 0.10038284  2.241224</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2  2.023406        2   2997  5.486775 0.11994215  2.737437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0 10.464250        1   2998  4.694657 0.53476256 23.087121</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1 10.464250        1   2999  7.740180 0.58401438 28.198673</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2 10.464250        1   3000 12.761400 0.63164373 34.441937</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       gammaDis    normMu normVar   unifMin  unifMax NewPois</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:        1  6.016568       4  5.406627 25.40663       2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:        1  7.016568       4  7.406627 27.40663       4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:        1  8.016568       4  9.406627 29.40663       7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:        1 11.328906       4  7.531563 27.53156       5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:        1 12.328906       4  9.531563 29.53156       8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                                                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:        1  7.011703       4  7.404681 27.40468       3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:        1  8.011703       4  9.404681 29.40468       3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998:        1 10.232125       4  7.092850 27.09285       3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999:        1 11.232125       4  9.092850 29.09285       7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000:        1 12.232125       4 11.092850 31.09285      11</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Binomial distribution - copula method</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtX4</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span></span>
+<span class='r-in'>  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span>, cnames <span class='op'>=</span> <span class='st'>"NewBin"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtX4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        cid period     xbase nperiods timeID    lambda          p   gammaMu</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2  2.033135        4      3  5.492116 0.12025058  2.745438</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0 12.657813        5      4  5.846138 0.68940602 44.582609</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1 12.657813        5      5  9.638652 0.73053603 54.453321</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                                                                     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1  2.023406        2   2996  3.327897 0.10038284  2.241224</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2  2.023406        2   2997  5.486775 0.11994215  2.737437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0 10.464250        1   2998  4.694657 0.53476256 23.087121</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1 10.464250        1   2999  7.740180 0.58401438 28.198673</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2 10.464250        1   3000 12.761400 0.63164373 34.441937</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       gammaDis    normMu normVar   unifMin  unifMax NewBin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:        1  6.016568       4  5.406627 25.40663      0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:        1  7.016568       4  7.406627 27.40663      0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:        1  8.016568       4  9.406627 29.40663      0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:        1 11.328906       4  7.531563 27.53156      0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:        1 12.328906       4  9.531563 29.53156      1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                                                     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:        1  7.011703       4  7.404681 27.40468      0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:        1  8.011703       4  9.404681 29.40468      0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998:        1 10.232125       4  7.092850 27.09285      0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999:        1 11.232125       4  9.092850 29.09285      0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000:        1 12.232125       4 11.092850 31.09285      0</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Gamma distribution</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtX6</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span></span>
+<span class='r-in'>  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"gamma"</span>, param1 <span class='op'>=</span> <span class='st'>"gammaMu"</span>, param2 <span class='op'>=</span> <span class='st'>"gammaDis"</span>,</span>
+<span class='r-in'>  cnames <span class='op'>=</span> <span class='st'>"NewGamma"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtX6</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        cid period     xbase nperiods timeID    lambda          p   gammaMu</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0  2.033135        4      1  2.020436 0.08393386  1.840322</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1  2.033135        4      2  3.331136 0.10064672  2.247774</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2  2.033135        4      3  5.492116 0.12025058  2.745438</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0 12.657813        5      4  5.846138 0.68940602 44.582609</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1 12.657813        5      5  9.638652 0.73053603 54.453321</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                                                                     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1  2.023406        2   2996  3.327897 0.10038284  2.241224</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2  2.023406        2   2997  5.486775 0.11994215  2.737437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0 10.464250        1   2998  4.694657 0.53476256 23.087121</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1 10.464250        1   2999  7.740180 0.58401438 28.198673</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2 10.464250        1   3000 12.761400 0.63164373 34.441937</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       gammaDis    normMu normVar   unifMin  unifMax   NewGamma</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:        1  6.016568       4  5.406627 25.40663  1.7635282</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:        1  7.016568       4  7.406627 27.40663  2.6140461</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:        1  8.016568       4  9.406627 29.40663  1.7093672</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:        1 11.328906       4  7.531563 27.53156 16.9854522</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:        1 12.328906       4  9.531563 29.53156 50.6781317</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:        1  7.011703       4  7.404681 27.40468  0.1006445</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:        1  8.011703       4  9.404681 29.40468  0.9576648</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998:        1 10.232125       4  7.092850 27.09285  5.0278293</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999:        1 11.232125       4  9.092850 29.09285  2.2798681</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000:        1 12.232125       4 11.092850 31.09285 13.0286195</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Normal distribution</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dtX7</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span></span>
+<span class='r-in'>  dtOld <span class='op'>=</span> <span class='va'>dtLong</span>, idvar <span class='op'>=</span> <span class='st'>"cid"</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, rho <span class='op'>=</span> <span class='fl'>.6</span>, corstr <span class='op'>=</span> <span class='st'>"ar1"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"normal"</span>, param1 <span class='op'>=</span> <span class='st'>"normMu"</span>, param2 <span class='op'>=</span> <span class='st'>"normVar"</span>,</span>
+<span class='r-in'>  cnames <span class='op'>=</span> <span class='st'>"NewNorm"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Binary outcome - ep method</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>probform</span> <span class='op'>&lt;-</span> <span class='st'>"-2 + .3*period"</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>def1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defDataAdd.html'>defDataAdd</a></span><span class='op'>(</span></span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"p"</span>, formula <span class='op'>=</span> <span class='va'>probform</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, link <span class='op'>=</span> <span class='st'>"logit"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addPeriods.html'>addPeriods</a></span><span class='op'>(</span><span class='va'>dx</span>, nPeriods <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addColumns.html'>addColumns</a></span><span class='op'>(</span><span class='va'>def1</span>, <span class='va'>dx</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dg</span> <span class='op'>&lt;-</span> <span class='fu'>addCorGen</span><span class='op'>(</span><span class='va'>dx</span>,</span>
+<span class='r-in'>  nvars <span class='op'>=</span> <span class='fl'>4</span>,</span>
+<span class='r-in'>  corMatrix <span class='op'>=</span> <span class='cn'>NULL</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"binary"</span>, param1 <span class='op'>=</span> <span class='st'>"p"</span>,</span>
+<span class='r-in'>  method <span class='op'>=</span> <span class='st'>"ep"</span>, formSpec <span class='op'>=</span> <span class='va'>probform</span>,</span>
+<span class='r-in'>  periodvar <span class='op'>=</span> <span class='st'>"period"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -253,148 +253,158 @@ Emrich and Piedmonte (1991).</p></td>
 Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>23432</span><span class='op'>)</span>
-<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8</span>, <span class='fl'>10</span>, <span class='fl'>12</span><span class='op'>)</span>
-
-<span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;         id period  X
-#&gt;    1:    1      0  4
-#&gt;    2:    1      1  5
-#&gt;    3:    1      2  6
-#&gt;    4:    2      0  8
-#&gt;    5:    2      1 11
-#&gt;   ---               
-#&gt; 2996:  999      1 12
-#&gt; 2997:  999      2 10
-#&gt; 2998: 1000      0 14
-#&gt; 2999: 1000      1 13
-#&gt; 3000: 1000      2 21</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fl'>5</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;         id period X
-#&gt;    1:    1      0 3
-#&gt;    2:    1      1 3
-#&gt;    3:    1      2 4
-#&gt;    4:    2      0 7
-#&gt;    5:    2      1 7
-#&gt;   ---              
-#&gt; 2996:  999      1 5
-#&gt; 2997:  999      2 6
-#&gt; 2998: 1000      0 3
-#&gt; 2999: 1000      1 3
-#&gt; 3000: 1000      2 3</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;         id V1 V2 V3
-#&gt;    1:    1  5 11  9
-#&gt;    2:    2  8 12 14
-#&gt;    3:    3  5  8 12
-#&gt;    4:    4  9  9 13
-#&gt;    5:    5  4  7 10
-#&gt;   ---              
-#&gt;  996:  996  7 11  8
-#&gt;  997:  997  8  6 10
-#&gt;  998:  998  5  6  8
-#&gt;  999:  999  5 11 11
-#&gt; 1000: 1000  5  6 11</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fl'>5</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;         id V1 V2 V3
-#&gt;    1:    1  4 10  3
-#&gt;    2:    2  3  4  6
-#&gt;    3:    3  5  5  7
-#&gt;    4:    4  4  4  4
-#&gt;    5:    5  2  1  2
-#&gt;   ---              
-#&gt;  996:  996  3  2  5
-#&gt;  997:  997  1  1  1
-#&gt;  998:  998  4  0  2
-#&gt;  999:  999  5  7  8
-#&gt; 1000: 1000  3  3  6</div><div class='input'>
-<span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
-  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
-  cnames <span class='op'>=</span> <span class='st'>"new_var"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;         id period new_var
-#&gt;    1:    1      0      11
-#&gt;    2:    1      1      12
-#&gt;    3:    1      2      16
-#&gt;    4:    2      0       9
-#&gt;    5:    2      1      15
-#&gt;   ---                    
-#&gt; 2996:  999      1       6
-#&gt; 2997:  999      2       8
-#&gt; 2998: 1000      0      10
-#&gt; 2999: 1000      1      12
-#&gt; 3000: 1000      2      13</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
-  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,
-  wide <span class='op'>=</span> <span class='cn'>TRUE</span>, cnames <span class='op'>=</span> <span class='st'>"a, b, c"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;         id a  b  c
-#&gt;    1:    1 8 10 10
-#&gt;    2:    2 5  9 10
-#&gt;    3:    3 6  8 12
-#&gt;    4:    4 7  8 13
-#&gt;    5:    5 9  9 19
-#&gt;   ---             
-#&gt;  996:  996 7 12  9
-#&gt;  997:  997 7  8 13
-#&gt;  998:  998 4 10 11
-#&gt;  999:  999 9 10 13
-#&gt; 1000: 1000 5  9  7</div><div class='input'>
-<span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;         id period X
-#&gt;    1:    1      0 1
-#&gt;    2:    1      1 0
-#&gt;    3:    1      2 1
-#&gt;    4:    2      0 1
-#&gt;    5:    2      1 1
-#&gt;   ---              
-#&gt; 2996:  999      1 1
-#&gt; 2997:  999      2 1
-#&gt; 2998: 1000      0 0
-#&gt; 2999: 1000      1 0
-#&gt; 3000: 1000      2 1</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
-  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, params2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>,
-  corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;         id        V1        V2         V3
-#&gt;    1:    1  3.651421  4.493988 11.6813305
-#&gt;    2:    2  1.414711  2.286705  3.4485920
-#&gt;    3:    3 12.325773  6.052076 32.7730153
-#&gt;    4:    4  9.871108 35.677670  5.9017059
-#&gt;    5:    5  2.154601  5.883472 11.1502204
-#&gt;   ---                                    
-#&gt;  996:  996 39.379123 13.638101 11.0539855
-#&gt;  997:  997  1.173825 28.220637 12.4952549
-#&gt;  998:  998  2.208063  2.455229  0.3416593
-#&gt;  999:  999  4.558461 10.266519  1.7471471
-#&gt; 1000: 1000  4.625952 10.278182  1.3732234</div><div class='input'>
-<span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
-  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>,
-  corMatrix <span class='op'>=</span> <span class='fu'><a href='genCorMat.html'>genCorMat</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>"ep"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;         id period X
-#&gt;    1:    1      0 1
-#&gt;    2:    1      1 1
-#&gt;    3:    1      2 0
-#&gt;    4:    2      0 0
-#&gt;    5:    2      1 0
-#&gt;   ---              
-#&gt; 2996:  999      1 1
-#&gt; 2997:  999      2 0
-#&gt; 2998: 1000      0 0
-#&gt; 2999: 1000      1 0
-#&gt; 3000: 1000      2 1</div><div class='input'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,
-  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>,
-  corMatrix <span class='op'>=</span> <span class='fu'><a href='genCorMat.html'>genCorMat</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>"copula"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;         id period X
-#&gt;    1:    1      0 0
-#&gt;    2:    1      1 1
-#&gt;    3:    1      2 0
-#&gt;    4:    2      0 0
-#&gt;    5:    2      1 1
-#&gt;   ---              
-#&gt; 2996:  999      1 0
-#&gt; 2997:  999      2 0
-#&gt; 2998: 1000      0 0
-#&gt; 2999: 1000      1 0
-#&gt; 3000: 1000      2 0</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>23432</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8</span>, <span class='fl'>10</span>, <span class='fl'>12</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id period  X</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0  4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1  5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2  6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0  8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1 11</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1 12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0 14</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1 13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2 21</span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fl'>5</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id period X</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2 4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0 7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1 7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1 5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2 6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2 3</span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id V1 V2 V3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1  5 11  9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    2  8 12 14</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    3  5  8 12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    4  9  9 13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    5  4  7 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  996:  996  7 11  8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  997:  997  8  6 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  998:  998  5  6  8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  999:  999  5 11 11</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1000: 1000  5  6 11</span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fl'>5</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id V1 V2 V3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1  4 10  3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    2  3  4  6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    3  5  5  7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    4  4  4  4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    5  2  1  2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  996:  996  3  2  5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  997:  997  1  1  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  998:  998  4  0  2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  999:  999  5  7  8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1000: 1000  3  3  6</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,</span>
+<span class='r-in'>  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,</span>
+<span class='r-in'>  cnames <span class='op'>=</span> <span class='st'>"new_var"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id period new_var</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0      11</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1      12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2      16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0       9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1      15</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1       6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2       8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0      10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1      12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2      13</span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,</span>
+<span class='r-in'>  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>, rho <span class='op'>=</span> <span class='fl'>.7</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span>,</span>
+<span class='r-in'>  wide <span class='op'>=</span> <span class='cn'>TRUE</span>, cnames <span class='op'>=</span> <span class='st'>"a, b, c"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id a  b  c</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1 8 10 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    2 5  9 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    3 6  8 12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    4 7  8 13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    5 9  9 19</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  996:  996 7 12  9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  997:  997 7  8 13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  998:  998 4 10 11</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  999:  999 9 10 13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1000: 1000 5  9  7</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>, nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id period X</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2 1</span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,</span>
+<span class='r-in'>  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='va'>l</span>, params2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, rho <span class='op'>=</span> <span class='fl'>.3</span>,</span>
+<span class='r-in'>  corstr <span class='op'>=</span> <span class='st'>"cs"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id        V1        V2         V3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1  3.651421  4.493988 11.6813305</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    2  1.414711  2.286705  3.4485920</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    3 12.325773  6.052076 32.7730153</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    4  9.871108 35.677670  5.9017059</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    5  2.154601  5.883472 11.1502204</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  996:  996 39.379123 13.638101 11.0539855</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  997:  997  1.173825 28.220637 12.4952549</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  998:  998  2.208063  2.455229  0.3416593</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  999:  999  4.558461 10.266519  1.7471471</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1000: 1000  4.625952 10.278182  1.3732234</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,</span>
+<span class='r-in'>  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>,</span>
+<span class='r-in'>  corMatrix <span class='op'>=</span> <span class='fu'><a href='genCorMat.html'>genCorMat</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>"ep"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id period X</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2 1</span>
+<span class='r-in'><span class='fu'>genCorGen</span><span class='op'>(</span><span class='fl'>1000</span>,</span>
+<span class='r-in'>  nvars <span class='op'>=</span> <span class='fl'>3</span>, params1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.7</span><span class='op'>)</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>,</span>
+<span class='r-in'>  corMatrix <span class='op'>=</span> <span class='fu'><a href='genCorMat.html'>genCorMat</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>"copula"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id period X</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1      0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    1      1 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    1      2 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    2      0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    2      1 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2996:  999      1 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2997:  999      2 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2998: 1000      0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2999: 1000      1 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3000: 1000      2 0</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
