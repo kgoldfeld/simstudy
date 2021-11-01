@@ -152,24 +152,24 @@
 ##    5:    5  1  1  0 1 0
 ##   ---                  
 ##  996:  996  0  0  0 1 0
-##  997:  997  1  0  0 1 0
-##  998:  998  0  0  1 1 0
+##  997:  997  1  0  1 1 0
+##  998:  998  0  1  0 1 0
 ##  999:  999  0  0  0 1 0
 ## 1000: 1000  0  0  0 1 0</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtObs</span></code></pre></div>
-<pre><code>##         id m  u         x1         x2         x3
-##    1:    1 0 NA 19.9564058 22.8020065 20.1563009
-##    2:    2 1 NA 41.2723053 39.5425821 42.2316644
-##    3:    3 0 NA         NA -0.4297609  0.3713128
-##    4:    4 0 NA         NA 21.0288944 19.4489125
-##    5:    5 0 NA         NA         NA 21.2872282
-##   ---                                           
-##  996:  996 1 NA 21.1219091 20.7805374 18.4644803
-##  997:  997 0 NA         NA -0.6004688  2.2113680
-##  998:  998 0 NA 19.7926121 19.9144679         NA
-##  999:  999 0 NA 20.7142963 19.6006124 20.1759279
-## 1000: 1000 0 NA  0.7089908 -0.1512555  1.1378541</code></pre>
+<pre><code>##         id m  u       x1       x2           x3
+##    1:    1 1 NA 37.72667 38.32449 39.808514356
+##    2:    2 1 NA 38.75860 38.12327 40.100181117
+##    3:    3 1 NA       NA 16.23019 17.503636278
+##    4:    4 0 NA       NA  2.87345  0.004377409
+##    5:    5 1 NA       NA       NA 20.109311188
+##   ---                                         
+##  996:  996 1 NA 39.53302 41.12122 40.541277916
+##  997:  997 0 NA       NA 20.78964           NA
+##  998:  998 1 NA 19.99906       NA 19.276391717
+##  999:  999 1 NA 40.96806 37.39816 41.135805335
+## 1000: 1000 1 NA 19.43908 19.89273 20.941038594</code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the “true” data set without missing data as a comparison for the “observed” data set. Since <code>x1</code> is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for <code>x2</code> and <code>x3</code> are biased, as the difference between observed and actual is not close to 0:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Two functions to calculate means and compare them</span>
@@ -191,9 +191,9 @@
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     19.9 19.9 19.9
-## Observed   20.0 18.3 18.4
-## Difference -0.1  1.6  1.5</code></pre>
+## Actual     19.9 20.0 20.0
+## Observed   19.9 18.7 18.9
+## Difference  0.0  1.3  1.1</code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias for the estimate of the mean of <code>x2</code> is mitigated, but not for <code>x3</code>, since <code>u</code> is not observed:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">meanActm</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span>
@@ -203,17 +203,17 @@
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     10.2 10.2 10.2
-## Observed   10.2 10.2  8.8
-## Difference  0.0  0.0  1.4</code></pre>
+## Actual     10.3 10.4 10.3
+## Observed    9.9 10.3  8.8
+## Difference  0.4  0.1  1.5</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compare observed and actual when m = 1</span>
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     30.4 30.4 30.5
-## Observed   30.7 30.8 28.9
-## Difference -0.3 -0.4  1.6</code></pre>
+## Actual     29.9 30.0 29.9
+## Observed   30.4 30.3 28.6
+## Difference -0.5 -0.3  1.3</code></pre>
 <div id="longitudinal-data-with-missingness" class="section level2">
 <h2 class="hasAnchor">
 <a href="#longitudinal-data-with-missingness" class="anchor"></a>Longitudinal data with missingness</h2>
