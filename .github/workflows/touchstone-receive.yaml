@@ -1,0 +1,95 @@
+name: Continuous Benchmarks (Receive)
+on: pull_request
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.read_touchstone_config.outputs.config }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+           fetch-depth: 0
+
+      - id: read_touchstone_config
+        run: |
+          content=`cat ./touchstone/config.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=config::$content"
+  build:
+    needs: prepare
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - ${{ fromJson(needs.prepare.outputs.config) }}
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      RSPM: ${{ matrix.config.rspm }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+           fetch-depth: 0
+      - name: Set up git user
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+      - name: Ensure base branch is fetched
+        run: |
+          git checkout -b $GITHUB_HEAD_REF # this is current ref. This is required for naming.
+          git branch $GITHUB_BASE_REF remotes/origin/$GITHUB_BASE_REF
+      - name: Setup R
+        uses: r-lib/actions/setup-r@master
+      - name: Setup dependencies
+        uses: r-lib/actions/setup-r-dependencies@master
+        with:
+          cache-version: 1
+          extra-packages: |
+            lorenzwalthert/touchstone
+            ggplot2
+            dplyr
+            gert
+      - name: Remove global installation
+        run: | 
+          pkg <- basename(getwd())
+          if (pkg %in% rownames(installed.packages())) {
+            remove.packages(pkg)
+            cat('removed package ', pkg, '.', sep = "")
+          }
+        shell: Rscript {0}
+      - name: Checkout benchmarking repo
+        if: ${{ matrix.config.benchmarking_repo != ''}}
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ matrix.config.benchmarking_repo }}
+          ref: ${{ matrix.config.benchmarking_ref }}
+          path: ${{ matrix.config.benchmarking_path }}
+      - name: Run benchmarks
+        run: Rscript -e 'touchstone::run_script("touchstone/script.R")'
+      - name: Save PR number
+        run: |
+          echo ${{ github.event.number }} > ./touchstone/pr-comment/NR
+      - uses: actions/upload-artifact@v2
+        with:
+          name: visual-benchmarks
+          path: touchstone/plots/
+      - uses: actions/upload-artifact@v1
+        with:
+          name: results
+          path: touchstone/pr-comment
+      - uses: actions/download-artifact@v1
+        with:
+          name: results
+      - name: comment PR
+        run: cat touchstone/pr-comment/info.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: touchstone/pr-comment/
