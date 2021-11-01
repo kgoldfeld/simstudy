@@ -299,7 +299,7 @@
 
   c
 }
-assertNotMissing()
+
 # Internal function called by .generate - returns non-random data
 #
 # @param n The number of observations required in the data set
@@ -381,7 +381,7 @@ assertNotMissing()
   f1 <- paste(unlist(formDT[, 1]), conditions, sep = "*")
   interval_formula <- paste(f1, collapse = "+")
 
-  dvars <- .parseDotVars(formula)
+  dvars <- .parseDotVars(formula, envir)
 
   u <- stats::runif(n)
   dvars$interval <- findInterval(u, ps, rightmost.closed = TRUE) + 1

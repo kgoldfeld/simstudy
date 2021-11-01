@@ -49,7 +49,7 @@
 #' @noRd
 .evalWith <- function(formula,
                       extVars,
-                      dtSim = data.frame(),
+                      dtSim = data.table(),
                       n = nrow(dtSim)) {
   if (missing(dtSim) && missing(n)) {
     n <- 1
@@ -65,16 +65,36 @@
   e <- list2env(extVars)
 
   if (!missing(dtSim) && !is.null(dtSim)) {
-    e <- list2env(dtSim, e)
+    e$dtSim <- as.data.table(dtSim)
+    e$def_id <- names(dtSim)[[1]]
+  }
+
+  if (missing(dtSim) || is.null(dtSim)) {
+    e$dtSim <- genData(n)
+    e$def_id <- "id"
   }
 
   if (!is.null(e$formula2parse)) {
     stop("'formula2parse' is a reserved variable name!")
   }
 
-  evalFormula <- function(x) {
-    e$formula2parse <- x
-    res <- with(e, eval(parse(text = formula2parse)))
+  evalFormula <- function(formula) {
+    e$formula2parse <- formula
+
+    res <- with(e, {
+      expr <- parse(text = as.character(formula2parse))
+      tryCatch(
+        expr = dtSim[, newVar := eval(expr), keyby = def_id],
+        error = function(err) {
+          if (grepl("RHS length must either be 1", gettext(err), fixed = T)) {
+            dtSim[, newVar := eval(expr)]
+          } else {
+            stop(gettext(err))
+          }
+        }
+      )
+      copy(dtSim$newVar)
+    })
 
     if (length(res) == 1) {
       rep(res, n)
@@ -82,6 +102,7 @@
       res
     }
   }
+
   parsedValues <- sapply(formula, evalFormula)
 
   # If only a single formula with 1 rep is eval'ed output would be not be
@@ -189,8 +210,7 @@
         )), silent = TRUE)
       )
     }
-  }
-  else if (is.numeric(formula)) {
+  } else if (is.numeric(formula)) {
     TRUE
   } else {
     FALSE
@@ -394,7 +414,9 @@ zeroPadInts <- function(ints, width = max(nchar(ints))) {
 #' @return x unless thats NULL then y
 #' @noRd
 `%||%` <- function(x, y) {
-    if (is.null(x))
-        y
-    else x
+  if (is.null(x)) {
+    y
+  } else {
+    x
+  }
 }
