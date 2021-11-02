@@ -105,6 +105,19 @@
       dtSim = dfSim,
       envir = envir
     ),
+    trtAssign = .genAssign(
+      dtName = dfSim,
+      grpName = args$varname,
+      strata = args$variance,
+      ratio = args$formula,
+      balanced = args$link
+    ),
+    trtObserve = .genObserve(
+      dt = dfSim,
+      grpName = args$varname,
+      formulas = args$formula,
+      logit.link = args$link
+    ),
     uniform = .genunif(
       n = n,
       formula = args$formula,
@@ -557,4 +570,31 @@
   unifCont <- stats::runif(n, range$min, range$max + 1)
 
   return(as.integer(floor(unifCont)))
+}
+
+.genAssign <- function(dtName, balanced,
+                      strata, grpName, ratio) {
+  dtName <- as.data.table(dtName)
+  if(strata == 0) {
+    strata <- NULL
+  } else {
+    strata <- .splitFormula(strata)
+  }
+  if (balanced == "identity") {
+    balanced <- TRUE
+  }
+  
+  ratio <- as.numeric(.splitFormula(ratio))
+  nTrt <- length(ratio)
+  trtAssign(dtName, nTrt, balanced, strata, grpName, ratio)[, ..grpName]
+                      }
+
+.genObserve <- function(dt, formulas, logit.link, grpName) {
+  dt <- as.data.table(dt)
+  if (logit.link == "identity") {
+    logit.link <- FALSE
+  } else {
+    logit.link <- TRUE
+  }
+  trtObserve(dt, formulas, logit.link, grpName)[, ..grpName]
 }

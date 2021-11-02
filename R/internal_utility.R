@@ -189,7 +189,9 @@
       "uniformInt",
       "negBinomial",
       "exponential",
-      "mixture"
+      "mixture",
+      "trtAssign",
+      "trtObserve"
     )
   }
 

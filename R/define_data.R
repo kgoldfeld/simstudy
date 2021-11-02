@@ -568,8 +568,10 @@ defSurv <- function(dtDefs = NULL,
       uniform = ,
 
       uniformInt = .checkUniform(newform),
+      trtAssign =  .checkCategorical(newform),
+      trtObserve = .isValidArithmeticFormula(newform),
 
-      stop("Unkown distribution.")
+      stop("Unknown distribution.")
     )
 
     invisible(newvar)
