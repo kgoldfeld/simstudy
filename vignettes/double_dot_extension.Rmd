@@ -43,7 +43,7 @@ ggtheme <- function(panelback = "white") {
 
 Often, we'd like to explore data generation and modeling under different scenarios. For example, we might want to understand the operating characteristics of a model given different variance or other parametric assumptions. There is functionality built into `simstudy` to facilitate this type of dynamic exploration. First, the functions `updateDef` and `updateDefAdd` essentially allow us to edit lines of existing data definition tables. Second, there is a built-in mechanism - called *double-dot*  reference - to access external variables that do not exist in a defined data set or data definition.
 
-### Updating existing definition tables
+## Updating existing definition tables
 
 The `updateDef` function updates a row in a definition table created by functions `defData` or `defRead`. Analogously, `updateDefAdd` function updates a row in a definition table created by functions `defDataAdd` or `defReadAdd`. 
 
@@ -78,7 +78,7 @@ defs <- updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
 defs
 ```
 
-### Double-dot external variable reference
+## Double-dot external variable reference
 
 For a truly dynamic data definition process, `simstudy` (as of `version 0.2.0`) allows users to reference variables that exist outside of data generation. These can be thought of as a type of hyperparameter of the data generation process. The reference is made directly in the formula itself, using a double-dot ("..") notation before the variable name. Here is a simple example:
 
@@ -138,7 +138,7 @@ ggplot(data = dd_4, aes(x = x, y = y)) +
   theme(panel.grid = element_blank())
 ```
 
-### Using non-scalar double-dot variable reference
+## Using non-scalar double-dot variable reference
 
 The double-dot notation is also *array-friendly*. For example if we want to create a mixture distribution from a vector of values (which we can also do using a *categorical* distribution), we can define the mixture formula in terms of the vector. In this case we are generating permuted block sizes of 2 and 4:
 

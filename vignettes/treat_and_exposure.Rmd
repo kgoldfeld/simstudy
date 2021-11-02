@@ -68,7 +68,7 @@ aplotfunc <- function(dt, ptitle) {
 
 Treatment assignment can be accomplished through the original data generation process, using `defData` and `genData`. However, the functions `trtAssign` and `trtObserve` provide more options to generate treatment assignment.
 
-### Assigned treatment
+## Assigned treatment
 
 Treatment assignment can simulate how the treatment allocation is made in a randomized study. Assignment to treatment groups can be (close to) balanced (as would occur in a block randomized trial); this balancing can be done without or without strata. Alternatively, the assignment can be left to chance without blocking; in this case, balance across treatment groups is not guaranteed, particularly with small sample sizes.
 
@@ -116,7 +116,7 @@ p3a <- aplotfunc(study3, "")
 grid.arrange(p1, p1a, p2, p2a, p3, p3a, ncol=2)
 ```
 
-### Observed treatment
+## Observed treatment
 
 If exposure or treatment is observed (rather than randomly assigned), use `trtObserved` to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:
 
@@ -192,7 +192,7 @@ p2a <- ggplot(data = dtplot2a, aes(x=factor(over65), y=N)) +
 grid.arrange(p1a,p2a,nrow=1)
 ```
 
-### Stepped-wedge design
+## Stepped-wedge design
 
 Stepped-wedge designs are a special class of cluster randomized trials where each cluster is observed in both treatment arms (as opposed to the classic parallel design where only some of the clusters receive the treatment). This is a special case of a cross-over design, where the cross-over is only in one direction: control (or pre-intervention) to intervention.
 
