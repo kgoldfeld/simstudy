@@ -101,7 +101,7 @@ dt[,round(sqrt(diag(var(cbind(a0, a1)))),1)]
 
 Two additional functions facilitate the generation of correlated data from *binomial*, *poisson*, *gamma*, and *uniform* distributions: `genCorGen` and `addCorGen`.
 
-`genCorGen` is an extension of `genCorData`. These functions draw on copula-based methods to generate the data. (This [Wikipedia page](https://bit.ly/31vAxFf) provides a general introduction and copula-based modeling can be conducted in `R` using package [copula](https://cran.r-project.org/web/packages/copula/index.html).) In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.
+`genCorGen` is an extension of `genCorData`. These functions draw on copula-based methods to generate the data. (This [Wikipedia page](https://en.wikipedia.org/wiki/Copula_(probability_theory)) provides a general introduction and copula-based modeling can be conducted in `R` using package [copula](https://cran.r-project.org/package=copula).) In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.
 
 ```{r}
 l <- c(8, 10, 12) # lambda for each new variable
