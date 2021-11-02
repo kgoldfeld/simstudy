@@ -582,6 +582,8 @@
   }
   if (balanced == "identity") {
     balanced <- TRUE
+  } else {
+    balanced <- FALSE
   }
   
   ratio <- as.numeric(.splitFormula(ratio))
