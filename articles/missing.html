@@ -151,24 +151,24 @@
 ##    5:    5  1  1  0 1 0
 ##   ---                  
 ##  996:  996  0  0  0 1 0
-##  997:  997  1  0  0 1 0
+##  997:  997  1  0  1 1 0
 ##  998:  998  0  0  1 1 0
 ##  999:  999  0  0  0 1 0
 ## 1000: 1000  0  0  0 1 0</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtObs</span></code></pre></div>
-<pre><code>##         id m  u         x1          x2        x3
-##    1:    1 0 NA  1.2780167 -1.07698645  2.935924
-##    2:    2 1 NA 18.5833291 20.06444277 19.379901
-##    3:    3 1 NA         NA 38.90729161 40.847142
-##    4:    4 1 NA         NA 39.45379013 42.311860
-##    5:    5 1 NA         NA          NA 40.280630
-##   ---                                           
-##  996:  996 0 NA -2.0473106 -2.83290917  1.046942
-##  997:  997 0 NA         NA -1.00659572  1.811703
-##  998:  998 0 NA 20.3695919 21.08647199        NA
-##  999:  999 0 NA -0.1371858 -0.09968494  1.276838
-## 1000: 1000 1 NA 41.0667632 40.82420112 39.189032</code></pre>
+<pre><code>##         id m  u        x1        x2        x3
+##    1:    1 0 NA 18.435526 18.658603 20.437243
+##    2:    2 1 NA 40.512684 40.439121 40.658623
+##    3:    3 0 NA        NA  1.368884  2.460871
+##    4:    4 0 NA        NA 19.112112 19.589086
+##    5:    5 1 NA        NA        NA 41.324793
+##   ---                                        
+##  996:  996 0 NA -1.652921  1.301331 -2.201207
+##  997:  997 0 NA        NA 22.297281        NA
+##  998:  998 0 NA 18.862699 19.785789        NA
+##  999:  999 1 NA 40.451872 40.637655 39.766814
+## 1000: 1000 1 NA 40.006467 39.726031 40.398736</code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the “true” data set without missing data as a comparison for the “observed” data set. Since <code>x1</code> is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for <code>x2</code> and <code>x3</code> are biased, as the difference between observed and actual is not close to 0:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Two functions to calculate means and compare them</span>
@@ -190,9 +190,9 @@
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     20.3 20.4 20.3
-## Observed   20.3 18.6 18.8
-## Difference  0.0  1.8  1.5</code></pre>
+## Actual     19.9 19.9 20.0
+## Observed   19.8 18.3 18.4
+## Difference  0.1  1.6  1.6</code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias for the estimate of the mean of <code>x2</code> is mitigated, but not for <code>x3</code>, since <code>u</code> is not observed:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">meanActm</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span>
@@ -201,18 +201,18 @@
 <code class="sourceCode R"><span class="co"># compare observed and actual when m = 0</span>
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>##             x1   x2  x3
-## Actual     9.8 10.0 9.9
-## Observed   9.6  9.8 8.4
-## Difference 0.2  0.2 1.5</code></pre>
+<pre><code>##              x1   x2   x3
+## Actual     10.0 10.0 10.1
+## Observed   10.1  9.9  8.8
+## Difference -0.1  0.1  1.3</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compare observed and actual when m = 1</span>
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     30.7 30.7 30.7
-## Observed   30.8 30.8 29.1
-## Difference -0.1 -0.1  1.6</code></pre>
+## Actual     29.4 29.5 29.5
+## Observed   29.3 29.3 27.9
+## Difference  0.1  0.2  1.6</code></pre>
 <div id="longitudinal-data-with-missingness" class="section level2">
 <h2 class="hasAnchor">
 <a href="#longitudinal-data-with-missingness" class="anchor"></a>Longitudinal data with missingness</h2>

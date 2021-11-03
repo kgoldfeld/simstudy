@@ -120,7 +120,7 @@
     
     
 <p>The <code>simstudy</code> package is a collection of functions that allows users to generate simulated data sets to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster-randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
-<p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create datasets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> datasets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
+<p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create data sets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> data sets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
 <p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean <span class="math inline">\(\mu\)</span> (or <span class="math inline">\(\log(\mu)\)</span>) and a dispersion <span class="math inline">\(d\)</span>, rather than shape <span class="math inline">\(\alpha\)</span> and rate <span class="math inline">\(\beta\)</span> parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling <span class="math inline">\(\mu\)</span> (or some function of <span class="math inline">\((\mu)\)</span>), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.</p>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
@@ -471,6 +471,16 @@
 <td align="center">-</td>
 </tr>
 <tr class="odd">
+<td align="left">trtAssign</td>
+<td align="left">ratio</td>
+<td align="left">string</td>
+<td align="left">r_1;r_2;…;r_n</td>
+<td align="left">stratification</td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center">-</td>
+</tr>
+<tr class="even">
 <td align="left">uniform</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -480,7 +490,7 @@
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">uniformInt</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -551,6 +561,11 @@
 <h4 class="hasAnchor">
 <a href="#poisson" class="anchor"></a>poisson</h4>
 <p>The <em>poisson</em> distribution is a discrete data distribution that takes on non-negative integers. The <code>formula</code> specifies the mean <span class="math inline">\(\lambda\)</span> (link is ‘identity’) or log of the mean (<code>link</code> is log). The <code>variance</code> field does not apply to this distribution. The variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\lambda\)</span> itself.</p>
+</div>
+<div id="trtassign" class="section level4">
+<h4 class="hasAnchor">
+<a href="#trtassign" class="anchor"></a>trtAssign</h4>
+<p>The <em>trtAssign</em> distribution is an implementation of the <code>trtAssign</code> functionality in the context of the <code>defData</code> workflow. Sometimes, it might be convenient to assign treatment or group membership while defining other variables. The <code>formula</code> specifies the relative allocation to the different groups. For example three-arm randomization with equal allocation to each arm would be specified as <em>“1;1;1”</em>. The <code>variance</code> field defines the stratification variables, and would be specified as <em>“s_1;s_2”</em> if <em>s_1</em> and <em>s_2</em> are the stratification variables. The <code>link</code> field is used to indicate if the allocations should be perfectly balanced; if nothing is specified (and link defaults to <em>identity</em>), the allocation will be balanced; if link is specified to be different from <em>identity</em>, then the allocation will not be balanced.</p>
 </div>
 <div id="uniform" class="section level4">
 <h4 class="hasAnchor">
