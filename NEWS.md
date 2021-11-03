@@ -3,7 +3,8 @@
 ## New features
 * You can now use non-scalar variables with double-dot notation. See the [*Dynamic Data Definition*](https://kgoldfeld.github.io/simstudy/articles/double_dot_extension.html#using-non-scalar-double-dot-variable-reference-1) Vignette.
 * The 'categorical' distribution now supports the variance parameter to introduce categories other than 1...n.
-  
+* You can now use [trtAssign()] as a distribution with [defData()].
+   
 ## Minor improvements and fixes
 * Added CITATION
 * genData now warns that a set 'id' parameter will override previously defined 'id' names from the data definition.
