@@ -116,6 +116,30 @@ p3a <- aplotfunc(study3, "")
 grid.arrange(p1, p1a, p2, p2a, p3, p3a, ncol=2)
 ```
 
+## Assigned treatment using *trtAssign* distribution in `defData`
+
+It is also possible to generate treatment assignments directly in the `defData` and `genData` process. In this example, randomization is stratified by *gender* and *age*, and the outcome *y* is effected by both of these factors as well as the treatment assignment variable *rx*.
+
+```{r}
+def <- defData(varname = "male", dist = "binary", 
+               formula = .5 , id="cid")
+def <- defData(def, varname = "over65", dist = "binary",  
+               formula = "-1.7 + .8*male", link="logit")
+def <- defData(def, varname = "rx", dist = "trtAssign",
+               formula = "1;1", variance = "male;over65")
+def <- defData(def, varname = "y", dist = "normal", 
+               formula = "20 + 5*male + 10*over65 + 10*rx", variance = 40)
+
+dtstudy <- genData(330, def)
+dtstudy
+```
+
+Here are the counts and average outcomes for each *gender*, *age*, and *treatment* combination:
+
+```{r}
+dtstudy[, .(n = .N, avg = round(mean(y), 1)), keyby = .(male, over65, rx)]
+```
+
 ## Observed treatment
 
 If exposure or treatment is observed (rather than randomly assigned), use `trtObserved` to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:

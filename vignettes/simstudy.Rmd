@@ -42,7 +42,7 @@ ggtheme <- function(panelback = "white") {
 
 The `simstudy` package is a collection of functions that allows users to generate simulated data sets to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster-randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.
 
-Simulation using `simstudy` has two fundamental steps. The user (1) **defines** the data elements of a data set and (2) **generates** the data based on these definitions. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, to create data sets with **missing** data, and to create non-linear relationships with underlying **spline** curves.
+Simulation using `simstudy` has two fundamental steps. The user (1) **defines** the data elements of a data set and (2) **generates** the data based on these definitions. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create data sets with **correlated variables** based on a specified covariance structure, to **merge** data sets, to create data sets with **missing** data, and to create non-linear relationships with underlying **spline** curves.
 
 The overarching philosophy of `simstudy` is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in `simstudy` *gamma*-distributed data are generated based on the specification of a mean $\mu$ (or $\log(\mu)$) and a dispersion $d$, rather than shape $\alpha$ and rate $\beta$ parameters that more typically characterize the *gamma* distribution. When we estimate the parameters, we are modeling $\mu$ (or some function of $(\mu)$), so we should explicitly recover the `simstudy` parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.
 
@@ -193,8 +193,9 @@ d[[9]] <- data.table("nonrandom", "formula", "both", "-", "-", "X", "-", "-")
 d[[10]] <- data.table("normal", "mean", "both", "-", "variance", "X", "-", "-")
 d[[11]] <- data.table("noZeroPoisson", "mean", "both", "-", "-", "X", "X", "-")
 d[[12]] <- data.table("poisson", "mean", "both", "-", "-", "X", "X", "-")
-d[[13]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
-d[[14]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[13]] <- data.table("trtAssign", "ratio", "string", "r_1;r_2;...;r_n", "stratification", "X", "X", "-")
+d[[14]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[15]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
 
 
 d <- rbindlist(d)
@@ -249,6 +250,10 @@ The *noZeroPoisson* distribution is a discrete data distribution that takes on p
 #### poisson
 
 The *poisson* distribution is a discrete data distribution that takes on non-negative integers. The `formula` specifies the mean $\lambda$ (link is 'identity') or log of the mean (`link` is log). The `variance` field does not apply to this distribution. The variance $\sigma^2$ is $\lambda$ itself.
+
+#### trtAssign
+
+The *trtAssign* distribution is an implementation of the `trtAssign` functionality in the context of the `defData` workflow. Sometimes, it might be convenient to assign treatment or group membership while defining other variables. The `formula` specifies the relative allocation to the different groups. For example three-arm randomization with equal allocation to each arm would be specified as *"1;1;1"*. The `variance` field defines the stratification variables, and would be specified as *"s_1;s_2"* if *s_1* and *s_2* are the stratification variables. The `link` field is used to indicate if the allocations should be perfectly balanced; if nothing is specified (and link defaults to *identity*), the allocation will be balanced; if link is specified to be different from *identity*, then the allocation will not be balanced.
 
 #### uniform
 
