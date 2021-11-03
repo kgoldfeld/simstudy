@@ -17,7 +17,7 @@
       formula = args$formula,
       precision = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     binary = {
@@ -27,7 +27,7 @@
         formula = args$formula,
         size = args$variance,
         link = args$link,
-        dtSim = dfSim,
+        dtSim = copy(dfSim),
         envir = envir
       )
     },
@@ -36,7 +36,7 @@
       formula = args$formula,
       size = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     categorical = .gencat(
@@ -44,14 +44,14 @@
       formula = args$formula,
       variance = args$variance,
       link = args$link,
-      dfSim = dfSim,
+      dfSim = copy(dfSim),
       envir = envir
     ),
     exponential = .genexp(
       n = n,
       formula = args$formula,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     gamma = .gengamma(
@@ -59,13 +59,13 @@
       formula = args$formula,
       dispersion = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     mixture = .genmixture(
       n = n,
       formula = args$formula,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     negBinomial = .gennegbinom(
@@ -73,14 +73,14 @@
       formula = args$formula,
       dispersion = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     nonrandom = .gendeterm(
       n = n,
       formula = args$formula,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     normal = .gennorm(
@@ -88,32 +88,32 @@
       formula = args$formula,
       variance = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     noZeroPoisson = .genpoisTrunc(
       n = n,
       formula = args$formula,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     poisson = .genpois(
       n = n,
       formula = args$formula,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     trtAssign = .genAssign(
-      dtName = dfSim,
+      dtName = copy(dfSim),
       grpName = args$varname,
       strata = args$variance,
       ratio = args$formula,
       balanced = args$link
     ),
     trtObserve = .genObserve(
-      dt = dfSim,
+      dt = copy(dfSim),
       grpName = args$varname,
       formulas = args$formula,
       logit.link = args$link
@@ -121,13 +121,13 @@
     uniform = .genunif(
       n = n,
       formula = args$formula,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     uniformInt = .genUnifInt(
       n = n,
       formula = args$formula,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     default = stop(
@@ -138,12 +138,16 @@
 
   # Create data frame
   if (is.null(dfSim)) {
-    dfNew <- data.frame(newColumn)
+    dfNew <- data.table(newColumn)
   } else {
     dfNew <- cbind(dfSim, newColumn)
   }
 
-  names(dfNew)[ncol(dfNew)] <- as.character(args$varname)
+  data.table::setnames(
+    dfNew,
+    ncol(dfNew),
+    as.character(args$varname)
+  )
 
   return(dfNew)
 }
@@ -573,23 +577,30 @@
 }
 
 .genAssign <- function(dtName, balanced,
-                      strata, grpName, ratio) {
-  dtName <- as.data.table(dtName)
-  if(strata == 0) {
+                       strata, grpName, ratio) {
+  stopifnot(is.data.table(dtName))
+  assertLength("formula/ratio" = ratio, length = 1)
+  if (strata == 0) {
     strata <- NULL
   } else {
     strata <- .splitFormula(strata)
   }
-  if (balanced == "identity") {
-    balanced <- TRUE
-  } else {
-    balanced <- FALSE
+
+  balanced <- fifelse(balanced == "identity", TRUE, FALSE)
+
+  if (is.character(ratio)) {
+    ratio <- as.numeric(.splitFormula(ratio))
+    nTrt <- length(ratio)
+  } else if (is.numeric(ratio)) {
+    nTrt <- ratio
+    ratio <- NULL
   }
   
-  ratio <- as.numeric(.splitFormula(ratio))
-  nTrt <- length(ratio)
-  trtAssign(dtName, nTrt, balanced, strata, grpName, ratio)[, ..grpName]
-                      }
+  trtAssign(
+    dtName,
+    nTrt, balanced, strata, grpName, ratio
+  )[, ..grpName]
+}
 
 .genObserve <- function(dt, formulas, logit.link, grpName) {
   dt <- as.data.table(dt)
