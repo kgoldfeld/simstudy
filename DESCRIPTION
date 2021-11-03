@@ -2,7 +2,7 @@ Type: Package
 Package: simstudy
 Title: Simulation of Study Data
 Version: 0.3.0
-Date: 2020-10-26
+Date: 2021-11-04
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",

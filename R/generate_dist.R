@@ -590,6 +590,7 @@
     ratio <- NULL
   }
 
+  ..grpName <- NULL # avoid NOTE
   trtAssign(
     dtName,
     nTrt, balanced, strata, grpName, ratio
