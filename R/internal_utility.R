@@ -190,8 +190,7 @@
       "negBinomial",
       "exponential",
       "mixture",
-      "trtAssign",
-      "trtObserve"
+      "trtAssign"
     )
   }
 

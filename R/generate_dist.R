@@ -112,12 +112,6 @@
       ratio = args$formula,
       balanced = args$link
     ),
-    trtObserve = .genObserve(
-      dt = copy(dfSim),
-      grpName = args$varname,
-      formulas = args$formula,
-      logit.link = args$link
-    ),
     uniform = .genunif(
       n = n,
       formula = args$formula,
@@ -595,19 +589,9 @@
     nTrt <- ratio
     ratio <- NULL
   }
-  
+
   trtAssign(
     dtName,
     nTrt, balanced, strata, grpName, ratio
   )[, ..grpName]
-}
-
-.genObserve <- function(dt, formulas, logit.link, grpName) {
-  dt <- as.data.table(dt)
-  if (logit.link == "identity") {
-    logit.link <- FALSE
-  } else {
-    logit.link <- TRUE
-  }
-  trtObserve(dt, formulas, logit.link, grpName)[, ..grpName]
 }
