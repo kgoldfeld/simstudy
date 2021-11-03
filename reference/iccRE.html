@@ -75,7 +75,7 @@ coefficients (ICCs) for clustered data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ coefficients (ICCs) for clustered data." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -136,7 +136,7 @@ coefficients (ICCs) for clustered data." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -211,29 +211,35 @@ specified when distribution is "gamma".</p></td>
 at the cluster level that correspond to the ICC vector.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>targetICC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.20</span>, by <span class='op'>=</span> <span class='fl'>.01</span><span class='op'>)</span>
-
-<span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"poisson"</span>, lambda <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.0017513 0.0021231 0.0025026 0.0028901 0.0032858 0.0036900 0.0041029
-#&gt;  [8] 0.0045249 0.0049562 0.0053971 0.0058480 0.0063092 0.0067811 0.0072640
-#&gt; [15] 0.0077584 0.0082647</div><div class='input'>
-<span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"binary"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.1731510 0.2099916 0.2476245 0.2860755 0.3253716 0.3655409 0.4066129
-#&gt;  [8] 0.4486184 0.4915895 0.5355599 0.5805650 0.6266415 0.6738284 0.7221662
-#&gt; [15] 0.7716975 0.8224670</div><div class='input'>
-<span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"normal"</span>, varTotal <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20</div><div class='input'><span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"normal"</span>, varWithin <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  5.263158  6.382979  7.526882  8.695652  9.890110 11.111111 12.359551
-#&gt;  [8] 13.636364 14.942529 16.279070 17.647059 19.047619 20.481928 21.951220
-#&gt; [15] 23.456790 25.000000</div><div class='input'>
-<span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"gamma"</span>, disp <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.03394390 0.04116600 0.04854342 0.05608122 0.06378469 0.07165934
-#&gt;  [7] 0.07971095 0.08794555 0.09636946 0.10498927 0.11381189 0.12284458
-#&gt; [13] 0.13209493 0.14157089 0.15128083 0.16123352</div><div class='input'>
-<span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"negBinomial"</span>, lambda <span class='op'>=</span> <span class='fl'>40</span>, disp <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.03609454 0.04377423 0.05161908 0.05963446 0.06782601 0.07619959
-#&gt;  [7] 0.08476134 0.09351768 0.10247531 0.11164126 0.12102288 0.13062787
-#&gt; [13] 0.14046431 0.15054066 0.16086581 0.17144908</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>targetICC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.20</span>, by <span class='op'>=</span> <span class='fl'>.01</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"poisson"</span>, lambda <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.0017513 0.0021231 0.0025026 0.0028901 0.0032858 0.0036900 0.0041029</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 0.0045249 0.0049562 0.0053971 0.0058480 0.0063092 0.0067811 0.0072640</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [15] 0.0077584 0.0082647</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"binary"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.1731510 0.2099916 0.2476245 0.2860755 0.3253716 0.3655409 0.4066129</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 0.4486184 0.4915895 0.5355599 0.5805650 0.6266415 0.6738284 0.7221662</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [15] 0.7716975 0.8224670</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"normal"</span>, varTotal <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1]  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20</span>
+<span class='r-in'><span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"normal"</span>, varWithin <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1]  5.263158  6.382979  7.526882  8.695652  9.890110 11.111111 12.359551</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 13.636364 14.942529 16.279070 17.647059 19.047619 20.481928 21.951220</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [15] 23.456790 25.000000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"gamma"</span>, disp <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.03394390 0.04116600 0.04854342 0.05608122 0.06378469 0.07165934</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] 0.07971095 0.08794555 0.09636946 0.10498927 0.11381189 0.12284458</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [13] 0.13209493 0.14157089 0.15128083 0.16123352</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>iccRE</span><span class='op'>(</span><span class='va'>targetICC</span>, <span class='st'>"negBinomial"</span>, lambda <span class='op'>=</span> <span class='fl'>40</span>, disp <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.03609454 0.04377423 0.05161908 0.05963446 0.06782601 0.07619959</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] 0.08476134 0.09351768 0.10247531 0.11164126 0.12102288 0.13062787</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [13] 0.14046431 0.15054066 0.16086581 0.17144908</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

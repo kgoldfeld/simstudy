@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -208,110 +208,121 @@ probability vector</p>
     <div class='dont-index'><p><code><a href='trtObserve.html'>trtObserve</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
-
-<span class='va'>dt1</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>3</span>, balanced <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>dt1</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='va'>trtGrp</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    trtGrp N
-#&gt; 1:      1 5
-#&gt; 2:      2 5
-#&gt; 3:      3 5</div><div class='input'>
-<span class='va'>dt2</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>3</span>, balanced <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='va'>dt2</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='va'>trtGrp</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    trtGrp N
-#&gt; 1:      1 4
-#&gt; 2:      2 3
-#&gt; 3:      3 8</div><div class='input'>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"male"</span>, formula <span class='op'>=</span> <span class='fl'>.4</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span><span class='op'>)</span>
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def</span><span class='op'>)</span>
-<span class='va'>dt</span>
-</div><div class='output co'>#&gt;         id male
-#&gt;    1:    1    0
-#&gt;    2:    2    1
-#&gt;    3:    3    1
-#&gt;    4:    4    1
-#&gt;    5:    5    0
-#&gt;   ---          
-#&gt;  996:  996    1
-#&gt;  997:  997    0
-#&gt;  998:  998    0
-#&gt;  999:  999    1
-#&gt; 1000: 1000    0</div><div class='input'>
-<span class='va'>dt3</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>5</span>, strata <span class='op'>=</span> <span class='st'>"male"</span>, balanced <span class='op'>=</span> <span class='cn'>TRUE</span>, grpName <span class='op'>=</span> <span class='st'>"Group"</span><span class='op'>)</span>
-<span class='va'>dt3</span>
-</div><div class='output co'>#&gt;         id male Group
-#&gt;    1:    1    0     3
-#&gt;    2:    2    1     2
-#&gt;    3:    3    1     5
-#&gt;    4:    4    1     4
-#&gt;    5:    5    0     1
-#&gt;   ---                
-#&gt;  996:  996    1     1
-#&gt;  997:  997    0     3
-#&gt;  998:  998    0     3
-#&gt;  999:  999    1     2
-#&gt; 1000: 1000    0     5</div><div class='input'><span class='va'>dt3</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>male</span>, <span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;     male Group   N
-#&gt;  1:    0     1 122
-#&gt;  2:    0     2 122
-#&gt;  3:    0     3 122
-#&gt;  4:    0     4 121
-#&gt;  5:    0     5 121
-#&gt;  6:    1     1  79
-#&gt;  7:    1     2  78
-#&gt;  8:    1     3  78
-#&gt;  9:    1     4  78
-#&gt; 10:    1     5  79</div><div class='input'><span class='va'>dt3</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    Group   N
-#&gt; 1:     1 201
-#&gt; 2:     2 200
-#&gt; 3:     3 200
-#&gt; 4:     4 199
-#&gt; 5:     5 200</div><div class='input'>
-<span class='va'>dt4</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>5</span>, strata <span class='op'>=</span> <span class='st'>"male"</span>, balanced <span class='op'>=</span> <span class='cn'>FALSE</span>, grpName <span class='op'>=</span> <span class='st'>"Group"</span><span class='op'>)</span>
-<span class='va'>dt4</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>male</span>, <span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;     male Group   N
-#&gt;  1:    0     1 119
-#&gt;  2:    0     2 125
-#&gt;  3:    0     3 117
-#&gt;  4:    0     4 124
-#&gt;  5:    0     5 123
-#&gt;  6:    1     1  70
-#&gt;  7:    1     2  91
-#&gt;  8:    1     3  66
-#&gt;  9:    1     4  84
-#&gt; 10:    1     5  81</div><div class='input'><span class='va'>dt4</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    Group   N
-#&gt; 1:     1 189
-#&gt; 2:     2 216
-#&gt; 3:     3 183
-#&gt; 4:     4 208
-#&gt; 5:     5 204</div><div class='input'>
-<span class='va'>dt5</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>5</span>, balanced <span class='op'>=</span> <span class='cn'>TRUE</span>, grpName <span class='op'>=</span> <span class='st'>"Group"</span><span class='op'>)</span>
-<span class='va'>dt5</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>male</span>, <span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;     male Group   N
-#&gt;  1:    0     1 122
-#&gt;  2:    0     2 122
-#&gt;  3:    0     3 117
-#&gt;  4:    0     4 119
-#&gt;  5:    0     5 128
-#&gt;  6:    1     1  78
-#&gt;  7:    1     2  78
-#&gt;  8:    1     3  83
-#&gt;  9:    1     4  81
-#&gt; 10:    1     5  72</div><div class='input'><span class='va'>dt5</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    Group   N
-#&gt; 1:     1 200
-#&gt; 2:     2 200
-#&gt; 3:     3 200
-#&gt; 4:     4 200
-#&gt; 5:     5 200</div><div class='input'>
-<span class='va'>dt6</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>3</span>, ratio <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>, grpName <span class='op'>=</span> <span class='st'>"Group"</span><span class='op'>)</span>
-<span class='va'>dt6</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    Group   N
-#&gt; 1:     1 200
-#&gt; 2:     2 400
-#&gt; 3:     3 400</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt1</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>3</span>, balanced <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt1</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='va'>trtGrp</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    trtGrp N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:      1 5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:      2 5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:      3 5</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt2</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>3</span>, balanced <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt2</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='va'>trtGrp</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    trtGrp N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:      1 4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:      2 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:      3 8</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"male"</span>, formula <span class='op'>=</span> <span class='fl'>.4</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id male</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    2    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    3    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    4    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    5    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  996:  996    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  997:  997    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  998:  998    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  999:  999    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1000: 1000    0</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt3</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>5</span>, strata <span class='op'>=</span> <span class='st'>"male"</span>, balanced <span class='op'>=</span> <span class='cn'>TRUE</span>, grpName <span class='op'>=</span> <span class='st'>"Group"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt3</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         id male Group</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:    1    0     3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:    2    1     2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:    3    1     5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:    4    1     4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:    5    0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  996:  996    1     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  997:  997    0     3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  998:  998    0     3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  999:  999    1     2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1000: 1000    0     5</span>
+<span class='r-in'><span class='va'>dt3</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>male</span>, <span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     male Group   N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:    0     1 122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:    0     2 122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:    0     3 122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:    0     4 121</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5:    0     5 121</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:    1     1  79</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:    1     2  78</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:    1     3  78</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:    1     4  78</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10:    1     5  79</span>
+<span class='r-in'><span class='va'>dt3</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Group   N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     1 201</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     2 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:     3 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:     4 199</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:     5 200</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt4</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>5</span>, strata <span class='op'>=</span> <span class='st'>"male"</span>, balanced <span class='op'>=</span> <span class='cn'>FALSE</span>, grpName <span class='op'>=</span> <span class='st'>"Group"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt4</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>male</span>, <span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     male Group   N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:    0     1 119</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:    0     2 125</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:    0     3 117</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:    0     4 124</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5:    0     5 123</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:    1     1  70</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:    1     2  91</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:    1     3  66</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:    1     4  84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10:    1     5  81</span>
+<span class='r-in'><span class='va'>dt4</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Group   N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     1 189</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     2 216</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:     3 183</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:     4 208</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:     5 204</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt5</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>5</span>, balanced <span class='op'>=</span> <span class='cn'>TRUE</span>, grpName <span class='op'>=</span> <span class='st'>"Group"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt5</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>male</span>, <span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     male Group   N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:    0     1 122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:    0     2 122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:    0     3 117</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:    0     4 119</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5:    0     5 128</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:    1     1  78</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:    1     2  78</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:    1     3  83</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:    1     4  81</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10:    1     5  72</span>
+<span class='r-in'><span class='va'>dt5</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Group   N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     1 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     2 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:     3 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:     4 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:     5 200</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt6</span> <span class='op'>&lt;-</span> <span class='fu'>trtAssign</span><span class='op'>(</span><span class='va'>dt</span>, nTrt <span class='op'>=</span> <span class='fl'>3</span>, ratio <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>, grpName <span class='op'>=</span> <span class='st'>"Group"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt6</span><span class='op'>[</span>, <span class='va'>.N</span>, keyby <span class='op'>=</span> <span class='fu'>.</span><span class='op'>(</span><span class='va'>Group</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Group   N</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     1 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     2 400</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:     3 400</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -176,7 +176,9 @@ a data set with ids only is generated.</p></td>
     </tr>
     <tr>
       <th>id</th>
-      <td><p>The string defining the id of the record</p></td>
+      <td><p>The string defining the id of the record. Will override previously
+set id name with a warning (unless the old value is 'id'). If the
+id attribute in dtDefs is NULL will default to 'id'.</p></td>
     </tr>
     <tr>
       <th>envir</th>
@@ -190,63 +192,67 @@ Defaults to <a href='https://rdrr.io/r/base/sys.parent.html'>base::parent.frame<
     <p>A data.table that contains the simulated data.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>genData</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    id
-#&gt; 1:  1
-#&gt; 2:  2
-#&gt; 3:  3
-#&gt; 4:  4
-#&gt; 5:  5</div><div class='input'><span class='fu'>genData</span><span class='op'>(</span><span class='fl'>5</span>, id <span class='op'>=</span> <span class='st'>"grpID"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    grpID
-#&gt; 1:     1
-#&gt; 2:     2
-#&gt; 3:     3
-#&gt; 4:     4
-#&gt; 5:     5</div><div class='input'>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>
-  varname <span class='op'>=</span> <span class='st'>"xNr"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, formula <span class='op'>=</span> <span class='fl'>7</span>,
-  id <span class='op'>=</span> <span class='st'>"idnum"</span>
-<span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,
-  varname <span class='op'>=</span> <span class='st'>"xUni"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span>,
-  formula <span class='op'>=</span> <span class='st'>"10;20"</span>
-<span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,
-  varname <span class='op'>=</span> <span class='st'>"xNorm"</span>, formula <span class='op'>=</span> <span class='st'>"xNr + xUni * 2"</span>,
-  dist <span class='op'>=</span> <span class='st'>"normal"</span>, variance <span class='op'>=</span> <span class='fl'>8</span>
-<span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,
-  varname <span class='op'>=</span> <span class='st'>"xPois"</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>,
-  formula <span class='op'>=</span> <span class='st'>"xNr - 0.2 * xUni"</span>, link <span class='op'>=</span> <span class='st'>"log"</span>
-<span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,
-  varname <span class='op'>=</span> <span class='st'>"xCat"</span>, formula <span class='op'>=</span> <span class='st'>"0.3;0.2;0.5"</span>,
-  dist <span class='op'>=</span> <span class='st'>"categorical"</span>
-<span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,
-  varname <span class='op'>=</span> <span class='st'>"xGamma"</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, formula <span class='op'>=</span> <span class='st'>"5+xCat"</span>,
-  variance <span class='op'>=</span> <span class='fl'>1</span>, link <span class='op'>=</span> <span class='st'>"log"</span>
-<span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,
-  varname <span class='op'>=</span> <span class='st'>"xBin"</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>, formula <span class='op'>=</span> <span class='st'>"-3 + xCat"</span>,
-  link <span class='op'>=</span> <span class='st'>"logit"</span>
-<span class='op'>)</span>
-<span class='va'>def</span>
-</div><div class='output co'>#&gt;    varname          formula variance        dist     link
-#&gt; 1:     xNr                7        0   nonrandom identity
-#&gt; 2:    xUni            10;20        0     uniform identity
-#&gt; 3:   xNorm   xNr + xUni * 2        8      normal identity
-#&gt; 4:   xPois xNr - 0.2 * xUni        0     poisson      log
-#&gt; 5:    xCat      0.3;0.2;0.5        0 categorical identity
-#&gt; 6:  xGamma           5+xCat        1       gamma      log
-#&gt; 7:    xBin        -3 + xCat        0      binary    logit</div><div class='input'>
-<span class='fu'>genData</span><span class='op'>(</span><span class='fl'>5</span>, <span class='va'>def</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    idnum xNr     xUni    xNorm xPois xCat   xGamma xBin
-#&gt; 1:     1   7 13.21221 31.87277    73    3 4779.621    1
-#&gt; 2:     2   7 11.63804 29.42522   127    3 1525.065    0
-#&gt; 3:     3   7 16.01978 36.30093    50    2 1155.946    0
-#&gt; 4:     4   7 19.61596 43.77713    18    3 2443.359    1
-#&gt; 5:     5   7 12.56710 33.65354   101    3 8068.865    1</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>genData</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    id</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:  3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:  5</span>
+<span class='r-in'><span class='fu'>genData</span><span class='op'>(</span><span class='fl'>5</span>, id <span class='op'>=</span> <span class='st'>"grpID"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    grpID</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:     3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:     4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:     5</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span></span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"xNr"</span>, dist <span class='op'>=</span> <span class='st'>"nonrandom"</span>, formula <span class='op'>=</span> <span class='fl'>7</span>,</span>
+<span class='r-in'>  id <span class='op'>=</span> <span class='st'>"idnum"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"xUni"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='st'>"10;20"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"xNorm"</span>, formula <span class='op'>=</span> <span class='st'>"xNr + xUni * 2"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"normal"</span>, variance <span class='op'>=</span> <span class='fl'>8</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"xPois"</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span>,</span>
+<span class='r-in'>  formula <span class='op'>=</span> <span class='st'>"xNr - 0.2 * xUni"</span>, link <span class='op'>=</span> <span class='st'>"log"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"xCat"</span>, formula <span class='op'>=</span> <span class='st'>"0.3;0.2;0.5"</span>,</span>
+<span class='r-in'>  dist <span class='op'>=</span> <span class='st'>"categorical"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"xGamma"</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span>, formula <span class='op'>=</span> <span class='st'>"5+xCat"</span>,</span>
+<span class='r-in'>  variance <span class='op'>=</span> <span class='fl'>1</span>, link <span class='op'>=</span> <span class='st'>"log"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"xBin"</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span>, formula <span class='op'>=</span> <span class='st'>"-3 + xCat"</span>,</span>
+<span class='r-in'>  link <span class='op'>=</span> <span class='st'>"logit"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    varname          formula variance        dist     link</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     xNr                7        0   nonrandom identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    xUni            10;20        0     uniform identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:   xNorm   xNr + xUni * 2        8      normal identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:   xPois xNr - 0.2 * xUni        0     poisson      log</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:    xCat      0.3;0.2;0.5        0 categorical identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:  xGamma           5+xCat        1       gamma      log</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:    xBin        -3 + xCat        0      binary    logit</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>genData</span><span class='op'>(</span><span class='fl'>5</span>, <span class='va'>def</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    idnum xNr     xUni    xNorm xPois xCat   xGamma xBin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     1   7 13.21221 31.87277    73    3 4779.621    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     2   7 11.63804 29.42522   127    3 1525.065    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:     3   7 16.01978 36.30093    50    2 1155.946    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:     4   7 19.61596 43.77713    18    3 2443.359    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:     5   7 12.56710 33.65354   101    3 8068.865    1</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

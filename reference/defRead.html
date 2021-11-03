@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -182,39 +182,41 @@
     <div class='dont-index'><p>[distributions]</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Create temporary external "csv" file</span>
-
-<span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-  <span class='st'>"varname,formula,variance,dist,link"</span>,
-  <span class='st'>"nr,7, 0,nonrandom,identity"</span>,
-  <span class='st'>"x1,.4, 0,binary,identity"</span>,
-  <span class='st'>"y1,nr + x1 * 2,8,normal,identity"</span>,
-  <span class='st'>"y2,nr - 0.2 * x1,0,poisson, log"</span>
-<span class='op'>)</span>
-
-<span class='va'>tfcsv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span><span class='va'>test1</span>, <span class='va'>tfcsv</span><span class='op'>)</span>
-
-<span class='co'># Read external csv file stored in file "tfcsv"</span>
-
-<span class='va'>defs</span> <span class='op'>&lt;-</span> <span class='fu'>defRead</span><span class='op'>(</span><span class='va'>tfcsv</span>, id <span class='op'>=</span> <span class='st'>"myID"</span><span class='op'>)</span>
-<span class='va'>defs</span>
-</div><div class='output co'>#&gt;    varname       formula variance      dist     link
-#&gt; 1:      nr             7        0 nonrandom identity
-#&gt; 2:      x1            .4        0    binary identity
-#&gt; 3:      y1   nr + x1 * 2        8    normal identity
-#&gt; 4:      y2 nr - 0.2 * x1        0   poisson      log</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>tfcsv</span><span class='op'>)</span>
-
-<span class='co'># Generate data based on external definition</span>
-
-<span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='va'>defs</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    myID nr x1        y1 y2
-#&gt; 1:    1  7  0  5.959429  7
-#&gt; 2:    2  7  0 12.481746  9
-#&gt; 3:    3  7  0  8.954772  7
-#&gt; 4:    4  7  1  8.650740  5
-#&gt; 5:    5  7  0  6.317463  7</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Create temporary external "csv" file</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='st'>"varname,formula,variance,dist,link"</span>,</span>
+<span class='r-in'>  <span class='st'>"nr,7, 0,nonrandom,identity"</span>,</span>
+<span class='r-in'>  <span class='st'>"x1,.4, 0,binary,identity"</span>,</span>
+<span class='r-in'>  <span class='st'>"y1,nr + x1 * 2,8,normal,identity"</span>,</span>
+<span class='r-in'>  <span class='st'>"y2,nr - 0.2 * x1,0,poisson, log"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tfcsv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span><span class='va'>test1</span>, <span class='va'>tfcsv</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Read external csv file stored in file "tfcsv"</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>defs</span> <span class='op'>&lt;-</span> <span class='fu'>defRead</span><span class='op'>(</span><span class='va'>tfcsv</span>, id <span class='op'>=</span> <span class='st'>"myID"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>defs</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    varname       formula variance      dist     link</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:      nr             7        0 nonrandom identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:      x1            .4        0    binary identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:      y1   nr + x1 * 2        8    normal identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      y2 nr - 0.2 * x1        0   poisson      log</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>tfcsv</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Generate data based on external definition</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='va'>defs</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    myID nr x1        y1 y2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    1  7  0  5.959429  7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    2  7  0 12.481746  9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:    3  7  0  8.954772  7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:    4  7  1  8.650740  5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:    5  7  0  6.317463  7</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

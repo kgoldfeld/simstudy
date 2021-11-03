@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -106,8 +106,7 @@
 
       
 
-      </header><script src="clustered_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="clustered_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="clustered_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="clustered_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Clustered Data</h1>
@@ -123,8 +122,8 @@
 <p>The function <code>genCluster</code> generates multilevel or clustered data based on a previously generated data set that is one “level” up from the clustered data. For example, if there is a data set that contains the school level (considered here to be level 2), classrooms (level 1) can be generated. And then, students (now level 1) can be generated within classrooms (now level 2)</p>
 <p>In the example here, we do in fact generate school-, class-, and student-level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides <em>random effects</em> at each of these levels.</p>
 <p>We start by defining the school level data:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">gen.school</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"s0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">3</span>, 
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gen.school</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"s0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">3</span>,
     id <span class="op">=</span> <span class="st">"idSchool"</span><span class="op">)</span>
 <span class="va">gen.school</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">gen.school</span>, varname <span class="op">=</span> <span class="st">"nClasses"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
@@ -133,7 +132,7 @@
 <span class="va">dtSchool</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">8</span>, <span class="va">gen.school</span><span class="op">)</span>
 <span class="va">dtSchool</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtSchool</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 
-<span class="va">dtSchool</span></pre></div>
+<span class="va">dtSchool</span></code></pre></div>
 <pre><code>##    idSchool         s0 nClasses trtGrp
 ## 1:        1  0.9732297        3      1
 ## 2:        2  3.5741932        4      1
@@ -144,15 +143,15 @@
 ## 7:        7  2.4400170        2      1
 ## 8:        8 -1.2496060        1      0</code></pre>
 <p>The classroom level data are generated with a call to <code>genCluster</code>, and then school level data is added by a call to <code>addColumns</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">gen.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"c0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="va">gen.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">gen.class</span>, varname <span class="op">=</span> <span class="st">"nStudents"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, 
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gen.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"c0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="va">gen.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">gen.class</span>, varname <span class="op">=</span> <span class="st">"nStudents"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>,
     formula <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
 
 <span class="va">dtClass</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCluster.html">genCluster</a></span><span class="op">(</span><span class="va">dtSchool</span>, <span class="st">"idSchool"</span>, numIndsVar <span class="op">=</span> <span class="st">"nClasses"</span>, level1ID <span class="op">=</span> <span class="st">"idClass"</span><span class="op">)</span>
 <span class="va">dtClass</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">gen.class</span>, <span class="va">dtClass</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dtClass</span>, <span class="fl">10</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dtClass</span>, <span class="fl">10</span><span class="op">)</span></code></pre></div>
 <pre><code>##     idSchool        s0 nClasses trtGrp idClass          c0 nStudents
 ##  1:        1 0.9732297        3      1       1  1.62726560        16
 ##  2:        1 0.9732297        3      1       2 -0.69640102        16
@@ -165,18 +164,20 @@
 ##  9:        3 0.1121028        3      0       9  0.07024057        19
 ## 10:        3 0.1121028        3      0      10  1.09465368        21</code></pre>
 <p>Finally, the student level data are added using the same process:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, 
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>,
     formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-<span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">gen.student</span>, varname <span class="op">=</span> <span class="st">"age"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span>, 
+<span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">gen.student</span>, varname <span class="op">=</span> <span class="st">"age"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span>,
     formula <span class="op">=</span> <span class="st">"9.5; 10.5"</span><span class="op">)</span>
-<span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">gen.student</span>, varname <span class="op">=</span> <span class="st">"test"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, 
+<span class="va">gen.student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">gen.student</span>, varname <span class="op">=</span> <span class="st">"test"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>,
     formula <span class="op">=</span> <span class="st">"50 - 5*Male + s0 + c0 + 8 * trtGrp"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="va">dtStudent</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCluster.html">genCluster</a></span><span class="op">(</span><span class="va">dtClass</span>, cLevelVar <span class="op">=</span> <span class="st">"idClass"</span>, numIndsVar <span class="op">=</span> <span class="st">"nStudents"</span>, 
+<span class="va">dtStudent</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genCluster.html">genCluster</a></span><span class="op">(</span><span class="va">dtClass</span>, cLevelVar <span class="op">=</span> <span class="st">"idClass"</span>, numIndsVar <span class="op">=</span> <span class="st">"nStudents"</span>,
     level1ID <span class="op">=</span> <span class="st">"idChild"</span><span class="op">)</span>
 
-<span class="va">dtStudent</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">gen.student</span>, <span class="va">dtStudent</span><span class="op">)</span></pre></div>
+<span class="va">dtStudent</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">gen.student</span>, <span class="va">dtStudent</span><span class="op">)</span></code></pre></div>
 <p>This is what the clustered data look like. Each classroom is represented by a box, and each school is represented by a color. The intervention group is highlighted by dark outlines:</p>
+<pre><code>## Warning: It is deprecated to specify `guide = FALSE` to remove a guide. Please
+## use `guide = "none"` instead.</code></pre>
 <p><img src="clustered_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
   </div>
 

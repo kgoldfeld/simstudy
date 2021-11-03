@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -187,64 +187,67 @@ referenced varname will be removed.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># First example:</span>
-
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"cat"</span>, formula <span class='op'>=</span> <span class='st'>".2;.3;.5"</span>, dist <span class='op'>=</span> <span class='st'>"categorical"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"x"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='va'>def</span><span class='op'>)</span>
-<span class='va'>dx</span>
-</div><div class='output co'>#&gt;       id cat        x
-#&gt;   1:   1   2 6.450340
-#&gt;   2:   2   3 7.922583
-#&gt;   3:   3   1 4.786523
-#&gt;   4:   4   3 8.716692
-#&gt;   5:   5   2 4.981055
-#&gt;  ---                 
-#&gt; 196: 196   3 4.778965
-#&gt; 197: 197   3 4.974389
-#&gt; 198: 198   2 2.618697
-#&gt; 199: 199   3 6.289800
-#&gt; 200: 200   3 6.357688</div><div class='input'>
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genFactor.html'>genFactor</a></span><span class='op'>(</span><span class='va'>dx</span>, <span class='st'>"cat"</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"one"</span>, <span class='st'>"two"</span>, <span class='st'>"three"</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genDummy</span><span class='op'>(</span><span class='va'>dx</span>, varname <span class='op'>=</span> <span class='st'>"fcat"</span>, sep <span class='op'>=</span> <span class='st'>"_"</span><span class='op'>)</span>
-
-<span class='va'>dx</span>
-</div><div class='output co'>#&gt;       id        x  fcat fcat_one fcat_two fcat_three
-#&gt;   1:   1 6.450340   two        0        1          0
-#&gt;   2:   2 7.922583 three        0        0          1
-#&gt;   3:   3 4.786523   one        1        0          0
-#&gt;   4:   4 8.716692 three        0        0          1
-#&gt;   5:   5 4.981055   two        0        1          0
-#&gt;  ---                                                
-#&gt; 196: 196 4.778965 three        0        0          1
-#&gt; 197: 197 4.974389 three        0        0          1
-#&gt; 198: 198 2.618697   two        0        1          0
-#&gt; 199: 199 6.289800 three        0        0          1
-#&gt; 200: 200 6.357688 three        0        0          1</div><div class='input'>
-<span class='co'># Second example:</span>
-
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='trtAssign.html'>trtAssign</a></span><span class='op'>(</span>dtName <span class='op'>=</span> <span class='va'>dx</span>, <span class='fl'>3</span>, grpName <span class='op'>=</span> <span class='st'>"arm"</span><span class='op'>)</span>
-<span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genDummy</span><span class='op'>(</span><span class='va'>dx</span>, varname <span class='op'>=</span> <span class='st'>"arm"</span><span class='op'>)</span>
-<span class='va'>dx</span>
-</div><div class='output co'>#&gt;     id arm arm.1 arm.2 arm.3
-#&gt;  1:  1   1     1     0     0
-#&gt;  2:  2   2     0     1     0
-#&gt;  3:  3   2     0     1     0
-#&gt;  4:  4   1     1     0     0
-#&gt;  5:  5   2     0     1     0
-#&gt;  6:  6   1     1     0     0
-#&gt;  7:  7   3     0     0     1
-#&gt;  8:  8   2     0     1     0
-#&gt;  9:  9   1     1     0     0
-#&gt; 10: 10   3     0     0     1
-#&gt; 11: 11   3     0     0     1
-#&gt; 12: 12   1     1     0     0
-#&gt; 13: 13   3     0     0     1
-#&gt; 14: 14   2     0     1     0
-#&gt; 15: 15   3     0     0     1</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># First example:</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"cat"</span>, formula <span class='op'>=</span> <span class='st'>".2;.3;.5"</span>, dist <span class='op'>=</span> <span class='st'>"categorical"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"x"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='va'>def</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dx</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       id cat        x</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:   1   2 6.450340</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:   2   3 7.922583</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:   3   1 4.786523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:   4   3 8.716692</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:   5   2 4.981055</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 196: 196   3 4.778965</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 197: 197   3 4.974389</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 198: 198   2 2.618697</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 199: 199   3 6.289800</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 200: 200   3 6.357688</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genFactor.html'>genFactor</a></span><span class='op'>(</span><span class='va'>dx</span>, <span class='st'>"cat"</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"one"</span>, <span class='st'>"two"</span>, <span class='st'>"three"</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genDummy</span><span class='op'>(</span><span class='va'>dx</span>, varname <span class='op'>=</span> <span class='st'>"fcat"</span>, sep <span class='op'>=</span> <span class='st'>"_"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dx</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       id        x  fcat fcat_one fcat_two fcat_three</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:   1 6.450340   two        0        1          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:   2 7.922583 three        0        0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:   3 4.786523   one        1        0          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:   4 8.716692 three        0        0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:   5 4.981055   two        0        1          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 196: 196 4.778965 three        0        0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 197: 197 4.974389 three        0        0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 198: 198 2.618697   two        0        1          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 199: 199 6.289800 three        0        0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 200: 200 6.357688 three        0        0          1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Second example:</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='trtAssign.html'>trtAssign</a></span><span class='op'>(</span>dtName <span class='op'>=</span> <span class='va'>dx</span>, <span class='fl'>3</span>, grpName <span class='op'>=</span> <span class='st'>"arm"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dx</span> <span class='op'>&lt;-</span> <span class='fu'>genDummy</span><span class='op'>(</span><span class='va'>dx</span>, varname <span class='op'>=</span> <span class='st'>"arm"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dx</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     id arm arm.1 arm.2 arm.3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:  1   1     1     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:  2   2     0     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:  3   2     0     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:  4   1     1     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5:  5   2     0     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:  6   1     1     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:  7   3     0     0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:  8   2     0     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:  9   1     1     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10: 10   3     0     0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11: 11   3     0     0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12: 12   1     1     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13: 13   3     0     0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14: 14   2     0     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15: 15   3     0     0     1</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -75,7 +75,7 @@ existing definitions table" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ existing definitions table" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -136,7 +136,7 @@ existing definitions table" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -210,50 +210,52 @@ existing definitions table</p>
     <div class='dont-index'><p><a href='distributions.html'>distributions</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># New data set</span>
-
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"x"</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span>, formula <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"y"</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>9</span><span class='op'>)</span>
-
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>def</span><span class='op'>)</span>
-
-<span class='co'># Add columns to dt</span>
-
-<span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span>
-  condition <span class='op'>=</span> <span class='st'>"x == 1"</span>, formula <span class='op'>=</span> <span class='st'>"5 + 2*y"</span>,
-  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>
-<span class='op'>)</span>
-
-<span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span><span class='va'>defC</span>,
-  condition <span class='op'>=</span> <span class='st'>"x &lt;= 5 &amp; x &gt;= 2"</span>, formula <span class='op'>=</span> <span class='st'>"3 - 2*y"</span>,
-  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>
-<span class='op'>)</span>
-
-<span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span><span class='va'>defC</span>,
-  condition <span class='op'>=</span> <span class='st'>"x &gt;= 6"</span>, formula <span class='op'>=</span> <span class='fl'>1</span>,
-  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>
-<span class='op'>)</span>
-
-<span class='va'>defC</span>
-</div><div class='output co'>#&gt;          condition formula variance   dist     link
-#&gt; 1:          x == 1 5 + 2*y        1 normal identity
-#&gt; 2: x &lt;= 5 &amp; x &gt;= 2 3 - 2*y        1 normal identity
-#&gt; 3:          x &gt;= 6       1        1 normal identity</div><div class='input'>
-<span class='co'># Add conditional column with field name "z"</span>
-
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCondition.html'>addCondition</a></span><span class='op'>(</span><span class='va'>defC</span>, <span class='va'>dt</span>, <span class='st'>"z"</span><span class='op'>)</span>
-<span class='va'>dt</span>
-</div><div class='output co'>#&gt;     id           z  x          y
-#&gt;  1:  1 12.60493882  5 -4.8401325
-#&gt;  2:  2  0.06657201  4  1.1153079
-#&gt;  3:  3  9.88180241  2 -2.7703308
-#&gt;  4:  4 16.58747478  5 -6.9123133
-#&gt;  5:  5  4.97777186  5 -0.8299244
-#&gt;  6:  6  5.80134321  4 -1.6118639
-#&gt;  7:  7  0.91513328  8 -0.2025508
-#&gt;  8:  8  1.49741504  6 -4.9571323
-#&gt;  9:  9  2.67471877 10  4.1792946
-#&gt; 10: 10  3.76736873  5 -1.0166581</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># New data set</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"x"</span>, dist <span class='op'>=</span> <span class='st'>"noZeroPoisson"</span>, formula <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"y"</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>9</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='genData.html'>genData</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>def</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Add columns to dt</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span></span>
+<span class='r-in'>  condition <span class='op'>=</span> <span class='st'>"x == 1"</span>, formula <span class='op'>=</span> <span class='st'>"5 + 2*y"</span>,</span>
+<span class='r-in'>  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span><span class='va'>defC</span>,</span>
+<span class='r-in'>  condition <span class='op'>=</span> <span class='st'>"x &lt;= 5 &amp; x &gt;= 2"</span>, formula <span class='op'>=</span> <span class='st'>"3 - 2*y"</span>,</span>
+<span class='r-in'>  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>defC</span> <span class='op'>&lt;-</span> <span class='fu'>defCondition</span><span class='op'>(</span><span class='va'>defC</span>,</span>
+<span class='r-in'>  condition <span class='op'>=</span> <span class='st'>"x &gt;= 6"</span>, formula <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>  variance <span class='op'>=</span> <span class='fl'>1</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>defC</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          condition formula variance   dist     link</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:          x == 1 5 + 2*y        1 normal identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: x &lt;= 5 &amp; x &gt;= 2 3 - 2*y        1 normal identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:          x &gt;= 6       1        1 normal identity</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Add conditional column with field name "z"</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addCondition.html'>addCondition</a></span><span class='op'>(</span><span class='va'>defC</span>, <span class='va'>dt</span>, <span class='st'>"z"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     id           z  x          y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:  1 12.60493882  5 -4.8401325</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:  2  0.06657201  4  1.1153079</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:  3  9.88180241  2 -2.7703308</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:  4 16.58747478  5 -6.9123133</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5:  5  4.97777186  5 -0.8299244</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:  6  5.80134321  4 -1.6118639</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:  7  0.91513328  8 -0.2025508</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:  8  1.49741504  6 -4.9571323</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:  9  2.67471877 10  4.1792946</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10: 10  3.76736873  5 -1.0166581</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

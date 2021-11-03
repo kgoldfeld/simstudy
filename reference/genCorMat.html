@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -185,28 +185,32 @@ matrix, and is specified by reading down the columns. For example, if CM is the 
 nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      [,1] [,2] [,3]
-#&gt; [1,]  1.0  0.3 -0.2
-#&gt; [2,]  0.3  1.0  0.1
-#&gt; [3,] -0.2  0.1  1.0</div><div class='input'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;            [,1]        [,2]        [,3]
-#&gt; [1,]  1.0000000 -0.05721830 -0.26562439
-#&gt; [2,] -0.0572183  1.00000000 -0.08206648
-#&gt; [3,] -0.2656244 -0.08206648  1.00000000</div><div class='input'>
-<span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>5</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.2</span>, <span class='op'>-</span><span class='fl'>.1</span>, <span class='fl'>.3</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4] [,5]
-#&gt; [1,]  1.0  0.3 -0.2  0.1  0.2
-#&gt; [2,]  0.3  1.0  0.5  0.2 -0.1
-#&gt; [3,] -0.2  0.5  1.0  0.3  0.1
-#&gt; [4,]  0.1  0.2  0.3  1.0  0.2
-#&gt; [5,]  0.2 -0.1  0.1  0.2  1.0</div><div class='input'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;             [,1]        [,2]        [,3]       [,4]        [,5]
-#&gt; [1,]  1.00000000  0.18378060 -0.08859631 0.07366686  0.04571161
-#&gt; [2,]  0.18378060  1.00000000  0.34041009 0.03797508 -0.48391898
-#&gt; [3,] -0.08859631  0.34041009  1.00000000 0.12364752  0.27887791
-#&gt; [4,]  0.07366686  0.03797508  0.12364752 1.00000000  0.32682135
-#&gt; [5,]  0.04571161 -0.48391898  0.27887791 0.32682135  1.00000000</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2] [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  1.0  0.3 -0.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]  0.3  1.0  0.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,] -0.2  0.1  1.0</span>
+<span class='r-in'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            [,1]        [,2]        [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  1.0000000 -0.05721830 -0.26562439</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -0.0572183  1.00000000 -0.08206648</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,] -0.2656244 -0.08206648  1.00000000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>5</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.2</span>, <span class='op'>-</span><span class='fl'>.1</span>, <span class='fl'>.3</span>, <span class='fl'>.1</span>, <span class='fl'>.2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2] [,3] [,4] [,5]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  1.0  0.3 -0.2  0.1  0.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]  0.3  1.0  0.5  0.2 -0.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,] -0.2  0.5  1.0  0.3  0.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [4,]  0.1  0.2  0.3  1.0  0.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5,]  0.2 -0.1  0.1  0.2  1.0</span>
+<span class='r-in'><span class='fu'>genCorMat</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             [,1]        [,2]        [,3]       [,4]        [,5]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  1.00000000  0.18378060 -0.08859631 0.07366686  0.04571161</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]  0.18378060  1.00000000  0.34041009 0.03797508 -0.48391898</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,] -0.08859631  0.34041009  1.00000000 0.12364752  0.27887791</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [4,]  0.07366686  0.03797508  0.12364752 1.00000000  0.32682135</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5,]  0.04571161 -0.48391898  0.27887791 0.32682135  1.00000000</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

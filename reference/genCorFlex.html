@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/kgoldfeld/simstudy/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -204,83 +204,87 @@ is not specified.</p></td>
     <p>data.table with added column(s) of correlated data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xNorm"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>4</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xGamma1"</span>, formula <span class='op'>=</span> <span class='fl'>15</span>, variance <span class='op'>=</span> <span class='fl'>2</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xBin"</span>, formula <span class='op'>=</span> <span class='fl'>0.5</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif1"</span>, formula <span class='op'>=</span> <span class='st'>"0;10"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xPois"</span>, formula <span class='op'>=</span> <span class='fl'>15</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif2"</span>, formula <span class='op'>=</span> <span class='st'>"23;28"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif3"</span>, formula <span class='op'>=</span> <span class='st'>"100;150"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xGamma2"</span>, formula <span class='op'>=</span> <span class='fl'>150</span>, variance <span class='op'>=</span> <span class='fl'>0.003</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span>
-<span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xNegBin"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.8</span>, dist <span class='op'>=</span> <span class='st'>"negBinomial"</span><span class='op'>)</span>
-
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>genCorFlex</span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def</span>, tau <span class='op'>=</span> <span class='fl'>0.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;             xNorm   xGamma1      xBin    xUnif1     xPois    xUnif2    xUnif3
-#&gt; xNorm   1.0000000 0.3635256 0.3502807 0.4348943 0.4406840 0.4334729 0.4736992
-#&gt; xGamma1 0.3635256 1.0000000 0.2703809 0.3329087 0.3614445 0.3549100 0.3569301
-#&gt; xBin    0.3502807 0.2703809 1.0000000 0.3396448 0.3529756 0.3123344 0.3482656
-#&gt; xUnif1  0.4348943 0.3329087 0.3396448 1.0000000 0.4203605 0.4541368 0.4536201
-#&gt; xPois   0.4406840 0.3614445 0.3529756 0.4203605 1.0000000 0.3985913 0.4262241
-#&gt; xUnif2  0.4334729 0.3549100 0.3123344 0.4541368 0.3985913 1.0000000 0.4377402
-#&gt; xUnif3  0.4736992 0.3569301 0.3482656 0.4536201 0.4262241 0.4377402 1.0000000
-#&gt; xGamma2 0.4442560 0.3925799 0.3843497 0.4485447 0.4534048 0.4318113 0.4327878
-#&gt; xNegBin 0.3691570 0.3840732 0.2925915 0.3724766 0.4006984 0.3944300 0.3963623
-#&gt;           xGamma2   xNegBin
-#&gt; xNorm   0.4442560 0.3691570
-#&gt; xGamma1 0.3925799 0.3840732
-#&gt; xBin    0.3843497 0.2925915
-#&gt; xUnif1  0.4485447 0.3724766
-#&gt; xPois   0.4534048 0.4006984
-#&gt; xUnif2  0.4318113 0.3944300
-#&gt; xUnif3  0.4327878 0.3963623
-#&gt; xGamma2 1.0000000 0.4169939
-#&gt; xNegBin 0.4169939 1.0000000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span>, method <span class='op'>=</span> <span class='st'>"kendall"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;             xNorm   xGamma1      xBin    xUnif1     xPois    xUnif2    xUnif3
-#&gt; xNorm   1.0000000 0.3242362 0.2873684 0.2963604 0.2956935 0.2904905 0.3192192
-#&gt; xGamma1 0.3242362 1.0000000 0.2812001 0.3005405 0.2907424 0.2985946 0.3004324
-#&gt; xBin    0.2873684 0.2812001 1.0000000 0.2770822 0.2903532 0.2549408 0.2844570
-#&gt; xUnif1  0.2963604 0.3005405 0.2770822 1.0000000 0.2929309 0.3142022 0.3121642
-#&gt; xPois   0.2956935 0.2907424 0.2903532 0.2929309 1.0000000 0.2769917 0.2974992
-#&gt; xUnif2  0.2904905 0.2985946 0.2549408 0.3142022 0.2769917 1.0000000 0.3002563
-#&gt; xUnif3  0.3192192 0.3004324 0.2844570 0.3121642 0.2974992 0.3002563 1.0000000
-#&gt; xGamma2 0.2876476 0.3199600 0.3074198 0.3055375 0.3054708 0.2859900 0.2905105
-#&gt; xNegBin 0.2711682 0.2894342 0.2912141 0.2823726 0.3055129 0.2982413 0.3088064
-#&gt;           xGamma2   xNegBin
-#&gt; xNorm   0.2876476 0.2711682
-#&gt; xGamma1 0.3199600 0.2894342
-#&gt; xBin    0.3074198 0.2912141
-#&gt; xUnif1  0.3055375 0.2823726
-#&gt; xPois   0.3054708 0.3055129
-#&gt; xUnif2  0.2859900 0.2982413
-#&gt; xUnif3  0.2905105 0.3088064
-#&gt; xGamma2 1.0000000 0.3065857
-#&gt; xNegBin 0.3065857 1.0000000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              xNorm    xGamma1      xBin     xUnif1      xPois     xUnif2
-#&gt; xNorm    4.0367045  15.923185 0.3517784  2.5255407  3.4066156  1.2386201
-#&gt; xGamma1 15.9231852 475.294680 2.9464367 20.9779896 30.3183438 11.0042976
-#&gt; xBin     0.3517784   2.946437 0.2498498  0.4907064  0.6788388  0.2220353
-#&gt; xUnif1   2.5255407  20.977990 0.4907064  8.3543838  4.6747839  1.8668378
-#&gt; xPois    3.4066156  30.318344 0.6788388  4.6747839 14.8035145  2.1810865
-#&gt; xUnif2   1.2386201  11.004298 0.2220353  1.8668378  2.1810865  2.0226714
-#&gt; xUnif3  13.9146847 113.768460 2.5451148 19.1693214 23.9760467  9.1019894
-#&gt; xGamma2  7.2968627  69.967912 1.5705636 10.5986933 14.2612609  5.0204900
-#&gt; xNegBin  3.7313742  42.124974 0.7357758  5.4162710  7.7561151  2.8221286
-#&gt;             xUnif3   xGamma2    xNegBin
-#&gt; xNorm    13.914685  7.296863  3.7313742
-#&gt; xGamma1 113.768460 69.967912 42.1249745
-#&gt; xBin      2.545115  1.570564  0.7357758
-#&gt; xUnif1   19.169321 10.598693  5.4162710
-#&gt; xPois    23.976047 14.261261  7.7561151
-#&gt; xUnif2    9.101989  5.020490  2.8221286
-#&gt; xUnif3  213.754068 51.727513 29.1537033
-#&gt; xGamma2  51.727513 66.831134 17.1499675
-#&gt; xNegBin  29.153703 17.149968 25.3097808</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span>, <span class='fl'>2</span>, <span class='va'>mean</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        xNorm      xGamma1         xBin       xUnif1        xPois       xUnif2 
-#&gt;  -0.04650213  14.30170908   0.48000000   4.99250585  14.98300000  25.40058719 
-#&gt;       xUnif3      xGamma2      xNegBin 
-#&gt; 124.21462961 149.86789726   4.72700000 </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span>varname <span class='op'>=</span> <span class='st'>"xNorm"</span>, formula <span class='op'>=</span> <span class='fl'>0</span>, variance <span class='op'>=</span> <span class='fl'>4</span>, dist <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xGamma1"</span>, formula <span class='op'>=</span> <span class='fl'>15</span>, variance <span class='op'>=</span> <span class='fl'>2</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xBin"</span>, formula <span class='op'>=</span> <span class='fl'>0.5</span>, dist <span class='op'>=</span> <span class='st'>"binary"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif1"</span>, formula <span class='op'>=</span> <span class='st'>"0;10"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xPois"</span>, formula <span class='op'>=</span> <span class='fl'>15</span>, dist <span class='op'>=</span> <span class='st'>"poisson"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif2"</span>, formula <span class='op'>=</span> <span class='st'>"23;28"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xUnif3"</span>, formula <span class='op'>=</span> <span class='st'>"100;150"</span>, dist <span class='op'>=</span> <span class='st'>"uniform"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xGamma2"</span>, formula <span class='op'>=</span> <span class='fl'>150</span>, variance <span class='op'>=</span> <span class='fl'>0.003</span>, dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='defData.html'>defData</a></span><span class='op'>(</span><span class='va'>def</span>, varname <span class='op'>=</span> <span class='st'>"xNegBin"</span>, formula <span class='op'>=</span> <span class='fl'>5</span>, variance <span class='op'>=</span> <span class='fl'>.8</span>, dist <span class='op'>=</span> <span class='st'>"negBinomial"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>genCorFlex</span><span class='op'>(</span><span class='fl'>1000</span>, <span class='va'>def</span>, tau <span class='op'>=</span> <span class='fl'>0.3</span>, corstr <span class='op'>=</span> <span class='st'>"cs"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             xNorm   xGamma1      xBin    xUnif1     xPois    xUnif2    xUnif3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNorm   1.0000000 0.3635256 0.3502807 0.4348943 0.4406840 0.4334729 0.4736992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma1 0.3635256 1.0000000 0.2703809 0.3329087 0.3614445 0.3549100 0.3569301</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xBin    0.3502807 0.2703809 1.0000000 0.3396448 0.3529756 0.3123344 0.3482656</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif1  0.4348943 0.3329087 0.3396448 1.0000000 0.4203605 0.4541368 0.4536201</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xPois   0.4406840 0.3614445 0.3529756 0.4203605 1.0000000 0.3985913 0.4262241</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif2  0.4334729 0.3549100 0.3123344 0.4541368 0.3985913 1.0000000 0.4377402</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif3  0.4736992 0.3569301 0.3482656 0.4536201 0.4262241 0.4377402 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma2 0.4442560 0.3925799 0.3843497 0.4485447 0.4534048 0.4318113 0.4327878</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNegBin 0.3691570 0.3840732 0.2925915 0.3724766 0.4006984 0.3944300 0.3963623</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           xGamma2   xNegBin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNorm   0.4442560 0.3691570</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma1 0.3925799 0.3840732</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xBin    0.3843497 0.2925915</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif1  0.4485447 0.3724766</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xPois   0.4534048 0.4006984</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif2  0.4318113 0.3944300</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif3  0.4327878 0.3963623</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma2 1.0000000 0.4169939</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNegBin 0.4169939 1.0000000</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span>, method <span class='op'>=</span> <span class='st'>"kendall"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             xNorm   xGamma1      xBin    xUnif1     xPois    xUnif2    xUnif3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNorm   1.0000000 0.3242362 0.2873684 0.2963604 0.2956935 0.2904905 0.3192192</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma1 0.3242362 1.0000000 0.2812001 0.3005405 0.2907424 0.2985946 0.3004324</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xBin    0.2873684 0.2812001 1.0000000 0.2770822 0.2903532 0.2549408 0.2844570</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif1  0.2963604 0.3005405 0.2770822 1.0000000 0.2929309 0.3142022 0.3121642</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xPois   0.2956935 0.2907424 0.2903532 0.2929309 1.0000000 0.2769917 0.2974992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif2  0.2904905 0.2985946 0.2549408 0.3142022 0.2769917 1.0000000 0.3002563</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif3  0.3192192 0.3004324 0.2844570 0.3121642 0.2974992 0.3002563 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma2 0.2876476 0.3199600 0.3074198 0.3055375 0.3054708 0.2859900 0.2905105</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNegBin 0.2711682 0.2894342 0.2912141 0.2823726 0.3055129 0.2982413 0.3088064</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           xGamma2   xNegBin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNorm   0.2876476 0.2711682</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma1 0.3199600 0.2894342</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xBin    0.3074198 0.2912141</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif1  0.3055375 0.2823726</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xPois   0.3054708 0.3055129</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif2  0.2859900 0.2982413</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif3  0.2905105 0.3088064</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma2 1.0000000 0.3065857</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNegBin 0.3065857 1.0000000</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              xNorm    xGamma1      xBin     xUnif1      xPois     xUnif2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNorm    4.0367045  15.923185 0.3517784  2.5255407  3.4066156  1.2386201</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma1 15.9231852 475.294680 2.9464367 20.9779896 30.3183438 11.0042976</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xBin     0.3517784   2.946437 0.2498498  0.4907064  0.6788388  0.2220353</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif1   2.5255407  20.977990 0.4907064  8.3543838  4.6747839  1.8668378</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xPois    3.4066156  30.318344 0.6788388  4.6747839 14.8035145  2.1810865</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif2   1.2386201  11.004298 0.2220353  1.8668378  2.1810865  2.0226714</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif3  13.9146847 113.768460 2.5451148 19.1693214 23.9760467  9.1019894</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma2  7.2968627  69.967912 1.5705636 10.5986933 14.2612609  5.0204900</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNegBin  3.7313742  42.124974 0.7357758  5.4162710  7.7561151  2.8221286</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             xUnif3   xGamma2    xNegBin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNorm    13.914685  7.296863  3.7313742</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma1 113.768460 69.967912 42.1249745</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xBin      2.545115  1.570564  0.7357758</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif1   19.169321 10.598693  5.4162710</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xPois    23.976047 14.261261  7.7561151</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif2    9.101989  5.020490  2.8221286</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xUnif3  213.754068 51.727513 29.1537033</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xGamma2  51.727513 66.831134 17.1499675</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xNegBin  29.153703 17.149968 25.3097808</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>dt</span><span class='op'>[</span>, <span class='op'>-</span><span class='st'>"id"</span><span class='op'>]</span>, <span class='fl'>2</span>, <span class='va'>mean</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        xNorm      xGamma1         xBin       xUnif1        xPois       xUnif2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  -0.04650213  14.30170908   0.48000000   4.99250585  14.98300000  25.40058719 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       xUnif3      xGamma2      xNegBin </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 124.21462961 149.86789726   4.72700000 </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
