@@ -1,11 +1,17 @@
-# simstudy (development version)
+# simstudy 0.3.0
+
+## New features
+* You can now use non-scalar variables with double-dot notation. See the [*Dynamic Data Definition*](https://kgoldfeld.github.io/simstudy/articles/double_dot_extension.html#using-non-scalar-double-dot-variable-reference-1) Vignette.
+* The 'categorical' distribution now supports the variance parameter to introduce categories other than 1...n.
+* You can now use [trtAssign()] as a distribution with [defData()].
+   
+## Minor improvements and fixes
 * Added CITATION
 * genData now warns that a set 'id' parameter will override previously defined 'id' names from the data definition.
 * genData now handles NULL as 'id' value in data definitions (e.g. when definitions are not created via defData etc.) by defaulting to 'id'.
 * Fix an error in genOrdCat when only a single adjustment variable is given but
   more than one new category will be created.
-* The 'categorical' distribution now supports the variance parameter to introduce categories other than 1...n
-* Fix a bug where ..variables did not work within a function using the `dist="beta"`  
+* Fix a bug where ..variables did not work within a function using the `dist="beta"`.  
 
 # simstudy 0.2.2
 * Improve documentation and vignettes.

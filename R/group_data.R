@@ -352,7 +352,7 @@ genNthEvent <- function(dtName, defEvent, nEvents = 1,
 #' @export
 #' @concept group_data
 trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
-                      strata = NULL, grpName = "trtGrp", ratio = NULL) {
+                      strata = NULL, grpName = "trtGrp", ratio = NULL) { 
 
   # 'declare' vars
   .stratum <- NULL

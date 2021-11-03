@@ -16,10 +16,10 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R build status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions){target="_blank"}
 [![CRAN status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy){target="_blank"}
-[![status](https://joss.theoj.org/papers/640fd4333948933b2817343e86df3424/status.svg)](https://joss.theoj.org/papers/640fd4333948933b2817343e86df3424){target="_blank"}
+[![status](https://joss.theoj.org/papers/10.21105/joss.02763/status.svg)](https://joss.theoj.org/papers/10.21105/joss.02763){target="_blank"}
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy){target="_blank"}
-[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy){target="_blank"}
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable){target="_blank"}
+[![codecov](https://app.codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://app.codecov.io/gh/kgoldfeld/simstudy){target="_blank"}
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html){target="_blank"}
 <!-- badges: end -->
 
 The `simstudy` package is a collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.
