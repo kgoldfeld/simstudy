@@ -260,6 +260,7 @@ genCluster <- function(dtClust,
 #' field in table specified by dtName
 #' @return data.table that stops after "nEvents" are reached.
 #' @examples
+#' \dontrun{
 #' defD <- defData(
 #'   varname = "effect", formula = 0, variance = 1,
 #'   dist = "normal"
@@ -272,6 +273,7 @@ genCluster <- function(dtClust,
 #' d <- genData(1000, defD)
 #' d <- addPeriods(d, 10)
 #' dx <- genNthEvent(d, defEvent = defE, nEvents = 3)
+#' }
 #' @export
 #' @concept group_data
 genNthEvent <- function(dtName, defEvent, nEvents = 1,
