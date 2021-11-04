@@ -593,5 +593,5 @@
   trtAssign(
     dtName,
     nTrt, balanced, strata, grpName, ratio
-  )[, ..grpName]
+  )[, get(grpName)]
 }
