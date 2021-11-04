@@ -7,7 +7,7 @@ Authors@R:
     c(person(given = "Keith",
              family = "Goldfeld",
              role = c("aut", "cre"),
-             email = "Keith.Goldfeld@nyumc.org",
+             email = "keith.goldfeld@nyulangone.org",
              comment = c(ORCID = "0000-0002-0292-8780")),
       person(given = "Jacob",
              family = "Wujciak-Jens",
