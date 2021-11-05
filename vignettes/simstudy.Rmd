@@ -177,7 +177,7 @@ list_of_data
 
 ### Distributions
 
-The foundation of generating data is the assumptions we make about the distribution of each variable. `simstudy` provides 14 types of distributions, which are listed in the following table:
+The foundation of generating data is the assumptions we make about the distribution of each variable. `simstudy` provides 15 types of distributions, which are listed in the following table:
 
 ```{r,  echo=FALSE}
 d <- list()
