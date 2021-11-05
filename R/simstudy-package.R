@@ -41,6 +41,7 @@ NULL
 #' | normal          | mean                   | String or Number                         | variance         | NA              |
 #' | noZeroPoisson   | mean                   | String or Number                         | NA             | identity or log   |
 #' | poisson         | mean                   | String or Number                         | NA             | identity or log   |
+#' | trtAssign       | ratio                  | `r_1;r_2;..;r_n`                         | stratification | identity or nonbalanced |
 #' | uniform         | range                  | `from;to`                                | NA             | NA              |
 #' | uniformInt      | range                  | `from;to`                                | NA             | NA              |
 #'
