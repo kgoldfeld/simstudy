@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -120,9 +120,6 @@
 
     
     
-<div id="correlated-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#correlated-data" class="anchor"></a>Correlated data</h2>
 <p>Sometimes it is desirable to simulate correlated data from a correlation matrix directly. For example, a simulation might require two random effects (e.g. a random intercept and a random slope). Correlated data like this could be generated using the <code>defData</code> functionality, but it may be more natural to do this with <code>genCorData</code> or <code>addCorData</code>. Currently, simstudy can only generate multivariate normal using these functions.</p>
 <p><code>genCorData</code> requires the user to specify a mean vector <code>mu</code>, a single standard deviation or a vector of standard deviations <code>sigma</code>, and either a correlation matrix <code>corMatrix</code> or a correlation coefficient <code>rho</code> and a correlation structure <code>corsrt</code>. Here are a few examples:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -231,11 +228,11 @@
 <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">a0</span>, <span class="va">a1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <pre><code>##  a0  a1 
 ## 2.0 0.2</code></pre>
-<div id="correlated-data-additional-distributions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#correlated-data-additional-distributions" class="anchor"></a>Correlated data: additional distributions</h3>
+<div id="correlated-data-additional-distributions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#correlated-data-additional-distributions" class="anchor"></a>Correlated data: additional distributions</h2>
 <p>Two additional functions facilitate the generation of correlated data from <em>binomial</em>, <em>poisson</em>, <em>gamma</em>, and <em>uniform</em> distributions: <code>genCorGen</code> and <code>addCorGen</code>.</p>
-<p><code>genCorGen</code> is an extension of <code>genCorData</code>. These functions draw on copula-based methods to generate the data. (This <a href="https://bit.ly/31vAxFf">Wikipedia page</a> provides a general introduction and copula-based modeling can be conducted in <code>R</code> using package <a href="https://cran.r-project.org/web/packages/copula/index.html">copula</a>.) In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.</p>
+<p><code>genCorGen</code> is an extension of <code>genCorData</code>. These functions draw on copula-based methods to generate the data. (This <a href="https://en.wikipedia.org/wiki/Copula_(probability_theory)">Wikipedia page</a> provides a general introduction and copula-based modeling can be conducted in <code>R</code> using package <a href="https://cran.r-project.org/package=copula">copula</a>.) In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">12</span><span class="op">)</span> <span class="co"># lambda for each new variable</span>
 
@@ -454,7 +451,6 @@
 ## [1,] 1.00 0.56 0.56
 ## [2,] 0.56 1.00 0.56
 ## [3,] 0.56 0.56 1.00</code></pre>
-</div>
 </div>
   </div>
 

@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -152,24 +152,24 @@
 ##    5:    5  1  1  0 1 0
 ##   ---                  
 ##  996:  996  0  0  0 1 0
-##  997:  997  1  0  1 1 0
-##  998:  998  0  0  1 1 0
+##  997:  997  1  0  0 1 0
+##  998:  998  0  0  0 1 0
 ##  999:  999  0  0  0 1 0
 ## 1000: 1000  0  0  0 1 0</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtObs</span></code></pre></div>
-<pre><code>##         id m  u        x1        x2         x3
-##    1:    1 0 NA 20.060751 21.325999 20.0498261
-##    2:    2 0 NA 18.635763 21.677915 19.2333136
-##    3:    3 0 NA        NA  1.087974 -1.3356404
-##    4:    4 1 NA        NA 38.315018 38.6385186
-##    5:    5 1 NA        NA        NA 20.1126964
-##   ---                                         
-##  996:  996 1 NA 40.124056 39.778392 41.1140275
-##  997:  997 1 NA        NA 38.410169         NA
-##  998:  998 0 NA 17.971133 22.798860         NA
-##  999:  999 0 NA -1.104113  1.376676 -0.7908299
-## 1000: 1000 1 NA 39.514029 40.046707 38.9641420</code></pre>
+<pre><code>##         id m  u        x1         x2         x3
+##    1:    1 1 NA 20.920657 21.7483763 19.8015510
+##    2:    2 1 NA 22.089841 21.4540228 19.4288972
+##    3:    3 1 NA        NA 19.7872526 18.6951079
+##    4:    4 1 NA        NA 18.9862823 20.5234180
+##    5:    5 1 NA        NA         NA 40.7584366
+##   ---                                          
+##  996:  996 0 NA 19.141085 20.4289421 21.1789025
+##  997:  997 0 NA        NA  1.6446897  1.0757220
+##  998:  998 0 NA  1.366038 -0.9587858  0.6936019
+##  999:  999 1 NA 19.070711 21.5500636 18.1717656
+## 1000: 1000 1 NA 37.131917 39.6433726 39.1509221</code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the “true” data set without missing data as a comparison for the “observed” data set. Since <code>x1</code> is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for <code>x2</code> and <code>x3</code> are biased, as the difference between observed and actual is not close to 0:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Two functions to calculate means and compare them</span>
@@ -191,9 +191,9 @@
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     20.0 20.0 19.9
-## Observed   19.8 18.3 18.2
-## Difference  0.2  1.7  1.7</code></pre>
+## Actual     20.3 20.3 20.2
+## Observed   20.5 18.8 19.2
+## Difference -0.2  1.5  1.0</code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias for the estimate of the mean of <code>x2</code> is mitigated, but not for <code>x3</code>, since <code>u</code> is not observed:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">meanActm</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span>
@@ -202,18 +202,18 @@
 <code class="sourceCode R"><span class="co"># compare observed and actual when m = 0</span>
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>##             x1   x2  x3
-## Actual     9.8 10.0 9.8
-## Observed   9.5  9.9 8.2
-## Difference 0.3  0.1 1.6</code></pre>
+<pre><code>##              x1 x2   x3
+## Actual     10.9 11 10.8
+## Observed   10.6 11  9.5
+## Difference  0.3  0  1.3</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compare observed and actual when m = 1</span>
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     29.8 29.6 29.7
-## Observed   29.6 29.3 27.9
-## Difference  0.2  0.3  1.8</code></pre>
+## Actual     29.2 29.1 29.2
+## Observed   29.2 29.0 28.0
+## Difference  0.0  0.1  1.2</code></pre>
 <div id="longitudinal-data-with-missingness" class="section level2">
 <h2 class="hasAnchor">
 <a href="#longitudinal-data-with-missingness" class="anchor"></a>Longitudinal data with missingness</h2>

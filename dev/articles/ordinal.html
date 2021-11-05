@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -127,24 +127,24 @@
 <p><span class="math display">\[\small{\frac{P(response \le 4|exposed)}{P(response &gt; 4|exposed)} \ \ vs. \ \frac{P(response \le 4|unexposed)}{P(response &gt; 4|unexposed)}},\]</span></p>
 <p>We can use an underlying (continuous) latent process as the basis for data generation. If we assume that probabilities are determined by segments of a logistic distribution (see below), we can define the ordinal mechanism using thresholds along the support of the distribution. If there are <span class="math inline">\(k\)</span> possible responses (in the meat example, we have 5), then there will be <span class="math inline">\(k-1\)</span> thresholds. The area under the logistic density curve of each of the regions defined by those thresholds (there will be <span class="math inline">\(k\)</span> distinct regions) represents the probability of each possible response tied to that region.</p>
 <p><img src="ordinal_files/figure-html/threshold-1.png" width="504"></p>
-<div id="comparing-response-distributions-of-different-populations" class="section level3">
-<h3 class="hasAnchor">
-<a href="#comparing-response-distributions-of-different-populations" class="anchor"></a>Comparing response distributions of different populations</h3>
+<div id="comparing-response-distributions-of-different-populations" class="section level2">
+<h2 class="hasAnchor">
+<a href="#comparing-response-distributions-of-different-populations" class="anchor"></a>Comparing response distributions of different populations</h2>
 <p>In the cumulative logit model, the underlying assumption is that the odds ratio of one population relative to another is constant across all the possible responses. This means that all of the cumulative odds ratios are equal:</p>
 <p><span class="math display">\[\small{\frac{codds(P(Resp = 1 | exposed))}{codds(P(Resp = 1 | unexposed))} = \frac{codds(P(Resp \leq 2 | exposed))}{codds(P(Resp \leq 2 | unexposed))} = \ ... \ = \frac{codds(P(Resp \leq 4 | exposed))}{codds(P(Resp \leq 4 | unexposed))}}\]</span></p>
 <p>In terms of the underlying process, this means that each of the thresholds shifts the same amount (as shown below) where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.</p>
 <p><img src="ordinal_files/figure-html/plotB-1.png" width="504"></p>
 </div>
-<div id="the-cumulative-proportional-odds-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-cumulative-proportional-odds-model" class="anchor"></a>The cumulative proportional odds model</h3>
+<div id="the-cumulative-proportional-odds-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-cumulative-proportional-odds-model" class="anchor"></a>The cumulative proportional odds model</h2>
 <p>In the <code>R</code> package <code>ordinal</code>, the model is fit using function <code>clm</code>. The model that is being estimated has the form</p>
 <p><span class="math display">\[log \left( \frac{P(Resp \leq  i)}{P(Resp &gt; i)} | Group \right) = \alpha_i - \beta*I(Group=exposed) \  \ , \ i \in \{1, 2, 3, 4\}\]</span></p>
 <p>The model specifies that the cumulative log-odds for a particular category is a function of two parameters, <span class="math inline">\(\alpha_i\)</span> and <span class="math inline">\(\beta\)</span>. (Note that in this parameterization and the model fit, <span class="math inline">\(-\beta\)</span> is used.) <span class="math inline">\(\alpha_i\)</span> represents the cumulative log odds of being in category <span class="math inline">\(i\)</span> or lower for those in the reference exposure group, which in our example is Group A. <em><span class="math inline">\(\alpha_i\)</span> also represents the threshold of the latent continuous (logistic) data generating process.</em> <span class="math inline">\(\beta\)</span> is the cumulative log-odds ratio for the category <span class="math inline">\(i\)</span> comparing the unexposed to reference group, which is the exposed. <em><span class="math inline">\(\beta\)</span> also represents the shift of the threshold on the latent continuous process for the exposed relative to the unexposed</em>. The proportionality assumption implies that the shift of the threshold for each of the categories is identical.</p>
 </div>
-<div id="simulation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#simulation" class="anchor"></a>Simulation</h3>
+<div id="simulation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#simulation" class="anchor"></a>Simulation</h2>
 <p>To generate ordered categorical data using <code>simstudy</code>, there is a function <code>genOrdCat</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">baseprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.11</span>, <span class="fl">0.33</span>, <span class="fl">0.36</span>, <span class="fl">0.17</span>, <span class="fl">0.03</span><span class="op">)</span>
@@ -198,9 +198,9 @@
 <pre><code>##   1   2   3   4 
 ## 1.1 1.1 1.2 1.3</code></pre>
 </div>
-<div id="correlated-multivariate-ordinal-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#correlated-multivariate-ordinal-data" class="anchor"></a>Correlated multivariate ordinal data</h3>
+<div id="correlated-multivariate-ordinal-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#correlated-multivariate-ordinal-data" class="anchor"></a>Correlated multivariate ordinal data</h2>
 <p>Function <code>genOrdCat</code> generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale and is specified with a value of <code>rho</code> and a correlation structure (<em>independence</em>, <em>compound symmetry</em>, or <em>AR-1</em>). Alternatively, a correlation matrix can be specified.</p>
 <p>In this example, there are 5 questions, each of which has three possible responses: “none”, “some”, “a lot”. The probabilities of response are specified in a <span class="math inline">\(5 \times 3\)</span> matrix, and the rows sum to 1:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -281,7 +281,9 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

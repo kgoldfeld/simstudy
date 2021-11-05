@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -157,15 +157,31 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#simstudy-development-version" class="anchor"></a>simstudy (development version)<small> Unreleased </small>
 </h1>
+</div>
+    <div id="simstudy-030" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.0">
+<a href="#simstudy-030" class="anchor"></a>simstudy 0.3.0<small> 2021-11-04 </small>
+</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
+<ul>
+<li>You can now use non-scalar variables with double-dot notation. See the <a href="https://kgoldfeld.github.io/simstudy/articles/double_dot_extension.html#using-non-scalar-double-dot-variable-reference-1"><em>Dynamic Data Definition</em></a> Vignette.</li>
+<li>The ‘categorical’ distribution now supports the variance parameter to introduce categories other than 1…n.</li>
+<li>You can now use [trtAssign()] as a distribution with [defData()].</li>
+</ul>
+</div>
+<div id="minor-improvements-and-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-improvements-and-fixes" class="anchor"></a>Minor improvements and fixes</h2>
 <ul>
 <li>Added CITATION</li>
 <li>genData now warns that a set ‘id’ parameter will override previously defined ‘id’ names from the data definition.</li>
 <li>genData now handles NULL as ‘id’ value in data definitions (e.g. when definitions are not created via defData etc.) by defaulting to ‘id’.</li>
 <li>Fix an error in genOrdCat when only a single adjustment variable is given but more than one new category will be created.</li>
-<li>The ‘categorical’ distribution now supports the variance parameter to introduce categories other than 1…n</li>
-<li>Fix a bug where ..variables did not work within a function using the <code>dist="beta"</code>
-</li>
+<li>Fix a bug where ..variables did not work within a function using the <code>dist="beta"</code>.</li>
 </ul>
+</div>
 </div>
     <div id="simstudy-022" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.2">
@@ -197,9 +213,9 @@
 <li>Renamed catProbs to genCatFormula for naming consistency. catProbs is now deprecated.</li>
 </ul>
 </div>
-<div id="new-features" class="section level2">
+<div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New features</h2>
+<a href="#new-features-1" class="anchor"></a>New features</h2>
 <ul>
 <li>Introduced a new system for formula definitions and completely reworked the underlying code. See vignette “Dynamic Data Definition”.</li>
 <li>The new function genMixFormula generates mixture formulas from different inputs.</li>
@@ -215,9 +231,9 @@
 </li>
 </ul>
 </div>
-<div id="minor-improvements-and-fixes" class="section level2">
+<div id="minor-improvements-and-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-improvements-and-fixes" class="anchor"></a>Minor improvements and fixes</h2>
+<a href="#minor-improvements-and-fixes-1" class="anchor"></a>Minor improvements and fixes</h2>
 <ul>
 <li>genCatFormula now warns if an additional category is created or probabilities are normalized.</li>
 <li>Fixed bug in trtAssign related new ratio argument.</li>
