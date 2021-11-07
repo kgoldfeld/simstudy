@@ -44,6 +44,7 @@ def_data <- function(dtDefs = NULL,
     list(
       dtDefs = dtDefs,
       varname = enexpr(varname),
+      dist = dist,
       formula = enexpr(formula),
       param1 = param1,
       param2 = param2
@@ -76,7 +77,7 @@ def_data <- function(dtDefs = NULL,
 #' @concept custom_distributions
 new_definition <- function(x, dist) {
   stopifnot(is.list(x))
-  stopifnot(length(x) == 5)
+  stopifnot(length(x) == 6)
   structure(x, class = c(dist, "list"))
 }
 
@@ -110,7 +111,7 @@ validate.default <- function(x) {
 #' Each distribution has a generate method, that generates data.
 #' The expected format is...
 #' @param def Row of a definition table containing expressions with the elements of the definition:
-#'  `dtDefs`, `varname`, `formula`, `param1`, `param2`, `data`
+#'  `dtDefs`, `data`, `dist`, `varname`, `formula`, `param1`, `param2`
 #' @export
 #' @concept custom_distributions
 generate <- function(def, env = parent.frame()) {
@@ -139,6 +140,7 @@ ensureReference <- function(dt) {
   dt
 }
 
+    # THIS IS NOT WORKING YET
 #' @export
 #' @importFrom purrr pmap
 gen_data <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
@@ -147,12 +149,10 @@ gen_data <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
   assertType(id = id, type = "character")
   assertNumeric(n = n)
 
-  data <- dt_with_id(n, id)
-
   if (!is.null(dtDefs)) {
     assertClass(dtDefs = dtDefs, class = "data.table")
-
     oldId <- attr(dtDefs, "id")
+
     if (!is.null(oldId) && id != oldId && !missing(id)) {
       if (oldId != "id") {
         valueWarning(
@@ -168,21 +168,27 @@ gen_data <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
       id <- oldId %||% id
     }
 
+    data <- dt_with_id(n, id)
+
     # use dt syntax here
-    dtDefs %>% pmap(~ parse(text = .x))
+    s2e <- function(col) map(col, str2lang) 
+    dtDefs[,lapply(.SD,str2lang)] %>% pmap
+    
 
     # for (i in seql_len(nrows(dtDefs))) {
-    #   dfSimulate <- .generate(
+    #     generate(new_definition(list(
     #     args = dtDefs[i, ],
     #     n = n,
     #     dfSim = dfSimulate,
-    #     idname = id,
-    #     envir = envir
-    #   )
+    #     idname = id)
+    #     env = envir
+    #   ))
     # }
 
 
     data.table::setkeyv(dt, id)
+  } else {
+    data <- dt_with_id(n, id)
   }
 
   data
