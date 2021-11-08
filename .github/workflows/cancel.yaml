@@ -2,7 +2,7 @@
 name: Cancel
 on:
   workflow_run:
-    workflows: ["Continuous Benchmarks (Comment)", "Continuous Benchmarks (Receive)"] # list by name as in `name:` of the workflow file
+    workflows: ["Continuous Benchmarks (Comment)", "Continuous Benchmarks (Receive)", "code-coverage", "pkgdown", "R-CMD-check"] # list by name as in `name:` of the workflow file
     types:
       - requested
 jobs:

@@ -77,8 +77,9 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
       id <- oldId %||% id
     }
 
-    dfSimulate <- data.frame(c(1:n)) # initialize simulated data with ids
-    names(dfSimulate) <- id # name first column attribute "id"
+    dfSimulate <- data.table::data.table(x = 1:n)
+    data.table::setnames(dfSimulate, id)
+    data.table::setkeyv(dfSimulate, id)
     iter <- nrow(dtDefs) # generate a column of data for each row of dtDefs
 
     for (i in (1:iter)) {
