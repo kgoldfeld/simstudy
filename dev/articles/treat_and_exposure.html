@@ -142,17 +142,17 @@
 
 <span class="va">study1</span></code></pre></div>
 <pre><code>##      cid male over65  baseDBP rxGrp
-##   1:   1    0      0 58.95637     3
-##   2:   2    1      0 77.56058     3
-##   3:   3    0      1 69.00983     3
-##   4:   4    0      0 84.48843     1
-##   5:   5    0      0 64.45643     2
+##   1:   1    1      0 71.87114     2
+##   2:   2    1      0 70.18692     2
+##   3:   3    0      0 67.75519     2
+##   4:   4    1      1 75.79438     3
+##   5:   5    0      0 56.44348     3
 ##  ---                               
-## 326: 326    1      0 70.78893     1
-## 327: 327    0      0 64.48626     3
-## 328: 328    1      1 79.84248     1
-## 329: 329    1      1 56.84579     3
-## 330: 330    0      0 64.91896     1</code></pre>
+## 326: 326    0      0 71.37932     2
+## 327: 327    1      0 65.18118     3
+## 328: 328    0      1 69.05230     1
+## 329: 329    1      0 61.17830     3
+## 330: 330    1      0 68.09985     2</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></code></pre></div>
@@ -179,29 +179,29 @@
 <span class="va">dtstudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">330</span>, <span class="va">def</span><span class="op">)</span>
 <span class="va">dtstudy</span></code></pre></div>
 <pre><code>##      cid male over65 rx        y
-##   1:   1    1      1  1 55.17003
-##   2:   2    0      0  0 21.03338
-##   3:   3    1      0  1 35.13209
-##   4:   4    1      0  0 20.00061
-##   5:   5    1      0  1 27.36047
+##   1:   1    0      0  1 28.10482
+##   2:   2    0      0  1 32.79755
+##   3:   3    0      0  1 20.93005
+##   4:   4    1      0  1 30.34009
+##   5:   5    1      0  1 30.18627
 ##  ---                            
-## 326: 326    0      0  1 25.15576
-## 327: 327    1      0  1 29.50075
-## 328: 328    1      1  0 29.73381
-## 329: 329    1      1  1 46.58075
-## 330: 330    1      0  1 45.42472</code></pre>
+## 326: 326    1      1  0 34.97551
+## 327: 327    1      0  1 33.64087
+## 328: 328    1      1  0 25.32034
+## 329: 329    0      0  0 21.95893
+## 330: 330    1      0  0 19.94881</code></pre>
 <p>Here are the counts and average outcomes for each <em>gender</em>, <em>age</em>, and <em>treatment</em> combination:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtstudy</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>n <span class="op">=</span> <span class="va">.N</span>, avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">male</span>, <span class="va">over65</span>, <span class="va">rx</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <pre><code>##    male over65 rx  n  avg
-## 1:    0      0  0 70 19.1
-## 2:    0      0  1 71 30.6
-## 3:    0      1  0 10 28.2
-## 4:    0      1  1 11 42.3
-## 5:    1      0  0 59 23.9
-## 6:    1      0  1 58 34.5
-## 7:    1      1  0 25 34.7
-## 8:    1      1  1 26 43.1</code></pre>
+## 1:    0      0  0 63 21.4
+## 2:    0      0  1 64 28.9
+## 3:    0      1  0 13 29.6
+## 4:    0      1  1 13 38.6
+## 5:    1      0  0 66 23.3
+## 6:    1      0  1 65 34.3
+## 7:    1      1  0 23 32.2
+## 8:    1      1  1 23 45.1</code></pre>
 </div>
 <div id="observed-treatment" class="section level2">
 <h2 class="hasAnchor">
