@@ -1,4 +1,8 @@
-name: Continuous Benchmarks (Receive)
+name: Continuous Benchmarks
+concurrency:
+  group: cb-${{github.ref_name}}
+  cancel-in-progress: true
+
 on: pull_request
 jobs:
   prepare:
@@ -93,3 +97,27 @@ jobs:
         with:
           name: pr
           path: touchstone/pr-comment/
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Download artifact'
+        uses: actions/github-script@v3.1.0
+        id: download
+        with:
+          name: pr
+      - name: 'Comment on PR'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = Number(fs.readFileSync('${{steps.download.outputs.download-path}}/NR'));
+            var body = fs.readFileSync('${{steps.download.outputs.download-path}}/info.txt').toString();
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: body
+            });
