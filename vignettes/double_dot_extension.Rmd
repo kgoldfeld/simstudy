@@ -8,6 +8,8 @@ vignette: >
 ---
 
 ```{r, echo = FALSE, message = FALSE}
+options(digits = 3)
+
 library(simstudy)
 library(ggplot2)
 library(scales)
@@ -41,7 +43,7 @@ ggtheme <- function(panelback = "white") {
 
 Often, we'd like to explore data generation and modeling under different scenarios. For example, we might want to understand the operating characteristics of a model given different variance or other parametric assumptions. There is functionality built into `simstudy` to facilitate this type of dynamic exploration. First, the functions `updateDef` and `updateDefAdd` essentially allow us to edit lines of existing data definition tables. Second, there is a built-in mechanism - called *double-dot*  reference - to access external variables that do not exist in a defined data set or data definition.
 
-### Updating existing definition tables
+## Updating existing definition tables
 
 The `updateDef` function updates a row in a definition table created by functions `defData` or `defRead`. Analogously, `updateDefAdd` function updates a row in a definition table created by functions `defDataAdd` or `defReadAdd`. 
 
@@ -76,7 +78,7 @@ defs <- updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
 defs
 ```
 
-### Double-dot external variable reference
+## Double-dot external variable reference
 
 For a truly dynamic data definition process, `simstudy` (as of `version 0.2.0`) allows users to reference variables that exist outside of data generation. These can be thought of as a type of hyperparameter of the data generation process. The reference is made directly in the formula itself, using a double-dot ("..") notation before the variable name. Here is a simple example:
 
@@ -136,6 +138,8 @@ ggplot(data = dd_4, aes(x = x, y = y)) +
   theme(panel.grid = element_blank())
 ```
 
+## Using non-scalar double-dot variable reference
+
 The double-dot notation is also *array-friendly*. For example if we want to create a mixture distribution from a vector of values (which we can also do using a *categorical* distribution), we can define the mixture formula in terms of the vector. In this case we are generating permuted block sizes of 2 and 4:
 
 ```{r}
@@ -149,3 +153,74 @@ defblk
 sizes <- c(2, 4)
 genData(1000, defblk)
 ```
+
+In this second example, there is a vector variable *tau* of positive real numbers that sum to 1, and we want to calculate the weighted average of three numbers using *tau* as the weights. We could use the following code to estimate a weighted average *theta*:
+
+```{r}
+tau <- rgamma(3, 5, 2)
+tau <- tau / sum(tau)
+tau
+
+d <- defData(varname = "a", formula = 3, variance = 4)
+d <- defData(d, varname = "b", formula = 8, variance = 2)
+d <- defData(d, varname = "c", formula = 11, variance = 6)
+d <- defData(d, varname = "theta", formula = "..tau[1]*a + ..tau[2]*b + ..tau[3]*c", 
+  dist = "nonrandom")
+
+set.seed(1)
+genData(4, d)
+```
+
+We can simplify the calculation of *theta* by using matrix multiplication:
+
+```{r}
+d <- updateDef(d, changevar = "theta", newformula = "t(..tau) %*% c(a, b, c)")
+
+set.seed(1)
+genData(4, d)
+```
+
+These arrays can also have **multiple dimensions**, as in a $2 \times 2$ matrix. If we want to specify the mean outcomes for a factorial study design with two interventions $a$ and $b$, we can use a simple matrix and draw the means directly from the matrix, which in this example is stored in the variable *effect*:
+
+```{r}
+effect <- matrix(c(0, 4, 5, 7), nrow = 2)
+effect
+```
+
+Using double dot notation, it is possible to reference the matrix cell values directly:
+
+```{r}
+d1 <- defData(varname = "a", formula = ".5;.5", variance = "1;2", dist = "categorical")
+d1 <- defData(d1, varname = "b", formula = ".5;.5", variance = "1;2", dist = "categorical")
+d1 <- defData(d1, varname = "outcome", formula = "..effect[a, b]", dist="nonrandom")
+```
+
+```{r}
+dx <- genData(8, d1)
+dx
+```
+
+It is possible to generate normally distributed data based on these means:
+
+```{r}
+d1 <- updateDef(d1, "outcome", newvariance = 9, newdist = "normal")
+dx <- genData(1000, d1)
+```
+
+The plot shows the individual values as well as the mean values by intervention arm:
+
+```{r, echo=FALSE}
+dsum <- dx[, .(outcome=mean(outcome)), keyby = .(a, b)]
+
+ggplot(data = dx, aes(x = factor(a), y = outcome)) +
+  geom_jitter(aes(color = factor(b)), width = .2, alpha = .4, size = .2) +
+  geom_point(data = dsum, size = 2, aes(color = factor(b))) + 
+  geom_line(data = dsum, size = 1, aes(color = factor(b), group = factor(b))) +
+  scale_color_manual(values = cbbPalette, name = "  b") +
+  theme(panel.grid = element_blank()) +
+  xlab ("a")
+```
+
+
+
+

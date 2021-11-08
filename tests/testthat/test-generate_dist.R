@@ -21,7 +21,6 @@ test_that(".gencat throws errors", {
     link = "identity",
     envir = emptyenv()
   ), class = "simstudy::lengthMismatch")
-
 })
 
 test_that("categorical data is generated as expected.", {
@@ -110,4 +109,16 @@ test_that("'uniformInt' formula checked correctly", {
   )
 
   expect_error(.genUnifInt(3, "1.1;2.4", NULL, environment()), "must be integer")
+})
+
+# .genmixture ----
+test_that("mixtures are generated correctly", {
+  def <- defData(varname =  "a", formula = 5)
+  def <- defData(def,
+    varname = "blksize",
+    formula = "..sizes[1] | .5 + ..sizes[2] * a/10 | .5", dist = "mixture"
+  )
+  sizes <- c(2, 4)
+  env <- environment()
+  expect_silent(genData(1000, def, envir = env))
 })

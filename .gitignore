@@ -17,3 +17,5 @@ Meta
 simstudy.code-workspace
 .vscode/
 docs
+/doc/
+/Meta/

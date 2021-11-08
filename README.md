@@ -9,12 +9,12 @@ simstudy
 status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![status](https://joss.theoj.org/papers/640fd4333948933b2817343e86df3424/status.svg)](https://joss.theoj.org/papers/640fd4333948933b2817343e86df3424)
+[![status](https://joss.theoj.org/papers/10.21105/joss.02763/status.svg)](https://joss.theoj.org/papers/10.21105/joss.02763)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![codecov](https://codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://codecov.io/gh/kgoldfeld/simstudy)
+[![codecov](https://app.codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://app.codecov.io/gh/kgoldfeld/simstudy)
 [![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 <!-- badges: end -->
 
 The `simstudy` package is a collection of functions that allow users to

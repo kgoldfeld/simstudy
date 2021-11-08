@@ -1,13 +1,13 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.2.2.9000
-Date: 2020-10-26
+Version: 0.3.0.9000
+Date: 2021-11-04
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",
              role = c("aut", "cre"),
-             email = "Keith.Goldfeld@nyumc.org",
+             email = "keith.goldfeld@nyulangone.org",
              comment = c(ORCID = "0000-0002-0292-8780")),
       person(given = "Jacob",
              family = "Wujciak-Jens",
@@ -61,5 +61,4 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-LazyData: TRUE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
