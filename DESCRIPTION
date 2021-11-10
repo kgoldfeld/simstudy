@@ -55,7 +55,8 @@ Suggests:
     scales,
     splines,
     survival,
-    testthat
+    testthat,
+    gtsummary
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
