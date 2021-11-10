@@ -450,10 +450,11 @@ defSurv <- function(dtDefs = NULL,
                     formula = 0,
                     scale,
                     shape = 1) {
+  
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
-
+  
   dt.new <- data.table::data.table(
     varname,
     formula,
