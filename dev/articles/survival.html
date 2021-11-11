@@ -121,6 +121,19 @@
     
     
 <p>Time-to-event data, including both survival and censoring times, are created using functions <code>defSurv</code> and <code>genSurv</code>. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the <code>formula</code> field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the <em>shape</em> of the distribution can be specified. A <code>shape</code> value of 1 reflects the <em>exponential</em> distribution.</p>
+<p>The density, mean, and variance of the Weibull distribution that is used in the data generation process are defined by the parameters <span class="math inline">\(\lambda\)</span> (scale) and <span class="math inline">\(\nu\)</span> (shape) as shown below.</p>
+<span class="math display">\[\begin{aligned}
+f(t) &amp;= \frac{t^{\frac{1}{\nu}-1}}{\lambda \nu} exp\left(-\frac{t^\frac{1}{\nu}}{\lambda}\right) \\
+E(T) &amp;= \lambda ^ \nu \Gamma(\nu + 1) \\
+Var(T) &amp;= (\lambda^2)^\nu \left( \Gamma(2 \nu + 1) - \Gamma^2(\nu + 1) \right) \\
+\end{aligned}\]</span>
+<p><br></p>
+<p>The survival time <span class="math inline">\(T\)</span> data are generated based on this formula:</p>
+<p><span class="math display">\[
+T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
+\]</span></p>
+<p>where <span class="math inline">\(U\)</span> is a uniform random variable between 0 and 1, <span class="math inline">\(\beta\)</span> is a vector of parameters in a Cox proportional hazard model, and <span class="math inline">\(x\)</span> is a vector of covariates that impact survival time. <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\nu\)</span> can also vary by covariates.</p>
+<p>Here is an example showing how to generate data with covariates. In this case the scale and shape parameters will vary by group membership.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Baseline data definitions</span>
 
@@ -190,9 +203,404 @@
 ## 3:   1  0 0.37
 ## 4:   1  1 0.17</code></pre>
 <p>Here is a Kaplan-Meier plot of the data by the four groups:</p>
-<pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
-## "none")` instead.</code></pre>
 <p><img src="survival_files/figure-html/unnamed-chunk-5-1.png" width="624"></p>
+<p>Here is a survival analysis (using a Cox proportional hazard model) of a slightly simplified data set:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Baseline data definitions</span>
+
+<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span>
+<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span>
+
+<span class="co"># Survival data definitions</span>
+
+<span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"survTime"</span>, formula <span class="op">=</span> <span class="st">"1.5*x1 - .8*x2"</span>, scale <span class="op">=</span> <span class="fl">50</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>
+<span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+
+<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span>
+<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span><span class="op">)</span>
+
+<span class="va">cdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"obsTime"</span>, formula <span class="op">=</span> <span class="st">"pmin(survTime, censorTime)"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
+<span class="va">cdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">cdef</span>, varname <span class="op">=</span> <span class="st">"status"</span>, formula <span class="op">=</span> <span class="st">"I(survTime &lt;= censorTime)"</span>,
+    dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
+
+<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">cdef</span>, <span class="va">dtSurv</span><span class="op">)</span>
+<span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">obsTime</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
+<p>The 95% confidence intervals of the parameter estimates include the values used to generate the data:</p>
+<div id="hpjhweirfl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#hpjhweirfl .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#hpjhweirfl .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#hpjhweirfl .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#hpjhweirfl .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#hpjhweirfl .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#hpjhweirfl .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#hpjhweirfl .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#hpjhweirfl .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hpjhweirfl .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hpjhweirfl .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#hpjhweirfl .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#hpjhweirfl .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#hpjhweirfl .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#hpjhweirfl .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hpjhweirfl .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hpjhweirfl .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#hpjhweirfl .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#hpjhweirfl .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hpjhweirfl .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#hpjhweirfl .gt_left {
+  text-align: left;
+}
+
+#hpjhweirfl .gt_center {
+  text-align: center;
+}
+
+#hpjhweirfl .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#hpjhweirfl .gt_font_normal {
+  font-weight: normal;
+}
+
+#hpjhweirfl .gt_font_bold {
+  font-weight: bold;
+}
+
+#hpjhweirfl .gt_font_italic {
+  font-style: italic;
+}
+
+#hpjhweirfl .gt_super {
+  font-size: 65%;
+}
+
+#hpjhweirfl .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="table gt_table">
+<thead class="gt_col_headings"><tr>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<strong>log(HR)</strong><sup class="gt_footnote_marks">1</sup>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<strong>95% CI</strong><sup class="gt_footnote_marks">1</sup>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td class="gt_row gt_left">x1</td>
+<td class="gt_row gt_center">1.5</td>
+<td class="gt_row gt_center">1.2, 1.8</td>
+<td class="gt_row gt_center">&lt;0.001</td>
+</tr>
+<tr>
+<td class="gt_row gt_left">x2</td>
+<td class="gt_row gt_center">-1.0</td>
+<td class="gt_row gt_center">-1.2, -0.70</td>
+<td class="gt_row gt_center">&lt;0.001</td>
+</tr>
+</tbody>
+<tfoot><tr class="gt_footnotes">
+<td colspan="4">
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks"><em>1</em>
+          </sup>
+           
+          HR = Hazard Ratio, CI = Confidence Interval
+          <br></p>
+      </td>
+    </tr></tfoot>
+</table>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
