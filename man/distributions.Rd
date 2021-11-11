@@ -49,6 +49,7 @@ distribution can be found in this table:\tabular{lllll}{
    normal \tab mean \tab String or Number \tab variance \tab NA \cr
    noZeroPoisson \tab mean \tab String or Number \tab NA \tab identity or log \cr
    poisson \tab mean \tab String or Number \tab NA \tab identity or log \cr
+   trtAssign \tab ratio \tab \verb{r_1;r_2;..;r_n} \tab stratification \tab identity or nonbalanced \cr
    uniform \tab range \tab \verb{from;to} \tab NA \tab NA \cr
    uniformInt \tab range \tab \verb{from;to} \tab NA \tab NA \cr
 }

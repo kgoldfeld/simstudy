@@ -827,6 +827,10 @@ genSpline <- function(dt, newvar, predictor, theta,
 #' head(dtSurv)
 #' @export
 #' @concept generate_data
+#' 
+# source: Bender, Augustin, & Blettner, Generating survival times to simulate Cox
+# proportional hazard models, SIM, 2005;24;1713-1723.
+#
 genSurv <- function(dtName, survDefs, digits = 3) {
 
   # 'declare

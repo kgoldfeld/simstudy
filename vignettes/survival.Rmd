@@ -195,6 +195,26 @@ ggsurv_m <- function(
 
 Time-to-event data, including both survival and censoring times, are created using functions `defSurv` and `genSurv`. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the `formula` field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the *shape* of the distribution can be specified. A `shape` value of 1 reflects the *exponential* distribution.
 
+The density, mean, and variance of the Weibull distribution that is used in the data generation process are defined by the parameters $\lambda$ (scale) and $\nu$ (shape) as shown below.
+
+\begin{aligned}
+f(t) &= \frac{t^{\frac{1}{\nu}-1}}{\lambda \nu} exp\left(-\frac{t^\frac{1}{\nu}}{\lambda}\right) \\
+E(T) &= \lambda ^ \nu \Gamma(\nu + 1) \\
+Var(T) &= (\lambda^2)^\nu \left( \Gamma(2 \nu + 1) - \Gamma^2(\nu + 1) \right) \\
+\end{aligned}
+
+<br>
+
+The survival time $T$ data are generated based on this formula:
+
+$$
+T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
+$$
+
+where $U$ is a uniform random variable between 0 and 1, $\beta$ is a vector of parameters in a Cox proportional hazard model, and $x$ is a vector of covariates that impact survival time. $\lambda$ and $\nu$ can also vary by covariates.
+
+Here is an example showing how to generate data with covariates. In this case the scale and shape parameters will vary by group membership.
+
 ```{r, tidy = TRUE}
 
 # Baseline data definitions
@@ -249,10 +269,8 @@ dtSurv[,round(1-mean(status),2), keyby = .(grp,x1)]
 
 Here is a Kaplan-Meier plot of the data by the four groups:
 
-```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5}
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
 fit <- survfit(Surv(obsTime, status) ~ x1+grp, data=dtSurv)
-# ggsurvplot(fit, palette = cbbPalette, font.tickslab = c(8), font.x = 10, font.y = 10,
-#            legend = c(0.8, 0.8))
 
 ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette, 
          labels = c("grp=0 & x1=0","grp=1 & x1=0","grp=0 & x1=1","grp=1 & x1=1")) +
@@ -266,4 +284,36 @@ ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette,
   guides(colour = guide_legend(override.aes = list(size=1)))
 
 ```
+
+Here is a survival analysis (using a Cox proportional hazard model) of a slightly simplified data set:
+
+```{r, tidy = TRUE}
+
+# Baseline data definitions
+
+def <- defData(varname = "x1", formula = .5, dist = "binary")
+def <- defData(def,varname = "x2", formula = .5, dist = "binary")
+
+# Survival data definitions
+
+sdef <- defSurv(varname = "survTime", formula = "1.5*x1 - .8*x2", scale = 50, shape = 1/2)
+sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
+
+dtSurv <- genData(300, def)
+dtSurv <- genSurv(dtSurv, sdef)
+
+cdef <- defDataAdd(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="nonrandom")
+cdef <- defDataAdd(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="nonrandom")
+
+dtSurv <- addColumns(cdef, dtSurv)
+coxfit <- survival::coxph(Surv(obsTime, status) ~ x1 + x2, data = dtSurv)
+```
+
+The 95\% confidence intervals of the parameter estimates include the values used to generate the data:
+
+```{r, echo=FALSE}
+gtsummary::tbl_regression(coxfit)
+```
+
+
 
