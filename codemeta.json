@@ -5,7 +5,7 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "simstudy",
-  "description": "Simulates data sets in order to explore modeling\n    techniques or better understand data generating processes. The user\n    specifies a set of relationships between covariates, and generates\n    data based on these specifications. The final data sets can represent\n    data from randomized control trials, repeated measure (longitudinal)\n    designs, and cluster randomized trials. Missingness can be generated\n    using various mechanisms (MCAR, MAR, NMAR).",
+  "description": "Simulates data sets in order to explore modeling techniques or better understand data generating processes. The user specifies a set of relationships between covariates, and generates data based on these specifications. The final data sets can represent data from randomized control trials, repeated measure (longitudinal) designs, and cluster randomized trials. Missingness can be generated using various mechanisms (MCAR, MAR, NMAR).",
   "name": "simstudy: Simulation of Study Data",
   "codeRepository": "https://github.com/kgoldfeld/simstudy",
   "relatedLink": [
@@ -15,13 +15,13 @@
   ],
   "issueTracker": "https://github.com/kgoldfeld/simstudy/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.2",
+  "version": "0.3.0.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
+  "runtimePlatform": "R version 4.1.2 (2021-11-01)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -33,7 +33,7 @@
       "@type": "Person",
       "givenName": "Keith",
       "familyName": "Goldfeld",
-      "email": "Keith.Goldfeld@nyumc.org",
+      "email": "keith.goldfeld@nyulangone.org",
       "@id": "https://orcid.org/0000-0002-0292-8780"
     },
     {
@@ -52,7 +52,7 @@
       "@type": "Person",
       "givenName": "Keith",
       "familyName": "Goldfeld",
-      "email": "Keith.Goldfeld@nyumc.org",
+      "email": "keith.goldfeld@nyulangone.org",
       "@id": "https://orcid.org/0000-0002-0292-8780"
     }
   ],
@@ -270,6 +270,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "gtsummary",
+      "name": "gtsummary",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=gtsummary"
     }
   ],
   "softwareRequirements": [
@@ -357,16 +369,50 @@
       "sameAs": "https://CRAN.R-project.org/package=backports"
     }
   ],
-  "releaseNotes": "https://github.com/kgoldfeld/simstudy/blob/main/NEWS.md",
+  "releaseNotes": "https://github.com/kgoldfeld/simstudy/blob/master/NEWS.md",
   "readme": "https://github.com/kgoldfeld/simstudy/blob/main/README.md",
-  "fileSize": "8057.013KB",
-  "contIntegration": "https://codecov.io/gh/kgoldfeld/simstudy",
-  "developmentStatus": "https://www.tidyverse.org/lifecycle/#stable",
+  "fileSize": "6381.75KB",
+  "contIntegration": ["https://github.com/kgoldfeld/simstudy/actions", "https://app.codecov.io/gh/kgoldfeld/simstudy"],
+  "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html",
   "keywords": [
     "r",
     "data-simulation",
     "data-generation",
     "simulation",
     "statistical-models"
+  ],
+  "citation": [
+    {
+      "@type": "ScholarlyArticle",
+      "datePublished": "2020",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Keith",
+          "familyName": "Goldfeld"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Jacob",
+          "familyName": "Wujciak-Jens"
+        }
+      ],
+      "name": "simstudy: Illuminating research methods through data generation",
+      "identifier": "10.21105/joss.02763",
+      "url": "https://doi.org/10.21105/joss.02763",
+      "pagination": "2763",
+      "@id": "https://doi.org/10.21105/joss.02763",
+      "sameAs": "https://doi.org/10.21105/joss.02763",
+      "isPartOf": {
+        "@type": "PublicationIssue",
+        "issueNumber": "54",
+        "datePublished": "2020",
+        "isPartOf": {
+          "@type": ["PublicationVolume", "Periodical"],
+          "volumeNumber": "5",
+          "name": "Journal of Open Source Software"
+        }
+      }
+    }
   ]
 }
