@@ -158,18 +158,18 @@
 ## 1000: 1000  0  0  0 1 0</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtObs</span></code></pre></div>
-<pre><code>##         id m  u         x1         x2         x3
-##    1:    1 0 NA -0.6039416  1.1690100  0.6776002
-##    2:    2 0 NA  1.6267014 -0.1863284 -0.8162936
-##    3:    3 1 NA         NA 23.1998101 20.9621020
-##    4:    4 1 NA         NA 19.6778856 20.0492044
-##    5:    5 0 NA         NA         NA  0.5870554
-##   ---                                           
-##  996:  996 1 NA 39.9223630 40.2087032 40.9215747
-##  997:  997 0 NA         NA  0.4951678 -1.7736239
-##  998:  998 0 NA 20.7424560 19.5161382         NA
-##  999:  999 0 NA 22.1510996 18.7830458 21.5015684
-## 1000: 1000 0 NA -2.2606000  0.6367896  1.1799367</code></pre>
+<pre><code>##         id m  u        x1        x2        x3
+##    1:    1 0 NA 19.537414 20.273004 19.885027
+##    2:    2 0 NA 20.610669 20.078113 19.639968
+##    3:    3 0 NA        NA  1.098851  2.170484
+##    4:    4 1 NA        NA 39.601979 38.979212
+##    5:    5 1 NA        NA        NA 41.606757
+##   ---                                        
+##  996:  996 1 NA 19.297310 21.136126 20.669913
+##  997:  997 1 NA        NA 19.199704 22.357291
+##  998:  998 0 NA 19.783560 16.804983        NA
+##  999:  999 1 NA 41.127185 41.319134 41.101955
+## 1000: 1000 0 NA -1.954926  1.470167  1.042704</code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the “true” data set without missing data as a comparison for the “observed” data set. Since <code>x1</code> is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for <code>x2</code> and <code>x3</code> are biased, as the difference between observed and actual is not close to 0:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Two functions to calculate means and compare them</span>
@@ -191,9 +191,9 @@
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     20.6 20.6 20.6
-## Observed   21.0 19.2 19.1
-## Difference -0.4  1.4  1.5</code></pre>
+## Actual     19.1 19.2 19.2
+## Observed   19.1 17.7 18.0
+## Difference  0.0  1.5  1.2</code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias for the estimate of the mean of <code>x2</code> is mitigated, but not for <code>x3</code>, since <code>u</code> is not observed:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">meanActm</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span>
@@ -203,17 +203,17 @@
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     10.8 10.8 10.8
-## Observed   11.1 10.9  9.0
-## Difference -0.3 -0.1  1.8</code></pre>
+## Actual     10.3 10.3 10.4
+## Observed   10.1 10.1  9.0
+## Difference  0.2  0.2  1.4</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compare observed and actual when m = 1</span>
 
 <span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     29.9 30.0 29.9
-## Observed   30.1 30.5 28.3
-## Difference -0.2 -0.5  1.6</code></pre>
+## Actual     29.9 29.9 29.9
+## Observed   30.2 30.3 28.5
+## Difference -0.3 -0.4  1.4</code></pre>
 <div id="longitudinal-data-with-missingness" class="section level2">
 <h2 class="hasAnchor">
 <a href="#longitudinal-data-with-missingness" class="anchor"></a>Longitudinal data with missingness</h2>
