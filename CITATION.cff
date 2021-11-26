@@ -1,0 +1,62 @@
+# -----------------------------------------------------------
+# CITATION file created with {cffr} R package, v0.1.1
+# See also: https://docs.ropensci.org/cffr/
+# -----------------------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "simstudy" in publications use:'
+type: software
+license: GPL-3.0-only
+title: 'simstudy: Simulation of Study Data'
+version: 0.3.0.9000
+doi: 10.21105/joss.02763
+abstract: Simulates data sets in order to explore modeling techniques or better understand
+  data generating processes. The user specifies a set of relationships between covariates,
+  and generates data based on these specifications. The final data sets can represent
+  data from randomized control trials, repeated measure (longitudinal) designs, and
+  cluster randomized trials. Missingness can be generated using various mechanisms
+  (MCAR, MAR, NMAR).
+authors:
+- family-names: Goldfeld
+  given-names: Keith
+  email: keith.goldfeld@nyulangone.org
+  orcid: https://orcid.org/0000-0002-0292-8780
+- family-names: Wujciak-Jens
+  given-names: Jacob
+  email: jacob@wujciak.de
+  orcid: https://orcid.org/0000-0002-7281-3989
+preferred-citation:
+  type: article
+  title: 'simstudy: Illuminating research methods through data generation'
+  authors:
+  - family-names: Goldfeld
+    given-names: Keith
+  - family-names: Wujciak-Jens
+    given-names: Jacob
+  publisher:
+    name: The Open Journal
+  journal: Journal of Open Source Software
+  year: '2020'
+  volume: '5'
+  number: '54'
+  pages: '2763'
+  url: https://doi.org/10.21105/joss.02763
+  doi: 10.21105/joss.02763
+repository: https://CRAN.R-project.org/package=simstudy
+repository-code: https://github.com/kgoldfeld/simstudy
+url: https://kgoldfeld.github.io/simstudy/
+date-released: '2021-11-04'
+contact:
+- family-names: Goldfeld
+  given-names: Keith
+  email: keith.goldfeld@nyulangone.org
+  orcid: https://orcid.org/0000-0002-0292-8780
+keywords:
+- data-generation
+- data-simulation
+- r
+- simulation
+- statistical-models
+identifiers:
+- type: url
+  value: https://kgoldfeld.github.io/simstudy/dev/
