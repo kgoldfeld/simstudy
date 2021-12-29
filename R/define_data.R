@@ -216,6 +216,141 @@ defDataAdd <- function(dtDefs = NULL,
   return(defNew[])
 }
 
+#' Add multiple (similar) rows to definitions table
+#'
+#' @param dtDefs Definition data.table to be modified
+#' @param nvars Number of new variables to define
+#' @param prefix Prefix (character) for new variables
+#' @param formula An R expression for mean (string)
+#' @param variance Number or formula
+#' @param dist Distribution. For possibilities, see details
+#' @param link The link function for the mean, see details
+#' @param id A string indicating the field name for the unique record identifier
+#' @return A data.table named dtName that is an updated data definitions table
+#' @seealso [distributions]
+#' @details The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
+#'
+#' @examples
+#' def <- defRepeat(nvars = 4, prefix = "g", formula = "1/3;1/3;1/3", variance = 0, dist = "categorical")
+#' def <- defData(def, varname = "a", formula = "1;1", dist = "trtAssign")
+#' def <- defRepeat(def, 8, "b", formula = "5 + a", variance = 3, dist = "normal")
+#' def <- defData(def, "y", formula = "0.10", dist = "binary")
+#' 
+#' def
+#' @export
+#' @concept define_data
+defRepeat <- function(dtDefs = NULL,
+                    nvars,
+                    prefix,
+                    formula,
+                    variance = 0,
+                    dist = "normal",
+                    link = "identity",
+                    id = "id") {
+  
+  #### Check that arguments have been passed
+  
+  if (missing(nvars)) stop("argument 'nvars' is missing", call. = FALSE)
+  if (missing(prefix)) stop("argument 'prefix' is missing", call. = FALSE)
+  if (missing(formula)) stop("argument 'formula' is missing", call. = FALSE)
+  
+  #### No missing arguments
+  
+  varnames <- paste0(prefix, 1 : nvars)
+  
+  if (is.null(dtDefs)) {
+    
+    defNew <- defData(varname = varnames[1], formula = formula,
+                 variance = variance, dist=dist, link = link, id = id)
+    
+    for (i in (2:nvars) ) {
+      defNew <- defData(defNew, varname = varnames[i], 
+                  formula = formula, variance = variance, 
+                  dist=dist, link = link, id = id)
+    }
+    
+  } else {
+    
+    defNew <- data.table::copy(dtDefs)
+    
+    for (i in 1:nvars) {
+      defNew <- defData(defNew, varname = varnames[i], 
+                  formula = formula, variance = variance, 
+                  dist=dist, link = link, id = id)
+    }
+  }
+  
+  return(defNew[])
+}
+
+#' Add multiple (similar) rows to definitions table that will be used to add data to an
+#' existing data.table
+#'
+#' @param dtDefs Definition data.table to be modified
+#' @param nvars Number of new variables to define
+#' @param prefix Prefix (character) for new variables
+#' @param formula An R expression for mean (string)
+#' @param variance Number or formula
+#' @param dist Distribution. For possibilities, see details
+#' @param link The link function for the mean, see details
+#' @param id A string indicating the field name for the unique record identifier
+#' @return A data.table named dtName that is an updated data definitions table
+#' @seealso [distributions]
+#' @details The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
+#'
+#' @examples
+#' def <- defRepeatAdd(nvars = 4, prefix = "g", formula = "1/3;1/3;1/3", variance = 0, dist = "categorical")
+#' def <- defDataAdd(def, varname = "a", formula = "1;1", dist = "trtAssign")
+#' def <- defRepeatAdd(def, 8, "b", formula = "5 + a", variance = 3, dist = "normal")
+#' def <- defDataAdd(def, "y", formula = "0.10", dist = "binary")
+#' 
+#' def
+#' @export
+#' @concept define_data
+defRepeatAdd <- function(dtDefs = NULL,
+                      nvars,
+                      prefix,
+                      formula,
+                      variance = 0,
+                      dist = "normal",
+                      link = "identity",
+                      id = "id") {
+  
+  #### Check that arguments have been passed
+  
+  if (missing(nvars)) stop("argument 'nvars' is missing", call. = FALSE)
+  if (missing(prefix)) stop("argument 'prefix' is missing", call. = FALSE)
+  if (missing(formula)) stop("argument 'formula' is missing", call. = FALSE)
+  
+  #### No missing arguments
+  
+  varnames <- paste0(prefix, 1 : nvars)
+  
+  if (is.null(dtDefs)) {
+    
+    defNew <- defDataAdd(varname = varnames[1], formula = formula,
+                      variance = variance, dist=dist, link = link)
+    
+    for (i in (2:nvars) ) {
+      defNew <- defDataAdd(defNew, varname = varnames[i], 
+                        formula = formula, variance = variance, 
+                        dist=dist, link = link)
+    }
+    
+  } else {
+    
+    defNew <- data.table::copy(dtDefs)
+    
+    for (i in 1:nvars) {
+      defNew <- defDataAdd(defNew, varname = varnames[i], 
+                        formula = formula, variance = variance, 
+                        dist=dist, link = link)
+    }
+  }
+  
+  return(defNew[])
+}
+
 #' Read external csv data set definitions
 #'
 #' @param filen String file name, including full path. Must be a csv file.
@@ -651,7 +786,7 @@ defSurv <- function(dtDefs = NULL,
 
 #' Check uniform formula
 #'
-#' @description Unifom formulas must be of the form "min;max"
+#' @description Uniform formulas must be of the form "min;max"
 #' @param formula Formula as string.
 #' @return Invisible, error if formula not valid.
 #' @seealso distributions
