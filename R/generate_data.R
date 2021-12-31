@@ -512,6 +512,9 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' not provided, then a structure and correlation coefficient rho must be
 #' specified. (The matrix created via `rho` and `corstr` must also be positive
 #' definite.)
+#' @param npVAR Vector of variable names that violate the proportionality 
+#' assumption.
+#' @param npAdj Matrix with a row for each npVar and a column for each category
 #' @return Original data.table with added categorical field.
 #' @examples
 #' # Ordinal Categorical Data ----
@@ -581,13 +584,15 @@ genOrdCat <- function(dtName,
                       prefix = "grp",
                       rho = 0,
                       corstr = "ind",
-                      corMatrix = NULL) {
-
+                      corMatrix = NULL,
+                      npVar = NULL,     # Add description above
+                      npAdj = NULL) {    
+  
   # "declares" to avoid global NOTE
   cat <- NULL
   logisZ <- NULL
   period <- NULL
-
+  
   assertNotMissing(dtName = missing(dtName), baseprobs = missing(baseprobs))
   assertValue(
     dtName = dtName,
@@ -614,16 +619,16 @@ genOrdCat <- function(dtName,
     options = c("ind", "cs", "ar1"),
     default = "ind"
   )
-
-  baseprobs <- ensureMatrix(baseprobs)
-  baseprobs <- .adjustProbs(baseprobs)
-
+  
+  baseprobs <- simstudy:::ensureMatrix(baseprobs)
+  baseprobs <- simstudy:::.adjustProbs(baseprobs)
+  
   nCats <- nrow(baseprobs)
-
-  ensureLength(catVar = catVar, n = nCats)
-
+  
+  simstudy:::ensureLength(catVar = catVar, n = nCats)
+  
   if (!is.null(adjVar)) {
-    adjVar <- ensureLength(
+    adjVar <- simstudy:::ensureLength(
       adjVar = adjVar,
       n = seq_len(nCats), msg = list(
         "Number of categories implied",
@@ -634,29 +639,89 @@ genOrdCat <- function(dtName,
       )
     )
   }
-
+  
+  if (!is.null(npAdj) & is.null(npVar) ) {
+    msg = list(
+      "Argument npAdj has been specified without specifiying npVar"
+    )
+    stop(do.call(glue, msg))
+  }
+  
+  if (is.null(npAdj) & !is.null(npVar) ) {
+    msg = list(
+      "Argument npVar has been specified without specifiying npAdj"
+    )
+    stop(do.call(glue, msg))
+  }
+  
+  if (is.null(npAdj) & is.null(npVar) ) {
+    npAdj <- matrix(rep(0, length(baseprobs)), nrow = 1)
+  }
+  
+  if (!is.null(npAdj) & !is.null(npVar)) {
+    b_len <- ncol(baseprobs)
+    v_len <- length(npVar)
+    
+    npAdj <- simstudy:::ensureMatrix(npAdj)
+    
+    if (nrow(npAdj) != v_len) {
+      msg = list(
+        "Number of rows for npAdj ({nrow(npAdj)})",
+        " does not match with the number of",
+        " adjustment variables specified",
+        " in npVar ({v_len})!"
+      )
+      stop(do.call(glue, msg))
+    }
+    
+    if (ncol(npAdj) != b_len) {
+      msg = list(
+        "Number of categories implied",
+        " by baseprobs and npAdj do not match. ",
+        "npAdj should have {b_len}",
+        " columns but has { ncol(npAdj) }!"
+      )
+      stop(do.call(glue, msg))
+    }
+  }
+  
   if (nCats > 1 && length(catVar) != nCats) {
     catVar <- glue("{prefix}{i}", i = zeroPadInts(1:nCats))
   }
+  
   dt <- copy(dtName)
   n <- nrow(dt)
-  zs <- .genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
+  zs <- simstudy:::.genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
   zs[, logisZ := stats::qlogis(p = zs$Unew)]
   cprop <- t(apply(baseprobs, 1, cumsum))
   quant <- t(apply(cprop, 1, stats::qlogis))
-
+  
   mycat <- list()
-
+  
   for (i in 1:nCats) {
     iLogisZ <- zs[period == i - 1, logisZ]
+    n_obs_i <- length(iLogisZ)
     matlp <- matrix(rep(quant[i, ], n),
-      ncol = ncol(cprop),
-      byrow = TRUE
+                    ncol = ncol(cprop),
+                    byrow = TRUE
     )
+    
+    ## in case adjVar and/or npVar is NULL
+    
+    z <- rep(0, length(n_obs_i))
+    npVar_mat <- matrix(rep(0, n_obs_i))
+    
     if (!is.null(adjVar)) {
       z <- dt[, adjVar[i], with = FALSE][[1]]
-      matlp <- matlp - z
     }
+    
+    if (!is.null(npVar)) {
+      npVar_mat <- as.matrix(dt[, npVar, with=FALSE])
+    }
+    
+    zmat <- npVar_mat %*% npAdj + z # npAdj is #npVAR X 
+    matlp <- matlp - zmat
+    
     locateGrp <- (iLogisZ > cbind(-Inf, matlp))
     assignGrp <- apply(locateGrp, 1, sum)
     mycat[[i]] <- data.table(
@@ -665,18 +730,19 @@ genOrdCat <- function(dtName,
       cat = assignGrp
     )
   }
+  
   dcat <- data.table::rbindlist(mycat)
   cats <- data.table::dcast(dcat, id ~ var, value.var = "cat")
-
+  
   setnames(cats, "id", idname)
   setkeyv(cats, idname)
   dt <- dt[cats]
-
+  
   if (asFactor) {
     dt <- genFactor(dt, catVar, replace = TRUE)
     data.table::setnames(dt, glue("f{catVar}"), catVar)
   }
-
+  
   dt[]
 }
 
