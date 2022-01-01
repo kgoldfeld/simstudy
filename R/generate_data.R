@@ -630,7 +630,7 @@ genOrdCat <- function(dtName,
   if (!is.null(adjVar)) {
     adjVar <- simstudy:::ensureLength(
       adjVar = adjVar,
-      n = seq_len(nCats), msg = list(
+      n = nCats, msg = list(
         "Number of categories implied",
         " by baseprobs and adjVar do not match. ",
         "{ dots$names[[1]] } should be",
