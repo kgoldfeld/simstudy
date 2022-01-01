@@ -56,6 +56,7 @@ We can use an underlying (continuous) latent process as the basis for data gener
 ```{r options, echo = FALSE}
 options(digits = 2)
 ```
+
 ```{r threshold, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
 # preliminary libraries and plotting defaults
 
