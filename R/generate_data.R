@@ -514,7 +514,9 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' definite.)
 #' @param npVAR Vector of variable names that violate the proportionality 
 #' assumption.
-#' @param npAdj Matrix with a row for each npVar and a column for each category
+#' @param npAdj Matrix with a row for each npVar and a column for each category.
+#' Each value represents the deviation from the proportional odds assumption on
+#' the logistic scale.
 #' @return Original data.table with added categorical field.
 #' @examples
 #' # Ordinal Categorical Data ----
@@ -536,6 +538,7 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' dx <- genData(1000, def1)
 #'
 #' probs <- c(0.40, 0.25, 0.15)
+#' 
 #' dx <- genOrdCat(dx,
 #'   adjVar = "z", idname = "idG", baseprobs = probs,
 #'   catVar = "grp"
@@ -570,6 +573,9 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' data.table::dcast(dProp, variable ~ response,
 #'     value.var = "V1", fill = 0
 #' )
+#' 
+#' # Non proportional assumption
+#' 
 #' @export
 #' @md
 #' @concept generate_data
@@ -585,7 +591,7 @@ genOrdCat <- function(dtName,
                       rho = 0,
                       corstr = "ind",
                       corMatrix = NULL,
-                      npVar = NULL,     # Add description above
+                      npVar = NULL, 
                       npAdj = NULL) {    
   
   # "declares" to avoid global NOTE
@@ -745,159 +751,6 @@ genOrdCat <- function(dtName,
   
   dt[]
 }
-
-#' @title Generate ordinal categorical data without proportionality assumption
-#' @description Ordinal categorical data without the proportionality assumption is
-#' added to an existing data set.
-#' @param dtName Name of complete data set
-#' @param adjVar Adjustment variable  name in dtName - determines
-#' logistic shift. This is specified assuming a cumulative logit
-#' link.
-#' @param baseprobs Baseline probability expressed as a vector or matrix of
-#' probabilities. The values (per row) must sum to <= 1. If `rowSums(baseprobs)
-#' < 1`, an additional category is added with probability `1 -
-#' rowSums(baseprobs)`. The number of rows represents the number of new
-#' categorical variables. The number of columns represents the number of
-#' possible responses - if an particular category has fewer possible responses,
-#' assign zero probability to non-relevant columns.
-#' @param npVar Name(s) of field(s) that break the non-proportionality assumption.
-#' A string or vector of strings.
-#' @param npAdj Vector or matrix of adjustments. Length of vector or number of
-#' columns must be the same number of response levels. The last column will be
-#' zero regardless of what is entered.
-#' @param catVar Name of the new categorical field. Defaults to "cat". Can be a
-#' character vector with a name for each new variable defined via `baseprobs`.
-#' Will be overridden by `prefix` if more than one variable is defined and
-#' `length(catVar) == 1`.
-#' @param asFactor If `asFactor == TRUE` (default), new field is returned
-#' as a factor. If `asFactor == FALSE`, new field is returned as an integer.
-#' @param idname Name of the id column in `dtName`.
-#' @param prefix A string. The names of the new variables will be a
-#' concatenation of the prefix and a sequence of integers indicating the
-#' variable number.
-#' @param rho Correlation coefficient, -1 < rho < 1. Use if corMatrix is not
-#' provided.
-#' @param corstr Correlation structure of the variance-covariance matrix defined
-#' by sigma and rho. Options include "ind" for an independence structure, "cs"
-#' for a compound symmetry structure, and "ar1" for an autoregressive structure.
-#' @param corMatrix Correlation matrix can be entered directly. It must be
-#' symmetrical and positive definite. It is not a required field; if a matrix is
-#' not provided, then a structure and correlation coefficient rho must be
-#' specified. (The matrix created via `rho` and `corstr` must also be positive
-#' definite.)
-#' @return Original data.table with added categorical field.
-#' @examples
-#' # Ordinal Categorical Data without proportionality assumption ----
-#' 
-#' d1 <- defData(varname = "z", formula = 0, variance = .25)
-#' 
-#' dd <- genData(10, d1)
-#' dd <- trtAssign(dd, grpName = "rx")
-#' 
-#' baseprobs <- c(.4, .3, .2, .1)
-#' npAdj <- c(0, 0.1, 0.3, 0)
-#' 
-#' dd <- genOrdCatNP(dtName = dd, adjVar = "z", baseprobs = baseprobs,
-#'                  npVar = "rx", npAdj = npAdj)
-
-#' @export
-#' @md
-#' @concept generate_data
-#' @concept categorical
-#' @concept correlated
-
-genOrdCatNP <- function(dtName,
-                        adjVar = NULL,
-                        baseprobs,
-                        npVar = NULL,
-                        npAdj = NULL,
-                        catVar = "cat",
-                        asFactor = TRUE,
-                        idname = "id",
-                        prefix = "grp",
-                        rho = 0,
-                        corstr = "ind",
-                        corMatrix = NULL) {
-  
-  # "declares" to avoid global NOTE
-  cat <- NULL
-  logisZ <- NULL
-  period <- NULL
-  
-  
-  baseprobs <- ensureMatrix(baseprobs)
-  baseprobs <- .adjustProbs(baseprobs)
-  
-  npAdj <- ensureMatrix(npAdj)
-  
-  nCats <- nrow(baseprobs)
-  
-  ensureLength(catVar = catVar, n = nCats)
-  
-  # if (!is.null(adjVar)) {
-  #   adjVar <- ensureLength(
-  #     adjVar = adjVar,
-  #     n = seq_len(nCats), msg = list(
-  #       "Number of categories implied",
-  #       " by baseprobs and adjVar do not match. ",
-  #       "{ dots$names[[1]] } should be",
-  #       " either length 1 or { n } but",
-  #       " is { length(var) }!"
-  #     )
-  #   )
-  # }
-  
-  # if (nCats > 1 && length(catVar) != nCats) {
-  #   catVar <- glue("{prefix}{i}", i = zeroPadInts(1:nCats))
-  # }
-  dt <- copy(dtName)
-  n <- nrow(dt)
-  zs <- .genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
-  zs[, logisZ := stats::qlogis(p = zs$Unew)]
-  cprop <- t(apply(baseprobs, 1, cumsum))
-  quant <- t(apply(cprop, 1, stats::qlogis))
-  
-  mycat <- list()
-  
-  for (i in 1:nCats) {
-    iLogisZ <- zs[period == i - 1, logisZ]
-    matlp <- matrix(rep(quant[i, ], n),
-                    ncol = ncol(cprop),
-                    byrow = TRUE
-    )
-    # if (!is.null(adjVar)) {
-    # z <- dt[, adjVar[i], with = FALSE][[1]]
-    
-    z <- dt[, adjVar, with = FALSE][[1]]
-    npVar_mat <- as.matrix(dt[, npVar, with=FALSE])
-    
-    zmat <- npVar_mat %*% npAdj + z
-    matlp <- matlp - zmat
-    # }
-    
-    locateGrp <- (iLogisZ > cbind(-Inf, matlp))
-    assignGrp <- apply(locateGrp, 1, sum)
-    mycat[[i]] <- data.table(
-      id = dt[, idname, with = FALSE][[1]],
-      var = catVar[[i]],
-      cat = assignGrp
-    )
-  }
-  dcat <- data.table::rbindlist(mycat)
-  cats <- data.table::dcast(dcat, id ~ var, value.var = "cat")
-  
-  data.table::setnames(cats, "id", idname)
-  data.table::setkeyv(cats, idname)
-  dt <- dt[cats]
-  
-  if (asFactor) {
-    dt <- genFactor(dt, catVar, replace = TRUE)
-    data.table::setnames(dt, glue::glue("f{catVar}"), catVar)
-  }
-  
-  dt[]
-}
-
 
 
 #' Generate spline curves
