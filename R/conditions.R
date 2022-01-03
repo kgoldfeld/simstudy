@@ -268,7 +268,7 @@ optionInvalidWarning <- function(name,
 #' @param name Name of invalid option
 #' @param value Value of name
 #' @param options Valid options for name
-#' @param msg Additonal message to be displayed.
+#' @param msg Additional message to be displayed.
 #' @param call sys.call to pass on to the error.
 #' @noRd
 optionInvalidError <- function(name,

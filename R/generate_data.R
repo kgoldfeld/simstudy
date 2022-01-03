@@ -643,15 +643,15 @@ genOrdCat <- function(dtName,
     default = "ind"
   )
   
-  baseprobs <- simstudy:::ensureMatrix(baseprobs)
-  baseprobs <- simstudy:::.adjustProbs(baseprobs)
+  baseprobs <- ensureMatrix(baseprobs)
+  baseprobs <- .adjustProbs(baseprobs)
   
   nCats <- nrow(baseprobs)
   
-  simstudy:::ensureLength(catVar = catVar, n = nCats)
+  ensureLength(catVar = catVar, n = nCats)
   
   if (!is.null(adjVar)) {
-    adjVar <- simstudy:::ensureLength(
+    adjVar <- ensureLength(
       adjVar = adjVar,
       n = nCats, msg = list(
         "Number of categories implied",
@@ -673,10 +673,11 @@ genOrdCat <- function(dtName,
       npAdj <- matrix(rep(0, ncol(baseprobs)), nrow = 1)
     
   } else if (!is.null(npAdj) & !is.null(npVar)) {
+    
       b_len <- ncol(baseprobs)
       v_len <- length(npVar)
     
-      npAdj <- simstudy:::ensureMatrix(npAdj)
+      npAdj <- ensureMatrix(npAdj)
     
       if (nrow(npAdj) != v_len) {
         msg = list(
@@ -686,26 +687,26 @@ genOrdCat <- function(dtName,
           " in npVar ({v_len})!"
         )
         stop(do.call(glue, msg))
-    }
+      }
     
-    if (ncol(npAdj) != b_len) {
-      msg = list(
-        "Number of categories implied",
-        " by baseprobs and npAdj do not match. ",
-        "npAdj should have {b_len}",
-        " columns but has { ncol(npAdj) }!"
-      )
-      stop(do.call(glue, msg))
-    }
+      if (ncol(npAdj) != b_len) {
+        msg = list(
+          "Number of categories implied",
+          " by baseprobs and npAdj do not match. ",
+          "npAdj should have {b_len}",
+          " columns but has { ncol(npAdj) }!"
+        )
+        stop(do.call(glue, msg))
+      }
   }
   
   if (nCats > 1 && length(catVar) != nCats) {
-    catVar <- glue("{prefix}{i}", i = simstudy:::zeroPadInts(1:nCats))
+    catVar <- glue("{prefix}{i}", i = zeroPadInts(1:nCats))
   }
   
   dt <- copy(dtName)
   n <- nrow(dt)
-  zs <- simstudy:::.genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
+  zs <- .genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
   zs[, logisZ := stats::qlogis(p = zs$Unew)]
   cprop <- t(apply(baseprobs, 1, cumsum))
   quant <- t(apply(cprop, 1, stats::qlogis))
@@ -720,21 +721,16 @@ genOrdCat <- function(dtName,
                     byrow = TRUE
     )
     
-    ## in case adjVar and/or npVar is NULL
-    
-    z <- rep(0, n_obs_i)
-    npVar_mat <- matrix(rep(0, n_obs_i))
-    
     if (!is.null(adjVar)) {
       z <- dt[, adjVar[i], with = FALSE][[1]]
-    }
+    } else z <- rep(0, n_obs_i)
     
     if (!is.null(npVar)) {
       npVar_mat <- as.matrix(dt[, npVar, with=FALSE])
-    }
+    } else npVar_mat <- matrix(rep(0, n_obs_i))
     
-    zmat <- npVar_mat %*% npAdj + z # npAdj is #npVAR X 
-    matlp <- matlp - zmat
+    npmat <- npVar_mat %*% npAdj # npAdj is #npVAR X 
+    matlp <- matlp - npmat - z
     
     locateGrp <- (iLogisZ > cbind(-Inf, matlp))
     assignGrp <- apply(locateGrp, 1, sum)
