@@ -16,6 +16,8 @@ library(gridExtra)
 library(survival)
 library(gee)
 library(data.table)
+library(ordinal)
+
 odds <- function (p)  p/(1 - p) # TODO temporary remove when added to package
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
@@ -86,7 +88,7 @@ pdf <- dlogis(thresholdA)
 grpA <- data.table(threshold = thresholdA, pdf)
 aBreaks <- c(-6, grpA$threshold, 6)
 
-# plot density with cutpoints
+# plot density with cut points
 
 dt[, grpA := cut(x, breaks = aBreaks, labels = F, include.lowest = TRUE)]
 
@@ -179,22 +181,21 @@ To generate ordered categorical data using `simstudy`, there is a function `genO
 ```{r acuts}
 baseprobs <- c(0.11, 0.33, 0.36, 0.17, 0.03)
 
-defA <- defDataAdd(varname = "z", formula = "-1.1*exposed", dist = "nonrandom")
+defA <- defData(varname = "exposed", formula = "1;1", dist = "trtAssign")
+defA <- defData(defA, varname = "z", formula = "-1.1*exposed", dist = "nonrandom")
 
 set.seed(130)
 
-dT <- genData(25000)
-dT <- trtAssign(dT, grpName = "exposed")
-dT <- addColumns(defA, dT)
+dT_1_cat <- genData(25000, defA)
 
-dT <- genOrdCat(dT, adjVar = "z", baseprobs, catVar = "r")
+dX <- genOrdCat(dT_1_cat, adjVar = "z", baseprobs, catVar = "r")
 ```
 
 Estimating the parameters of the model using function `clm`, we can recover the original parameters quite well.
 
 ```{r ordinal}
 library(ordinal)
-clmFit <- clm(r ~ exposed, data = dT)
+clmFit <- clm(r ~ exposed, data = dX)
 summary(clmFit)
 ```
 
@@ -203,19 +204,63 @@ In the model output, the `exposed` coefficient of -1.15 is the estimate of $-\be
 The log of the cumulative odds for groups 1 to 4 from the data without exposure are
 
 ```{r}
-(logOdds.unexp <- log(odds(cumsum(dT[exposed == 0, prop.table(table(r))])))[1:4])
+(logOdds.unexp <- log(odds(cumsum(dX[exposed == 0, prop.table(table(r))])))[1:4])
 ```
 
 And under exposure:
 
 ```{r}
-(logOdds.expos <- log(odds(cumsum(dT[exposed == 1, prop.table(table(r))])))[1:4])
+(logOdds.expos <- log(odds(cumsum(dX[exposed == 1, prop.table(table(r))])))[1:4])
 ```
 
 The log of the cumulative odds ratios for each of the four groups is
 
 ```{r}
 logOdds.expos - logOdds.unexp
+```
+
+A plot of the modeled cumulative probabilities (the lines) shows that the proportionality assumption fit the observed data (the points) quite well.
+
+```{r, echo=FALSE, fig.width=6, fig.height=3.5}
+getCumProbs <- function(coefs) {
+  
+  cumprob0 <- data.table(
+    cumprob = c(1/(1 + exp(-coefs[which(rownames(coefs) != "exposed")])), 1),
+    r = factor(1 : nrow(coefs)),
+    exposed = 0
+  )
+  
+  cumprob1 <- data.table(
+    cumprob = c(1/(1 + exp(-coefs[which(rownames(coefs) != "exposed")] + 
+                             coefs["exposed", 1])), 1),
+    r = factor(1 : nrow(coefs)),
+    exposed = 1
+  )
+  
+  rbind(cumprob0, cumprob1)[]
+ 
+}
+
+fitPlot <- function(dx) {
+  
+  clmFit <- clm(r ~ exposed, data = dx)
+  coefs <- coef(summary(clmFit))
+  cumModProbs <- getCumProbs(coefs)
+
+  cumObsProbs <- dx[, .N, keyby = .(exposed, r)]
+  cumObsProbs[, cumprob := cumsum(N)/sum(N) , keyby = exposed]
+  
+  ggplot(data = cumObsProbs, aes(x = r, y = cumprob, color = factor(exposed))) +
+    geom_line(data = cumModProbs, alpha = 1, aes(group=exposed)) +
+    geom_point(size = 1.25) +
+    ylab("cumulative probability") +
+    xlab("ordinal category") +
+    theme(panel.grid = element_blank(),
+          legend.title = element_blank()) +
+    scale_color_manual(values = c("#7c8e8f", "#8f7c8e"), labels = c("Not exposed", "Exposed"))
+}
+
+fitPlot(dX)
 ```
 
 ## Correlated multivariate ordinal data
@@ -236,9 +281,9 @@ baseprobs <- matrix(c(0.2, 0.1, 0.7,
 # generate the data
 
 set.seed(333)                     
-dT <- genData(10000)
+dT_5_cat <- genData(10000)
 
-dX <- genOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+dX <- genOrdCat(dT_5_cat, adjVar = NULL, baseprobs = baseprobs, 
                    prefix = "q", rho = 0.15, corstr = "cs", asFactor = FALSE)
 ```
 
@@ -258,14 +303,14 @@ dProp[, response := rep(seq(3), 5)]
 # observed probabilities
 dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
 
-# specified probabilites
+# specified probabilities
 baseprobs
 ```
 
 In the next example, the structure of the correlation is changed to AR-1, so the correlation between questions closer to each other is higher than for questions farther apart. But the probability distributions are unaffected:
 
 ```{r}
-dX <- genOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+dX <- genOrdCat(dT_5_cat, adjVar = NULL, baseprobs = baseprobs, 
                    prefix = "q", rho = 0.40, corstr = "ar1", asFactor = FALSE)
 
 # correlation
@@ -278,3 +323,89 @@ dProp[, response := rep(seq(3), 5)]
 # probabilities
 dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
 ```
+
+## Non-proportional odds 
+
+By default, the function `genOrdCat` generates ordinal categorical data under the assumption of proportional cumulative odds. On the underlying logistic scale, this means that there is a consistent shift of the thresholds; in the initial example above, the exposure thresholds were shifted 1.1 units to the right on the logistic scale. In the figure below, the rightward shift of the threshold to the left varies for each threshold (0.5 units for the first threshold, 1.1 for the second, 0.1 for the third, and 0.5 for the last), which violates the underlying assumption of proportionality:
+
+```{r plotNP, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
+
+pA <- plogis(c(thresholdA, Inf)) - plogis(c(-Inf, thresholdA))
+probs <- data.frame(pA)
+rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
+                     "P(Resp = 3)", "P(Resp = 4)", "P(Resp = 5)")
+
+probA <- data.frame(
+           cprob = plogis(thresholdA), 
+           codds = plogis(thresholdA)/(1-plogis(thresholdA)),
+           lcodds = log(plogis(thresholdA)/(1-plogis(thresholdA)))
+)
+rownames(probA) <- c("P(Grp < 2)", "P(Grp < 3)", "P(Grp < 4)", "P(Grp < 5)")
+
+thresholdB <- thresholdA + c(0.5, 1.1, 0.1, 0.5)
+
+pdf <- dlogis(thresholdB)
+grpB <- data.table(threshold = thresholdB, pdf)
+bBreaks <- c(-6, grpB$threshold, 6)
+
+pB = plogis(c(thresholdB, Inf)) - plogis(c(-Inf, thresholdB))
+probs <- data.frame(pA, pB)
+rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
+                     "P(Resp = 3)", "P(Resp = 4)", "P(Resp = 5)")
+
+
+# Plot density for group B
+
+dt[, grpB := cut(x, breaks = bBreaks, labels = F, include.lowest = TRUE)]
+
+p3 <- ggplot(data = dt, aes(x = x, y = pdf)) +
+  geom_line() +
+  geom_area(aes(x = x, y = pdf, group = grpB, fill = factor(grpB))) +
+  geom_hline(yintercept = 0, color = "grey5") +
+  geom_segment(data=grpA, 
+               aes(x=threshold, xend = threshold, y=0, yend=pdf), 
+               size = 0.3, lty = 2, color = "#857284") +
+  annotate("text", x = -4, y = .28, label = "non-proportional", size = 5) +
+  scale_fill_manual(values = c("#d0d7d1", "#bbc5bc", "#a6b3a7", "#91a192", "#7c8f7d"),
+                    name = "Frequency") +
+  scale_x_continuous(breaks = thresholdB) +
+  scale_y_continuous(limits = c(0.0, 0.3), name = "Density") +
+  my_theme() +
+  theme(legend.position = "none")
+
+p3
+```
+
+It is possible to generate data under these assumptions using the `npVar` and `npAdj` arguments. `npVar` indicates the variable(s) for which the non-proportional assumption is violated, and `npAdj` indicates the various shifts of the intervals. (Note that the last cut point is at `Inf`, so there is no impact of a shift related to that threshold.)
+
+```{r}
+baseprobs <- c(0.11, 0.33, 0.36, 0.17, 0.03)
+npAdj <- c(-0.5, -1.1, -0.1, -0.5, 0)
+
+dX <- genOrdCat(dT_1_cat, baseprobs = baseprobs, catVar = "r", npVar = "exposed", npAdj = npAdj)
+```
+
+The calculation of the log cumulative odds follows as before:
+
+```{r}
+(logOdds.unexp <- log(odds(cumsum(dX[exposed == 0, prop.table(table(r))])))[1:4])
+```
+
+And under exposure:
+
+```{r}
+(logOdds.expos <- log(odds(cumsum(dX[exposed == 1, prop.table(table(r))])))[1:4])
+```
+
+But, now, the log of the cumulative odds ratios for each of the four groups varies across the different levels.
+
+```{r}
+logOdds.expos - logOdds.unexp
+```
+
+This is confirmed by a plot of the model fit with a proportional odds assumption along with the observed cumulative proportions. Since the model imposes a consistent shift of each threshold, the observed points no longer lie along the prediction line, indicating a violation of the proportional odds assumption:
+
+```{r, echo=FALSE, fig.width=6, fig.height=3.5}
+fitPlot(dX)
+```
+
