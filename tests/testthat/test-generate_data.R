@@ -147,7 +147,7 @@ test_that("non-proportional ordinal categorical data are generated correctly.", 
     {
       dn <- genOrdCat(dtName = dd, adjVar = "z", 
                       baseprobs = baseprobs, 
-                      npVar = "rx", npAdj = c(0, 1.5, 0, 0))
+                      npVar = "rx", npAdj = c(0, 1, 0, 0))
       
       dc <- dn[, .(.N), keyby = .(rx, cat)]
       dc[, cprop := cumsum(N)/sum(N), keyby = .(rx)]

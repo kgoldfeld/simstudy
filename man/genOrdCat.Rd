@@ -129,7 +129,7 @@ data.table::dcast(dProp, variable ~ response,
     value.var = "V1", fill = 0
 )
 
-# roportional odds assumption violated
+# proportional odds assumption violated
 
 d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
 d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx", dist = "nonrandom")
@@ -137,7 +137,7 @@ d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx", dist = "nonrandom")
 dd <- genData(1000, d1)
 
 baseprobs <- c(.4, .3, .2, .1)
-npAdj <- c(0, 1.5, 0, 0)
+npAdj <- c(0, 1, 0, 0)
 
 dn <- genOrdCat(dtName = dd, adjVar = "z", 
                 baseprobs = baseprobs,

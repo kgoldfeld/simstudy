@@ -579,7 +579,7 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #'     value.var = "V1", fill = 0
 #' )
 #' 
-#' # roportional odds assumption violated
+#' # proportional odds assumption violated
 #' 
 #' d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
 #' d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx", dist = "nonrandom")
@@ -587,7 +587,7 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' dd <- genData(1000, d1)
 #' 
 #' baseprobs <- c(.4, .3, .2, .1)
-#' npAdj <- c(0, 1.5, 0, 0)
+#' npAdj <- c(0, 1, 0, 0)
 #' 
 #' dn <- genOrdCat(dtName = dd, adjVar = "z", 
 #'                 baseprobs = baseprobs,
@@ -732,6 +732,16 @@ genOrdCat <- function(dtName,
     npmat <- npVar_mat %*% npAdj # npAdj is #npVAR X 
     matlp <- matlp - npmat - z
     
+    ## write Rcpp code to speed up apply
+    
+    if ( chkNonIncreasing(matlp) ) {
+       stop("Overlapping thresholds. Check adjustment values!")
+    }
+    
+    # if ( any(apply(matlp, 1, is.unsorted)) ) {
+    #   stop("Overlapping thresholds. Check adjustment values!")
+    # }
+      
     locateGrp <- (iLogisZ > cbind(-Inf, matlp))
     assignGrp <- apply(locateGrp, 1, sum)
     mycat[[i]] <- data.table(
