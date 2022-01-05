@@ -161,6 +161,14 @@ test_that("non-proportional ordinal categorical data are generated correctly.", 
     },
     1.5,
   )
+  
+  expect_error(
+    {
+      dn <- genOrdCat(dtName = dd, adjVar = "z", 
+                      baseprobs = baseprobs, 
+                      npVar = "rx", npAdj = c(0, 2, 0, 0))
+    }
+  )
   set.seed(oldSeed)
 })
 
