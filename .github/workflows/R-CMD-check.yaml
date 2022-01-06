@@ -42,5 +42,5 @@ jobs:
         with:
           extra-packages: |
             rcmdcheck
-            hedgehogqa/r-hedgehog/
+            hedgehogqa/r-hedgehog
       - uses: r-lib/actions/check-r-package@v2
