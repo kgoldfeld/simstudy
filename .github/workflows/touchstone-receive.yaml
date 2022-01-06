@@ -46,9 +46,9 @@ jobs:
           git checkout -b $GITHUB_HEAD_REF # this is current ref. This is required for naming.
           git branch $GITHUB_BASE_REF remotes/origin/$GITHUB_BASE_REF
       - name: Setup R
-        uses: r-lib/actions/setup-r@master
+        uses: r-lib/actions/setup-r@v2
       - name: Setup dependencies
-        uses: r-lib/actions/setup-r-dependencies@master
+        uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: 1
           extra-packages: |
