@@ -39,10 +39,69 @@ test_that("vectorized variables work in formulas", {
 
 # genOrdCat ----
 test_that("genOrdCat throws errors.", {
+  oldSeed <- .Random.seed
+  set.seed(87920)
+
   expect_error(genOrdCat("not a data table", NULL, c(.1, .1)), class = "simstudy::wrongClass")
   expect_error(genOrdCat(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
   expect_error(genOrdCat(NULL, NULL, NULL), class = "simstudy::noValue")
   expect_warning(genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "notValid"), class = "simstudy::invalidOption")
+
+  d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
+  d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
+  d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx - 1*male", dist = "nonrandom")
+
+  dd <- genData(5, d1)
+
+  baseprobs <- c(0.4, 0.3, 0.2, 0.1)
+  npAdj <- matrix(c(
+    0, 1, 0, 0,
+    1, 0, 1, 0
+  ), nrow = T, byrow = T)
+
+  expect_error(genOrdCat(dtName = dd, baseprobs = baseprobs, npVar = "rx"), class = "simstudy::mismatch")
+  expect_error(genOrdCat(dtName = dd, baseprobs = baseprobs, npAdj = npAdj), class = "simstudy::mismatch")
+  expect_error(genOrdCat(dd, "z", baseprobs, npVar = "rx", npAdj = npAdj))
+  expect_error(genOrdCat(dd, "z", baseprobs, npVar = c("rx"), npAdj = c(0, 1, 1)))
+
+  n <- 100000
+
+  d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
+  d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
+  d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx - 1*male", dist = "nonrandom")
+
+  dd <- genData(n, d1)
+  baseprobs <- c(.4, .3, .2, .1)
+
+  expect_error({
+    dn <- genOrdCat(
+      dtName = dd, adjVar = "z",
+      baseprobs = baseprobs,
+      npVar = "rx", npAdj = c(0, 2, 0, 0)
+    )
+  })
+
+  expect_error({
+    dn <- genOrdCat(
+      dtName = dd, adjVar = "z",
+      baseprobs = baseprobs,
+      npVar = c("rx", "male"), npAdj = c(0, 1, 0, 0)
+    )
+  })
+
+  expect_error({
+    dn <- genOrdCat(
+      dtName = dd, adjVar = "z",
+      baseprobs = baseprobs,
+      npVar = c("rx"),
+      npAdj = matrix(c(
+        0, .2, 0, 0,
+        0, 0, -.2, 0
+      ), nrow = 2, byrow = T)
+    )
+  })
+
+  set.seed(oldSeed)
 })
 
 library(magrittr)
@@ -92,6 +151,67 @@ test_that("ordinal categorical data is generated correctly.", {
   set.seed(oldSeed)
   expect_silent(genOrdCat(dtName = data, adjVar = "id", baseprobs = rbind(probs, probs), asFactor = FALSE))
 })
+
+
+test_that("non-proportional ordinal categorical data are generated correctly.", {
+  oldSeed <- .Random.seed
+  set.seed(87920)
+  n <- 100000
+
+  d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
+  d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
+  d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx - 1*male", dist = "nonrandom")
+
+  dd <- genData(n, d1)
+  baseprobs <- c(.4, .3, .2, .1)
+
+  # Assumes proportional odds
+
+  expect_lte(
+    {
+      dn <- genOrdCat(
+        dtName = dd, adjVar = "z",
+        baseprobs = baseprobs
+      )
+
+      dc <- dn[, .(.N), keyby = .(rx, cat)]
+      dc[, cprop := cumsum(N) / sum(N), keyby = .(rx)]
+      dc[, codds := cprop / (1 - cprop)]
+
+      dcc <- dcast(dc[codds != Inf], cat ~ rx, value.var = "codds")
+      dcc[, cOR := `1` / `0`]
+
+      dcc[, abs(max(cOR) - min(cOR))]
+    },
+    0.5
+  )
+
+  # Assumes non-proportional data generation
+
+  expect_gt(
+    {
+      dn <- genOrdCat(
+        dtName = dd, adjVar = "z",
+        baseprobs = baseprobs,
+        npVar = "rx", npAdj = c(0, 1, 0, 0)
+      )
+
+      dc <- dn[, .(.N), keyby = .(rx, cat)]
+      dc[, cprop := cumsum(N) / sum(N), keyby = .(rx)]
+      dc[, codds := cprop / (1 - cprop)]
+
+      dcc <- dcast(dc[codds != Inf], cat ~ rx, value.var = "codds")
+      dcc[, cOR := `1` / `0`]
+
+      dcc[, abs(max(cOR) - min(cOR))]
+    },
+    1.5,
+  )
+
+  set.seed(oldSeed)
+})
+
+
 
 test_that("deprecation warning shows up.", {
   expect_warning(genCorOrdCat(genData(5), baseprobs = c(.2, .3, .5), rho = 0, corstr = "cs"), "deprecated")

@@ -16,6 +16,8 @@ library(gridExtra)
 library(survival)
 library(gee)
 library(data.table)
+library(ordinal)
+
 odds <- function (p)  p/(1 - p) # TODO temporary remove when added to package
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
@@ -39,23 +41,22 @@ ggtheme <- function(panelback = "white") {
 
 ```
 
-Using the `defData` and `genData` functions, it is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related to strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on five possible values: (1) strongly disagree, (2) disagree, (3) neutral, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.
+Using the `defData` and `genData` functions, it is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related to strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on four possible values: (1) strongly disagree, (2) disagree, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.
 
 It is common to summarize the data by looking at *cumulative* probabilities, odds, or log-odds.  Comparisons of different exposures or individual characteristics typically look at how these cumulative measures vary across the different exposures or characteristics. So, if we were interested in cumulative odds, we would compare
 $$\small{\frac{P(response = 1|exposed)}{P(response > 1|exposed)} \ \ vs. \ \frac{P(response = 1|unexposed)}{P(response > 1|unexposed)}},$$
 
-$$\small{\frac{P(response \le 2|exposed)}{P(response > 2|exposed)} \ \ vs. \ \frac{P(response \le 2|unexposed)}{P(response > 2|unexposed)}},$$
+and continue until the last (in this case, third) comparison
 
-and continue until the last (in this case, fourth) comparison
-
-$$\small{\frac{P(response \le 4|exposed)}{P(response > 4|exposed)} \ \ vs. \ \frac{P(response \le 4|unexposed)}{P(response > 4|unexposed)}},$$
+$$\small{\frac{P(response \le 3|exposed)}{P(response > 3|exposed)} \ \ vs. \ \frac{P(response \le 3|unexposed)}{P(response > 3|unexposed)}},$$
 
 
-We can use an underlying (continuous) latent process as the basis for data generation. If we assume that probabilities are determined by segments of a logistic distribution (see below), we can define the ordinal mechanism using thresholds along the support of the distribution. If there are $k$ possible responses (in the meat example, we have 5), then there will be $k-1$ thresholds. The area under the logistic density curve of each of the regions defined by those thresholds (there will be $k$ distinct regions) represents the probability of each possible response tied to that region.
+We can use an underlying (continuous) latent process as the basis for data generation. If we assume that probabilities are determined by segments of a logistic distribution (see below), we can define the ordinal mechanism using thresholds along the support of the distribution. If there are $k$ possible responses (in the meat example, we have 4), then there will be $k-1$ thresholds. The area under the logistic density curve of each of the regions defined by those thresholds (there will be $k$ distinct regions) represents the probability of each possible response tied to that region.
 
 ```{r options, echo = FALSE}
 options(digits = 2)
 ```
+
 ```{r threshold, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
 # preliminary libraries and plotting defaults
 
@@ -79,13 +80,15 @@ dt <- data.table(x, pdf)
 
 # set thresholds for Group A
 
-thresholdA <- c(-2.1, -0.3, 1.4, 3.6)
+# P = c(0.31, 0.29, .20, 0.20)
+
+thresholdA <- c(-0.8, 0.4, 1.4)
 
 pdf <- dlogis(thresholdA)
 grpA <- data.table(threshold = thresholdA, pdf)
 aBreaks <- c(-6, grpA$threshold, 6)
 
-# plot density with cutpoints
+# plot density with cut points
 
 dt[, grpA := cut(x, breaks = aBreaks, labels = F, include.lowest = TRUE)]
 
@@ -95,7 +98,7 @@ p1 <- ggplot(data = dt, aes(x = x, y = pdf)) +
   geom_hline(yintercept = 0, color = "grey50") +
   annotate("text", x = -5, y = .28, label = "unexposed", size = 5) +
   scale_fill_manual(values = c("#d0d7d1", "#bbc5bc", "#a6b3a7", "#91a192", "#7c8f7d"),
-                    labels = c("strongly disagree", "disagree", "neutral", "agree", "strongly agree"),
+                    labels = c("strongly disagree", "disagree", "agree", "strongly agree"),
                     name = "Frequency") +
   scale_x_continuous(breaks = thresholdA) +
   scale_y_continuous(limits = c(0, 0.3), name = "Density") +
@@ -111,25 +114,25 @@ p1
 
 In the cumulative logit model, the underlying assumption is that the odds ratio of one population relative to another is constant across all the possible responses. This means that all of the cumulative odds ratios are equal: 
 
-$$\small{\frac{codds(P(Resp = 1 | exposed))}{codds(P(Resp = 1 | unexposed))} = \frac{codds(P(Resp \leq 2 | exposed))}{codds(P(Resp \leq 2 | unexposed))} = \ ... \ = \frac{codds(P(Resp \leq 4 | exposed))}{codds(P(Resp \leq 4 | unexposed))}}$$
+$$\small{\frac{codds(P(Resp = 1 | exposed))}{codds(P(Resp = 1 | unexposed))} =  \ ... \ = \frac{codds(P(Resp \leq 3 | exposed))}{codds(P(Resp \leq 3 | unexposed))}}$$
 
-In terms of the underlying process, this means that each of the thresholds shifts the same amount (as shown below) where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.
+In terms of the underlying process, this means that each of the thresholds shifts the same amount (as shown below) where we add 0.7 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.
 
 ```{r plotB, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
 
 pA= plogis(c(thresholdA, Inf)) - plogis(c(-Inf, thresholdA))
 probs <- data.frame(pA)
 rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
-                     "P(Resp = 3)", "P(Resp = 4)", "P(Resp = 5)")
+                     "P(Resp = 3)", "P(Resp = 4)")
 
 probA <- data.frame(
            cprob = plogis(thresholdA), 
            codds = plogis(thresholdA)/(1-plogis(thresholdA)),
            lcodds = log(plogis(thresholdA)/(1-plogis(thresholdA)))
 )
-rownames(probA) <- c("P(Grp < 2)", "P(Grp < 3)", "P(Grp < 4)", "P(Grp < 5)")
+rownames(probA) <- c("P(Grp < 2)", "P(Grp < 3)", "P(Grp < 4)")
 
-thresholdB <- thresholdA + 1.1
+thresholdB <- thresholdA + 0.7
 
 pdf <- dlogis(thresholdB)
 grpB <- data.table(threshold = thresholdB, pdf)
@@ -138,7 +141,7 @@ bBreaks <- c(-6, grpB$threshold, 6)
 pB = plogis(c(thresholdB, Inf)) - plogis(c(-Inf, thresholdB))
 probs <- data.frame(pA, pB)
 rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
-                     "P(Resp = 3)", "P(Resp = 4)", "P(Resp = 5)")
+                     "P(Resp = 3)", "P(Resp = 4)")
 
 
 # Plot density for group B
@@ -167,7 +170,7 @@ p2
 
 In the `R` package `ordinal`, the model is fit using function `clm`. The model that is being estimated has the form
 
-$$log \left( \frac{P(Resp \leq  i)}{P(Resp > i)} | Group \right) = \alpha_i - \beta*I(Group=exposed) \  \ , \ i \in \{1, 2, 3, 4\}$$
+$$log \left( \frac{P(Resp \leq  i)}{P(Resp > i)} | Group \right) = \alpha_i - \beta*I(Group=exposed) \  \ , \ i \in \{1, 2, 3\}$$
 
 The model specifies that the cumulative log-odds for a particular category is a function of two parameters, $\alpha_i$ and $\beta$. (Note that in this parameterization and the model fit, $-\beta$ is used.)  $\alpha_i$ represents the cumulative log odds of being in category $i$ or lower for those in the reference exposure group, which in our example is Group A. *$\alpha_i$ also represents the threshold of the latent continuous (logistic) data generating process.* $\beta$ is the cumulative log-odds ratio for the category $i$ comparing the unexposed to reference group, which is the exposed. *$\beta$ also represents the shift of the threshold on the latent continuous process for the exposed relative to the unexposed*. The proportionality assumption implies that the shift of the threshold for each of the categories is identical.
 
@@ -176,24 +179,23 @@ The model specifies that the cumulative log-odds for a particular category is a 
 To generate ordered categorical data using `simstudy`, there is a function `genOrdCat`.
 
 ```{r acuts}
-baseprobs <- c(0.11, 0.33, 0.36, 0.17, 0.03)
+baseprobs <- c(0.31, 0.29, .20, 0.20)
 
-defA <- defDataAdd(varname = "z", formula = "-1.1*exposed", dist = "nonrandom")
+defA <- defData(varname = "exposed", formula = "1;1", dist = "trtAssign")
+defA <- defData(defA, varname = "z", formula = "-0.7*exposed", dist = "nonrandom")
 
 set.seed(130)
 
-dT <- genData(25000)
-dT <- trtAssign(dT, grpName = "exposed")
-dT <- addColumns(defA, dT)
+dT_1_cat <- genData(25000, defA)
 
-dT <- genOrdCat(dT, adjVar = "z", baseprobs, catVar = "r")
+dX <- genOrdCat(dT_1_cat, adjVar = "z", baseprobs, catVar = "r")
 ```
 
 Estimating the parameters of the model using function `clm`, we can recover the original parameters quite well.
 
 ```{r ordinal}
 library(ordinal)
-clmFit <- clm(r ~ exposed, data = dT)
+clmFit <- clm(r ~ exposed, data = dX)
 summary(clmFit)
 ```
 
@@ -202,19 +204,149 @@ In the model output, the `exposed` coefficient of -1.15 is the estimate of $-\be
 The log of the cumulative odds for groups 1 to 4 from the data without exposure are
 
 ```{r}
-(logOdds.unexp <- log(odds(cumsum(dT[exposed == 0, prop.table(table(r))])))[1:4])
+(logOdds.unexp <- log(odds(cumsum(dX[exposed == 0, prop.table(table(r))])))[1:3])
 ```
 
 And under exposure:
 
 ```{r}
-(logOdds.expos <- log(odds(cumsum(dT[exposed == 1, prop.table(table(r))])))[1:4])
+(logOdds.expos <- log(odds(cumsum(dX[exposed == 1, prop.table(table(r))])))[1:3])
 ```
 
 The log of the cumulative odds ratios for each of the four groups is
 
 ```{r}
 logOdds.expos - logOdds.unexp
+```
+
+A plot of the modeled cumulative probabilities (the lines) shows that the proportionality assumption fit the observed data (the points) quite well.
+
+```{r, echo=FALSE, fig.width=6, fig.height=3.5}
+getCumProbs <- function(coefs) {
+  
+  cumprob0 <- data.table(
+    cumprob = c(1/(1 + exp(-coefs[which(rownames(coefs) != "exposed")])), 1),
+    r = factor(1 : nrow(coefs)),
+    exposed = 0
+  )
+  
+  cumprob1 <- data.table(
+    cumprob = c(1/(1 + exp(-coefs[which(rownames(coefs) != "exposed")] + 
+                             coefs["exposed", 1])), 1),
+    r = factor(1 : nrow(coefs)),
+    exposed = 1
+  )
+  
+  rbind(cumprob0, cumprob1)[]
+ 
+}
+
+fitPlot <- function(dx) {
+  
+  clmFit <- clm(r ~ exposed, data = dx)
+  coefs <- coef(summary(clmFit))
+  cumModProbs <- getCumProbs(coefs)
+
+  cumObsProbs <- dx[, .N, keyby = .(exposed, r)]
+  cumObsProbs[, cumprob := cumsum(N)/sum(N) , keyby = exposed]
+  
+  ggplot(data = cumObsProbs, aes(x = r, y = cumprob, color = factor(exposed))) +
+    geom_line(data = cumModProbs, alpha = 1, aes(group=exposed)) +
+    geom_point(size = 1.25) +
+    ylab("cumulative probability") +
+    xlab("ordinal category") +
+    theme(panel.grid = element_blank(),
+          legend.title = element_blank()) +
+    scale_color_manual(values = c("#7c8e8f", "#8f7c8e"), labels = c("Not exposed", "Exposed"))
+}
+
+fitPlot(dX)
+```
+
+## Non-proportional odds 
+
+By default, the function `genOrdCat` generates ordinal categorical data under the assumption of proportional cumulative odds. On the underlying logistic scale, this means that there is a consistent shift of the thresholds; in the initial example above, the exposure thresholds were shifted 0.7 units to the right on the logistic scale. In the figure below, the rightward shift of the threshold to the left varies for each threshold (0.4 units for the first threshold, 0.0 for the second, and 1.7 for the last), which violates the underlying assumption of proportionality:
+
+```{r plotNP, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
+
+pA <- plogis(c(thresholdA, Inf)) - plogis(c(-Inf, thresholdA))
+probs <- data.frame(pA)
+rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
+                     "P(Resp = 3)", "P(Resp = 4)")
+
+probA <- data.frame(
+  cprob = plogis(thresholdA), 
+  codds = plogis(thresholdA)/(1-plogis(thresholdA)),
+  lcodds = log(plogis(thresholdA)/(1-plogis(thresholdA)))
+)
+
+rownames(probA) <- c("P(Grp < 2)", "P(Grp < 3)", "P(Grp < 4)")
+
+thresholdB <- thresholdA + c(0.4, 0.0, 1.7)
+
+pdf <- dlogis(thresholdB)
+grpB <- data.table(threshold = thresholdB, pdf)
+bBreaks <- c(-6, grpB$threshold, 6)
+
+pB = plogis(c(thresholdB, Inf)) - plogis(c(-Inf, thresholdB))
+probs <- data.frame(pA, pB)
+rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
+                     "P(Resp = 3)", "P(Resp = 4)")
+
+
+# Plot density for group B
+
+dt[, grpB := cut(x, breaks = bBreaks, labels = F, include.lowest = TRUE)]
+
+p3 <- ggplot(data = dt, aes(x = x, y = pdf)) +
+  geom_line() +
+  geom_area(aes(x = x, y = pdf, group = grpB, fill = factor(grpB))) +
+  geom_hline(yintercept = 0, color = "grey5") +
+  geom_segment(data=grpA, 
+               aes(x=threshold, xend = threshold, y=0, yend=pdf), 
+               size = 0.3, lty = 2, color = "#857284") +
+  annotate("text", x = -4, y = .28, label = "non-proportional", size = 5) +
+  scale_fill_manual(values = c("#d0d7d1", "#bbc5bc", "#a6b3a7", "#91a192", "#7c8f7d"),
+                    name = "Frequency") +
+  scale_x_continuous(breaks = thresholdB) +
+  scale_y_continuous(limits = c(0.0, 0.3), name = "Density") +
+  my_theme() +
+  theme(legend.position = "none")
+
+p3
+```
+
+It is possible to generate data under these assumptions using the `npVar` and `npAdj` arguments. `npVar` indicates the variable(s) for which the non-proportional assumption is violated, and `npAdj` indicates the various shifts of the intervals. (Note that the last cut point is at `Inf`, so there is no impact of a shift related to that threshold.)
+
+```{r}
+baseprobs <- c(0.31, 0.29, .20, 0.20)
+npAdj <- c(-0.4, 0.0, -1.7, 0)
+
+dX <- genOrdCat(dT_1_cat, baseprobs = baseprobs, catVar = "r", npVar = "exposed", npAdj = npAdj)
+```
+
+The calculation of the log cumulative odds follows as before:
+  
+```{r}
+(logOdds.unexp <- log(odds(cumsum(dX[exposed == 0, prop.table(table(r))])))[1:3])
+```
+
+And under exposure:
+  
+```{r}
+(logOdds.expos <- log(odds(cumsum(dX[exposed == 1, prop.table(table(r))])))[1:3])
+```
+
+But, now, the log of the cumulative odds ratios for each of the four groups varies across the different levels.
+
+```{r}
+logOdds.expos - logOdds.unexp
+```
+
+This is confirmed by a plot of the model fit with a proportional odds assumption along with the observed cumulative proportions. Since the model imposes a consistent shift of each threshold, the observed points no longer lie along the prediction line, indicating a violation of the proportional odds assumption:
+  
+```{r, echo=FALSE, fig.width=6, fig.height=3.5}
+fitPlot(dX)
 ```
 
 ## Correlated multivariate ordinal data
@@ -235,9 +367,9 @@ baseprobs <- matrix(c(0.2, 0.1, 0.7,
 # generate the data
 
 set.seed(333)                     
-dT <- genData(10000)
+dT_5_cat <- genData(10000)
 
-dX <- genOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+dX <- genOrdCat(dT_5_cat, adjVar = NULL, baseprobs = baseprobs, 
                    prefix = "q", rho = 0.15, corstr = "cs", asFactor = FALSE)
 ```
 
@@ -257,14 +389,14 @@ dProp[, response := rep(seq(3), 5)]
 # observed probabilities
 dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
 
-# specified probabilites
+# specified probabilities
 baseprobs
 ```
 
 In the next example, the structure of the correlation is changed to AR-1, so the correlation between questions closer to each other is higher than for questions farther apart. But the probability distributions are unaffected:
 
 ```{r}
-dX <- genOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+dX <- genOrdCat(dT_5_cat, adjVar = NULL, baseprobs = baseprobs, 
                    prefix = "q", rho = 0.40, corstr = "ar1", asFactor = FALSE)
 
 # correlation
@@ -277,3 +409,8 @@ dProp[, response := rep(seq(3), 5)]
 # probabilities
 dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
 ```
+
+
+
+
+

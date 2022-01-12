@@ -6,7 +6,7 @@
 touchstone::pin_assets("bench")
 
 # installs branches to benchmark
-touchstone::refs_install()
+touchstone::branch_install()
 
 
 seed <- 282721
@@ -22,7 +22,7 @@ source(touchstone::path_pinned_asset("bench/define.R"))
 
 # touchstone runs its benchmarks in callr subprozess so we have to do the setup
 # within each benchmark
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -34,7 +34,7 @@ touchstone::benchmark_run_ref(
 
 
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -47,7 +47,7 @@ touchstone::benchmark_run_ref(
 
 n <- 100000
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -57,7 +57,7 @@ touchstone::benchmark_run_ref(
   n = reps
 )
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -67,7 +67,7 @@ touchstone::benchmark_run_ref(
   n = reps
 )
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -77,7 +77,7 @@ touchstone::benchmark_run_ref(
   n = reps
 )
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -87,7 +87,7 @@ touchstone::benchmark_run_ref(
   n = reps
 )
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -97,7 +97,7 @@ touchstone::benchmark_run_ref(
   n = reps
 )
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -108,7 +108,7 @@ touchstone::benchmark_run_ref(
   n = reps
 )
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -120,7 +120,7 @@ touchstone::benchmark_run_ref(
   n = reps
 )
 
-touchstone::benchmark_run_ref(
+touchstone::benchmark_run(
   expr_before_benchmark = {
     library(simstudy)
     set.seed(!!seed)
@@ -132,4 +132,4 @@ touchstone::benchmark_run_ref(
 
 
 # create artifacts used downstream in the GitHub Action
-touchstone::benchmarks_analyze()
+touchstone::benchmark_analyze()

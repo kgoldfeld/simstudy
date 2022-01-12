@@ -13,3 +13,7 @@ clipVec <- function(id, seq, event) {
     .Call(`_simstudy_clipVec`, id, seq, event)
 }
 
+chkNonIncreasing <- function(adjmatrix) {
+    .Call(`_simstudy_chkNonIncreasing`, adjmatrix)
+}
+

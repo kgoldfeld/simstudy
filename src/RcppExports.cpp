@@ -48,11 +48,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// chkNonIncreasing
+bool chkNonIncreasing(Rcpp::NumericMatrix adjmatrix);
+RcppExport SEXP _simstudy_chkNonIncreasing(SEXP adjmatrixSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type adjmatrix(adjmatrixSEXP);
+    rcpp_result_gen = Rcpp::wrap(chkNonIncreasing(adjmatrix));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simstudy_matMultinom", (DL_FUNC) &_simstudy_matMultinom, 1},
     {"_simstudy_markovChains", (DL_FUNC) &_simstudy_markovChains, 4},
     {"_simstudy_clipVec", (DL_FUNC) &_simstudy_clipVec, 3},
+    {"_simstudy_chkNonIncreasing", (DL_FUNC) &_simstudy_chkNonIncreasing, 1},
     {NULL, NULL, 0}
 };
 

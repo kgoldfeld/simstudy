@@ -268,7 +268,7 @@ optionInvalidWarning <- function(name,
 #' @param name Name of invalid option
 #' @param value Value of name
 #' @param options Valid options for name
-#' @param msg Additonal message to be displayed.
+#' @param msg Additional message to be displayed.
 #' @param call sys.call to pass on to the error.
 #' @noRd
 optionInvalidError <- function(name,
@@ -284,4 +284,29 @@ optionInvalidError <- function(name,
     )
     c <- condition(c("simstudy::optionInvalid", "error"), message, call, ...)
     stop(c)
+}
+
+### Added by KSG 1/1/22
+
+#' Mismatch of arguments Warning
+#'
+#' @param name_specified Name of argument specified
+#' @param name_null Name of argument not specified
+#' @param call sys.call to pass on to the warning.
+#' @return Error message
+#' @noRd
+mismatchError <- function(name_specified, name_null,
+                                 call = sys.call(-1),
+                                 ...) {
+  message <- glueCollapse(
+    "Argument {name_specified} has been specified",
+    " without argument {name_null}.",
+    " If specifying one argument, ",
+    " the other must be specified."
+  )
+  c <- condition(
+    c("simstudy::mismatch", "error"),
+    message, call, ...
+  )
+  stop(c)
 }

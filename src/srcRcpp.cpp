@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
 int vecMultinom(NumericVector probs) {
 
   int k = probs.size();
@@ -83,6 +84,29 @@ Rcpp::IntegerVector clipVec(IntegerVector id, IntegerVector seq, IntegerVector e
     
   }
   return last;
+}
+
+// [[Rcpp::export]]
+bool chkNonIncreasing(Rcpp::NumericMatrix adjmatrix) {
+  
+  int nr = adjmatrix.nrow(), nc = adjmatrix.ncol();
+  bool unsorted = FALSE;
+  
+  int i = 0;
+  
+  do {
+  
+    for (int j = 1; j < nc; j++) {
+        if (adjmatrix(i, j-1) > adjmatrix(i, j)) {
+          unsorted = TRUE;
+        };
+      }
+    
+    ++i;
+    
+  } while(i<nr && unsorted == FALSE);
+  
+  return(unsorted);
 }
 
 

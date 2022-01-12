@@ -9,17 +9,17 @@ on:
       email:
         description: email 
         required: true
-        default: "Keith.Goldfeld@nyumc.org"
+        default: "keith.goldfeld@nyulangone.org"
       token:
         description: email validation token    
         required: true
       platforms:
         description: platforms to check on
         required: true
-        default: c("windows-x86_64-devel","fedora-clang-devel","linux-x86_64-rocker-gcc-san","debian-gcc-devel-nold")
+        default: "c('windows-x86_64-devel','fedora-clang-devel','linux-x86_64-rocker-gcc-san','debian-gcc-devel-nold')"
 jobs:
   rhub:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -32,33 +32,12 @@ jobs:
         if: github.event.inputs.git-ref != ''
         with:
           ref: ${{ github.event.inputs.git-ref }}
-
-      - uses: actions/checkout@v2
-
-      - uses: r-lib/actions/setup-r@master
-
-      - uses: r-lib/actions/setup-pandoc@master
-
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        uses: actions/cache@v2
+          
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
-      - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE)
-          install.packages("rhub")
-        shell: Rscript {0}
-
+          extra-packages: rhub
       - name: Run rhub checks
         run: |
           rhub::validate_email(email = ${{ github.event.inputs.email }}, token = ${{ github.event.inputs.token }})
