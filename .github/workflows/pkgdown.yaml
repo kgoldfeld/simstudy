@@ -31,7 +31,9 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: pkgdown
+          extra-packages: | 
+            pkgdown
+            local::.
       - name: Deploy package
         run: |
           git config --local user.email "actions@github.com"
