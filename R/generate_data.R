@@ -5,7 +5,7 @@
 #'  are provided
 #' a data set with ids only is generated.
 #' @param id The string defining the id of the record. Will override previously
-#'  set id name with a warning (unless the old value is 'id'). If the 
+#'  set id name with a warning (unless the old value is 'id'). If the
 #' id attribute in dtDefs is NULL will default to 'id'.
 #' @param envir Environment the data definitions are evaluated in.
 #'  Defaults to [base::parent.frame].
@@ -527,12 +527,12 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' # Ordinal Categorical Data ----
 #'
 #' def1 <- defData(
-#'     varname = "male",
-#'     formula = 0.45, dist = "binary", id = "idG"
+#'   varname = "male",
+#'   formula = 0.45, dist = "binary", id = "idG"
 #' )
 #' def1 <- defData(def1,
-#'     varname = "z",
-#'     formula = "1.2*male", dist = "nonrandom"
+#'   varname = "z",
+#'   formula = "1.2*male", dist = "nonrandom"
 #' )
 #' def1
 #'
@@ -543,7 +543,7 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' dx <- genData(1000, def1)
 #'
 #' probs <- c(0.40, 0.25, 0.15)
-#' 
+#'
 #' dx <- genOrdCat(dx,
 #'   adjVar = "z", idname = "idG", baseprobs = probs,
 #'   catVar = "grp"
@@ -553,11 +553,11 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' # Correlated Ordinal Categorical Data ----
 #'
 #' baseprobs <- matrix(c(
-#'     0.2, 0.1, 0.1, 0.6,
-#'     0.7, 0.2, 0.1, 0,
-#'     0.5, 0.2, 0.3, 0,
-#'     0.4, 0.2, 0.4, 0,
-#'     0.6, 0.2, 0.2, 0
+#'   0.2, 0.1, 0.1, 0.6,
+#'   0.7, 0.2, 0.1, 0,
+#'   0.5, 0.2, 0.3, 0,
+#'   0.4, 0.2, 0.4, 0,
+#'   0.6, 0.2, 0.2, 0
 #' ),
 #' nrow = 5, byrow = TRUE
 #' )
@@ -566,8 +566,8 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' dT <- genData(1000)
 #'
 #' dX <- genOrdCat(dT,
-#'     adjVar = NULL, baseprobs = baseprobs,
-#'     prefix = "q", rho = .125, corstr = "cs", asFactor = FALSE
+#'   adjVar = NULL, baseprobs = baseprobs,
+#'   prefix = "q", rho = .125, corstr = "cs", asFactor = FALSE
 #' )
 #' dX
 #'
@@ -576,23 +576,25 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
 #' dProp[, response := c(1:4, 1:3, 1:3, 1:3, 1:3)]
 #'
 #' data.table::dcast(dProp, variable ~ response,
-#'     value.var = "V1", fill = 0
+#'   value.var = "V1", fill = 0
 #' )
-#' 
+#'
 #' # proportional odds assumption violated
-#' 
+#'
 #' d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
 #' d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx", dist = "nonrandom")
-#' 
+#'
 #' dd <- genData(1000, d1)
-#' 
+#'
 #' baseprobs <- c(.4, .3, .2, .1)
 #' npAdj <- c(0, 1, 0, 0)
-#' 
-#' dn <- genOrdCat(dtName = dd, adjVar = "z", 
-#'                 baseprobs = baseprobs,
-#'                 npVar = "rx", npAdj = npAdj)
-#' 
+#'
+#' dn <- genOrdCat(
+#'   dtName = dd, adjVar = "z",
+#'   baseprobs = baseprobs,
+#'   npVar = "rx", npAdj = npAdj
+#' )
+#'
 #' @export
 #' @md
 #' @concept generate_data
@@ -608,14 +610,14 @@ genOrdCat <- function(dtName,
                       rho = 0,
                       corstr = "ind",
                       corMatrix = NULL,
-                      npVar = NULL, 
-                      npAdj = NULL) {    
-  
+                      npVar = NULL,
+                      npAdj = NULL) {
+
   # "declares" to avoid global NOTE
   cat <- NULL
   logisZ <- NULL
   period <- NULL
-  
+
   assertNotMissing(dtName = missing(dtName), baseprobs = missing(baseprobs))
   assertValue(
     dtName = dtName,
@@ -642,14 +644,14 @@ genOrdCat <- function(dtName,
     options = c("ind", "cs", "ar1"),
     default = "ind"
   )
-  
+
   baseprobs <- ensureMatrix(baseprobs)
   baseprobs <- .adjustProbs(baseprobs)
-  
+
   nCats <- nrow(baseprobs)
-  
+
   ensureLength(catVar = catVar, n = nCats)
-  
+
   if (!is.null(adjVar)) {
     adjVar <- ensureLength(
       adjVar = adjVar,
@@ -662,86 +664,80 @@ genOrdCat <- function(dtName,
       )
     )
   }
-  
-  if (!is.null(npAdj) & is.null(npVar) ) {
+
+  if (!is.null(npAdj) & is.null(npVar)) {
     mismatchError("npAdj", "npVar")
-    
-  } else if (is.null(npAdj) & !is.null(npVar) ) {
-      mismatchError("npVar", "npAdj")
-    
-  } else if (is.null(npAdj) & is.null(npVar) ) {
-      npAdj <- matrix(rep(0, ncol(baseprobs)), nrow = 1)
-    
+  } else if (is.null(npAdj) & !is.null(npVar)) {
+    mismatchError("npVar", "npAdj")
+  } else if (is.null(npAdj) & is.null(npVar)) {
+    npAdj <- matrix(rep(0, ncol(baseprobs)), nrow = 1)
   } else if (!is.null(npAdj) & !is.null(npVar)) {
-    
-      b_len <- ncol(baseprobs)
-      v_len <- length(npVar)
-    
-      npAdj <- ensureMatrix(npAdj)
-    
-      if (nrow(npAdj) != v_len) {
-        msg = list(
-          "Number of rows for npAdj ({nrow(npAdj)})",
-          " does not match with the number of",
-          " adjustment variables specified",
-          " in npVar ({v_len})!"
-        )
-        stop(do.call(glue, msg))
-      }
-    
-      if (ncol(npAdj) != b_len) {
-        msg = list(
-          "Number of categories implied",
-          " by baseprobs and npAdj do not match. ",
-          "npAdj should have {b_len}",
-          " columns but has { ncol(npAdj) }!"
-        )
-        stop(do.call(glue, msg))
-      }
+    b_len <- ncol(baseprobs)
+    v_len <- length(npVar)
+
+    npAdj <- ensureMatrix(npAdj)
+
+    if (nrow(npAdj) != v_len) {
+      msg <- list(
+        "Number of rows for npAdj ({nrow(npAdj)})",
+        " does not match with the number of",
+        " adjustment variables specified",
+        " in npVar ({v_len})!"
+      )
+      stop(do.call(glue, msg))
+    }
+
+    if (ncol(npAdj) != b_len) {
+      msg <- list(
+        "Number of categories implied",
+        " by baseprobs and npAdj do not match. ",
+        "npAdj should have {b_len}",
+        " columns but has { ncol(npAdj) }!"
+      )
+      stop(do.call(glue, msg))
+    }
   }
-  
+
   if (nCats > 1 && length(catVar) != nCats) {
     catVar <- glue("{prefix}{i}", i = zeroPadInts(1:nCats))
   }
-  
+
   dt <- copy(dtName)
   n <- nrow(dt)
   zs <- .genQuantU(nCats, n, rho = rho, corstr, corMatrix = corMatrix)
   zs[, logisZ := stats::qlogis(p = zs$Unew)]
   cprop <- t(apply(baseprobs, 1, cumsum))
   quant <- t(apply(cprop, 1, stats::qlogis))
-  
+
   mycat <- list()
-  
+
   for (i in 1:nCats) {
     iLogisZ <- zs[period == i - 1, logisZ]
     n_obs_i <- length(iLogisZ)
     matlp <- matrix(rep(quant[i, ], n),
-                    ncol = ncol(cprop),
-                    byrow = TRUE
+      ncol = ncol(cprop),
+      byrow = TRUE
     )
-    
+
     if (!is.null(adjVar)) {
       z <- dt[, adjVar[i], with = FALSE][[1]]
-    } else z <- rep(0, n_obs_i)
-    
-    if (!is.null(npVar)) {
-      npVar_mat <- as.matrix(dt[, npVar, with=FALSE])
-    } else npVar_mat <- matrix(rep(0, n_obs_i))
-    
-    npmat <- npVar_mat %*% npAdj # npAdj is #npVAR X 
-    matlp <- matlp - npmat - z
-    
-    ## write Rcpp code to speed up apply
-    
-    if ( chkNonIncreasing(matlp) ) {
-       stop("Overlapping thresholds. Check adjustment values!")
+    } else {
+      z <- rep(0, n_obs_i)
     }
-    
-    # if ( any(apply(matlp, 1, is.unsorted)) ) {
-    #   stop("Overlapping thresholds. Check adjustment values!")
-    # }
-      
+
+    if (!is.null(npVar)) {
+      npVar_mat <- as.matrix(dt[, npVar, with = FALSE])
+    } else {
+      npVar_mat <- matrix(rep(0, n_obs_i))
+    }
+
+    npmat <- npVar_mat %*% npAdj # npAdj is #npVAR X
+    matlp <- matlp - npmat - z
+
+    if (chkNonIncreasing(matlp)) {
+      stop("Overlapping thresholds. Check adjustment values!")
+    }
+
     locateGrp <- (iLogisZ > cbind(-Inf, matlp))
     assignGrp <- apply(locateGrp, 1, sum)
     mycat[[i]] <- data.table(
@@ -750,19 +746,19 @@ genOrdCat <- function(dtName,
       cat = assignGrp
     )
   }
-  
+
   dcat <- data.table::rbindlist(mycat)
   cats <- data.table::dcast(dcat, id ~ var, value.var = "cat")
-  
+
   setnames(cats, "id", idname)
   setkeyv(cats, idname)
   dt <- dt[cats]
-  
+
   if (asFactor) {
     dt <- genFactor(dt, catVar, replace = TRUE)
     data.table::setnames(dt, glue("f{catVar}"), catVar)
   }
-  
+
   dt[]
 }
 
@@ -908,7 +904,7 @@ genSpline <- function(dt, newvar, predictor, theta,
 #' head(dtSurv)
 #' @export
 #' @concept generate_data
-#' 
+#'
 # source: Bender, Augustin, & Blettner, Generating survival times to simulate Cox
 # proportional hazard models, SIM, 2005;24;1713-1723.
 #
