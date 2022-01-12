@@ -1,5 +1,6 @@
 # simstudy (development version)
-
+* genOrdCat now supports non-proportional odds
+  
 # simstudy 0.3.0
 
 ## New features
