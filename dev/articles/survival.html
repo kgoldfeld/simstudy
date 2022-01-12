@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,12 +40,6 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/simstudy.html">Get started</a>
 </li>
@@ -92,7 +88,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/kgoldfeld/simstudy/">
+  <a href="https://github.com/kgoldfeld/simstudy/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -107,13 +103,13 @@
 
       
 
-      </header><script src="survival_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Survival Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/master/vignettes/survival.Rmd"><code>vignettes/survival.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/HEAD/vignettes/survival.Rmd" class="external-link"><code>vignettes/survival.Rmd</code></a></small>
       <div class="hidden name"><code>survival.Rmd</code></div>
 
     </div>
@@ -143,16 +139,16 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 
 <span class="co"># Survival data definitions</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">282716</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">282716</span><span class="op">)</span>
 
 <span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"survTime"</span>, formula <span class="op">=</span> <span class="st">"1.5*x1"</span>, scale <span class="op">=</span> <span class="st">"grp*50 + (1-grp)*25"</span>,
     shape <span class="op">=</span> <span class="st">"grp*1 + (1-grp)*1.5"</span><span class="op">)</span>
 <span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="va">sdef</span></code></pre></div>
-<pre><code>##       varname formula               scale               shape
-## 1:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5
-## 2: censorTime       0                  80                   1</code></pre>
+<pre><code><span class="co">##       varname formula               scale               shape</span>
+<span class="co">## 1:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5</span>
+<span class="co">## 2: censorTime       0                  80                   1</span></code></pre>
 <p>The data are generated with calls to <code>genData</code> and <code>genSurv</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Baseline data definitions</span>
@@ -160,23 +156,23 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span>
 <span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
-<pre><code>##    id x1 x2 grp survTime censorTime
-## 1:  1  0  0   1    9.206     95.976
-## 2:  2  0  1   0   25.525     46.754
-## 3:  3  0  1   0  604.203     31.620
-## 4:  4  1  1   0   23.631    338.427
-## 5:  5  1  0   0  108.276    287.553
-## 6:  6  0  1   1    8.122     53.406</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    id x1 x2 grp survTime censorTime</span>
+<span class="co">## 1:  1  0  0   1    9.206     95.976</span>
+<span class="co">## 2:  2  0  1   0   25.525     46.754</span>
+<span class="co">## 3:  3  0  1   0  604.203     31.620</span>
+<span class="co">## 4:  4  1  1   0   23.631    338.427</span>
+<span class="co">## 5:  5  1  0   0  108.276    287.553</span>
+<span class="co">## 6:  6  0  1   1    8.122     53.406</span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># A comparison of survival by group and x1</span>
 
-<span class="va">dtSurv</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">survTime</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">grp</span>, <span class="va">x1</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##    grp x1    V1
-## 1:   0  0 156.2
-## 2:   0  1  19.0
-## 3:   1  0  43.3
-## 4:   1  1  14.1</code></pre>
+<span class="va">dtSurv</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">survTime</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">grp</span>, <span class="va">x1</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code><span class="co">##    grp x1    V1</span>
+<span class="co">## 1:   0  0 156.2</span>
+<span class="co">## 2:   0  1  19.0</span>
+<span class="co">## 3:   1  0  43.3</span>
+<span class="co">## 4:   1  1  14.1</span></code></pre>
 <p>Observed survival times and censoring indicators can be generated by defining new fields:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"obsTime"</span>, formula <span class="op">=</span> <span class="st">"pmin(survTime, censorTime)"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
@@ -185,23 +181,23 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 
 <span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">cdef</span>, <span class="va">dtSurv</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
-<pre><code>##    id x1 x2 grp survTime censorTime obsTime status
-## 1:  1  0  0   1    9.206     95.976   9.206   TRUE
-## 2:  2  0  1   0   25.525     46.754  25.525   TRUE
-## 3:  3  0  1   0  604.203     31.620  31.620  FALSE
-## 4:  4  1  1   0   23.631    338.427  23.631   TRUE
-## 5:  5  1  0   0  108.276    287.553 108.276   TRUE
-## 6:  6  0  1   1    8.122     53.406   8.122   TRUE</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    id x1 x2 grp survTime censorTime obsTime status</span>
+<span class="co">## 1:  1  0  0   1    9.206     95.976   9.206   TRUE</span>
+<span class="co">## 2:  2  0  1   0   25.525     46.754  25.525   TRUE</span>
+<span class="co">## 3:  3  0  1   0  604.203     31.620  31.620  FALSE</span>
+<span class="co">## 4:  4  1  1   0   23.631    338.427  23.631   TRUE</span>
+<span class="co">## 5:  5  1  0   0  108.276    287.553 108.276   TRUE</span>
+<span class="co">## 6:  6  0  1   1    8.122     53.406   8.122   TRUE</span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># estimate proportion of censoring by x1 and group</span>
 
-<span class="va">dtSurv</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">grp</span>, <span class="va">x1</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##    grp x1   V1
-## 1:   0  0 0.51
-## 2:   0  1 0.13
-## 3:   1  0 0.37
-## 4:   1  1 0.17</code></pre>
+<span class="va">dtSurv</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">grp</span>, <span class="va">x1</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code><span class="co">##    grp x1   V1</span>
+<span class="co">## 1:   0  0 0.51</span>
+<span class="co">## 2:   0  1 0.13</span>
+<span class="co">## 3:   1  0 0.37</span>
+<span class="co">## 4:   1  1 0.17</span></code></pre>
 <p>Here is a Kaplan-Meier plot of the data by the four groups:</p>
 <p><img src="survival_files/figure-html/unnamed-chunk-5-1.png" width="624"></p>
 <p>Here is a survival analysis (using a Cox proportional hazard model) of a slightly simplified data set:</p>
@@ -224,7 +220,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
     dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
 
 <span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">cdef</span>, <span class="va">dtSurv</span><span class="op">)</span>
-<span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">obsTime</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
+<span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">obsTime</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
 <p>The 95% confidence intervals of the parameter estimates include the values used to generate the data:</p>
 <div id="hpjhweirfl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
@@ -612,11 +608,13 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://www.rdatagen.net/">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
+  <p></p>
+<p>Developed by <a href="https://www.rdatagen.net/" class="external-link">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -624,6 +622,8 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 
   
 
+
+  
 
   </body>
 </html>

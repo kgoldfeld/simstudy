@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,12 +40,6 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/simstudy.html">Get started</a>
 </li>
@@ -92,7 +88,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/kgoldfeld/simstudy/">
+  <a href="https://github.com/kgoldfeld/simstudy/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -107,13 +103,13 @@
 
       
 
-      </header><script src="simstudy_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulating Study Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/master/vignettes/simstudy.Rmd"><code>vignettes/simstudy.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/HEAD/vignettes/simstudy.Rmd" class="external-link"><code>vignettes/simstudy.Rmd</code></a></small>
       <div class="hidden name"><code>simstudy.Rmd</code></div>
 
     </div>
@@ -123,13 +119,13 @@
 <p>The <code>simstudy</code> package is a collection of functions that allows users to generate simulated data sets to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster-randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
 <p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create data sets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> data sets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
 <p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean <span class="math inline">\(\mu\)</span> (or <span class="math inline">\(\log(\mu)\)</span>) and a dispersion <span class="math inline">\(d\)</span>, rather than shape <span class="math inline">\(\alpha\)</span> and rate <span class="math inline">\(\beta\)</span> parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling <span class="math inline">\(\mu\)</span> (or some function of <span class="math inline">\((\mu)\)</span>), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.</p>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>This introduction provides a brief overview to the basics of defining and generating data, including treatment or exposure variables. Subsequent sections in this vignette provide more details on these processes. For information on more elaborate data generating mechanisms, please refer to other vignettes in this package that provide more detailed descriptions.</p>
-<div id="defining-the-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#defining-the-data" class="anchor"></a>Defining the Data</h3>
+<div class="section level3">
+<h3 id="defining-the-data">Defining the Data<a class="anchor" aria-label="anchor" href="#defining-the-data"></a>
+</h3>
 <p>The key to simulating data in <code>simstudy</code> is the creation of a series of data definition tables that look like this:</p>
 <table class="table">
 <thead><tr class="header">
@@ -174,81 +170,81 @@
 <p>The data definition table includes a row for each variable that is to be generated, and has the following fields: <code>varname*</code>, <code>formula</code>, <code>variance</code>, <code>dist</code>, and <code>link</code>. <code>varname</code> provides the name of the variable to be generated. <code>formula</code> is either a value or string representing any valid R formula (which can include function calls) that in most cases defines the mean of the distribution. <code>variance</code> is a value or string that specifies either the variance or other parameter that characterizes the distribution; the default is 0. <code>dist</code> is defines the distribution of the variable to be generated; the default is <em>normal</em>. The <code>link</code> is a function that defines the relationship of the formula with the mean value, and can either <em>identity</em>, <em>log</em>, or <em>logit</em>, depending on the distribution; the default is <em>identity</em>.</p>
 <p>If using <code>defData</code> to create the definition table, the first call to <code>defData</code> without specifying a definition name (in this example the definition name is <em>def</em>) creates a <strong>new</strong> data.table with a single row. An additional row is added to the table <code>def</code> each time the function <code>defData</code> is called. Each of these calls is the definition of a new field in the data set that will be generated.</p>
 </div>
-<div id="generating-the-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#generating-the-data" class="anchor"></a>Generating the data</h3>
+<div class="section level3">
+<h3 id="generating-the-data">Generating the data<a class="anchor" aria-label="anchor" href="#generating-the-data"></a>
+</h3>
 <p>After the data set definitions have been created, a new data set with <span class="math inline">\(n\)</span> observations can be created with a call to function <strong><code>genData</code></strong>. In this example, 1,000 observations are generated using the data set definitions in <strong><code>def</code></strong>, and then stored in the object <strong><code>dd</code></strong>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">87261</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">87261</span><span class="op">)</span>
 
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">def</span><span class="op">)</span>
 <span class="va">dd</span></code></pre></div>
-<pre><code>##         id   age female visits
-##    1:    1  9.78      0      0
-##    2:    2 10.81      0      0
-##    3:    3  8.86      0      1
-##    4:    4  9.83      1      1
-##    5:    5 10.58      0      0
-##   ---                         
-##  996:  996  8.87      1      2
-##  997:  997 10.27      0      0
-##  998:  998  6.84      0      1
-##  999:  999  9.28      0      2
-## 1000: 1000 10.80      1      2</code></pre>
+<pre><code><span class="co">##         id   age female visits</span>
+<span class="co">##    1:    1  9.78      0      0</span>
+<span class="co">##    2:    2 10.81      0      0</span>
+<span class="co">##    3:    3  8.86      0      1</span>
+<span class="co">##    4:    4  9.83      1      1</span>
+<span class="co">##    5:    5 10.58      0      0</span>
+<span class="co">##   ---                         </span>
+<span class="co">##  996:  996  8.87      1      2</span>
+<span class="co">##  997:  997 10.27      0      0</span>
+<span class="co">##  998:  998  6.84      0      1</span>
+<span class="co">##  999:  999  9.28      0      2</span>
+<span class="co">## 1000: 1000 10.80      1      2</span></code></pre>
 <p>If no data definition is provided, a simple data set is created with just id’s.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></code></pre></div>
-<pre><code>##         id
-##    1:    1
-##    2:    2
-##    3:    3
-##    4:    4
-##    5:    5
-##   ---     
-##  996:  996
-##  997:  997
-##  998:  998
-##  999:  999
-## 1000: 1000</code></pre>
+<pre><code><span class="co">##         id</span>
+<span class="co">##    1:    1</span>
+<span class="co">##    2:    2</span>
+<span class="co">##    3:    3</span>
+<span class="co">##    4:    4</span>
+<span class="co">##    5:    5</span>
+<span class="co">##   ---     </span>
+<span class="co">##  996:  996</span>
+<span class="co">##  997:  997</span>
+<span class="co">##  998:  998</span>
+<span class="co">##  999:  999</span>
+<span class="co">## 1000: 1000</span></code></pre>
 </div>
-<div id="assigning-treatmentexposure" class="section level3">
-<h3 class="hasAnchor">
-<a href="#assigning-treatmentexposure" class="anchor"></a>Assigning treatment/exposure</h3>
+<div class="section level3">
+<h3 id="assigning-treatmentexposure">Assigning treatment/exposure<a class="anchor" aria-label="anchor" href="#assigning-treatmentexposure"></a>
+</h3>
 <p>In many instances, the data generation process will involve a treatment or exposure. While it is possible to generate a treatment or exposure variable directly using the data definition process, <code>trtAssign</code> and <code>trtObserve</code> offer the ability to generate more involved types of study designs. In particular, with <code>trtAssign</code>, balanced and stratified designs are possible.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">study1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, strata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"female"</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="va">study1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, strata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"female"</span><span class="op">)</span>,
     grpName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span>
 <span class="va">study1</span></code></pre></div>
-<pre><code>##         id   age female visits rx
-##    1:    1  9.78      0      0  3
-##    2:    2 10.81      0      0  1
-##    3:    3  8.86      0      1  3
-##    4:    4  9.83      1      1  3
-##    5:    5 10.58      0      0  3
-##   ---                            
-##  996:  996  8.87      1      2  2
-##  997:  997 10.27      0      0  3
-##  998:  998  6.84      0      1  1
-##  999:  999  9.28      0      2  1
-## 1000: 1000 10.80      1      2  3</code></pre>
+<pre><code><span class="co">##         id   age female visits rx</span>
+<span class="co">##    1:    1  9.78      0      0  3</span>
+<span class="co">##    2:    2 10.81      0      0  1</span>
+<span class="co">##    3:    3  8.86      0      1  3</span>
+<span class="co">##    4:    4  9.83      1      1  3</span>
+<span class="co">##    5:    5 10.58      0      0  3</span>
+<span class="co">##   ---                            </span>
+<span class="co">##  996:  996  8.87      1      2  2</span>
+<span class="co">##  997:  997 10.27      0      0  3</span>
+<span class="co">##  998:  998  6.84      0      1  1</span>
+<span class="co">##  999:  999  9.28      0      2  1</span>
+<span class="co">## 1000: 1000 10.80      1      2  3</span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study1</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">female</span>, <span class="va">rx</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##    female rx   N
-## 1:      0  1 249
-## 2:      0  2 248
-## 3:      0  3 248
-## 4:      1  1  85
-## 5:      1  2  85
-## 6:      1  3  85</code></pre>
+<pre><code><span class="co">##    female rx   N</span>
+<span class="co">## 1:      0  1 249</span>
+<span class="co">## 2:      0  2 248</span>
+<span class="co">## 3:      0  3 248</span>
+<span class="co">## 4:      1  1  85</span>
+<span class="co">## 5:      1  2  85</span>
+<span class="co">## 6:      1  3  85</span></code></pre>
 </div>
 </div>
-<div id="more-details-on-data-definitions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#more-details-on-data-definitions" class="anchor"></a>More details on data definitions</h2>
+<div class="section level2">
+<h2 id="more-details-on-data-definitions">More details on data definitions<a class="anchor" aria-label="anchor" href="#more-details-on-data-definitions"></a>
+</h2>
 <p>This section elaborates on the data definition process to provide more details on how to create data sets.</p>
-<div id="formulas" class="section level3">
-<h3 class="hasAnchor">
-<a href="#formulas" class="anchor"></a>Formulas</h3>
+<div class="section level3">
+<h3 id="formulas">Formulas<a class="anchor" aria-label="anchor" href="#formulas"></a>
+</h3>
 <p>The data definition table for a new data set is constructed sequentially. As each new row or variable is added, the formula (and in some cases the variance) can refer back to a previously defined variable. The first row by necessity cannot refer to another variable, so the formula must be a specific value (i.e. not a string formula). Starting with the second row, the formula can either be a value or any valid <code>R</code> equation with quotes and can include any variables previously defined.</p>
 <p>In the definition we created above, the probability being <strong>female</strong> is a function of <strong>age</strong>, which was previously defined. Likewise, the number of <strong>visits</strong> is a function of both <strong>age</strong> and <strong>female</strong>. Since <strong>age</strong> is the first row in the table, we had to use a scalar to define the mean.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -270,27 +266,27 @@
     variance <span class="op">=</span> <span class="fl">0.1</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">def</span><span class="op">)</span></code></pre></div>
-<pre><code>##    id   age loginvage
-## 1:  1 10.31     -2.58
-## 2:  2  7.90     -1.94
-## 3:  3  9.83     -1.93
-## 4:  4  9.10     -2.42
-## 5:  5 10.18     -2.21</code></pre>
+<pre><code><span class="co">##    id   age loginvage</span>
+<span class="co">## 1:  1 10.31     -2.58</span>
+<span class="co">## 2:  2  7.90     -1.94</span>
+<span class="co">## 3:  3  9.83     -1.93</span>
+<span class="co">## 4:  4  9.10     -2.42</span>
+<span class="co">## 5:  5 10.18     -2.21</span></code></pre>
 <p>Replication is an important aspect of data simulation - it is often very useful to generate data under different sets of assumptions. <code>simstudy</code> facilitates this in at least two different ways. There is function <code>updateDef</code> which allows row by row changes of a data definition table. In this case, we are changing the formula of <strong>loginvage</strong> in <strong>def</strong> so that it uses the function <code>log10</code> instead of <code>log</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">def10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span><span class="va">def</span>, changevar <span class="op">=</span> <span class="st">"loginvage"</span>, newformula <span class="op">=</span> <span class="st">"log10(myinv(age))"</span><span class="op">)</span>
 <span class="va">def10</span></code></pre></div>
-<pre><code>##      varname           formula variance   dist     link
-## 1:       age                10        2 normal identity
-## 2: loginvage log10(myinv(age))      0.1 normal identity</code></pre>
+<pre><code><span class="co">##      varname           formula variance   dist     link</span>
+<span class="co">## 1:       age                10        2 normal identity</span>
+<span class="co">## 2: loginvage log10(myinv(age))      0.1 normal identity</span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">def10</span><span class="op">)</span></code></pre></div>
-<pre><code>##    id   age loginvage
-## 1:  1  9.82    -0.338
-## 2:  2 10.97    -0.633
-## 3:  3 11.79    -1.267
-## 4:  4  9.74    -0.882
-## 5:  5 10.11    -1.519</code></pre>
+<pre><code><span class="co">##    id   age loginvage</span>
+<span class="co">## 1:  1  9.82    -0.338</span>
+<span class="co">## 2:  2 10.97    -0.633</span>
+<span class="co">## 3:  3 11.79    -1.267</span>
+<span class="co">## 4:  4  9.74    -0.882</span>
+<span class="co">## 5:  5 10.11    -1.519</span></code></pre>
 <p>A more powerful feature of <code>simstudy</code> that allows for dynamic definition tables is the external reference capability through the <em>double-dot</em> notation. Any variable reference in a formula that is preceded by “..” refers to an externally defined variable:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">age_effect</span> <span class="op">&lt;-</span> <span class="fl">3</span>
@@ -301,43 +297,43 @@
     dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
 
 <span class="va">def</span></code></pre></div>
-<pre><code>##    varname            formula variance      dist     link
-## 1:     age                 10        2    normal identity
-## 2: agemult age * ..age_effect        0 nonrandom identity</code></pre>
+<pre><code><span class="co">##    varname            formula variance      dist     link</span>
+<span class="co">## 1:     age                 10        2    normal identity</span>
+<span class="co">## 2: agemult age * ..age_effect        0 nonrandom identity</span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">def</span><span class="op">)</span></code></pre></div>
-<pre><code>##    id  age agemult
-## 1:  1 9.69    29.1
-## 2:  2 9.63    28.9</code></pre>
+<pre><code><span class="co">##    id  age agemult</span>
+<span class="co">## 1:  1 9.69    29.1</span>
+<span class="co">## 2:  2 9.63    28.9</span></code></pre>
 <p>But the real power of dynamic definition is seen in the context of iteration over multiple values:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">age_effects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>
-<span class="va">list_of_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">age_effects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>
+<span class="va">list_of_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">age_effects</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">age_effects</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">age_effect</span> <span class="op">&lt;-</span> <span class="va">age_effects</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>
     <span class="va">list_of_data</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">def</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="va">list_of_data</span></code></pre></div>
-<pre><code>## [[1]]
-##    id  age agemult
-## 1:  1 11.4       0
-## 2:  2 10.7       0
-## 
-## [[2]]
-##    id  age agemult
-## 1:  1 11.3    56.6
-## 2:  2 11.2    56.1
-## 
-## [[3]]
-##    id   age agemult
-## 1:  1  9.32    93.2
-## 2:  2 10.62   106.2</code></pre>
+<pre><code><span class="co">## [[1]]</span>
+<span class="co">##    id  age agemult</span>
+<span class="co">## 1:  1 11.4       0</span>
+<span class="co">## 2:  2 10.7       0</span>
+<span class="co">## </span>
+<span class="co">## [[2]]</span>
+<span class="co">##    id  age agemult</span>
+<span class="co">## 1:  1 11.3    56.6</span>
+<span class="co">## 2:  2 11.2    56.1</span>
+<span class="co">## </span>
+<span class="co">## [[3]]</span>
+<span class="co">##    id   age agemult</span>
+<span class="co">## 1:  1  9.32    93.2</span>
+<span class="co">## 2:  2 10.62   106.2</span></code></pre>
 </div>
-<div id="distributions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#distributions" class="anchor"></a>Distributions</h3>
+<div class="section level3">
+<h3 id="distributions">Distributions<a class="anchor" aria-label="anchor" href="#distributions"></a>
+</h3>
 <p>The foundation of generating data is the assumptions we make about the distribution of each variable. <code>simstudy</code> provides 15 types of distributions, which are listed in the following table:</p>
 <table class="table">
 <thead><tr class="header">
@@ -503,90 +499,90 @@
 </tr>
 </tbody>
 </table>
-<div id="beta" class="section level4">
-<h4 class="hasAnchor">
-<a href="#beta" class="anchor"></a>beta</h4>
+<div class="section level4">
+<h4 id="beta">beta<a class="anchor" aria-label="anchor" href="#beta"></a>
+</h4>
 <p>A <em>beta</em> distribution is a continuous data distribution that takes on values between <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>. The <code>formula</code> specifies the mean <span class="math inline">\(\mu\)</span> (with the ‘identity’ link) or the log-odds of the mean (with the ‘logit’ link). The scalar value in the ‘variance’ represents the dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> for a beta distributed variable will be <span class="math inline">\(\mu (1- \mu)/(1 + d)\)</span>. Typically, the beta distribution is specified using two shape parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, where <span class="math inline">\(\mu = \alpha/(\alpha + \beta)\)</span> and <span class="math inline">\(\sigma^2 = \alpha\beta/[(\alpha + \beta)^2 (\alpha + \beta + 1)]\)</span>.</p>
 </div>
-<div id="binary" class="section level4">
-<h4 class="hasAnchor">
-<a href="#binary" class="anchor"></a>binary</h4>
+<div class="section level4">
+<h4 id="binary">binary<a class="anchor" aria-label="anchor" href="#binary"></a>
+</h4>
 <p>A <em>binary</em> distribution is a discrete data distribution that takes values <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>. (It is more conventionally called a <em>Bernoulli</em> distribution, or is a <em>binomial</em> distribution with a single trial <span class="math inline">\(n=1\)</span>.) The <code>formula</code> represents the probability (with the ‘identity’ link) or the log odds (with the ‘logit’ link) that the variable takes the value of 1. The mean of this distribution is <span class="math inline">\(p\)</span>, and variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(p(1-p)\)</span>.</p>
 </div>
-<div id="binomial" class="section level4">
-<h4 class="hasAnchor">
-<a href="#binomial" class="anchor"></a>binomial</h4>
+<div class="section level4">
+<h4 id="binomial">binomial<a class="anchor" aria-label="anchor" href="#binomial"></a>
+</h4>
 <p>A <em>binomial</em> distribution is a discrete data distribution that represents the count of the number of successes given a number of trials. The formula specifies the probability of success <span class="math inline">\(p\)</span>, and the variance field is used to specify the number of trials <span class="math inline">\(n\)</span>. Given a value of <span class="math inline">\(p\)</span>, the mean <span class="math inline">\(\mu\)</span> of this distribution is <span class="math inline">\(n*p\)</span>, and the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(np(1-p)\)</span>.</p>
 </div>
-<div id="categorical" class="section level4">
-<h4 class="hasAnchor">
-<a href="#categorical" class="anchor"></a>categorical</h4>
+<div class="section level4">
+<h4 id="categorical">categorical<a class="anchor" aria-label="anchor" href="#categorical"></a>
+</h4>
 <p>A <em>categorical</em> distribution is a discrete data distribution taking on values from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>, with each value representing a specific category, and there are <span class="math inline">\(K\)</span> categories. The categories may or may not be ordered. For a categorical variable with <span class="math inline">\(k\)</span> categories, the <code>formula</code> is a string of probabilities that sum to 1, each separated by a semi-colon: <span class="math inline">\((p_1 ; p_2 ; ... ; p_k)\)</span>. <span class="math inline">\(p_1\)</span> is the probability of the random variable falling in category <span class="math inline">\(1\)</span>, <span class="math inline">\(p_2\)</span> is the probability of category <span class="math inline">\(2\)</span>, etc. The probabilities can be specified as functions of other variables previously defined. The helper function <code>genCatFormula</code> is an easy way to create different probability strings. The <code>link</code> options are <em>identity</em> or <em>logit</em>. The <code>variance</code> field is optional an allows to provide categories other than the default <code>1...n</code> in the same format as <code>formula</code>: “a;b;c”. Numeric variance Strings (e.g. “50;100;200”) will be converted to numeric when possible.</p>
 </div>
-<div id="exponential" class="section level4">
-<h4 class="hasAnchor">
-<a href="#exponential" class="anchor"></a>exponential</h4>
+<div class="section level4">
+<h4 id="exponential">exponential<a class="anchor" aria-label="anchor" href="#exponential"></a>
+</h4>
 <p>An <em>exponential</em> distribution is a continuous data distribution that takes on non-negative values. The <code>formula</code> represents the mean <span class="math inline">\(\theta\)</span> (with the ‘identity’ link) or log of the mean (with the ‘log’ link). The <code>variance</code> argument does not apply to the <em>exponential</em> distribution. The variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\theta^2\)</span>.</p>
 </div>
-<div id="gamma" class="section level4">
-<h4 class="hasAnchor">
-<a href="#gamma" class="anchor"></a>gamma</h4>
+<div class="section level4">
+<h4 id="gamma">gamma<a class="anchor" aria-label="anchor" href="#gamma"></a>
+</h4>
 <p>A <em>gamma</em> distribution is a continuous data distribution that takes on non-negative values. The <code>formula</code> specifies the mean <span class="math inline">\(\mu\)</span> (with the ‘identity’ link) or the log of the mean (with the ‘log’ link). The <code>variance</code> field represents a dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> is is <span class="math inline">\(d \mu^2\)</span>.</p>
 </div>
-<div id="mixture" class="section level4">
-<h4 class="hasAnchor">
-<a href="#mixture" class="anchor"></a>mixture</h4>
+<div class="section level4">
+<h4 id="mixture">mixture<a class="anchor" aria-label="anchor" href="#mixture"></a>
+</h4>
 <p>The <em>mixture</em> distribution is a mixture of other predefined variables, which can be defined based on any of the other available distributions. The formula is a string structured with a sequence of variables <span class="math inline">\(x_i\)</span> and probabilities <span class="math inline">\(p_i\)</span>: <span class="math inline">\(x_1 | p_1 + … + x_n | p_n\)</span>. All of the <span class="math inline">\(x_i\)</span>’s are required to have been previously defined, and the probabilities must sum to <span class="math inline">\(1\)</span> (i.e. <span class="math inline">\(\sum_1^n p_i = 1\)</span>). The result of generating from a mixture is the value <span class="math inline">\(x_i\)</span> with probability <span class="math inline">\(p_i\)</span>. The <code>variance</code> and <code>link</code> fields do not apply to the <em>mixture</em> distribution.</p>
 </div>
-<div id="negbinomial" class="section level4">
-<h4 class="hasAnchor">
-<a href="#negbinomial" class="anchor"></a>negBinomial</h4>
+<div class="section level4">
+<h4 id="negbinomial">negBinomial<a class="anchor" aria-label="anchor" href="#negbinomial"></a>
+</h4>
 <p>A <em>negative binomial</em> distribution is a discrete data distribution that represents the number of successes that occur in a sequence of <em>Bernoulli</em> trials before a specified number of failures occurs. It is often used to model count data more generally when a <em>Poisson</em> distribution is not considered appropriate; the variance of the negative binomial distribution is larger than the <em>Poisson</em> distribution. The <code>formula</code> specifies the mean <span class="math inline">\(\mu\)</span> or the log of the mean. The variance field represents a dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> will be <span class="math inline">\(\mu + d\mu^2\)</span>.</p>
 </div>
-<div id="nonrandom" class="section level4">
-<h4 class="hasAnchor">
-<a href="#nonrandom" class="anchor"></a>nonrandom</h4>
+<div class="section level4">
+<h4 id="nonrandom">nonrandom<a class="anchor" aria-label="anchor" href="#nonrandom"></a>
+</h4>
 <p>Deterministic data can be “generated” using the <em>nonrandom</em> distribution. The <code>formula</code> explicitly represents the value of the variable to be generated, without any uncertainty. The <code>variance</code> and <code>link</code> fields do not apply to <em>nonrandom</em> data generation.</p>
 </div>
-<div id="normal" class="section level4">
-<h4 class="hasAnchor">
-<a href="#normal" class="anchor"></a>normal</h4>
+<div class="section level4">
+<h4 id="normal">normal<a class="anchor" aria-label="anchor" href="#normal"></a>
+</h4>
 <p>A <em>normal</em> or <em>Gaussian</em> distribution is a continuous data distribution that takes on values between <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(\infty\)</span>. The <code>formula</code> represents the mean <span class="math inline">\(\mu\)</span> and the <code>variance</code> represents <span class="math inline">\(\sigma^2\)</span>. The <code>link</code> field is not applied to the <em>normal</em> distribution.</p>
 </div>
-<div id="nozeropoisson" class="section level4">
-<h4 class="hasAnchor">
-<a href="#nozeropoisson" class="anchor"></a>noZeroPoisson</h4>
+<div class="section level4">
+<h4 id="nozeropoisson">noZeroPoisson<a class="anchor" aria-label="anchor" href="#nozeropoisson"></a>
+</h4>
 <p>The <em>noZeroPoisson</em> distribution is a discrete data distribution that takes on positive integers. This is a truncated <em>poisson</em> distribution that excludes <span class="math inline">\(0\)</span>. The <code>formula</code> specifies the parameter <span class="math inline">\(\lambda\)</span> (link is ‘identity’) or log() (<code>link</code> is log). The <code>variance</code> field does not apply to this distribution. The mean <span class="math inline">\(\mu\)</span> of this distribution is <span class="math inline">\(\lambda/(1-e^{-\lambda})\)</span> and the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\((\lambda + \lambda^2)/(1-e^{-\lambda}) - \lambda^2/(1-e^{-\lambda})^2\)</span>. We are not typically interested in modeling data drawn from this distribution (except in the case of a <em>hurdle model</em>), but it is useful to generate positive count data where it is not desirable to have any <span class="math inline">\(0\)</span> values.</p>
 </div>
-<div id="poisson" class="section level4">
-<h4 class="hasAnchor">
-<a href="#poisson" class="anchor"></a>poisson</h4>
+<div class="section level4">
+<h4 id="poisson">poisson<a class="anchor" aria-label="anchor" href="#poisson"></a>
+</h4>
 <p>The <em>poisson</em> distribution is a discrete data distribution that takes on non-negative integers. The <code>formula</code> specifies the mean <span class="math inline">\(\lambda\)</span> (link is ‘identity’) or log of the mean (<code>link</code> is log). The <code>variance</code> field does not apply to this distribution. The variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\lambda\)</span> itself.</p>
 </div>
-<div id="trtassign" class="section level4">
-<h4 class="hasAnchor">
-<a href="#trtassign" class="anchor"></a>trtAssign</h4>
+<div class="section level4">
+<h4 id="trtassign">trtAssign<a class="anchor" aria-label="anchor" href="#trtassign"></a>
+</h4>
 <p>The <em>trtAssign</em> distribution is an implementation of the <code>trtAssign</code> functionality in the context of the <code>defData</code> workflow. Sometimes, it might be convenient to assign treatment or group membership while defining other variables. The <code>formula</code> specifies the relative allocation to the different groups. For example three-arm randomization with equal allocation to each arm would be specified as <em>“1;1;1”</em>. The <code>variance</code> field defines the stratification variables, and would be specified as <em>“s_1;s_2”</em> if <em>s_1</em> and <em>s_2</em> are the stratification variables. The <code>link</code> field is used to indicate if the allocations should be perfectly balanced; if nothing is specified (and link defaults to <em>identity</em>), the allocation will be balanced; if link is specified to be different from <em>identity</em>, then the allocation will not be balanced.</p>
 </div>
-<div id="uniform" class="section level4">
-<h4 class="hasAnchor">
-<a href="#uniform" class="anchor"></a>uniform</h4>
+<div class="section level4">
+<h4 id="uniform">uniform<a class="anchor" aria-label="anchor" href="#uniform"></a>
+</h4>
 <p>A <em>uniform</em> distribution is a continuous data distribution that takes on values from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, where <span class="math inline">\(b\)</span> &gt; <span class="math inline">\(a\)</span>, and they both lie anywhere on the real number line. The <code>formula</code> is a string with the format “a;b”, where <em>a</em> and <em>b</em> are scalars or functions of previously defined variables. The <code>variance</code> and <code>link</code> arguments do not apply to the <em>uniform</em> distribution.</p>
 </div>
-<div id="uniformint" class="section level4">
-<h4 class="hasAnchor">
-<a href="#uniformint" class="anchor"></a>uniformInt</h4>
+<div class="section level4">
+<h4 id="uniformint">uniformInt<a class="anchor" aria-label="anchor" href="#uniformint"></a>
+</h4>
 <p>A <em>uniform integer</em> distribution is a discrete data distribution that takes on values from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, where <span class="math inline">\(b\)</span> &gt; <span class="math inline">\(a\)</span>, and they both lie anywhere on the integer number line. The <code>formula</code> is a string with the format “a;b”, where <em>a</em> and <em>b</em> are scalars or functions of previously defined variables. The <code>variance</code> and <code>link</code> arguments do not apply to the <em>uniform integer</em> distribution.</p>
 </div>
 </div>
 </div>
-<div id="adding-data-to-an-existing-data-table" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-data-to-an-existing-data-table" class="anchor"></a>Adding data to an existing data table</h2>
+<div class="section level2">
+<h2 id="adding-data-to-an-existing-data-table">Adding data to an existing data table<a class="anchor" aria-label="anchor" href="#adding-data-to-an-existing-data-table"></a>
+</h2>
 <p>Until this point, we have been generating new data sets, building them up from scratch. However, it is often necessary to generate the data in multiple stages so that we would need to add data as we go along. For example, we may have multi-level data with clusters that contain collections of individual observations. The data generation might begin with defining and generating cluster-level variables, followed by the definition and generation of the individual-level data; the individual-level data set would be adding to the cluster-level data set.</p>
-<div id="defdataaddreaddataadd-and-addcolumns" class="section level3">
-<h3 class="hasAnchor">
-<a href="#defdataaddreaddataadd-and-addcolumns" class="anchor"></a>defDataAdd/readDataAdd and addColumns</h3>
+<div class="section level3">
+<h3 id="defdataaddreaddataadd-and-addcolumns">defDataAdd/readDataAdd and addColumns<a class="anchor" aria-label="anchor" href="#defdataaddreaddataadd-and-addcolumns"></a>
+</h3>
 <p>There are several important functions that facilitate the augmentation of data sets. <code>defDataAdd</code> and <code>readDataAdd</code> are similar to their counterparts <code>defData</code> and <code>readData</code>; they create data definition tables that will be used by the function <code>addColumns</code>. The formulas in these “<em>add</em>-ing” functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span>,
@@ -599,25 +595,25 @@
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">d1</span><span class="op">)</span>
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, nTrt <span class="op">=</span> <span class="fl">2</span>, grpName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span>
 <span class="va">dd</span></code></pre></div>
-<pre><code>##    id      x1 x2 rx
-## 1:  1 -1.3230  1  0
-## 2:  2 -0.0494  0  1
-## 3:  3 -0.4064  1  0
-## 4:  4 -0.5562  1  0
-## 5:  5 -0.0941  0  1</code></pre>
+<pre><code><span class="co">##    id      x1 x2 rx</span>
+<span class="co">## 1:  1 -1.3230  1  0</span>
+<span class="co">## 2:  2 -0.0494  0  1</span>
+<span class="co">## 3:  3 -0.4064  1  0</span>
+<span class="co">## 4:  4 -0.5562  1  0</span>
+<span class="co">## 5:  5 -0.0941  0  1</span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">d2</span>, <span class="va">dd</span><span class="op">)</span>
 <span class="va">dd</span></code></pre></div>
-<pre><code>##    id      x1 x2 rx y
-## 1:  1 -1.3230  1  0 0
-## 2:  2 -0.0494  0  1 0
-## 3:  3 -0.4064  1  0 0
-## 4:  4 -0.5562  1  0 1
-## 5:  5 -0.0941  0  1 0</code></pre>
+<pre><code><span class="co">##    id      x1 x2 rx y</span>
+<span class="co">## 1:  1 -1.3230  1  0 0</span>
+<span class="co">## 2:  2 -0.0494  0  1 0</span>
+<span class="co">## 3:  3 -0.4064  1  0 0</span>
+<span class="co">## 4:  4 -0.5562  1  0 1</span>
+<span class="co">## 5:  5 -0.0941  0  1 0</span></code></pre>
 </div>
-<div id="defcondition-and-addcondition" class="section level3">
-<h3 class="hasAnchor">
-<a href="#defcondition-and-addcondition" class="anchor"></a>defCondition and addCondition</h3>
+<div class="section level3">
+<h3 id="defcondition-and-addcondition">defCondition and addCondition<a class="anchor" aria-label="anchor" href="#defcondition-and-addcondition"></a>
+</h3>
 <p>In certain situations, it might be useful to define a data distribution conditional on previously generated data in a way that is more complex than might be easily handled by a single formula. <code>defCondition</code> creates a special table of definitions and the new variable is added to an existing data set by calling <code>addCondition</code>. <code>defCondition</code> specifies a condition argument that will be based on a variable that already exists in the data set. The new variable can take on any <code>simstudy</code> distribution specified with the appropriate <code>formula</code>, <code>variance</code>, and <code>link</code> arguments.</p>
 <p>In this example, the slope of a regression line of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> varies depending on the value of the predictor <span class="math inline">\(x\)</span>:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
@@ -648,11 +644,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://www.rdatagen.net/">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
+  <p></p>
+<p>Developed by <a href="https://www.rdatagen.net/" class="external-link">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -660,6 +658,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,12 +40,6 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/simstudy.html">Get started</a>
 </li>
@@ -92,7 +88,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/kgoldfeld/simstudy/">
+  <a href="https://github.com/kgoldfeld/simstudy/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -107,13 +103,13 @@
 
       
 
-      </header><script src="spline_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Spline Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/master/vignettes/spline.Rmd"><code>vignettes/spline.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/HEAD/vignettes/spline.Rmd" class="external-link"><code>vignettes/spline.Rmd</code></a></small>
       <div class="hidden name"><code>spline.Rmd</code></div>
 
     </div>
@@ -124,37 +120,37 @@
 <p>The shape of a spline is determined by three factors: (1) the cut-points or knots that define the piecewise structure of the function, (2) the polynomial degree, such as linear, quadratic, cubic, etc., and (3) the linear coefficients that combine the basis functions, which is contained in a vector or matrix <em>theta</em>.</p>
 <p>First, we can look at the basis functions, which depend only the knots and degree. The knots are specified as quantiles, between 0 and 1:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span><span class="op">)</span>
 <span class="fu"><a href="../reference/viewBasis.html">viewBasis</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span><span class="op">)</span>
 <span class="fu"><a href="../reference/viewBasis.html">viewBasis</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-2-2.png" width="576"></p>
 <p>The splines themselves are specified as linear combinations of each of the basis functions. The coefficients of those combinations are specified in <em>theta</em>. Each individual spline curve represents a specific linear combination of a particular set of basis functions. In exploring, we can look at a single curve or multiple curves, depending on whether or not we specify theta as a vector (single) or matrix (multiple).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>
 
 <span class="co"># number of elements in theta: length(knots) + degree + 1</span>
-<span class="va">theta1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.4</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span>, <span class="fl">1.0</span><span class="op">)</span> 
+<span class="va">theta1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.4</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span>, <span class="fl">1.0</span><span class="op">)</span> 
 
 <span class="fu"><a href="../reference/viewSplines.html">viewSplines</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">2</span>, <span class="va">theta1</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">theta2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.6</span>, 
+<code class="sourceCode R"><span class="va">theta2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.6</span>, 
                   <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.8</span>, <span class="fl">1.0</span>, <span class="fl">0.9</span>, <span class="fl">0.4</span>, 
                   <span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.6</span>, <span class="fl">0.1</span><span class="op">)</span>,
                ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
 <span class="va">theta2</span></code></pre></div>
-<pre><code>##      [,1] [,2] [,3]
-## [1,]  0.1  0.1  0.1
-## [2,]  0.2  0.3  0.9
-## [3,]  0.4  0.3  0.8
-## [4,]  0.9  0.8  0.2
-## [5,]  0.2  1.0  0.1
-## [6,]  0.3  0.9  0.6
-## [7,]  0.6  0.4  0.1</code></pre>
+<pre><code><span class="co">##      [,1] [,2] [,3]</span>
+<span class="co">## [1,]  0.1  0.1  0.1</span>
+<span class="co">## [2,]  0.2  0.3  0.9</span>
+<span class="co">## [3,]  0.4  0.3  0.8</span>
+<span class="co">## [4,]  0.9  0.8  0.2</span>
+<span class="co">## [5,]  0.2  1.0  0.1</span>
+<span class="co">## [6,]  0.3  0.9  0.6</span>
+<span class="co">## [7,]  0.6  0.4  0.1</span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/viewSplines.html">viewSplines</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span>, <span class="va">theta2</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-3-2.png" width="576"></p>
@@ -162,15 +158,15 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ddef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"age"</span>, formula <span class="op">=</span> <span class="st">"20;60"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span><span class="op">)</span>
 
-<span class="va">theta1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span>
-<span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span></code></pre></div>
+<span class="va">theta1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span>
+<span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span></code></pre></div>
 <p>Here is the shape of the curve that we want to generate data from:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/viewSplines.html">viewSplines</a></span><span class="op">(</span>knots <span class="op">=</span> <span class="va">knots</span>, theta <span class="op">=</span> <span class="va">theta1</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>Now we specify the variables in the data set and generate the data:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">234</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">234</span><span class="op">)</span>
 
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">ddef</span><span class="op">)</span>
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSpline.html">genSpline</a></span><span class="op">(</span>dt <span class="op">=</span> <span class="va">dt</span>, newvar <span class="op">=</span> <span class="st">"weight"</span>,
@@ -180,38 +176,38 @@
                 noise.var <span class="op">=</span> <span class="fl">64</span><span class="op">)</span></code></pre></div>
 <p>Here’s a plot of the data with a smoothed line fit to the data:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y<span class="op">=</span><span class="va">weight</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey65"</span>, size <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se<span class="op">=</span><span class="cn">FALSE</span>, color<span class="op">=</span><span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">1</span>, method <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">dt</span><span class="op">$</span><span class="va">age</span>, <span class="va">knots</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y<span class="op">=</span><span class="va">weight</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey65"</span>, size <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>se<span class="op">=</span><span class="cn">FALSE</span>, color<span class="op">=</span><span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">1</span>, method <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">dt</span><span class="op">$</span><span class="va">age</span>, <span class="va">knots</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <p>Finally, we will fit three different spline models to the data - a linear, a quadratic, and a cubic - and plot the predicted values:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># normalize age for best basis functions</span>
-<span class="va">dt</span><span class="op">[</span>, <span class="va">nage</span> <span class="op">:=</span> <span class="op">(</span><span class="va">age</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> 
+<span class="va">dt</span><span class="op">[</span>, <span class="va">nage</span> <span class="op">:=</span> <span class="op">(</span><span class="va">age</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> 
 
 <span class="co"># fit a cubic spline</span>
-<span class="va">lmfit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="fu">bs</span><span class="op">(</span>x <span class="op">=</span> <span class="va">nage</span>, knots <span class="op">=</span> <span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span>, intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span>
+<span class="va">lmfit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="fu">bs</span><span class="op">(</span>x <span class="op">=</span> <span class="va">nage</span>, knots <span class="op">=</span> <span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span>, intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span>
 
 <span class="co"># fit a quadtratic spline</span>
-<span class="va">lmfit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="fu">bs</span><span class="op">(</span>x <span class="op">=</span> <span class="va">nage</span>, knots <span class="op">=</span> <span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span>
+<span class="va">lmfit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="fu">bs</span><span class="op">(</span>x <span class="op">=</span> <span class="va">nage</span>, knots <span class="op">=</span> <span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span>
 
 <span class="co"># fit a  linear spline</span>
-<span class="va">lmfit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="fu">bs</span><span class="op">(</span>x <span class="op">=</span> <span class="va">nage</span>, knots <span class="op">=</span> <span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span>
+<span class="va">lmfit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="fu">bs</span><span class="op">(</span>x <span class="op">=</span> <span class="va">nage</span>, knots <span class="op">=</span> <span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span>
 
 <span class="co"># add predicted values for plotting</span>
-<span class="va">dt</span><span class="op">[</span>, <span class="va">pred.3deg</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lmfit3</span><span class="op">)</span><span class="op">]</span>
-<span class="va">dt</span><span class="op">[</span>, <span class="va">pred.2deg</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lmfit2</span><span class="op">)</span><span class="op">]</span>
-<span class="va">dt</span><span class="op">[</span>, <span class="va">pred.1deg</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lmfit1</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dt</span><span class="op">[</span>, <span class="va">pred.3deg</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lmfit3</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dt</span><span class="op">[</span>, <span class="va">pred.2deg</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lmfit2</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dt</span><span class="op">[</span>, <span class="va">pred.1deg</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lmfit1</span><span class="op">)</span><span class="op">]</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y<span class="op">=</span><span class="va">weight</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey65"</span>, size <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y <span class="op">=</span> <span class="va">pred.3deg</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#1B9E77"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y <span class="op">=</span> <span class="va">pred.2deg</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#D95F02"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y <span class="op">=</span> <span class="va">pred.1deg</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#7570B3"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">dt</span><span class="op">$</span><span class="va">age</span>, <span class="va">knots</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y<span class="op">=</span><span class="va">weight</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey65"</span>, size <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y <span class="op">=</span> <span class="va">pred.3deg</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#1B9E77"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y <span class="op">=</span> <span class="va">pred.2deg</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#D95F02"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y <span class="op">=</span> <span class="va">pred.1deg</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#7570B3"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">dt</span><span class="op">$</span><span class="va">age</span>, <span class="va">knots</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
   </div>
 
@@ -224,11 +220,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://www.rdatagen.net/">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
+  <p></p>
+<p>Developed by <a href="https://www.rdatagen.net/" class="external-link">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -236,6 +234,8 @@
 
   
 
+
+  
 
   </body>
 </html>
