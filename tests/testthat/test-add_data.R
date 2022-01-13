@@ -50,5 +50,5 @@ test_that("defRepeatAdd works", {
 test_that("defRepeatAdd throws errors correctly.", {
   expect_error(defRepeatAdd(prefix = "b", formula = 5, variance = 3, dist = "normal"))
   expect_error(defRepeatAdd(nvars = 8, formula = 5, variance = 3, dist = "normal"))
-  expect_error(defRepeatAdd(vars = 8, prefix = "b", variance = 3, dist = "normal"))
+  expect_error(defRepeatAdd(nvars = 8, prefix = "b", variance = 3, dist = "normal"))
 })
