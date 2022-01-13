@@ -249,13 +249,9 @@ defRepeat <- function(dtDefs = NULL,
                     link = "identity",
                     id = "id") {
   
-  #### Check that arguments have been passed
-  
-  if (missing(nvars)) stop("argument 'nvars' is missing", call. = FALSE)
-  if (missing(prefix)) stop("argument 'prefix' is missing", call. = FALSE)
-  if (missing(formula)) stop("argument 'formula' is missing", call. = FALSE)
-  
-  #### No missing arguments
+  assertNotMissing(nvars = missing(nvars), 
+                   prefix = missing(prefix), 
+                   formula = missing(formula))
   
   varnames <- paste0(prefix, 1 : nvars)
   
@@ -318,13 +314,9 @@ defRepeatAdd <- function(dtDefs = NULL,
                       link = "identity",
                       id = "id") {
   
-  #### Check that arguments have been passed
-  
-  if (missing(nvars)) stop("argument 'nvars' is missing", call. = FALSE)
-  if (missing(prefix)) stop("argument 'prefix' is missing", call. = FALSE)
-  if (missing(formula)) stop("argument 'formula' is missing", call. = FALSE)
-  
-  #### No missing arguments
+  assertNotMissing(nvars = missing(nvars), 
+                   prefix = missing(prefix), 
+                   formula = missing(formula))
   
   varnames <- paste0(prefix, 1 : nvars)
   

@@ -163,9 +163,12 @@ test_that("defRepeat works.", {
 })
 
 test_that("defRepeat throws errors correctly.", {
-  expect_error(defRepeat(prefix = "b", formula = 5, variance = 3, dist = "normal"))
-  expect_error(defRepeat(nvars = 8, formula = 5, variance = 3, dist = "normal"))
-  expect_error(defRepeat(nvars = 8, prefix = "b", variance = 3, dist = "normal"))
+  expect_error(defRepeat(prefix = "b", formula = 5, variance = 3, dist = "normal"),
+    class = "simstudy::missingArgument")
+  expect_error(defRepeat(nvars = 8, formula = 5, variance = 3, dist = "normal"), 
+    class = "simstudy::missingArgument")
+  expect_error(defRepeat(nvars = 8, prefix = "b", variance = 3, dist = "normal"),
+    class = "simstudy::missingArgument")
   expect_error(defRepeat(nvars = 4, prefix = "b", formula = "5 + a", variance = 3, dist = "normal"))
 })
 
