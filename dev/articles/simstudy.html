@@ -517,7 +517,7 @@
 <div class="section level4">
 <h4 id="categorical">categorical<a class="anchor" aria-label="anchor" href="#categorical"></a>
 </h4>
-<p>A <em>categorical</em> distribution is a discrete data distribution taking on values from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>, with each value representing a specific category, and there are <span class="math inline">\(K\)</span> categories. The categories may or may not be ordered. For a categorical variable with <span class="math inline">\(k\)</span> categories, the <code>formula</code> is a string of probabilities that sum to 1, each separated by a semi-colon: <span class="math inline">\((p_1 ; p_2 ; ... ; p_k)\)</span>. <span class="math inline">\(p_1\)</span> is the probability of the random variable falling in category <span class="math inline">\(1\)</span>, <span class="math inline">\(p_2\)</span> is the probability of category <span class="math inline">\(2\)</span>, etc. The probabilities can be specified as functions of other variables previously defined. The helper function <code>genCatFormula</code> is an easy way to create different probability strings. The <code>link</code> options are <em>identity</em> or <em>logit</em>. The <code>variance</code> field is optional an allows to provide categories other than the default <code>1...n</code> in the same format as <code>formula</code>: “a;b;c”. Numeric variance Strings (e.g. “50;100;200”) will be converted to numeric when possible.</p>
+<p>A <em>categorical</em> distribution is a discrete data distribution taking on values from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>, with each value representing a specific category, and there are <span class="math inline">\(K\)</span> categories. The categories may or may not be ordered. For a categorical variable with <span class="math inline">\(k\)</span> categories, the <code>formula</code> is a string of probabilities that sum to 1, each separated by a semi-colon: <span class="math inline">\((p_1 ; p_2 ; ... ; p_k)\)</span>. <span class="math inline">\(p_1\)</span> is the probability of the random variable falling in category <span class="math inline">\(1\)</span>, <span class="math inline">\(p_2\)</span> is the probability of category <span class="math inline">\(2\)</span>, etc. The probabilities can be specified as functions of other variables previously defined. The helper function <code>genCatFormula</code> is an easy way to create different probability strings. The <code>link</code> options are <em>identity</em> or <em>logit</em>. The <code>variance</code> field is optional an allows to provide categories other than the default <code>1...n</code> in the same format as <code>formula</code>: “a;b;c”. Numeric variance Strings (e.g. “50;100;200”) will be converted to numeric when possible. All probabilities will be rounded to 1e12 decimal points to prevent possible rounding errors.</p>
 </div>
 <div class="section level4">
 <h4 id="exponential">exponential<a class="anchor" aria-label="anchor" href="#exponential"></a>
@@ -650,7 +650,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

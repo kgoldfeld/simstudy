@@ -167,12 +167,12 @@ the logistic scale.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Ordinal Categorical Data ----</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span></span>
-<span class="r-in">    varname <span class="op">=</span> <span class="st">"male"</span>,</span>
-<span class="r-in">    formula <span class="op">=</span> <span class="fl">0.45</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, id <span class="op">=</span> <span class="st">"idG"</span></span>
+<span class="r-in">  varname <span class="op">=</span> <span class="st">"male"</span>,</span>
+<span class="r-in">  formula <span class="op">=</span> <span class="fl">0.45</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, id <span class="op">=</span> <span class="st">"idG"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>,</span>
-<span class="r-in">    varname <span class="op">=</span> <span class="st">"z"</span>,</span>
-<span class="r-in">    formula <span class="op">=</span> <span class="st">"1.2*male"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span></span>
+<span class="r-in">  varname <span class="op">=</span> <span class="st">"z"</span>,</span>
+<span class="r-in">  formula <span class="op">=</span> <span class="st">"1.2*male"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">def1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    varname  formula variance      dist     link</span>
@@ -209,11 +209,11 @@ the logistic scale.</p></dd>
 <span class="r-in"><span class="co"># Correlated Ordinal Categorical Data ----</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">baseprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.6</span>,</span>
-<span class="r-in">    <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0</span>,</span>
-<span class="r-in">    <span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0</span>,</span>
-<span class="r-in">    <span class="fl">0.4</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0</span>,</span>
-<span class="r-in">    <span class="fl">0.6</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0</span></span>
+<span class="r-in">  <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.6</span>,</span>
+<span class="r-in">  <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0</span>,</span>
+<span class="r-in">  <span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0</span>,</span>
+<span class="r-in">  <span class="fl">0.4</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0</span>,</span>
+<span class="r-in">  <span class="fl">0.6</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0</span></span>
 <span class="r-in"><span class="op">)</span>,</span>
 <span class="r-in">nrow <span class="op">=</span> <span class="fl">5</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
@@ -222,8 +222,8 @@ the logistic scale.</p></dd>
 <span class="r-in"><span class="va">dT</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">dX</span> <span class="op">&lt;-</span> <span class="fu">genOrdCat</span><span class="op">(</span><span class="va">dT</span>,</span>
-<span class="r-in">    adjVar <span class="op">=</span> <span class="cn">NULL</span>, baseprobs <span class="op">=</span> <span class="va">baseprobs</span>,</span>
-<span class="r-in">    prefix <span class="op">=</span> <span class="st">"q"</span>, rho <span class="op">=</span> <span class="fl">.125</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, asFactor <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span class="r-in">  adjVar <span class="op">=</span> <span class="cn">NULL</span>, baseprobs <span class="op">=</span> <span class="va">baseprobs</span>,</span>
+<span class="r-in">  prefix <span class="op">=</span> <span class="st">"q"</span>, rho <span class="op">=</span> <span class="fl">.125</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, asFactor <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">dX</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         id q1 q2 q3 q4 q5</span>
@@ -261,7 +261,7 @@ the logistic scale.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16:       q5 0.205        3</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>,</span>
-<span class="r-in">    value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span></span>
+<span class="r-in">  value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    variable     1     2     3     4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       q1 0.192 0.096 0.109 0.603</span>
@@ -280,9 +280,11 @@ the logistic scale.</p></dd>
 <span class="r-in"><span class="va">baseprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">npAdj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">dn</span> <span class="op">&lt;-</span> <span class="fu">genOrdCat</span><span class="op">(</span>dtName <span class="op">=</span> <span class="va">dd</span>, adjVar <span class="op">=</span> <span class="st">"z"</span>, </span>
-<span class="r-in">                baseprobs <span class="op">=</span> <span class="va">baseprobs</span>,</span>
-<span class="r-in">                npVar <span class="op">=</span> <span class="st">"rx"</span>, npAdj <span class="op">=</span> <span class="va">npAdj</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">dn</span> <span class="op">&lt;-</span> <span class="fu">genOrdCat</span><span class="op">(</span></span>
+<span class="r-in">  dtName <span class="op">=</span> <span class="va">dd</span>, adjVar <span class="op">=</span> <span class="st">"z"</span>,</span>
+<span class="r-in">  baseprobs <span class="op">=</span> <span class="va">baseprobs</span>,</span>
+<span class="r-in">  npVar <span class="op">=</span> <span class="st">"rx"</span>, npAdj <span class="op">=</span> <span class="va">npAdj</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -298,7 +300,7 @@ the logistic scale.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
