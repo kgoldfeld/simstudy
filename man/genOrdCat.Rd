@@ -77,12 +77,12 @@ Correlations can be added via correlation matrix or \code{rho} and \code{corstr}
 # Ordinal Categorical Data ----
 
 def1 <- defData(
-    varname = "male",
-    formula = 0.45, dist = "binary", id = "idG"
+  varname = "male",
+  formula = 0.45, dist = "binary", id = "idG"
 )
 def1 <- defData(def1,
-    varname = "z",
-    formula = "1.2*male", dist = "nonrandom"
+  varname = "z",
+  formula = "1.2*male", dist = "nonrandom"
 )
 def1
 
@@ -103,11 +103,11 @@ dx
 # Correlated Ordinal Categorical Data ----
 
 baseprobs <- matrix(c(
-    0.2, 0.1, 0.1, 0.6,
-    0.7, 0.2, 0.1, 0,
-    0.5, 0.2, 0.3, 0,
-    0.4, 0.2, 0.4, 0,
-    0.6, 0.2, 0.2, 0
+  0.2, 0.1, 0.1, 0.6,
+  0.7, 0.2, 0.1, 0,
+  0.5, 0.2, 0.3, 0,
+  0.4, 0.2, 0.4, 0,
+  0.6, 0.2, 0.2, 0
 ),
 nrow = 5, byrow = TRUE
 )
@@ -116,8 +116,8 @@ set.seed(333)
 dT <- genData(1000)
 
 dX <- genOrdCat(dT,
-    adjVar = NULL, baseprobs = baseprobs,
-    prefix = "q", rho = .125, corstr = "cs", asFactor = FALSE
+  adjVar = NULL, baseprobs = baseprobs,
+  prefix = "q", rho = .125, corstr = "cs", asFactor = FALSE
 )
 dX
 
@@ -126,7 +126,7 @@ dProp <- dM[, prop.table(table(value)), by = variable]
 dProp[, response := c(1:4, 1:3, 1:3, 1:3, 1:3)]
 
 data.table::dcast(dProp, variable ~ response,
-    value.var = "V1", fill = 0
+  value.var = "V1", fill = 0
 )
 
 # proportional odds assumption violated
@@ -139,9 +139,11 @@ dd <- genData(1000, d1)
 baseprobs <- c(.4, .3, .2, .1)
 npAdj <- c(0, 1, 0, 0)
 
-dn <- genOrdCat(dtName = dd, adjVar = "z", 
-                baseprobs = baseprobs,
-                npVar = "rx", npAdj = npAdj)
+dn <- genOrdCat(
+  dtName = dd, adjVar = "z",
+  baseprobs = baseprobs,
+  npVar = "rx", npAdj = npAdj
+)
 
 }
 \concept{categorical}
