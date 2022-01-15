@@ -44,7 +44,7 @@
       formula = args$formula,
       variance = args$variance,
       link = args$link,
-      dfSim = copy(dfSim),
+      dtSim = copy(dfSim),
       envir = envir
     ),
     exponential = .genexp(
@@ -270,7 +270,7 @@
 # @param envir Environment the data definitions are evaluated in.
 #  Defaults to [base::parent.frame].
 # @return A data.frame column with the updated simulated data
-.gencat <- function(n, formula, variance, link, dfSim, envir) {
+.gencat <- function(n, formula, variance, link, dtSim, envir) {
   formulas <- .splitFormula(formula)
 
   if (length(formulas) < 2) {
@@ -281,7 +281,7 @@
   }
 
   parsedProbs <-
-    .evalWith(formulas, .parseDotVars(formulas, envir), dfSim, n)
+    .evalWith(formulas, .parseDotVars(formulas, envir), dtSim, n)
 
   if (link == "logit") {
     parsedProbs <- exp(parsedProbs)
@@ -291,6 +291,7 @@
   }
 
   parsedProbs <- cbind(parsedProbs, 1 - rowSums(parsedProbs))
+  parsedProbs <- round(parsedProbs, 12) # to avoid extremely small p's
 
   c <- .Call(`_simstudy_matMultinom`, parsedProbs, PACKAGE = "simstudy")
 
