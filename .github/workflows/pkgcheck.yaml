@@ -6,9 +6,11 @@ concurrency:
 
 on: workflow_dispatch
 
-runs-on: ubuntu-latest
-steps:
-    - uses: assignUser/pkgcheck-action@main
+jobs: 
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: assignUser/pkgcheck-action@main
         with:
-        cache-version: 1
+          cache-version: 1
         
