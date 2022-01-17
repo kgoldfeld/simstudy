@@ -268,7 +268,7 @@ A *uniform integer* distribution is a discrete data distribution that takes on v
 `defRepeat` allows us to specify multiple versions of a variable based on a single set of distribution assumptions. The function will add `nvar` variables to the *data definition* table, each of which will be specified with a single set of distribution assumptions. The names of the variables will be based on the `prefix` argument and the distribution assumptions are specified as they are in the `defData` function. Calls to `defRepeat` can be integrated with calls to `defData`.
 
 ```{r}
-def <- defRepeat(nvars = 4, prefix = "g", formula = "1/3;1/3;1/3", 
+def <- defRepeat(nVars = 4, prefix = "g", formula = "1/3;1/3;1/3", 
    variance = 0, dist = "categorical")
 def <- defData(def, varname = "a", formula = "1;1", dist = "trtAssign")
 def <- defRepeat(def, 3, "b", formula = "5 + a", variance = 3, dist = "normal")
@@ -289,7 +289,7 @@ There are several important functions that facilitate the augmentation of data s
 d1 <- defData(varname = "x1", formula = 0, variance = 1, dist = "normal")
 d1 <- defData(d1, varname = "x2", formula = 0.5, dist = "binary")
 
-d2 <- defRepeatAdd(nvars = 2, prefix = "q", formula = "5 + 3*rx",
+d2 <- defRepeatAdd(nVars = 2, prefix = "q", formula = "5 + 3*rx",
                    variance = 4, dist = "normal")
 d2 <- defDataAdd(d2, varname = "y", formula = "-2 + 0.5*x1 + 0.5*x2 + 1*rx", 
                  dist = "binary", link = "logit")
