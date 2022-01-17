@@ -219,7 +219,7 @@ defDataAdd <- function(dtDefs = NULL,
 #' Add multiple (similar) rows to definitions table
 #'
 #' @param dtDefs Definition data.table to be modified
-#' @param nvars Number of new variables to define
+#' @param nVars Number of new variables to define
 #' @param prefix Prefix (character) for new variables
 #' @param formula An R expression for mean (string)
 #' @param variance Number or formula
@@ -231,52 +231,58 @@ defDataAdd <- function(dtDefs = NULL,
 #' @details The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
 #'
 #' @examples
-#' def <- defRepeat(nvars = 4, prefix = "g", formula = "1/3;1/3;1/3", 
-#'    variance = 0, dist = "categorical")
+#' def <- defRepeat(
+#'   nVars = 4, prefix = "g", formula = "1/3;1/3;1/3",
+#'   variance = 0, dist = "categorical"
+#' )
 #' def <- defData(def, varname = "a", formula = "1;1", dist = "trtAssign")
 #' def <- defRepeat(def, 8, "b", formula = "5 + a", variance = 3, dist = "normal")
 #' def <- defData(def, "y", formula = "0.10", dist = "binary")
-#' 
+#'
 #' def
 #' @export
 #' @concept define_data
 defRepeat <- function(dtDefs = NULL,
-                    nvars,
-                    prefix,
-                    formula,
-                    variance = 0,
-                    dist = "normal",
-                    link = "identity",
-                    id = "id") {
-  
-  assertNotMissing(nvars = missing(nvars), 
-                   prefix = missing(prefix), 
-                   formula = missing(formula))
-  
-  varnames <- paste0(prefix, 1 : nvars)
-  
+                      nVars,
+                      prefix,
+                      formula,
+                      variance = 0,
+                      dist = "normal",
+                      link = "identity",
+                      id = "id") {
+  assertNotMissing(
+    nVars = missing(nVars),
+    prefix = missing(prefix),
+    formula = missing(formula)
+  )
+
+  varnames <- paste0(prefix, 1:nVars)
+
   if (is.null(dtDefs)) {
-    
-    defNew <- defData(varname = varnames[1], formula = formula,
-                 variance = variance, dist=dist, link = link, id = id)
-    
-    for (i in (2:nvars) ) {
-      defNew <- defData(defNew, varname = varnames[i], 
-                  formula = formula, variance = variance, 
-                  dist=dist, link = link, id = id)
+    defNew <- defData(
+      varname = varnames[1], formula = formula,
+      variance = variance, dist = dist, link = link, id = id
+    )
+
+    for (i in (2:nVars)) {
+      defNew <- defData(defNew,
+        varname = varnames[i],
+        formula = formula, variance = variance,
+        dist = dist, link = link, id = id
+      )
     }
-    
   } else {
-    
     defNew <- data.table::copy(dtDefs)
-    
-    for (i in 1:nvars) {
-      defNew <- defData(defNew, varname = varnames[i], 
-                  formula = formula, variance = variance, 
-                  dist=dist, link = link, id = id)
+
+    for (i in 1:nVars) {
+      defNew <- defData(defNew,
+        varname = varnames[i],
+        formula = formula, variance = variance,
+        dist = dist, link = link, id = id
+      )
     }
   }
-  
+
   return(defNew[])
 }
 
@@ -284,7 +290,7 @@ defRepeat <- function(dtDefs = NULL,
 #' existing data.table
 #'
 #' @param dtDefs Definition data.table to be modified
-#' @param nvars Number of new variables to define
+#' @param nVars Number of new variables to define
 #' @param prefix Prefix (character) for new variables
 #' @param formula An R expression for mean (string)
 #' @param variance Number or formula
@@ -296,52 +302,58 @@ defRepeat <- function(dtDefs = NULL,
 #' @details The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
 #'
 #' @examples
-#' def <- defRepeatAdd(nvars = 4, prefix = "g", formula = "1/3;1/3;1/3", 
-#'     variance = 0, dist = "categorical")
+#' def <- defRepeatAdd(
+#'   nVars = 4, prefix = "g", formula = "1/3;1/3;1/3",
+#'   variance = 0, dist = "categorical"
+#' )
 #' def <- defDataAdd(def, varname = "a", formula = "1;1", dist = "trtAssign")
 #' def <- defRepeatAdd(def, 8, "b", formula = "5 + a", variance = 3, dist = "normal")
 #' def <- defDataAdd(def, "y", formula = "0.10", dist = "binary")
-#' 
+#'
 #' def
 #' @export
 #' @concept define_data
 defRepeatAdd <- function(dtDefs = NULL,
-                      nvars,
-                      prefix,
-                      formula,
-                      variance = 0,
-                      dist = "normal",
-                      link = "identity",
-                      id = "id") {
-  
-  assertNotMissing(nvars = missing(nvars), 
-                   prefix = missing(prefix), 
-                   formula = missing(formula))
-  
-  varnames <- paste0(prefix, 1 : nvars)
-  
+                         nVars,
+                         prefix,
+                         formula,
+                         variance = 0,
+                         dist = "normal",
+                         link = "identity",
+                         id = "id") {
+  assertNotMissing(
+    nVars = missing(nVars),
+    prefix = missing(prefix),
+    formula = missing(formula)
+  )
+
+  varnames <- paste0(prefix, 1:nVars)
+
   if (is.null(dtDefs)) {
-    
-    defNew <- defDataAdd(varname = varnames[1], formula = formula,
-                      variance = variance, dist=dist, link = link)
-    
-    for (i in (2:nvars) ) {
-      defNew <- defDataAdd(defNew, varname = varnames[i], 
-                        formula = formula, variance = variance, 
-                        dist=dist, link = link)
+    defNew <- defDataAdd(
+      varname = varnames[1], formula = formula,
+      variance = variance, dist = dist, link = link
+    )
+
+    for (i in (2:nVars)) {
+      defNew <- defDataAdd(defNew,
+        varname = varnames[i],
+        formula = formula, variance = variance,
+        dist = dist, link = link
+      )
     }
-    
   } else {
-    
     defNew <- data.table::copy(dtDefs)
-    
-    for (i in 1:nvars) {
-      defNew <- defDataAdd(defNew, varname = varnames[i], 
-                        formula = formula, variance = variance, 
-                        dist=dist, link = link)
+
+    for (i in 1:nVars) {
+      defNew <- defDataAdd(defNew,
+        varname = varnames[i],
+        formula = formula, variance = variance,
+        dist = dist, link = link
+      )
     }
   }
-  
+
   return(defNew[])
 }
 
@@ -579,11 +591,10 @@ defSurv <- function(dtDefs = NULL,
                     formula = 0,
                     scale,
                     shape = 1) {
-  
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
-  
+
   dt.new <- data.table::data.table(
     varname,
     formula,
@@ -649,57 +660,42 @@ defSurv <- function(dtDefs = NULL,
     newvar <- ensureValidName(newvar, call = sys.call(-1))
     assertNotInDataTable(vars = newvar, dt = defVars)
 
-    switch(
-      newdist,
-
+    switch(newdist,
       binary = {
         .isValidArithmeticFormula(newform, defVars)
         .isIdLogit(link)
       },
-
       beta = ,
       binomial = {
         .isValidArithmeticFormula(newform, defVars)
         .isValidArithmeticFormula(variance, defVars)
         .isIdLogit(link)
       },
-
       noZeroPoisson = ,
-
       poisson = ,
-
       exponential = {
         .isValidArithmeticFormula(newform, defVars)
         .isIdLog(link)
       },
-
       gamma = ,
-
       negBinomial = {
         .isValidArithmeticFormula(newform, defVars)
         .isValidArithmeticFormula(variance, defVars)
         .isIdLog(link)
       },
-
       nonrandom = .isValidArithmeticFormula(newform, defVars),
-
       normal = {
         .isValidArithmeticFormula(newform, defVars)
         .isValidArithmeticFormula(variance, defVars)
       },
-
       categorical = .checkCategorical(newform),
-
       mixture = {
         .isValidArithmeticFormula(newform, defVars)
         .checkMixture(newform)
       },
-
       uniform = ,
-
       uniformInt = .checkUniform(newform),
-      trtAssign =  .checkCategorical(newform),
-
+      trtAssign = .checkCategorical(newform),
       stop("Unknown distribution.")
     )
 
