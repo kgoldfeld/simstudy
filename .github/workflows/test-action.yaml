@@ -20,4 +20,5 @@ jobs:
             pb$tick()
             Sys.sleep(1 / 100)
           }
+        shell: Rscript {0}
           
