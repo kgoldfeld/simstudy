@@ -9,12 +9,9 @@ on: workflow_dispatch
 jobs: 
   check:
     runs-on: ubuntu-latest
-    container: mpadge/pkgcheck
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RSPM: 'https://packagemanager.rstudio.com/all/__linux__/focal/latest'
     steps:
-      - uses: assignUser/pkgcheck-action@docker
-        with:
-          cache-version: 1
+      - uses: assignUser/pkgcheck-action@actual-docker
         
