@@ -35,7 +35,7 @@ test_that("addColumns works.", {
 
 test_that("defRepeatAdd works", {
   expect_silent(
-    defRepeatAdd(nvars = 4, prefix = "g", formula = "1/3;1/3;1/3", variance = 0, dist = "categorical")
+    defRepeatAdd(nVars = 4, prefix = "g", formula = "1/3;1/3;1/3", variance = 0, dist = "categorical")
   )
   
   def <- defDataAdd(varname = "a", formula = "1;1", dist = "trtAssign")
@@ -43,15 +43,15 @@ test_that("defRepeatAdd works", {
     defRepeatAdd(def, 8, "b", formula = "5 + a", variance = 3, dist = "normal")
   )
   
-  expect_silent(defRepeatAdd(nvars = 4, prefix = "b", formula = "5 + a", variance = 3, dist = "normal"))
+  expect_silent(defRepeatAdd(nVars = 4, prefix = "b", formula = "5 + a", variance = 3, dist = "normal"))
   
 })
 
 test_that("defRepeatAdd throws errors correctly.", {
   expect_error(defRepeatAdd(prefix = "b", formula = 5, variance = 3, dist = "normal"),
     class = "simstudy::missingArgument")
-  expect_error(defRepeatAdd(nvars = 8, formula = 5, variance = 3, dist = "normal"),
+  expect_error(defRepeatAdd(nVars = 8, formula = 5, variance = 3, dist = "normal"),
     class = "simstudy::missingArgument")
-  expect_error(defRepeatAdd(nvars = 8, prefix = "b", variance = 3, dist = "normal"),
+  expect_error(defRepeatAdd(nVars = 8, prefix = "b", variance = 3, dist = "normal"),
     class = "simstudy::missingArgument")
 })
