@@ -6,7 +6,7 @@
 \usage{
 defRepeat(
   dtDefs = NULL,
-  nvars,
+  nVars,
   prefix,
   formula,
   variance = 0,
@@ -18,7 +18,7 @@ defRepeat(
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
 
-\item{nvars}{Number of new variables to define}
+\item{nVars}{Number of new variables to define}
 
 \item{prefix}{Prefix (character) for new variables}
 
@@ -42,8 +42,10 @@ Add multiple (similar) rows to definitions table
 The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
 }
 \examples{
-def <- defRepeat(nvars = 4, prefix = "g", formula = "1/3;1/3;1/3", 
-   variance = 0, dist = "categorical")
+def <- defRepeat(
+  nVars = 4, prefix = "g", formula = "1/3;1/3;1/3",
+  variance = 0, dist = "categorical"
+)
 def <- defData(def, varname = "a", formula = "1;1", dist = "trtAssign")
 def <- defRepeat(def, 8, "b", formula = "5 + a", variance = 3, dist = "normal")
 def <- defData(def, "y", formula = "0.10", dist = "binary")

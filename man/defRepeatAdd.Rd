@@ -7,7 +7,7 @@ existing data.table}
 \usage{
 defRepeatAdd(
   dtDefs = NULL,
-  nvars,
+  nVars,
   prefix,
   formula,
   variance = 0,
@@ -19,7 +19,7 @@ defRepeatAdd(
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
 
-\item{nvars}{Number of new variables to define}
+\item{nVars}{Number of new variables to define}
 
 \item{prefix}{Prefix (character) for new variables}
 
@@ -44,8 +44,10 @@ existing data.table
 The possible data distributions are: `r paste0(.getDists(),collapse = ", ")`.
 }
 \examples{
-def <- defRepeatAdd(nvars = 4, prefix = "g", formula = "1/3;1/3;1/3", 
-    variance = 0, dist = "categorical")
+def <- defRepeatAdd(
+  nVars = 4, prefix = "g", formula = "1/3;1/3;1/3",
+  variance = 0, dist = "categorical"
+)
 def <- defDataAdd(def, varname = "a", formula = "1;1", dist = "trtAssign")
 def <- defRepeatAdd(def, 8, "b", formula = "5 + a", variance = 3, dist = "normal")
 def <- defDataAdd(def, "y", formula = "0.10", dist = "binary")
