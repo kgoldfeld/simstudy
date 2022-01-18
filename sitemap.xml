@@ -1,156 +1,231 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/index.html</loc>
+    <loc>/404.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/addColumns.html</loc>
+    <loc>/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/addCondition.html</loc>
+    <loc>/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/addCorData.html</loc>
+    <loc>/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/addCorFlex.html</loc>
+    <loc>/SUPPORT.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/addCorGen.html</loc>
+    <loc>/articles/clustered.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/addMarkov.html</loc>
+    <loc>/articles/correlated.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/addMultiFac.html</loc>
+    <loc>/articles/double_dot_extension.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/addPeriods.html</loc>
+    <loc>/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/betaGetShapes.html</loc>
+    <loc>/articles/longitudinal.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/catProbs.html</loc>
+    <loc>/articles/missing.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/defCondition.html</loc>
+    <loc>/articles/ordinal.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/defData.html</loc>
+    <loc>/articles/simstudy.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/defDataAdd.html</loc>
+    <loc>/articles/spline.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/defMiss.html</loc>
+    <loc>/articles/survival.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/defRead.html</loc>
+    <loc>/articles/treat_and_exposure.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/defReadAdd.html</loc>
+    <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/defReadCond.html</loc>
+    <loc>/index.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/defSurv.html</loc>
+    <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/delColumns.html</loc>
+    <loc>/reference/addColumns.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/gammaGetShapeRate.html</loc>
+    <loc>/reference/addCondition.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genCluster.html</loc>
+    <loc>/reference/addCorData.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genCorData.html</loc>
+    <loc>/reference/addCorFlex.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genCorFlex.html</loc>
+    <loc>/reference/addCorGen.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genCorGen.html</loc>
+    <loc>/reference/addMarkov.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genCorMat.html</loc>
+    <loc>/reference/addMultiFac.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genCorOrdCat.html</loc>
+    <loc>/reference/addPeriods.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genData.html</loc>
+    <loc>/reference/betaGetShapes.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genDummy.html</loc>
+    <loc>/reference/catProbs.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genFactor.html</loc>
+    <loc>/reference/defCondition.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genFormula.html</loc>
+    <loc>/reference/defData.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genMarkov.html</loc>
+    <loc>/reference/defDataAdd.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genMiss.html</loc>
+    <loc>/reference/defMiss.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genMultiFac.html</loc>
+    <loc>/reference/defRead.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genNthEvent.html</loc>
+    <loc>/reference/defReadAdd.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genObs.html</loc>
+    <loc>/reference/defReadCond.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genOrdCat.html</loc>
+    <loc>/reference/defRepeat.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genSpline.html</loc>
+    <loc>/reference/defRepeatAdd.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/genSurv.html</loc>
+    <loc>/reference/defSurv.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/iccRE.html</loc>
+    <loc>/reference/delColumns.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/mergeData.html</loc>
+    <loc>/reference/distributions.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/negbinomGetSizeProb.html</loc>
+    <loc>/reference/gammaGetShapeRate.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/trimData.html</loc>
+    <loc>/reference/genCatFormula.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/trtAssign.html</loc>
+    <loc>/reference/genCluster.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/trtObserve.html</loc>
+    <loc>/reference/genCorData.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/trtStepWedge.html</loc>
+    <loc>/reference/genCorFlex.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/updateDef.html</loc>
+    <loc>/reference/genCorGen.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/updateDefAdd.html</loc>
+    <loc>/reference/genCorMat.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/viewBasis.html</loc>
+    <loc>/reference/genCorOrdCat.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/reference/viewSplines.html</loc>
+    <loc>/reference/genData.html</loc>
   </url>
   <url>
-    <loc>https://kgoldfeld.github.io/simstudy/articles/simstudy.html</loc>
+    <loc>/reference/genDummy.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genFactor.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genFormula.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genMarkov.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genMiss.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genMixFormula.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genMultiFac.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genNthEvent.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genObs.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genOrdCat.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genSpline.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genSurv.html</loc>
+  </url>
+  <url>
+    <loc>/reference/iccRE.html</loc>
+  </url>
+  <url>
+    <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mergeData.html</loc>
+  </url>
+  <url>
+    <loc>/reference/negbinomGetSizeProb.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simstudy-deprecated.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simstudy-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/trimData.html</loc>
+  </url>
+  <url>
+    <loc>/reference/trtAssign.html</loc>
+  </url>
+  <url>
+    <loc>/reference/trtObserve.html</loc>
+  </url>
+  <url>
+    <loc>/reference/trtStepWedge.html</loc>
+  </url>
+  <url>
+    <loc>/reference/updateDef.html</loc>
+  </url>
+  <url>
+    <loc>/reference/updateDefAdd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/viewBasis.html</loc>
+  </url>
+  <url>
+    <loc>/reference/viewSplines.html</loc>
   </url>
 </urlset>
