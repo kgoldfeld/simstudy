@@ -263,19 +263,35 @@ A *uniform* distribution is a continuous data distribution that takes on values 
 
 A *uniform integer* distribution is a discrete data distribution that takes on values from $a$ to $b$, where $b$ > $a$, and they both lie anywhere on the integer number line. The `formula` is a string with the format "a;b", where *a* and *b* are scalars or functions of previously defined variables. The `variance` and `link` arguments do not apply to the *uniform integer* distribution.
 
+## Generating multiple variables with a single definition
+
+`defRepeat` allows us to specify multiple versions of a variable based on a single set of distribution assumptions. The function will add `nvar` variables to the *data definition* table, each of which will be specified with a single set of distribution assumptions. The names of the variables will be based on the `prefix` argument and the distribution assumptions are specified as they are in the `defData` function. Calls to `defRepeat` can be integrated with calls to `defData`.
+
+```{r}
+def <- defRepeat(nVars = 4, prefix = "g", formula = "1/3;1/3;1/3", 
+   variance = 0, dist = "categorical")
+def <- defData(def, varname = "a", formula = "1;1", dist = "trtAssign")
+def <- defRepeat(def, 3, "b", formula = "5 + a", variance = 3, dist = "normal")
+def <- defData(def, "y", formula = "0.10", dist = "binary")
+
+def
+```
+
 ## Adding data to an existing data table
 
 Until this point, we have been generating new data sets, building them up from scratch. However, it is often necessary to generate the data in multiple stages so that we would need to add data as we go along. For example, we may have multi-level data with clusters that contain collections of individual observations. The data generation might begin with defining and generating cluster-level variables, followed by the definition and generation of the individual-level data; the individual-level data set would be adding to the cluster-level data set.
 
-### defDataAdd/readDataAdd and addColumns
+### defDataAdd/defRepeatAdd/readDataAdd and addColumns
 
-There are several important functions that facilitate the augmentation of data sets. `defDataAdd` and `readDataAdd` are similar to their counterparts `defData` and `readData`; they create data definition tables that will be used by the function `addColumns`. The formulas in these "*add*-ing" functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.
+There are several important functions that facilitate the augmentation of data sets. `defDataAdd`, `defRepeatAdd`, and `readDataAdd` are similar to their counterparts `defData`, `defRepeat`, and `readData`, respectively; they create data definition tables that will be used by the function `addColumns`. The formulas in these "*add*-ing" functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.
 
 ```{r}
 d1 <- defData(varname = "x1", formula = 0, variance = 1, dist = "normal")
 d1 <- defData(d1, varname = "x2", formula = 0.5, dist = "binary")
 
-d2 <- defDataAdd(varname = "y", formula = "-2 + 0.5*x1 + 0.5*x2 + 1*rx", 
+d2 <- defRepeatAdd(nVars = 2, prefix = "q", formula = "5 + 3*rx",
+                   variance = 4, dist = "normal")
+d2 <- defDataAdd(d2, varname = "y", formula = "-2 + 0.5*x1 + 0.5*x2 + 1*rx", 
                  dist = "binary", link = "logit")
 
 dd <- genData(5, d1)
@@ -295,12 +311,12 @@ In this example, the slope of a regression line of $y$ on $x$ varies depending o
 ```{r}
 d <- defData(varname = "x", formula = 0, variance = 9, dist = "normal")
 
-dc <- defCondition(condition = "x <= -2", formula = "4 + 3*x", variance = 2, 
-                   dist = "normal")
-dc <- defCondition(dc, condition = "x > -2 & x <= 2", formula = "0 + 1*x", variance = 4, 
-                   dist = "normal")
-dc <- defCondition(dc, condition = "x > 2", formula = "-5 + 4*x", variance = 3, 
-                   dist = "normal")
+dc <- defCondition(condition = "x <= -2", formula = "4 + 3*x", 
+                   variance = 2, dist = "normal")
+dc <- defCondition(dc, condition = "x > -2 & x <= 2", formula = "0 + 1*x", 
+                   variance = 4, dist = "normal")
+dc <- defCondition(dc, condition = "x > 2", formula = "-5 + 4*x", 
+                   variance = 3, dist = "normal")
 
 dd <- genData(1000, d)
 dd <- addCondition(dc, dd, newvar = "y")
