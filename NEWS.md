@@ -1,5 +1,11 @@
-# simstudy (development version)
+# simstudy 0.3.1
+
+## New features
 * genOrdCat now supports non-proportional odds
+* Added functions defRepeat and defRepeatAdd to facilitate the definition of multiple variables that share identical data definitions.
+
+## Minor improvements and fixes
+* Fixed bug resulting from rounding error when specifying probabilities for 'categorical' distributions.
   
 # simstudy 0.3.0
 
