@@ -2,19 +2,14 @@ simstudy
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/kgoldfeld/simstudy/actions)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![status](https://joss.theoj.org/papers/10.21105/joss.02763/status.svg)](https://joss.theoj.org/papers/10.21105/joss.02763)
-[![CRAN
-downloads](https://cranlogs.r-pkg.org/badges/grand-total/simstudy)](https://CRAN.R-project.org/package=simstudy)
-[![codecov](https://app.codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg)](https://app.codecov.io/gh/kgoldfeld/simstudy)
-[![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+<a href="https://github.com/kgoldfeld/simstudy/actions" target="_blank"><img src="https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main" alt="R build status" /></a>
+<a href="https://CRAN.R-project.org/package=simstudy" target="_blank"><img src="https://www.r-pkg.org/badges/version/simstudy" alt="CRAN status" /></a>
+<a href="https://joss.theoj.org/papers/10.21105/joss.02763" target="_blank"><img src="https://joss.theoj.org/papers/10.21105/joss.02763/status.svg" alt="status" /></a>
+<a href="https://CRAN.R-project.org/package=simstudy" target="_blank"><img src="https://cranlogs.r-pkg.org/badges/grand-total/simstudy" alt="CRAN downloads" /></a>
+<a href="https://app.codecov.io/gh/kgoldfeld/simstudy" target="_blank"><img src="https://app.codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg" alt="codecov" /></a>
+<a href="https://lifecycle.r-lib.org/articles/stages.html" target="_blank"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable" /></a>
 <!-- badges: end -->
 
 The `simstudy` package is a collection of functions that allow users to
@@ -44,7 +39,7 @@ So, the parameterization of some of the data generating processes may
 not follow the standard parameterizations for the specific
 distributions. For example, in `simstudy` *gamma*-distributed data are
 generated based on the specification of a mean μ (or log(μ)) and a
-dispersion \(d\), rather than shape α and rate β parameters that more
+dispersion *d*, rather than shape α and rate β parameters that more
 typically characterize the *gamma* distribution. When we estimate the
 parameters, we are modeling μ (or some function of μ), so we should
 explicitly recover the `simstudy` parameters used to generate the model,
@@ -56,13 +51,14 @@ page](https://kgoldfeld.github.io/simstudy/articles/simstudy.html).
 ## Installation
 
 You can install the released version of simstudy from
-[CRAN](https://CRAN.R-project.org) with:
+<a href="https://CRAN.R-project.org" target="_blank">CRAN</a> with:
 
 ``` r
 install.packages("simstudy")
 ```
 
-And the development version from [GitHub](https://github.com/) with:
+And the development version from
+<a href="https://github.com/" target="_blank">GitHub</a> with:
 
 ``` r
 # install.packages("devtools")
@@ -101,15 +97,14 @@ dd
 ## Contributing & Support
 
 If you find a bug or need help, please file an issue with a
-[reprex](https://www.tidyverse.org/help/) on
-[Github](https://github.com/kgoldfeld/simstudy/issues). We are happy to
-accept contributions to simstudy. More information on how to propose
-changes or fix bugs can be found
-[here](https://kgoldfeld.github.io/simstudy/CONTRIBUTING.html).
+<a href="https://www.tidyverse.org/help/" target="_blank">reprex</a> on
+<a href="https://github.com/kgoldfeld/simstudy/issues" target="_blank">Github</a>.
+We are happy to accept contributions to simstudy. More information on
+how to propose changes or fix bugs can be found
+<a href="https://kgoldfeld.github.io/simstudy/CONTRIBUTING.html" target="_blank">here</a>.
 
 ## Code of Conduct
 
-Please note that the simstudy project is released with a [Contributor
-Code of
-Conduct](https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html). By
-contributing to this project, you agree to abide by its terms.
+Please note that the simstudy project is released with a
+<a href="https://kgoldfeld.github.io/simstudy/CODE_OF_CONDUCT.html" target="_blank">Contributor Code of Conduct</a>.
+By contributing to this project, you agree to abide by its terms.
