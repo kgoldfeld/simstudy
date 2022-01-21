@@ -11,3 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: ropensci-review-tools/pkgcheck-action@issue-test
+        with:
+          issue-title: 'some issue'
