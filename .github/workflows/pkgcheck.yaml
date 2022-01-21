@@ -12,5 +12,4 @@ jobs:
     steps:
       - uses: ropensci-review-tools/pkgcheck-action@main
         with:
-          summary-only: false
 
