@@ -10,5 +10,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: ropensci-review-tools/pkgcheck-action@issue-test
+      - uses: ropensci-review-tools/pkgcheck-action@main
+        with:
+          summary-only: false
 
