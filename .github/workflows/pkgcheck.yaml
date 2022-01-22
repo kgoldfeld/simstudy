@@ -13,9 +13,12 @@ on:
     branches: 
       - main
 
-jobs: 
+jobs:
   check:
     runs-on: ubuntu-latest
+    container: ghcr.io/ropensci-review-tools/pkgcheck-action:latest
+    env: 
+      GITHUB_PAT: ${{ github.token }}
     steps:
       - uses: ropensci-review-tools/pkgcheck-action@main
         with:
