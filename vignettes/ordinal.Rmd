@@ -322,7 +322,8 @@ It is possible to generate data under these assumptions using the `npVar` and `n
 baseprobs <- c(0.31, 0.29, .20, 0.20)
 npAdj <- c(-0.4, 0.0, -1.7, 0)
 
-dX <- genOrdCat(dT_1_cat, baseprobs = baseprobs, catVar = "r", npVar = "exposed", npAdj = npAdj)
+dX <- genOrdCat(dT_1_cat, baseprobs = baseprobs, adjVar = "z",
+                catVar = "r", npVar = "exposed", npAdj = npAdj)
 ```
 
 The calculation of the log cumulative odds follows as before:
@@ -345,7 +346,7 @@ logOdds.expos - logOdds.unexp
 
 This is confirmed by a plot of the model fit with a proportional odds assumption along with the observed cumulative proportions. Since the model imposes a consistent shift of each threshold, the observed points no longer lie along the prediction line, indicating a violation of the proportional odds assumption:
   
-```{r, echo=FALSE, fig.width=6, fig.height=3.5}
+```{r, echo=FALSE, fig.width=6, fig.height=3.5, warning=FALSE}
 fitPlot(dX)
 ```
 
