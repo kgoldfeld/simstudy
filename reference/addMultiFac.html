@@ -125,18 +125,18 @@ an integer.</p>
 <span class="r-in"><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">360</span>, <span class="va">defD</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, colNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">DT</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       id           x A B C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  0.30129207 2 2 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2 -1.24246780 1 3 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  0.90072413 2 2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 -0.79684550 2 3 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5  1.77667367 1 3 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356 -1.98988373 1 2 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357 -0.04597061 1 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358 -0.18174984 2 2 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359 -0.63816043 2 1 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360 -1.35692580 1 3 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id          x A B C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  1.5911128 2 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2 -0.0697195 2 2 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  0.1267355 2 1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4  1.2116312 2 3 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 -1.1699184 1 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356  1.1154606 1 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357 -1.7117348 1 1 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358  0.6033390 2 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359  0.4960044 2 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360  0.8324418 1 2 2</span>
 <span class="r-in"><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     A B C  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1 1 1 20</span>
@@ -165,10 +165,10 @@ an integer.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    0    0    0 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:    0    1    0 38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:    0    1    1 37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    1    0    0 38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:    1    0    1 38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:    1    1    0 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:    0    1    1 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    1    0    0 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:    1    0    1 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:    1    1    0 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8:    1    1    1 38</span>
 </code></pre></div>
     </div>
