@@ -6,9 +6,23 @@ concurrency:
 
 on: workflow_dispatch
 
-jobs: 
+jobs:
   check:
     runs-on: ubuntu-latest
+    container: ghcr.io/ropensci-review-tools/pkgcheck-action:latest
+    env: 
+      GITHUB_PAT: ${{ github.token }}
     steps:
-      - uses: ropensci-review-tools/pkgcheck-action@main
-
+      - uses: actions/checkout@v2
+      - name: Run pkgcheck
+        id: pkgcheck
+        run: source(".github/workflows/check.R") 
+        shell: Rscript {0}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: visual-network
+          path: "${{ steps.pkgcheck.outputs.visnet_path }}"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: "${{ steps.pkgcheck.outputs.results }}"
