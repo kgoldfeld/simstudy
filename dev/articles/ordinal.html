@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.0.9000</span>
       </span>
     </div>
 
@@ -203,7 +203,8 @@
 <code class="sourceCode R"><span class="va">baseprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.31</span>, <span class="fl">0.29</span>, <span class="fl">.20</span>, <span class="fl">0.20</span><span class="op">)</span>
 <span class="va">npAdj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.4</span>, <span class="fl">0.0</span>, <span class="op">-</span><span class="fl">1.7</span>, <span class="fl">0</span><span class="op">)</span>
 
-<span class="va">dX</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genOrdCat.html">genOrdCat</a></span><span class="op">(</span><span class="va">dT_1_cat</span>, baseprobs <span class="op">=</span> <span class="va">baseprobs</span>, catVar <span class="op">=</span> <span class="st">"r"</span>, npVar <span class="op">=</span> <span class="st">"exposed"</span>, npAdj <span class="op">=</span> <span class="va">npAdj</span><span class="op">)</span></code></pre></div>
+<span class="va">dX</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genOrdCat.html">genOrdCat</a></span><span class="op">(</span><span class="va">dT_1_cat</span>, baseprobs <span class="op">=</span> <span class="va">baseprobs</span>, adjVar <span class="op">=</span> <span class="st">"z"</span>,
+                catVar <span class="op">=</span> <span class="st">"r"</span>, npVar <span class="op">=</span> <span class="st">"exposed"</span>, npAdj <span class="op">=</span> <span class="va">npAdj</span><span class="op">)</span></code></pre></div>
 <p>The calculation of the log cumulative odds follows as before:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">logOdds.unexp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu">odds</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">dX</span><span class="op">[</span><span class="va">exposed</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></code></pre></div>
@@ -212,13 +213,13 @@
 <p>And under exposure:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">logOdds.expos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu">odds</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">dX</span><span class="op">[</span><span class="va">exposed</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##     1     2     3 </span>
-<span class="co">## -0.41  0.40  3.04</span></code></pre>
+<pre><code><span class="co">##    1    2    3 </span>
+<span class="co">## 0.29 1.10 3.72</span></code></pre>
 <p>But, now, the log of the cumulative odds ratios for each of the four groups varies across the different levels.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">logOdds.expos</span> <span class="op">-</span> <span class="va">logOdds.unexp</span></code></pre></div>
-<pre><code><span class="co">##     1     2     3 </span>
-<span class="co">##  0.39 -0.02  1.64</span></code></pre>
+<pre><code><span class="co">##    1    2    3 </span>
+<span class="co">## 1.09 0.69 2.32</span></code></pre>
 <p>This is confirmed by a plot of the model fit with a proportional odds assumption along with the observed cumulative proportions. Since the model imposes a consistent shift of each threshold, the observed points no longer lie along the prediction line, indicating a violation of the proportional odds assumption:</p>
 <p><img src="ordinal_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 </div>
