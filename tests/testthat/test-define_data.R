@@ -4,6 +4,7 @@ freeze_eval <- names(.GlobalEnv)
 # defCondition ----
 
 # .evalDef ----
+
 test_that("checks combine in .evalDef correctly", {
   skip_on_cran()
 
@@ -38,6 +39,7 @@ test_that(".evalDef throws errors correctly.", {
 })
 
 # .isValidArithmeticFormula ----
+
 test_that("g.a.e. formula checked correctly.", {
   skip_on_cran()
   gen_gae <-
@@ -63,6 +65,7 @@ test_that(".isValidArithmeticFormula throws errors correctly.", {
 })
 
 # .checkMixture ----
+
 test_that("'mixture' formula checked correctly", {
   skip_on_cran()
   gen_mix_vars <- gen.choice(gen_dotdot_num, gen_varname, gen.element(-100:100))
@@ -85,6 +88,7 @@ test_that(".checkMixture throws errors.", {
 })
 
 # .checkCategorical ----
+
 test_that("'categorical' formula checked correctly", {
   skip_on_cran()
   forall(gen_cat_probs, function(f) {
@@ -97,6 +101,7 @@ test_that(".checkCategorical throws errors.", {
 })
 
 # .checkUniform ----
+
 test_that("'uniform' formula checked correctly", {
   skip_on_cran()
   forall(
@@ -137,7 +142,9 @@ test_that("'link' checked as expected", {
 # .rmDots ----
 # .rmWS ----
 # .isDotArr ----
+
 # .splitFormula ----
+
 test_that("utility functions work", {
   names <- c("..as", "..bs", "..cs[4]", "..ds[x]")
   res <- c("as", "bs", "cs[4]", "ds[x]")
@@ -150,6 +157,60 @@ test_that("utility functions work", {
   expect_equal(.splitFormula("a;split"), c("a", "split"))
   expect_equal(.splitFormula(";split"), c("", "split"))
 })
+
+# defData ----
+
+test_that("defData throws off errors.", {
+  expect_error(defData(formula = .5, dist = "binary"),
+    class = "simstudy::missingArgument")
+  expect_error(defData(varname = "x", dist = "binary"),
+               class = "simstudy::missingArgument")
+  
+  d <- defData(varname = "x", formula = .5, dist = "binary")
+  expect_error(defData(d, varname = "y", dist = "binary"),
+    class = "simstudy::missingArgument")
+  expect_error(defData(d, formula = .4, dist = "binary"),
+               class = "simstudy::missingArgument")
+  
+  expect_error(defData(varname = "b", formula = "5+", dist = "gamma"))
+  expect_error(defData(varname = "b", formula = .5, variance = "1+", dist = "gamma"))
+  expect_error(defData(varname = "b", formula = .5, variance = 10, 
+                       dist = "gamma", link="logit"))
+  
+  expect_error(defData(varname = "b", formula = "5+", dist = "negBinomial"))
+  expect_error(defData(varname = "b", formula = .5, variance = "1+", 
+                       dist = "negBinomial"))
+  expect_error(defData(varname = "b", formula = .5, variance = 10, 
+                       dist = "negBinomial", link="logit"))
+  
+  expect_error(defData(varname = "b", formula = "5+", dist = "exponential"))
+  expect_error(defData(varname = "b", formula = 5, variance = 10, 
+                       dist = "exponential", link="logit"))
+  
+  expect_error(defData(varname = "b", formula = "5+", dist = "binomial"))
+  expect_error(defData(varname = "b", formula = .5, variance = "1+", dist = "binomial"))
+  expect_error(defData(varname = "b", formula = .5, variance = 10, dist = "binomial", link="log"))
+  
+  expect_error(defData(varname = "b", formula = "5", dist = "expotial"))
+  
+})
+
+# defSurv ----
+
+test_that("defSurv works.", {
+  def <- defData(varname = "x1", formula = .5, dist = "binary")
+  def <- defData(def, varname = "x2", formula = .5, dist = "binary")
+  def <- defData(def, varname = "grp", formula = .5, dist = "binary")
+
+  expect_silent(
+    defSurv(
+      varname = "s", formula = "1.5*x1",
+      scale = "grp*50 + (1-grp)*25", shape = "grp*1 + (1-grp)*1.5"
+    )
+  )
+})
+
+# defRepeat ----
 
 test_that("defRepeat works.", {
   expect_silent(
@@ -171,5 +232,160 @@ test_that("defRepeat throws errors correctly.", {
     class = "simstudy::missingArgument")
   expect_error(defRepeat(nVars = 4, prefix = "b", formula = "5 + a", variance = 3, dist = "normal"))
 })
+
+# defRead ----
+
+test_that("defRead works.", {
+  oldSeed <- .Random.seed
+  
+  def1 <- defData(varname = "x1", formula = 0, var = 1, dist = "normal")
+  def1 <- defData(def1, varname = "x2", formula = 0.2, dist = "binary")
+  
+  filen <- tempfile("test", fileext = ".csv")
+  data.table::fwrite(x=def1, file=filen)
+  
+  def2 <- defRead(file = filen)
+  
+  seed <-sample(1:1e8, 1)
+  set.seed(seed)
+  d1 <- genData(10, def1)
+  
+  set.seed(seed)
+  d2 <- genData(10, def2)
+  
+  expect_equal(d1, d2)
+  set.seed(oldSeed)
+  
+})
+
+test_that("defRead throws off errors",{
+  
+  filen <- tempfile("test", fileext = ".csv")
+  
+  def1 <- defData(varname = "x1", formula = 0, var = 1, dist = "normal")
+  def1 <- defData(def1, varname = "x2", formula = 0.2, dist = "binary")
+  def1[varname == "x2", varname := "x1"]
+   
+  data.table::fwrite(x=def1, file=filen)
+  expect_error(defRead(file = filen))
+   
+  filen <- tempfile("test", fileext = ".csv")
+  expect_error(defRead(file = filen))
+  
+  filen <- tempfile("test", fileext = ".csv")
+  def1 <- defData(varname = "x1", formula = 0, var = 1, dist = "normal")
+  def1$error <- 0
+  
+  data.table::fwrite(x=def1, file=filen)
+  expect_error(defRead(file = filen))
+  
+  filen <- tempfile("test", fileext = ".csv")
+  def1 <- defData(varname = "x1", formula = 1, var = 1, dist = "normal")
+  def1$formula <- "a"
+    
+  data.table::fwrite(x=def1, file=filen)
+  expect_error(defRead(file = filen))
+  
+})
+
+# defReadAdd ----
+
+test_that("defReadAdd works.", {
+  oldSeed <- .Random.seed
+  
+  def1 <- defData(varname = "x1", formula = 0, var = 1, dist = "normal")
+  def1 <- defData(def1, varname = "x2", formula = 0.2, dist = "binary")
+  
+  def2 <- defDataAdd(varname = "x3", formula = 0, var = 1, dist = "normal")
+  
+  filen <- tempfile("test", fileext = ".csv")
+  data.table::fwrite(x=def2, file=filen)
+  
+  def3 <- defReadAdd(file = filen)
+  
+  seed <-sample(1:1e8, 1)
+  
+  set.seed(seed)
+  d1 <- genData(10, def1)
+  d1 <- addColumns(def2, d1)
+  
+  set.seed(seed)
+  d2 <- genData(10, def1)
+  d2 <- addColumns(def3, d2)
+  
+  expect_equal(d1, d2)
+  set.seed(oldSeed)
+  
+})
+
+test_that("defReadAdd throws off errors",{
+  
+  filen <- tempfile("test", fileext = ".csv")
+  expect_error(defReadAdd(file = filen))
+  
+  filen <- tempfile("test", fileext = ".csv")
+  def1 <- defDataAdd(varname = "x1", formula = 0, var = 1, dist = "normal")
+  def1$error <- 0
+  
+  data.table::fwrite(x=def1, file=filen)
+  expect_error(defReadAdd(file = filen))
+  
+})
+
+# defReadCond ----
+
+test_that("defReadCond works.", {
+
+  defC <- defCondition(
+    condition = "x == 1", formula = "5 + 2*y",
+    variance = 1, dist = "normal"
+  )
+  defC <- defCondition(defC,
+    condition = "x <= 5 & x >= 2", formula = "3 - 2*y",
+    variance = 1, dist = "normal"
+  )
+  defC <- defCondition(defC,
+    condition = "x >= 6", formula = 1,
+    variance = 1, dist = "normal"
+  )
+  
+  filen <- tempfile("test", fileext = ".csv")
+  data.table::fwrite(x=defC, file=filen)
+  
+  defCr <- defReadCond(file = filen)
+  expect_equal(defC, defCr)
+
+})
+
+test_that("defReadCond throws off errors",{
+  
+  defC <- defCondition(
+    condition = "x == 1", formula = "5 + 2*y",
+    variance = 1, dist = "normal"
+  )
+  defC <- defCondition(defC,
+                       condition = "x <= 5 & x >= 2", formula = "3 - 2*y",
+                       variance = 1, dist = "normal"
+  )
+  defC <- defCondition(defC,
+                       condition = "x >= 6", formula = 1,
+                       variance = 1, dist = "normal"
+  )
+  
+  defC$error <- 0
+  
+  filen <- tempfile("test", fileext = ".csv")
+  data.table::fwrite(x=defC, file=filen)
+  expect_error(defReadCond(file = filen))
+  
+  
+  filen <- tempfile("test", fileext = ".csv")
+  expect_error(defReadCond(file = filen))
+  
+  
+  
+})
+
+# done ----
 
 rm(list = setdiff(names(.GlobalEnv), freeze_eval), pos = .GlobalEnv)

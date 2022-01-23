@@ -125,9 +125,11 @@ defData <- function(dtDefs = NULL,
                     id = "id") {
 
   #### Check that arguments have been passed
-
-  if (missing(varname)) stop("argument 'varname' is missing", call. = FALSE)
-  if (missing(formula)) stop("argument 'formula' is missing", call. = FALSE)
+  
+  assertNotMissing(
+    varname = missing(varname),
+    formula = missing(formula)
+  )
 
   #### No missing arguments
 
@@ -403,12 +405,10 @@ defRead <- function(filen, id = "id") {
 
   read.df <- utils::read.csv(filen, header = TRUE, as.is = TRUE) # do not read as factors
   read.dt <- data.table::data.table(read.df)
-
-  if (!all(names(read.dt) == c(
-    "varname",
-    "formula", "variance", "dist", "link"
-  ))) {
-    stop("Field names do not match")
+  
+  if (!(identical(sort(names(read.dt)), 
+    sort(c("varname", "formula", "variance", "dist", "link" ))))) {
+      stop("Field names do not match")
   }
 
   # check validity of data set
@@ -481,11 +481,9 @@ defReadAdd <- function(filen) {
   read.df <- utils::read.csv(filen, header = TRUE, as.is = TRUE) # do not read as factors
   read.dt <- data.table::data.table(read.df)
 
-  if (!all(names(read.dt) == c(
-    "varname",
-    "formula", "variance", "dist", "link"
-  ))) {
-    stop("Field names do not match")
+  if (!(identical(sort(names(read.dt)), 
+    sort(c("varname", "formula", "variance", "dist", "link" ))))) {
+      stop("Field names do not match")
   }
 
   return(read.dt[])
@@ -541,8 +539,9 @@ defReadCond <- function(filen) {
   read.df <- utils::read.csv(filen, header = TRUE, as.is = TRUE) # do not read as factors
   read.dt <- data.table::data.table(read.df)
 
-  if (!all(names(read.dt) == c("condition", "formula", "variance", "dist", "link"))) {
-    stop("field names do not match")
+  if (!(identical(sort(names(read.dt)), 
+                  sort(c("condition", "formula", "variance", "dist", "link" ))))) {
+    stop("Field names do not match")
   }
 
   return(read.dt[])
@@ -591,6 +590,12 @@ defSurv <- function(dtDefs = NULL,
                     formula = 0,
                     scale,
                     shape = 1) {
+  
+  assertNotMissing(
+    varname = missing(varname),
+    scale = missing(scale)
+  )
+  
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
@@ -695,8 +700,7 @@ defSurv <- function(dtDefs = NULL,
       },
       uniform = ,
       uniformInt = .checkUniform(newform),
-      trtAssign = .checkCategorical(newform),
-      stop("Unknown distribution.")
+      trtAssign = .checkCategorical(newform)
     )
 
     invisible(newvar)
@@ -823,13 +827,6 @@ defSurv <- function(dtDefs = NULL,
       names = formula,
       msg = list("Equation: '{names}' not in proper form. See ?distributions ."),
       call = NULL
-    )
-    stop(paste(
-      "Equation: '",
-      formula,
-      "' not in proper form. See ?distributions ."
-    ),
-    call. = FALSE
     )
   }
 
