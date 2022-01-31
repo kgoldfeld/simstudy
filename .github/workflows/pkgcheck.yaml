@@ -20,5 +20,5 @@ jobs:
       GITHUB_PAT: ${{ github.token }}
       R_CLI_NUM_COLORS: 16777216
     steps:
-      - uses: ropensci-review-tools/pkgcheck-action@use-octolog
+      - uses: ropensci-review-tools/pkgcheck-action@issue-append
 
