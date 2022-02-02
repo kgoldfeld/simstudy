@@ -116,19 +116,21 @@
 
     
     
+<pre><code><span class="co">## Warning in register(): Can't find generic `scale_type` in package ggplot2 to</span>
+<span class="co">## register S3 method.</span></code></pre>
 <p>Sometimes (usually?) relationships between variables are non-linear. <code>simstudy</code> can already accommodate that. But, if we want to explicitly generate data from a piece-wise polynomial function to explore spline methods in particular, or non-linear relationships more generally. There are three functions that facilitate this: <code>viewBasis</code>, <code>viewSplines</code>, and <code>genSpline</code>. The first two functions are more exploratory in nature, and just provide plots of the B-spline basis functions and the splines, respectively. The third function actually generates data and adds to an existing data.table.</p>
 <p>The shape of a spline is determined by three factors: (1) the cut-points or knots that define the piecewise structure of the function, (2) the polynomial degree, such as linear, quadratic, cubic, etc., and (3) the linear coefficients that combine the basis functions, which is contained in a vector or matrix <em>theta</em>.</p>
 <p>First, we can look at the basis functions, which depend only the knots and degree. The knots are specified as quantiles, between 0 and 1:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span><span class="op">)</span>
 <span class="fu"><a href="../reference/viewBasis.html">viewBasis</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span><span class="op">)</span>
 <span class="fu"><a href="../reference/viewBasis.html">viewBasis</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-2-2.png" width="576"></p>
 <p>The splines themselves are specified as linear combinations of each of the basis functions. The coefficients of those combinations are specified in <em>theta</em>. Each individual spline curve represents a specific linear combination of a particular set of basis functions. In exploring, we can look at a single curve or multiple curves, depending on whether or not we specify theta as a vector (single) or matrix (multiple).</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>
 
 <span class="co"># number of elements in theta: length(knots) + degree + 1</span>
@@ -136,7 +138,7 @@
 
 <span class="fu"><a href="../reference/viewSplines.html">viewSplines</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">2</span>, <span class="va">theta1</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">theta2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.6</span>, 
                   <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.8</span>, <span class="fl">1.0</span>, <span class="fl">0.9</span>, <span class="fl">0.4</span>, 
                   <span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.6</span>, <span class="fl">0.1</span><span class="op">)</span>,
@@ -151,21 +153,21 @@
 <span class="co">## [5,]  0.2  1.0  0.1</span>
 <span class="co">## [6,]  0.3  0.9  0.6</span>
 <span class="co">## [7,]  0.6  0.4  0.1</span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/viewSplines.html">viewSplines</a></span><span class="op">(</span><span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span>, <span class="va">theta2</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-3-2.png" width="576"></p>
 <p>We can generate data using a predictor in an existing data set by specifying the <em>knots</em> (in terms of quantiles), a vector of coefficients in <em>theta</em>, the degree of the polynomial, as well as a range</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ddef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"age"</span>, formula <span class="op">=</span> <span class="st">"20;60"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span><span class="op">)</span>
 
 <span class="va">theta1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span>
 <span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span></code></pre></div>
 <p>Here is the shape of the curve that we want to generate data from:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/viewSplines.html">viewSplines</a></span><span class="op">(</span>knots <span class="op">=</span> <span class="va">knots</span>, theta <span class="op">=</span> <span class="va">theta1</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>Now we specify the variables in the data set and generate the data:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">234</span><span class="op">)</span>
 
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">ddef</span><span class="op">)</span>
@@ -175,7 +177,7 @@
                 newrange <span class="op">=</span> <span class="st">"90;160"</span>,
                 noise.var <span class="op">=</span> <span class="fl">64</span><span class="op">)</span></code></pre></div>
 <p>Here’s a plot of the data with a smoothed line fit to the data:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>, y<span class="op">=</span><span class="va">weight</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey65"</span>, size <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>se<span class="op">=</span><span class="cn">FALSE</span>, color<span class="op">=</span><span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">1</span>, method <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span> <span class="op">+</span>
@@ -183,7 +185,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spline_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <p>Finally, we will fit three different spline models to the data - a linear, a quadratic, and a cubic - and plot the predicted values:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># normalize age for best basis functions</span>
 <span class="va">dt</span><span class="op">[</span>, <span class="va">nage</span> <span class="op">:=</span> <span class="op">(</span><span class="va">age</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> 
 

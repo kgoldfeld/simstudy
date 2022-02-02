@@ -116,6 +116,8 @@
 
     
     
+<pre><code><span class="co">## Warning in register(): Can't find generic `scale_type` in package ggplot2 to</span>
+<span class="co">## register S3 method.</span></code></pre>
 <p>The <code>simstudy</code> package is a collection of functions that allows users to generate simulated data sets to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster-randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
 <p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create data sets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> data sets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
 <p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean <span class="math inline">\(\mu\)</span> (or <span class="math inline">\(\log(\mu)\)</span>) and a dispersion <span class="math inline">\(d\)</span>, rather than shape <span class="math inline">\(\alpha\)</span> and rate <span class="math inline">\(\beta\)</span> parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling <span class="math inline">\(\mu\)</span> (or some function of <span class="math inline">\((\mu)\)</span>), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.</p>
@@ -160,7 +162,7 @@
 </tbody>
 </table>
 <p>These definition tables can be generated in two ways. One option is to use any external editor that allows the creation of .csv files, which can be read in with a call to <code>defRead</code>. An alternative is to make repeated calls to the function <code>defData</code>. This script builds a definition table internally:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"age"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">10</span>,
     variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"female"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>,
@@ -174,7 +176,7 @@
 <h3 id="generating-the-data">Generating the data<a class="anchor" aria-label="anchor" href="#generating-the-data"></a>
 </h3>
 <p>After the data set definitions have been created, a new data set with <span class="math inline">\(n\)</span> observations can be created with a call to function <strong><code>genData</code></strong>. In this example, 1,000 observations are generated using the data set definitions in <strong><code>def</code></strong>, and then stored in the object <strong><code>dd</code></strong>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">87261</span><span class="op">)</span>
 
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">def</span><span class="op">)</span>
@@ -192,7 +194,7 @@
 <span class="co">##  999:  999  9.28      0      2</span>
 <span class="co">## 1000: 1000 10.80      1      2</span></code></pre>
 <p>If no data definition is provided, a simple data set is created with just id’s.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##         id</span>
 <span class="co">##    1:    1</span>
@@ -211,7 +213,7 @@
 <h3 id="assigning-treatmentexposure">Assigning treatment/exposure<a class="anchor" aria-label="anchor" href="#assigning-treatmentexposure"></a>
 </h3>
 <p>In many instances, the data generation process will involve a treatment or exposure. While it is possible to generate a treatment or exposure variable directly using the data definition process, <code>trtAssign</code> and <code>trtObserve</code> offer the ability to generate more involved types of study designs. In particular, with <code>trtAssign</code>, balanced and stratified designs are possible.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, strata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"female"</span><span class="op">)</span>,
     grpName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span>
 <span class="va">study1</span></code></pre></div>
@@ -227,7 +229,7 @@
 <span class="co">##  998:  998  6.84      0      1  1</span>
 <span class="co">##  999:  999  9.28      0      2  1</span>
 <span class="co">## 1000: 1000 10.80      1      2  3</span></code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study1</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">female</span>, <span class="va">rx</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <pre><code><span class="co">##    female rx   N</span>
 <span class="co">## 1:      0  1 249</span>
@@ -247,7 +249,7 @@
 </h3>
 <p>The data definition table for a new data set is constructed sequentially. As each new row or variable is added, the formula (and in some cases the variance) can refer back to a previously defined variable. The first row by necessity cannot refer to another variable, so the formula must be a specific value (i.e. not a string formula). Starting with the second row, the formula can either be a value or any valid <code>R</code> equation with quotes and can include any variables previously defined.</p>
 <p>In the definition we created above, the probability being <strong>female</strong> is a function of <strong>age</strong>, which was previously defined. Likewise, the number of <strong>visits</strong> is a function of both <strong>age</strong> and <strong>female</strong>. Since <strong>age</strong> is the first row in the table, we had to use a scalar to define the mean.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"age"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">10</span>,
     variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"female"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>,
@@ -255,7 +257,7 @@
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"visits"</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>,
     formula <span class="op">=</span> <span class="st">"1.5 - 0.2 * age + 0.5 * female"</span>, link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span></code></pre></div>
 <p>Formulas can include <code>R</code> functions or user-defined functions. Here is an example with a user-defined function <code>myinv</code> and the <code>log</code> function from base <code>R</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">myinv</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="fl">1</span><span class="op">/</span><span class="va">x</span>
 <span class="op">}</span>
@@ -273,13 +275,13 @@
 <span class="co">## 4:  4  9.10     -2.42</span>
 <span class="co">## 5:  5 10.18     -2.21</span></code></pre>
 <p>Replication is an important aspect of data simulation - it is often very useful to generate data under different sets of assumptions. <code>simstudy</code> facilitates this in at least two different ways. There is function <code>updateDef</code> which allows row by row changes of a data definition table. In this case, we are changing the formula of <strong>loginvage</strong> in <strong>def</strong> so that it uses the function <code>log10</code> instead of <code>log</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">def10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span><span class="va">def</span>, changevar <span class="op">=</span> <span class="st">"loginvage"</span>, newformula <span class="op">=</span> <span class="st">"log10(myinv(age))"</span><span class="op">)</span>
 <span class="va">def10</span></code></pre></div>
 <pre><code><span class="co">##      varname           formula variance   dist     link</span>
 <span class="co">## 1:       age                10        2 normal identity</span>
 <span class="co">## 2: loginvage log10(myinv(age))      0.1 normal identity</span></code></pre>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">def10</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    id   age loginvage</span>
 <span class="co">## 1:  1  9.82    -0.338</span>
@@ -288,7 +290,7 @@
 <span class="co">## 4:  4  9.74    -0.882</span>
 <span class="co">## 5:  5 10.11    -1.519</span></code></pre>
 <p>A more powerful feature of <code>simstudy</code> that allows for dynamic definition tables is the external reference capability through the <em>double-dot</em> notation. Any variable reference in a formula that is preceded by “..” refers to an externally defined variable:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">age_effect</span> <span class="op">&lt;-</span> <span class="fl">3</span>
 
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"age"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">2</span>,
@@ -300,13 +302,13 @@
 <pre><code><span class="co">##    varname            formula variance      dist     link</span>
 <span class="co">## 1:     age                 10        2    normal identity</span>
 <span class="co">## 2: agemult age * ..age_effect        0 nonrandom identity</span></code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">def</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    id  age agemult</span>
 <span class="co">## 1:  1 9.69    29.1</span>
 <span class="co">## 2:  2 9.63    28.9</span></code></pre>
 <p>But the real power of dynamic definition is seen in the context of iteration over multiple values:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">age_effects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>
 <span class="va">list_of_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
 
@@ -580,7 +582,7 @@
 <h2 id="generating-multiple-variables-with-a-single-definition">Generating multiple variables with a single definition<a class="anchor" aria-label="anchor" href="#generating-multiple-variables-with-a-single-definition"></a>
 </h2>
 <p><code>defRepeat</code> allows us to specify multiple versions of a variable based on a single set of distribution assumptions. The function will add <code>nvar</code> variables to the <em>data definition</em> table, each of which will be specified with a single set of distribution assumptions. The names of the variables will be based on the <code>prefix</code> argument and the distribution assumptions are specified as they are in the <code>defData</code> function. Calls to <code>defRepeat</code> can be integrated with calls to <code>defData</code>.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defRepeat.html">defRepeat</a></span><span class="op">(</span>nVars <span class="op">=</span> <span class="fl">4</span>, prefix <span class="op">=</span> <span class="st">"g"</span>, formula <span class="op">=</span> <span class="st">"1/3;1/3;1/3"</span>,
     variance <span class="op">=</span> <span class="fl">0</span>, dist <span class="op">=</span> <span class="st">"categorical"</span><span class="op">)</span>
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"a"</span>, formula <span class="op">=</span> <span class="st">"1;1"</span>, dist <span class="op">=</span> <span class="st">"trtAssign"</span><span class="op">)</span>
@@ -608,7 +610,7 @@
 <h3 id="defdataadddefrepeataddreaddataadd-and-addcolumns">defDataAdd/defRepeatAdd/readDataAdd and addColumns<a class="anchor" aria-label="anchor" href="#defdataadddefrepeataddreaddataadd-and-addcolumns"></a>
 </h3>
 <p>There are several important functions that facilitate the augmentation of data sets. <code>defDataAdd</code>, <code>defRepeatAdd</code>, and <code>readDataAdd</code> are similar to their counterparts <code>defData</code>, <code>defRepeat</code>, and <code>readData</code>, respectively; they create data definition tables that will be used by the function <code>addColumns</code>. The formulas in these “<em>add</em>-ing” functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span>,
     dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
 <span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span>
@@ -627,7 +629,7 @@
 <span class="co">## 3:  3 -0.4064  1  0</span>
 <span class="co">## 4:  4 -0.5562  1  0</span>
 <span class="co">## 5:  5 -0.0941  0  1</span></code></pre>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">d2</span>, <span class="va">dd</span><span class="op">)</span>
 <span class="va">dd</span></code></pre></div>
 <pre><code><span class="co">##    id      x1 x2 rx    q1    q2 y</span>
@@ -642,7 +644,7 @@
 </h3>
 <p>In certain situations, it might be useful to define a data distribution conditional on previously generated data in a way that is more complex than might be easily handled by a single formula. <code>defCondition</code> creates a special table of definitions and the new variable is added to an existing data set by calling <code>addCondition</code>. <code>defCondition</code> specifies a condition argument that will be based on a variable that already exists in the data set. The new variable can take on any <code>simstudy</code> distribution specified with the appropriate <code>formula</code>, <code>variance</code>, and <code>link</code> arguments.</p>
 <p>In this example, the slope of a regression line of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> varies depending on the value of the predictor <span class="math inline">\(x\)</span>:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">9</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
 
 <span class="va">dc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defCondition.html">defCondition</a></span><span class="op">(</span>condition <span class="op">=</span> <span class="st">"x &lt;= -2"</span>, formula <span class="op">=</span> <span class="st">"4 + 3*x"</span>,
