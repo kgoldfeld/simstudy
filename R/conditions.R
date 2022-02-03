@@ -49,6 +49,58 @@ lengthError <- function(names,
     stop(c)
 }
 
+#' Order Error
+#'
+#' @param name Name of the incorrectly ordered vector
+#' @param prop Which property should hold e.g. "ascending".
+#' @param call sys.call to pass on to the error.
+#' @param msg Error message as glueCollapse'able string.
+#' @noRd
+orderError <- function(name,
+                        prop = "ascending",
+                        call = sys.call(-1),
+                        msg = "{ name } should be in { prop } order!", ...) {
+  c <- condition(
+    c("simstudy::wrongOrder", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
+}
+
+#' Positive Error
+#'
+#' @param name Name of the vector with non-positive values
+#' @param prop Which property should hold e.g. "positive".
+#' @param call sys.call to pass on to the error.
+#' @param msg Error message as glueCollapse'able string.
+#' @noRd
+signError <- function(name,
+                       prop = "positive",
+                       call = sys.call(-1),
+                       msg = "{ name } should be { prop}!", ...) {
+  c <- condition(
+    c("simstudy::wrongSign", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
+}
+
+#' Probability Error
+#'
+#' @param name Name of the vector with improper probabilities
+#' @param call sys.call to pass on to the error.
+#' @param msg Error message as glueCollapse'able string.
+#' @noRd
+probError <- function(name,
+                call = sys.call(-1),
+                msg = "probabilities { name } should all be between 0 and 1!", ...) {
+  c <- condition(
+    c("simstudy::probError", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
+}
+
 #' Wrong Class Error
 #'
 #' @param names Names of the vars.

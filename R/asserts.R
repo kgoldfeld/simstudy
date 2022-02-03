@@ -209,6 +209,66 @@ assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
     }
 }
 
+#' Is vector in ascending order?
+#'
+#' @description Checks if passed vector is in ascending order
+#' @param vec Vector under consideration
+#' @noRd
+assertAscending <- function(vec, call = sys.call(-1)) {
+  
+  name <- deparse(substitute(vec))
+  ascending <- all(vec[order(vec)] == vec)
+  
+  if (!ascending) {
+    orderError(name, "ascending", call = call)
+  }
+}
+
+#' Is vector in descending order?
+#'
+#' @description Checks if passed vector is in descending order
+#' @param vec Vector under consideration
+#' @noRd
+assertDescending <- function(vec, call = sys.call(-1)) {
+  
+  name <- deparse(substitute(vec))
+  descending <- all(vec[rev(order(vec))] == vec)
+  
+  if (!descending) {
+    orderError(name, "descending", call = call)
+  }
+}
+
+#' Are all elements of vector positive?
+#'
+#' @description Checks if passed vector is includes only positive values
+#' @param vec Vector under consideration
+#' @noRd
+assertPositive <- function(vec, call = sys.call(-1)) {
+  
+  name <- deparse(substitute(vec))
+  positive <- all(vec > 0)
+  
+  if (!positive) {
+    signError(name, "positive", call = call)
+  }
+}
+
+#' Are all elements of vector probabilities?
+#'
+#' @description Checks if passed vector is includes only proper probabilities
+#' @param vec Vector under consideration
+#' @noRd
+assertProbability <- function(vec, call = sys.call(-1)) {
+  
+  name <- deparse(substitute(vec))
+  probability <- all(vec >= 0 & vec <= 1)
+
+  if (!probability) {
+    probError(name, call = call)
+  }
+}
+
 #' Ensure Length
 #'
 #' @description Ensures that var is of length n or 1. Repeats the value n
