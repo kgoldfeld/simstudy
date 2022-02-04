@@ -1,5 +1,8 @@
 # simstudy (development version)
 
+## New features
+*Added utility functions survGetParams and survPlot to aid users in identifying parameters that can be used to generate desired distributions of time to event data.
+
 # simstudy 0.4.0
 
 ## New features
