@@ -79,3 +79,42 @@ test_that("genMixFormula works.", {
     "..a[[1]] | 0.333333333333333 + ..a[[2]] | 0.333333333333333 + ..a[[3]] | 0.333333333333333"
   )
 })
+
+# survGetParams ----
+
+test_that("survGetParams throws errors.", {
+  expect_error(survGetParams(), class = "simstudy::missingArgument")
+  expect_error(survGetParams(c(100, .5)), class = "simstudy::wrongClass")
+  points <- list(c(280, 0.85), c(165, .45))
+  expect_error(survGetParams(points), class = "simstudy::wrongOrder")
+  points <- list(c(80, 0.45), c(165, .55))
+  expect_error(survGetParams(points), class = "simstudy::wrongOrder")
+  points <- list(c(-280, 0.85), c(165, .45))
+  expect_error(survGetParams(points), class = "simstudy::wrongSign")
+  points <- list(c(28, 1.85), c(365, .45))
+  expect_error(survGetParams(points), class = "simstudy::probError")
+})
+
+test_that("survGetParam works.", {
+  points <- list(c(50, 0.90), c(100, 0.10))
+  expect_equal(survGetParams(points), c(-19.658, 0.225), tolerance = .001)
+  points <- list(c(60, 0.90), c(100, .75), c(200, .25), c(250, .10))
+  expect_equal(survGetParams(points), c(-11.206, 0.459), tolerance = .001)
+})
+
+# plotSurv ----
+
+test_that("survPlot throws errors.", {
+  expect_error(survPlot(), class = "simstudy::missingArgument")
+  expect_error(survPlot(f=-10), class = "simstudy::missingArgument")
+  expect_error(survPlot(f=4, shape=-1), class = "simstudy::wrongSign")
+})
+
+test_that("survPlot works.", {
+  expect_is(survPlot(f = -4, shape = 1), class="ggplot")
+  
+  points <- list(c(100, .8), c(200, .5))
+  r <- survGetParams(points)
+  expect_is(survPlot(f = r[1], shape = r[2], points = points), class="ggplot")
+  
+})

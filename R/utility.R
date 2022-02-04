@@ -800,6 +800,7 @@ survGetParams <- function(points) {
 survPlot <- function(f, shape, points = NULL, n = 100, scale = 1) {
   
   assertNotMissing(f = missing(f), shape = missing(shape))
+  assertPositive(shape)
   
   # "declares" to avoid global NOTE
   
@@ -831,8 +832,8 @@ survPlot <- function(f, shape, points = NULL, n = 100, scale = 1) {
     dpoints <- as.data.frame(do.call(rbind, points))  
     return(
       p +     
-        ggplot2:: geom_point(data = dpoints, ggplot2::aes(x = V1, y = V2), 
-                   pch = 21, fill = "#DCC949", size = 2.5) 
+        ggplot2::geom_point(data = dpoints, ggplot2::aes(x = V1, y = V2), 
+                    pch = 21, fill = "#DCC949", size = 2.5) 
     )
   } else return(p)
   
