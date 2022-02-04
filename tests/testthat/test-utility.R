@@ -104,17 +104,17 @@ test_that("survGetParam works.", {
 
 # plotSurv ----
 
-test_that("survPlot throws errors.", {
-  expect_error(survPlot(), class = "simstudy::missingArgument")
-  expect_error(survPlot(f=-10), class = "simstudy::missingArgument")
-  expect_error(survPlot(f=4, shape=-1), class = "simstudy::wrongSign")
+test_that("survParamPlot throws errors.", {
+  expect_error(survParamPlot(), class = "simstudy::missingArgument")
+  expect_error(survParamPlot(f=-10), class = "simstudy::missingArgument")
+  expect_error(survParamPlot(f=4, shape=-1), class = "simstudy::wrongSign")
 })
 
-test_that("survPlot works.", {
-  expect_is(survPlot(f = -4, shape = 1), class="ggplot")
+test_that("survParamPlot works.", {
+  expect_is(survParamPlot(f = -4, shape = 1), class="ggplot")
   
   points <- list(c(100, .8), c(200, .5))
   r <- survGetParams(points)
-  expect_is(survPlot(f = r[1], shape = r[2], points = points), class="ggplot")
+  expect_is(survParamPlot(f = r[1], shape = r[2], points = points), class="ggplot")
   
 })

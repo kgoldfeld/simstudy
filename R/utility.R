@@ -793,11 +793,11 @@ survGetParams <- function(points) {
 #' @examples
 #' points <- list(c(60, 0.90), c(100, .75), c(200, .25), c(250, .10))
 #' r <- survGetParams(points)
-#' survPlot(r[1], r[2])
-#' survPlot(r[1], r[2], points = points)
+#' survParamPlot(r[1], r[2])
+#' survParamPlot(r[1], r[2], points = points)
 #' @export
 #' @concept utility
-survPlot <- function(f, shape, points = NULL, n = 100, scale = 1) {
+survParamPlot <- function(f, shape, points = NULL, n = 100, scale = 1) {
   
   assertNotMissing(f = missing(f), shape = missing(shape))
   assertPositive(shape)
