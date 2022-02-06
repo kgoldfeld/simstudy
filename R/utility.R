@@ -758,7 +758,7 @@ survGetParams <- function(points) {
       ( params[2]*(log(-log(a[2])) - params[1]) - log(a[1]) ) ^ 2
     }
     
-    sum(sapply(points, function(a) loss(a, params)))
+    sum(vapply(points, function(a) loss(a, params), FUN.VALUE = numeric(1)))
     
   }
   
