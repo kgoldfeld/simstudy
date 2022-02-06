@@ -779,7 +779,7 @@ survGetParams <- function(points) {
 #' Plot survival curves
 #' 
 #' @param f This is the "formula" parameter of the Weibull-based survival curve
-#' that can be used to define the scale of the distribution
+#' that can be used to define the scale of the distribution.
 #' @param shape The parameter that defines the shape of the distribution.
 #' @param points An optional list of two-element vectors specifying the desired 
 #' time and probability pairs that define the desired survival curve. If no list
