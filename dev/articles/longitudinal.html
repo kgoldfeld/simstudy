@@ -116,10 +116,8 @@
 
     
     
-<pre><code><span class="co">## Warning in register(): Can't find generic `scale_type` in package ggplot2 to</span>
-<span class="co">## register S3 method.</span></code></pre>
 <p>To simulate longitudinal data, we start with a ‘cross-sectional’ data set and convert it to a time-dependent data set. The original cross-sectional data set may or may not include time-dependent data in the columns. In the next example, we measure outcome <code>Y</code> once before and twice after intervention <code>T</code> in a randomized trial:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"T"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
 <span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">tdef</span>, varname <span class="op">=</span> <span class="st">"Y0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">tdef</span>, varname <span class="op">=</span> <span class="st">"Y1"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"Y0 + 5 + 5 * T"</span>,
@@ -144,7 +142,7 @@
 <span class="co">## 499: 499 0 11.875659 17.94330 23.04687</span>
 <span class="co">## 500: 500 0 11.923223 18.39068 22.50220</span></code></pre>
 <p>Longitudinal data are created with a call to <strong><code>addPeriods</code></strong>. If the cross-sectional data includes time-dependent data, then the number of periods <code>nPeriods</code> must be the same as the number of time-dependent columns. If a variable is not declared as one of the <code>timevars</code>, it will be repeated each time period. In this example, the treatment indicator <code>T</code> is not specified as a time-dependent variable. (Note: if there are two time-dependent variables, it is best to create two data sets and merge them. This will be shown later in the vignette).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">dtTrial</span>, nPeriods <span class="op">=</span> <span class="fl">3</span>, idvars <span class="op">=</span> <span class="st">"id"</span>, timevars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Y0"</span>, <span class="st">"Y1"</span>,
     <span class="st">"Y2"</span><span class="op">)</span>, timevarName <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span>
 <span class="va">dtTime</span></code></pre></div>
@@ -167,7 +165,7 @@
 </h2>
 <p>It is also possible to generate longitudinal data with varying numbers of measurement periods as well as varying time intervals between each measurement period. This is done by defining specific variables in the data set that define the number of observations per subject and the average interval time between each observation. <code>nCount</code> defines the number of measurements for an individual; <code>mInterval</code> specifies the average time between intervals for a subject; and <code>vInterval</code> specifies the variance of those interval times. If <code>vInterval</code> is set to 0 or is not defined, the interval for a subject is determined entirely by the mean interval. If <code>vInterval</code> is greater than 0, time intervals are generated using a gamma distribution with mean and dispersion specified.</p>
 <p>In this simple example, the cross-sectional data generates individuals with a different number of measurement observations and different times between each observation. Data for two of these individuals is printed:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xbase"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">20</span>, variance <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"nCount"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
 <span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"mInterval"</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, formula <span class="op">=</span> <span class="fl">30</span>, variance <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>
@@ -179,7 +177,7 @@
 <span class="co">## 1:   8 18.01478      4  28.10234      0.07</span>
 <span class="co">## 2: 121 22.69431      6  33.21150      0.07</span></code></pre>
 <p>The resulting longitudinal data for these two subjects can be inspected after a call to <code>addPeriods</code>. Notice that no parameters need to be set since all information resides in the data set itself:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtPeriod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span>
 <span class="va">dtPeriod</span><span class="op">[</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span>  <span class="co"># View individuals 8 and 121 only</span></code></pre></div>
 <pre><code><span class="co">##      id period    xbase time timeID</span>
@@ -194,7 +192,7 @@
 <span class="co">##  9: 121      4 22.69431  154    695</span>
 <span class="co">## 10: 121      5 22.69431  180    696</span></code></pre>
 <p>If a time-sensitive measurement is added to the data set …</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"Y"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"15 + .1 * time"</span>, variance <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="va">dtPeriod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">def2</span>, <span class="va">dtPeriod</span><span class="op">)</span></code></pre></div>
 <p>… a plot of five randomly selected individuals looks like this:</p>
