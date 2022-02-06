@@ -4,11 +4,11 @@
 \alias{survParamPlot}
 \title{Plot survival curves}
 \usage{
-survParamPlot(f, shape, points = NULL, n = 100, scale = 1)
+survParamPlot(formula, shape, points = NULL, n = 100, scale = 1)
 }
 \arguments{
-\item{f}{This is the "formula" parameter of the Weibull-based survival curve
-that can be used to define the scale of the distribution}
+\item{formula}{This is the "formula" parameter of the Weibull-based survival curve
+that can be used to define the scale of the distribution.}
 
 \item{shape}{The parameter that defines the shape of the distribution.}
 

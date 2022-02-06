@@ -625,6 +625,13 @@ updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
 #' @concept utility
 #' @concept splines
 viewBasis <- function(knots, degree) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
 
   # 'declare vars'
   value <- NULL
@@ -688,6 +695,13 @@ viewBasis <- function(knots, degree) {
 #' @concept splines
 #' @concept utility
 viewSplines <- function(knots, degree, theta) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
 
   # 'declare'
 
@@ -762,7 +776,7 @@ survGetParams <- function(points) {
     
   }
   
-  r <- stats::optim(
+  optim_results <- stats::optim(
     par = c(1, 1), 
     fn = loss_surv, 
     points = points,
@@ -771,14 +785,14 @@ survGetParams <- function(points) {
     upper = c(Inf, Inf)
   )
   
-  if (r$convergence !=0) stop("Optimization did not converge")
+  if (optim_results$convergence !=0) stop("Optimization did not converge")
   
-  return(r$par)
+  return(optim_results$par)
 }
 
 #' Plot survival curves
 #' 
-#' @param f This is the "formula" parameter of the Weibull-based survival curve
+#' @param formula This is the "formula" parameter of the Weibull-based survival curve
 #' that can be used to define the scale of the distribution.
 #' @param shape The parameter that defines the shape of the distribution.
 #' @param points An optional list of two-element vectors specifying the desired 
@@ -797,9 +811,16 @@ survGetParams <- function(points) {
 #' survParamPlot(r[1], r[2], points = points)
 #' @export
 #' @concept utility
-survParamPlot <- function(f, shape, points = NULL, n = 100, scale = 1) {
+survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1) {
   
-  assertNotMissing(f = missing(f), shape = missing(shape))
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
+  
+  assertNotMissing(formula = missing(formula), shape = missing(shape))
   assertPositive(shape)
   
   # "declares" to avoid global NOTE
@@ -812,10 +833,10 @@ survParamPlot <- function(f, shape, points = NULL, n = 100, scale = 1) {
   u <- seq(1, 0.001, length = n)
   
   dd <- data.table::data.table(
-    f = f,
+    formula = formula,
     scale = scale,
     shape = shape,
-    T = (-(log(u)*scale/exp(f)))^(shape),
+    T = (-(log(u)*scale/exp(formula)))^(shape),
     p = round(1 - cumsum(rep(1/length(u), length(u))), 3)
   )
   
