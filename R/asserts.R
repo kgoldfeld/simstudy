@@ -256,7 +256,7 @@ assertPositive <- function(vec, call = sys.call(-1)) {
 
 #' Are all elements of vector probabilities?
 #'
-#' @description Checks if passed vector is includes only proper probabilities
+#' @description Checks if passed vector includes only proper probabilities
 #' @param vec Vector under consideration
 #' @noRd
 assertProbability <- function(vec, call = sys.call(-1)) {
