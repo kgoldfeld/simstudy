@@ -743,7 +743,7 @@ survGetParams <- function(points) {
   assertNotMissing(points = missing(points))
   assertClass(points = points, class = "list")
   
-  time <- sapply(points, function(x) x[1])
+  time <- vapply(points, function(x) x[1], FUN.VALUE = numeric(1))
   p <- sapply(points, function(x) x[2])
   
   assertPositive(time)
