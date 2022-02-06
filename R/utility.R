@@ -744,7 +744,7 @@ survGetParams <- function(points) {
   assertClass(points = points, class = "list")
   
   time <- vapply(points, function(x) x[1], FUN.VALUE = numeric(1))
-  p <- sapply(points, function(x) x[2])
+  p <- vapply(points, function(x) x[2],  FUN.VALUE = numeric(1))
   
   assertPositive(time)
   assertAscending(time)
