@@ -625,6 +625,13 @@ updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
 #' @concept utility
 #' @concept splines
 viewBasis <- function(knots, degree) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
 
   # 'declare vars'
   value <- NULL
@@ -688,6 +695,13 @@ viewBasis <- function(knots, degree) {
 #' @concept splines
 #' @concept utility
 viewSplines <- function(knots, degree, theta) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
 
   # 'declare'
 
@@ -712,7 +726,6 @@ viewSplines <- function(knots, degree, theta) {
 
   dx[, Spline := factor(index)]
 
-
   p <- ggplot2::ggplot(data = dx) +
     ggplot2::geom_line(ggplot2::aes(x = x, y = y.spline, color = Spline), size = 1) +
     ggplot2::scale_y_continuous(limits = c(0, 1)) +
@@ -725,4 +738,124 @@ viewSplines <- function(knots, degree, theta) {
   }
 
   return(p)
+}
+
+#' Get survival curve parameters
+#'
+#' @param points A list of two-element vectors specifying the desired time and 
+#' probability pairs that define the desired survival curve
+#' @return A vector of parameters that define the survival curve optimized for
+#' the target points. The first element of the vector represents the "f"
+#' parameter and the second element represents the "shape" parameter.
+#' @examples
+#' points <- list(c(60, 0.90), c(100, .75), c(200, .25), c(250, .10))
+#' survGetParams(points)
+#' @export
+#' @concept utility
+survGetParams <- function(points) {
+  
+  assertNotMissing(points = missing(points))
+  assertClass(points = points, class = "list")
+  
+  time <- vapply(points, function(x) x[1], FUN.VALUE = numeric(1))
+  p <- vapply(points, function(x) x[2],  FUN.VALUE = numeric(1))
+  
+  assertPositive(time)
+  assertAscending(time)
+  
+  assertProbability(p)  
+  assertDescending(p)
+  
+  loss_surv <- function(params, points) {
+    
+    loss <- function(a, params) {
+      ( params[2]*(log(-log(a[2])) - params[1]) - log(a[1]) ) ^ 2
+    }
+    
+    sum(vapply(points, function(a) loss(a, params), FUN.VALUE = numeric(1)))
+    
+  }
+  
+  optim_results <- stats::optim(
+    par = c(1, 1), 
+    fn = loss_surv, 
+    points = points,
+    method = "L-BFGS-B", 
+    lower = c(-Inf, 0),
+    upper = c(Inf, Inf)
+  )
+  
+  if (optim_results$convergence !=0) stop("Optimization did not converge")
+  
+  return(optim_results$par)
+}
+
+#' Plot survival curves
+#' 
+#' @param formula This is the "formula" parameter of the Weibull-based survival curve
+#' that can be used to define the scale of the distribution.
+#' @param shape The parameter that defines the shape of the distribution.
+#' @param points An optional list of two-element vectors specifying the desired 
+#' time and probability pairs that define the desired survival curve. If no list
+#' is specified then the plot will not include any points.
+#' @param n The number of points along the curve that will be used to 
+#' define the line. Defaults to 100.
+#' @param scale An optional scale parameter that defaults to 1. If the value is 
+#' 1, the scale of the distribution is determined entirely by the argument "f".
+#' @return A ggplot of the survival curve defined by the specified parameters.
+#' If the argument points is specified, the plot will include them
+#' @examples
+#' points <- list(c(60, 0.90), c(100, .75), c(200, .25), c(250, .10))
+#' r <- survGetParams(points)
+#' survParamPlot(r[1], r[2])
+#' survParamPlot(r[1], r[2], points = points)
+#' @export
+#' @concept utility
+survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
+  
+  assertNotMissing(formula = missing(formula), shape = missing(shape))
+  assertPositive(shape)
+  
+  # "declares" to avoid global NOTE
+  
+  V1 <- NULL
+  V2 <- NULL
+  
+  ###
+  
+  u <- seq(1, 0.001, length = n)
+  
+  dd <- data.table::data.table(
+    formula = formula,
+    scale = scale,
+    shape = shape,
+    T = (-(log(u)*scale/exp(formula)))^(shape),
+    p = round(1 - cumsum(rep(1/length(u), length(u))), 3)
+  )
+  
+  p <- ggplot2::ggplot(data = dd, ggplot2::aes(x = T, y = p)) +
+    ggplot2::geom_line(size = 0.8) +
+    ggplot2::scale_y_continuous(limits = c(0,1), name = "probability of survival") +
+    ggplot2::scale_x_continuous(name = "time") +
+    ggplot2::theme(panel.grid = ggplot2::element_blank(),
+          axis.text = ggplot2::element_text(size = 7.5),
+          axis.title = ggplot2::element_text(size = 8, face = "bold")
+    )
+  
+  if (!is.null(points)) {
+    dpoints <- as.data.frame(do.call(rbind, points))  
+    return(
+      p +     
+        ggplot2::geom_point(data = dpoints, ggplot2::aes(x = V1, y = V2), 
+                    pch = 21, fill = "#DCC949", size = 2.5) 
+    )
+  } else return(p)
+  
 }
