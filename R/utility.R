@@ -757,8 +757,8 @@ survGetParams <- function(points) {
   assertNotMissing(points = missing(points))
   assertClass(points = points, class = "list")
   
-  time <- sapply(points, function(x) x[1])
-  p <- sapply(points, function(x) x[2])
+  time <- vapply(points, function(x) x[1], FUN.VALUE = numeric(1))
+  p <- vapply(points, function(x) x[2],  FUN.VALUE = numeric(1))
   
   assertPositive(time)
   assertAscending(time)
@@ -772,7 +772,7 @@ survGetParams <- function(points) {
       ( params[2]*(log(-log(a[2])) - params[1]) - log(a[1]) ) ^ 2
     }
     
-    sum(sapply(points, function(a) loss(a, params)))
+    sum(vapply(points, function(a) loss(a, params), FUN.VALUE = numeric(1)))
     
   }
   
