@@ -217,7 +217,7 @@ assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
 assertAscending <- function(vec, call = sys.call(-1)) {
   
   name <- deparse(substitute(vec))
-  ascending <- all(vec[order(vec)] == vec)
+  ascending <- all(vec[order(vec)] == vec) & (length(unique(vec)) == length(vec))
   
   if (!ascending) {
     orderError(name, "ascending", call = call)
@@ -232,7 +232,7 @@ assertAscending <- function(vec, call = sys.call(-1)) {
 assertDescending <- function(vec, call = sys.call(-1)) {
   
   name <- deparse(substitute(vec))
-  descending <- all(vec[rev(order(vec))] == vec)
+  descending <- all(vec[rev(order(vec))] == vec) & (length(unique(vec)) == length(vec))
   
   if (!descending) {
     orderError(name, "descending", call = call)

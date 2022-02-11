@@ -909,25 +909,71 @@ genSpline <- function(dt, newvar, predictor, theta,
 # proportional hazard models, SIM, 2005;24;1713-1723.
 #
 genSurv <- function(dtName, survDefs, digits = 3) {
+  
+  assertNotMissing(
+    dtName = missing(dtName),
+    survDefs = missing(survDefs),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtName = dtName, 
+    survDefs = survDefs, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+  
+  assertClass(digits = digits, class="numeric")
+  assertLength(digits = digits, length = 1, call = sys.call(-1))
 
   # 'declare
   varname <- NULL
   formula <- NULL
 
   dtSurv <- copy(dtName)
+  
+  unique_vars <- survDefs[, .N, keyby = varname][, varname]
+    
+  for (i in (seq_along(unique_vars))) {
+    
+    nlogu <--log(runif(nrow(dtSurv), min = 0, max = 1))
+    
+    subDef <- survDefs[varname == unique_vars[i]]
+    
+    shape <- dtSurv[, eval(parse(text = subDef[1, shape]))]
+    scale <- dtSurv[, eval(parse(text = subDef[1, scale]))]
+    formulas <- subDef[, formula]
+    
+    form1 <- dtSurv[, eval(parse(text = formulas[1])), keyby = id][, V1]
+    
+    if (nrow(subDef) > 1) {
+      
+      transition <- subDef[2, transition]
+      t_adj <- transition ^ (1/shape)
+     
+      form2 <- dtSurv[, eval(parse(text = formulas[2])), keyby = id][, V1]
+      
+      threshold <- exp(form1) * t_adj
+      period <- 1*(nlogu < threshold) + 2*(nlogu >= threshold)
+      
+      tempdt <- data.table(nlogu, form1, form2, period)
+      
+      tempdt[period == 1, survx := (nlogu/(scale*exp(form1)))^shape]
+      tempdt[period == 2, survx := ((nlogu - scale*exp(form1)*t_adj + scale*exp(form2)*t_adj)/(scale*exp(form2)))^shape]
+      
+      newColumn <- tempdt[, list(survx = round(survx, digits))]
+      
+    } else {
+    
+      tempdt <- data.table(nlogu, form1)
+      newColumn <-  
+        tempdt[, list(survx = round((nlogu/(scale*exp(form1)))^shape, digits))]
 
-  for (i in (1:nrow(survDefs))) {
-    shape <- dtSurv[, eval(parse(text = survDefs[i, shape]))]
-    scale <- dtSurv[, eval(parse(text = survDefs[i, scale]))]
-    survPred <- dtSurv[, eval(parse(text = survDefs[i, formula]))]
-
-    u <- stats::runif(n = nrow(dtSurv))
-
-    newColumn <- dtSurv[, list(survx = round((-(log(u) / ((1 / scale) * exp(survPred))))^(shape), digits)), ]
-
+    }
+    
     dtSurv <- data.table::data.table(dtSurv, newColumn)
-
-    data.table::setnames(dtSurv, "survx", as.character(survDefs[i, varname]))
+    data.table::setnames(dtSurv, "survx", as.character(subDef[1, varname]))
+    
   }
 
   return(dtSurv[])
