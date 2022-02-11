@@ -958,8 +958,8 @@ genSurv <- function(dtName, survDefs, digits = 3) {
       
       tempdt <- data.table(nlogu, form1, form2, period)
       
-      tempdt[period == 1, survx := (nlogu/(scale*exp(form1)))^shape]
-      tempdt[period == 2, survx := ((nlogu - scale*exp(form1)*t_adj + scale*exp(form2)*t_adj)/(scale*exp(form2)))^shape]
+      tempdt[period == 1, survx := (nlogu/((1/scale)*exp(form1)))^shape]
+      tempdt[period == 2, survx := ((nlogu - (1/scale)*exp(form1)*t_adj + (1/scale)*exp(form2)*t_adj)/((1/scale)*exp(form2)))^shape]
       
       newColumn <- tempdt[, list(survx = round(survx, digits))]
       
@@ -967,7 +967,7 @@ genSurv <- function(dtName, survDefs, digits = 3) {
     
       tempdt <- data.table(nlogu, form1)
       newColumn <-  
-        tempdt[, list(survx = round((nlogu/(scale*exp(form1)))^shape, digits))]
+        tempdt[, list(survx = round((nlogu/((1/scale)*exp(form1)))^shape, digits))]
 
     }
     
