@@ -874,7 +874,13 @@ genSpline <- function(dt, newvar, predictor, theta,
 #' @param dtName Name of complete data set
 #' @param survDefs Definitions of survival
 #' @param digits Number of digits for rounding
-#' @return Original matrix with survival time
+#' @param timeName A string to indicate the name of a combined competing risk
+#' time-to-event outcome that reflects the minimum observed value of all 
+#' time-to-event outcomes. Defaults to NULL, indicating that each time-to-event
+#' outcome will be included in dataset.
+#' @param censorName The name of a time to event variable that is the censoring
+#' variable. Will be ignored if timeName is NULL.
+#' @return Original data table with survival time
 #' @examples
 #' # Baseline data definitions
 #'
@@ -908,7 +914,28 @@ genSpline <- function(dt, newvar, predictor, theta,
 # source: Bender, Augustin, & Blettner, Generating survival times to simulate Cox
 # proportional hazard models, SIM, 2005;24;1713-1723.
 #
-genSurv <- function(dtName, survDefs, digits = 3) {
+genSurv <- function(dtName, survDefs, digits = 3, 
+             timeName = NULL, censorName = NULL) {
+  
+  # check that there are more than one survival variables being created
+  # when timeName is not NULL.
+  
+  # when timeName is not NULL, check to make sure name does not already exist.
+  
+  # when timeName is NULL, need to check no all time-to-event variables
+  # are already in data set.
+  
+  # if censorName is not null, need to check that one of the new variables is
+  # censorName
+  
+  # need to get id
+  
+  # option to set time name
+  
+  # option to set type name - change default?
+  
+  # create separate function for competingRisk so it can be called more 
+  # generally?
   
   assertNotMissing(
     dtName = missing(dtName),
@@ -975,6 +1002,28 @@ genSurv <- function(dtName, survDefs, digits = 3) {
     data.table::setnames(dtSurv, "survx", as.character(subDef[1, varname]))
     
   }
-
+  
+  if (!is.null(timeName)) {
+    
+    events <- survDefs[, unique(varname)]
+  
+    dtSurv[, time := min(sapply(1:length(events), 
+        function(a) get(events[a]))), keyby = id]
+    dtSurv[, event := which.min(sapply(1:length(events), 
+        function(a) get(events[a]))), keyby = id]
+    dtSurv[, type := events[event], keyby = id]
+   
+    # make this optional?
+    
+    for (i in seq_along(events)) { dtSurv[, events[i] := NULL] }
+   
+    if (!is.null(censorName)) {
+      dtSurv[type == censorName, event := 0 ]
+      dtSurv[, event := as.numeric(factor(event)) - 1]
+    }
+    
+    data.table::setnames(dtSurv, "time", timeName)
+  }
+  
   return(dtSurv[])
 }
