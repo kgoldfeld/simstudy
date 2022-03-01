@@ -859,3 +859,93 @@ survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1) {
   } else return(p)
   
 }
+
+#' Generating single competing risk survival varible
+#' 
+#' @param dtName Name of complete data set to be updated
+#' @param events Vector of column names that include
+#' time-to-event outcome measures
+#' @param timeName A string to indicate the name of the combined competing risk
+#' time-to-event outcome that reflects the minimum observed value of all 
+#' time-to-event outcomes.
+#' @param censorName The name of a time-to-event variable that is the censoring
+#' variable. Must be one of the "events" names. Defaults to NULL.
+#' @param eventName The name of the new numeric/integer column representing the
+#' competing event outcomes. If censorName is specified, the integer value for
+#' that event will be 0. Defaults to "event", but will be ignored 
+#' if timeName is NULL.
+#' @param typeName The name of the new character column that will indicate the
+#' event type. The type will be the unique variable names in survDefs. Defaults
+#' to "type", but will be ignored if timeName is NULL.
+#' @param keepEvents Indicator to retain original "events" columns. Defaults
+#' to FALSE.
+#' @param idName Name of id field in existing data set.
+#' @return An updated data table
+#' @examples
+#' d1 <- defData(varname = "x1", formula = .5, dist = "binary")
+#' d1 <- defData(d1, "x2", .5, dist = "binary")
+#' 
+#' dS <- defSurv(varname = "reinc", formula = "-10 - 0.6*x1 + 0.4*x2", shape = 0.3)
+#' dS <- defSurv(dS, "death", "-6.5 + 0.3*x1 - 0.5*x2", shape = 0.5)
+#' dS <- defSurv(dS, "censor", "-7", shape = 0.55)
+#' 
+#' dd <- genData(10, d1)
+#' dd <- genSurv(dd, dS)
+#' 
+#' addCompRisk(dd, c("reinc","death", "censor"), timeName = "time",
+#'    censorName = "censor", keepEvents = FALSE)
+#' 
+#' @export
+#' @concept utility
+addCompRisk <- function(dtName, events, timeName, 
+  censorName = NULL, eventName = "event", typeName = "type",
+  keepEvents = FALSE, idName = "id") {
+  
+  assertNotMissing(
+    dtName = missing(dtName),
+    events = missing(events),
+    timeName = missing(timeName),
+    call = sys.call(-1)
+  )
+  assertAtLeastLength(events = events, length = 2)
+  assertInDataTable(events, dtName)
+  if (!is.null(censorName)) {assertInDataTable(censorName, dtName)}
+  assertNotInDataTable(vars = c(eventName, typeName), dtName)
+  if (keepEvents == TRUE) assertNotInDataTable(vars = timeName, dtName)
+  assertInDataTable(idName, dtName)
+  
+  # 'declare'
+  time <- NULL
+  event <- NULL
+  type <- NULL
+  id <- NULL
+
+  dtSurv <- copy(dtName)
+  setnames(dtSurv, idName, "id")
+  
+  dtSurv[, time := min(sapply(1:length(events), 
+              function(a) get(events[a]))), keyby = id]
+  dtSurv[, event := which.min(sapply(1:length(events), 
+              function(a) get(events[a]))), keyby = id]
+  dtSurv[, type := events[event], keyby = id]
+  
+  if (! keepEvents) {
+    for (i in seq_along(events)) { dtSurv[, events[i] := NULL] }  
+  }
+  
+  if (!is.null(censorName)) {
+    dtSurv[type == censorName, event := 0 ]
+    dtSurv[, event := as.numeric(factor(event)) - 1]
+  }
+  
+  data.table::setnames(
+    dtSurv, 
+    c("time", "event", "type"),
+    c(timeName, eventName, typeName)
+  )
+  
+  setnames(dtSurv, "id", idName)
+  dtSurv[]
+}
+  
+  

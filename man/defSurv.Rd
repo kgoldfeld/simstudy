@@ -4,7 +4,14 @@
 \alias{defSurv}
 \title{Add single row to survival definitions}
 \usage{
-defSurv(dtDefs = NULL, varname, formula = 0, scale, shape = 1)
+defSurv(
+  dtDefs = NULL,
+  varname,
+  formula = 0,
+  scale = 1,
+  shape = 1,
+  transition = 0
+)
 }
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
@@ -17,6 +24,10 @@ defSurv(dtDefs = NULL, varname, formula = 0, scale, shape = 1)
 
 \item{shape}{The shape of the Weibull distribution. Shape = 1 for
 an exponential distribution}
+
+\item{transition}{An integer value indicating the starting point for a new
+specification of the hazard function. It will default to 0 (and must be 0)
+for the first instance of a "varname".}
 }
 \value{
 A data.table named dtName that is an updated data definitions table

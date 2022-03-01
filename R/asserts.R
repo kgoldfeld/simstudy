@@ -51,6 +51,25 @@ assertLength <- function(..., length, call = sys.call(-1)) {
     }
 }
 
+#' Is length correct?
+#'
+#' @description Checks if all passed vars are of at least 
+#' of length 'length'. Caveat: length(matrix) = numer of elements 
+#' but length(data.frame) = number of columns.
+#' @param length Length to check
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertAtLeastLength <- function(..., length, call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  correctLength <- lengths(dots$args) >= length
+  if (!all(correctLength)) {
+    lengthError(dots$names[!correctLength],
+      prop = length,
+      msg = "{ names *} should be at least length { prop }!", call = call
+    )
+  }
+}
+
 #' Check for Class
 #'
 #' @description Checks if all passed vars inherit from class.

@@ -871,7 +871,7 @@ genSpline <- function(dt, newvar, predictor, theta,
 
 #' @title Generate survival data
 #' @description Survival data is added to an existing data set.
-#' @param dtName Name of complete data set
+#' @param dtName Name of data set
 #' @param survDefs Definitions of survival
 #' @param digits Number of digits for rounding
 #' @param timeName A string to indicate the name of a combined competing risk
@@ -880,6 +880,16 @@ genSpline <- function(dt, newvar, predictor, theta,
 #' outcome will be included in dataset.
 #' @param censorName The name of a time to event variable that is the censoring
 #' variable. Will be ignored if timeName is NULL.
+#' @param eventName The name of the new numeric/integer column representing the
+#' competing event outcomes. If censorName is specified, the integer value for
+#' that event will be 0. Defaults to "event", but will be ignored 
+#' if timeName is NULL.
+#' @param typeName The name of the new character column that will indicate the
+#' event type. The type will be the unique variable names in survDefs. Defaults
+#' to "type", but will be ignored if timeName is NULL.
+#' @param keepEvents Indicator to retain original "events" columns. Defaults
+#' to FALSE.
+#' @param idName Name of id field in existing data set.
 #' @return Original data table with survival time
 #' @examples
 #' # Baseline data definitions
@@ -915,27 +925,8 @@ genSpline <- function(dt, newvar, predictor, theta,
 # proportional hazard models, SIM, 2005;24;1713-1723.
 #
 genSurv <- function(dtName, survDefs, digits = 3, 
-             timeName = NULL, censorName = NULL) {
-  
-  # check that there are more than one survival variables being created
-  # when timeName is not NULL.
-  
-  # when timeName is not NULL, check to make sure name does not already exist.
-  
-  # when timeName is NULL, need to check no all time-to-event variables
-  # are already in data set.
-  
-  # if censorName is not null, need to check that one of the new variables is
-  # censorName
-  
-  # need to get id
-  
-  # option to set time name
-  
-  # option to set type name - change default?
-  
-  # create separate function for competingRisk so it can be called more 
-  # generally?
+  timeName = NULL, censorName = NULL, eventName = "event", 
+  typeName = "type", keepEvents = FALSE, idName = "id") {
   
   assertNotMissing(
     dtName = missing(dtName),
@@ -950,22 +941,33 @@ genSurv <- function(dtName, survDefs, digits = 3,
     call = sys.call(-1)
   )
   
+  events <- unique(survDefs$varname)
+  
+  assertNotInDataTable(events, dtName)
+  
   assertClass(digits = digits, class="numeric")
   assertLength(digits = digits, length = 1, call = sys.call(-1))
+  assertInDataTable(idName, dtName)
 
   # 'declare
   varname <- NULL
   formula <- NULL
-
-  dtSurv <- copy(dtName)
+  N <- NULL
+  V1 <- NULL 
+  event  <- NULL
+  survx  <- NULL
+  time  <- NULL
+  type <- NULL
+  id <- NULL
   
-  unique_vars <- survDefs[, .N, keyby = varname][, varname]
+  dtSurv <- copy(dtName)
+  setnames(dtSurv, idName, "id")
+  
+  for (i in (seq_along(events))) {
     
-  for (i in (seq_along(unique_vars))) {
+    nlogu <--log(stats::runif(nrow(dtSurv), min = 0, max = 1))
     
-    nlogu <--log(runif(nrow(dtSurv), min = 0, max = 1))
-    
-    subDef <- survDefs[varname == unique_vars[i]]
+    subDef <- survDefs[varname == events[i]]
     
     shape <- dtSurv[, eval(parse(text = subDef[1, shape]))]
     scale <- dtSurv[, eval(parse(text = subDef[1, scale]))]
@@ -1005,25 +1007,11 @@ genSurv <- function(dtName, survDefs, digits = 3,
   
   if (!is.null(timeName)) {
     
-    events <- survDefs[, unique(varname)]
-  
-    dtSurv[, time := min(sapply(1:length(events), 
-        function(a) get(events[a]))), keyby = id]
-    dtSurv[, event := which.min(sapply(1:length(events), 
-        function(a) get(events[a]))), keyby = id]
-    dtSurv[, type := events[event], keyby = id]
-   
-    # make this optional?
+    dtSurv <- addCompRisk(dtSurv, events, timeName, censorName, 
+      eventName, typeName, keepEvents)
     
-    for (i in seq_along(events)) { dtSurv[, events[i] := NULL] }
-   
-    if (!is.null(censorName)) {
-      dtSurv[type == censorName, event := 0 ]
-      dtSurv[, event := as.numeric(factor(event)) - 1]
-    }
-    
-    data.table::setnames(dtSurv, "time", timeName)
   }
-  
+    
+  setnames(dtSurv, "id", idName)
   return(dtSurv[])
 }

@@ -556,6 +556,9 @@ defReadCond <- function(filen) {
 #' @param scale Scale parameter for the Weibull distribution.
 #' @param shape The shape of the Weibull distribution. Shape = 1 for
 #' an exponential distribution
+#' @param transition An integer value indicating the starting point for a new
+#' specification of the hazard function. It will default to 0 (and must be 0)
+#' for the first instance of a "varname". 
 #' @return A data.table named dtName that is an updated data definitions table
 #' @examples
 #' # Baseline data definitions
@@ -593,7 +596,8 @@ defSurv <- function(dtDefs = NULL,
                     shape = 1,
                     transition = 0) {
   
-  # check any arguments missing
+  # 'declare'
+  N <- NULL
   
   assertNotMissing(
     varname = missing(varname),
