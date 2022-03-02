@@ -203,5 +203,157 @@ dtSurv
 
 ### Introducing non-proportional hazards
 
+In the standard `simstudy` data generation process for survival/time-to-event outcomes that includes covariates that effect the hazard rate at various time points, the ratio of hazards comparing different levels of a covariate are constant across all time points. For example, if we have a single binary covariate $x$, the hazard $\lambda(t)$ at time $t$ is
+
+$$\lambda(t|x) = \lambda_0(t) e ^ {\beta x}$$ 
+where $\lambda_0(t)$ is a baseline hazard when $x=0$. The ratio of the hazards for $x=1$ compared to $x=0$ is
+
+$$\frac{\lambda_0(t) e ^ {\beta}}{\lambda_0(t)} = e ^ \beta,$$
+
+so the log of the hazard ratio is a constant $\beta$, and the hazard ratio is always $e^\beta$.
+
+However, we may not always want to make the assumption that the hazard ratio is constant over all time periods. To facilitate this, it is possible to specify two different data definitions for the same outcome, using the *transition* field to specify when the second definition replaces the first. (While it would theoretically be possible to generate data for more than two periods, the process is more involved, and has not been implemented at this time.)
+
+<br>
+
+**Constant/proportional hazard ratio**
+
+To start, here is an example assuming a constant log hazard ratio of -0.7:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "x", formula = .4, dist="binary")
+
+defS <- defSurv(varname = "death", formula = "-14.6 - 0.7*x", shape = .35)
+defS <- defSurv(defS, varname = "censor", scale = exp(13), shape = .5)
+
+dd <- genData(500, def)
+dd <- genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor")
+
+fit <- survfit( Surv(time, event) ~ x, data = dd )
+```
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette
+)
+```
+
+The Cox proportional hazards model recovers the correct log hazards rate:
+
+```{r}
+coxfit <- coxph(formula = Surv(time, event) ~ x, data = dd)
+```
+
+```{r, echo=FALSE}
+gtsummary::tbl_regression(coxfit)
+```
+
+We can test the assumption of proportional hazards using weighted residuals. If the $\text{p-value} < 0.05$, then we would conclude that the assumption of proportional hazards is not warranted. In this case $p = 0.22$, so the model is apparently reasonable:
+
+```{r}
+cox.zph(coxfit)
+```
+
+<br>
+
+**Non-constant/non-proportional hazard ratio**
+
+In this next case, the risk of death when $x=1$ is lower at all time points compared to when $x=0$, but the relative risk (or hazard ratio) changes at 150 days:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "x", formula = .4, dist="binary")
+
+defS <- defSurv(varname = "death", formula = "-14.6 - 1.3*x", shape = .35, transition = 0)
+defS <- defSurv(defS, varname = "death", formula = "-14.6 - 0.4*x", shape = .35, transition = 150)
+defS <- defSurv(defS, varname = "censor", scale = exp(13), shape = .5)
+
+dd <- genData(500, def)
+dd <- genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor")
+
+fit <- survfit( Surv(time, event) ~ x, data = dd )
+```
+
+The survival curve for the sample with $x=1$ has a slightly different shape under this data generation process compared to the previous example under a constant hazard ratio assumption; there is more separation early on (prior to day 150), and then the gap is closed at a quicker rate.
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette
+)
+```
+
+If we ignore the possibility that there might be a different relationship over time, the Cox proportional hazards model gives an estimate of the log hazard ratio quite close to -0.70:
+
+```{r}
+coxfit <- survival::coxph(formula = Surv(time, event) ~ x, data = dd)
+```
 
 
+```{r, echo=FALSE}
+gtsummary::tbl_regression(coxfit)
+```
+
+However, further inspection of the proportionality assumption should make us question the appropriateness of the model. Since $p<0.05$, we would be wise to see if we can improve on the model.
+
+```{r}
+cox.zph(coxfit)
+```
+
+We might be able to see from the plot where proportionality diverges, in which case we can split the data set into two parts at the identified time point. (In many cases, the transition point or points won't be so obvious, in which case the investigation might be more involved.) By splitting the data at day 150, we get the desired estimates:
+
+```{r}
+dd2 <- survSplit(Surv(time, event) ~ ., data= dd, cut=c(150),
+                 episode= "tgroup", id="newid")
+
+coxfit2 <- survival::coxph(Surv(tstart, time, event) ~ x:strata(tgroup), data=dd2)
+```
+
+```{r, echo=FALSE}
+gtsummary::tbl_regression(coxfit2)
+```
+
+And the diagnostic test of proportionality confirms the appropriateness of the model:
+
+```{r}
+cox.zph(coxfit2)
+```
+
+### Generating parameters for survival distribution
+
+Throughout this vignette, I have been using various assumptions for the parameters - *formula*, *scale*, and *shape* - that define the Weibull-based survival distribution. Where do these assumptions come from and how can we determine what is appropriate to use in our simulations? That will depend, of course, on each specific application and use of the simulation, but there are two helper functions in `simstudy`, `survGetParams` and `survParamPlot`, that are intended to guide the process.
+
+`survGetParams` will provide the *formula* and *shape* parameters (the *scale* parameter will always be set to 1) that define a curve close to points provided as inputs. For example, if we would like to find the parameters for a distribution where 80% survive until day 100, and 10% survive until day 200 (any number of points may be provided):
+
+```{r}
+points <- list(c(100, 0.80), c(200, 0.10))
+r <- survGetParams(points)
+r
+```
+
+We can visualize the curve that is defined by these parameters:
+
+```{r, tidy = TRUE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+survParamPlot(f = r[1], shape = r[2], points)
+```
+
+And we can generate data based on these parameters:
+
+```{r}
+
+defS <- defSurv(varname = "death", formula = -17, scale = 1, shape = 0.3)
+defS <- defSurv(defS, varname = "censor", formula = 0, scale = exp(18.5), shape = 0.3)
+
+dd <- genData(500)
+dd <- genSurv(dd, defS, timeName = "time", censorName = "censor")
+```
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+fit <- survfit( Surv(time, event) ~ 1, data = dd )
+
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette,
+                      legend = "none"
+)
+```
