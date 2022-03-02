@@ -909,38 +909,38 @@ addCompRisk <- function(dtName, events, timeName,
   )
   assertAtLeastLength(events = events, length = 2)
   assertInDataTable(events, dtName)
+  assertInDataTable(idName, dtName)
   if (!is.null(censorName)) {assertInDataTable(censorName, dtName)}
   assertNotInDataTable(vars = c(eventName, typeName), dtName)
   if (keepEvents == TRUE) assertNotInDataTable(vars = timeName, dtName)
-  assertInDataTable(idName, dtName)
   
   # 'declare'
-  time <- NULL
-  event <- NULL
-  type <- NULL
+  ..temp_time <- NULL
+  ..temp_event <- NULL
+  ..temp_type <- NULL
   id <- NULL
 
   dtSurv <- copy(dtName)
   setnames(dtSurv, idName, "id")
   
-  dtSurv[, time := min(sapply(1:length(events), 
+  dtSurv[, ..temp_time := min(sapply(1:length(events), 
               function(a) get(events[a]))), keyby = id]
-  dtSurv[, event := which.min(sapply(1:length(events), 
+  dtSurv[, ..temp_event := which.min(sapply(1:length(events), 
               function(a) get(events[a]))), keyby = id]
-  dtSurv[, type := events[event], keyby = id]
+  dtSurv[, ..temp_type := events[..temp_event], keyby = id]
   
   if (! keepEvents) {
     for (i in seq_along(events)) { dtSurv[, events[i] := NULL] }  
   }
   
   if (!is.null(censorName)) {
-    dtSurv[type == censorName, event := 0 ]
-    dtSurv[, event := as.numeric(factor(event)) - 1]
+    dtSurv[..temp_type == censorName, ..temp_event := 0 ]
+    dtSurv[, ..temp_event := as.numeric(factor(..temp_event)) - 1]
   }
   
   data.table::setnames(
     dtSurv, 
-    c("time", "event", "type"),
+    c("..temp_time", "..temp_event", "..temp_type"),
     c(timeName, eventName, typeName)
   )
   
