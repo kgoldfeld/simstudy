@@ -21,6 +21,15 @@ test_that("assertLength works", {
   expect_silent(assertLength(x = 1, z = "b", length = 1))
 })
 
+test_that("assertAtLeastLength works", {
+  expect_error(assertAtLeastLength(x = c("3", "4"), length = 3),
+               class = "simstudy::lengthMismatch"
+  )
+  expect_silent(assertAtLeastLength(x = c("3", "4", "5"), length = 2))
+})
+
+
+
 test_that("assertClass works.", {
   expect_error(assertClass(x = c(1, 2, 3), y = "b", class = "data.frame"), class = "simstudy::wrongClass")
   expect_silent(assertClass(x = c(1, 2, 3), class = "numeric"))

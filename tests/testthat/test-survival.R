@@ -1,3 +1,7 @@
+test_that("defSurv kicks out transition error", {
+  expect_error(defSurv(varname = "censor", formula="-7", shape = 0.55, transition = 150))
+})
+
 test_that("genSurv runs OK", {
   
   dS <- defSurv(varname = "event_1", formula = "-10", shape = 0.3)
