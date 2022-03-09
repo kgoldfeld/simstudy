@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,21 +90,53 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genSurv</span><span class="op">(</span><span class="va">dtName</span>, <span class="va">survDefs</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genSurv</span><span class="op">(</span>
+  <span class="va">dtName</span>,
+  <span class="va">survDefs</span>,
+  digits <span class="op">=</span> <span class="fl">3</span>,
+  timeName <span class="op">=</span> <span class="cn">NULL</span>,
+  censorName <span class="op">=</span> <span class="cn">NULL</span>,
+  eventName <span class="op">=</span> <span class="st">"event"</span>,
+  typeName <span class="op">=</span> <span class="st">"type"</span>,
+  keepEvents <span class="op">=</span> <span class="cn">FALSE</span>,
+  idName <span class="op">=</span> <span class="st">"id"</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtName</dt>
-<dd><p>Name of complete data set</p></dd>
+<dd><p>Name of data set</p></dd>
 <dt>survDefs</dt>
 <dd><p>Definitions of survival</p></dd>
 <dt>digits</dt>
 <dd><p>Number of digits for rounding</p></dd>
+<dt>timeName</dt>
+<dd><p>A string to indicate the name of a combined competing risk
+time-to-event outcome that reflects the minimum observed value of all 
+time-to-event outcomes. Defaults to NULL, indicating that each time-to-event
+outcome will be included in dataset.</p></dd>
+<dt>censorName</dt>
+<dd><p>The name of a time to event variable that is the censoring
+variable. Will be ignored if timeName is NULL.</p></dd>
+<dt>eventName</dt>
+<dd><p>The name of the new numeric/integer column representing the
+competing event outcomes. If censorName is specified, the integer value for
+that event will be 0. Defaults to "event", but will be ignored 
+if timeName is NULL.</p></dd>
+<dt>typeName</dt>
+<dd><p>The name of the new character column that will indicate the
+event type. The type will be the unique variable names in survDefs. Defaults
+to "type", but will be ignored if timeName is NULL.</p></dd>
+<dt>keepEvents</dt>
+<dd><p>Indicator to retain original "events" columns. Defaults
+to FALSE.</p></dd>
+<dt>idName</dt>
+<dd><p>Name of id field in existing data set.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Original matrix with survival time</p>
+    <p>Original data table with survival time</p>
     </div>
 
     <div id="ref-examples">
@@ -125,9 +157,9 @@
 <span class="r-in"><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">sdef</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       varname formula               scale               shape</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: censorTime       0                  80                   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       varname formula               scale               shape transition</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: censorTime       0                  80                   1          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5          0</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Baseline data definitions</span></span>
 <span class="r-in"></span>
@@ -138,13 +170,13 @@
 <span class="r-in"><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu">genSurv</span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id x1 x2 grp survTime censorTime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1  0  1   0   10.865     88.965</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2  1  1   1   60.252     49.287</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3  1  0   0    5.009     59.099</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4  0  0   0   34.043      0.532</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  5  0  0   1   10.109    101.262</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:  6  1  1   0  113.537     85.093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id x1 x2 grp censorTime survTime</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1  0  1   0     15.698  146.589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2  1  1   1    432.049    6.873</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3  1  0   0     41.984    8.365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4  0  0   0     33.613    0.068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  5  0  0   1     16.175   63.289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:  6  1  1   0    336.267   14.453</span>
 </code></pre></div>
     </div>
   </div>
