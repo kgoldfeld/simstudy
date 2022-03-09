@@ -4,17 +4,49 @@
 \alias{genSurv}
 \title{Generate survival data}
 \usage{
-genSurv(dtName, survDefs, digits = 3)
+genSurv(
+  dtName,
+  survDefs,
+  digits = 3,
+  timeName = NULL,
+  censorName = NULL,
+  eventName = "event",
+  typeName = "type",
+  keepEvents = FALSE,
+  idName = "id"
+)
 }
 \arguments{
-\item{dtName}{Name of complete data set}
+\item{dtName}{Name of data set}
 
 \item{survDefs}{Definitions of survival}
 
 \item{digits}{Number of digits for rounding}
+
+\item{timeName}{A string to indicate the name of a combined competing risk
+time-to-event outcome that reflects the minimum observed value of all 
+time-to-event outcomes. Defaults to NULL, indicating that each time-to-event
+outcome will be included in dataset.}
+
+\item{censorName}{The name of a time to event variable that is the censoring
+variable. Will be ignored if timeName is NULL.}
+
+\item{eventName}{The name of the new numeric/integer column representing the
+competing event outcomes. If censorName is specified, the integer value for
+that event will be 0. Defaults to "event", but will be ignored 
+if timeName is NULL.}
+
+\item{typeName}{The name of the new character column that will indicate the
+event type. The type will be the unique variable names in survDefs. Defaults
+to "type", but will be ignored if timeName is NULL.}
+
+\item{keepEvents}{Indicator to retain original "events" columns. Defaults
+to FALSE.}
+
+\item{idName}{Name of id field in existing data set.}
 }
 \value{
-Original matrix with survival time
+Original data table with survival time
 }
 \description{
 Survival data is added to an existing data set.

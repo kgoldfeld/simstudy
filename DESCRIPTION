@@ -56,7 +56,8 @@ Suggests:
     splines,
     survival,
     testthat,
-    gtsummary
+    gtsummary,
+    survminer
 LinkingTo: 
     Rcpp
 VignetteBuilder: 

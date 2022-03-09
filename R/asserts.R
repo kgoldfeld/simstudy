@@ -51,6 +51,25 @@ assertLength <- function(..., length, call = sys.call(-1)) {
     }
 }
 
+#' Is length correct?
+#'
+#' @description Checks if all passed vars are of at least 
+#' of length 'length'. Caveat: length(matrix) = numer of elements 
+#' but length(data.frame) = number of columns.
+#' @param length Length to check
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertAtLeastLength <- function(..., length, call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  correctLength <- lengths(dots$args) >= length
+  if (!all(correctLength)) {
+    lengthError(dots$names[!correctLength],
+      prop = length,
+      msg = "{ names *} should be at least length { prop }!", call = call
+    )
+  }
+}
+
 #' Check for Class
 #'
 #' @description Checks if all passed vars inherit from class.
@@ -217,7 +236,7 @@ assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
 assertAscending <- function(vec, call = sys.call(-1)) {
   
   name <- deparse(substitute(vec))
-  ascending <- all(vec[order(vec)] == vec)
+  ascending <- all(vec[order(vec)] == vec) & (length(unique(vec)) == length(vec))
   
   if (!ascending) {
     orderError(name, "ascending", call = call)
@@ -232,7 +251,7 @@ assertAscending <- function(vec, call = sys.call(-1)) {
 assertDescending <- function(vec, call = sys.call(-1)) {
   
   name <- deparse(substitute(vec))
-  descending <- all(vec[rev(order(vec))] == vec)
+  descending <- all(vec[rev(order(vec))] == vec) & (length(unique(vec)) == length(vec))
   
   if (!descending) {
     orderError(name, "descending", call = call)

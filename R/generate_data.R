@@ -871,10 +871,26 @@ genSpline <- function(dt, newvar, predictor, theta,
 
 #' @title Generate survival data
 #' @description Survival data is added to an existing data set.
-#' @param dtName Name of complete data set
+#' @param dtName Name of data set
 #' @param survDefs Definitions of survival
 #' @param digits Number of digits for rounding
-#' @return Original matrix with survival time
+#' @param timeName A string to indicate the name of a combined competing risk
+#' time-to-event outcome that reflects the minimum observed value of all 
+#' time-to-event outcomes. Defaults to NULL, indicating that each time-to-event
+#' outcome will be included in dataset.
+#' @param censorName The name of a time to event variable that is the censoring
+#' variable. Will be ignored if timeName is NULL.
+#' @param eventName The name of the new numeric/integer column representing the
+#' competing event outcomes. If censorName is specified, the integer value for
+#' that event will be 0. Defaults to "event", but will be ignored 
+#' if timeName is NULL.
+#' @param typeName The name of the new character column that will indicate the
+#' event type. The type will be the unique variable names in survDefs. Defaults
+#' to "type", but will be ignored if timeName is NULL.
+#' @param keepEvents Indicator to retain original "events" columns. Defaults
+#' to FALSE.
+#' @param idName Name of id field in existing data set.
+#' @return Original data table with survival time
 #' @examples
 #' # Baseline data definitions
 #'
@@ -908,27 +924,94 @@ genSpline <- function(dt, newvar, predictor, theta,
 # source: Bender, Augustin, & Blettner, Generating survival times to simulate Cox
 # proportional hazard models, SIM, 2005;24;1713-1723.
 #
-genSurv <- function(dtName, survDefs, digits = 3) {
+genSurv <- function(dtName, survDefs, digits = 3, 
+  timeName = NULL, censorName = NULL, eventName = "event", 
+  typeName = "type", keepEvents = FALSE, idName = "id") {
+  
+  assertNotMissing(
+    dtName = missing(dtName),
+    survDefs = missing(survDefs),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtName = dtName, 
+    survDefs = survDefs, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+  
+  events <- unique(survDefs$varname)
+  
+  assertNotInDataTable(events, dtName)
+  
+  assertClass(digits = digits, class="numeric")
+  assertLength(digits = digits, length = 1, call = sys.call(-1))
+  assertInDataTable(idName, dtName)
 
   # 'declare
   varname <- NULL
   formula <- NULL
-
+  N <- NULL
+  V1 <- NULL 
+  event  <- NULL
+  survx  <- NULL
+  time  <- NULL
+  type <- NULL
+  id <- NULL
+  
   dtSurv <- copy(dtName)
+  setnames(dtSurv, idName, "id")
+  
+  for (i in (seq_along(events))) {
+    
+    nlogu <--log(stats::runif(nrow(dtSurv), min = 0, max = 1))
+    
+    subDef <- survDefs[varname == events[i]]
+    
+    shape <- dtSurv[, eval(parse(text = subDef[1, shape]))]
+    scale <- dtSurv[, eval(parse(text = subDef[1, scale]))]
+    formulas <- subDef[, formula]
+    
+    form1 <- dtSurv[, eval(parse(text = formulas[1])), keyby = id][, V1]
+    
+    if (nrow(subDef) > 1) {
+      
+      transition <- subDef[2, transition]
+      t_adj <- transition ^ (1/shape)
+     
+      form2 <- dtSurv[, eval(parse(text = formulas[2])), keyby = id][, V1]
+      
+      threshold <- exp(form1) * t_adj
+      period <- 1*(nlogu < threshold) + 2*(nlogu >= threshold)
+      
+      tempdt <- data.table(nlogu, form1, form2, period)
+      
+      tempdt[period == 1, survx := (nlogu/((1/scale)*exp(form1)))^shape]
+      tempdt[period == 2, survx := ((nlogu - (1/scale)*exp(form1)*t_adj + (1/scale)*exp(form2)*t_adj)/((1/scale)*exp(form2)))^shape]
+      
+      newColumn <- tempdt[, list(survx = round(survx, digits))]
+      
+    } else {
+    
+      tempdt <- data.table(nlogu, form1)
+      newColumn <-  
+        tempdt[, list(survx = round((nlogu/((1/scale)*exp(form1)))^shape, digits))]
 
-  for (i in (1:nrow(survDefs))) {
-    shape <- dtSurv[, eval(parse(text = survDefs[i, shape]))]
-    scale <- dtSurv[, eval(parse(text = survDefs[i, scale]))]
-    survPred <- dtSurv[, eval(parse(text = survDefs[i, formula]))]
-
-    u <- stats::runif(n = nrow(dtSurv))
-
-    newColumn <- dtSurv[, list(survx = round((-(log(u) / ((1 / scale) * exp(survPred))))^(shape), digits)), ]
-
+    }
+    
     dtSurv <- data.table::data.table(dtSurv, newColumn)
-
-    data.table::setnames(dtSurv, "survx", as.character(survDefs[i, varname]))
+    data.table::setnames(dtSurv, "survx", as.character(subDef[1, varname]))
+    
   }
-
+  
+  if (!is.null(timeName)) {
+    
+    dtSurv <- addCompRisk(dtSurv, events, timeName, censorName, 
+      eventName, typeName, keepEvents)
+    
+  }
+    
+  setnames(dtSurv, "id", idName)
   return(dtSurv[])
 }

@@ -7,16 +7,20 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
+
+
 ```{r, echo = FALSE, message = FALSE}
 library(simstudy)
-library(ggplot2)
+# library(ggplot2)
 library(scales)
 library(grid)
 library(gridExtra)
 library(survival)
 library(gee)
 library(data.table)
+```
 
+```{r, echo = FALSE}
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
 cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
@@ -25,175 +29,22 @@ cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
 ggtheme <- function(panelback = "white") {
   
   ggplot2::theme(
-    panel.background = element_rect(fill = panelback),
-    panel.grid = element_blank(),
-    axis.ticks =  element_line(colour = "black"),
-    panel.spacing =unit(0.25, "lines"),  # requires package grid
-    panel.border = element_rect(fill = NA, colour="gray90"), 
-    plot.title = element_text(size = 8,vjust=.5,hjust=0),
-    axis.text = element_text(size=8),
-    axis.title = element_text(size = 8)
+    panel.background = ggplot2::element_rect(fill = panelback),
+    panel.grid = ggplot2::element_blank(),
+    axis.ticks =  ggplot2::element_line(colour = "black"),
+    panel.spacing = ggplot2::unit(0.25, "lines"),  # requires package grid
+    panel.border = ggplot2::element_rect(fill = NA, colour="gray90"), 
+    plot.title = ggplot2::element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = ggplot2::element_text(size=8),
+    axis.title = ggplot2::element_text(size = 8)
   )  
   
 }
-
-ggsurv_m <- function(
-  s,
-  CI         = 'def',
-  plot.cens  = TRUE,
-  surv.col   = 'gg.def',
-  cens.col   = 'gg.def',
-  lty.est    = 1,
-  lty.ci     = 2,
-  cens.shape = 3,
-  back.white = FALSE,
-  xlab       = 'Time',
-  ylab       = 'Survival',
-  main       = '',
-  strata     = length(s$strata),
-  labels     = NULL
-) {
-  
-  s <- fit
-  
-  n <- s$strata
-  
-  strataEqualNames <- unlist(strsplit(names(s$strata), '='))
-  groups <- factor(
-    strataEqualNames[seq(2, 2 * strata, by = 2)],
-    levels = strataEqualNames[seq(2, 2 * strata, by = 2)]
-  )
-  
-  gr.name <-  strataEqualNames[1]
-  gr.df   <- vector('list', strata)
-  n.ind   <- cumsum(c(0,n))
-  
-  for (i in 1:strata) {
-    indI <- (n.ind[i]+1):n.ind[i+1]
-    gr.df[[i]] <- data.frame(
-      time  = c(0, s$time[ indI ]),
-      surv  = c(1, s$surv[ indI ]),
-      up    = c(1, s$upper[ indI ]),
-      low   = c(1, s$lower[ indI ]),
-      cens  = c(0, s$n.censor[ indI ]),
-      group = rep(groups[i], n[i] + 1)
-    )
-  }
-  
-  dat      <- do.call(rbind, gr.df)
-  dat.cens <- subset(dat, cens != 0)
-  
-  pl <- ggplot(dat, aes(x = time, y = surv, group = group)) +
-    geom_step(aes(col = group, lty = group)) +
-    xlab(xlab) +
-    ylab(ylab) +
-    ggtitle(main)
-  
-  pl <- if(surv.col[1] != 'gg.def'){
-    scaleValues <- if (length(surv.col) == 1) {
-      rep(surv.col, strata)
-    } else{
-      surv.col
-    }
-    pl + scale_colour_manual(name = gr.name, values = scaleValues, labels=labels)
-    
-  } else {
-    pl + scale_colour_discrete(name = gr.name, labels=labels)
-  }
-  
-  lineScaleValues <- if (length(lty.est) == 1) {
-    rep(lty.est, strata)
-  } else {
-    lty.est
-  }
-  pl <- pl + scale_linetype_manual(name = gr.name, values = lineScaleValues)
-
-  if(identical(CI,TRUE)) {
-    if(length(surv.col) > 1 || length(lty.est) > 1){
-      stop('Either surv.col or lty.est should be of length 1 in order to plot 95% CI with multiple strata')
-    }
-
-    stepLty <- if ((length(surv.col) > 1 | surv.col == 'gg.def')[1]) {
-      lty.ci
-    } else {
-      surv.col
-    }
-    pl <- pl +
-      geom_step(aes(y = up, lty = group), lty = stepLty) +
-      geom_step(aes(y = low,lty = group), lty = stepLty)
-  }
-
-  if (identical(plot.cens, TRUE) ){
-    if (nrow(dat.cens) == 0) {
-      stop('There are no censored observations')
-    }
-    if (length(cens.col) == 1) {
-      col <- ifelse(cens.col == 'gg.def', 'red', cens.col)
-      pl <- pl + geom_point(
-        data    = dat.cens,
-        mapping = aes(y = surv),
-        shape   = cens.shape,
-        col     = col
-      )
-
-    } else if (length(cens.col) > 0) {
-    # if(!(identical(cens.col,surv.col) || is.null(cens.col))) {
-      #   warning ("Color scales for survival curves and censored points don't match.\nOnly one color scale can be used. Defaulting to surv.col")
-      # }
-
-
-      if (! identical(cens.col, "gg.def")) {
-        if (length(cens.col) != strata) {
-          warning("Color scales for censored points don't match the number of groups. Defaulting to ggplot2 default color scale")
-          cens.col <- "gg.def"
-        }
-      }
-
-      if (identical(cens.col, "gg.def")) {
-        pl <- pl + geom_point(
-          data = dat.cens,
-          mapping = aes(y=surv, col = group),
-          shape = cens.shape,
-          show.legend = FALSE
-        )
-      } else {
-
-        uniqueGroupVals = unique(dat.cens$group)
-        if (length(cens.shape) == 1) {
-          cens.shape = rep(cens.shape, strata)
-        }
-
-        if (length(cens.shape) != strata) {
-          warning("The length of the censored shapes does not match the number of groups (or 1). Defaulting shape = 3 (+)")
-          cens.shape = rep(3, strata)
-        }
-        for (i in seq_along(uniqueGroupVals)) {
-          groupVal = uniqueGroupVals[i]
-          dtGroup <- subset(dat.cens, group == groupVal)
-
-          pl <- pl + geom_point(
-            data = dtGroup,
-            mapping = aes(y=surv),
-            color = I(cens.col[i]),
-            shape = cens.shape[i],
-            show.legend = FALSE
-          )
-
-        }
-      }
-
-    }
-  }
-
-  if(identical(back.white, TRUE)) {
-    pl <- pl + theme_bw()
-  }
-  
-  pl
-}
 ```
 
-Time-to-event data, including both survival and censoring times, are created using functions `defSurv` and `genSurv`. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the `formula` field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the *shape* of the distribution can be specified. A `shape` value of 1 reflects the *exponential* distribution.
+Time-to-event data, including both survival and censoring times, are created using functions `defSurv` and `genSurv`. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the `formula` field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the *shape* of the distribution can be specified. A `shape` value of 1 reflects the *exponential* distribution. As of `simstudy` version 0.5.0, it is also possible to generate survival data that violate a proportional hazards assumption. In addition, data with two or more competing risks can be generated.
+
+### Weibull distribution
 
 The density, mean, and variance of the Weibull distribution that is used in the data generation process are defined by the parameters $\lambda$ (scale) and $\nu$ (shape) as shown below.
 
@@ -213,6 +64,8 @@ $$
 
 where $U$ is a uniform random variable between 0 and 1, $\beta$ is a vector of parameters in a Cox proportional hazard model, and $x$ is a vector of covariates that impact survival time. $\lambda$ and $\nu$ can also vary by covariates.
 
+### Generating standard survival data with censoring
+
 Here is an example showing how to generate data with covariates. In this case the scale and shape parameters will vary by group membership.
 
 ```{r, tidy = TRUE}
@@ -220,7 +73,6 @@ Here is an example showing how to generate data with covariates. In this case th
 # Baseline data definitions
 
 def <- defData(varname = "x1", formula = .5, dist = "binary")
-def <- defData(def,varname = "x2", formula = .5, dist = "binary")
 def <- defData(def,varname = "grp", formula = .5, dist = "binary")
 
 # Survival data definitions
@@ -251,14 +103,13 @@ dtSurv[,round(mean(survTime),1), keyby = .(grp,x1)]
 
 ```
 
-Observed survival times and censoring indicators can be generated by defining new fields:
+Observed survival times and censoring indicators can be generated using the competing risk functionality and specifying a censoring variable:
 
 ```{r, tidy = TRUE}
-
-cdef <- defDataAdd(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="nonrandom")
-cdef <- defDataAdd(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="nonrandom")
-
-dtSurv <- addColumns(cdef, dtSurv)
+dtSurv <- genData(300, def)
+dtSurv <- genSurv(dtSurv, sdef, timeName = "obsTime", 
+            censorName = "censorTime", eventName = "status", 
+            keepEvents = TRUE)
 
 head(dtSurv)
 
@@ -267,25 +118,23 @@ head(dtSurv)
 dtSurv[,round(1-mean(status),2), keyby = .(grp,x1)]
 ```
 
+
 Here is a Kaplan-Meier plot of the data by the four groups:
+
 
 ```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
 fit <- survfit(Surv(obsTime, status) ~ x1+grp, data=dtSurv)
 
-ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette, 
-         labels = c("grp=0 & x1=0","grp=1 & x1=0","grp=0 & x1=1","grp=1 & x1=1")) +
-  ggplot2::guides(linetype = FALSE) +
-  ggtheme("grey95") +
-  theme(legend.position=c(.8,.8), 
-        legend.title = element_blank(),
-        legend.key = element_rect(fill="grey95" , color = "grey95"),
-        legend.background = element_rect(fill="grey95"),
-        legend.key.width = unit(1, "cm")) +
-  guides(colour = guide_legend(override.aes = list(size=1)))
-
+survminer::ggsurvplot(fit, data = dtSurv,
+  palette = cbbPalette,
+  size = .5,
+  ggtheme = ggtheme("grey94")
+    # ggplot2::theme(axis.title = ggplot2::element_text(size = 9),
+    #                        panel.grid = ggplot2::element_blank())
+)
 ```
 
-Here is a survival analysis (using a Cox proportional hazard model) of a slightly simplified data set:
+Here is a survival analysis (using a Cox proportional hazard model) of a slightly simplified data set with two baseline covariates only:
 
 ```{r, tidy = TRUE}
 
@@ -300,12 +149,9 @@ sdef <- defSurv(varname = "survTime", formula = "1.5*x1 - .8*x2", scale = 50, sh
 sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
 
 dtSurv <- genData(300, def)
-dtSurv <- genSurv(dtSurv, sdef)
+dtSurv <- genSurv(dtSurv, sdef, timeName = "obsTime", 
+            censorName = "censorTime", eventName = "status")
 
-cdef <- defDataAdd(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="nonrandom")
-cdef <- defDataAdd(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="nonrandom")
-
-dtSurv <- addColumns(cdef, dtSurv)
 coxfit <- survival::coxph(Surv(obsTime, status) ~ x1 + x2, data = dtSurv)
 ```
 
@@ -315,5 +161,199 @@ The 95\% confidence intervals of the parameter estimates include the values used
 gtsummary::tbl_regression(coxfit)
 ```
 
+### Competing risks
+
+In the previous example, we actually used the competing risk mechanism in `genSurv` to generate an observed time variable (which was the earliest of the censoring and event time). This is done by specifying a *timeName* argument that will represent the observed time value. The event status is indicated in the field set by the *eventName* argument (which defaults to "event"). If a variable name is indicated in the *censorName* argument, the censored events automatically have a value of 0. As we saw above, competing risk information can be generated as part of `genSurv`. However, there is an additional function `addCompRisk` that will generate the competing risk information using an existing data set. The example here will take that approach.
+
+```{r}
+d1 <- defData(varname = "x1", formula = .5, dist = "binary")
+d1 <- defData(d1, "x2", .5, dist = "binary")
+
+dS <- defSurv(varname = "event_1", formula = "-10 - 0.6*x1 + 0.4*x2", shape = 0.3)
+dS <- defSurv(dS, "event_2", "-6.5 + 0.3*x1 - 0.5*x2", shape = 0.5)
+dS <- defSurv(dS, "censor", "-7", shape = 0.55)
+
+dtSurv <- genData(1001, d1)
+dtSurv <- genSurv(dtSurv, dS)
+
+dtSurv
+```
+
+```{r}
+dtSurv <- addCompRisk(dtSurv, events = c("event_1", "event_2", "censor"), 
+            timeName = "time", censorName = "censor")
+dtSurv
+```
+
+The competing risk data can be plotted using the cumulative incidence functions (rather than the survival curves):
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+fit <- survfit(Surv(time, event, type="mstate") ~ 1, data=dtSurv)
+survminer::ggcompetingrisks(fit, ggtheme = ggtheme("grey94"))  + 
+  ggplot2::scale_fill_manual(values = cbbPalette)
+```
+
+The data generation can all be done in two (instead of three) steps:
+
+```{r}
+dtSurv <- genData(101, d1)
+dtSurv <- genSurv(dtSurv, dS, timeName = "time", censorName = "censor")
+dtSurv
+```
+
+### Introducing non-proportional hazards
+
+In the standard `simstudy` data generation process for survival/time-to-event outcomes that includes covariates that effect the hazard rate at various time points, the ratio of hazards comparing different levels of a covariate are constant across all time points. For example, if we have a single binary covariate $x$, the hazard $\lambda(t)$ at time $t$ is
+
+$$\lambda(t|x) = \lambda_0(t) e ^ {\beta x}$$ 
+where $\lambda_0(t)$ is a baseline hazard when $x=0$. The ratio of the hazards for $x=1$ compared to $x=0$ is
+
+$$\frac{\lambda_0(t) e ^ {\beta}}{\lambda_0(t)} = e ^ \beta,$$
+
+so the log of the hazard ratio is a constant $\beta$, and the hazard ratio is always $e^\beta$.
+
+However, we may not always want to make the assumption that the hazard ratio is constant over all time periods. To facilitate this, it is possible to specify two different data definitions for the same outcome, using the *transition* field to specify when the second definition replaces the first. (While it would theoretically be possible to generate data for more than two periods, the process is more involved, and has not been implemented at this time.)
+
+<br>
+
+**Constant/proportional hazard ratio**
+
+To start, here is an example assuming a constant log hazard ratio of -0.7:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "x", formula = .4, dist="binary")
+
+defS <- defSurv(varname = "death", formula = "-14.6 - 0.7*x", shape = .35)
+defS <- defSurv(defS, varname = "censor", scale = exp(13), shape = .5)
+
+dd <- genData(500, def)
+dd <- genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor")
+
+fit <- survfit( Surv(time, event) ~ x, data = dd )
+```
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette
+)
+```
+
+The Cox proportional hazards model recovers the correct log hazards rate:
+
+```{r}
+coxfit <- coxph(formula = Surv(time, event) ~ x, data = dd)
+```
+
+```{r, echo=FALSE}
+gtsummary::tbl_regression(coxfit)
+```
+
+We can test the assumption of proportional hazards using weighted residuals. If the $\text{p-value} < 0.05$, then we would conclude that the assumption of proportional hazards is not warranted. In this case $p = 0.22$, so the model is apparently reasonable:
+
+```{r}
+cox.zph(coxfit)
+```
+
+<br>
+
+**Non-constant/non-proportional hazard ratio**
+
+In this next case, the risk of death when $x=1$ is lower at all time points compared to when $x=0$, but the relative risk (or hazard ratio) changes at 150 days:
+
+```{r, tidy = TRUE}
+def <- defData(varname = "x", formula = .4, dist="binary")
+
+defS <- defSurv(varname = "death", formula = "-14.6 - 1.3*x", shape = .35, transition = 0)
+defS <- defSurv(defS, varname = "death", formula = "-14.6 - 0.4*x", shape = .35, transition = 150)
+defS <- defSurv(defS, varname = "censor", scale = exp(13), shape = .5)
+
+dd <- genData(500, def)
+dd <- genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor")
+
+fit <- survfit( Surv(time, event) ~ x, data = dd )
+```
+
+The survival curve for the sample with $x=1$ has a slightly different shape under this data generation process compared to the previous example under a constant hazard ratio assumption; there is more separation early on (prior to day 150), and then the gap is closed at a quicker rate.
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette
+)
+```
+
+If we ignore the possibility that there might be a different relationship over time, the Cox proportional hazards model gives an estimate of the log hazard ratio quite close to -0.70:
+
+```{r}
+coxfit <- survival::coxph(formula = Surv(time, event) ~ x, data = dd)
+```
 
 
+```{r, echo=FALSE}
+gtsummary::tbl_regression(coxfit)
+```
+
+However, further inspection of the proportionality assumption should make us question the appropriateness of the model. Since $p<0.05$, we would be wise to see if we can improve on the model.
+
+```{r}
+cox.zph(coxfit)
+```
+
+We might be able to see from the plot where proportionality diverges, in which case we can split the data set into two parts at the identified time point. (In many cases, the transition point or points won't be so obvious, in which case the investigation might be more involved.) By splitting the data at day 150, we get the desired estimates:
+
+```{r}
+dd2 <- survSplit(Surv(time, event) ~ ., data= dd, cut=c(150),
+                 episode= "tgroup", id="newid")
+
+coxfit2 <- survival::coxph(Surv(tstart, time, event) ~ x:strata(tgroup), data=dd2)
+```
+
+```{r, echo=FALSE}
+gtsummary::tbl_regression(coxfit2)
+```
+
+And the diagnostic test of proportionality confirms the appropriateness of the model:
+
+```{r}
+cox.zph(coxfit2)
+```
+
+### Generating parameters for survival distribution
+
+Throughout this vignette, I have been using various assumptions for the parameters - *formula*, *scale*, and *shape* - that define the Weibull-based survival distribution. Where do these assumptions come from and how can we determine what is appropriate to use in our simulations? That will depend, of course, on each specific application and use of the simulation, but there are two helper functions in `simstudy`, `survGetParams` and `survParamPlot`, that are intended to guide the process.
+
+`survGetParams` will provide the *formula* and *shape* parameters (the *scale* parameter will always be set to 1) that define a curve close to points provided as inputs. For example, if we would like to find the parameters for a distribution where 80% survive until day 100, and 10% survive until day 200 (any number of points may be provided):
+
+```{r}
+points <- list(c(100, 0.80), c(200, 0.10))
+r <- survGetParams(points)
+r
+```
+
+We can visualize the curve that is defined by these parameters:
+
+```{r, tidy = TRUE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+survParamPlot(f = r[1], shape = r[2], points)
+```
+
+And we can generate data based on these parameters:
+
+```{r}
+
+defS <- defSurv(varname = "death", formula = -17, scale = 1, shape = 0.3)
+defS <- defSurv(defS, varname = "censor", formula = 0, scale = exp(18.5), shape = 0.3)
+
+dd <- genData(500)
+dd <- genSurv(dd, defS, timeName = "time", censorName = "censor")
+```
+
+```{r, tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE}
+fit <- survfit( Surv(time, event) ~ 1, data = dd )
+
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette,
+                      legend = "none"
+)
+```

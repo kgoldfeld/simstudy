@@ -556,6 +556,9 @@ defReadCond <- function(filen) {
 #' @param scale Scale parameter for the Weibull distribution.
 #' @param shape The shape of the Weibull distribution. Shape = 1 for
 #' an exponential distribution
+#' @param transition An integer value indicating the starting point for a new
+#' specification of the hazard function. It will default to 0 (and must be 0)
+#' for the first instance of a "varname". 
 #' @return A data.table named dtName that is an updated data definitions table
 #' @examples
 #' # Baseline data definitions
@@ -589,23 +592,48 @@ defReadCond <- function(filen) {
 defSurv <- function(dtDefs = NULL,
                     varname,
                     formula = 0,
-                    scale,
-                    shape = 1) {
+                    scale = 1,
+                    shape = 1,
+                    transition = 0) {
+  
+  # 'declare'
+  N <- NULL
+  
+  assertNotMissing(
+    varname = missing(varname),
+    call = sys.call(-1)
+  )
+  
   if (is.null(dtDefs)) {
     dtDefs <- data.table::data.table()
   }
-
+  
+  newvarname <- varname
+  if (nrow(dtDefs[varname == newvarname]) == 0 & transition != 0){
+    stop("first transition time must be set to 0")
+  }
+  
   dt.new <- data.table::data.table(
     varname,
     formula,
     scale,
-    shape
+    shape,
+    transition
   )
-
+  
   l <- list(dtDefs, dt.new)
-
+  
   defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
-
+  
+  dups <- defNew[, .N, keyby = varname][N > 1, varname]
+  
+  for (i in seq_along(dups)) {
+    transition <- defNew[varname == dups[i], transition]
+    assertAscending(transition, call = sys.call(-1))
+  }
+  
+  setkey(defNew, varname)
+  
   return(defNew[])
 }
 
