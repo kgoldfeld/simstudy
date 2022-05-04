@@ -280,3 +280,38 @@ test_that("genFactor works.", {
   expect_length(genFactor(copy(dt), c("q1", "q2"), replace = TRUE), 4)
   expect_equal(genFactor(copy(dt), c("q1", "q2"), labels = labels), dt_res)
 })
+
+#genDummy ----
+test_that("genDummy throws errors.", {
+  oldSeed <- .Random.seed
+  set.seed(10076)
+  
+  d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
+  d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
+  d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx - 1*male", dist = "nonrandom")
+  
+  dd <- genData(5, d1)
+  
+  # Initial data checks
+  expect_error(genDummy(varname = "rx", sep = ".", replace = FALSE))
+  expect_error(genDummy(dd, sep = ".", replace = FALSE))
+  
+  # Check if data table exists
+  expect_error(genDummy(dt, varname = "rx", sep = ".", replace = FALSE))
+  
+  # Check if varname exists
+  expect_error(genDummy(dd, varname = "xx", sep = ".", replace = FALSE))
+  
+  #I do not understand how to test for is.integer or is.factor, I'm not clear on the 
+  #distinction between these and inputted numbers etc.
+  
+  d3 <- d1
+  d3 <- defData(d3, varname = "rx.1", formula = 5, dist = "normal")
+  
+  dd3 <- genData(5, d3)
+  
+  # Check to see if new field names exists
+  expect_error(genDummy(dd3, varname = "rx", sep = ".", replace = FALSE))
+  
+  set.seed(oldSeed)
+})
