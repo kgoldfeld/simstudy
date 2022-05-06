@@ -148,6 +148,41 @@ assertInteger <- function(..., type, call = sys.call(-1)) {
     }
 }
 
+#' Check for Factor
+#'
+#' @description Checks if all passed vars and their content are factors or can
+#' be coerced to factor without loss of information.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertFactor <- function(..., type, call = sys.call(-1)) {
+  #assertNumeric(..., call = call)
+  dots <- dots2argNames(...)
+  checkFactor <- function(arg) {
+    arg <- unlist(arg)
+    all(arg == as.factor(arg))
+  }
+  notFactor <- !sapply(dots$args, checkFactor)
+  if (any(notFactor)) {
+    typeError(dots$names[notFactor], type = "factor", call = call)
+  }
+}
+
+#' Check for Integer OR Factor
+#'
+#' @description Checks if all passed vars and their content are factors or can
+#' be coerced to factor without loss of information.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+#assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
+  #assertNumeric(..., call = call)
+#  dots <- dots2argNames(...)
+#  notInteger <- assertInteger(arg)
+#  notFactor <- assertFactor(arg)
+#  if (any(notFactor)) {
+#    typeError(dots$names[notFactor], type = "factor", call = call)
+#  }
+#}
+
 #' Check for Value
 #'
 #' @description Checks if all passed vars have a value other than NULL and NA

@@ -1,0 +1,36 @@
+---
+title: "max_test"
+output: html_document
+date: '2022-05-03'
+---
+
+```{r setup, include=FALSE}
+library(simstudy)
+library(data.table)
+library(ggplot2)
+library(knitr)
+library(data.table)
+
+```
+```{r}
+d1 <- defData(varname = "num1", formula = "1.1;2.2;3.3", dist = "trtAssign")
+
+dd1 <- genData(10, d1)
+dd1
+```
+```{r}
+d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
+d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
+d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx - 1*male", dist = "nonrandom")
+  
+dd <- genData(5, d1)
+  
+d3 <- d1
+d3 <- defData(d3, varname = "rx.1", formula = 5, dist = "normal")
+  
+dd3 <- genData(5, d3)
+dd3
+
+
+```
+
