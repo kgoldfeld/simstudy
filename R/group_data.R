@@ -359,16 +359,10 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   .n <- NULL
   grpExp <- NULL
 
-  if (missing(dtName)) {
-    stop("Data table argument is missing", call. = FALSE)
-  }
-  if (grpName %in% names(dtName)) {
-    stop("Group name has previously been defined in data table", call. = FALSE)
-  }
+  assertNotMissing(dtName = missing(dtName))
+  assertNotInDataTable(grpName, dtName)
   if (!is.null(ratio)) {
-    if (length(ratio) != nTrt) {
-      stop("Number of treatments does not match specified ratio", call. = FALSE)
-    }
+    assertLengthEqual(var1 = length(ratio), var2 = nTrt)
   }
 
   dt <- copy(dtName)

@@ -732,8 +732,8 @@ defSurv <- function(dtDefs = NULL,
 
 #' Check categorical formula
 #'
-#' @description Categorical formulas muste be of the form "x1; x2; ..." and
-#' contain atleast 2 numeric probabilities.
+#' @description Categorical formulas must be of the form "x1; x2; ..." and
+#' contain at least 2 numeric probabilities.
 #' @param formula Formula as string.
 #' @return Invisible, error if formula not valid.
 #' @seealso distributions

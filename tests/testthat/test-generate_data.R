@@ -296,34 +296,30 @@ test_that("genDummy throws errors.", {
   expect_error(genDummy(varname = "rx", sep = ".", replace = FALSE), class = "simstudy::missingArgument")
   expect_error(genDummy(dd, sep = ".", replace = FALSE), class = "simstudy::missingArgument")
   
-  #expect_error(genDummy(varname = "rx", sep = ".", replace = FALSE))
-  #expect_error(genDummy(dd, sep = ".", replace = FALSE))
-  
   # Check if data table exists
-  expect_error(genDummy(dt, varname = "rx", sep = ".", replace = FALSE))
+  expect_error(genDummy(d, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::dtNotExist")
   
   # Check if varname exists
   expect_error(genDummy(dd, varname = "xx", sep = ".", replace = FALSE), class = "simstudy::notDefined")
   
-  expect_error(genDummy(dd, varname = "xx", sep = ".", replace = FALSE))
+  # Check if field is integer or factor
+  # TODO if field is integer, is it guarunteed to be factor?
+  # TODO if not, add case with integers but no factors
   
-  #I do not understand how to test for is.integer or is.factor, I'm not clear on the 
-  #distinction between these and inputted numbers etc.
+  d2 <- defData(varname = "tx", formula = 5, dist = "normal", variance = 2)
   
-  #d2 <- defData(varname = "tx", formula = "'thirteen'", dist = "normal")
-  #d2 <- defData(d2, varname = "ttx", formula = tx )
+  dd2 <- genData(6, d2)
   
-  #dd2 <- genData(6, d2)
+  expect_error(genDummy(dd2, varname = "tx", sep = ".", replace = FALSE), class = "simstudy::notIntegerOrFactor")
   
-  expect_error(genDummy(dd2, varname = "tx", sep = ".", replace = FALSE))
+  # TODO Check to see if new field names exists
   
-  d3 <- d1
-  d3 <- defData(d3, varname = "rx.1", formula = 5, dist = "normal")
+  #d3 <- d1
+  #d3 <- defData(d3, varname = "rx.1", formula = .8, dist = "binary")
   
-  dd3 <- genData(5, d3)
+  #dd3 <- genData(5, d3)
   
-  # Check to see if new field names exists
-  expect_error(genDummy(dd3, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::alreadyDefined")
+  #expect_error(genDummy(dd3, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::alreadyDefined")
   
   set.seed(oldSeed)
 })

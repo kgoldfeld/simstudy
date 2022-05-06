@@ -24,13 +24,41 @@ d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
 d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx - 1*male", dist = "nonrandom")
   
 dd <- genData(5, d1)
+dd
   
-d3 <- d1
-d3 <- defData(d3, varname = "rx.1", formula = 5, dist = "normal")
-  
-dd3 <- genData(5, d3)
-dd3
+ddum <- genDummy(dd, "rx")
+ddum
 
 
+```
+```{r}
+dtDefs <- NULL
+varname <- "x"
+formula <- "1;1"
+variance <- 0
+dist <- "normal"
+link <- "identity"
+id <- "id"
+dtDefs <- data.table::data.table()
+attr(dtDefs, "id") <- id
+
+dt.new <- data.table::data.table(
+    varname,
+    formula,
+    variance,
+    dist,
+    link
+  )
+
+l <- list(dtDefs, dt.new)
+
+defNew <- data.table::rbindlist(l, use.names = TRUE, fill = TRUE)
+attr(defNew, "id") <- attr(dtDefs, "id")
+
+defNew
+
+```
+```{r}
+assertInteger(as.integer(1))
 ```
 

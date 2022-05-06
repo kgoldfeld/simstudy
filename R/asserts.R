@@ -18,7 +18,7 @@ assertNotMissing <- function(..., call = sys.call(-1)) {
 #' Are Lengths Equal?
 #'
 #' @description Checks if all passed vars are of equal Length. Caveat:
-#' length(matrix) = numer of elements but length(data.frame) = number
+#' length(matrix) = number of elements but length(data.frame) = number
 #'  of columns.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
@@ -173,15 +173,15 @@ assertFactor <- function(..., type, call = sys.call(-1)) {
 #' be coerced to factor without loss of information.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
-#assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
+assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
   #assertNumeric(..., call = call)
-#  dots <- dots2argNames(...)
-#  notInteger <- assertInteger(arg)
-#  notFactor <- assertFactor(arg)
-#  if (any(notFactor)) {
-#    typeError(dots$names[notFactor], type = "factor", call = call)
-#  }
-#}
+  dots <- dots2argNames(...)
+  notInteger <- assertInteger(arg)
+  notFactor <- assertFactor(arg)
+  if (all(notFactor) | all(notInteger)) {
+    typeError(dots$names[notIntegerOrFactor], type = type, call = call)
+  }
+}
 
 #' Check for Value
 #'
