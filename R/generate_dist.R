@@ -142,6 +142,9 @@
     ncol(dfNew),
     as.character(args$varname)
   )
+  
+  #TODO
+  #as.integer(dfNew$newColumn)
 
   return(dfNew)
 }

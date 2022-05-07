@@ -314,12 +314,12 @@ test_that("genDummy throws errors.", {
   
   # TODO Check to see if new field names exists
   
-  #d3 <- d1
-  #d3 <- defData(d3, varname = "rx.1", formula = .8, dist = "binary")
+  d3 <- defData(varname = "px", formula = ".2;.3;.5", dist = "trtAssign")
+  d3 <- defData(d3, varname = "rx.1", formula = .8, dist = "binary")
   
-  #dd3 <- genData(5, d3)
+  dd3 <- genData(5, d3)
   
-  #expect_error(genDummy(dd3, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::alreadyDefined")
+  expect_error(genDummy(dd3, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::alreadyDefined")
   
   set.seed(oldSeed)
 })

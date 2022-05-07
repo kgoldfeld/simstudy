@@ -59,6 +59,8 @@ defNew
 
 ```
 ```{r}
-assertInteger(as.integer(1))
+test <- c("one", "two", "three")
+
+typeof(assertIntegerOrFactor(var1 = test))
 ```
 

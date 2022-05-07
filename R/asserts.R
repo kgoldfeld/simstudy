@@ -173,15 +173,26 @@ assertFactor <- function(..., type, call = sys.call(-1)) {
 #' be coerced to factor without loss of information.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
-assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
-  #assertNumeric(..., call = call)
-  dots <- dots2argNames(...)
-  notInteger <- assertInteger(arg)
-  notFactor <- assertFactor(arg)
-  if (all(notFactor) | all(notInteger)) {
-    typeError(dots$names[notIntegerOrFactor], type = type, call = call)
-  }
-}
+#assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
+#  #assertNumeric(..., call = call)
+#  dots <- dots2argNames(...)
+#  checkInteger <- function(arg) {
+#    arg <- unlist(arg)
+#    all(arg == as.integer(arg))
+#  }
+#  checkFactor <- function(arg) {
+#    arg <- unlist(arg)
+#    all(arg == as.factor(arg))
+#  }
+#  notInteger <- !sapply(dots$args, checkInteger)
+#  notFactor <- !sapply(dots$args, checkFactor)
+#  #notInteger <- assertInteger(...)
+#  #notFactor <- assertFactor(...)
+#  if (!notFactor && !notInteger) {
+#    typeError(dots$names[notIntegerOrFactor], type = type, call = call)
+#    #typeError(notIntegerOrFactor, type = type, call = call)
+#  }
+#}
 
 #' Check for Value
 #'
