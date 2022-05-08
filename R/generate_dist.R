@@ -130,21 +130,22 @@
     )
   )
 
+  if (args$dist == "trtAssign") {
+    newColumn <- as.integer(newColumn)
+  }
+  
   # Create data frame
   if (is.null(dfSim)) {
     dfNew <- data.table(newColumn)
   } else {
     dfNew <- cbind(dfSim, newColumn)
   }
-
+  
   data.table::setnames(
     dfNew,
     ncol(dfNew),
     as.character(args$varname)
   )
-  
-  #TODO
-  #as.integer(dfNew$newColumn)
 
   return(dfNew)
 }

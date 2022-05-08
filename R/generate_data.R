@@ -170,14 +170,9 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
   nlevels <- length(levels(x))
 
   # Check to see if new field names exist
-  # TODO update with assert
 
   for (i in 1:nlevels) {
-    #assertNotInDataTable(dummy.names[i], dtName)
-    
-    if (dummy.names[i] %in% names(dtName)) {
-      stop(paste("variable", dummy.names[i], "already exists in data table", deparse(substitute(dtName))), call. = FALSE)
-    }
+    assertNotInDataTable(dummy.names[i], dtName)
   }
 
   # Create dummies for each level of factor

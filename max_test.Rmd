@@ -20,12 +20,14 @@ dd1
 ```
 ```{r}
 d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
+d1 <- defData(d1, varname = "rx.1", formula = 5, dist = "nonrandom")
 d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
 d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx - 1*male", dist = "nonrandom")
   
 dd <- genData(5, d1)
+#dd$rx <- as.integer(dd$rx)
 dd
-  
+
 ddum <- genDummy(dd, "rx")
 ddum
 
@@ -62,5 +64,22 @@ defNew
 test <- c("one", "two", "three")
 
 typeof(assertIntegerOrFactor(var1 = test))
+```
+
+
+```{r}
+argu <- data.table::data.table(defData(varname = "rx", formula = 5, dist = "normal"))
+
+newColumn <- .genAssign(
+      dtName = copy(NULL),
+      grpName = argu$varname,
+      strata = argu$variance,
+      ratio = argu$formula,
+      balanced = argu$link
+    )
+newColumn
+
+#dfNew <- data.table(newColumn)
+#dfNew
 ```
 
