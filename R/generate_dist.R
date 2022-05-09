@@ -130,10 +130,6 @@
     )
   )
 
-  if (args$dist == "trtAssign") {
-    newColumn <- as.integer(newColumn)
-  }
-  
   # Create data frame
   if (is.null(dfSim)) {
     dfNew <- data.table(newColumn)

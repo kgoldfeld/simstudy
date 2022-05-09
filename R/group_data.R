@@ -397,6 +397,10 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 
     dt <- trtObserve(dt, formulas = formula, logit.link = FALSE, grpName)
   }
+  
+  for (i in seq_along(dt)) {
+    dt[[i]] <- as.integer(dt[[i]])
+  }
 
   return(dt[])
 }
