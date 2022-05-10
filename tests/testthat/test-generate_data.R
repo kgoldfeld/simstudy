@@ -321,5 +321,17 @@ test_that("genDummy throws errors.", {
   
   expect_error(genDummy(dd3, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::alreadyDefined")
   
+})
+  
+test_that("genDummy works.", {
+  
+  d4 <- defData(varname = "a", formula = ".2;.3;.5", dist = "trtAssign")
+  dd4 <- genData(100, d4)
+  dd4dum <- genDummy(dd4, varname = "a")
+  
+  expect_equal(ncol(dd4dum), 5)
+  
+  
+  
   set.seed(oldSeed)
 })
