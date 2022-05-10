@@ -77,6 +77,15 @@ test_that("assertInteger works.", {
   ))
 })
 
+# TODO create case that returns error
+test_that("assertFactor works.", {
+  expect_silent(assertFactor(
+    a = c(1, 2, 3), b = list(a = 1, b = 2),
+    c = data.frame(a = 1:10, b = 1:10),
+    d = 1
+  ))
+})
+
 test_that("assertValue works.", {
   expect_error(assertValue(a = NULL, b = NA, c = character(0)),
     regexp = "b and c",

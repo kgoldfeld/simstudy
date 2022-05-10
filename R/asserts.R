@@ -154,18 +154,18 @@ assertInteger <- function(..., type, call = sys.call(-1)) {
 #' be coerced to factor without loss of information.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
-#assertFactor <- function(..., type, call = sys.call(-1)) {
+assertFactor <- function(..., type, call = sys.call(-1)) {
   #assertNumeric(..., call = call)
-#  dots <- dots2argNames(...)
-#  checkFactor <- function(arg) {
-#    arg <- unlist(arg)
-#    all(arg == as.factor(arg))
-#  }
-#  notFactor <- !sapply(dots$args, checkFactor)
-#  if (any(notFactor)) {
-#    typeError(dots$names[notFactor], type = "factor", call = call)
-#  }
-#}
+  dots <- dots2argNames(...)
+  checkFactor <- function(arg) {
+    arg <- unlist(arg)
+    all(arg == as.factor(arg))
+  }
+  notFactor <- !sapply(dots$args, checkFactor)
+  if (any(notFactor)) {
+    typeError(dots$names[notFactor], type = "factor", call = call)
+  }
+}
 
 #' Check for Integer OR Factor
 #'
@@ -231,6 +231,19 @@ assertUnique <- function(..., call = sys.call(-1)) {
         notUniqueError(dots$names[notUnique], call = call)
     }
 }
+
+# TODO this raises errors when it shouldn't
+#' Data Table exists?
+#'
+#' @description Checks if dt exists in environment.
+#' @param dtName Name of dt to check (as a string).
+#' @noRd
+#assertDataTableExists <- function(dtNameStr, call = sys.call(-1)) {
+#  dtexist <- dtNameStr %in% ls(envir = parent.frame())
+#  if (!dtexist) {
+#    dtDoesNotExistError(dtNameStr, call = call)
+#  }
+#}
 
 #' Var Defined?
 #'

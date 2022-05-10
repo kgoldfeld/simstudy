@@ -147,6 +147,8 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
                    "Data Table does not exist!")
     stop(c)
   }
+  
+  #assertDataTableExists(deparse(substitute(dtName)))
 
   # Check if varname exists
   
