@@ -355,5 +355,29 @@ test_that("genDummy works.", {
     }
 
   }
+
+  dd5dum <- genDummy(dd4, varname = "a", replace = TRUE)
+  
+  expect_equal(ncol(dd5dum), 4)
+  for (i in seq_along(dd5dum)) {
+    if (dd4dum$a[i] == 1) {
+      expect_equal(dd5dum$a.1[i], 1)
+      expect_equal(dd5dum$a.2[i], 0)
+      expect_equal(dd5dum$a.3[i], 0)
+    }
+    
+    if (dd4dum$a[i] == 2) {
+      expect_equal(dd5dum$a.1[i], 0)
+      expect_equal(dd5dum$a.2[i], 1)
+      expect_equal(dd5dum$a.3[i], 0)
+    }
+    
+    if (dd4dum$a[i] == 3) {
+      expect_equal(dd5dum$a.1[i], 0)
+      expect_equal(dd5dum$a.2[i], 0)
+      expect_equal(dd5dum$a.3[i], 1)
+    }
+    
+  }
   
 })
