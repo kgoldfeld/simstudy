@@ -215,18 +215,18 @@
 <code class="sourceCode R"><span class="va">study1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, strata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"female"</span><span class="op">)</span>,
     grpName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span>
 <span class="va">study1</span></code></pre></div>
-<pre><code><span class="co">##         id   age female visits rx</span>
-<span class="co">##    1:    1  9.78      0      0  3</span>
-<span class="co">##    2:    2 10.81      0      0  1</span>
-<span class="co">##    3:    3  8.86      0      1  3</span>
-<span class="co">##    4:    4  9.83      1      1  3</span>
-<span class="co">##    5:    5 10.58      0      0  3</span>
-<span class="co">##   ---                            </span>
-<span class="co">##  996:  996  8.87      1      2  2</span>
-<span class="co">##  997:  997 10.27      0      0  3</span>
-<span class="co">##  998:  998  6.84      0      1  1</span>
-<span class="co">##  999:  999  9.28      0      2  1</span>
-<span class="co">## 1000: 1000 10.80      1      2  3</span></code></pre>
+<pre><code><span class="co">##         id age female visits rx</span>
+<span class="co">##    1:    1   9      0      0  3</span>
+<span class="co">##    2:    2  10      0      0  1</span>
+<span class="co">##    3:    3   8      0      1  3</span>
+<span class="co">##    4:    4   9      1      1  3</span>
+<span class="co">##    5:    5  10      0      0  3</span>
+<span class="co">##   ---                          </span>
+<span class="co">##  996:  996   8      1      2  2</span>
+<span class="co">##  997:  997  10      0      0  3</span>
+<span class="co">##  998:  998   6      0      1  1</span>
+<span class="co">##  999:  999   9      0      2  1</span>
+<span class="co">## 1000: 1000  10      1      2  3</span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study1</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">female</span>, <span class="va">rx</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <pre><code><span class="co">##    female rx   N</span>
@@ -621,21 +621,21 @@
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">d1</span><span class="op">)</span>
 <span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, nTrt <span class="op">=</span> <span class="fl">2</span>, grpName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span>
 <span class="va">dd</span></code></pre></div>
-<pre><code><span class="co">##    id      x1 x2 rx</span>
-<span class="co">## 1:  1 -1.3230  1  0</span>
-<span class="co">## 2:  2 -0.0494  0  1</span>
-<span class="co">## 3:  3 -0.4064  1  0</span>
-<span class="co">## 4:  4 -0.5562  1  0</span>
-<span class="co">## 5:  5 -0.0941  0  1</span></code></pre>
+<pre><code><span class="co">##    id x1 x2 rx</span>
+<span class="co">## 1:  1 -1  1  0</span>
+<span class="co">## 2:  2  0  0  1</span>
+<span class="co">## 3:  3  0  1  0</span>
+<span class="co">## 4:  4  0  1  0</span>
+<span class="co">## 5:  5  0  0  1</span></code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">d2</span>, <span class="va">dd</span><span class="op">)</span>
 <span class="va">dd</span></code></pre></div>
-<pre><code><span class="co">##    id      x1 x2 rx    q1    q2 y</span>
-<span class="co">## 1:  1 -1.3230  1  0 4.589  5.70 0</span>
-<span class="co">## 2:  2 -0.0494  0  1 9.829 11.74 1</span>
-<span class="co">## 3:  3 -0.4064  1  0 2.117  4.47 0</span>
-<span class="co">## 4:  4 -0.5562  1  0 0.798  3.24 0</span>
-<span class="co">## 5:  5 -0.0941  0  1 7.601  6.98 0</span></code></pre>
+<pre><code><span class="co">##    id x1 x2 rx    q1    q2 y</span>
+<span class="co">## 1:  1 -1  1  0 4.589  5.70 0</span>
+<span class="co">## 2:  2  0  0  1 9.829 11.74 1</span>
+<span class="co">## 3:  3  0  1  0 2.117  4.47 0</span>
+<span class="co">## 4:  4  0  1  0 0.798  3.24 1</span>
+<span class="co">## 5:  5  0  0  1 7.601  6.98 0</span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="defcondition-and-addcondition">defCondition and addCondition<a class="anchor" aria-label="anchor" href="#defcondition-and-addcondition"></a>
