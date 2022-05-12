@@ -362,3 +362,24 @@ mismatchError <- function(name_specified, name_null,
   )
   stop(c)
 }
+
+###Added by ME 5/9/22
+
+#' Datatable does not exist error.
+#'
+#' @param dtName Names of the dt.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+dtDoesNotExistError <- function(dtNameStr, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "Datatable { dtNameStr *} not defined!", msg
+  )
+  
+  c <- condition(
+    c("simstudy::dtDoesNotExist", "error"),
+    message, call, ...
+  )
+  stop(c)
+}

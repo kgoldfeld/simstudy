@@ -137,28 +137,31 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
 genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 
   # Initial data checks
-
-  if (missing(dtName)) stop("argument 'dtName' is missing", call. = FALSE)
-  if (missing(varname)) stop("argument 'varname' is missing", call. = FALSE)
+  
+  assertNotMissing(dtName = missing(dtName), varname = missing(varname))
 
   # Check if data table exists
 
   if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
-    stop(paste("data table", deparse(substitute(dtName)), "not found"), call. = FALSE)
+    c <- condition(c("simstudy::dtNotExist", "error"),
+                   "Data Table does not exist!")
+    stop(c)
   }
+  
+  #assertDataTableExists(deparse(substitute(dtName)))
 
   # Check if varname exists
-
-  if (!(varname %in% names(dtName))) {
-    stop(paste("variable", varname, "not found in data table", deparse(substitute(dtName))), call. = FALSE)
-  }
+  
+  assertInDataTable(varname, dtName)
 
   # Check if field is integer or factor
 
   x <- dtName[, get(varname)]
-
+  
   if (!(is.integer(x) | is.factor(x))) {
-    stop(paste("variable", varname, "must be a factor or integer"), call. = FALSE)
+    c <- condition(c("simstudy::notIntegerOrFactor", "error"),
+                   "Variable must be a factor or integer")
+    stop(c)
   }
 
 
@@ -171,9 +174,7 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
   # Check to see if new field names exist
 
   for (i in 1:nlevels) {
-    if (dummy.names[i] %in% names(dtName)) {
-      stop(paste("variable", dummy.names[i], "already exists in data table", deparse(substitute(dtName))), call. = FALSE)
-    }
+    assertNotInDataTable(dummy.names[i], dtName)
   }
 
   # Create dummies for each level of factor

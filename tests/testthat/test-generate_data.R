@@ -280,3 +280,104 @@ test_that("genFactor works.", {
   expect_length(genFactor(copy(dt), c("q1", "q2"), replace = TRUE), 4)
   expect_equal(genFactor(copy(dt), c("q1", "q2"), labels = labels), dt_res)
 })
+
+#genDummy ----
+test_that("genDummy throws errors.", {
+  oldSeed <- .Random.seed
+  set.seed(10076)
+  
+  d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
+  d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
+  d1 <- defData(d1, varname = "z", formula = "0 - 1.2*rx - 1*male", dist = "nonrandom")
+  
+  dd <- genData(5, d1)
+  
+  # Initial data checks
+  expect_error(genDummy(varname = "rx", sep = ".", replace = FALSE), class = "simstudy::missingArgument")
+  expect_error(genDummy(dd, sep = ".", replace = FALSE), class = "simstudy::missingArgument")
+  
+  # Check if data table exists
+  expect_error(genDummy(d, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::dtNotExist")
+  #expect_error(genDummy(d, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::dtDoesNotExist")
+  
+  # Check if varname exists
+  expect_error(genDummy(dd, varname = "xx", sep = ".", replace = FALSE), class = "simstudy::notDefined")
+  
+  # Check if field is integer or factor
+  # TODO if field is integer, is it guarunteed to be factor?
+  # TODO if not, add case with integers but no factors
+  
+  d2 <- defData(varname = "tx", formula = 5, dist = "normal", variance = 2)
+  
+  dd2 <- genData(6, d2)
+  
+  expect_error(genDummy(dd2, varname = "tx", sep = ".", replace = FALSE), class = "simstudy::notIntegerOrFactor")
+  
+  # TODO Check to see if new field names exists
+  
+  d1 <- defData(d1, varname = "rx.1", formula = 5, dist = "nonrandom")
+  
+  dd3 <- genData(5, d1)
+  
+  expect_error(genDummy(dd3, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::alreadyDefined")
+  
+  set.seed(oldSeed)
+  
+})
+  
+test_that("genDummy works.", {
+  
+  d4 <- defData(varname = "a", formula = ".2;.3;.5", dist = "trtAssign")
+  dd4 <- genData(10, d4)
+  
+  expect_true(is.data.frame(genDummy(dd4, varname = "a")))
+  
+  dd4dum <- genDummy(dd4, varname = "a")
+  
+  expect_equal(ncol(dd4dum), 5)
+  for (i in seq_along(dd4dum)) {
+    if (dd4dum$a[i] == 1) {
+      expect_equal(dd4dum$a.1[i], 1)
+      expect_equal(dd4dum$a.2[i], 0)
+      expect_equal(dd4dum$a.3[i], 0)
+    }
+    
+    if (dd4dum$a[i] == 2) {
+      expect_equal(dd4dum$a.1[i], 0)
+      expect_equal(dd4dum$a.2[i], 1)
+      expect_equal(dd4dum$a.3[i], 0)
+    }
+    
+    if (dd4dum$a[i] == 3) {
+      expect_equal(dd4dum$a.1[i], 0)
+      expect_equal(dd4dum$a.2[i], 0)
+      expect_equal(dd4dum$a.3[i], 1)
+    }
+
+  }
+
+  dd5dum <- genDummy(dd4, varname = "a", replace = TRUE)
+  
+  expect_equal(ncol(dd5dum), 4)
+  for (i in seq_along(dd5dum)) {
+    if (dd4dum$a[i] == 1) {
+      expect_equal(dd5dum$a.1[i], 1)
+      expect_equal(dd5dum$a.2[i], 0)
+      expect_equal(dd5dum$a.3[i], 0)
+    }
+    
+    if (dd4dum$a[i] == 2) {
+      expect_equal(dd5dum$a.1[i], 0)
+      expect_equal(dd5dum$a.2[i], 1)
+      expect_equal(dd5dum$a.3[i], 0)
+    }
+    
+    if (dd4dum$a[i] == 3) {
+      expect_equal(dd5dum$a.1[i], 0)
+      expect_equal(dd5dum$a.2[i], 0)
+      expect_equal(dd5dum$a.3[i], 1)
+    }
+    
+  }
+  
+})
