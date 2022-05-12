@@ -77,14 +77,38 @@ test_that("assertInteger works.", {
   ))
 })
 
-# TODO create case that returns error
 test_that("assertFactor works.", {
+  expect_error(assertFactor(
+    a = "two", b = 123.456,
+    c = as.factor(c(1, 2, 3)),
+    d = as.factor(1.1), e = as.factor("one")
+  ),
+  regexp = "a and b", class = "simstudy::wrongType"
+  )
+  
   expect_silent(assertFactor(
-    a = c(1, 2, 3), b = list(a = 1, b = 2),
-    c = data.frame(a = 1:10, b = 1:10),
-    d = 1
+    a = as.factor("two"), b = as.factor(123.456),
+    c = as.factor(c(1, 2, 3)),
+    d = as.factor(1.1), e = as.factor("one")
   ))
 })
+
+# test_that("assertIntegerOrFactor works.", {
+#   expect_error(assertIntegerOrFactor(
+#     a = "two", b = 123.456,
+#     c = as.factor(c(1, 2, 3)),
+#     d = as.factor(1.1), e = as.factor("one")
+#   ),
+#   regexp = "a and b", class = "simstudy::wrongType"
+#   )
+#   
+#   expect_silent(assertIntegerOrFactor(
+#     a = as.factor("two"), b = as.factor(123.456),
+#     c = as.factor(c(1, 2, 3)),
+#     d = as.factor(1.1), e = as.factor("one"),
+#     f = 1, g = c(12, 34, 56)
+#   ))
+# })
 
 test_that("assertValue works.", {
   expect_error(assertValue(a = NULL, b = NA, c = character(0)),

@@ -157,7 +157,7 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
   # Check if field is integer or factor
 
   x <- dtName[, get(varname)]
-
+  
   if (!(is.integer(x) | is.factor(x))) {
     c <- condition(c("simstudy::notIntegerOrFactor", "error"),
                    "Variable must be a factor or integer")

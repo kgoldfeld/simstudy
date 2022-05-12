@@ -139,8 +139,8 @@ assertInteger <- function(..., type, call = sys.call(-1)) {
     assertNumeric(..., call = call)
     dots <- dots2argNames(...)
     checkInteger <- function(arg) {
-        arg <- unlist(arg)
-        all(arg == as.integer(arg))
+      arg <- unlist(arg)
+      all(arg == as.integer(arg))
     }
     notInteger <- !sapply(dots$args, checkInteger)
     if (any(notInteger)) {
@@ -150,18 +150,13 @@ assertInteger <- function(..., type, call = sys.call(-1)) {
 
 #' Check for Factor
 #'
-#' @description Checks if all passed vars and their content are factors or can
-#' be coerced to factor without loss of information.
+#' @description Checks if all passed vars and their content are factors.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
 assertFactor <- function(..., type, call = sys.call(-1)) {
   #assertNumeric(..., call = call)
   dots <- dots2argNames(...)
-  checkFactor <- function(arg) {
-    arg <- unlist(arg)
-    all(arg == as.factor(arg))
-  }
-  notFactor <- !sapply(dots$args, checkFactor)
+  notFactor <- !sapply(dots$args, function(fac) {is.factor(fac)})
   if (any(notFactor)) {
     typeError(dots$names[notFactor], type = "factor", call = call)
   }
@@ -169,30 +164,37 @@ assertFactor <- function(..., type, call = sys.call(-1)) {
 
 #' Check for Integer OR Factor
 #'
-#' @description Checks if all passed vars and their content are factors or can
-#' be coerced to factor without loss of information.
+#' @description Checks if all passed vars and their content are integers or factors.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
-#assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
-#  #assertNumeric(..., call = call)
-#  dots <- dots2argNames(...)
-#  checkInteger <- function(arg) {
-#    arg <- unlist(arg)
-#    all(arg == as.integer(arg))
-#  }
-#  checkFactor <- function(arg) {
-#    arg <- unlist(arg)
-#    all(arg == as.factor(arg))
-#  }
-#  notInteger <- !sapply(dots$args, checkInteger)
-#  notFactor <- !sapply(dots$args, checkFactor)
-#  #notInteger <- assertInteger(...)
-#  #notFactor <- assertFactor(...)
-#  if (!notFactor && !notInteger) {
-#    typeError(dots$names[notIntegerOrFactor], type = type, call = call)
-#    #typeError(notIntegerOrFactor, type = type, call = call)
-#  }
-#}
+# assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
+#   #assertNumeric(..., call = call)
+#   dots <- dots2argNames(...)
+#   #checkIntegerOrFactor <- function(arg) {
+#   #  arg <- unlist(arg)
+#   #  all(assertInteger(var1 = arg) | assertFactor(var1 = arg))
+#   #}
+#   #notInteger <- !sapply(dots$args, checkInteger)
+#   
+#   
+#   #notIntOrFac <- !sapply(dots$args, function(x) {((x == as.integer(x)) | is.factor(x))})
+# 
+#   checkInteger <- function(arg) {
+#     arg <- unlist(arg)
+#     all(tryCatch({assertNumeric(arg)},
+#                  error = FALSE,
+#                  finally = {
+#                    arg == as.integer(arg)
+#                  }))}
+# 
+#   
+#   notInteger <- !sapply(dots$args, checkInteger)
+#   notFactor <- !sapply(dots$args, function(fac) {is.factor(fac)})
+#   
+#   if (any(notInteger && notFactor)) {
+#     typeError(dots$names[notIntOrFac], type = "integer or factor", call = call)
+#   }
+# }
 
 #' Check for Value
 #'
@@ -238,12 +240,13 @@ assertUnique <- function(..., call = sys.call(-1)) {
 #' @description Checks if dt exists in environment.
 #' @param dtName Name of dt to check (as a string).
 #' @noRd
-#assertDataTableExists <- function(dtNameStr, call = sys.call(-1)) {
-#  dtexist <- dtNameStr %in% ls(envir = parent.frame())
-#  if (!dtexist) {
-#    dtDoesNotExistError(dtNameStr, call = call)
-#  }
-#}
+# assertDataTableExists <- function(dtNameStr, call = sys.call(-1)) {
+#   dtexist <- exists(deparse(substitute(dtNameStr)), envir = parent.frame())
+#   #dtexist <- dtNameStr %in% ls(envir = parent.frame())
+#   if (!dtexist) {
+#     dtDoesNotExistError(dtNameStr, call = call)
+#   }
+# }
 
 #' Var Defined?
 #'
