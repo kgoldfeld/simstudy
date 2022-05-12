@@ -309,16 +309,20 @@ genFormula <- function(coefs, vars) {
   lvars <- length(vars)
 
   if (!(lcoef == lvars | lcoef == lvars + 1)) {
-    stop("Coefficients or variables not properly specified")
+    c <- condition(c("simstudy::coeffVar", "error"),
+                   "Coefficients or variables not properly specified!")
+    stop(c)
   }
 
-  if (!is.numeric(coefs)) {
-    stop("Coefficients must be specified as numeric values or numeric variables")
-  }
+  assertNumeric(var1 = coefs)
+  # if (!is.numeric(coefs)) {
+  #   stop("Coefficients must be specified as numeric values or numeric variables")
+  # }
 
-  if (!is.character(vars)) {
-    stop("Variable names must be specified as characters or character variables")
-  }
+  assertType(var1 = vars, type = "character")
+  # if (!is.character(vars)) {
+  #   stop("Variable names must be specified as characters or character variables")
+  # }
 
   if (lcoef != lvars) { # Intercept
 

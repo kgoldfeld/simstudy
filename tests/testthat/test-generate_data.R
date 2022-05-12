@@ -381,3 +381,21 @@ test_that("genDummy works.", {
   }
   
 })
+
+#genFormula ----
+test_that("genFormula throws errors.", {
+  oldSeed <- .Random.seed
+  set.seed(24761)
+  
+  # Check coefficients and variables properly specified
+  expect_error(genFormula(c(1, 2), c("a", "b", "c", "d")), class = "simstudy::coeffVar")
+  
+  # Check coefficients are numeric
+  expect_error(genFormula(c("1", "2", "3"), c("a", "b")), class = "simstudy::wrongType")
+  
+  # Check vars are type character
+  expect_error(genFormula(c(1, 2, 3), c(12, 23, 34)), class = "simstudy::wrongType")
+  
+  set.seed(oldSeed)
+  
+})
