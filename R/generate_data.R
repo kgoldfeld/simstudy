@@ -448,15 +448,23 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
 
   ####
 
-  dprob <- defData(varname = "prob", formula = start0prob, dist = "trtAssign")
-  dd <- genData(n = n, dprob, id = id)
-  dd <- addMarkov(dd, transMat, chainLen, wide, id,
-    pername, varname, widePrefix,
-    start0lab = "prob",
-    trimvalue = trimvalue
-  )
-  
-  dd$prob <- NULL
+  if (!is.null(start0prob)) {
+    dprob <- defData(varname = "prob", formula = start0prob, dist = "trtAssign")
+    dd <- genData(n = n, dprob, id = id)
+    dd <- addMarkov(dd, transMat, chainLen, wide, id,
+      pername, varname, widePrefix,
+      start0lab = "prob",
+      trimvalue = trimvalue
+    )
+    
+    dd$prob <- NULL
+  } else {
+    dd <- genData(n = n, id = id)
+    dd <- addMarkov(dd, transMat, chainLen, wide, id,
+                    pername, varname, widePrefix,
+                    trimvalue = trimvalue
+    )
+  }
 
   dd[]
 }

@@ -420,19 +420,19 @@ test_that("genMarkov throws errors.", {
   set.seed(24761)
 
   # check transMat is matrix
-  mat1 <- c(.7,.2,.1,.5,.3,.2,0.0,.1,.9)
+  mat1 <- c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9)
   expect_error(genMarkov(n=10, transMat = mat1, chainLen = 5, wide = TRUE), class = "simstudy::typeMatrix")
   
   # check transMat is square matrix
-  mat2 <- t(matrix(c(.7,.2,.1,.5,.3,.2,0.0,.1,.9,.3,.4,.3), nrow=4,ncol=3))
+  mat2 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9, 0.3, 0.4, 0.3), nrow=4,ncol=3))
   expect_error(genMarkov(n=10, transMat = mat2, chainLen = 5, wide = TRUE), class = "simstudy::squareMatrix")
   
   # check transMat row sums = 1
-  mat3 <- t(matrix(c(.7,.2,.1,.5,.3,.2,0.0,.1,.8), nrow=3,ncol=3))
+  mat3 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.8), nrow=3,ncol=3))
   expect_error(genMarkov(n=10, transMat = mat3, chainLen = 5, wide = TRUE), class = "simstudy::rowSums1")
   
   # check chainLen is > 1
-  mat4 <- t(matrix(c(.7,.2,.1,.5,.3,.2,0.0,.1,.9), nrow=3,ncol=3))
+  mat4 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
   expect_error(genMarkov(n=10, transMat = mat4, chainLen = 0, wide = TRUE), class = "simstudy::chainLen")
   
   set.seed(oldSeed)
@@ -443,6 +443,15 @@ test_that("genMarkov works.", {
   oldSeed <- .Random.seed
   set.seed(23456)
 
+  # not wide, not start0prob
+  
+  # not wide, start0prob
+  
+  # wide, not start0prob
+  
+  # wide, start0prob
+  
+  
   set.seed(oldSeed)
   
 })
