@@ -366,6 +366,7 @@ genFormula <- function(coefs, vars) {
 #' prefix for the state fields in the wide format. Defaults to "S".
 #' @param trimvalue Integer value indicating end state. If trimvalue is not NULL,
 #' all records after the first instance of state = trimvalue will be deleted.
+#' @param start0prob probabily of starting state, i.e. ".3;.5;.2"
 #' @return A data table with n rows if in wide format, or n by chainLen rows
 #' if in long format.
 #' @examples
@@ -389,38 +390,73 @@ genFormula <- function(coefs, vars) {
 #' @concept generate_data
 genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state",
-                      widePrefix = "S", trimvalue = NULL) {
+                      widePrefix = "S", trimvalue = NULL, start0prob = NULL) {
 
   # 'declare' vars created in data.table
   variable <- NULL
 
-  # check transMat is square matrix and row sums = 1
-
-  if (!is.matrix(transMat) |
-    (length(dim(transMat)) != 2) |
-    (dim(transMat)[1] != dim(transMat)[2])
-  ) {
-    stop("Transition matrix needs to be a square matrix")
+  # check transMat is matrix
+  #assertType(var1 = transMat, type = "matrix", deep = FALSE)
+  if (!is.matrix(transMat)) {
+    c <- condition(c("simstudy::typeMatrix", "error"),
+                   "transMat is not a matrix!")
+    stop(c)
   }
-
-  # check row sums = 1
-
+    
+  # check transMat is square matrix
+  if ((length(dim(transMat)) != 2) |
+      (dim(transMat)[1] != dim(transMat)[2])) {
+    c <- condition(c("simstudy::squareMatrix", "error"),
+                   "transMat is not a square matrix!")
+    stop(c)
+  }
+  
+  # check transMat row sums = 1
   if (!all(round(apply(transMat, 1, sum), 5) == 1)) {
-    stop("Rows in transition matrix must sum to 1")
+    c <- condition(c("simstudy::rowSums1", "error"),
+                   "transMat rows do not sum to 1!")
+    stop(c)
   }
+  
+  
+  
+  # check transMat is square matrix and row sums = 1
+# 
+#   if (!is.matrix(transMat) |
+#     (length(dim(transMat)) != 2) |
+#     (dim(transMat)[1] != dim(transMat)[2])
+#   ) {
+#     c <- condition(c("simstudy::coeffVar", "error"),
+#                    "Coefficients or variables not properly specified!")
+#     stop(c)
+#     stop("Transition matrix needs to be a square matrix")
+#   }
+# 
+#   # check row sums = 1
+# 
+#   if (!all(round(apply(transMat, 1, sum), 5) == 1)) {
+#     stop("Rows in transition matrix must sum to 1")
+#   }
 
   # check chainLen is > 1
 
-  if (chainLen <= 1) stop("Chain length must be greater than 1")
+  if (chainLen <= 1) {
+    c <- condition(c("simstudy::chainLen", "error"),
+                   "chainLen must be greater than 1!")
+    stop(c)
+  }
 
   ####
 
-  dd <- genData(n = n, id = id)
+  dprob <- defData(varname = "prob", formula = start0prob, dist = "trtAssign")
+  dd <- genData(n = n, dprob, id = id)
   dd <- addMarkov(dd, transMat, chainLen, wide, id,
     pername, varname, widePrefix,
-    start0lab = NULL,
+    start0lab = "prob",
     trimvalue = trimvalue
   )
+  
+  dd$prob <- NULL
 
   dd[]
 }
