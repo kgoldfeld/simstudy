@@ -399,3 +399,17 @@ test_that("genFormula throws errors.", {
   set.seed(oldSeed)
   
 })
+
+test_that("genFormula works.", {
+  oldSeed <- .Random.seed
+  set.seed(23456)
+  
+  # intercept
+  expect_equal(genFormula(c(42, 54, 32, 2), c("A", "B", "C")), "42 + 54 * A + 32 * B + 2 * C")
+  
+  # no intercept
+  expect_equal(genFormula(c(2.1, 3.1, 4.1), c("a", "b", "c")), "2.1 * a + 3.1 * b + 4.1 * c")
+  
+  set.seed(oldSeed)
+
+})
