@@ -366,7 +366,9 @@ genFormula <- function(coefs, vars) {
 #' prefix for the state fields in the wide format. Defaults to "S".
 #' @param trimvalue Integer value indicating end state. If trimvalue is not NULL,
 #' all records after the first instance of state = trimvalue will be deleted.
-#' @param start0prob probabily of starting state, i.e. ".3;.5;.2"
+#' @param startProb A string that contains the probability distribution of the 
+#' starting state, separated by a ";". Length of start probabilities must match
+#' the number of rows of the transition matrix.
 #' @return A data table with n rows if in wide format, or n by chainLen rows
 #' if in long format.
 #' @examples
@@ -390,7 +392,7 @@ genFormula <- function(coefs, vars) {
 #' @concept generate_data
 genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state",
-                      widePrefix = "S", trimvalue = NULL, start0prob = NULL) {
+                      widePrefix = "S", trimvalue = NULL, startProb = NULL) {
 
   # 'declare' vars created in data.table
   variable <- NULL
@@ -418,38 +420,25 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
     stop(c)
   }
   
-  
-  
-  # check transMat is square matrix and row sums = 1
-# 
-#   if (!is.matrix(transMat) |
-#     (length(dim(transMat)) != 2) |
-#     (dim(transMat)[1] != dim(transMat)[2])
-#   ) {
-#     c <- condition(c("simstudy::coeffVar", "error"),
-#                    "Coefficients or variables not properly specified!")
-#     stop(c)
-#     stop("Transition matrix needs to be a square matrix")
-#   }
-# 
-#   # check row sums = 1
-# 
-#   if (!all(round(apply(transMat, 1, sum), 5) == 1)) {
-#     stop("Rows in transition matrix must sum to 1")
-#   }
-
-  # check chainLen is > 1
-
+  # check chainLen greater than 1
   if (chainLen <= 1) {
     c <- condition(c("simstudy::chainLen", "error"),
                    "chainLen must be greater than 1!")
     stop(c)
   }
+  
+  # if startProb defined, check it has length == number of matrix rows
+  if (!is.null(startProb)) {
+    s <- unlist(strsplit(startProb, split = ";"))
+    r <- dim(transMat)[1]
+      assertLength(var1 = s, length = r)
+    
+  }
 
   ####
 
-  if (!is.null(start0prob)) {
-    dprob <- defData(varname = "prob", formula = start0prob, dist = "trtAssign")
+  if (!is.null(startProb)) {
+    dprob <- defData(varname = "prob", formula = startProb, dist = "categorical")
     dd <- genData(n = n, dprob, id = id)
     dd <- addMarkov(dd, transMat, chainLen, wide, id,
       pername, varname, widePrefix,

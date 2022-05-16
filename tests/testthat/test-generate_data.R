@@ -435,6 +435,10 @@ test_that("genMarkov throws errors.", {
   mat4 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
   expect_error(genMarkov(n=10, transMat = mat4, chainLen = 0, wide = TRUE), class = "simstudy::chainLen")
   
+  # if startProb defined, check it has length == number of matrix rows
+  mat5 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
+  expect_error(genMarkov(n=10, transMat = mat5, chainLen = 5, wide = TRUE, startProb = ".7;.3"), class = "simstudy::lengthMismatch")
+  
   set.seed(oldSeed)
   
 })
@@ -443,13 +447,57 @@ test_that("genMarkov works.", {
   oldSeed <- .Random.seed
   set.seed(23456)
 
-  # not wide, not start0prob
   
-  # not wide, start0prob
+  # wide, not startProb
+  ## pk
+  mat_w_nsp <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
+                     0.15, 0.5, 0.35, 0.0,
+                     0.0, 0.35, 0.5, 0.15,
+                     0.0, 0.0, 0.5, 0.5), nrow=4,ncol=4))
+  long1000_1 <- genMarkov(n=1000, transMat = mat_w_nsp, chainLen = 1000, wide = TRUE)
+  totals <- table(long1000_1[, "S1000"])
+  ratios <- totals/1000
   
-  # wide, not start0prob
+  expected_v <- c(0.115, 0.3833333, 0.3833333, 0.115)
   
-  # wide, start0prob
+  expect_silent(ratios[1] >= expected_v[1] - 0.005 && ratios[1] <= expected_v[1] + 0.005)
+  expect_silent(ratios[2] >= expected_v[2] - 0.005 && ratios[2] <= expected_v[2] + 0.005)
+  expect_silent(ratios[3] >= expected_v[3] - 0.005 && ratios[3] <= expected_v[3] + 0.005)
+  expect_silent(ratios[4] >= expected_v[4] - 0.005 && ratios[4] <= expected_v[4] + 0.005)
+  
+  
+  ## correct number of events gen
+  expect_equal(ncol(long1000_1), 1001)
+  
+  ## number of categories == dimensions of transistion matrix
+  
+  # wide, startProb
+  ## pk
+  mat_w_sp <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
+                          0.15, 0.5, 0.35, 0.0,
+                          0.0, 0.35, 0.5, 0.15,
+                          0.0, 0.0, 0.5, 0.5), nrow=4,ncol=4))
+  long1000_2 <- genMarkov(n=1000, transMat = mat_w_sp, chainLen = 1000, wide = TRUE, startProb = "0.65;0.25;0.05;0.05")
+  totals <- table(long1000_2[, "S1000"])
+  ratios <- totals/1000
+  
+  expected_v <- c(0.115, 0.3833333, 0.3833333, 0.115)
+  
+  expect_silent(ratios[1] >= expected_v[1] - 0.005 && ratios[1] <= expected_v[1] + 0.005)
+  expect_silent(ratios[2] >= expected_v[2] - 0.005 && ratios[2] <= expected_v[2] + 0.005)
+  expect_silent(ratios[3] >= expected_v[3] - 0.005 && ratios[3] <= expected_v[3] + 0.005)
+  expect_silent(ratios[4] >= expected_v[4] - 0.005 && ratios[4] <= expected_v[4] + 0.005)
+  
+  ## correct number of events gen
+  expect_equal(ncol(long1000_2), 1001)
+  
+  ## number of categories == dimensions of transistion matrix
+  
+  # not wide, not startProb
+  
+  
+  # not wide, startProb
+  
   
   
   set.seed(oldSeed)
