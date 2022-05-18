@@ -450,13 +450,13 @@ test_that("genMarkov works.", {
   
   # wide, not startProb
   ## pk
-  mat_w_nsp <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
+  matr <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
                      0.15, 0.5, 0.35, 0.0,
                      0.0, 0.35, 0.5, 0.15,
                      0.0, 0.0, 0.5, 0.5), nrow=4,ncol=4))
-  long1000_1 <- genMarkov(n=1000, transMat = mat_w_nsp, chainLen = 1000, wide = TRUE)
-  totals <- table(long1000_1[, "S1000"])
-  ratios <- totals/1000
+  gm1 <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = TRUE)
+  totals <- table(gm1[, "S250"])
+  ratios <- totals/500
   
   expected_v <- c(0.115, 0.3833333, 0.3833333, 0.115)
   
@@ -467,19 +467,19 @@ test_that("genMarkov works.", {
   
   
   ## correct number of events gen
-  expect_equal(ncol(long1000_1), 1001)
+  expect_equal(ncol(gm1), 251)
   
   ## number of categories == dimensions of transistion matrix
+  for(i in 1:4) {
+    expect_equal(any(gm1 == i), TRUE)
+  }
   
   # wide, startProb
   ## pk
-  mat_w_sp <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
-                          0.15, 0.5, 0.35, 0.0,
-                          0.0, 0.35, 0.5, 0.15,
-                          0.0, 0.0, 0.5, 0.5), nrow=4,ncol=4))
-  long1000_2 <- genMarkov(n=1000, transMat = mat_w_sp, chainLen = 1000, wide = TRUE, startProb = "0.65;0.25;0.05;0.05")
-  totals <- table(long1000_2[, "S1000"])
-  ratios <- totals/1000
+  set.seed(23456)
+  gm2 <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = TRUE, startProb = "0.65;0.25;0.05;0.05")
+  totals <- table(gm2[, "S250"])
+  ratios <- totals/500
   
   expected_v <- c(0.115, 0.3833333, 0.3833333, 0.115)
   
@@ -489,17 +489,37 @@ test_that("genMarkov works.", {
   expect_silent(ratios[4] >= expected_v[4] - 0.005 && ratios[4] <= expected_v[4] + 0.005)
   
   ## correct number of events gen
-  expect_equal(ncol(long1000_2), 1001)
+  expect_equal(ncol(gm2), 251)
   
   ## number of categories == dimensions of transistion matrix
-  
-  # not wide, not startProb
-  
-  
-  # not wide, startProb
+  for(i in 1:4) {
+    expect_equal(any(gm2 == i), TRUE)
+  }
   
   
+  # not wide == wide
+  set.seed(23456)
+  gm1_nw <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = FALSE)
   
+  set.seed(23456)
+  gm2_nw <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = FALSE, startProb = "0.65;0.25;0.05;0.05")
+  
+  check_equal <- function (gm_not_wide, gm_wide) {
+    rand_id <- sample(1:500, 1)
+    rand_state <- sample(1:250, 1)
+    gmnw <- gm_not_wide[((250 * (rand_id - 1)) + rand_state), 3]
+    gmw <- gm_wide[rand_id, (rand_state + 1), with = FALSE]
+    colnames(gmnw) <- c("x")
+    colnames(gmw) <- c("x")
+    
+    expect_equal(gmnw, gmw)
+  }
+  
+  for (i in 1:5) {
+    check_equal(gm1_nw, gm1)
+    check_equal(gm2_nw, gm2)
+  }
+ 
   set.seed(oldSeed)
   
 })

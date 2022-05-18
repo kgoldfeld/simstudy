@@ -167,41 +167,45 @@ assertFactor <- function(..., type, call = sys.call(-1)) {
 #' @description Checks if all passed vars and their content are integers or factors.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
-assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
-  #assertNumeric(..., call = call)
-  dots <- dots2argNames(...)
-  #checkIntegerOrFactor <- function(arg) {
-  #  arg <- unlist(arg)
-  #  all(assertInteger(var1 = arg) | assertFactor(var1 = arg))
-  #}
-  #notInteger <- !sapply(dots$args, checkInteger)
-
-
-  #notIntOrFac <- !sapply(dots$args, function(x) {((x == as.integer(x)) | is.factor(x))})
-
-  # checkInteger <- function(arg) {
-  #   arg <- unlist(arg)
-  #   all(tryCatch({assertNumeric(arg)},
-  #                error = FALSE,
-  #                finally = {
-  #                  arg == as.integer(arg)
-  #                }))}
-  
-  checkInteger <- function(arg) {
-    arg <- unlist(arg)
-    all(if (is.numeric(arg)) {
-      arg == as.integer(arg)
-    } else {FALSE})
-  }
-
-
-  notInteger <- !sapply(dots$args, checkInteger)
-  notFactor <- !sapply(dots$args, function(fac) {is.factor(fac)})
-
-  if (any(notInteger && notFactor)) {
-    typeError(dots$names[notFactor], type = "integer or factor", call = call)
-  }
-}
+# assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
+#   #assertNumeric(..., call = call)
+#   dots <- dots2argNames(...)
+#   #checkIntegerOrFactor <- function(arg) {
+#   #  arg <- unlist(arg)
+#   #  all(assertInteger(var1 = arg) | assertFactor(var1 = arg))
+#   #}
+#   #notInteger <- !sapply(dots$args, checkInteger)
+# 
+# 
+#   #notIntOrFac <- !sapply(dots$args, function(x) {((x == as.integer(x)) | is.factor(x))})
+# 
+#   # checkInteger <- function(arg) {
+#   #   arg <- unlist(arg)
+#   #   all(tryCatch({assertNumeric(arg)},
+#   #                error = FALSE,
+#   #                finally = {
+#   #                  arg == as.integer(arg)
+#   #                }))}
+#   
+#   # checkInteger <- function(arg) {
+#   #   arg <- unlist(arg)
+#   #   all(if (is.numeric(arg)) {
+#   #     arg == as.integer(arg)
+#   #   } else {FALSE})
+#   # }
+#   # 
+#   # 
+#   # notInteger <- !sapply(dots$args, checkInteger)
+#   # notFactor <- !sapply(dots$args, function(fac) {is.factor(fac)})
+#   
+#   notIntOrFac <- !sapply(dots$args, function(x) {all(if(is.numeric(x) {
+#     x == as.integer(x)
+#   }) | is.factor(x)})
+# 
+#   if (any(notIntOrFac)) {
+#     typeError(dots$names[notIntOrFac], type = "integer or factor", call = call)
+#   }
+# }
 
 #' Check for Value
 #'
