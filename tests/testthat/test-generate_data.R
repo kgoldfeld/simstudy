@@ -391,7 +391,7 @@ test_that("genFormula throws errors.", {
   expect_error(genFormula(c(1, 2), c("a", "b", "c", "d")), class = "simstudy::coeffVar")
   
   # Check coefficients are numeric
-  expect_error(genFormula(c("1", "2", "3"), c("a", "b")), class = "simstudy::wrongType")
+  #expect_error(genFormula(c("1", "2", "3"), c("a", "b")), class = "simstudy::wrongType")
   
   # Check vars are type character
   expect_error(genFormula(c(1, 2, 3), c(12, 23, 34)), class = "simstudy::wrongType")
@@ -409,6 +409,12 @@ test_that("genFormula works.", {
   
   # no intercept
   expect_equal(genFormula(c(2.1, 3.1, 4.1), c("a", "b", "c")), "2.1 * a + 3.1 * b + 4.1 * c")
+  
+  # intercept, double dot
+  expect_equal(genFormula(c(42, "b", "c", 2), c("A", "B", "C")), "42 + ..b * A + ..c * B + 2 * C")
+  
+  # no intercept, double dot
+  expect_equal(genFormula(c("a", "b", 4.1), c("a", "b", "c")), "..a * a + ..b * b + 4.1 * c")
   
   set.seed(oldSeed)
 

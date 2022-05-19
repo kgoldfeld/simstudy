@@ -279,7 +279,8 @@ genFactor <- function(dtName,
 #' @description Formulas for additive linear models can be generated
 #' with specified coefficient values and variable names.
 #' @param coefs A numerical vector that contains the values of the
-#' coefficients. If length(coefs) == length(vars), then no intercept
+#' coefficients. Coefficients can also be defined as character for use with 
+#' double dot notation. If length(coefs) == length(vars), then no intercept
 #' is assumed. Otherwise, an intercept is assumed.
 #' @param vars A vector of strings that specify the names of the
 #' explanatory variables in the equation.
@@ -314,7 +315,15 @@ genFormula <- function(coefs, vars) {
     stop(c)
   }
 
-  assertNumeric(var1 = coefs)
+  # check coefs are numeric or character
+  
+  # if (any(!is.numeric(coefs) | !is.character(coefs))) {
+  #   c <- condition(c("simstudy::coefNumOrChar", "error"),
+  #                  "Coefficients must be of type numeric or character!")
+  #   stop(c)
+  # }
+  
+  #assertNumeric(var1 = coefs)
   # if (!is.numeric(coefs)) {
   #   stop("Coefficients must be specified as numeric values or numeric variables")
   # }
@@ -323,20 +332,33 @@ genFormula <- function(coefs, vars) {
   # if (!is.character(vars)) {
   #   stop("Variable names must be specified as characters or character variables")
   # }
+  
+  coef_gen <- function (cf) {
+    cff <- tryCatch(as.numeric(cf),
+                    warning = function (w) {
+                      paste0("..", cf)
+                    })
+                    
+    return(paste0(cff))
+  }
 
   if (lcoef != lvars) { # Intercept
 
-    form <- paste0(coefs[1])
+    #form <- paste0(coefs[1])
+    form <- coef_gen(coefs[1])
     coefs <- coefs[-1]
   } else { # no intercept
 
-    form <- paste(coefs[1], "*", vars[1])
+    #form <- paste(coefs[1], "*", vars[1])
+    form <- paste(coef_gen(coefs[1]), "*", vars[1])
     coefs <- coefs[-1]
     vars <- vars[-1]
   }
 
   for (i in 1:(lcoef - 1)) {
-    form <- paste(form, "+", coefs[i], "*", vars[i])
+    #form <- paste(form, "+", coefs[i], "*", vars[i])
+    cg <- coef_gen(coefs[i])
+    form <- paste(form, "+", cg, "*", vars[i])
   }
 
   return(form)
