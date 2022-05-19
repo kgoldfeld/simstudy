@@ -19,7 +19,7 @@ test_that("addCondition works.", {
 })
 
 # addColumns ----
-test_that("addColumns throws erros.", {
+test_that("addColumns throws errors.", {
   expect_error(addColumns(), class = "simstudy::missingArgument")
   expect_error(addColumns("a"), class = "simstudy::missingArgument")
   expect_error(addColumns(data.frame(), data.frame()), class = "simstudy::wrongClass")
@@ -54,4 +54,37 @@ test_that("defRepeatAdd throws errors correctly.", {
     class = "simstudy::missingArgument")
   expect_error(defRepeatAdd(nVars = 8, prefix = "b", variance = 3, dist = "normal"),
     class = "simstudy::missingArgument")
+})
+
+# addMarkov ----
+test_that("addMarkov throws errors.", {
+  d0 <- defData(varname = "xx", formula = 2)
+  d0 <- defData(d0, varname = "xy", formula = 5)
+  dd <- genData(n = 10, dt = d0)
+  
+  # check transMat is matrix
+  mat1 <- c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9)
+  expect_error(addMarkov(dd, transMat = mat1, chainLen = 5, wide = TRUE), class = "simstudy::typeMatrix")
+  
+  # check transMat is square matrix
+  mat2 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9, 0.3, 0.4, 0.3), nrow=4,ncol=3))
+  expect_error(addMarkov(dd, transMat = mat2, chainLen = 5, wide = TRUE), class = "simstudy::squareMatrix")
+  
+  # check transMat row sums = 1
+  mat3 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.8), nrow=3,ncol=3))
+  expect_error(addMarkov(dd, transMat = mat3, chainLen = 5, wide = TRUE), class = "simstudy::rowSums1")
+  
+  # check chainLen is > 1
+  mat4 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
+  expect_error(addMarkov(dd, transMat = mat4, chainLen = 0, wide = TRUE), class = "simstudy::chainLen")
+  
+  # if start0lab defined, check that it is defined in dd
+  mat5 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
+  expect_error(addMarkov(dd, transMat = mat5, chainLen = 5, wide = TRUE, start0lab = "yy"), class = "simstudy::notDefined")
+  
+  
+  # if start0lab defined, check that it exists in the transition matrix
+  mat6 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
+  expect_error(addMarkov(dd, transMat = mat6, chainLen = 5, wide = TRUE, start0lab = "xy"), class = "simstudy::start0probNotInTransMat")
+  
 })

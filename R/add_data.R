@@ -260,29 +260,58 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
   # 'declare' vars created in data.table
   variable <- NULL
   .e <- NULL
-
-  # check transMat is square matrix and row sums = 1
-
-  if (!is.matrix(transMat) |
-    (length(dim(transMat)) != 2) |
-    (dim(transMat)[1] != dim(transMat)[2])
-  ) {
-    stop("Transition matrix needs to be a square matrix")
+  
+  ######
+  # check transMat is matrix
+  if (!is.matrix(transMat)) {
+    c <- condition(c("simstudy::typeMatrix", "error"),
+                   "transMat is not a matrix!")
+    stop(c)
   }
 
-  # check row sums = 1
+  # check transMat is square matrix
+  if ((length(dim(transMat)) != 2) |
+      (dim(transMat)[1] != dim(transMat)[2])) {
+    c <- condition(c("simstudy::squareMatrix", "error"),
+                   "transMat is not a square matrix!")
+    stop(c)
+  }
 
+  # check transMat row sums = 1
   if (!all(round(apply(transMat, 1, sum), 5) == 1)) {
-    stop("Rows in transition matrix must sum to 1")
+    c <- condition(c("simstudy::rowSums1", "error"),
+                   "transMat rows do not sum to 1!")
+    stop(c)
   }
 
-  # check chainLen is > 1
+  # check chainLen greater than 1
+  if (chainLen <= 1) {
+    c <- condition(c("simstudy::chainLen", "error"),
+                   "chainLen must be greater than 1!")
+    stop(c)
+  }
+  
+  # if start0lab defined, check that it is defined in dd
+  if (!is.null(start0lab)) {
+    assertInDataTable(vars = start0lab, dt = dd)
+    
+  }
 
-  if (chainLen <= 1) stop("Chain length must be greater than 1")
+  # if start0lab defined, check that it exists in the transition matrix
+  if (!is.null(start0lab)) {
+    if (any(0 < dd[, start0lab, with = FALSE] | dd[, start0lab, with = FALSE] > dim(transMat)[1])) {
+      c <- condition(c("simstudy::start0probNotInTransMat", "error"),
+                     "all start states in start0prob must exist in the transistion matrix!")
+      stop(c)
+    }
+
+  }
+  ######
 
   # verify id is in data.table dd
 
-  if (!(id %in% names(dd))) stop(paste(id, "is not in data table"))
+  #if (!(id %in% names(dd))) stop(paste(id, "is not in data table"))
+  assertInDataTable(vars = id, dt = dd)
 
   ####
 
@@ -290,8 +319,6 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
 
   if (is.null(start0lab)) {
     s0 <- rep(1, n)
-  } else if (!(start0lab %in% names(dd))) {
-    stop(paste("Start state field", start0lab, "does not exist"))
   } else {
     s0 <- dd[, get(start0lab)]
   }

@@ -435,9 +435,14 @@ test_that("genMarkov throws errors.", {
   mat4 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
   expect_error(genMarkov(n=10, transMat = mat4, chainLen = 0, wide = TRUE), class = "simstudy::chainLen")
   
-  # if startProb defined, check it has length == number of matrix rows
+  # if startProb defined, check it sums to 1
   mat5 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
-  expect_error(genMarkov(n=10, transMat = mat5, chainLen = 5, wide = TRUE, startProb = ".7;.3"), class = "simstudy::lengthMismatch")
+  expect_error(genMarkov(n=10, transMat = mat5, chainLen = 5, wide = TRUE, startProb = ".3;.3;.1"), class = "simstudy::notEqual")
+  
+  
+  # if startProb defined, check it has length == number of matrix rows
+  mat6 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
+  expect_error(genMarkov(n=10, transMat = mat6, chainLen = 5, wide = TRUE, startProb = ".7;.3"), class = "simstudy::lengthMismatch")
   
   set.seed(oldSeed)
   
@@ -445,17 +450,12 @@ test_that("genMarkov throws errors.", {
 
 test_that("genMarkov works.", {
   oldSeed <- .Random.seed
+  set.seed(23456)
   
-
   
   # wide, not startProb
   ## pk
-<<<<<<< HEAD
-  set.seed(23456)
-  mat_w_nsp <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
-=======
   matr <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
->>>>>>> 8b478ce62fac734695457d0a1c2fffe4f26297da
                      0.15, 0.5, 0.35, 0.0,
                      0.0, 0.35, 0.5, 0.15,
                      0.0, 0.0, 0.5, 0.5), nrow=4,ncol=4))
@@ -482,19 +482,9 @@ test_that("genMarkov works.", {
   # wide, startProb
   ## pk
   set.seed(23456)
-<<<<<<< HEAD
-  mat_w_sp <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
-                          0.15, 0.5, 0.35, 0.0,
-                          0.0, 0.35, 0.5, 0.15,
-                          0.0, 0.0, 0.5, 0.5), nrow=4,ncol=4))
-  long1000_2 <- genMarkov(n=1000, transMat = mat_w_sp, chainLen = 1000, wide = TRUE, startProb = "0.65;0.25;0.05;0.05")
-  totals <- table(long1000_2[, "S1000"])
-  ratios <- totals/1000
-=======
   gm2 <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = TRUE, startProb = "0.65;0.25;0.05;0.05")
   totals <- table(gm2[, "S250"])
   ratios <- totals/500
->>>>>>> 8b478ce62fac734695457d0a1c2fffe4f26297da
   
   expected_v <- c(0.115, 0.3833333, 0.3833333, 0.115)
   
@@ -507,23 +497,6 @@ test_that("genMarkov works.", {
   expect_equal(ncol(gm2), 251)
   
   ## number of categories == dimensions of transistion matrix
-<<<<<<< HEAD
-  
-  # not wide, not startProb
-  set.seed(23456)
-  long1000_3 <- genMarkov(n=1000, transMat = mat_w_nsp, chainLen = 1000, wide = FALSE)
-  
-  for(i in seq_along(long1000_3)) {
-    id <- long1000_3[i, "id"]
-    per <- long1000_3[i, "period"]
-    #expect_equal(long1000_3[i, "state"], long1000_1[.(id), .(per)])
-    expect_equal(long1000_3[i, "state"], subset(long1000_1, id == id, per == per))
-  }
-  
-  
-  # not wide, startProb
-  set.seed(23456)
-=======
   for(i in 1:4) {
     expect_equal(any(gm2 == i), TRUE)
   }
@@ -532,7 +505,6 @@ test_that("genMarkov works.", {
   # not wide == wide
   set.seed(23456)
   gm1_nw <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = FALSE)
->>>>>>> 8b478ce62fac734695457d0a1c2fffe4f26297da
   
   set.seed(23456)
   gm2_nw <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = FALSE, startProb = "0.65;0.25;0.05;0.05")
@@ -552,7 +524,7 @@ test_that("genMarkov works.", {
     check_equal(gm1_nw, gm1)
     check_equal(gm2_nw, gm2)
   }
- 
+  
   set.seed(oldSeed)
   
 })

@@ -398,7 +398,6 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
   variable <- NULL
 
   # check transMat is matrix
-  #assertType(var1 = transMat, type = "matrix", deep = FALSE)
   if (!is.matrix(transMat)) {
     c <- condition(c("simstudy::typeMatrix", "error"),
                    "transMat is not a matrix!")
@@ -425,6 +424,18 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
     c <- condition(c("simstudy::chainLen", "error"),
                    "chainLen must be greater than 1!")
     stop(c)
+  }
+  
+  # if startProb defined, check it sums to 1
+  if (!is.null(startProb)) {
+    s <- as.numeric(unlist(strsplit(startProb, split = ";")))
+    ssum <- sum(s)
+    if (ssum != 1) {
+      c <- condition(c("simstudy::notEqual", "error"),
+                     "startProb must sum to 1!")
+      stop(c)
+    }
+    
   }
   
   # if startProb defined, check it has length == number of matrix rows
