@@ -445,11 +445,12 @@ test_that("genMarkov throws errors.", {
 
 test_that("genMarkov works.", {
   oldSeed <- .Random.seed
-  set.seed(23456)
+  
 
   
   # wide, not startProb
   ## pk
+  set.seed(23456)
   mat_w_nsp <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
                      0.15, 0.5, 0.35, 0.0,
                      0.0, 0.35, 0.5, 0.15,
@@ -473,6 +474,7 @@ test_that("genMarkov works.", {
   
   # wide, startProb
   ## pk
+  set.seed(23456)
   mat_w_sp <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
                           0.15, 0.5, 0.35, 0.0,
                           0.0, 0.35, 0.5, 0.15,
@@ -494,9 +496,19 @@ test_that("genMarkov works.", {
   ## number of categories == dimensions of transistion matrix
   
   # not wide, not startProb
+  set.seed(23456)
+  long1000_3 <- genMarkov(n=1000, transMat = mat_w_nsp, chainLen = 1000, wide = FALSE)
+  
+  for(i in seq_along(long1000_3)) {
+    id <- long1000_3[i, "id"]
+    per <- long1000_3[i, "period"]
+    #expect_equal(long1000_3[i, "state"], long1000_1[.(id), .(per)])
+    expect_equal(long1000_3[i, "state"], subset(long1000_1, id == id, per == per))
+  }
   
   
   # not wide, startProb
+  set.seed(23456)
   
   
   
