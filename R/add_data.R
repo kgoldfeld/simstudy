@@ -299,7 +299,7 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
 
   # if start0lab defined, check that it exists in the transition matrix
   if (!is.null(start0lab)) {
-    if (any(0 > dd[, start0lab, with = FALSE] | dd[, start0lab, with = FALSE] > dim(transMat)[1])) {
+    if (any(1 > dd[, start0lab, with = FALSE] | dd[, start0lab, with = FALSE] > dim(transMat)[1])) {
       c <- condition(c("simstudy::start0probNotInTransMat", "error"),
                      "all start states in start0prob must exist in the transistion matrix!")
       stop(c)
