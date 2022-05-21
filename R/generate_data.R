@@ -337,16 +337,16 @@ genFormula <- function(coefs, vars) {
   
   coef_gen <- function (cf) {
     cf_char <- as.character(cf)
-    cff <- if(!is.null(double_dot_vars[cf_char]),
-                    )
+    cff <- if(!is.null(double_dot_vars[[cf_char]])) {
+      double_dot_vars[[cf_char]]
+    } else {
+      cf_char
+    }
     
-    
-    
-    
-    cff <- tryCatch(as.numeric(cf),
-                    warning = function (w) {
-                      paste0("..", cf)
-                    })
+    # cff <- tryCatch(as.numeric(cf),
+    #                 warning = function (w) {
+    #                   paste0("..", cf)
+    #                 })
                     
     return(paste0(cff))
   }
