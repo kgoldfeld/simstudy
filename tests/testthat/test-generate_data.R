@@ -489,13 +489,13 @@ test_that("genMarkov works.", {
   prop[, t.p := rep(theoretical_p, max(id))]
   prop[, dif := abs(p - t.p)]
   
-  expect_silent(all(prop[, dif < 0.02]))
+  expect_true(all(prop[, dif < 0.02]))
   
   ## correct number of events gen
   expect_equal(nchain, gm1[, max(period)])
   
   ## number of categories == dimensions of transistion matrix
-  expect_silent((length(table(gm1$state)) == dim(matr)[1]) & (gm1[, max(state)] == dim(matr)[1]))
+  expect_true((length(table(gm1$state)) == dim(matr)[1]) & (gm1[, max(state)] == dim(matr)[1]))
   
   # startProb
   ## pk
@@ -507,13 +507,13 @@ test_that("genMarkov works.", {
   prop[, t.p := rep(theoretical_p, max(id))]
   prop[, dif := abs(p - t.p)]
   
-  expect_silent(all(prop[, dif < 0.02]))
+  expect_true(all(prop[, dif < 0.02]))
   
   ## correct number of events gen
   expect_equal(nchain, gm2[, max(period)])
   
   ## number of categories == dimensions of transistion matrix
-  expect_silent((length(table(gm2$state)) == dim(matr)[1]) & (gm2[, max(state)] == dim(matr)[1]))
+  expect_true((length(table(gm2$state)) == dim(matr)[1]) & (gm2[, max(state)] == dim(matr)[1]))
   
   
   # not wide == wide
