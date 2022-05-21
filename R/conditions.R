@@ -373,17 +373,17 @@ mismatchError <- function(name_specified, name_null,
 #' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
-dtDoesNotExistError <- function(dtNameStr, call = sys.call(-1), msg = "", ...) {
-  message <- glueCollapse(
-    "Datatable { dtNameStr *} not defined!", msg
-  )
-  
-  c <- condition(
-    c("simstudy::dtDoesNotExist", "error"),
-    message, call, ...
-  )
-  stop(c)
-}
+# dtDoesNotExistError <- function(dtNameStr, call = sys.call(-1), msg = "", ...) {
+#   message <- glueCollapse(
+#     "Datatable { dtNameStr *} not defined!", msg
+#   )
+#   
+#   c <- condition(
+#     c("simstudy::dtDoesNotExist", "error"),
+#     message, call, ...
+#   )
+#   stop(c)
+# }
 
 ###Added by ME 5/12/22
 
@@ -395,14 +395,14 @@ dtDoesNotExistError <- function(dtNameStr, call = sys.call(-1), msg = "", ...) {
 #' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
-coeffVarError <- function(call = sys.call(-1), msg = "", ...) {
-  message <- glueCollapse(
-    "Coefficients or variables not properly specified!", msg
-  )
-  
-  c <- condition(
-    c("simstudy::coeffVar", "error"),
-    message, call, ...
-  )
-  stop(c)
-}
+# coeffVarError <- function(call = sys.call(-1), msg = "", ...) {
+#   message <- glueCollapse(
+#     "Coefficients or variables not properly specified!", msg
+#   )
+#   
+#   c <- condition(
+#     c("simstudy::coeffVar", "error"),
+#     message, call, ...
+#   )
+#   stop(c)
+# }
