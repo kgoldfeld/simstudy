@@ -459,76 +459,79 @@ test_that("genMarkov works.", {
   set.seed(23456)
   
   
-  # wide, not startProb
+  # not startProb
   ## pk
+  mat_pow <- function(x, k) {
+    x.k <- x
+    for (i in 2:k) {
+      x.k <- x.k %*% x
+    }
+    x.k
+  }
+  
   matr <- t(matrix(c(0.5, 0.5, 0.0, 0.0,
                      0.15, 0.5, 0.35, 0.0,
                      0.0, 0.35, 0.5, 0.15,
                      0.0, 0.0, 0.5, 0.5), nrow=4,ncol=4))
-  gm1 <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = TRUE)
-  totals <- table(gm1[, "S250"])
-  ratios <- totals/500
   
-  expected_v <- c(0.115, 0.3833333, 0.3833333, 0.115)
+  theoretical_p <- mat_pow(matr, 100)[1,]
   
-  expect_silent(ratios[1] >= expected_v[1] - 0.005 && ratios[1] <= expected_v[1] + 0.005)
-  expect_silent(ratios[2] >= expected_v[2] - 0.005 && ratios[2] <= expected_v[2] + 0.005)
-  expect_silent(ratios[3] >= expected_v[3] - 0.005 && ratios[3] <= expected_v[3] + 0.005)
-  expect_silent(ratios[4] >= expected_v[4] - 0.005 && ratios[4] <= expected_v[4] + 0.005)
+  nind <- 10
+  nchain <- 5000
   
+  gm1 <- genMarkov(n = nind, transMat = matr, chainLen = nchain)
+  
+  prop <- gm1[, .N, keyby = .(id,state)]
+  prop[, p := N/sum(N), keyby = id]
+  prop[, t.p := rep(theoretical_p, max(id))]
+  prop[, dif := abs(p - t.p)]
+  
+  expect_silent(all(prop[, dif < 0.02]))
   
   ## correct number of events gen
-  expect_equal(ncol(gm1), 251)
+  expect_equal(nchain, gm1[, max(period)])
   
   ## number of categories == dimensions of transistion matrix
-  for(i in 1:4) {
-    expect_equal(any(gm1 == i), TRUE)
-  }
+  expect_silent((length(table(gm1$state)) == dim(matr)[1]) & (gm1[, max(state)] == dim(matr)[1]))
   
-  # wide, startProb
+  # startProb
   ## pk
   set.seed(23456)
-  gm2 <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = TRUE, startProb = "0.65;0.25;0.05;0.05")
-  totals <- table(gm2[, "S250"])
-  ratios <- totals/500
+  gm2 <- genMarkov(n=nind, transMat = matr, chainLen = nchain, startProb = "0.65;0.25;0.05;0.05")
   
-  expected_v <- c(0.115, 0.3833333, 0.3833333, 0.115)
+  prop <- gm1[, .N, keyby = .(id,state)]
+  prop[, p := N/sum(N), keyby = id]
+  prop[, t.p := rep(theoretical_p, max(id))]
+  prop[, dif := abs(p - t.p)]
   
-  expect_silent(ratios[1] >= expected_v[1] - 0.005 && ratios[1] <= expected_v[1] + 0.005)
-  expect_silent(ratios[2] >= expected_v[2] - 0.005 && ratios[2] <= expected_v[2] + 0.005)
-  expect_silent(ratios[3] >= expected_v[3] - 0.005 && ratios[3] <= expected_v[3] + 0.005)
-  expect_silent(ratios[4] >= expected_v[4] - 0.005 && ratios[4] <= expected_v[4] + 0.005)
+  expect_silent(all(prop[, dif < 0.02]))
   
   ## correct number of events gen
-  expect_equal(ncol(gm2), 251)
+  expect_equal(nchain, gm2[, max(period)])
   
   ## number of categories == dimensions of transistion matrix
-  for(i in 1:4) {
-    expect_equal(any(gm2 == i), TRUE)
-  }
+  expect_silent((length(table(gm2$state)) == dim(matr)[1]) & (gm2[, max(state)] == dim(matr)[1]))
   
   
   # not wide == wide
   set.seed(23456)
-  gm1_nw <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = FALSE)
+  gm1_w <- genMarkov(n=nind, transMat = matr, chainLen = nchain, wide = TRUE)
   
   set.seed(23456)
-  gm2_nw <- genMarkov(n=500, transMat = matr, chainLen = 250, wide = FALSE, startProb = "0.65;0.25;0.05;0.05")
+  gm2_w <- genMarkov(n=nind, transMat = matr, chainLen = nchain, wide = TRUE, startProb = "0.65;0.25;0.05;0.05")
   
   check_equal <- function (gm_not_wide, gm_wide) {
-    rand_id <- sample(1:500, 1)
-    rand_state <- sample(1:250, 1)
-    gmnw <- gm_not_wide[((250 * (rand_id - 1)) + rand_state), 3]
-    gmw <- gm_wide[rand_id, (rand_state + 1), with = FALSE]
-    colnames(gmnw) <- c("x")
-    colnames(gmw) <- c("x")
+    rand_id <- sample(nind, 1)
+    rand_state <- sample(nchain, 1)
+    gmnw <- gm_not_wide[id == rand_id & period == rand_state, state]
+    gmw <- gm_wide[rand_id, rand_state + 1, with = FALSE]
     
-    expect_equal(gmnw, gmw)
+    expect_equal(as.numeric(gmnw), as.numeric(gmw))
   }
   
   for (i in 1:5) {
-    check_equal(gm1_nw, gm1)
-    check_equal(gm2_nw, gm2)
+    check_equal(gm1, gm1_w)
+    check_equal(gm2, gm2_w)
   }
   
   set.seed(oldSeed)

@@ -333,7 +333,16 @@ genFormula <- function(coefs, vars) {
   #   stop("Variable names must be specified as characters or character variables")
   # }
   
+  double_dot_vars <- .parseDotVars(coefs)
+  
   coef_gen <- function (cf) {
+    cf_char <- as.character(cf)
+    cff <- if(!is.null(double_dot_vars[cf_char]),
+                    )
+    
+    
+    
+    
     cff <- tryCatch(as.numeric(cf),
                     warning = function (w) {
                       paste0("..", cf)

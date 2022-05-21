@@ -384,25 +384,3 @@ dtDoesNotExistError <- function(dtNameStr, call = sys.call(-1), msg = "", ...) {
   )
   stop(c)
 }
-
-###Added by ME 5/12/22
-
-# TODO tests
-#' Datatable does not exist error.
-#'
-#' @param dtName Names of the dt.
-#' @param call sys.call to pass on to the error.
-#' @param msg Additional information for the error message as
-#' glueCollapse'able string.
-#' @noRd
-coeffVarError <- function(call = sys.call(-1), msg = "", ...) {
-  message <- glueCollapse(
-    "Coefficients or variables not properly specified!", msg
-  )
-  
-  c <- condition(
-    c("simstudy::coeffVar", "error"),
-    message, call, ...
-  )
-  stop(c)
-}
