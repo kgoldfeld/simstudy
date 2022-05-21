@@ -406,3 +406,16 @@ mismatchError <- function(name_specified, name_null,
 #   )
 #   stop(c)
 # }
+=======
+dtDoesNotExistError <- function(dtNameStr, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "Datatable { dtNameStr *} not defined!", msg
+  )
+  
+  c <- condition(
+    c("simstudy::dtDoesNotExist", "error"),
+    message, call, ...
+  )
+  stop(c)
+}
+>>>>>>> fd76b3954f1914efea97c7279282537447da811c
