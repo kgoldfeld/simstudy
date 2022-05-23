@@ -407,3 +407,22 @@ mismatchError <- function(name_specified, name_null,
 #   stop(c)
 # }
 
+#' Variables not equal to value error.
+#'
+#' @param vars Names of the variables.
+#' @param val Value to be equal to.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+notEqualError <- function(vars, val, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "{ vars *} not equal to {val}!", msg
+  )
+
+  c <- condition(
+    c("simstudy::notEqual", "error"),
+    message, call, ...
+  )
+  stop(c)
+}

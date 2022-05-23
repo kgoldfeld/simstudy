@@ -14,6 +14,13 @@ test_that("assertLengthEqual works.", {
   expect_error(assertLengthEqual(x = 5), class = "simpleError")
 })
 
+test_that("assertEqual works.", {
+  expect_error(assertEqual(x = 5, val = 6), class = "simstudy::notEqual")
+  expect_error(assertEqual(x = 5, y = 6, val = 5), class = "simstudy::notEqual")
+  expect_error(assertEqual(x = "one", val = "two"), class = "simstudy::notEqual")
+  expect_silent(assertEqual(x = "three", y = "three", val = "three"))
+})
+
 test_that("assertLength works", {
   expect_error(assertLength(x = 5, y = c(1, 3), z = list(a = 3, b = 4), length = 2),
     class = "simstudy::lengthMismatch"

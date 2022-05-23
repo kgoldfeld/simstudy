@@ -329,45 +329,37 @@ genFormula <- function(coefs, vars) {
   # }
 
   assertType(var1 = vars, type = "character")
-  # if (!is.character(vars)) {
-  #   stop("Variable names must be specified as characters or character variables")
+  
+  # double_dot_vars <- .parseDotVars(coefs)
+  # 
+  # coef_gen <- function (cf) {
+  #   cf_char <- as.character(cf)
+  #   cff <- if(!is.null(double_dot_vars[[cf_char]])) {
+  #     double_dot_vars[[cf_char]]
+  #   } else {
+  #     cf_char
+  #   }
+  #              
+  #   return(paste0(cff))
   # }
-  
-  double_dot_vars <- .parseDotVars(coefs)
-  
-  coef_gen <- function (cf) {
-    cf_char <- as.character(cf)
-    cff <- if(!is.null(double_dot_vars[[cf_char]])) {
-      double_dot_vars[[cf_char]]
-    } else {
-      cf_char
-    }
-    
-    # cff <- tryCatch(as.numeric(cf),
-    #                 warning = function (w) {
-    #                   paste0("..", cf)
-    #                 })
-                    
-    return(paste0(cff))
-  }
 
   if (lcoef != lvars) { # Intercept
 
-    #form <- paste0(coefs[1])
-    form <- coef_gen(coefs[1])
+    form <- paste0(coefs[1])
+    #form <- coef_gen(coefs[1])
     coefs <- coefs[-1]
   } else { # no intercept
 
-    #form <- paste(coefs[1], "*", vars[1])
-    form <- paste(coef_gen(coefs[1]), "*", vars[1])
+    form <- paste(coefs[1], "*", vars[1])
+    #form <- paste(coef_gen(coefs[1]), "*", vars[1])
     coefs <- coefs[-1]
     vars <- vars[-1]
   }
 
   for (i in 1:(lcoef - 1)) {
-    #form <- paste(form, "+", coefs[i], "*", vars[i])
-    cg <- coef_gen(coefs[i])
-    form <- paste(form, "+", cg, "*", vars[i])
+    form <- paste(form, "+", coefs[i], "*", vars[i])
+    #cg <- coef_gen(coefs[i])
+    #form <- paste(form, "+", cg, "*", vars[i])
   }
 
   return(form)
@@ -526,8 +518,26 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
 #' @export
 #' @concept generate_data
 genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames = NULL, idName = "id") {
-  if (nFactors < 2) stop("Must specify at least 2 factors")
-  if (length(levels) > 1 & (length(levels) != nFactors)) stop("Number of levels does not match factors")
+  # check nFactors are integers
+  assertInteger(var1 = nFactors)
+  
+  # check length nFactors greater than 2
+  if(nFactors < 2) {
+    c <- condition(c("simstudy::greaterThan", "error"),
+                   "nFactors must be greater than 2!")
+    stop(c)
+  }
+  
+  # check number of levels matches factors
+  if (length(levels) > 1) {
+    assertEqual(var1 = length(levels), val = nFactors)
+  }
+  
+  # if (length(levels) > 1 & (length(levels) != nFactors)) {
+  #   c <- condition(c("simstudy::notEqual", "error"),
+  #                  "Number of levels does not match factors!")
+  #   stop(c)
+  #   }
 
   x <- list()
 

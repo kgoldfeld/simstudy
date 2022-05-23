@@ -32,6 +32,22 @@ assertLengthEqual <- function(..., call = sys.call(-1)) {
     }
 }
 
+#' Are arguments equal to value?
+#'
+#' @description Checks if all passed vars are equal to given value.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param val Value to check if variables are equal to
+#' @noRd
+assertEqual <- function(..., val, call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  
+  notEqual <- !sapply(dots$args, function(i) {i == val})
+  if (any(notEqual)) {
+    notEqualError(dots$names, val, call = call,
+                  msg = "{names *} should be equal to {val}")
+  }
+}
+
 #' Is length correct?
 #'
 #' @description Checks if all passed vars are of length 'length'. Caveat:

@@ -411,13 +411,10 @@ test_that("genFormula works.", {
   expect_equal(genFormula(c(2.1, 3.1, 4.1), c("a", "b", "c")), "2.1 * a + 3.1 * b + 4.1 * c")
   
   # intercept, double dot
-  x <- 22
-  y <- 33
-  z <- 44
-  expect_equal(genFormula(c(42, "..y", "..z", 2), c("A", "B", "C")), "42 + 33 * A + 44 * B + 2 * C")
+  expect_equal(genFormula(c(42, "..y", "..z", 2), c("A", "B", "C")), "42 + ..y * A + ..z * B + 2 * C")
   
   # no intercept, double dot
-  expect_equal(genFormula(c("..x", "..y", 4.1), c("a", "b", "c")), "22 * a + 33 * b + 4.1 * c")
+  expect_equal(genFormula(c("..x", "..y", 4.1), c("a", "b", "..z")), "..x * a + ..y * b + 4.1 * ..z")
   
   set.seed(oldSeed)
 
@@ -539,4 +536,21 @@ test_that("genMarkov works.", {
   
   set.seed(oldSeed)
   
+})
+
+#genMultiFac ----
+test_that("genMultiFac throws errors.", {
+  oldSeed <- .Random.seed
+  set.seed(98765)
+  
+  # check nFactors are integers
+  expect_error(genMultiFac(1.4, each = 4), class = "simstudy::wrongType")
+  
+  # check length nFactors greater than 2
+  expect_error(genMultiFac(1, each = 4), class = "simstudy::greaterThan")
+  
+  # check number of levels matches factors
+  expect_error(genMultiFac(3, levels = c(2, 3)), class = "simstudy::notEqual")
+  
+  set.seed(oldSeed)
 })
