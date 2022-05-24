@@ -415,9 +415,9 @@ mismatchError <- function(name_specified, name_null,
 #' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
-notEqualError <- function(vars, val, call = sys.call(-1), msg = "", ...) {
+notEqualError <- function(names, val, call = sys.call(-1), msg = "", ...) {
   message <- glueCollapse(
-    "{ vars *} not equal to {val}!", msg
+    "{ names *} not equal to {val}!", msg
   )
 
   c <- condition(

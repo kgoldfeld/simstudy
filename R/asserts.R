@@ -43,8 +43,7 @@ assertEqual <- function(..., val, call = sys.call(-1)) {
   
   notEqual <- !sapply(dots$args, function(i) {i == val})
   if (any(notEqual)) {
-    notEqualError(dots$names, val, call = call,
-                  msg = "{names *} should be equal to {val}")
+    notEqualError(dots$names, val, call = call)
   }
 }
 
