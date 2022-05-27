@@ -598,6 +598,7 @@ test_that("genMultiFac works.", {
   actual_row_sums1 <- sort(unlist(actual_row_sums1))
   
   expect_true(all(poss_row_sums1 == actual_row_sums1))
+  expect_true(all(g1[, 2:nFac] == 0 | g1[, 2:nFac] == 1))
   
   
   # coding == effect, levels == 2
@@ -607,8 +608,7 @@ test_that("genMultiFac works.", {
   for(i in sample(2:length(g2))) {
     expect_equal(sum(g2[, i, with = FALSE]), 0)
   }
-  expect_true(!all(g2 == 0))
-  
+  expect_true(all(g2[, 2:nFac] == 1 | g2[, 2:nFac] == -1))
   
   
   ## levels == other, len(levels) == 1
