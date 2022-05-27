@@ -565,12 +565,12 @@ test_that("genMultiFac works.", {
   g1
   
   # checks each column sums to correct amount
-  for(i in sample(2:length(g1))) {
+  for(i in sample(2:(nFac + 1))) {
     expect_equal(sum(g1[, i, with = FALSE]), nrow(g1) / 2)
   }
   
   # checks all values are 0s or 1s
-  expect_true(all(g1[, 2:nFac] == 0 | g1[, 2:nFac] == 1))
+  expect_true(all(g1[, 2:(nFac + 1)] == 0 | g1[, 2:(nFac + 1)] == 1))
   
   # checks all rows are unique
   rowStrings <- unlist(lapply(split(g1[,-1], seq(nrow(g1))), function(x) paste0(x, collapse="")))
@@ -586,12 +586,12 @@ test_that("genMultiFac works.", {
   g2 <- genMultiFac(nFac, each = nEach, coding = "effect")
   
   # checks all columns sum to 0
-  for(i in sample(2:length(g2))) {
+  for(i in sample(2:(nFac + 1))) {
     expect_equal(sum(g2[, i, with = FALSE]), 0)
   }
   
   # checks all values are 1s or -1s
-  expect_true(all(g2[, 2:nFac] == 1 | g2[, 2:nFac] == -1))
+  expect_true(all(g2[, 2:(nFac + 1)] == 1 | g2[, 2:(nFac + 1)] == -1))
   
   # checks all rows are unique
   rowStrings <- unlist(lapply(split(g2[,-1], seq(nrow(g2))), function(x) paste0(x, collapse="")))
@@ -615,7 +615,7 @@ test_that("genMultiFac works.", {
   expect_true(length(rowStrings) == nEach * nLev^nFac)
   
   # checks all values are in correct range
-  expect_true(all(g3[, 2:nFac, with = FALSE] <= nLev && g3[, 2:nFac, with = FALSE] > 0))
+  expect_true(all(g3[, 2:(nFac + 1), with = FALSE] <= nLev && g3[, 2:(nFac + 1), with = FALSE] > 0))
 
   
   ## levels == other, len(levels) != 1
@@ -635,7 +635,9 @@ test_that("genMultiFac works.", {
   expect_true(length(rowStrings) == nEach * prod(nLev))
   
   # checks all values are in correct range
-  expect_true(all(g4[, 2:nFac, with = FALSE] <= max(nLev) && g4[, 2:nFac, with = FALSE] > 0))
+  for(i in 2:(nFac + 1)) {
+    expect_true(all(g4[, i, with = FALSE] <= nLev[i - 1] && g4[, i, with = FALSE] > 0))
+  }
   
   set.seed(oldSeed)
 })
