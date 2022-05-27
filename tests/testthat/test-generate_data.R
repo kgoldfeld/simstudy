@@ -615,7 +615,8 @@ test_that("genMultiFac works.", {
   expect_true(length(rowStrings) == nEach * nLev^nFac)
   
   # checks all values are in correct range
-  expect_true(all(g3[, 2:(nFac + 1), with = FALSE] <= nLev && g3[, 2:(nFac + 1), with = FALSE] > 0))
+  expect_true(all(g3[, i, with = FALSE] <= nLev[i - 1]))
+  expect_true(all(g3[, i, with = FALSE] > 0))
 
   
   ## levels == other, len(levels) != 1
@@ -636,7 +637,8 @@ test_that("genMultiFac works.", {
   
   # checks all values are in correct range
   for(i in 2:(nFac + 1)) {
-    expect_true(all(g4[, i, with = FALSE] <= nLev[i - 1] && g4[, i, with = FALSE] > 0))
+    expect_true(all(g4[, i, with = FALSE] <= nLev[i - 1]))
+    expect_true(all(g4[, i, with = FALSE] > 0))
   }
   
   set.seed(oldSeed)
