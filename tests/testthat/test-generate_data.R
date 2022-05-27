@@ -304,16 +304,12 @@ test_that("genDummy throws errors.", {
   expect_error(genDummy(dd, varname = "xx", sep = ".", replace = FALSE), class = "simstudy::notDefined")
   
   # Check if field is integer or factor
-  # TODO if field is integer, is it guarunteed to be factor?
-  # TODO if not, add case with integers but no factors
   
   d2 <- defData(varname = "tx", formula = 5, dist = "normal", variance = 2)
   
   dd2 <- genData(6, d2)
   
   expect_error(genDummy(dd2, varname = "tx", sep = ".", replace = FALSE), class = "simstudy::notIntegerOrFactor")
-  
-  # TODO Check to see if new field names exists
   
   d1 <- defData(d1, varname = "rx.1", formula = 5, dist = "nonrandom")
   
@@ -583,41 +579,6 @@ test_that("genMultiFac works.", {
   # checks there is right number of rows
   expect_true(length(rowStrings) == nEach * 2^nFac)
   
-  # sumTable <- table(rowSums(g1[, 2:length(g1)]))
-  # # checks all unique row sums are accounted for
-  # for(i in 0:nFac) {
-  #   ind <- as.character(i)
-  #   expect_true(!is.na(sumTable[ind]))
-  # }
-  
-  # # this is from stackoverflow, is that an issue with publishing?
-  # pascalTriangle <- function(h) {
-  #   lapply(0:h, function(i) choose(i, 0:i))
-  # }
-  # 
-  # pt <- pascalTriangle(nFac)
-  # 
-  # poss_row_sums1 <- NULL
-  # 
-  # for(j in 0:nFac) {
-  #   pt_num <- pt[[nFac + 1]][j + 1]
-  #   for(k in 1:pt_num) {
-  #     for(i in 1:nEach) {
-  #       poss_row_sums1 <- c(poss_row_sums1, j)
-  #     }
-  #   }
-  # }
-  # 
-  # actual_row_sums1 <- NULL
-  # for(i in 1:nrow(g1)) {
-  #   actual_row_sums1 <- c(actual_row_sums1, sum(g1[i, 2:length(g1)]))
-  # }
-  # 
-  # poss_row_sums1 <- sort(unlist(poss_row_sums1))
-  # actual_row_sums1 <- sort(unlist(actual_row_sums1))
-  # 
-  # expect_true(all(poss_row_sums1 == actual_row_sums1))
-  
   
   ## coding == effect, levels == 2
   nFac <- sample(2:5, size = 1)
@@ -639,19 +600,6 @@ test_that("genMultiFac works.", {
   # checks there is right number of rows
   expect_true(length(rowStrings) == nEach * 2^nFac)
   
-  # g2up <- g2 + 1
-  # sumTable <- table(rowSums(g2up[, 2:length(g2up)]))
-  # sumOpts <- NULL
-  # for(i in 0:nFac) {
-  #   sumOpts <- c(sumOpts, i * 2)
-  # }
-  
-  # # checks all unique row sums are accounted for
-  # for(i in sumOpts) {
-  #   ind <- as.character(i)
-  #   expect_true(!is.na(sumTable[ind]))
-  # }
-  
   
   ## levels == other, len(levels) == 1
   nFac <- sample(2:5, size = 1)
@@ -669,23 +617,25 @@ test_that("genMultiFac works.", {
   # checks all values are in correct range
   expect_true(all(g3[, 2:nFac, with = FALSE] <= nLev && g3[, 2:nFac, with = FALSE] > 0))
 
-  # # checks each column has appropriate number of each value in it (1s, 2s, 3s, etc.)
-  # for(i in 2:(nFac + 1)) {
-  #   t <- table(g3[, i, with = FALSE])
-  #   sum_num <- (nLev^(nFac - 1))*nEach
-  # 
-  #   expect_true(all(t == sum_num))
-  #   expect_equal(sum(t), sum_num * nLev)
-  # }
-  
-  # sumTable <- table(rowSums(g3[, 2:length(g3)]))
-  # # checks all unique row sums are accounted for
-  # for(i in nFac:(nFac * nLev)) {
-  #   ind <- as.character(i)
-  #   expect_true(!is.na(sumTable[ind]))
-  # }
   
   ## levels == other, len(levels) != 1
+  nFac <- sample(2:5, size = 1)
+  nEach <- sample(2:5, size = 1)
+  nLev <- NULL
+  for(i in 1:nFac) {
+    nLev <- c(nLev, sample(2:5, size = 1))
+  }
+  g4 <- genMultiFac(nFac, each = nEach, levels = nLev)
+  
+  # checks all rows are unique
+  rowStrings <- unlist(lapply(split(g4[,-1], seq(nrow(g4))), function(x) paste0(x, collapse="")))
+  expect_true(length(rowStrings) == (length(unique(rowStrings)) * nEach))
+  
+  # checks there is right number of rows
+  expect_true(length(rowStrings) == nEach * prod(nLev))
+  
+  # checks all values are in correct range
+  expect_true(all(g4[, 2:nFac, with = FALSE] <= max(nLev) && g4[, 2:nFac, with = FALSE] > 0))
   
   set.seed(oldSeed)
 })
