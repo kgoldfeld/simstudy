@@ -563,8 +563,8 @@ test_that("genMultiFac works.", {
   set.seed(87654)
   
   # coding == dummy, levels == 2
-  nFac <- sample(2:10, size = 1)
-  nEach <- sample(2:10, size = 1)
+  nFac <- sample(2:5, size = 1)
+  nEach <- sample(2:5, size = 1)
   g1 <- genMultiFac(nFac, each = nEach)
   g1
   for(i in sample(2:length(g1))) {
@@ -601,9 +601,9 @@ test_that("genMultiFac works.", {
   expect_true(all(g1[, 2:nFac] == 0 | g1[, 2:nFac] == 1))
   
   
-  # coding == effect, levels == 2
-  nFac <- sample(2:10, size = 1)
-  nEach <- sample(2:10, size = 1)
+  ## coding == effect, levels == 2
+  nFac <- sample(2:5, size = 1)
+  nEach <- sample(2:5, size = 1)
   g2 <- genMultiFac(nFac, each = nEach, coding = "effect")
   for(i in sample(2:length(g2))) {
     expect_equal(sum(g2[, i, with = FALSE]), 0)
@@ -612,29 +612,26 @@ test_that("genMultiFac works.", {
   
   
   ## levels == other, len(levels) == 1
-  nFac <- sample(2:10, size = 1)
-  nEach <- sample(2:10, size = 1)
-  nLev <- sample(2:10, size = 1)
+  nFac <- sample(2:5, size = 1)
+  nEach <- sample(2:5, size = 1)
+  nLev <- sample(2:5, size = 1)
   g3 <- genMultiFac(nFac, each = nEach, levels = nLev)
   
-  poss_row_sums3 <- list()
-  for(i in 1:nEach) {
-    append(poss_row_sums3, nFac:(nFac * nLev))
+  sumTable <- table(rowSums(g3[, 2:length(g3)]))
+  # checks all unique row sums are accounted for
+  for(i in nFac:(nFac * nLev)) {
+    ind <- as.character(i)
+    expect_true(!is.na(sumTable[ind]))
   }
   
-  actual_row_sums3 <- list()
-  for(i in nrow(g3)) {
-    append(actual_row_sums3, sum(g3[i, 2:length(g3)]))
+  # checks each column has appropriate number of each value in it (1s, 2s, 3s, etc.)
+  for(i in 2:nFac + 1) {
+    t <- table(g3[, i, with = FALSE])
+    sum_num <- (nLev^(nFac - 1))*nEach
+    
+    expect_true(all(t == sum_num))
+    expect_equal(sum(t), sum_num * nLev)
   }
-  
-  poss_row_sums3 <- sort(unlist(poss_row_sums3))
-  actual_row_sums3 <- sort(unlist(actual_row_sums3))
-  
-  expect_true(all(poss_row_sums3 == actual_row_sums3))
-  
-  ## levels == other, len(levels) != 1
-  
-  
   
   set.seed(oldSeed)
 })
