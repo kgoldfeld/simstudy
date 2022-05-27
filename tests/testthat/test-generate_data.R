@@ -576,40 +576,40 @@ test_that("genMultiFac works.", {
   # checks all values are 0s or 1s
   expect_true(all(g1[, 2:nFac] == 0 | g1[, 2:nFac] == 1))
   
-  sumTable <- table(rowSums(g1[, 2:length(g1)]))
-  # checks all unique row sums are accounted for
-  for(i in 0:nFac) {
-    ind <- as.character(i)
-    expect_true(!is.na(sumTable[ind]))
-  }
+  # sumTable <- table(rowSums(g1[, 2:length(g1)]))
+  # # checks all unique row sums are accounted for
+  # for(i in 0:nFac) {
+  #   ind <- as.character(i)
+  #   expect_true(!is.na(sumTable[ind]))
+  # }
   
-  # # this is from stackoverflow, is that an issue with publishing?
-  # pascalTriangle <- function(h) {
-  #   lapply(0:h, function(i) choose(i, 0:i))
-  # }
-  # 
-  # pt <- pascalTriangle(nFac)
-  # 
-  # poss_row_sums1 <- NULL
-  # 
-  # for(j in 0:nFac) {
-  #   pt_num <- pt[[nFac + 1]][j + 1]
-  #   for(k in 1:pt_num) {
-  #     for(i in 1:nEach) {
-  #       poss_row_sums1 <- c(poss_row_sums1, j)
-  #     }
-  #   }
-  # }
-  # 
-  # actual_row_sums1 <- NULL
-  # for(i in 1:nrow(g1)) {
-  #   actual_row_sums1 <- c(actual_row_sums1, sum(g1[i, 2:length(g1)]))
-  # }
-  # 
-  # poss_row_sums1 <- sort(unlist(poss_row_sums1))
-  # actual_row_sums1 <- sort(unlist(actual_row_sums1))
-  # 
-  # expect_true(all(poss_row_sums1 == actual_row_sums1))
+  # this is from stackoverflow, is that an issue with publishing?
+  pascalTriangle <- function(h) {
+    lapply(0:h, function(i) choose(i, 0:i))
+  }
+
+  pt <- pascalTriangle(nFac)
+
+  poss_row_sums1 <- NULL
+
+  for(j in 0:nFac) {
+    pt_num <- pt[[nFac + 1]][j + 1]
+    for(k in 1:pt_num) {
+      for(i in 1:nEach) {
+        poss_row_sums1 <- c(poss_row_sums1, j)
+      }
+    }
+  }
+
+  actual_row_sums1 <- NULL
+  for(i in 1:nrow(g1)) {
+    actual_row_sums1 <- c(actual_row_sums1, sum(g1[i, 2:length(g1)]))
+  }
+
+  poss_row_sums1 <- sort(unlist(poss_row_sums1))
+  actual_row_sums1 <- sort(unlist(actual_row_sums1))
+
+  expect_true(all(poss_row_sums1 == actual_row_sums1))
   
   
   ## coding == effect, levels == 2
@@ -625,17 +625,29 @@ test_that("genMultiFac works.", {
   # checks all values are 1s or -1s
   expect_true(all(g2[, 2:nFac] == 1 | g2[, 2:nFac] == -1))
   
-  g2up <- g2 + 1
-  sumTable <- table(rowSums(g2up[, 2:length(g2up)]))
-  sumOpts <- NULL
-  for(i in 0:nFac) {
-    sumOpts <- c(sumOpts, i * 2)
+  # g2up <- g2 + 1
+  # sumTable <- table(rowSums(g2up[, 2:length(g2up)]))
+  # sumOpts <- NULL
+  # for(i in 0:nFac) {
+  #   sumOpts <- c(sumOpts, i * 2)
+  # }
+  
+  rowStrings <- NULL
+  for(i in 1:nrow(g2)) {
+    rowStr <- NULL
+    for(j in 2:ncol(g2)) {
+      rowStr <- paste0(rowStr, g2[i, j, with = FALSE])
+    }
+    rowStrings <- c(rowStrings, rowStr)
   }
-  # checks all unique row sums are accounted for
-  for(i in sumOpts) {
-    ind <- as.character(i)
-    expect_true(!is.na(sumTable[ind]))
-  }
+  
+  expect_true(length(rowStrings) == (length(unique(rowStrings)) * nEach))
+  
+  # # checks all unique row sums are accounted for
+  # for(i in sumOpts) {
+  #   ind <- as.character(i)
+  #   expect_true(!is.na(sumTable[ind]))
+  # }
   
   
   ## levels == other, len(levels) == 1
@@ -644,21 +656,32 @@ test_that("genMultiFac works.", {
   nLev <- sample(2:5, size = 1)
   g3 <- genMultiFac(nFac, each = nEach, levels = nLev)
   
-  sumTable <- table(rowSums(g3[, 2:length(g3)]))
-  # checks all unique row sums are accounted for
-  for(i in nFac:(nFac * nLev)) {
-    ind <- as.character(i)
-    expect_true(!is.na(sumTable[ind]))
+  rowStrings <- NULL
+  for(i in 1:nrow(g3)) {
+    rowStr <- NULL
+    for(j in 2:ncol(g3)) {
+      rowStr <- paste0(rowStr, g3[i, j, with = FALSE])
+    }
+    rowStrings <- c(rowStrings, rowStr)
   }
   
+  expect_true(length(rowStrings) == (length(unique(rowStrings)) * nEach))
+
   # checks each column has appropriate number of each value in it (1s, 2s, 3s, etc.)
-  for(i in 2:nFac + 1) {
+  for(i in 2:(nFac + 1)) {
     t <- table(g3[, i, with = FALSE])
     sum_num <- (nLev^(nFac - 1))*nEach
-    
+
     expect_true(all(t == sum_num))
     expect_equal(sum(t), sum_num * nLev)
   }
+  
+  # sumTable <- table(rowSums(g3[, 2:length(g3)]))
+  # # checks all unique row sums are accounted for
+  # for(i in nFac:(nFac * nLev)) {
+  #   ind <- as.character(i)
+  #   expect_true(!is.na(sumTable[ind]))
+  # }
   
   ## levels == other, len(levels) != 1
   
