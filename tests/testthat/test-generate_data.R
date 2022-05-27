@@ -577,15 +577,7 @@ test_that("genMultiFac works.", {
   expect_true(all(g1[, 2:nFac] == 0 | g1[, 2:nFac] == 1))
   
   # checks all rows are unique
-  rowStrings <- NULL
-  for(i in 1:nrow(g1)) {
-    rowStr <- NULL
-    for(j in 2:ncol(g1)) {
-      rowStr <- paste0(rowStr, g1[i, j, with = FALSE])
-    }
-    rowStrings <- c(rowStrings, rowStr)
-  }
-  
+  rowStrings <- unlist(lapply(split(g1[,-1], seq(nrow(g1))), function(x) paste0(x, collapse="")))
   expect_true(length(rowStrings) == (length(unique(rowStrings)) * nEach))
   
   # checks there is right number of rows
@@ -640,27 +632,19 @@ test_that("genMultiFac works.", {
   # checks all values are 1s or -1s
   expect_true(all(g2[, 2:nFac] == 1 | g2[, 2:nFac] == -1))
   
+  # checks all rows are unique
+  rowStrings <- unlist(lapply(split(g2[,-1], seq(nrow(g2))), function(x) paste0(x, collapse="")))
+  expect_true(length(rowStrings) == (length(unique(rowStrings)) * nEach))
+  
+  # checks there is right number of rows
+  expect_true(length(rowStrings) == nEach * 2^nFac)
+  
   # g2up <- g2 + 1
   # sumTable <- table(rowSums(g2up[, 2:length(g2up)]))
   # sumOpts <- NULL
   # for(i in 0:nFac) {
   #   sumOpts <- c(sumOpts, i * 2)
   # }
-  
-  # checks all rows are unique
-  rowStrings <- NULL
-  for(i in 1:nrow(g2)) {
-    rowStr <- NULL
-    for(j in 2:ncol(g2)) {
-      rowStr <- paste0(rowStr, g2[i, j, with = FALSE])
-    }
-    rowStrings <- c(rowStrings, rowStr)
-  }
-  
-  expect_true(length(rowStrings) == (length(unique(rowStrings)) * nEach))
-  
-  # checks there is right number of rows
-  expect_true(length(rowStrings) == nEach * 2^nFac)
   
   # # checks all unique row sums are accounted for
   # for(i in sumOpts) {
@@ -676,28 +660,23 @@ test_that("genMultiFac works.", {
   g3 <- genMultiFac(nFac, each = nEach, levels = nLev)
   
   # checks all rows are unique
-  rowStrings <- NULL
-  for(i in 1:nrow(g3)) {
-    rowStr <- NULL
-    for(j in 2:ncol(g3)) {
-      rowStr <- paste0(rowStr, g3[i, j, with = FALSE])
-    }
-    rowStrings <- c(rowStrings, rowStr)
-  }
-  
+  rowStrings <- unlist(lapply(split(g3[,-1], seq(nrow(g3))), function(x) paste0(x, collapse="")))
   expect_true(length(rowStrings) == (length(unique(rowStrings)) * nEach))
   
   # checks there is right number of rows
   expect_true(length(rowStrings) == nEach * nLev^nFac)
+  
+  # checks all values are in correct range
+  expect_true(all(g3[, 2:nFac, with = FALSE] <= nLev && g3[, 2:nFac, with = FALSE] > 0))
 
-  # checks each column has appropriate number of each value in it (1s, 2s, 3s, etc.)
-  for(i in 2:(nFac + 1)) {
-    t <- table(g3[, i, with = FALSE])
-    sum_num <- (nLev^(nFac - 1))*nEach
-
-    expect_true(all(t == sum_num))
-    expect_equal(sum(t), sum_num * nLev)
-  }
+  # # checks each column has appropriate number of each value in it (1s, 2s, 3s, etc.)
+  # for(i in 2:(nFac + 1)) {
+  #   t <- table(g3[, i, with = FALSE])
+  #   sum_num <- (nLev^(nFac - 1))*nEach
+  # 
+  #   expect_true(all(t == sum_num))
+  #   expect_equal(sum(t), sum_num * nLev)
+  # }
   
   # sumTable <- table(rowSums(g3[, 2:length(g3)]))
   # # checks all unique row sums are accounted for
