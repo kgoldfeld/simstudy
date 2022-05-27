@@ -1,6 +1,8 @@
 # simstudy (development version)
 
 ## New features
+* Updated genFormula with functionality to generate formulas with double dot variables inside.
+
 * Added utility functions survGetParams and survParamPlot to aid users in identifying parameters that can be used to generate desired distributions of time to event data.
 
 * Major updates to functions defSurv and genSurv. It is now possible to generate survival outcomes with hazard functions that change over time. In addition, competing risk outcomes can be explicitly generated.

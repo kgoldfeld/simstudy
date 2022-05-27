@@ -552,5 +552,89 @@ test_that("genMultiFac throws errors.", {
   # check number of levels matches factors
   expect_error(genMultiFac(3, levels = c(2, 3)), class = "simstudy::notEqual")
   
+  # check coding == 'effect' or 'dummy'
+  expect_error(genMultiFac(2, each = 3, coding = "trtAssign"), class = "simstudy::codingVal")
+  
+  set.seed(oldSeed)
+})
+
+test_that("genMultiFac works.", {
+  oldSeed <- .Random.seed
+  set.seed(87654)
+  
+  # coding == dummy, levels == 2
+  nFac <- sample(2:10, size = 1)
+  nEach <- sample(2:10, size = 1)
+  g1 <- genMultiFac(nFac, each = nEach)
+  g1
+  for(i in sample(2:length(g1))) {
+    expect_equal(sum(g1[, i, with = FALSE]), nrow(g1) / 2)
+  }
+  
+  # this is from stackoverflow, is that an issue with publishing?
+  pascalTriangle <- function(h) {
+    lapply(0:h, function(i) choose(i, 0:i))
+  }
+  
+  pt <- pascalTriangle(nFac)
+  
+  poss_row_sums1 <- NULL
+  
+  for(j in 0:nFac) {
+    pt_num <- pt[[nFac + 1]][j + 1]
+    for(k in 1:pt_num) {
+      for(i in 1:nEach) {
+        poss_row_sums1 <- c(poss_row_sums1, j)
+      }
+    }
+  }
+  
+  actual_row_sums1 <- NULL
+  for(i in 1:nrow(g1)) {
+    actual_row_sums1 <- c(actual_row_sums1, sum(g1[i, 2:length(g1)]))
+  }
+  
+  poss_row_sums1 <- sort(unlist(poss_row_sums1))
+  actual_row_sums1 <- sort(unlist(actual_row_sums1))
+  
+  expect_true(all(poss_row_sums1 == actual_row_sums1))
+  
+  
+  # coding == effect, levels == 2
+  nFac <- sample(2:10, size = 1)
+  nEach <- sample(2:10, size = 1)
+  g2 <- genMultiFac(nFac, each = nEach, coding = "effect")
+  for(i in sample(2:length(g2))) {
+    expect_equal(sum(g2[, i, with = FALSE]), 0)
+  }
+  expect_true(!all(g2 == 0))
+  
+  
+  
+  ## levels == other, len(levels) == 1
+  nFac <- sample(2:10, size = 1)
+  nEach <- sample(2:10, size = 1)
+  nLev <- sample(2:10, size = 1)
+  g3 <- genMultiFac(nFac, each = nEach, levels = nLev)
+  
+  poss_row_sums3 <- list()
+  for(i in 1:nEach) {
+    append(poss_row_sums3, nFac:(nFac * nLev))
+  }
+  
+  actual_row_sums3 <- list()
+  for(i in nrow(g3)) {
+    append(actual_row_sums3, sum(g3[i, 2:length(g3)]))
+  }
+  
+  poss_row_sums3 <- sort(unlist(poss_row_sums3))
+  actual_row_sums3 <- sort(unlist(actual_row_sums3))
+  
+  expect_true(all(poss_row_sums3 == actual_row_sums3))
+  
+  ## levels == other, len(levels) != 1
+  
+  
+  
   set.seed(oldSeed)
 })

@@ -538,16 +538,21 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
   #                  "Number of levels does not match factors!")
   #   stop(c)
   #   }
+  
+  # check coding == 'effect' or 'dummy'
+  if(!(coding == "effect" | coding == "dummy")) {
+    c <- condition(c("simstudy::codingVal", "error"),
+                   "coding must equal 'effect' or 'dummy'!")
+    stop(c)
+  }
 
   x <- list()
 
   if (all(levels == 2)) {
     if (coding == "effect") {
       opts <- c(-1, 1)
-    } else if (coding == "dummy") {
-      opts <- c(0, 1)
     } else {
-      stop("Need to specify 'effect' or 'dummy' coding")
+      opts <- c(0, 1)
     }
 
     for (i in 1:nFactors) {
