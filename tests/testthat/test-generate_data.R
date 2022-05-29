@@ -279,6 +279,7 @@ test_that("genFactor works.", {
   expect_length(genFactor(copy(dt), c("q1", "q2")), 6)
   expect_length(genFactor(copy(dt), c("q1", "q2"), replace = TRUE), 4)
   expect_equal(genFactor(copy(dt), c("q1", "q2"), labels = labels), dt_res)
+  
 })
 
 #genDummy ----
@@ -640,6 +641,19 @@ test_that("genMultiFac works.", {
     expect_true(all(g4[, i, with = FALSE] <= nLev[i - 1]))
     expect_true(all(g4[, i, with = FALSE] > 0))
   }
+  
+  ## check colNames works
+  nFac <- sample(2:5, size = 1)
+  nEach <- sample(2:5, size = 1)
+  colNames <- NULL
+  for(i in 1:nFac) {
+    colNames <- c(colNames, paste0("test", i))
+  }
+  g5 <- genMultiFac(nFac, nEach, colNames = colNames)
+  
+  columnNames <- colnames(g5[, 2:(nFac + 1)])
+  expect_equal(colNames, columnNames)
+  
   
   set.seed(oldSeed)
 })

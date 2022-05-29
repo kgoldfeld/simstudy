@@ -533,12 +533,6 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
     assertEqual(var1 = length(levels), val = nFactors)
   }
   
-  # if (length(levels) > 1 & (length(levels) != nFactors)) {
-  #   c <- condition(c("simstudy::notEqual", "error"),
-  #                  "Number of levels does not match factors!")
-  #   stop(c)
-  #   }
-  
   # check coding == 'effect' or 'dummy'
   if(!(coding == "effect" | coding == "dummy")) {
     c <- condition(c("simstudy::codingVal", "error"),
