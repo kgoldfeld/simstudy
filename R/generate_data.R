@@ -278,7 +278,7 @@ genFactor <- function(dtName,
 #' @title Generate a linear formula
 #' @description Formulas for additive linear models can be generated
 #' with specified coefficient values and variable names.
-#' @param coefs A numerical vector that contains the values of the
+#' @param coefs A vector that contains the values of the
 #' coefficients. Coefficients can also be defined as character for use with 
 #' double dot notation. If length(coefs) == length(vars), then no intercept
 #' is assumed. Otherwise, an intercept is assumed.
@@ -289,6 +289,9 @@ genFactor <- function(dtName,
 #'
 #' genFormula(c(.5, 2, 4), c("A", "B", "C"))
 #' genFormula(c(.5, 2, 4), c("A", "B"))
+#' 
+#' genFormula(c(.5, "..x", 4), c("A", "B", "C"))
+#' genFormula(c(.5, 2, "..z"), c("A", "B"))
 #'
 #' changeX <- c(7, 10)
 #' genFormula(c(.5, 2, changeX[1]), c("A", "B"))
@@ -314,34 +317,22 @@ genFormula <- function(coefs, vars) {
                    "Coefficients or variables not properly specified!")
     stop(c)
   }
-
-  # check coefs are numeric or character
   
-  # if (any(!is.numeric(coefs) | !is.character(coefs))) {
-  #   c <- condition(c("simstudy::coefNumOrChar", "error"),
-  #                  "Coefficients must be of type numeric or character!")
-  #   stop(c)
-  # }
   
-  #assertNumeric(var1 = coefs)
-  # if (!is.numeric(coefs)) {
-  #   stop("Coefficients must be specified as numeric values or numeric variables")
-  # }
+  if (is.character(coefs)) {
+    for (cf in coefs) {
+      if (suppressWarnings(is.na(as.integer(cf)))) {
+        if (substr(cf, start = 1, stop = 2) != "..") {
+          c <- condition(c("simstudy::doubleDot", "error"),
+                         "non-numerical coefficients must be specified with double dot notation")
+          
+          stop(c)
+        }
+      }
+    }
+  }
 
   assertType(var1 = vars, type = "character")
-  
-  # double_dot_vars <- .parseDotVars(coefs)
-  # 
-  # coef_gen <- function (cf) {
-  #   cf_char <- as.character(cf)
-  #   cff <- if(!is.null(double_dot_vars[[cf_char]])) {
-  #     double_dot_vars[[cf_char]]
-  #   } else {
-  #     cf_char
-  #   }
-  #              
-  #   return(paste0(cff))
-  # }
 
   if (lcoef != lvars) { # Intercept
 
