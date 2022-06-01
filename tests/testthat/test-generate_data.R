@@ -657,3 +657,5 @@ test_that("genMultiFac works.", {
   
   set.seed(oldSeed)
 })
+
+#test
