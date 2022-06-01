@@ -337,20 +337,16 @@ genFormula <- function(coefs, vars) {
   if (lcoef != lvars) { # Intercept
 
     form <- paste0(coefs[1])
-    #form <- coef_gen(coefs[1])
     coefs <- coefs[-1]
   } else { # no intercept
 
     form <- paste(coefs[1], "*", vars[1])
-    #form <- paste(coef_gen(coefs[1]), "*", vars[1])
     coefs <- coefs[-1]
     vars <- vars[-1]
   }
 
   for (i in 1:(lcoef - 1)) {
     form <- paste(form, "+", coefs[i], "*", vars[i])
-    #cg <- coef_gen(coefs[i])
-    #form <- paste(form, "+", cg, "*", vars[i])
   }
 
   return(form)
@@ -521,7 +517,7 @@ genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames =
   
   # check number of levels matches factors
   if (length(levels) > 1) {
-    assertEqual(var1 = length(levels), val = nFactors)
+    assertLength(var1 = levels, length = nFactors)
   }
   
   # check coding == 'effect' or 'dummy'

@@ -547,7 +547,7 @@ test_that("genMultiFac throws errors.", {
   expect_error(genMultiFac(1, each = 4), class = "simstudy::greaterThan")
   
   # check number of levels matches factors
-  expect_error(genMultiFac(3, levels = c(2, 3)), class = "simstudy::notEqual")
+  expect_error(genMultiFac(3, levels = c(2, 3)), class = "simstudy::lengthMismatch")
   
   # check coding == 'effect' or 'dummy'
   expect_error(genMultiFac(2, each = 3, coding = "trtAssign"), class = "simstudy::codingVal")
@@ -557,13 +557,11 @@ test_that("genMultiFac throws errors.", {
 
 test_that("genMultiFac works.", {
   oldSeed <- .Random.seed
-  set.seed(87654)
   
   # coding == dummy, levels == 2
   nFac <- sample(2:5, size = 1)
   nEach <- sample(2:5, size = 1)
   g1 <- genMultiFac(nFac, each = nEach)
-  g1
   
   # checks each column sums to correct amount
   for(i in sample(2:(nFac + 1))) {
@@ -616,8 +614,8 @@ test_that("genMultiFac works.", {
   expect_true(length(rowStrings) == nEach * nLev^nFac)
   
   # checks all values are in correct range
-  expect_true(all(g3[, i, with = FALSE] <= nLev[i - 1]))
-  expect_true(all(g3[, i, with = FALSE] > 0))
+  expect_true(all(g3[, 2:(nFac + 1), with = FALSE] <= nLev))
+  expect_true(all(g3[, 2:(nFac + 1), with = FALSE] > 0))
 
   
   ## levels == other, len(levels) != 1
