@@ -101,7 +101,8 @@ specifying a transition matrix.</p>
   pername <span class="op">=</span> <span class="st">"period"</span>,
   varname <span class="op">=</span> <span class="st">"state"</span>,
   widePrefix <span class="op">=</span> <span class="st">"S"</span>,
-  trimvalue <span class="op">=</span> <span class="cn">NULL</span>
+  trimvalue <span class="op">=</span> <span class="cn">NULL</span>,
+  startProb <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -137,6 +138,10 @@ prefix for the state fields in the wide format. Defaults to "S".</p></dd>
 <dt>trimvalue</dt>
 <dd><p>Integer value indicating end state. If trimvalue is not NULL,
 all records after the first instance of state = trimvalue will be deleted.</p></dd>
+<dt>startProb</dt>
+<dd><p>A string that contains the probability distribution of the 
+starting state, separated by a ";". Length of start probabilities must match
+the number of rows of the transition matrix.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
