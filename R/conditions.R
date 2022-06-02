@@ -365,20 +365,21 @@ mismatchError <- function(name_specified, name_null,
 
 ###Added by ME 5/9/22
 
-#' Datatable does not exist error.
+#' Variables not equal to value error.
 #'
-#' @param dtName Names of the dt.
+#' @param vars Names of the variables.
+#' @param val Value to be equal to.
 #' @param call sys.call to pass on to the error.
 #' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
-dtDoesNotExistError <- function(dtNameStr, call = sys.call(-1), msg = "", ...) {
+notEqualError <- function(names, val, call = sys.call(-1), msg = "", ...) {
   message <- glueCollapse(
-    "Datatable { dtNameStr *} not defined!", msg
+    "{ names *} not equal to {val}!", msg
   )
-  
+
   c <- condition(
-    c("simstudy::dtDoesNotExist", "error"),
+    c("simstudy::notEqual", "error"),
     message, call, ...
   )
   stop(c)

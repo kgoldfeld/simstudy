@@ -3,6 +3,15 @@ freeze_eval <- names(.GlobalEnv)
 
 # defCondition ----
 
+# defData ----
+test_that("defData throws errors", {
+  expect_error(defData(dist = "nonrandom", formula = 7, id = "idnum"), class = "simstudy::missingArgument")
+  expect_error(defData(varname = "xnr", dist = "nonrandom", id = "idnum"), class = "simstudy::missingArgument")
+})
+
+# defRead ----
+
+
 # .evalDef ----
 test_that("checks combine in .evalDef correctly", {
   skip_on_cran()

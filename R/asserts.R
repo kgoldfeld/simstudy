@@ -32,6 +32,21 @@ assertLengthEqual <- function(..., call = sys.call(-1)) {
     }
 }
 
+#' Are arguments equal to value?
+#'
+#' @description Checks if all passed vars are equal to given value.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param val Value to check if variables are equal to
+#' @noRd
+assertEqual <- function(..., val, call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  
+  notEqual <- !sapply(dots$args, function(i) {i == val})
+  if (any(notEqual)) {
+    notEqualError(dots$names, val, call = call)
+  }
+}
+
 #' Is length correct?
 #'
 #' @description Checks if all passed vars are of length 'length'. Caveat:
@@ -162,40 +177,6 @@ assertFactor <- function(..., type, call = sys.call(-1)) {
   }
 }
 
-#' Check for Integer OR Factor
-#'
-#' @description Checks if all passed vars and their content are integers or factors.
-#' @param ... Any number of variables as named elements e.g. var1 = var1.
-#' @noRd
-# assertIntegerOrFactor <- function(..., type, call = sys.call(-1)) {
-#   #assertNumeric(..., call = call)
-#   dots <- dots2argNames(...)
-#   #checkIntegerOrFactor <- function(arg) {
-#   #  arg <- unlist(arg)
-#   #  all(assertInteger(var1 = arg) | assertFactor(var1 = arg))
-#   #}
-#   #notInteger <- !sapply(dots$args, checkInteger)
-#   
-#   
-#   #notIntOrFac <- !sapply(dots$args, function(x) {((x == as.integer(x)) | is.factor(x))})
-# 
-#   checkInteger <- function(arg) {
-#     arg <- unlist(arg)
-#     all(tryCatch({assertNumeric(arg)},
-#                  error = FALSE,
-#                  finally = {
-#                    arg == as.integer(arg)
-#                  }))}
-# 
-#   
-#   notInteger <- !sapply(dots$args, checkInteger)
-#   notFactor <- !sapply(dots$args, function(fac) {is.factor(fac)})
-#   
-#   if (any(notInteger && notFactor)) {
-#     typeError(dots$names[notIntOrFac], type = "integer or factor", call = call)
-#   }
-# }
-
 #' Check for Value
 #'
 #' @description Checks if all passed vars have a value other than NULL and NA
@@ -233,20 +214,6 @@ assertUnique <- function(..., call = sys.call(-1)) {
         notUniqueError(dots$names[notUnique], call = call)
     }
 }
-
-# TODO this raises errors when it shouldn't
-#' Data Table exists?
-#'
-#' @description Checks if dt exists in environment.
-#' @param dtName Name of dt to check (as a string).
-#' @noRd
-# assertDataTableExists <- function(dtNameStr, call = sys.call(-1)) {
-#   dtexist <- exists(deparse(substitute(dtNameStr)), envir = parent.frame())
-#   #dtexist <- dtNameStr %in% ls(envir = parent.frame())
-#   if (!dtexist) {
-#     dtDoesNotExistError(dtNameStr, call = call)
-#   }
-# }
 
 #' Var Defined?
 #'
@@ -448,7 +415,6 @@ assertOption <- function(..., options, msg = "", call = sys.call(-1)) {
 #' @param range Numeric vector of range as c(min,max).
 #' @param minCheck Comparison that is made with the lower boundary.
 #' @param maxCheck Comparison that is made with the upper boundary.
-#' @return
 #' @noRd
 assertInRange <- function(...,
                           range,

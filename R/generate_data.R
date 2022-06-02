@@ -278,8 +278,9 @@ genFactor <- function(dtName,
 #' @title Generate a linear formula
 #' @description Formulas for additive linear models can be generated
 #' with specified coefficient values and variable names.
-#' @param coefs A numerical vector that contains the values of the
-#' coefficients. If length(coefs) == length(vars), then no intercept
+#' @param coefs A vector that contains the values of the
+#' coefficients. Coefficients can also be defined as character for use with 
+#' double dot notation. If length(coefs) == length(vars), then no intercept
 #' is assumed. Otherwise, an intercept is assumed.
 #' @param vars A vector of strings that specify the names of the
 #' explanatory variables in the equation.
@@ -288,6 +289,9 @@ genFactor <- function(dtName,
 #'
 #' genFormula(c(.5, 2, 4), c("A", "B", "C"))
 #' genFormula(c(.5, 2, 4), c("A", "B"))
+#' 
+#' genFormula(c(.5, "..x", 4), c("A", "B", "C"))
+#' genFormula(c(.5, 2, "..z"), c("A", "B"))
 #'
 #' changeX <- c(7, 10)
 #' genFormula(c(.5, 2, changeX[1]), c("A", "B"))
@@ -309,16 +313,26 @@ genFormula <- function(coefs, vars) {
   lvars <- length(vars)
 
   if (!(lcoef == lvars | lcoef == lvars + 1)) {
-    stop("Coefficients or variables not properly specified")
+    c <- condition(c("simstudy::coeffVar", "error"),
+                   "Coefficients or variables not properly specified!")
+    stop(c)
+  }
+  
+  
+  if (is.character(coefs)) {
+    for (cf in coefs) {
+      if (suppressWarnings(is.na(as.integer(cf)))) {
+        if (substr(cf, start = 1, stop = 2) != "..") {
+          c <- condition(c("simstudy::doubleDot", "error"),
+                         "non-numerical coefficients must be specified with double dot notation")
+          
+          stop(c)
+        }
+      }
+    }
   }
 
-  if (!is.numeric(coefs)) {
-    stop("Coefficients must be specified as numeric values or numeric variables")
-  }
-
-  if (!is.character(vars)) {
-    stop("Variable names must be specified as characters or character variables")
-  }
+  assertType(var1 = vars, type = "character")
 
   if (lcoef != lvars) { # Intercept
 
@@ -362,6 +376,9 @@ genFormula <- function(coefs, vars) {
 #' prefix for the state fields in the wide format. Defaults to "S".
 #' @param trimvalue Integer value indicating end state. If trimvalue is not NULL,
 #' all records after the first instance of state = trimvalue will be deleted.
+#' @param startProb A string that contains the probability distribution of the 
+#' starting state, separated by a ";". Length of start probabilities must match
+#' the number of rows of the transition matrix.
 #' @return A data table with n rows if in wide format, or n by chainLen rows
 #' if in long format.
 #' @examples
@@ -385,38 +402,79 @@ genFormula <- function(coefs, vars) {
 #' @concept generate_data
 genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state",
-                      widePrefix = "S", trimvalue = NULL) {
+                      widePrefix = "S", trimvalue = NULL, startProb = NULL) {
 
   # 'declare' vars created in data.table
   variable <- NULL
 
-  # check transMat is square matrix and row sums = 1
-
-  if (!is.matrix(transMat) |
-    (length(dim(transMat)) != 2) |
-    (dim(transMat)[1] != dim(transMat)[2])
-  ) {
-    stop("Transition matrix needs to be a square matrix")
+  # check transMat is matrix
+  if (!is.matrix(transMat)) {
+    c <- condition(c("simstudy::typeMatrix", "error"),
+                   "transMat is not a matrix!")
+    stop(c)
   }
-
-  # check row sums = 1
-
+    
+  # check transMat is square matrix
+  if ((length(dim(transMat)) != 2) |
+      (dim(transMat)[1] != dim(transMat)[2])) {
+    c <- condition(c("simstudy::squareMatrix", "error"),
+                   "transMat is not a square matrix!")
+    stop(c)
+  }
+  
+  # check transMat row sums = 1
   if (!all(round(apply(transMat, 1, sum), 5) == 1)) {
-    stop("Rows in transition matrix must sum to 1")
+    c <- condition(c("simstudy::rowSums1", "error"),
+                   "transMat rows do not sum to 1!")
+    stop(c)
   }
-
-  # check chainLen is > 1
-
-  if (chainLen <= 1) stop("Chain length must be greater than 1")
+  
+  # check chainLen greater than 1
+  if (chainLen <= 1) {
+    c <- condition(c("simstudy::chainLen", "error"),
+                   "chainLen must be greater than 1!")
+    stop(c)
+  }
+  
+  # if startProb defined, check it sums to 1
+  if (!is.null(startProb)) {
+    s <- as.numeric(unlist(strsplit(startProb, split = ";")))
+    ssum <- sum(s)
+    if (ssum != 1) {
+      c <- condition(c("simstudy::notEqual", "error"),
+                     "startProb must sum to 1!")
+      stop(c)
+    }
+    
+  }
+  
+  # if startProb defined, check it has length == number of matrix rows
+  if (!is.null(startProb)) {
+    s <- unlist(strsplit(startProb, split = ";"))
+    r <- dim(transMat)[1]
+      assertLength(var1 = s, length = r)
+    
+  }
 
   ####
 
-  dd <- genData(n = n, id = id)
-  dd <- addMarkov(dd, transMat, chainLen, wide, id,
-    pername, varname, widePrefix,
-    start0lab = NULL,
-    trimvalue = trimvalue
-  )
+  if (!is.null(startProb)) {
+    dprob <- defData(varname = "prob", formula = startProb, dist = "categorical")
+    dd <- genData(n = n, dprob, id = id)
+    dd <- addMarkov(dd, transMat, chainLen, wide, id,
+      pername, varname, widePrefix,
+      start0lab = "prob",
+      trimvalue = trimvalue
+    )
+    
+    dd$prob <- NULL
+  } else {
+    dd <- genData(n = n, id = id)
+    dd <- addMarkov(dd, transMat, chainLen, wide, id,
+                    pername, varname, widePrefix,
+                    trimvalue = trimvalue
+    )
+  }
 
   dd[]
 }
@@ -447,18 +505,35 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
 #' @export
 #' @concept generate_data
 genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames = NULL, idName = "id") {
-  if (nFactors < 2) stop("Must specify at least 2 factors")
-  if (length(levels) > 1 & (length(levels) != nFactors)) stop("Number of levels does not match factors")
+  # check nFactors are integers
+  assertInteger(var1 = nFactors)
+  
+  # check length nFactors greater than 2
+  if(nFactors < 2) {
+    c <- condition(c("simstudy::greaterThan", "error"),
+                   "nFactors must be greater than 2!")
+    stop(c)
+  }
+  
+  # check number of levels matches factors
+  if (length(levels) > 1) {
+    assertLength(var1 = levels, length = nFactors)
+  }
+  
+  # check coding == 'effect' or 'dummy'
+  if(!(coding == "effect" | coding == "dummy")) {
+    c <- condition(c("simstudy::codingVal", "error"),
+                   "coding must equal 'effect' or 'dummy'!")
+    stop(c)
+  }
 
   x <- list()
 
   if (all(levels == 2)) {
     if (coding == "effect") {
       opts <- c(-1, 1)
-    } else if (coding == "dummy") {
-      opts <- c(0, 1)
     } else {
-      stop("Need to specify 'effect' or 'dummy' coding")
+      opts <- c(0, 1)
     }
 
     for (i in 1:nFactors) {

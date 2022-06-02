@@ -126,8 +126,7 @@ defData <- function(dtDefs = NULL,
 
   #### Check that arguments have been passed
 
-  if (missing(varname)) stop("argument 'varname' is missing", call. = FALSE)
-  if (missing(formula)) stop("argument 'formula' is missing", call. = FALSE)
+  assertNotMissing(varname = missing(formula), formula = missing(formula))
 
   #### No missing arguments
 
