@@ -7,8 +7,9 @@
 genFormula(coefs, vars)
 }
 \arguments{
-\item{coefs}{A numerical vector that contains the values of the
-coefficients. If length(coefs) == length(vars), then no intercept
+\item{coefs}{A vector that contains the values of the
+coefficients. Coefficients can also be defined as character for use with 
+double dot notation. If length(coefs) == length(vars), then no intercept
 is assumed. Otherwise, an intercept is assumed.}
 
 \item{vars}{A vector of strings that specify the names of the
@@ -25,6 +26,9 @@ with specified coefficient values and variable names.
 
 genFormula(c(.5, 2, 4), c("A", "B", "C"))
 genFormula(c(.5, 2, 4), c("A", "B"))
+
+genFormula(c(.5, "..x", 4), c("A", "B", "C"))
+genFormula(c(.5, 2, "..z"), c("A", "B"))
 
 changeX <- c(7, 10)
 genFormula(c(.5, 2, changeX[1]), c("A", "B"))

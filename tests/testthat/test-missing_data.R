@@ -22,6 +22,25 @@ test_that("defMiss produces correct output", {
   ))
 })
 
+# genMiss ----
+test_that("genMiss works", {
+  # not repeated
+  
+  # repeated
+  
+  ## includes lags
+  
+  ## baseline
+  
+  ## not baseline
+  
+  ### monotonic
+  
+  ## includes lags
+  
+  
+})
+
 # .checkLags ----
 test_that("LAG() usage is detected correctly.", {
   hasLag <- c("a + 5 | LAG(3) - 4", " 4 + 3 ", "LAG(x)")

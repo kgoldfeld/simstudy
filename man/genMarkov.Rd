@@ -13,7 +13,8 @@ genMarkov(
   pername = "period",
   varname = "state",
   widePrefix = "S",
-  trimvalue = NULL
+  trimvalue = NULL,
+  startProb = NULL
 )
 }
 \arguments{
@@ -46,6 +47,10 @@ prefix for the state fields in the wide format. Defaults to "S".}
 
 \item{trimvalue}{Integer value indicating end state. If trimvalue is not NULL,
 all records after the first instance of state = trimvalue will be deleted.}
+
+\item{startProb}{A string that contains the probability distribution of the 
+starting state, separated by a ";". Length of start probabilities must match
+the number of rows of the transition matrix.}
 }
 \value{
 A data table with n rows if in wide format, or n by chainLen rows
