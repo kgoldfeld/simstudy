@@ -215,20 +215,6 @@ assertUnique <- function(..., call = sys.call(-1)) {
     }
 }
 
-# TODO this raises errors when it shouldn't
-#' Data Table exists?
-#'
-#' @description Checks if dt exists in environment.
-#' @param dtName Name of dt to check (as a string).
-#' @noRd
-# assertDataTableExists <- function(dtNameStr, call = sys.call(-1)) {
-#   dtexist <- exists(deparse(substitute(dtNameStr)), envir = parent.frame())
-#   #dtexist <- dtNameStr %in% ls(envir = parent.frame())
-#   if (!dtexist) {
-#     dtDoesNotExistError(dtNameStr, call = call)
-#   }
-# }
-
 #' Var Defined?
 #'
 #' @description Checks if all passed vars have been defined in dt.
@@ -429,7 +415,6 @@ assertOption <- function(..., options, msg = "", call = sys.call(-1)) {
 #' @param range Numeric vector of range as c(min,max).
 #' @param minCheck Comparison that is made with the lower boundary.
 #' @param maxCheck Comparison that is made with the upper boundary.
-#' @return
 #' @noRd
 assertInRange <- function(...,
                           range,
