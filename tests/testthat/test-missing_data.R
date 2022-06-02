@@ -22,6 +22,81 @@ test_that("defMiss produces correct output", {
   ))
 })
 
+# genMiss ----
+test_that("genMiss works", {
+  # not repeated
+  def1 <- defData(varname = "m", dist = "binary", formula = .5)
+  def1 <- defData(def1, "u", dist = "binary", formula = .5)
+  def1 <- defData(def1, "x1", dist="normal", formula = "20*m + 20*u", variance = 2)
+  def1 <- defData(def1, "x2", dist="normal", formula = "20*m + 20*u", variance = 2)
+  def1 <- defData(def1, "x3", dist="normal", formula = "20*m + 20*u", variance = 2)
+  
+  dtAct <- genData(1000, def1)
+  
+  hardProbForm <- runif(1)
+  form1 <- ".05 + m * 0.25"
+  form2 <- ".05 + u * 0.25"
+  
+  defM <- defMiss(varname = "x1", formula = hardProbForm, logit.link = FALSE)
+  defM <- defMiss(defM, varname = "x2", formula = form1, logit.link = FALSE)
+  defM <- defMiss(defM, varname = "x3", formula = form2, logit.link = FALSE)
+  defM <- defMiss(defM, varname = "u", formula = 1, logit.link = FALSE) # not observed
+  
+  missMat <- genMiss(dtAct, defM, idvars = "id")
+  
+  ## check probabilistic column has correct distribution
+  hardProbAct <- sum(missMat[, x1]) / nrow(missMat)
+  hPDiff <- abs(hardProbAct - hardProbForm)
+  
+  expect_true(hPDiff < 0.02)
+  
+  ## check dependent column 1
+  mAvg <- sum(dtAct[, m]) / nrow(dtAct)
+  m <- mAvg
+  col1Exp <- eval(parse(text = as.character(form1)))
+  col1Act <- sum(missMat[, x2]) / nrow(missMat)
+  col1Diff <- abs(col1Act - col1Exp)
+  
+  expect_true(col1Diff < 0.02)
+  
+  ## check dependent column 2
+  uAvg <- sum(dtAct[, u]) / nrow(dtAct)
+  u <- uAvg
+  col2Exp <- eval(parse(text = as.character(form2)))
+  col2Act <- sum(missMat[, x3]) / nrow(missMat)
+  col2Diff <- abs(col2Act - col2Exp)
+  
+  expect_true(col2Diff < 0.02)
+  
+  ## check empty column
+  expect_true(all(missMat[, u] == 1))
+  
+  # repeated
+  ## includes lags
+  
+  ## baseline
+  dtAct <- genData(120, def1)
+  dtAct <- trtObserve(dtAct, formulas = .5, logit.link = FALSE, grpName = "rx")
+
+  defLong <- defDataAdd(varname = "y", dist = "normal", formula = "10 + period*2 + 2 * rx", variance = 2)
+  
+  dtTime <- addPeriods(dtAct, nPeriods = 6)
+  dtTime <- addColumns(defLong, dtTime)
+  
+  defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
+  defMlong <- defMiss(defMlong,varname = "y", formula = "-1.5 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = FALSE)
+  
+  missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+  
+  ## not baseline
+  
+  ### monotonic
+  
+  ## includes lags
+  
+  
+})
+
 # .checkLags ----
 test_that("LAG() usage is detected correctly.", {
   hasLag <- c("a + 5 | LAG(3) - 4", " 4 + 3 ", "LAG(x)")
@@ -80,4 +155,12 @@ test_that("LAGS are added as expected.", {
   lagForms <- c("-2 + 1.5 * .rx1", "-2.1 + 1.3 * .tx1")
 
   expect_equal(.addLags(dataLong, c(origForm, noLAG)), list(dataAfter, c(lagForms, noLAG), lagNames))
+})
+
+# .genMissDataMat ----
+
+test_that(".genMissDataMat works", {
+  
+  
+  
 })
