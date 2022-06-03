@@ -75,13 +75,14 @@ test_that("genMiss works", {
   
   ## baseline
   #if missing at baseline, missing at all other perios
+  idNum <- 500
   
-  dtAct <- genData(120, def1)
+  dtAct <- genData(idNum, def1)
   dtAct <- trtObserve(dtAct, formulas = .5, logit.link = FALSE, grpName = "rx")
   
   defLong <- defDataAdd(varname = "y", dist = "normal", formula = "10 + period*2 + 2 * rx", variance = 2)
   
-  dtTime <- addPeriods(dtAct, nPeriods = 6)
+  dtTime <- addPeriods(dtAct, nPeriods = 4)
   dtTime <- addColumns(defLong, dtTime)
   
   defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
@@ -89,8 +90,39 @@ test_that("genMiss works", {
   
   missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
   
+  casevec <- NULL
+  for(i in 1:idNum) {
+    tempMM <- missMatLong[id == i]
+    if(tempMM[1, x1] == 1) {
+      casevec <- c(casevec, all(tempMM[, x1] == 1))
+    }
+  }
+  
+  expect_true(all(casevec == TRUE))
+  
   ### monotonic
   #same as baseline stipulation
+  defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
+  defMlong <- defMiss(defMlong,varname = "y", formula = "-1.8 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = TRUE)
+  
+  missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+  
+  casevec <- NULL
+  for(i in 1:idNum) {
+    tempMM <- missMatLong[id == i]
+    # TODO is there a cleaner way to do this?
+    if(tempMM[1, x1] == 1) {
+      casevec <- c(casevec, all(tempMM[, x1] == 1))
+    } else if(tempMM[2, x1] == 1) {
+      casevec <- c(casevec, (all(tempMM[-1, x1] == 1) && tempMM[1, x1] == 0))
+    } else if(tempMM[3, x1] == 1) {
+      casevec <- c(casevec, (all(tempMM[-(1:2), x1] == 1) && tempMM[1:2, x1] == 0))
+    } else if(tempMM[4, x1] == 1) {
+      casevec <- c(casevec, (all(tempMM[-(1:3), x1] == 1) && tempMM[1:3, x1] == 0))
+    }
+  }
+  
+  expect_true(all(casevec == TRUE))
   
   ## includes lags
   
