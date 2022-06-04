@@ -341,17 +341,7 @@ genMiss <- function(dtName, missDefs, idvars,
 #' @export
 #' @concept missing
 genObs <- function(dtName, dtMiss, idvars) {
-  if (missing(dtName)) {
-    stop("Argument dtName is missing", call. = FALSE)
-  }
-
-  if (missing(dtMiss)) {
-    stop("Argument dtMiss is missing", call. = FALSE)
-  }
-
-  if (missing(idvars)) {
-    stop("Argument idvars is missing", call. = FALSE)
-  }
+  assertNotMissing(dtName = missing(dtName), dtMiss = missing(dtMiss), idvars = missing(idvars))
 
   if (("period" %in% names(dtName)) & !("period" %in% idvars)) {
     idvars <- c(idvars, "period")
