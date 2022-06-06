@@ -36,8 +36,8 @@ test_that("genMiss works", {
   hardProbForm <- runif(1)
   form1val0 <- runif(1)
   form1val1 <- runif(1)
-  #form1 <- "..form1val0*(1-m) + m*..form1val1"
-  form1 <- paste0(form1val0, "*(1-m) + m*", form1val1)
+  form1 <- "..form1val0*(1-m) + m*..form1val1"
+  #form1 <- paste0(form1val0, "*(1-m) + m*", form1val1)
   
   defM <- defMiss(varname = "x1", formula = hardProbForm, logit.link = FALSE)
   defM <- defMiss(defM, varname = "x2", formula = form1, logit.link = FALSE)
