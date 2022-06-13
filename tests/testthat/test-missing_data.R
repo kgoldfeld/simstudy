@@ -254,7 +254,6 @@ test_that("genObs throws errors", {
 })
 
 test_that("genObs works", {
-  # check all 1s in dtMiss == NA in dtName
   def1 <- defData(varname = "m", dist = "binary", formula = .5)
   def1 <- defData(def1, "u", dist = "binary", formula = .5)
   def1 <- defData(def1, "x1", dist="normal", formula = "20*m + 20*u", variance = 2)
@@ -266,8 +265,8 @@ test_that("genObs works", {
   hardProbForm <- runif(1)
   form1val0 <- runif(1)
   form1val1 <- runif(1)
-  #form1 <- "..form1val0*(1-m) + m*..form1val1"
-  form1 <- paste0(form1val0, "*(1-m) + m*", form1val1)
+  form1 <- "..form1val0*(1-m) + m*..form1val1"
+  #form1 <- paste0(form1val0, "*(1-m) + m*", form1val1)
   defM <- defMiss(varname = "x1", formula = hardProbForm, logit.link = FALSE)
   defM <- defMiss(defM, varname = "x2", formula = form1, logit.link = FALSE)
   defM <- defMiss(defM, varname = "u", formula = 1, logit.link = FALSE) # not observed
