@@ -1090,4 +1090,72 @@ genSurv <- function(dtName, survDefs, digits = 3,
     
   setnames(dtSurv, "id", idName)
   return(dtSurv[])
+  
 }
+
+#' @title Generate synthetic data 
+#' @description Synthetic data is generated from an existing data set
+#' @param dtFrom Data set that contains the source data
+#' @param n Number of samples to draw from the source data. The default
+#' is number of records that are in the source data file.
+#' @param vars A vector of string names specifying the fields that will be
+#' sampled. The default is that all variables will be selected.
+#' @param id A string specifying the field that serves as the record id. The
+#' default field is "id".
+#' @return A data table with the generated data
+#' @examples
+#' # Baseline data definitions
+#'
+#' @export
+#' @concept generate_data
+
+genSynthetic <- function(dtFrom, n = nrow(dtFrom),  
+  vars = names(dtFrom)[names(dtFrom) != id], id = "id") {
+  
+  # check to make sure id is not in vars
+  
+  assertNotMissing(
+    dtFrom = missing(dtFrom),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtFrom = dtFrom, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+
+  assertClass(
+    vars = vars, 
+    id = id,
+    class = "character",
+    call = sys.call(-1)
+  )  
+  
+  assertInteger(n = n)
+  
+  assertInDataTable(vars = vars, dt = dtFrom)
+  assertInDataTable(vars = id, dt = dtFrom)
+  
+  assertNotInDataTable(vars = id, dt = data.table(names(vars)))
+  
+  
+  # 'declare
+  
+  dx <- copy(dtFrom)
+  
+  if ( !is.null(vars) ) {
+    getvars <- c(id, vars)
+    dx <- dx[, getvars, with = FALSE]  
+  }
+  
+  setnames(dx, id, "id")
+  ids <- dx[, sample(id, n, replace = TRUE)]
+  dx <- dx[ids]
+  dx[, id := 1:n]
+  setnames(dx, "id", id)
+  
+  dx[]
+  
+}
+
