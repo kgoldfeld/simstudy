@@ -1095,7 +1095,7 @@ genSurv <- function(dtName, survDefs, digits = 3,
 
 #' @title Generate synthetic data 
 #' @description Synthetic data is generated from an existing data set
-#' @param dtFrom Data set that contains the source data
+#' @param dtFrom Data table that contains the source data
 #' @param n Number of samples to draw from the source data. The default
 #' is number of records that are in the source data file.
 #' @param vars A vector of string names specifying the fields that will be

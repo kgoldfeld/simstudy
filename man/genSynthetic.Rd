@@ -4,10 +4,15 @@
 \alias{genSynthetic}
 \title{Generate synthetic data}
 \usage{
-genSynthetic(dtFrom, n = nrow(dtFrom), vars = NULL, id = "id")
+genSynthetic(
+  dtFrom,
+  n = nrow(dtFrom),
+  vars = names(dtFrom)[names(dtFrom) != id],
+  id = "id"
+)
 }
 \arguments{
-\item{dtFrom}{Data set that contains the source data}
+\item{dtFrom}{Data table that contains the source data}
 
 \item{n}{Number of samples to draw from the source data. The default
 is number of records that are in the source data file.}
