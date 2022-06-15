@@ -272,6 +272,26 @@ alreadyDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
     stop(c)
 }
 
+#' Element in vector
+#'
+#' @param value Value(s) in vector.
+#' @param name Name of the vector.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+alreadyInVectorError <- function(namevar, namevec, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "element of { namevar } should not also be in vector { namevec }!", msg
+  )
+  
+  c <- condition(
+    c("simstudy::alreadyInVector", "error"),
+    message, call, ...
+  )
+  stop(c)
+}
+
 #' Not Positive Definite Error
 #'
 #' @param var Name of matrix.
@@ -363,11 +383,11 @@ mismatchError <- function(name_specified, name_null,
   stop(c)
 }
 
-###Added by ME 5/9/22
+### Added by ME 5/9/22
 
 #' Variables not equal to value error.
 #'
-#' @param vars Names of the variables.
+#' @param names Names of the variables.
 #' @param val Value to be equal to.
 #' @param call sys.call to pass on to the error.
 #' @param msg Additional information for the error message as
@@ -378,6 +398,28 @@ notEqualError <- function(names, val, call = sys.call(-1), msg = "", ...) {
     "{ names *} not equal to {val}!", msg
   )
 
+  c <- condition(
+    c("simstudy::notEqual", "error"),
+    message, call, ...
+  )
+  stop(c)
+}
+
+### Added by KSG 6/13/22
+
+#' Variables not equal to value error.
+#'
+#' @param var Names of the variables.
+#' @param val Value to be equal to.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+notEqualError <- function(names, val, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "{ names *} not equal to {val}!", msg
+  )
+  
   c <- condition(
     c("simstudy::notEqual", "error"),
     message, call, ...

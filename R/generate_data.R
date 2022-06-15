@@ -1137,8 +1137,7 @@ genSynthetic <- function(dtFrom, n = nrow(dtFrom),
   assertInDataTable(vars = vars, dt = dtFrom)
   assertInDataTable(vars = id, dt = dtFrom)
   
-  assertNotInDataTable(vars = id, dt = data.table(names(vars)))
-  
+  assertNotInVector(id, vars)
   
   # 'declare
   
