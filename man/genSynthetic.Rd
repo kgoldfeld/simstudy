@@ -30,7 +30,21 @@ A data table with the generated data
 Synthetic data is generated from an existing data set
 }
 \examples{
-# Baseline data definitions
+### Create fake "real" data set
+
+d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+
+A <- genData(100, d, id = "index")
+
+### Create synthetic data set from "observed" data set A:
+
+def <- defDataAdd(varname = "x", formula = "2*b + 2*d", variance = 2)
+
+S <- genSynthetic(dtFrom = A, n = 120, vars = c("b", "d"), id = "index")
+S <- addColumns(def, S)
 
 }
 \concept{generate_data}
