@@ -1,7 +1,7 @@
 # simstudy (development version)
 
 ## New features
-* Added new function genSynthetic. Allows users to sample records with replacement from an existing data table.
+* Added new functions genSynthetic and addSynthetic. Allows users to sample records with replacement from an existing data table.
 * Updated genFormula with functionality to generate formulas with double dot variables inside.
 * Added argument 'startProb' to genMarkov. Allows user to set probability distribution of start state.
 * Added utility functions survGetParams and survParamPlot to aid users in identifying parameters that can be used to generate desired distributions of time to event data.

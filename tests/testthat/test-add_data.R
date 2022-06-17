@@ -88,3 +88,73 @@ test_that("addMarkov throws errors.", {
   expect_error(addMarkov(dd, transMat = mat6, chainLen = 5, wide = TRUE, start0lab = "xy"), class = "simstudy::start0probNotInTransMat")
   
 })
+
+# addSynthetic ----
+
+test_that("addSynthetic throws errors.", {
+  
+  ### Create fake "real" data set
+  
+  d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+  d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+  d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+  d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+  
+  A <- genData(1000, d, id = "index")
+  
+  def <- defData(varname = "x", formula = 0, variance = 5)
+  
+  S <- genData(120, def)
+  
+  expect_error(ddSynthetic(dtFrom = A))
+  
+  x <- c(1 ,2, 3)
+  expect_error(addSynthetic(dtOld = x, dtFrom = A))
+  expect_error(addSynthetic(dtOld = S, dtFrom = x))
+  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "index"))
+  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "id"))
+  
+  d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+  d <- defData(d, varname = "x", formula = 5, dist = "poisson")
+  
+  A <- genData(1000, d)
+  S <- genData(120, def)
+  expect_error(addSynthetic(dtOld = S, dtFrom = A))
+  
+})
+
+test_that("addSynthetic works.", {
+  
+  d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+  d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+  d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+  d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+  
+  A <- genData(1000, d)
+  
+  ### Create synthetic data set from "observed" data set A:
+  
+  def <- defData(varname = "x", formula = 0, variance = 5)
+  
+  n <- rpois(1, 100)
+  vars <- c("d", "b")
+  
+  S <- genData(n, def)
+  Snew <- addSynthetic(dtOld = S, dtFrom = A, vars = vars)
+  
+  expect_true(all(c(names(S), vars) == names(Snew)))
+  expect_equal(nrow(Snew), nrow(S))
+  
+  mu_a <- rnorm(1, 25, 4)
+  n <- rpois(1, 3500)
+  
+  d <- defData(varname = "a", formula = "..mu_a", variance = 1, dist = "normal")
+  A <- genData(n, d)
+  
+  S <- genData(n, def)
+  Snew <- addSynthetic(S, A)
+  
+  expect_lt(Snew[, abs(mean(a) - mu_a)], 0.15)
+  
+  
+})

@@ -460,3 +460,57 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
 
   return(dreturn[])
 }
+
+#' Add synthetic data
+#'
+#' @param dtOld data.table that is to be modified
+#' @param dtFrom Data table that contains the source data
+#' @param vars A vector of string names specifying the fields that will be
+#' sampled. The default is that all variables will be selected.
+#' @param id A string specifying the field that serves as the record id. The
+#' default field is "id".
+#' @return A data.table that contains the added synthetic data.
+#' @examples
+#' ### Create fake "real" data set
+#' 
+#' d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+#' d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+#' d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+#' d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+#' 
+#' A <- genData(1000, d)
+#' 
+#' ### Create synthetic data set from "observed" data set A:
+#' 
+#' def <- defData(varname = "x", formula = 0, variance = 5)
+#' 
+#' S <- genData(120, def)
+#' S <- addSynthetic(dtOld = S, dtFrom = A, vars = c("b", "d"))
+#' @export
+#' @concept generate_data
+addSynthetic <- function(dtOld, dtFrom, 
+  vars = names(dtFrom)[names(dtFrom) != id], id = "id") {
+  
+  assertNotMissing(
+    dtOld = missing(dtOld),
+    dtFrom = missing(dtFrom),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtOld = dtOld,
+    dtFrom = dtFrom, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+  
+  assertInDataTable(vars = id, dt = dtOld)
+  assertInDataTable(vars = id, dt = dtFrom)
+  assertNotInDataTable(vars = vars, dt = dtOld)
+  
+  n <- nrow(dtOld)
+  dS <- genSynthetic(dtFrom = dtFrom, n = n, vars = vars, id = id)
+  dS <- dtOld[dS, on = id]
+  dS[]
+  
+}
