@@ -136,7 +136,7 @@
   } else {
     dfNew <- cbind(dfSim, newColumn)
   }
-  
+
   data.table::setnames(
     dfNew,
     ncol(dfNew),

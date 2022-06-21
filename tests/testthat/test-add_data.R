@@ -37,23 +37,25 @@ test_that("defRepeatAdd works", {
   expect_silent(
     defRepeatAdd(nVars = 4, prefix = "g", formula = "1/3;1/3;1/3", variance = 0, dist = "categorical")
   )
-  
+
   def <- defDataAdd(varname = "a", formula = "1;1", dist = "trtAssign")
   expect_silent(
     defRepeatAdd(def, 8, "b", formula = "5 + a", variance = 3, dist = "normal")
   )
-  
+
   expect_silent(defRepeatAdd(nVars = 4, prefix = "b", formula = "5 + a", variance = 3, dist = "normal"))
-  
 })
 
 test_that("defRepeatAdd throws errors correctly.", {
   expect_error(defRepeatAdd(prefix = "b", formula = 5, variance = 3, dist = "normal"),
-    class = "simstudy::missingArgument")
+    class = "simstudy::missingArgument"
+  )
   expect_error(defRepeatAdd(nVars = 8, formula = 5, variance = 3, dist = "normal"),
-    class = "simstudy::missingArgument")
+    class = "simstudy::missingArgument"
+  )
   expect_error(defRepeatAdd(nVars = 8, prefix = "b", variance = 3, dist = "normal"),
-    class = "simstudy::missingArgument")
+    class = "simstudy::missingArgument"
+  )
 })
 
 # addMarkov ----
@@ -61,103 +63,99 @@ test_that("addMarkov throws errors.", {
   d0 <- defData(varname = "xx", formula = 2)
   d0 <- defData(d0, varname = "xy", formula = 5)
   dd <- genData(n = 10, dt = d0)
-  
+
   # check transMat is matrix
   mat1 <- c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9)
   expect_error(addMarkov(dd, transMat = mat1, chainLen = 5, wide = TRUE), class = "simstudy::typeMatrix")
-  
+
   # check transMat is square matrix
-  mat2 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9, 0.3, 0.4, 0.3), nrow=4,ncol=3))
+  mat2 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9, 0.3, 0.4, 0.3), nrow = 4, ncol = 3))
   expect_error(addMarkov(dd, transMat = mat2, chainLen = 5, wide = TRUE), class = "simstudy::squareMatrix")
-  
+
   # check transMat row sums = 1
-  mat3 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.8), nrow=3,ncol=3))
+  mat3 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.8), nrow = 3, ncol = 3))
   expect_error(addMarkov(dd, transMat = mat3, chainLen = 5, wide = TRUE), class = "simstudy::rowSums1")
-  
+
   # check chainLen is > 1
-  mat4 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
+  mat4 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow = 3, ncol = 3))
   expect_error(addMarkov(dd, transMat = mat4, chainLen = 0, wide = TRUE), class = "simstudy::chainLen")
-  
+
   # if start0lab defined, check that it is defined in dd
-  mat5 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
+  mat5 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow = 3, ncol = 3))
   expect_error(addMarkov(dd, transMat = mat5, chainLen = 5, wide = TRUE, start0lab = "yy"), class = "simstudy::notDefined")
-  
-  
+
+
   # if start0lab defined, check that it exists in the transition matrix
-  mat6 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow=3,ncol=3))
+  mat6 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow = 3, ncol = 3))
   expect_error(addMarkov(dd, transMat = mat6, chainLen = 5, wide = TRUE, start0lab = "xy"), class = "simstudy::start0probNotInTransMat")
-  
 })
 
 # addSynthetic ----
 
 test_that("addSynthetic throws errors.", {
-  
+
   ### Create fake "real" data set
-  
+
   d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
   d <- defData(d, varname = "b", formula = 5, dist = "poisson")
   d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
   d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
-  
+
   A <- genData(1000, d, id = "index")
-  
+
   def <- defData(varname = "x", formula = 0, variance = 5)
-  
+
   S <- genData(120, def)
-  
+
   expect_error(addSynthetic(dtFrom = A), class = "simstudy::missingArgument")
-  
-  x <- c(1 ,2, 3)
-  expect_error(addSynthetic(dtOld = x, dtFrom = A), class="simstudy::wrongClass")
-  expect_error(addSynthetic(dtOld = S, dtFrom = x), class="simstudy::wrongClass")
-  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "index"), class="simstudy::notDefined")
-  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "id"), class="simstudy::notDefined")
-  
+
+  x <- c(1, 2, 3)
+  expect_error(addSynthetic(dtOld = x, dtFrom = A), class = "simstudy::wrongClass")
+  expect_error(addSynthetic(dtOld = S, dtFrom = x), class = "simstudy::wrongClass")
+  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "index"), class = "simstudy::notDefined")
+  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "id"), class = "simstudy::notDefined")
+
   d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
   d <- defData(d, varname = "x", formula = 5, dist = "poisson")
-  
+
   A <- genData(1000, d)
   S <- genData(120, def)
-  expect_error(addSynthetic(dtOld = S, dtFrom = A), class="simstudy::alreadyDefined")
-  
+  expect_error(addSynthetic(dtOld = S, dtFrom = A), class = "simstudy::alreadyDefined")
 })
 
 test_that("addSynthetic works.", {
-  
+
   ### Create fake 'external' data set 'A'
-  
+
   d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
   d <- defData(d, varname = "b", formula = 5, dist = "poisson")
   d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
   d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
-  
+
   A <- genData(1000, d)
-  
-  ### Create synthetic data set from "observed" data set A 
+
+  ### Create synthetic data set from "observed" data set A
   ### and add it to other data set S:
-  
+
   def <- defData(varname = "x", formula = 0, variance = 5)
-  
+
   n <- rpois(1, 100)
   vars <- c("d", "b")
-  
+
   S <- genData(n, def)
   Snew <- addSynthetic(dtOld = S, dtFrom = A, vars = vars)
-  
+
   expect_true(all(c(names(S), vars) == names(Snew)))
   expect_equal(nrow(Snew), nrow(S))
-  
+
   mu_a <- rnorm(1, 25, 4)
   n <- rpois(1, 3500)
-  
+
   d <- defData(varname = "a", formula = "..mu_a", variance = 1, dist = "normal")
   A <- genData(n, d)
-  
+
   S <- genData(n, def)
   Snew <- addSynthetic(S, A)
-  
+
   expect_lt(Snew[, abs(mean(a) - mu_a)], 0.15)
-  
-  
 })
