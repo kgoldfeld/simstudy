@@ -462,7 +462,9 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
 }
 
 #' Add synthetic data
-#'
+#' @title Add synthetic data to existing data set
+#' @description This function generates synthetic data from an existing 
+#' data.table and adds it to another (simstudy) data.table.
 #' @param dtOld data.table that is to be modified
 #' @param dtFrom Data table that contains the source data
 #' @param vars A vector of string names specifying the fields that will be
@@ -471,20 +473,25 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
 #' default field is "id".
 #' @return A data.table that contains the added synthetic data.
 #' @examples
-#' ### Create fake "real" data set
+#' ### Create fake "real" data set - this is the source of the synthetic data
 #' 
 #' d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
 #' d <- defData(d, varname = "b", formula = 5, dist = "poisson")
 #' d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
 #' d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
 #' 
+#' ### Create synthetic data set from "observed" data set A (normally this
+#' ### would be an actual external data set):
+#' 
 #' A <- genData(1000, d)
 #' 
-#' ### Create synthetic data set from "observed" data set A:
+#' ### Generate new simstudy data set (using 'def')
 #' 
 #' def <- defData(varname = "x", formula = 0, variance = 5)
-#' 
 #' S <- genData(120, def)
+#' 
+#' ### Create synthetic data from 'A' and add to simulated data in 'S'
+#' 
 #' S <- addSynthetic(dtOld = S, dtFrom = A, vars = c("b", "d"))
 #' @export
 #' @concept generate_data

@@ -125,6 +125,8 @@ test_that("addSynthetic throws errors.", {
 
 test_that("addSynthetic works.", {
   
+  ### Create fake 'external' data set 'A'
+  
   d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
   d <- defData(d, varname = "b", formula = 5, dist = "poisson")
   d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
@@ -132,7 +134,8 @@ test_that("addSynthetic works.", {
   
   A <- genData(1000, d)
   
-  ### Create synthetic data set from "observed" data set A:
+  ### Create synthetic data set from "observed" data set A 
+  ### and add it to other data set S:
   
   def <- defData(varname = "x", formula = 0, variance = 5)
   
