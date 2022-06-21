@@ -106,20 +106,20 @@ test_that("addSynthetic throws errors.", {
   
   S <- genData(120, def)
   
-  expect_error(ddSynthetic(dtFrom = A))
+  expect_error(addSynthetic(dtFrom = A), class = "simstudy::missingArgument")
   
   x <- c(1 ,2, 3)
-  expect_error(addSynthetic(dtOld = x, dtFrom = A))
-  expect_error(addSynthetic(dtOld = S, dtFrom = x))
-  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "index"))
-  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "id"))
+  expect_error(addSynthetic(dtOld = x, dtFrom = A), class="simstudy::wrongClass")
+  expect_error(addSynthetic(dtOld = S, dtFrom = x), class="simstudy::wrongClass")
+  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "index"), class="simstudy::notDefined")
+  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "id"), class="simstudy::notDefined")
   
   d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
   d <- defData(d, varname = "x", formula = 5, dist = "poisson")
   
   A <- genData(1000, d)
   S <- genData(120, def)
-  expect_error(addSynthetic(dtOld = S, dtFrom = A))
+  expect_error(addSynthetic(dtOld = S, dtFrom = A), class="simstudy::alreadyDefined")
   
 })
 

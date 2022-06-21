@@ -1124,9 +1124,7 @@ genSurv <- function(dtName, survDefs, digits = 3,
 #' @concept generate_data
 
 genSynthetic <- function(dtFrom, n = nrow(dtFrom),  
-  vars = names(dtFrom)[names(dtFrom) != id], id = "id") {
-  
-  # check to make sure id is not in vars
+  vars = NULL, id = "id") {
   
   assertNotMissing(
     dtFrom = missing(dtFrom),
@@ -1138,9 +1136,11 @@ genSynthetic <- function(dtFrom, n = nrow(dtFrom),
     class = "data.table",
     call = sys.call(-1)
   )
+  
+  if (is.null(vars)) { vars <- names(dtFrom)[names(dtFrom) != id] }
 
   assertClass(
-    vars = vars, 
+    vars= vars,
     id = id,
     class = "character",
     call = sys.call(-1)
@@ -1153,14 +1153,10 @@ genSynthetic <- function(dtFrom, n = nrow(dtFrom),
   
   assertNotInVector(id, vars)
   
-  # 'declare
-  
   dx <- copy(dtFrom)
   
-  if ( !is.null(vars) ) {
-    getvars <- c(id, vars)
-    dx <- dx[, getvars, with = FALSE]  
-  }
+  getVars <- c(id, vars)
+  dx <- dx[, getVars, with = FALSE]  
   
   setnames(dx, id, "id")
   ids <- dx[, sample(id, n, replace = TRUE)]

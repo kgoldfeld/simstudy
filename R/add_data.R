@@ -489,7 +489,7 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
 #' @export
 #' @concept generate_data
 addSynthetic <- function(dtOld, dtFrom, 
-  vars = names(dtFrom)[names(dtFrom) != id], id = "id") {
+  vars = NULL, id = "id") {
   
   assertNotMissing(
     dtOld = missing(dtOld),
@@ -503,6 +503,8 @@ addSynthetic <- function(dtOld, dtFrom,
     class = "data.table",
     call = sys.call(-1)
   )
+  
+  if (is.null(vars)) { vars <- names(dtFrom)[names(dtFrom) != id] }
   
   assertInDataTable(vars = id, dt = dtOld)
   assertInDataTable(vars = id, dt = dtFrom)

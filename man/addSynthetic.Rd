@@ -4,12 +4,7 @@
 \alias{addSynthetic}
 \title{Add synthetic data}
 \usage{
-addSynthetic(
-  dtOld,
-  dtFrom,
-  vars = names(dtFrom)[names(dtFrom) != id],
-  id = "id"
-)
+addSynthetic(dtOld, dtFrom, vars = NULL, id = "id")
 }
 \arguments{
 \item{dtOld}{data.table that is to be modified}

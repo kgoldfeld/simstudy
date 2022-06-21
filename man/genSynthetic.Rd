@@ -4,12 +4,7 @@
 \alias{genSynthetic}
 \title{Generate synthetic data}
 \usage{
-genSynthetic(
-  dtFrom,
-  n = nrow(dtFrom),
-  vars = names(dtFrom)[names(dtFrom) != id],
-  id = "id"
-)
+genSynthetic(dtFrom, n = nrow(dtFrom), vars = NULL, id = "id")
 }
 \arguments{
 \item{dtFrom}{Data table that contains the source data}

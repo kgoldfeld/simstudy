@@ -267,11 +267,12 @@ assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
 assertNotInVector <- function(var, vec, call = sys.call(-1)) {
 
   areInVector <- var %in% vec
-  namevar <- deparse(substitute(var))
-  namevec <- deparse(substitute(vec))
+  elementOfVar <- var[areInVector]
+  nameVar <- deparse(substitute(var))
+  nameVec <- deparse(substitute(vec))
   
   if (any(areInVector)) {
-    alreadyInVectorError(namevar, namevec, call = call)
+    alreadyInVectorError(elementOfVar, nameVar, nameVec, call = call)
   }
 }
 
