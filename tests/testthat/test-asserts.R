@@ -30,7 +30,7 @@ test_that("assertLength works", {
 
 test_that("assertAtLeastLength works", {
   expect_error(assertAtLeastLength(x = c("3", "4"), length = 3),
-               class = "simstudy::lengthMismatch"
+    class = "simstudy::lengthMismatch"
   )
   expect_silent(assertAtLeastLength(x = c("3", "4", "5"), length = 2))
 })
@@ -92,7 +92,7 @@ test_that("assertFactor works.", {
   ),
   regexp = "a and b", class = "simstudy::wrongType"
   )
-  
+
   expect_silent(assertFactor(
     a = as.factor("two"), b = as.factor(123.456),
     c = as.factor(c(1, 2, 3)),

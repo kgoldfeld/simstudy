@@ -8,18 +8,18 @@
 #' @return The collapsed text, or identity when no marker found.
 #' @noRd
 collapseTransformer <- function(regex = "[*]$", ...) {
-    function(text, envir) {
-        collapse <- grepl(regex, text)
-        if (collapse) {
-            text <- sub(regex, "", text)
-        }
-        res <- identity_transformer(text, envir)
-        if (collapse) {
-            glue_collapse(res, ...)
-        } else {
-            res
-        }
+  function(text, envir) {
+    collapse <- grepl(regex, text)
+    if (collapse) {
+      text <- sub(regex, "", text)
     }
+    res <- identity_transformer(text, envir)
+    if (collapse) {
+      glue_collapse(res, ...)
+    } else {
+      res
+    }
+  }
 }
 
 #' Sprintf Transformer
@@ -93,10 +93,10 @@ sprintfCTransformer <- function(sep = ", ", last = " and ", ...) {
 #' @noRd
 glueCollapse <- function(..., sep = ", ", last = " and ",
                          .envir = parent.frame()) {
-    glue(...,
-        .transformer = collapseTransformer(sep = sep, last = last),
-        .envir = .envir
-    )
+  glue(...,
+    .transformer = collapseTransformer(sep = sep, last = last),
+    .envir = .envir
+  )
 }
 
 #' Format numeric vars and glue text
@@ -107,10 +107,10 @@ glueCollapse <- function(..., sep = ", ", last = " and ",
 #' @details var:.2 = %.2f
 #' @noRd
 glueFmt <- function(..., .envir = parent.frame()) {
-    glue(...,
-        .transformer = sprintfTransformer,
-        .envir = .envir
-    )
+  glue(...,
+    .transformer = sprintfTransformer,
+    .envir = .envir
+  )
 }
 
 #' Format and collapse numeric vars
@@ -121,8 +121,8 @@ glueFmt <- function(..., .envir = parent.frame()) {
 #' @details var:.2 = %.2f
 #' @noRd
 glueFmtC <- function(..., .envir = parent.frame(), sep = ", ", last = " and ") {
-    glue(...,
-        .transformer = sprintfCTransformer(sep = sep, last = last),
-        .envir = .envir
-    )
+  glue(...,
+    .transformer = sprintfCTransformer(sep = sep, last = last),
+    .envir = .envir
+  )
 }

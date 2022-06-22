@@ -55,7 +55,7 @@ test_that("evalWith output is Matrix.", {
 # .adjustProbs ----
 test_that("probabilities (matrix) are adjusted as documented.", {
   skip_on_cran()
-  forall(gen.and_then(gen.c(gen.element(2:6), of = 2), function(n) { 
+  forall(gen.and_then(gen.c(gen.element(2:6), of = 2), function(n) {
     gen.with(gen.list(gen_n_norm_Probs(n[2]), of = n[1]), function(ps) {
       do.call("rbind", ps)
     })
