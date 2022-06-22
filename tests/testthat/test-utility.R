@@ -106,16 +106,16 @@ test_that("survGetParam works.", {
 
 test_that("survParamPlot throws errors.", {
   expect_error(survParamPlot(), class = "simstudy::missingArgument")
-  expect_error(survParamPlot(formula=-10), class = "simstudy::missingArgument")
-  expect_error(survParamPlot(formula=4, shape=-1), class = "simstudy::wrongSign")
+  expect_error(survParamPlot(formula = -10), class = "simstudy::missingArgument")
+  expect_error(survParamPlot(formula = 4, shape = -1), class = "simstudy::wrongSign")
 })
 
 test_that("survParamPlot works.", {
-  expect_is(survParamPlot(formula = -4, shape = 1), class="ggplot")
-  
+  expect_is(survParamPlot(formula = -4, shape = 1), class = "ggplot")
+
   points <- list(c(100, .8), c(200, .5))
   r <- survGetParams(points)
-  expect_is(survParamPlot(formula = r[1], shape = r[2], points = points), 
-            class="ggplot")
-  
+  expect_is(survParamPlot(formula = r[1], shape = r[2], points = points),
+    class = "ggplot"
+  )
 })

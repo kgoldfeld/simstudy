@@ -113,7 +113,7 @@ test_that("'uniformInt' formula checked correctly", {
 
 # .genmixture ----
 test_that("mixtures are generated correctly", {
-  def <- defData(varname =  "a", formula = 5)
+  def <- defData(varname = "a", formula = 5)
   def <- defData(def,
     varname = "blksize",
     formula = "..sizes[1] | .5 + ..sizes[2] * a/10 | .5", dist = "mixture"

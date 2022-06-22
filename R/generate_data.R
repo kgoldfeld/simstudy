@@ -1090,4 +1090,81 @@ genSurv <- function(dtName, survDefs, digits = 3,
     
   setnames(dtSurv, "id", idName)
   return(dtSurv[])
+  
 }
+
+#' @title Generate synthetic data 
+#' @description Synthetic data is generated from an existing data set
+#' @param dtFrom Data table that contains the source data
+#' @param n Number of samples to draw from the source data. The default
+#' is number of records that are in the source data file.
+#' @param vars A vector of string names specifying the fields that will be
+#' sampled. The default is that all variables will be selected.
+#' @param id A string specifying the field that serves as the record id. The
+#' default field is "id".
+#' @return A data table with the generated data
+#' @examples
+#' ### Create fake "real" data set
+#'
+#' d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+#' d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+#' d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+#' d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+#' 
+#' A <- genData(100, d, id = "index")
+#' 
+#' ### Create synthetic data set from "observed" data set A:
+#' 
+#' def <- defDataAdd(varname = "x", formula = "2*b + 2*d", variance = 2)
+#' 
+#' S <- genSynthetic(dtFrom = A, n = 120, vars = c("b", "d"), id = "index")
+#' S <- addColumns(def, S)
+#'
+#' @export
+#' @concept generate_data
+
+genSynthetic <- function(dtFrom, n = nrow(dtFrom),  
+  vars = NULL, id = "id") {
+  
+  assertNotMissing(
+    dtFrom = missing(dtFrom),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtFrom = dtFrom, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+  
+  if (is.null(vars)) { vars <- names(dtFrom)[names(dtFrom) != id] }
+
+  assertClass(
+    vars= vars,
+    id = id,
+    class = "character",
+    call = sys.call(-1)
+  )  
+  
+  assertInteger(n = n)
+  
+  assertInDataTable(vars = vars, dt = dtFrom)
+  assertInDataTable(vars = id, dt = dtFrom)
+  
+  assertNotInVector(id, vars)
+  
+  dx <- copy(dtFrom)
+  
+  getVars <- c(id, vars)
+  dx <- dx[, getVars, with = FALSE]  
+  
+  setnames(dx, id, "id")
+  ids <- dx[, sample(id, n, replace = TRUE)]
+  dx <- dx[ids]
+  dx[, id := 1:n]
+  setnames(dx, "id", id)
+  
+  dx[]
+  
+}
+

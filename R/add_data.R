@@ -460,3 +460,66 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
 
   return(dreturn[])
 }
+
+#' Add synthetic data
+#' @title Add synthetic data to existing data set
+#' @description This function generates synthetic data from an existing 
+#' data.table and adds it to another (simstudy) data.table.
+#' @param dtOld data.table that is to be modified
+#' @param dtFrom Data table that contains the source data
+#' @param vars A vector of string names specifying the fields that will be
+#' sampled. The default is that all variables will be selected.
+#' @param id A string specifying the field that serves as the record id. The
+#' default field is "id".
+#' @return A data.table that contains the added synthetic data.
+#' @examples
+#' ### Create fake "real" data set - this is the source of the synthetic data
+#' 
+#' d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+#' d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+#' d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+#' d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+#' 
+#' ### Create synthetic data set from "observed" data set A (normally this
+#' ### would be an actual external data set):
+#' 
+#' A <- genData(1000, d)
+#' 
+#' ### Generate new simstudy data set (using 'def')
+#' 
+#' def <- defData(varname = "x", formula = 0, variance = 5)
+#' S <- genData(120, def)
+#' 
+#' ### Create synthetic data from 'A' and add to simulated data in 'S'
+#' 
+#' S <- addSynthetic(dtOld = S, dtFrom = A, vars = c("b", "d"))
+#' @export
+#' @concept generate_data
+addSynthetic <- function(dtOld, dtFrom, 
+  vars = NULL, id = "id") {
+  
+  assertNotMissing(
+    dtOld = missing(dtOld),
+    dtFrom = missing(dtFrom),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtOld = dtOld,
+    dtFrom = dtFrom, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+  
+  if (is.null(vars)) { vars <- names(dtFrom)[names(dtFrom) != id] }
+  
+  assertInDataTable(vars = id, dt = dtOld)
+  assertInDataTable(vars = id, dt = dtFrom)
+  assertNotInDataTable(vars = vars, dt = dtOld)
+  
+  n <- nrow(dtOld)
+  dS <- genSynthetic(dtFrom = dtFrom, n = n, vars = vars, id = id)
+  dS <- dtOld[dS, on = id]
+  dS[]
+  
+}
