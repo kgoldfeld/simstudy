@@ -32,7 +32,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: | 
-            pkgdown
+            github::r-lib/pkgdown
             local::.
       - name: Deploy package
         run: |
