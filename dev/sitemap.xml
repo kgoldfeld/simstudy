@@ -82,6 +82,9 @@
     <loc>/reference/addPeriods.html</loc>
   </url>
   <url>
+    <loc>/reference/addSynthetic.html</loc>
+  </url>
+  <url>
     <loc>/reference/betaGetShapes.html</loc>
   </url>
   <url>
@@ -185,6 +188,9 @@
   </url>
   <url>
     <loc>/reference/genSurv.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genSynthetic.html</loc>
   </url>
   <url>
     <loc>/reference/iccRE.html</loc>

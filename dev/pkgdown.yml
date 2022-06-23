@@ -1,6 +1,6 @@
 pandoc: 2.14.2
-pkgdown: 2.0.3
-pkgdown_sha: ~
+pkgdown: 2.0.5.9000
+pkgdown_sha: b4096aa376773d7dee98a267fd0b5a025975a3dc
 articles:
   clustered: clustered.html
   correlated: correlated.html
@@ -12,5 +12,5 @@ articles:
   spline: spline.html
   survival: survival.html
   treat_and_exposure: treat_and_exposure.html
-last_built: 2022-06-02T13:57Z
+last_built: 2022-06-23T18:47Z
 

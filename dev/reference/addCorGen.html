@@ -112,52 +112,79 @@
     <dl><dt>dtOld</dt>
 <dd><p>If an existing data.table is specified, then wide will be set to TRUE and n
 will be set to the nrow(dt) without any warning or error.</p></dd>
+
+
 <dt>nvars</dt>
 <dd><p>Number of new variables to create for each id.</p></dd>
+
+
 <dt>idvar</dt>
 <dd><p>String variable name of column represents individual level id for correlated
 data.</p></dd>
+
+
 <dt>rho</dt>
 <dd><p>Correlation coefficient, -1 &lt;= rho &lt;= 1. Use if corMatrix is not provided.</p></dd>
+
+
 <dt>corstr</dt>
 <dd><p>Correlation structure of the variance-covariance matrix
 defined by sigma and rho. Options include "cs" for a compound symmetry structure
 and "ar1" for an autoregressive structure.</p></dd>
+
+
 <dt>corMatrix</dt>
 <dd><p>Correlation matrix can be entered directly. It must be symmetrical and
 positive semi-definite. It is not a required field; if a matrix is not provided, then a
 structure and correlation coefficient rho must be specified.</p></dd>
+
+
 <dt>dist</dt>
 <dd><p>A string indicating "normal", "binary", "poisson" or "gamma".</p></dd>
+
+
 <dt>param1</dt>
 <dd><p>A string that represents the column in dtOld that contains the parameter
 for the mean of the distribution. In the case of the uniform distribution the column
 specifies the minimum.</p></dd>
+
+
 <dt>param2</dt>
 <dd><p>A string that represents the column in dtOld that contains a possible second
 parameter for the distribution. For the normal distribution, this will be the variance;
 for the gamma distribution, this will be the dispersion; and for the uniform distribution,
 this will be the maximum.</p></dd>
+
+
 <dt>cnames</dt>
 <dd><p>Explicit column names. A single string with names separated
 by commas. If no string is provided, the default names will be V#, where #
 represents the column.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Two methods are available to generate correlated data. (1) "copula" uses
 the multivariate Gaussian copula method that is applied to all other distributions; this
 applies to all available distributions. (2) "ep" uses an algorithm developed by
 Emrich and Piedmonte (1991).</p></dd>
+
+
 <dt>formSpec</dt>
 <dd><p>The formula (as a string) that was used to generate the binary
 outcome in the `defDataAdd` statement. This is only necessary when method "ep" is
 requested.</p></dd>
+
+
 <dt>periodvar</dt>
 <dd><p>A string value that indicates the name of the field that indexes
 the repeated measurement for an individual unit. The value defaults to "period".</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Original data.table with added column(s) of correlated data</p>
+    
+
+<p>Original data.table with added column(s) of correlated data</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -235,30 +262,30 @@ Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
 <span class="r-in">  dist <span class="op">=</span> <span class="st">"poisson"</span>, param1 <span class="op">=</span> <span class="st">"lambda"</span>, cnames <span class="op">=</span> <span class="st">"NewPois"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">dtX3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        cid period    xbase nperiods timeID   lambda          p   gammaMu</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 2.538723        8      1 2.125214 0.09635624  2.141736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 2.538723        8      2 3.503885 0.11523148  2.615923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 2.538723        8      3 5.776929 0.13724263  3.195095</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 1.784216        4      4 1.970765 0.07836764  1.707900</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 1.784216        4      5 3.249241 0.09408599  2.086034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 1.948398        2   2996 3.303029 0.09836893  2.191354</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 1.948398        2   2997 5.445774 0.11758713  2.676526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 7.052441        2   2998 3.337574 0.29229419  8.295659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 7.052441        2   2999 5.502729 0.33530947 10.132340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 7.052441        2   3000 9.072466 0.38124488 12.375668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cid period    xbase nperiods timeID    lambda          p   gammaMu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 4.222097        1      1  2.514841 0.15015692  3.548870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 4.222097        1      2  4.146272 0.17750102  4.334599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 4.222097        1      3  6.836047 0.20860233  5.294291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 2.647892        2      4  2.148541 0.09924582  2.213041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 2.647892        2      5  3.542346 0.11861281  2.703014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 5.962211        2   2996  4.934351 0.26671832  7.305761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 5.962211        2   2997  8.135369 0.30760571  8.923277</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 8.419020        5   2998  3.826314 0.38360040 12.499716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 8.419020        5   2999  6.308526 0.43185322 15.267188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 8.419020        5   3000 10.401000 0.48143502 18.647385</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       gammaDis    normMu normVar   unifMin  unifMax NewPois</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:        1  6.269361       4  5.507745 25.50774       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:        1  7.269361       4  7.507745 27.50774       4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:        1  8.269361       4  9.507745 29.50774       4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:        1  5.892108       4  5.356843 25.35684       3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:        1  6.892108       4  7.356843 27.35684       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:        1  7.111049       4  5.844419 25.84442       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:        1  8.111049       4  7.844419 27.84442       7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:        1  9.111049       4  9.844419 29.84442       7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:        1  6.323946       4  5.529578 25.52958       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:        1  7.323946       4  7.529578 27.52958       4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:        1  6.974199       4  7.389680 27.38968       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:        1  7.974199       4  9.389680 29.38968       6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998:        1  8.526221       4  6.410488 26.41049       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999:        1  9.526221       4  8.410488 28.41049       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000:        1 10.526221       4 10.410488 30.41049       7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:        1  8.981105       4  8.192442 28.19244       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:        1  9.981105       4 10.192442 30.19244       8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2998:        1  9.209510       4  6.683804 26.68380       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2999:        1 10.209510       4  8.683804 28.68380       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3000:        1 11.209510       4 10.683804 30.68380      10</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Binomial distribution - copula method</span></span>
 <span class="r-in"></span>
@@ -268,30 +295,30 @@ Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">dtX4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        cid period    xbase nperiods timeID   lambda          p   gammaMu</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 2.538723        8      1 2.125214 0.09635624  2.141736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 2.538723        8      2 3.503885 0.11523148  2.615923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 2.538723        8      3 5.776929 0.13724263  3.195095</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 1.784216        4      4 1.970765 0.07836764  1.707900</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 1.784216        4      5 3.249241 0.09408599  2.086034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 1.948398        2   2996 3.303029 0.09836893  2.191354</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 1.948398        2   2997 5.445774 0.11758713  2.676526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 7.052441        2   2998 3.337574 0.29229419  8.295659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 7.052441        2   2999 5.502729 0.33530947 10.132340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 7.052441        2   3000 9.072466 0.38124488 12.375668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cid period    xbase nperiods timeID    lambda          p   gammaMu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 4.222097        1      1  2.514841 0.15015692  3.548870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 4.222097        1      2  4.146272 0.17750102  4.334599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 4.222097        1      3  6.836047 0.20860233  5.294291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 2.647892        2      4  2.148541 0.09924582  2.213041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 2.647892        2      5  3.542346 0.11861281  2.703014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 5.962211        2   2996  4.934351 0.26671832  7.305761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 5.962211        2   2997  8.135369 0.30760571  8.923277</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 8.419020        5   2998  3.826314 0.38360040 12.499716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 8.419020        5   2999  6.308526 0.43185322 15.267188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 8.419020        5   3000 10.401000 0.48143502 18.647385</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       gammaDis    normMu normVar   unifMin  unifMax NewBin</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:        1  6.269361       4  5.507745 25.50774      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:        1  7.269361       4  7.507745 27.50774      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:        1  8.269361       4  9.507745 29.50774      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:        1  5.892108       4  5.356843 25.35684      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:        1  6.892108       4  7.356843 27.35684      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:        1  7.111049       4  5.844419 25.84442      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:        1  8.111049       4  7.844419 27.84442      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:        1  9.111049       4  9.844419 29.84442      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:        1  6.323946       4  5.529578 25.52958      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:        1  7.323946       4  7.529578 27.52958      0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:        1  6.974199       4  7.389680 27.38968      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:        1  7.974199       4  9.389680 29.38968      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998:        1  8.526221       4  6.410488 26.41049      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999:        1  9.526221       4  8.410488 28.41049      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000:        1 10.526221       4 10.410488 30.41049      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:        1  8.981105       4  8.192442 28.19244      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:        1  9.981105       4 10.192442 30.19244      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2998:        1  9.209510       4  6.683804 26.68380      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2999:        1 10.209510       4  8.683804 28.68380      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3000:        1 11.209510       4 10.683804 30.68380      1</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Gamma distribution</span></span>
 <span class="r-in"></span>
@@ -302,30 +329,30 @@ Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">dtX6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        cid period    xbase nperiods timeID   lambda          p   gammaMu</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 2.538723        8      1 2.125214 0.09635624  2.141736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 2.538723        8      2 3.503885 0.11523148  2.615923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 2.538723        8      3 5.776929 0.13724263  3.195095</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 1.784216        4      4 1.970765 0.07836764  1.707900</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 1.784216        4      5 3.249241 0.09408599  2.086034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 1.948398        2   2996 3.303029 0.09836893  2.191354</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 1.948398        2   2997 5.445774 0.11758713  2.676526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 7.052441        2   2998 3.337574 0.29229419  8.295659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 7.052441        2   2999 5.502729 0.33530947 10.132340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 7.052441        2   3000 9.072466 0.38124488 12.375668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cid period    xbase nperiods timeID    lambda          p   gammaMu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 4.222097        1      1  2.514841 0.15015692  3.548870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 4.222097        1      2  4.146272 0.17750102  4.334599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 4.222097        1      3  6.836047 0.20860233  5.294291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 2.647892        2      4  2.148541 0.09924582  2.213041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 2.647892        2      5  3.542346 0.11861281  2.703014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 5.962211        2   2996  4.934351 0.26671832  7.305761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 5.962211        2   2997  8.135369 0.30760571  8.923277</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 8.419020        5   2998  3.826314 0.38360040 12.499716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 8.419020        5   2999  6.308526 0.43185322 15.267188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 8.419020        5   3000 10.401000 0.48143502 18.647385</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       gammaDis    normMu normVar   unifMin  unifMax   NewGamma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:        1  6.269361       4  5.507745 25.50774  3.0188750</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:        1  7.269361       4  7.507745 27.50774  2.6014614</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:        1  8.269361       4  9.507745 29.50774  0.6466849</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:        1  5.892108       4  5.356843 25.35684  2.0103277</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:        1  6.892108       4  7.356843 27.35684  1.2818696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:        1  7.111049       4  5.844419 25.84442  3.9549606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:        1  8.111049       4  7.844419 27.84442  3.5492997</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:        1  9.111049       4  9.844419 29.84442  8.9791349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:        1  6.323946       4  5.529578 25.52958  0.2802417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:        1  7.323946       4  7.529578 27.52958  2.0878575</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:        1  6.974199       4  7.389680 27.38968  8.0553733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:        1  7.974199       4  9.389680 29.38968  9.5049686</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998:        1  8.526221       4  6.410488 26.41049 19.3378501</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999:        1  9.526221       4  8.410488 28.41049  9.1357073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000:        1 10.526221       4 10.410488 30.41049  0.5387682</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:        1  8.981105       4  8.192442 28.19244  1.6602991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:        1  9.981105       4 10.192442 30.19244  6.4372173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2998:        1  9.209510       4  6.683804 26.68380 18.3804756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2999:        1 10.209510       4  8.683804 28.68380 19.7115453</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3000:        1 11.209510       4 10.683804 30.68380 37.5194993</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Normal distribution</span></span>
 <span class="r-in"></span>
@@ -369,7 +396,7 @@ Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

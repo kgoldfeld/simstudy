@@ -97,24 +97,35 @@
     <h2>Arguments</h2>
     <dl><dt>dtOld</dt>
 <dd><p>data.table that is to be modified</p></dd>
+
+
 <dt>nFactors</dt>
 <dd><p>Number of factors (columns) to generate.</p></dd>
+
+
 <dt>levels</dt>
 <dd><p>Vector or scalar. If a vector is specified, it must be
 the same length as nFatctors. Each value of the vector represents the
 number of levels of each corresponding factor. If a scalar is specified,
 each factor will have the same number of levels. The default is 2 levels
 for each factor.</p></dd>
+
+
 <dt>coding</dt>
 <dd><p>String value to specify if "dummy" or "effect" coding is used.
 Defaults to "dummy".</p></dd>
+
+
 <dt>colNames</dt>
 <dd><p>A vector of strings, with a length of nFactors. The strings
 represent the name for each factor.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table that contains the added simulated data. Each new column contains
+    
+
+<p>A data.table that contains the added simulated data. Each new column contains
 an integer.</p>
     </div>
 
@@ -126,17 +137,17 @@ an integer.</p>
 <span class="r-in"><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, colNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">DT</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id          x A B C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 -1.1956692 2 3 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  1.9464332 2 2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3 -0.8693868 1 3 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 -0.9943921 1 3 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 -1.3228210 1 2 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 -1.2790719 2 1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  0.6731233 2 1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  1.5674596 1 1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 -0.5461882 1 3 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 -1.7168700 1 3 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356 -0.1053829 2 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357 -1.3125878 1 1 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358 -0.9358464 2 2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359 -1.0303458 2 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360 -1.1845493 2 3 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356 -0.1597933 2 1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357 -0.6015755 2 3 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358 -1.2119617 2 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359  0.3818872 2 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360  0.1322061 1 2 1</span>
 <span class="r-in"><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     A B C  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1 1 1 20</span>
@@ -163,13 +174,13 @@ an integer.</p>
 <span class="r-in"><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Var1</span>, <span class="va">Var2</span>, <span class="va">Var3</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Var1 Var2 Var3  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    0    0    0 38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:    0    1    0 37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:    0    1    1 38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    1    0    0 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:    0    1    1 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    1    0    0 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:    1    0    1 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:    1    1    0 37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    1    1    1 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    1    1    1 37</span>
 </code></pre></div>
     </div>
   </div>
@@ -184,7 +195,7 @@ an integer.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

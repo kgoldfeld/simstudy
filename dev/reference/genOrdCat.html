@@ -112,54 +112,79 @@ Correlations can be added via correlation matrix or <code>rho</code> and <code>c
     <h2>Arguments</h2>
     <dl><dt>dtName</dt>
 <dd><p>Name of complete data set</p></dd>
+
+
 <dt>adjVar</dt>
 <dd><p>Adjustment variable  name in dtName - determines
 logistic shift. This is specified assuming a cumulative logit
 link.</p></dd>
+
+
 <dt>baseprobs</dt>
 <dd><p>Baseline probability expressed as a vector or matrix of
 probabilities. The values (per row) must sum to &lt;= 1. If <code>rowSums(baseprobs) &lt; 1</code>, an additional category is added with probability <code>1 - rowSums(baseprobs)</code>. The number of rows represents the number of new
 categorical variables. The number of columns represents the number of
 possible responses - if an particular category has fewer possible responses,
 assign zero probability to non-relevant columns.</p></dd>
+
+
 <dt>catVar</dt>
 <dd><p>Name of the new categorical field. Defaults to "cat". Can be a
 character vector with a name for each new variable defined via <code>baseprobs</code>.
 Will be overridden by <code>prefix</code> if more than one variable is defined and
 <code>length(catVar) == 1</code>.</p></dd>
+
+
 <dt>asFactor</dt>
 <dd><p>If <code>asFactor == TRUE</code> (default), new field is returned
 as a factor. If <code>asFactor == FALSE</code>, new field is returned as an integer.</p></dd>
+
+
 <dt>idname</dt>
 <dd><p>Name of the id column in <code>dtName</code>.</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>A string. The names of the new variables will be a
 concatenation of the prefix and a sequence of integers indicating the
 variable number.</p></dd>
+
+
 <dt>rho</dt>
 <dd><p>Correlation coefficient, -1 &lt; rho &lt; 1. Use if corMatrix is not
 provided.</p></dd>
+
+
 <dt>corstr</dt>
 <dd><p>Correlation structure of the variance-covariance matrix defined
 by sigma and rho. Options include "ind" for an independence structure, "cs"
 for a compound symmetry structure, and "ar1" for an autoregressive structure.</p></dd>
+
+
 <dt>corMatrix</dt>
 <dd><p>Correlation matrix can be entered directly. It must be
 symmetrical and positive definite. It is not a required field; if a matrix is
 not provided, then a structure and correlation coefficient rho must be
 specified. (The matrix created via <code>rho</code> and <code>corstr</code> must also be positive
 definite.)</p></dd>
+
+
 <dt>npVar</dt>
 <dd><p>Vector of variable names that indicate which variables are to
 violate the proportionality assumption.</p></dd>
+
+
 <dt>npAdj</dt>
 <dd><p>Matrix with a row for each npVar and a column for each category.
 Each value represents the deviation from the proportional odds assumption on
 the logistic scale.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Original data.table with added categorical field.</p>
+    
+
+<p>Original data.table with added categorical field.</p>
     </div>
 
     <div id="ref-examples">
@@ -300,7 +325,7 @@ the logistic scale.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

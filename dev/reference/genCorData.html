@@ -106,33 +106,50 @@
     <h2>Arguments</h2>
     <dl><dt>n</dt>
 <dd><p>Number of observations</p></dd>
+
+
 <dt>mu</dt>
 <dd><p>A vector of means. The length of mu must be nvars.</p></dd>
+
+
 <dt>sigma</dt>
 <dd><p>Standard deviation of variables. If standard deviation differs for
 each variable, enter as a vector with the same length as the mean vector mu. If
 the standard deviation is constant across variables, as single value can be entered.</p></dd>
+
+
 <dt>corMatrix</dt>
 <dd><p>Correlation matrix can be entered directly. It must be symmetrical and
 positive semi-definite. It is not a required field; if a matrix is not provided, then a
 structure and correlation coefficient rho must be specified.</p></dd>
+
+
 <dt>rho</dt>
 <dd><p>Correlation coefficient, -1 &lt;= rho &lt;= 1. Use if corMatrix is not provided.</p></dd>
+
+
 <dt>corstr</dt>
 <dd><p>Correlation structure of the variance-covariance matrix
 defined by sigma and rho. Options include "ind" for an independence
 structure, "cs" for a compound symmetry structure, and "ar1" for an
 autoregressive structure.</p></dd>
+
+
 <dt>cnames</dt>
 <dd><p>Explicit column names. A single string with names separated
 by commas. If no string is provided, the default names will be V#, where #
 represents the column.</p></dd>
+
+
 <dt>idname</dt>
 <dd><p>The name of the index id name. Defaults to "id."</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table with n rows and the k + 1 columns, where k is the number of
+    
+
+<p>A data.table with n rows and the k + 1 columns, where k is the number of
 means in the vector mu.</p>
     </div>
 
@@ -208,7 +225,7 @@ means in the vector mu.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

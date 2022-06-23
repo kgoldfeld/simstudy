@@ -106,34 +106,51 @@
     <h2>Arguments</h2>
     <dl><dt>dtName</dt>
 <dd><p>Name of complete data set to be updated</p></dd>
+
+
 <dt>events</dt>
 <dd><p>Vector of column names that include
 time-to-event outcome measures</p></dd>
+
+
 <dt>timeName</dt>
 <dd><p>A string to indicate the name of the combined competing risk
 time-to-event outcome that reflects the minimum observed value of all 
 time-to-event outcomes.</p></dd>
+
+
 <dt>censorName</dt>
 <dd><p>The name of a time-to-event variable that is the censoring
 variable. Must be one of the "events" names. Defaults to NULL.</p></dd>
+
+
 <dt>eventName</dt>
 <dd><p>The name of the new numeric/integer column representing the
 competing event outcomes. If censorName is specified, the integer value for
 that event will be 0. Defaults to "event", but will be ignored 
 if timeName is NULL.</p></dd>
+
+
 <dt>typeName</dt>
 <dd><p>The name of the new character column that will indicate the
 event type. The type will be the unique variable names in survDefs. Defaults
 to "type", but will be ignored if timeName is NULL.</p></dd>
+
+
 <dt>keepEvents</dt>
 <dd><p>Indicator to retain original "events" columns. Defaults
 to FALSE.</p></dd>
+
+
 <dt>idName</dt>
 <dd><p>Name of id field in existing data set.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An updated data table</p>
+    
+
+<p>An updated data table</p>
     </div>
 
     <div id="ref-examples">
@@ -150,17 +167,17 @@ to FALSE.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">addCompRisk</span><span class="op">(</span><span class="va">dd</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reinc"</span>,<span class="st">"death"</span>, <span class="st">"censor"</span><span class="op">)</span>, timeName <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span class="r-in">   censorName <span class="op">=</span> <span class="st">"censor"</span>, keepEvents <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     id x1 x2   time event   type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1  1  0 13.438     1  reinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2  0  1 14.636     1  reinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3  0  1 17.196     0 censor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  4  0  1  9.295     2  death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5  0  0 18.643     1  reinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6  1  0 21.204     2  death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  7  1  0  8.685     0 censor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8  0  0 19.455     2  death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9  1  0  7.979     2  death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10  1  1 23.207     1  reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     id x1 x2   time event  type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1  1  0 16.978     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2  0  1 13.656     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3  1  0  5.637     1 death</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  4  1  1  9.473     1 death</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5  0  0 22.099     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6  0  1  9.553     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  7  0  1 10.627     1 death</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8  1  1  4.693     1 death</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9  1  1 24.365     1 death</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10  0  1 10.602     0 reinc</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -176,7 +193,7 @@ to FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

@@ -138,17 +138,17 @@
 
 <span class="va">study1</span></code></pre></div>
 <pre><code><span class="co">##      cid male over65 baseDBP rxGrp</span>
-<span class="co">##   1:   1    1      0      67     3</span>
-<span class="co">##   2:   2    0      1      61     3</span>
-<span class="co">##   3:   3    0      0      73     3</span>
-<span class="co">##   4:   4    1      0      63     3</span>
-<span class="co">##   5:   5    0      0      74     1</span>
+<span class="co">##   1:   1    0      0      71     1</span>
+<span class="co">##   2:   2    1      0      65     1</span>
+<span class="co">##   3:   3    0      0      70     2</span>
+<span class="co">##   4:   4    1      0      69     3</span>
+<span class="co">##   5:   5    1      0      68     1</span>
 <span class="co">##  ---                              </span>
-<span class="co">## 326: 326    0      0      60     3</span>
-<span class="co">## 327: 327    1      0      72     2</span>
-<span class="co">## 328: 328    0      1      76     2</span>
-<span class="co">## 329: 329    1      0      69     1</span>
-<span class="co">## 330: 330    0      1      64     2</span></code></pre>
+<span class="co">## 326: 326    1      1      70     2</span>
+<span class="co">## 327: 327    0      0      86     2</span>
+<span class="co">## 328: 328    1      0      62     1</span>
+<span class="co">## 329: 329    0      0      68     1</span>
+<span class="co">## 330: 330    0      1      64     1</span></code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></code></pre></div>
@@ -174,29 +174,29 @@
 <span class="va">dtstudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">330</span>, <span class="va">def</span><span class="op">)</span>
 <span class="va">dtstudy</span></code></pre></div>
 <pre><code><span class="co">##      cid male over65 rx        y</span>
-<span class="co">##   1:   1    0      0  0 25.01104</span>
-<span class="co">##   2:   2    0      0  0 23.36101</span>
-<span class="co">##   3:   3    1      0  1 26.98155</span>
-<span class="co">##   4:   4    1      1  1 30.17451</span>
-<span class="co">##   5:   5    1      0  1 31.69145</span>
+<span class="co">##   1:   1    0      0  1 25.76628</span>
+<span class="co">##   2:   2    0      0  1 36.96414</span>
+<span class="co">##   3:   3    0      0  1 29.59817</span>
+<span class="co">##   4:   4    0      0  1 29.80084</span>
+<span class="co">##   5:   5    0      0  0 22.31117</span>
 <span class="co">##  ---                            </span>
-<span class="co">## 326: 326    1      0  1 31.82181</span>
-<span class="co">## 327: 327    1      0  1 43.84911</span>
-<span class="co">## 328: 328    1      0  1 35.84157</span>
-<span class="co">## 329: 329    0      0  1 32.52426</span>
-<span class="co">## 330: 330    0      0  1 21.95738</span></code></pre>
+<span class="co">## 326: 326    1      0  1 34.34183</span>
+<span class="co">## 327: 327    1      0  0 23.61184</span>
+<span class="co">## 328: 328    0      0  1 14.99934</span>
+<span class="co">## 329: 329    1      1  1 51.10105</span>
+<span class="co">## 330: 330    0      0  0 17.09093</span></code></pre>
 <p>Here are the counts and average outcomes for each <em>gender</em>, <em>age</em>, and <em>treatment</em> combination:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtstudy</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>n <span class="op">=</span> <span class="va">.N</span>, avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">male</span>, <span class="va">over65</span>, <span class="va">rx</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <pre><code><span class="co">##    male over65 rx  n  avg</span>
-<span class="co">## 1:    0      0  0 75 20.4</span>
-<span class="co">## 2:    0      0  1 74 30.0</span>
-<span class="co">## 3:    0      1  0 11 30.7</span>
-<span class="co">## 4:    0      1  1 10 38.2</span>
-<span class="co">## 5:    1      0  0 56 25.7</span>
-<span class="co">## 6:    1      0  1 56 34.3</span>
-<span class="co">## 7:    1      1  0 24 35.9</span>
-<span class="co">## 8:    1      1  1 24 45.2</span></code></pre>
+<span class="co">## 1:    0      0  0 74 19.7</span>
+<span class="co">## 2:    0      0  1 74 29.8</span>
+<span class="co">## 3:    0      1  0 11 32.3</span>
+<span class="co">## 4:    0      1  1 11 38.7</span>
+<span class="co">## 5:    1      0  0 55 25.8</span>
+<span class="co">## 6:    1      0  1 55 33.9</span>
+<span class="co">## 7:    1      1  0 25 35.0</span>
+<span class="co">## 8:    1      1  1 25 45.8</span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="observed-treatment">Observed treatment<a class="anchor" aria-label="anchor" href="#observed-treatment"></a>
@@ -293,7 +293,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer>

@@ -107,36 +107,55 @@
     <h2>Arguments</h2>
     <dl><dt>dtName</dt>
 <dd><p>Name of data set</p></dd>
+
+
 <dt>survDefs</dt>
 <dd><p>Definitions of survival</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>Number of digits for rounding</p></dd>
+
+
 <dt>timeName</dt>
 <dd><p>A string to indicate the name of a combined competing risk
 time-to-event outcome that reflects the minimum observed value of all 
 time-to-event outcomes. Defaults to NULL, indicating that each time-to-event
 outcome will be included in dataset.</p></dd>
+
+
 <dt>censorName</dt>
 <dd><p>The name of a time to event variable that is the censoring
 variable. Will be ignored if timeName is NULL.</p></dd>
+
+
 <dt>eventName</dt>
 <dd><p>The name of the new numeric/integer column representing the
 competing event outcomes. If censorName is specified, the integer value for
 that event will be 0. Defaults to "event", but will be ignored 
 if timeName is NULL.</p></dd>
+
+
 <dt>typeName</dt>
 <dd><p>The name of the new character column that will indicate the
 event type. The type will be the unique variable names in survDefs. Defaults
 to "type", but will be ignored if timeName is NULL.</p></dd>
+
+
 <dt>keepEvents</dt>
 <dd><p>Indicator to retain original "events" columns. Defaults
 to FALSE.</p></dd>
+
+
 <dt>idName</dt>
 <dd><p>Name of id field in existing data set.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Original data table with survival time</p>
+    
+
+<p>Original data table with survival time</p>
     </div>
 
     <div id="ref-examples">
@@ -191,7 +210,7 @@ to FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>
