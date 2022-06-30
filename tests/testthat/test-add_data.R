@@ -88,6 +88,7 @@ test_that("addMarkov throws errors.", {
   # if start0lab defined, check that it exists in the transition matrix
   mat6 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow = 3, ncol = 3))
   expect_error(addMarkov(dd, transMat = mat6, chainLen = 5, wide = TRUE, start0lab = "xy"), class = "simstudy::start0probNotInTransMat")
+
 })
 
 # addSynthetic ----
@@ -158,4 +159,5 @@ test_that("addSynthetic works.", {
   Snew <- addSynthetic(S, A)
 
   expect_lt(Snew[, abs(mean(a) - mu_a)], 0.15)
+
 })

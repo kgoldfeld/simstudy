@@ -97,7 +97,8 @@ defMiss <- function(dtDefs = NULL,
 #' @export
 #' @concept missing
 genMiss <- function(dtName, missDefs, idvars,
-                    repeated = FALSE, periodvar = "period") {
+                    repeated = FALSE, periodvar = "period", 
+                    envir = parent.frame()) { # changed envir = ...
 
   # "Declare" vars to avoid R CMD warning
   varname <- NULL
@@ -119,7 +120,7 @@ genMiss <- function(dtName, missDefs, idvars,
 
     for (i in (1:nrow(tmDefs))) {
       dtTemp <- data.table::copy(dtName)
-      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ])
+      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ], envir) # changed envir
       vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
 
       dtMiss <- cbind(dtMiss, vec1)
@@ -270,10 +271,12 @@ genMiss <- function(dtName, missDefs, idvars,
 #' @param dtTemp Name of data set with unique ids only
 #' @param idvars To be filled in
 #' @param missDefs To be filled in
+#' @param envir parent.frame() by default, allows functionality with double-dot
+#' notation
 #' @return A missing data matrix of 0/1, where 1 indicates missing
 #' @noRd
 
-.genMissDataMat <- function(dtName, dtTemp, idvars, missDefs) {
+.genMissDataMat <- function(dtName, dtTemp, idvars, missDefs, envir = parent.frame()) {
 
   # 'declare vars
   varname <- NULL
@@ -284,15 +287,16 @@ genMiss <- function(dtName, missDefs, idvars,
 
   Expression <- parse(text = as.character(missDefs[, varname]))
   ColName <- as.character(missDefs[, varname]) # new data.table (changed 2016-12-05)
-  Formula <- parse(text = as.character(missDefs[, formula]))
+  Formula <- as.character(missDefs[, formula])
 
   if (!missDefs[, logit.link]) {
     # dtMissP[, eval(Expression) := dtName[, eval(Formula)]] # old data.table
-
-    dtMissP[, (ColName) := dtName[, eval(Formula)]]
+    
+    dtMissP[, (ColName) := dtName[, .evalWith(Formula, .parseDotVars(Formula, envir), dtName)]]
   } else {
     # dtMissP[, eval(Expression) := dtName[, .log2Prob(eval(Formula))]] # old data.table
-    dtMissP[, (ColName) := dtName[, .log2Prob(eval(Formula))]]
+    
+    dtMissP[, (ColName) := dtName[, .log2Prob(.evalWith(Formula, .parseDotVars(Formula, envir), dtName))]]
   }
   matMiss <- dtMissP[, idvars, with = FALSE]
   # matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1, dtMissP[,
@@ -341,17 +345,7 @@ genMiss <- function(dtName, missDefs, idvars,
 #' @export
 #' @concept missing
 genObs <- function(dtName, dtMiss, idvars) {
-  if (missing(dtName)) {
-    stop("Argument dtName is missing", call. = FALSE)
-  }
-
-  if (missing(dtMiss)) {
-    stop("Argument dtMiss is missing", call. = FALSE)
-  }
-
-  if (missing(idvars)) {
-    stop("Argument idvars is missing", call. = FALSE)
-  }
+  assertNotMissing(dtName = missing(dtName), dtMiss = missing(dtMiss), idvars = missing(idvars))
 
   if (("period" %in% names(dtName)) & !("period" %in% idvars)) {
     idvars <- c(idvars, "period")

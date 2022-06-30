@@ -270,6 +270,7 @@ alreadyDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
     message, call, ...
   )
   stop(c)
+
 }
 
 #' Element in vector
@@ -292,6 +293,7 @@ alreadyInVectorError <- function(elementOfVar, nameVar, nameVec,
     message, call, ...
   )
   stop(c)
+
 }
 
 #' Not Positive Definite Error
@@ -382,6 +384,8 @@ mismatchError <- function(name_specified, name_null,
   )
   stop(c)
 }
+
+### Added by ME 5/9/22
 
 #' Variables not equal to value error.
 #'

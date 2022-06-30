@@ -648,6 +648,7 @@ test_that("genMultiFac works.", {
   set.seed(oldSeed)
 })
 
+
 # genSyntheticc ----
 test_that("genSynthetic throws errors.", {
   mu_a <- rnorm(1)
@@ -703,3 +704,4 @@ test_that("genSynthetic works.", {
   expect_true(all(names(S) == c("id", "a", "b")))
   expect_true(nrow(S) == n)
 })
+
