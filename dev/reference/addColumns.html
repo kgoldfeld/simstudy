@@ -90,7 +90,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addColumns</span><span class="op">(</span><span class="va">dtDefs</span>, <span class="va">dtOld</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addColumns</span><span class="op">(</span><span class="va">dtDefs</span>, <span class="va">dtOld</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -117,35 +117,35 @@ Defaults to <a href="https://rdrr.io/r/base/sys.parent.html" class="external-lin
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># New data set</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xNr"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>, formula <span class="op">=</span> <span class="fl">7</span>, id <span class="op">=</span> <span class="st">"idnum"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xUni"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span>, formula <span class="op">=</span> <span class="st">"10;20"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Add columns to dt</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"y1"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">def2</span>, varname <span class="op">=</span> <span class="st">"y2"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def2</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># New data set</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xNr"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>, formula <span class="op">=</span> <span class="fl">7</span>, id <span class="op">=</span> <span class="st">"idnum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xUni"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span>, formula <span class="op">=</span> <span class="st">"10;20"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add columns to dt</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"y1"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">def2</span>, varname <span class="op">=</span> <span class="st">"y2"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    varname formula variance   dist     link</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      y1    10.0        3 normal identity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      y2     0.5        0 binary identity</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">addColumns</span><span class="op">(</span><span class="va">def2</span>, <span class="va">dt</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">addColumns</span><span class="op">(</span><span class="va">def2</span>, <span class="va">dt</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     idnum xNr     xUni        y1 y2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1   7 19.62745 10.825155  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2   7 15.45946  9.973688  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     3   7 12.28194  9.087441  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     4   7 10.71663  8.092706  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     5   7 13.53917  9.332142  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     6   7 18.54320 12.028561  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     7   7 10.82421  8.700260  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     8   7 12.69229  9.525532  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     9   7 19.66425  9.650182  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    10   7 17.47366  6.768140  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1   7 16.54959 10.493528  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2   7 16.27046 11.666929  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     3   7 10.47346  9.754929  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     4   7 10.39918 14.335799  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     5   7 18.30912  9.938501  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     6   7 17.47621 11.240136  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     7   7 13.96109 10.801475  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     8   7 12.95050 11.093003  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     9   7 14.61016  8.631253  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    10   7 11.46230  8.770166  0</span>
 </code></pre></div>
     </div>
   </div>

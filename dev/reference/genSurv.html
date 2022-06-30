@@ -90,17 +90,17 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genSurv</span><span class="op">(</span>
-  <span class="va">dtName</span>,
-  <span class="va">survDefs</span>,
-  digits <span class="op">=</span> <span class="fl">3</span>,
-  timeName <span class="op">=</span> <span class="cn">NULL</span>,
-  censorName <span class="op">=</span> <span class="cn">NULL</span>,
-  eventName <span class="op">=</span> <span class="st">"event"</span>,
-  typeName <span class="op">=</span> <span class="st">"type"</span>,
-  keepEvents <span class="op">=</span> <span class="cn">FALSE</span>,
-  idName <span class="op">=</span> <span class="st">"id"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genSurv</span><span class="op">(</span></span>
+<span>  <span class="va">dtName</span>,</span>
+<span>  <span class="va">survDefs</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  timeName <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  censorName <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  eventName <span class="op">=</span> <span class="st">"event"</span>,</span>
+<span>  typeName <span class="op">=</span> <span class="st">"type"</span>,</span>
+<span>  keepEvents <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  idName <span class="op">=</span> <span class="st">"id"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -160,35 +160,35 @@ to FALSE.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Baseline data definitions</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"grp"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Survival data definitions</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span></span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"survTime"</span>, formula <span class="op">=</span> <span class="st">"1.5*x1"</span>,</span>
-<span class="r-in">  scale <span class="op">=</span> <span class="st">"grp*50 + (1-grp)*25"</span>, shape <span class="op">=</span> <span class="st">"grp*1 + (1-grp)*1.5"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">sdef</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Baseline data definitions</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"grp"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Survival data definitions</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"survTime"</span>, formula <span class="op">=</span> <span class="st">"1.5*x1"</span>,</span></span>
+<span class="r-in"><span>  scale <span class="op">=</span> <span class="st">"grp*50 + (1-grp)*25"</span>, shape <span class="op">=</span> <span class="st">"grp*1 + (1-grp)*1.5"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sdef</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       varname formula               scale               shape transition</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: censorTime       0                  80                   1          0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5          0</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Baseline data definitions</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Add survival times</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu">genSurv</span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Baseline data definitions</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add survival times</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu">genSurv</span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id x1 x2 grp censorTime survTime</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1  0  1   0     15.698  146.589</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2  1  1   1    432.049    6.873</span>

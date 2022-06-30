@@ -90,16 +90,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addCompRisk</span><span class="op">(</span>
-  <span class="va">dtName</span>,
-  <span class="va">events</span>,
-  <span class="va">timeName</span>,
-  censorName <span class="op">=</span> <span class="cn">NULL</span>,
-  eventName <span class="op">=</span> <span class="st">"event"</span>,
-  typeName <span class="op">=</span> <span class="st">"type"</span>,
-  keepEvents <span class="op">=</span> <span class="cn">FALSE</span>,
-  idName <span class="op">=</span> <span class="st">"id"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addCompRisk</span><span class="op">(</span></span>
+<span>  <span class="va">dtName</span>,</span>
+<span>  <span class="va">events</span>,</span>
+<span>  <span class="va">timeName</span>,</span>
+<span>  censorName <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  eventName <span class="op">=</span> <span class="st">"event"</span>,</span>
+<span>  typeName <span class="op">=</span> <span class="st">"type"</span>,</span>
+<span>  keepEvents <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  idName <span class="op">=</span> <span class="st">"id"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -155,30 +155,30 @@ to FALSE.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, <span class="st">"x2"</span>, <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"reinc"</span>, formula <span class="op">=</span> <span class="st">"-10 - 0.6*x1 + 0.4*x2"</span>, shape <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">dS</span>, <span class="st">"death"</span>, <span class="st">"-6.5 + 0.3*x1 - 0.5*x2"</span>, shape <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">dS</span>, <span class="st">"censor"</span>, <span class="st">"-7"</span>, shape <span class="op">=</span> <span class="fl">0.55</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">d1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dd</span>, <span class="va">dS</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">addCompRisk</span><span class="op">(</span><span class="va">dd</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reinc"</span>,<span class="st">"death"</span>, <span class="st">"censor"</span><span class="op">)</span>, timeName <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span class="r-in">   censorName <span class="op">=</span> <span class="st">"censor"</span>, keepEvents <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, <span class="st">"x2"</span>, <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"reinc"</span>, formula <span class="op">=</span> <span class="st">"-10 - 0.6*x1 + 0.4*x2"</span>, shape <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">dS</span>, <span class="st">"death"</span>, <span class="st">"-6.5 + 0.3*x1 - 0.5*x2"</span>, shape <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">dS</span>, <span class="st">"censor"</span>, <span class="st">"-7"</span>, shape <span class="op">=</span> <span class="fl">0.55</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">d1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dd</span>, <span class="va">dS</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">addCompRisk</span><span class="op">(</span><span class="va">dd</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reinc"</span>,<span class="st">"death"</span>, <span class="st">"censor"</span><span class="op">)</span>, timeName <span class="op">=</span> <span class="st">"time"</span>,</span></span>
+<span class="r-in"><span>   censorName <span class="op">=</span> <span class="st">"censor"</span>, keepEvents <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id x1 x2   time event  type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1  1  0 16.978     0 reinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2  0  1 13.656     0 reinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3  1  0  5.637     1 death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  4  1  1  9.473     1 death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5  0  0 22.099     0 reinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6  0  1  9.553     0 reinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  7  0  1 10.627     1 death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8  1  1  4.693     1 death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9  1  1 24.365     1 death</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10  0  1 10.602     0 reinc</span>
-<span class="r-in"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1  1  1 15.330     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2  1  1 22.272     1 death</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3  1  1  9.844     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  4  1  1 20.965     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5  0  1 11.192     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6  0  1 14.539     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  7  0  0 13.850     1 death</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8  1  1 13.221     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9  0  0 13.972     0 reinc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10  1  0 14.048     1 death</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

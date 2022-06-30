@@ -120,136 +120,136 @@
 <p>By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) <em>missing completely at random</em> (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) <em>missing at random</em> (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) <em>not missing at random</em> (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with the measure.</p>
 <p>These possibilities are illustrated with an example. A data set of 1000 observations with three “outcome” measures” <code>x1</code>, <code>x2</code>, and <code>x3</code> is defined. This data set also includes two independent predictors, <code>m</code> and <code>u</code> that largely determine the value of each outcome (subject to random noise).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"m"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-<span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"u"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-<span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x1"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x2"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x3"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-
-<span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">def1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"m"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"u"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x1"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x2"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x3"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">def1</span><span class="op">)</span></span></code></pre></div>
 <p>In this example, the missing data mechanism is different for each outcome. As defined below, missingness for <code>x1</code> is MCAR, since the probability of missing is fixed. Missingness for <code>x2</code> is MAR, since missingness is a function of <code>m</code>, a measured predictor of <code>x2</code>. And missingness for <code>x3</code> is NMAR, since the probability of missing is dependent on <code>u</code>, an unmeasured predictor of <code>x3</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.15</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="st">".05 + m * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x3"</span>, formula <span class="op">=</span> <span class="st">".05 + u * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"u"</span>, formula <span class="op">=</span> <span class="fl">1</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># not observed</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">283726</span><span class="op">)</span>
-
-<span class="va">missMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genMiss.html">genMiss</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">defM</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span>
-<span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genObs.html">genObs</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">missMat</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.15</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="st">".05 + m * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x3"</span>, formula <span class="op">=</span> <span class="st">".05 + u * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"u"</span>, formula <span class="op">=</span> <span class="fl">1</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># not observed</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">283726</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">missMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genMiss.html">genMiss</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">defM</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<span><span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genObs.html">genObs</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">missMat</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">missMat</span></code></pre></div>
-<pre><code><span class="co">##         id x1 x2 x3 u m</span>
-<span class="co">##    1:    1  0  0  0 1 0</span>
-<span class="co">##    2:    2  0  0  0 1 0</span>
-<span class="co">##    3:    3  1  0  0 1 0</span>
-<span class="co">##    4:    4  1  0  0 1 0</span>
-<span class="co">##    5:    5  1  1  0 1 0</span>
-<span class="co">##   ---                  </span>
-<span class="co">##  996:  996  0  0  0 1 0</span>
-<span class="co">##  997:  997  1  0  0 1 0</span>
-<span class="co">##  998:  998  0  1  1 1 0</span>
-<span class="co">##  999:  999  0  0  0 1 0</span>
-<span class="co">## 1000: 1000  0  0  0 1 0</span></code></pre>
+<code class="sourceCode R"><span><span class="va">missMat</span></span></code></pre></div>
+<pre><code><span><span class="co">##         id x1 x2 x3 u m</span></span>
+<span><span class="co">##    1:    1  0  0  0 1 0</span></span>
+<span><span class="co">##    2:    2  0  0  0 1 0</span></span>
+<span><span class="co">##    3:    3  1  0  0 1 0</span></span>
+<span><span class="co">##    4:    4  1  0  0 1 0</span></span>
+<span><span class="co">##    5:    5  1  1  0 1 0</span></span>
+<span><span class="co">##   ---                  </span></span>
+<span><span class="co">##  996:  996  0  0  0 1 0</span></span>
+<span><span class="co">##  997:  997  1  0  1 1 0</span></span>
+<span><span class="co">##  998:  998  0  1  0 1 0</span></span>
+<span><span class="co">##  999:  999  0  0  0 1 0</span></span>
+<span><span class="co">## 1000: 1000  0  0  0 1 0</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dtObs</span></code></pre></div>
-<pre><code><span class="co">##         id m  u        x1          x2         x3</span>
-<span class="co">##    1:    1 1 NA 38.947773 40.08653405 43.4229105</span>
-<span class="co">##    2:    2 0 NA 20.449934 21.36132634 21.7538492</span>
-<span class="co">##    3:    3 0 NA        NA  0.05664245  0.2343272</span>
-<span class="co">##    4:    4 1 NA        NA 19.99342316 18.5584131</span>
-<span class="co">##    5:    5 0 NA        NA          NA -0.9514723</span>
-<span class="co">##   ---                                           </span>
-<span class="co">##  996:  996 1 NA 21.464135 20.83015575 17.5180597</span>
-<span class="co">##  997:  997 0 NA        NA  0.33029659 -1.2081752</span>
-<span class="co">##  998:  998 1 NA 40.436046          NA         NA</span>
-<span class="co">##  999:  999 1 NA 20.312133 18.63788546 18.2183175</span>
-<span class="co">## 1000: 1000 0 NA  1.082865 -2.36263813 -0.5558214</span></code></pre>
+<code class="sourceCode R"><span><span class="va">dtObs</span></span></code></pre></div>
+<pre><code><span><span class="co">##         id m  u         x1         x2         x3</span></span>
+<span><span class="co">##    1:    1 0 NA  0.5386313 -2.1237339  0.9195611</span></span>
+<span><span class="co">##    2:    2 1 NA 19.5083116 20.8994716 19.3422869</span></span>
+<span><span class="co">##    3:    3 0 NA         NA -0.8591973  0.4076997</span></span>
+<span><span class="co">##    4:    4 0 NA         NA -0.5444807 -0.8794122</span></span>
+<span><span class="co">##    5:    5 0 NA         NA         NA 21.7951195</span></span>
+<span><span class="co">##   ---                                           </span></span>
+<span><span class="co">##  996:  996 0 NA -1.1654991  1.7669556  1.1983079</span></span>
+<span><span class="co">##  997:  997 1 NA         NA 40.1181632         NA</span></span>
+<span><span class="co">##  998:  998 1 NA 20.0937426         NA 18.3051595</span></span>
+<span><span class="co">##  999:  999 1 NA 40.3043240 39.3583882 41.4773444</span></span>
+<span><span class="co">## 1000: 1000 1 NA 18.4960086 20.2471721 21.4002078</span></span></code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the “true” data set without missing data as a comparison for the “observed” data set. Since <code>x1</code> is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for <code>x2</code> and <code>x3</code> are biased, as the difference between observed and actual is not close to 0:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Two functions to calculate means and compare them</span>
-
-<span class="va">rmean</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">var</span>, <span class="va">digits</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">var</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">digits</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="va">showDif</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dt1</span>, <span class="va">dt2</span>, <span class="va">rowName</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Actual"</span>, <span class="st">"Observed"</span>, <span class="st">"Difference"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">dt1</span>, <span class="va">dt2</span>, <span class="va">dt1</span> <span class="op">-</span> <span class="va">dt2</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">rowName</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co"># data.table functionality to estimate means for each data set</span>
-
-<span class="va">meanAct</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-<span class="va">meanObs</span> <span class="op">&lt;-</span> <span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-
-<span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##              x1   x2   x3</span>
-<span class="co">## Actual     20.4 20.6 20.5</span>
-<span class="co">## Observed   20.4 18.9 19.1</span>
-<span class="co">## Difference  0.0  1.7  1.4</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Two functions to calculate means and compare them</span></span>
+<span></span>
+<span><span class="va">rmean</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">var</span>, <span class="va">digits</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">var</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">digits</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">showDif</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dt1</span>, <span class="va">dt2</span>, <span class="va">rowName</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Actual"</span>, <span class="st">"Observed"</span>, <span class="st">"Difference"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">dt1</span>, <span class="va">dt2</span>, <span class="va">dt1</span> <span class="op">-</span> <span class="va">dt2</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">rowName</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># data.table functionality to estimate means for each data set</span></span>
+<span></span>
+<span><span class="va">meanAct</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">meanObs</span> <span class="op">&lt;-</span> <span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##              x1   x2   x3</span></span>
+<span><span class="co">## Actual     19.6 19.5 19.5</span></span>
+<span><span class="co">## Observed   19.8 17.8 17.9</span></span>
+<span><span class="co">## Difference -0.2  1.7  1.6</span></span></code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias for the estimate of the mean of <code>x2</code> is mitigated, but not for <code>x3</code>, since <code>u</code> is not observed:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">meanActm</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span>
-<span class="va">meanObsm</span> <span class="op">&lt;-</span> <span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">meanActm</span> <span class="op">&lt;-</span> <span class="va">dtAct</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span></span>
+<span><span class="va">meanObsm</span> <span class="op">&lt;-</span> <span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, x2 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, x3 <span class="op">=</span> <span class="fu">rmean</span><span class="op">(</span><span class="va">x3</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">m</span><span class="op">]</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># compare observed and actual when m = 0</span>
-
-<span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##              x1   x2   x3</span>
-<span class="co">## Actual     10.6 10.7 10.8</span>
-<span class="co">## Observed   10.8 10.6  9.2</span>
-<span class="co">## Difference -0.2  0.1  1.6</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># compare observed and actual when m = 0</span></span>
+<span></span>
+<span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             x1  x2  x3</span></span>
+<span><span class="co">## Actual     9.3 9.2 9.2</span></span>
+<span><span class="co">## Observed   9.2 9.2 7.8</span></span>
+<span><span class="co">## Difference 0.1 0.0 1.4</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># compare observed and actual when m = 1</span>
-
-<span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##              x1   x2   x3</span>
-<span class="co">## Actual     29.5 29.6 29.5</span>
-<span class="co">## Observed   29.5 29.9 27.9</span>
-<span class="co">## Difference  0.0 -0.3  1.6</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># compare observed and actual when m = 1</span></span>
+<span></span>
+<span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##              x1   x2   x3</span></span>
+<span><span class="co">## Actual     29.6 29.6 29.5</span></span>
+<span><span class="co">## Observed   29.6 29.1 27.8</span></span>
+<span><span class="co">## Difference  0.0  0.5  1.7</span></span></code></pre>
 <div class="section level2">
 <h2 id="longitudinal-data-with-missingness">Longitudinal data with missingness<a class="anchor" aria-label="anchor" href="#longitudinal-data-with-missingness"></a>
 </h2>
 <p>Missingness can occur, of course, in the context of longitudinal data. <code>missDef</code> provides two additional arguments that are relevant for these types of data: <code>baseline</code> and <code>monotonic</code>. In the case of variables that are measured at baseline only, a missing value would be reflected throughout the course of the study. In the case where a variable is time-dependent (i.e it is measured at each time point), it is possible to declare missingness to be <em>monotonic</em>. This means that if a value for this field is missing at time <code>t</code>, then values will also be missing at all times <code>T &gt; t</code> as well. The call to <code>genMiss</code> must set <code>repeated</code> to TRUE.</p>
 <p>The following two examples describe an outcome variable <code>y</code> that is measured over time, whose value is a function of time and an observed exposure:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># use baseline definitions from the previous example</span>
-
-<span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">120</span>, <span class="va">def1</span><span class="op">)</span>
-<span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtAct</span>, formulas <span class="op">=</span> <span class="fl">0.5</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span>
-
-<span class="co"># add longitudinal data</span>
-
-<span class="va">defLong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"y"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"10 + period*2 + 2 * rx"</span>,
-    variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-
-<span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">dtAct</span>, nPeriods <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">defLong</span>, <span class="va">dtTime</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># use baseline definitions from the previous example</span></span>
+<span></span>
+<span><span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">120</span>, <span class="va">def1</span><span class="op">)</span></span>
+<span><span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtAct</span>, formulas <span class="op">=</span> <span class="fl">0.5</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># add longitudinal data</span></span>
+<span></span>
+<span><span class="va">defLong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"y"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"10 + period*2 + 2 * rx"</span>,</span>
+<span>    variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">dtAct</span>, nPeriods <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">defLong</span>, <span class="va">dtTime</span><span class="op">)</span></span></code></pre></div>
 <p>In the first case, missingness is not monotonic; a subject might miss a measurement but returns for subsequent measurements:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># missingness for y is not monotonic</span>
-
-<span class="va">defMlong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.2</span>, baseline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">defMlong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defMlong</span>, varname <span class="op">=</span> <span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"-1.5 - 1.5 * rx + .25*period"</span>,
-    logit.link <span class="op">=</span> <span class="cn">TRUE</span>, baseline <span class="op">=</span> <span class="cn">FALSE</span>, monotonic <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="va">missMatLong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genMiss.html">genMiss</a></span><span class="op">(</span><span class="va">dtTime</span>, <span class="va">defMlong</span>, idvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"rx"</span><span class="op">)</span>, repeated <span class="op">=</span> <span class="cn">TRUE</span>,
-    periodvar <span class="op">=</span> <span class="st">"period"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># missingness for y is not monotonic</span></span>
+<span></span>
+<span><span class="va">defMlong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.2</span>, baseline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">defMlong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defMlong</span>, varname <span class="op">=</span> <span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"-1.5 - 1.5 * rx + .25*period"</span>,</span>
+<span>    logit.link <span class="op">=</span> <span class="cn">TRUE</span>, baseline <span class="op">=</span> <span class="cn">FALSE</span>, monotonic <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">missMatLong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genMiss.html">genMiss</a></span><span class="op">(</span><span class="va">dtTime</span>, <span class="va">defMlong</span>, idvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"rx"</span><span class="op">)</span>, repeated <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    periodvar <span class="op">=</span> <span class="st">"period"</span><span class="op">)</span></span></code></pre></div>
 <p>Here is a conceptual plot that shows the pattern of missingness. Each row represents an individual, and each box represents a time period. A box that is colored reflects missing data; a box colored grey reflects observed. The missingness pattern is shown for two variables <code>x1</code> and <code>y</code>:</p>
 <p><img src="missing_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 <p>In the second case, missingness is monotonic; once a subject misses a measurement for <code>y</code>, there are no subsequent measurements:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># missingness for y is monotonic</span>
-
-<span class="va">defMlong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.2</span>, baseline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">defMlong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defMlong</span>, varname <span class="op">=</span> <span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"-1.8 - 1.5 * rx + .25*period"</span>,
-    logit.link <span class="op">=</span> <span class="cn">TRUE</span>, baseline <span class="op">=</span> <span class="cn">FALSE</span>, monotonic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">missMatLong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genMiss.html">genMiss</a></span><span class="op">(</span><span class="va">dtTime</span>, <span class="va">defMlong</span>, idvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"rx"</span><span class="op">)</span>, repeated <span class="op">=</span> <span class="cn">TRUE</span>,
-    periodvar <span class="op">=</span> <span class="st">"period"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># missingness for y is monotonic</span></span>
+<span></span>
+<span><span class="va">defMlong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.2</span>, baseline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">defMlong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defMiss.html">defMiss</a></span><span class="op">(</span><span class="va">defMlong</span>, varname <span class="op">=</span> <span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"-1.8 - 1.5 * rx + .25*period"</span>,</span>
+<span>    logit.link <span class="op">=</span> <span class="cn">TRUE</span>, baseline <span class="op">=</span> <span class="cn">FALSE</span>, monotonic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">missMatLong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genMiss.html">genMiss</a></span><span class="op">(</span><span class="va">dtTime</span>, <span class="va">defMlong</span>, idvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"rx"</span><span class="op">)</span>, repeated <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    periodvar <span class="op">=</span> <span class="st">"period"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="missing_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
 </div>
   </div>

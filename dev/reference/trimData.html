@@ -90,7 +90,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">trimData</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">seqvar</span>, <span class="va">eventvar</span>, idvar <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">trimData</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">seqvar</span>, <span class="va">eventvar</span>, idvar <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -121,28 +121,28 @@ individual</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">eDef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"e"</span>, formula <span class="op">=</span> <span class="st">"u==4"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fl">0.4</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span>
-<span class="r-in">  <span class="fl">0.0</span>, <span class="fl">0.4</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>,</span>
-<span class="r-in">  <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>,</span>
-<span class="r-in">  <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span></span>
-<span class="r-in"><span class="op">)</span>,</span>
-<span class="r-in">nrow <span class="op">=</span> <span class="fl">4</span></span>
-<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="genMarkov.html">genMarkov</a></span><span class="op">(</span></span>
-<span class="r-in">  n <span class="op">=</span> <span class="fl">100</span>, transMat <span class="op">=</span> <span class="va">P</span>,</span>
-<span class="r-in">  chainLen <span class="op">=</span> <span class="fl">8</span>, id <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span class="r-in">  pername <span class="op">=</span> <span class="st">"period"</span>,</span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"u"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">eDef</span>, <span class="va">dp</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu">trimData</span><span class="op">(</span><span class="va">dp</span>, seqvar <span class="op">=</span> <span class="st">"period"</span>, eventvar <span class="op">=</span> <span class="st">"e"</span>, idvar <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dp</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">eDef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"e"</span>, formula <span class="op">=</span> <span class="st">"u==4"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fl">0.4</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">0.0</span>, <span class="fl">0.4</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span></span></span>
+<span class="r-in"><span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>nrow <span class="op">=</span> <span class="fl">4</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="genMarkov.html">genMarkov</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  n <span class="op">=</span> <span class="fl">100</span>, transMat <span class="op">=</span> <span class="va">P</span>,</span></span>
+<span class="r-in"><span>  chainLen <span class="op">=</span> <span class="fl">8</span>, id <span class="op">=</span> <span class="st">"id"</span>,</span></span>
+<span class="r-in"><span>  pername <span class="op">=</span> <span class="st">"period"</span>,</span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"u"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">eDef</span>, <span class="va">dp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu">trimData</span><span class="op">(</span><span class="va">dp</span>, seqvar <span class="op">=</span> <span class="st">"period"</span>, eventvar <span class="op">=</span> <span class="st">"e"</span>, idvar <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dp</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id period u     e</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1      1 1 FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:   1      2 4  TRUE</span>

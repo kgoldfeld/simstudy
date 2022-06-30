@@ -90,16 +90,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genSpline</span><span class="op">(</span>
-  <span class="va">dt</span>,
-  <span class="va">newvar</span>,
-  <span class="va">predictor</span>,
-  <span class="va">theta</span>,
-  knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>,
-  degree <span class="op">=</span> <span class="fl">3</span>,
-  newrange <span class="op">=</span> <span class="cn">NULL</span>,
-  noise.var <span class="op">=</span> <span class="fl">0</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genSpline</span><span class="op">(</span></span>
+<span>  <span class="va">dt</span>,</span>
+<span>  <span class="va">newvar</span>,</span>
+<span>  <span class="va">predictor</span>,</span>
+<span>  <span class="va">theta</span>,</span>
+<span>  knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>,</span>
+<span>  degree <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  newrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  noise.var <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -153,25 +153,25 @@ is value of spline curve.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">ddef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"age"</span>, formula <span class="op">=</span> <span class="st">"0;1"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">theta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="viewSplines.html">viewSplines</a></span><span class="op">(</span>knots <span class="op">=</span> <span class="va">knots</span>, theta <span class="op">=</span> <span class="va">theta1</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">ddef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"age"</span>, formula <span class="op">=</span> <span class="st">"0;1"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">theta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="viewSplines.html">viewSplines</a></span><span class="op">(</span>knots <span class="op">=</span> <span class="va">knots</span>, theta <span class="op">=</span> <span class="va">theta1</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="genSpline-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">234</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">ddef</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">genSpline</span><span class="op">(</span></span>
-<span class="r-in">  dt <span class="op">=</span> <span class="va">dt</span>, newvar <span class="op">=</span> <span class="st">"weight"</span>,</span>
-<span class="r-in">  predictor <span class="op">=</span> <span class="st">"age"</span>, theta <span class="op">=</span> <span class="va">theta1</span>,</span>
-<span class="r-in">  knots <span class="op">=</span> <span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span>,</span>
-<span class="r-in">  noise.var <span class="op">=</span> <span class="fl">.025</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">234</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">ddef</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">genSpline</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dt <span class="op">=</span> <span class="va">dt</span>, newvar <span class="op">=</span> <span class="st">"weight"</span>,</span></span>
+<span class="r-in"><span>  predictor <span class="op">=</span> <span class="st">"age"</span>, theta <span class="op">=</span> <span class="va">theta1</span>,</span></span>
+<span class="r-in"><span>  knots <span class="op">=</span> <span class="va">knots</span>, degree <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>  noise.var <span class="op">=</span> <span class="fl">.025</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         id        age    weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1 0.74562000 0.5520232</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2 0.78171242 1.0489039</span>

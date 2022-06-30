@@ -92,18 +92,18 @@ specifying a transition matrix.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addMarkov</span><span class="op">(</span>
-  <span class="va">dd</span>,
-  <span class="va">transMat</span>,
-  <span class="va">chainLen</span>,
-  wide <span class="op">=</span> <span class="cn">FALSE</span>,
-  id <span class="op">=</span> <span class="st">"id"</span>,
-  pername <span class="op">=</span> <span class="st">"period"</span>,
-  varname <span class="op">=</span> <span class="st">"state"</span>,
-  widePrefix <span class="op">=</span> <span class="st">"S"</span>,
-  start0lab <span class="op">=</span> <span class="cn">NULL</span>,
-  trimvalue <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addMarkov</span><span class="op">(</span></span>
+<span>  <span class="va">dd</span>,</span>
+<span>  <span class="va">transMat</span>,</span>
+<span>  <span class="va">chainLen</span>,</span>
+<span>  wide <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  pername <span class="op">=</span> <span class="st">"period"</span>,</span>
+<span>  varname <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  widePrefix <span class="op">=</span> <span class="st">"S"</span>,</span>
+<span>  start0lab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trimvalue <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -172,29 +172,29 @@ if in long format.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>,</span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"S0"</span>, formula <span class="op">=</span> <span class="st">".6;.3;.1"</span>,</span>
-<span class="r-in">  dist <span class="op">=</span> <span class="st">"categorical"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">20</span>, <span class="va">def1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Transition matrix P</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span>
-<span class="r-in">  <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>,</span>
-<span class="r-in">  <span class="fl">0.0</span>, <span class="fl">0.7</span>, <span class="fl">0.3</span></span>
-<span class="r-in"><span class="op">)</span>,</span>
-<span class="r-in">nrow <span class="op">=</span> <span class="fl">3</span></span>
-<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d3</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, wide <span class="op">=</span> <span class="cn">TRUE</span>, start0lab <span class="op">=</span> <span class="st">"S0"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d4</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, start0lab <span class="op">=</span> <span class="st">"S0"</span>, trimvalue <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>,</span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"S0"</span>, formula <span class="op">=</span> <span class="st">".6;.3;.1"</span>,</span></span>
+<span class="r-in"><span>  dist <span class="op">=</span> <span class="st">"categorical"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">20</span>, <span class="va">def1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Transition matrix P</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">0.0</span>, <span class="fl">0.7</span>, <span class="fl">0.3</span></span></span>
+<span class="r-in"><span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>nrow <span class="op">=</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d3</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, wide <span class="op">=</span> <span class="cn">TRUE</span>, start0lab <span class="op">=</span> <span class="st">"S0"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d4</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, start0lab <span class="op">=</span> <span class="st">"S0"</span>, trimvalue <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>

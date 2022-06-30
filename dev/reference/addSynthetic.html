@@ -92,7 +92,7 @@ data.table and adds it to another (simstudy) data.table.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addSynthetic</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">dtFrom</span>, vars <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addSynthetic</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">dtFrom</span>, vars <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -128,26 +128,26 @@ default field is "id".</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">### Create fake "real" data set - this is the source of the synthetic data</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"a"</span>, formula <span class="op">=</span> <span class="fl">3</span>, variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d</span>, varname <span class="op">=</span> <span class="st">"b"</span>, formula <span class="op">=</span> <span class="fl">5</span>, dist <span class="op">=</span> <span class="st">"poisson"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d</span>, varname <span class="op">=</span> <span class="st">"c"</span>, formula <span class="op">=</span> <span class="fl">0.3</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d</span>, varname <span class="op">=</span> <span class="st">"d"</span>, formula <span class="op">=</span> <span class="st">"a + b + 3*c"</span>, variance <span class="op">=</span> <span class="fl">2</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">### Create synthetic data set from "observed" data set A (normally this</span></span>
-<span class="r-in"><span class="co">### would be an actual external data set):</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">d</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">### Generate new simstudy data set (using 'def')</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">S</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">120</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">### Create synthetic data from 'A' and add to simulated data in 'S'</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">S</span> <span class="op">&lt;-</span> <span class="fu">addSynthetic</span><span class="op">(</span>dtOld <span class="op">=</span> <span class="va">S</span>, dtFrom <span class="op">=</span> <span class="va">A</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="st">"d"</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">### Create fake "real" data set - this is the source of the synthetic data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"a"</span>, formula <span class="op">=</span> <span class="fl">3</span>, variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d</span>, varname <span class="op">=</span> <span class="st">"b"</span>, formula <span class="op">=</span> <span class="fl">5</span>, dist <span class="op">=</span> <span class="st">"poisson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d</span>, varname <span class="op">=</span> <span class="st">"c"</span>, formula <span class="op">=</span> <span class="fl">0.3</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d</span>, varname <span class="op">=</span> <span class="st">"d"</span>, formula <span class="op">=</span> <span class="st">"a + b + 3*c"</span>, variance <span class="op">=</span> <span class="fl">2</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Create synthetic data set from "observed" data set A (normally this</span></span></span>
+<span class="r-in"><span><span class="co">### would be an actual external data set):</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">d</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Generate new simstudy data set (using 'def')</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">S</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">120</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Create synthetic data from 'A' and add to simulated data in 'S'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">S</span> <span class="op">&lt;-</span> <span class="fu">addSynthetic</span><span class="op">(</span>dtOld <span class="op">=</span> <span class="va">S</span>, dtFrom <span class="op">=</span> <span class="va">A</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="st">"d"</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>

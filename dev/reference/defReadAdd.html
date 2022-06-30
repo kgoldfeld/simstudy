@@ -90,7 +90,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">defReadAdd</span><span class="op">(</span><span class="va">filen</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">defReadAdd</span><span class="op">(</span><span class="va">filen</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -112,52 +112,52 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Create temporary external "csv" files</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">test1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"varname,formula,variance,dist,link"</span>,</span>
-<span class="r-in">  <span class="st">"nr,7, 0,nonrandom,identity"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tfcsv1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">test1</span>, <span class="va">tfcsv1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">test2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"varname,formula,variance,dist,link"</span>,</span>
-<span class="r-in">  <span class="st">"x1,.4, 0,binary,identity"</span>,</span>
-<span class="r-in">  <span class="st">"y1,nr + x1 * 2,8,normal,identity"</span>,</span>
-<span class="r-in">  <span class="st">"y2,nr - 0.2 * x1,0,poisson, log"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tfcsv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">test2</span>, <span class="va">tfcsv2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Generate data based on external definitions</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="defRead.html">defRead</a></span><span class="op">(</span><span class="va">tfcsv1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">defs</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Create temporary external "csv" files</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"varname,formula,variance,dist,link"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"nr,7, 0,nonrandom,identity"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tfcsv1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">test1</span>, <span class="va">tfcsv1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"varname,formula,variance,dist,link"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"x1,.4, 0,binary,identity"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"y1,nr + x1 * 2,8,normal,identity"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"y2,nr - 0.2 * x1,0,poisson, log"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tfcsv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">test2</span>, <span class="va">tfcsv2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Generate data based on external definitions</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="defRead.html">defRead</a></span><span class="op">(</span><span class="va">tfcsv1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">defs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id nr</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1  7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2  7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3  7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4  7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:  5  7</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Add additional data based on external definitions</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">defs2</span> <span class="op">&lt;-</span> <span class="fu">defReadAdd</span><span class="op">(</span><span class="va">tfcsv2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">defs2</span>, <span class="va">dt</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add additional data based on external definitions</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">defs2</span> <span class="op">&lt;-</span> <span class="fu">defReadAdd</span><span class="op">(</span><span class="va">tfcsv2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">defs2</span>, <span class="va">dt</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id nr x1       y1 y2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1  7  0 4.821535  5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2  7  0 7.461437  8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3  7  0 2.851221  7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4  7  0 7.649656  4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:  5  7  0 6.374638  5</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tfcsv1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tfcsv2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tfcsv1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tfcsv2</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>

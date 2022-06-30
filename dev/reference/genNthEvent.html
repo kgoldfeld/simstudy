@@ -95,7 +95,7 @@ until the nth event.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genNthEvent</span><span class="op">(</span><span class="va">dtName</span>, <span class="va">defEvent</span>, nEvents <span class="op">=</span> <span class="fl">1</span>, perName <span class="op">=</span> <span class="st">"period"</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genNthEvent</span><span class="op">(</span><span class="va">dtName</span>, <span class="va">defEvent</span>, nEvents <span class="op">=</span> <span class="fl">1</span>, perName <span class="op">=</span> <span class="st">"period"</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -132,18 +132,18 @@ field in table specified by dtName</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">defD</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span></span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"effect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  dist <span class="op">=</span> <span class="st">"normal"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">defE</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span></span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"died"</span>, formula <span class="op">=</span> <span class="st">"-2.5 + 0.3*period + effect"</span>,</span>
-<span class="r-in">  dist <span class="op">=</span> <span class="st">"binary"</span>, link <span class="op">=</span> <span class="st">"logit"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">defD</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genNthEvent</span><span class="op">(</span><span class="va">d</span>, defEvent <span class="op">=</span> <span class="va">defE</span>, nEvents <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">defD</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"effect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  dist <span class="op">=</span> <span class="st">"normal"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">defE</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"died"</span>, formula <span class="op">=</span> <span class="st">"-2.5 + 0.3*period + effect"</span>,</span></span>
+<span class="r-in"><span>  dist <span class="op">=</span> <span class="st">"binary"</span>, link <span class="op">=</span> <span class="st">"logit"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">defD</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genNthEvent</span><span class="op">(</span><span class="va">d</span>, defEvent <span class="op">=</span> <span class="va">defE</span>, nEvents <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>

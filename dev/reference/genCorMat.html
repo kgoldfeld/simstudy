@@ -90,7 +90,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genCorMat</span><span class="op">(</span><span class="va">nvars</span>, cors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genCorMat</span><span class="op">(</span><span class="va">nvars</span>, cors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -119,25 +119,25 @@ nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].</p
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.3 -0.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.3  1.0  0.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2  0.1  1.0</span>
-<span class="r-in"><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]        [,2]        [,3]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0000000 -0.05721830 -0.26562439</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.0572183  1.00000000 -0.08206648</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2656244 -0.08206648  1.00000000</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.5</span>, <span class="fl">.2</span>, <span class="op">-</span><span class="fl">.1</span>, <span class="fl">.3</span>, <span class="fl">.1</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.5</span>, <span class="fl">.2</span>, <span class="op">-</span><span class="fl">.1</span>, <span class="fl">.3</span>, <span class="fl">.1</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.3 -0.2  0.1  0.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.3  1.0  0.5  0.2 -0.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2  0.5  1.0  0.3  0.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.1  0.2  0.3  1.0  0.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  0.2 -0.1  0.1  0.2  1.0</span>
-<span class="r-in"><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]        [,3]       [,4]        [,5]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.00000000  0.18378060 -0.08859631 0.07366686  0.04571161</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.18378060  1.00000000  0.34041009 0.03797508 -0.48391898</span>
