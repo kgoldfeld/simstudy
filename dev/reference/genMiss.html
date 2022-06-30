@@ -90,7 +90,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genMiss</span><span class="op">(</span><span class="va">dtName</span>, <span class="va">missDefs</span>, <span class="va">idvars</span>, repeated <span class="op">=</span> <span class="cn">FALSE</span>, periodvar <span class="op">=</span> <span class="st">"period"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genMiss</span><span class="op">(</span></span>
+<span>  <span class="va">dtName</span>,</span>
+<span>  <span class="va">missDefs</span>,</span>
+<span>  <span class="va">idvars</span>,</span>
+<span>  repeated <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  periodvar <span class="op">=</span> <span class="st">"period"</span>,</span>
+<span>  envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -113,6 +120,11 @@
 
 <dt>periodvar</dt>
 <dd><p>Name of variable that contains period</p></dd>
+
+
+<dt>envir</dt>
+<dd><p>parent.frame() by default, allows functionality with double-dot
+notation</p></dd>
 
 </dl></div>
     <div id="value">
