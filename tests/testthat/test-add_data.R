@@ -88,4 +88,76 @@ test_that("addMarkov throws errors.", {
   # if start0lab defined, check that it exists in the transition matrix
   mat6 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow = 3, ncol = 3))
   expect_error(addMarkov(dd, transMat = mat6, chainLen = 5, wide = TRUE, start0lab = "xy"), class = "simstudy::start0probNotInTransMat")
+
+})
+
+# addSynthetic ----
+
+test_that("addSynthetic throws errors.", {
+
+  ### Create fake "real" data set
+
+  d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+  d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+  d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+  d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+
+  A <- genData(1000, d, id = "index")
+
+  def <- defData(varname = "x", formula = 0, variance = 5)
+
+  S <- genData(120, def)
+
+  expect_error(addSynthetic(dtFrom = A), class = "simstudy::missingArgument")
+
+  x <- c(1, 2, 3)
+  expect_error(addSynthetic(dtOld = x, dtFrom = A), class = "simstudy::wrongClass")
+  expect_error(addSynthetic(dtOld = S, dtFrom = x), class = "simstudy::wrongClass")
+  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "index"), class = "simstudy::notDefined")
+  expect_error(addSynthetic(dtOld = S, dtFrom = A, id = "id"), class = "simstudy::notDefined")
+
+  d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+  d <- defData(d, varname = "x", formula = 5, dist = "poisson")
+
+  A <- genData(1000, d)
+  S <- genData(120, def)
+  expect_error(addSynthetic(dtOld = S, dtFrom = A), class = "simstudy::alreadyDefined")
+})
+
+test_that("addSynthetic works.", {
+
+  ### Create fake 'external' data set 'A'
+
+  d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+  d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+  d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+  d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+
+  A <- genData(1000, d)
+
+  ### Create synthetic data set from "observed" data set A
+  ### and add it to other data set S:
+
+  def <- defData(varname = "x", formula = 0, variance = 5)
+
+  n <- rpois(1, 100)
+  vars <- c("d", "b")
+
+  S <- genData(n, def)
+  Snew <- addSynthetic(dtOld = S, dtFrom = A, vars = vars)
+
+  expect_true(all(c(names(S), vars) == names(Snew)))
+  expect_equal(nrow(Snew), nrow(S))
+
+  mu_a <- rnorm(1, 25, 4)
+  n <- rpois(1, 3500)
+
+  d <- defData(varname = "a", formula = "..mu_a", variance = 1, dist = "normal")
+  A <- genData(n, d)
+
+  S <- genData(n, def)
+  Snew <- addSynthetic(S, A)
+
+  expect_lt(Snew[, abs(mean(a) - mu_a)], 0.15)
+
 })

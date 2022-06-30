@@ -647,3 +647,61 @@ test_that("genMultiFac works.", {
 
   set.seed(oldSeed)
 })
+
+
+# genSyntheticc ----
+test_that("genSynthetic throws errors.", {
+  mu_a <- rnorm(1)
+  v_a <- rgamma(1, 9)
+  mu_b <- rgamma(1, 4)
+  mu_c <- rbeta(1, 2, 2)
+
+  n <- rpois(1, 3500)
+
+  d <- defData(varname = "a", formula = "..mu_a", variance = "..v_a", dist = "normal")
+  d <- defData(d, varname = "b", formula = "..mu_b", dist = "poisson")
+  d <- defData(d, varname = "c", formula = "..mu_c", dist = "binary")
+
+  A <- genData(n, d)
+  B <- c(2, 3, 4)
+
+  ### Errors
+
+  expect_error(genSynthetic(id = "cid"), class = "simstudy::missingArgument")
+  expect_error(genSynthetic(B), class = "simstudy::wrongClass")
+  expect_error(genSynthetic(A, vars = c(1, 2), id = "id"), class = "simstudy::wrongClass")
+  expect_error(genSynthetic(A, n = "4"), class = "simstudy::wrongType")
+  expect_error(genSynthetic(A, vars = c("z")), class = "simstudy::notDefined")
+  expect_error(genSynthetic(A, id = "cid"), class = "simstudy::notDefined")
+  expect_error(genSynthetic(A, vars = c("a", "b", "id")), class = "simstudy::alreadyInVector")
+})
+
+test_that("genSynthetic works.", {
+  mu_a <- rnorm(1)
+  v_a <- rgamma(1, 9)
+  mu_b <- rgamma(1, 4)
+  mu_c <- rbeta(1, 2, 2)
+
+  n <- rpois(1, 3500)
+
+  d <- defData(varname = "a", formula = "..mu_a", variance = "..v_a", dist = "normal")
+  d <- defData(d, varname = "b", formula = "..mu_b", dist = "poisson")
+  d <- defData(d, varname = "c", formula = "..mu_c", dist = "binary")
+
+  A <- genData(n, d)
+  B <- c(2, 3, 4)
+
+  S <- genSynthetic(A)
+  expect_true(all(names(S) == names(A)))
+  expect_true(nrow(S) == n)
+
+  expect_lt(abs(S[, mean(a)] - mu_a), 0.4)
+  expect_lt(abs(S[, mean(b)] - mu_b), 0.25)
+  expect_lt(abs(S[, mean(c)] - mu_c), 0.05)
+
+  n <- rpois(1, 100)
+  S <- genSynthetic(A, n = n, vars = c("a", "b"))
+  expect_true(all(names(S) == c("id", "a", "b")))
+  expect_true(nrow(S) == n)
+})
+

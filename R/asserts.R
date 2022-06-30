@@ -261,6 +261,24 @@ assertNotInDataTable <- function(vars, dt, call = sys.call(-1)) {
   }
 }
 
+#' Check if single string not in vector of strings
+#'
+#' @description Checks if all passed vars have not been defined in dt.
+#' @param ... vars Name of variables to check.
+#' @param dt data.table to check for vars. Can also be character vector with
+#' defined variables.
+#' @noRd
+assertNotInVector <- function(var, vec, call = sys.call(-1)) {
+  areInVector <- var %in% vec
+  elementOfVar <- var[areInVector]
+  nameVar <- deparse(substitute(var))
+  nameVec <- deparse(substitute(vec))
+
+  if (any(areInVector)) {
+    alreadyInVectorError(elementOfVar, nameVar, nameVec, call = call)
+  }
+}
+
 #' Is vector in ascending order?
 #'
 #' @description Checks if passed vector is in ascending order

@@ -270,6 +270,30 @@ alreadyDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
     message, call, ...
   )
   stop(c)
+
+}
+
+#' Element in vector
+#'
+#' @param nameVar Value(s) in vector.
+#' @param nameVec Name of the vector.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+alreadyInVectorError <- function(elementOfVar, nameVar, nameVec,
+                                 call = sys.call(-1), msg = "", ...) {
+  vars <- paste(elementOfVar, collapse = ", ")
+  message <- glueCollapse(
+    "{ vars } (in { nameVar }) should not also be in vector { nameVec }!", msg
+  )
+
+  c <- condition(
+    c("simstudy::alreadyInVector", "error"),
+    message, call, ...
+  )
+  stop(c)
+
 }
 
 #' Not Positive Definite Error
@@ -338,8 +362,6 @@ optionInvalidError <- function(name,
   stop(c)
 }
 
-### Added by KSG 1/1/22
-
 #' Mismatch of arguments Warning
 #'
 #' @param name_specified Name of argument specified
@@ -367,7 +389,7 @@ mismatchError <- function(name_specified, name_null,
 
 #' Variables not equal to value error.
 #'
-#' @param vars Names of the variables.
+#' @param names Names of the variables.
 #' @param val Value to be equal to.
 #' @param call sys.call to pass on to the error.
 #' @param msg Additional information for the error message as
