@@ -68,6 +68,8 @@ defMiss <- function(dtDefs = NULL,
 #' @param idvars Index variables
 #' @param repeated Indicator for longitudinal data
 #' @param periodvar Name of variable that contains period
+#' @param envir parent.frame() by default, allows functionality with double-dot
+#' notation
 #' @return Missing data matrix indexed by idvars (and period if relevant)
 #' @seealso \code{\link{defMiss}}, \code{\link{genObs}}
 #' @examples
