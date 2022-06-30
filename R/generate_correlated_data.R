@@ -310,10 +310,10 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
     stop("Distribution not properly specified.")
   }
 
-  if (class(params1) != "numeric") stop("Parameters must be numeric")
+  if (!is(params1, "numeric")) stop("Parameters must be numeric")
 
   if (!is.null(params2)) {
-    if (class(params2) != "numeric") stop("Parameters must be numeric")
+    if (!is(params2, "numeric")) stop("Parameters must be numeric")
   }
 
   nparams <- as.numeric(!is.null(params1)) + as.numeric(!is.null(params2))

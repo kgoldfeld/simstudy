@@ -4,7 +4,14 @@
 \alias{genMiss}
 \title{Generate missing data}
 \usage{
-genMiss(dtName, missDefs, idvars, repeated = FALSE, periodvar = "period")
+genMiss(
+  dtName,
+  missDefs,
+  idvars,
+  repeated = FALSE,
+  periodvar = "period",
+  envir = parent.frame()
+)
 }
 \arguments{
 \item{dtName}{Name of complete data set}
@@ -16,6 +23,9 @@ genMiss(dtName, missDefs, idvars, repeated = FALSE, periodvar = "period")
 \item{repeated}{Indicator for longitudinal data}
 
 \item{periodvar}{Name of variable that contains period}
+
+\item{envir}{parent.frame() by default, allows functionality with double-dot
+notation}
 }
 \value{
 Missing data matrix indexed by idvars (and period if relevant)

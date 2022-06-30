@@ -92,101 +92,34 @@ test_that("genMiss works", {
   missMatLong <- genMiss(dtTime, defMlong, idvars = c("id", "rx"), repeated = TRUE, periodvar = "period")
 
   ids0 <- missMatLong[period == 0 & x1 == 0, id]
-  casevec0 <- missMatLong[id %in% ids0, all(x1 == 0)]
-
-  expect_true(all(casevec0 == TRUE))
-
+  expect_true(missMatLong[id %in% ids0, all(x1 == 0)])
 
   ids1 <- missMatLong[period == 0 & x1 == 1, id]
-  casevec1 <- missMatLong[id %in% ids1, all(x1 == 1)]
-
-  expect_true(all(casevec1 == TRUE))
+  expect_true(missMatLong[id %in% ids1, all(x1 == 1)])
 
   ### monotonic
-  # same as baseline stipulation
+
   defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
   defMlong <- defMiss(defMlong, varname = "y", formula = "-1.8 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = TRUE)
 
   missMatLong <- genMiss(dtTime, defMlong, idvars = c("id", "rx"), repeated = TRUE, periodvar = "period")
 
-  # casevec <- NULL
-  # for(i in 1:idNum) {
-  #   tempMM <- missMatLong[id == i]
-  #   # TODO is there a cleaner way to do this?
-  #   if(tempMM[1, y] == 1) {
-  #     casevec <- c(casevec, all(tempMM[, y] == 1))
-  #   } else if(tempMM[2, y] == 1) {
-  #     casevec <- c(casevec, (all(tempMM[-1, y] == 1) && tempMM[1, y] == 0))
-  #   } else if(tempMM[3, y] == 1) {
-  #     casevec <- c(casevec, (all(tempMM[-(1:2), y] == 1) && tempMM[1:2, y] == 0))
-  #   } else if(tempMM[4, y] == 1) {
-  #     casevec <- c(casevec, (all(tempMM[-(1:3), y] == 1) && tempMM[1:3, y] == 0))
-  #   }
-  # }
-  #
-  # expect_true(all(casevec == TRUE))
+  dp <- missMatLong[y == 1, .SD[1], keyby = id][, .(id, fperiod = period)]
+  dd <- missMatLong[dp, on = "id"]
+  expect_true(dd[period >= fperiod][, all(y == 1)])
 
-  id1 <- missMatLong[period == 0 & y == 1, id]
-  cv1.1 <- missMatLong[id %in% id1, all(y == 1)]
-  expect_true(all(cv1.1 == TRUE))
-
-  id2.0 <- missMatLong[period == 0 & y == 0, id]
-  id2.1 <- missMatLong[period == 1 & y == 1, id]
-  id2 <- intersect(id2.0, id2.1)
-  cv2.0 <- missMatLong[id %in% id2 & period == 0, all(y == 0)]
-  cv2.1 <- missMatLong[id %in% id2 & period != 0, all(y == 1)]
-  expect_true(all(cv2.0 == TRUE) & all(cv2.1 == TRUE))
-
-  # NOTE: the following code works for testing, but I want the implementation to be
-  # uniform for all of these and the %in% vector I think works better
-  # id3.0 <- missMatLong[period == (0 | 1) & y == 0, id]
-  # id3.1 <- missMatLong[period == 2 & y == 1, id]
-  # id3 <- intersect(id3.0, id3.1)
-  # cv3.0 <- rbind(missMatLong[id %in% id3 & period == 0],
-  #                missMatLong[id %in% id3 & period == 1])
-  # cv3.0 <- cv3.0[, all(y == 0)]
-  # cv3.1 <- rbind(missMatLong[id %in% id3 & period == 2],
-  #                missMatLong[id %in% id3 & period == 3])
-  # cv3.1 <- cv3.1[, all(y == 1)]
-  # expect_true(cv3.0 & cv3.1)
-  id3.0 <- missMatLong[period %in% c(0, 1) & y == 0, id]
-  n_occur <- data.frame(table(id3.0))
-  id3.0 <- n_occur[n_occur$Freq == 2, ]
-  id3.1 <- missMatLong[period == 2 & y == 1, id]
-  id3 <- intersect(id3.0, id3.1)
-  cv3.0 <- rbind(
-    missMatLong[id %in% id3 & period == 0],
-    missMatLong[id %in% id3 & period == 1]
-  )
-  cv3.0 <- cv3.0[, all(y == 0)]
-  cv3.1 <- rbind(
-    missMatLong[id %in% id3 & period == 2],
-    missMatLong[id %in% id3 & period == 3]
-  )
-  cv3.1 <- cv3.1[, all(y == 1)]
-  expect_true(cv3.0 & cv3.1)
-
-  id4.0 <- missMatLong[period %in% c(0, 1, 2) & y == 0, id]
-  n_occur <- data.frame(table(id4.0))
-  id4.0 <- n_occur[n_occur$Freq == 3, ]
-  id4.1 <- missMatLong[period == 3 & y == 1, id]
-  id4 <- intersect(id4.0, id4.1)
-  cv4.0 <- rbind(
-    missMatLong[id %in% id4 & period == 0],
-    missMatLong[id %in% id4 & period == 1],
-    missMatLong[id %in% id4 & period == 2]
-  )
-  cv4.0 <- cv4.0[, all(y == 0)]
-  cv4.1 <- missMatLong[id %in% id4 & period == 3, all(y == 1)]
-  expect_true(cv4.0 & all(cv4.1 == TRUE))
-
-
-
-
-
-
-
-  ## includes lags
+  ## not monotonic
+  
+  defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
+  defMlong <- defMiss(defMlong,varname = "y", 
+                      formula = "-1.8 - 1.5 * rx + .25*period", logit.link = TRUE, 
+                      baseline = FALSE, monotonic = FALSE)
+  
+  missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+  
+  dp <- missMatLong[y == 1, .SD[1], keyby = id][, .(id, fperiod = period)]
+  dd <- missMatLong[dp, on = "id"]
+  expect_false(dd[period >= fperiod][, all(y == 1)])
 })
 
 # .checkLags ----
