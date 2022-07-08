@@ -1,7 +1,7 @@
-## Resubmission 2022JAN20
+## Resubmission 2022JUL08
 
-This is a submission of version 0.4.0
+This is a submission of version 0.5.0
 
-Developed with R Version 4.1.2
+Developed with R Version 4.2.1
 
-I did not get any notes from check_win_devel and all rhub checks passed.
+I did not get any notes from check_win_devel.
