@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,55 +90,62 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addColumns</span><span class="op">(</span><span class="va">dtDefs</span>, <span class="va">dtOld</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addColumns</span><span class="op">(</span><span class="va">dtDefs</span>, <span class="va">dtOld</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtDefs</dt>
 <dd><p>name of definitions for added columns</p></dd>
+
+
 <dt>dtOld</dt>
 <dd><p>name of data table that is to be updated</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>Environment the data definitions are evaluated in.
 Defaults to <a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">base::parent.frame</a>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an updated data.table that contains the added simulated data</p>
+    
+
+<p>an updated data.table that contains the added simulated data</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># New data set</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xNr"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>, formula <span class="op">=</span> <span class="fl">7</span>, id <span class="op">=</span> <span class="st">"idnum"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xUni"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span>, formula <span class="op">=</span> <span class="st">"10;20"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Add columns to dt</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"y1"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">def2</span>, varname <span class="op">=</span> <span class="st">"y2"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def2</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># New data set</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xNr"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>, formula <span class="op">=</span> <span class="fl">7</span>, id <span class="op">=</span> <span class="st">"idnum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xUni"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span>, formula <span class="op">=</span> <span class="st">"10;20"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add columns to dt</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"y1"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def2</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">def2</span>, varname <span class="op">=</span> <span class="st">"y2"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    varname formula variance   dist     link</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      y1    10.0        3 normal identity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      y2     0.5        0 binary identity</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">addColumns</span><span class="op">(</span><span class="va">def2</span>, <span class="va">dt</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">addColumns</span><span class="op">(</span><span class="va">def2</span>, <span class="va">dt</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     idnum xNr     xUni        y1 y2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1   7 10.93724  9.438560  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2   7 15.87203  9.217762  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     3   7 17.19722 10.414061  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     4   7 14.13063 13.530014  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     5   7 17.91291  7.841761  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     6   7 12.38907  6.982927  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     7   7 18.19158 12.154690  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     8   7 13.34165 13.894068  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     9   7 14.09442  7.642417  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    10   7 12.31374 10.852055  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1   7 10.42360  9.663004  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2   7 15.16605 10.402045  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     3   7 15.68368  9.105430  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     4   7 17.67782  9.821221  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     5   7 11.27213 11.436708  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     6   7 19.83146 10.542084  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     7   7 18.32480  9.963363  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     8   7 16.90907 10.685153  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     9   7 15.14155  9.104559  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    10   7 17.85015 10.199267  1</span>
 </code></pre></div>
     </div>
   </div>
@@ -153,7 +160,7 @@ Defaults to <a href="https://rdrr.io/r/base/sys.parent.html" class="external-lin
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

@@ -61,6 +61,9 @@
     <loc>/reference/addColumns.html</loc>
   </url>
   <url>
+    <loc>/reference/addCompRisk.html</loc>
+  </url>
+  <url>
     <loc>/reference/addCondition.html</loc>
   </url>
   <url>
@@ -80,6 +83,9 @@
   </url>
   <url>
     <loc>/reference/addPeriods.html</loc>
+  </url>
+  <url>
+    <loc>/reference/addSynthetic.html</loc>
   </url>
   <url>
     <loc>/reference/betaGetShapes.html</loc>
@@ -187,6 +193,9 @@
     <loc>/reference/genSurv.html</loc>
   </url>
   <url>
+    <loc>/reference/genSynthetic.html</loc>
+  </url>
+  <url>
     <loc>/reference/iccRE.html</loc>
   </url>
   <url>
@@ -203,6 +212,12 @@
   </url>
   <url>
     <loc>/reference/simstudy-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/survGetParams.html</loc>
+  </url>
+  <url>
+    <loc>/reference/survParamPlot.html</loc>
   </url>
   <url>
     <loc>/reference/trimData.html</loc>

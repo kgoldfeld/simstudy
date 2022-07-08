@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,25 +90,34 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">trtObserve</span><span class="op">(</span><span class="va">dt</span>, <span class="va">formulas</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"trtGrp"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">trtObserve</span><span class="op">(</span><span class="va">dt</span>, <span class="va">formulas</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"trtGrp"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dt</dt>
 <dd><p>data table</p></dd>
+
+
 <dt>formulas</dt>
 <dd><p>collection of formulas that determine probabilities</p></dd>
+
+
 <dt>logit.link</dt>
 <dd><p>indicator that specifies link. If TRUE, then logit link
 is used. If FALSE, the identity link is used.</p></dd>
+
+
 <dt>grpName</dt>
 <dd><p>character string representing name of treatment/exposure group
 variable</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An integer (group) ranging from 1 to length of the probability vector</p>
+    
+
+<p>An integer (group) ranging from 1 to length of the probability vector</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -117,12 +126,12 @@ variable</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, id <span class="op">=</span> <span class="st">"cid"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"over65"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="st">"-1.7 + .8*male"</span>, link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"baseDBP"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">70</span>, variance <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtstudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dtstudy</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"male"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, id <span class="op">=</span> <span class="st">"cid"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"over65"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="st">"-1.7 + .8*male"</span>, link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"baseDBP"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">70</span>, variance <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtstudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dtstudy</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        cid male over65  baseDBP</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1    0      0 75.16916</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2    0      0 76.26197</span>
@@ -135,10 +144,10 @@ variable</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  998:  998    0      0 72.93428</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  999:  999    0      0 79.72073</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1000: 1000    1      0 81.65354</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">formula1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-2 + 2*male - .5*over65"</span>, <span class="st">"-1 + 2*male + .5*over65"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu">trtObserve</span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula1</span>, logit.link <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dtObs</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">formula1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-2 + 2*male - .5*over65"</span>, <span class="st">"-1 + 2*male + .5*over65"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu">trtObserve</span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula1</span>, logit.link <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dtObs</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        cid exposure male over65  baseDBP</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1        1    0      0 75.16916</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2        3    0      0 76.26197</span>
@@ -151,22 +160,22 @@ variable</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  998:  998        1    0      0 72.93428</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  999:  999        3    0      0 79.72073</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1000: 1000        2    1      0 81.65354</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Check actual distributions</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>pctMale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">male</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">exposure</span><span class="op">]</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Check actual distributions</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>pctMale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">male</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">exposure</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    exposure pctMale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:        1    0.61</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:        2    0.71</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:        3    0.24</span>
-<span class="r-in"><span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>pctMale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">over65</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">exposure</span><span class="op">]</span></span>
+<span class="r-in"><span><span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>pctMale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">over65</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">exposure</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    exposure pctMale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:        1    0.15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:        2    0.27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:        3    0.15</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtSum</span> <span class="op">&lt;-</span> <span class="va">dtObs</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">male</span>, <span class="va">over65</span>, <span class="va">exposure</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">dtSum</span><span class="op">[</span>, <span class="va">grpPct</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">N</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">male</span>, <span class="va">over65</span><span class="op">)</span><span class="op">]</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtSum</span> <span class="op">&lt;-</span> <span class="va">dtObs</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">male</span>, <span class="va">over65</span>, <span class="va">exposure</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">dtSum</span><span class="op">[</span>, <span class="va">grpPct</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">N</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">male</span>, <span class="va">over65</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     male over65 exposure   N grpPct</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:    0      0        1  52   0.12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:    0      0        2 110   0.25</span>
@@ -180,7 +189,7 @@ variable</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10:    1      1        1  18   0.13</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11:    1      1        2 101   0.71</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12:    1      1        3  24   0.17</span>
-<span class="r-in"><span class="va">dtSum</span></span>
+<span class="r-in"><span><span class="va">dtSum</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     male over65 exposure   N grpPct</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:    0      0        1  52   0.12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:    0      0        2 110   0.25</span>
@@ -208,7 +217,7 @@ variable</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

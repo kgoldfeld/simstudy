@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -52,7 +52,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -113,50 +113,48 @@
 <div class="section level1">
 <div class="page-header"><h1 id="simstudy">simstudy<a class="anchor" aria-label="anchor" href="#simstudy"></a>
 </h1></div>
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-<!-- badges: start -->
-
+<!-- README.md is generated from README.Rmd. Please edit that file --><!-- badges: start -->
 <p>The <code>simstudy</code> package is a collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
 <p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create datasets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> datasets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
-<p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean μ (or log(μ)) and a dispersion <em>d</em>, rather than shape α and rate β parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling μ (or some function of μ), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model, thus illuminating the relationship between the underlying data generating processes and the models. For more details on the package, use cases, examples, and function reference see the <a href="https://kgoldfeld.github.io/simstudy/articles/simstudy.html" class="external-link">documentation page</a>.</p>
+<p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean μ (or log(μ)) and a dispersion <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;d" title="d" alt="d">, rather than shape α and rate β parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling μ (or some function of μ), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model, thus illuminating the relationship between the underlying data generating processes and the models. For more details on the package, use cases, examples, and function reference see the <a href="https://kgoldfeld.github.io/simstudy/articles/simstudy.html" class="external-link">documentation page</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the released version of simstudy from <a href="https://CRAN.R-project.org" target="_blank" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"simstudy"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"simstudy"</span><span class="op">)</span></span></code></pre></div>
 <p>And the development version from <a href="https://github.com/" target="_blank" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"kgoldfeld/simstudy"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"kgoldfeld/simstudy"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>Here is some simple sample code, much more in the vignettes:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy" class="external-link">simstudy</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1965</span><span class="op">)</span>
-
-<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span><span class="op">(</span>varname<span class="op">=</span><span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">2</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
-<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname<span class="op">=</span><span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"3 + 0.5 * x"</span>, variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
-<span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">250</span>, <span class="va">def</span><span class="op">)</span>
-
-<span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, nTrt <span class="op">=</span> <span class="fl">4</span>, grpName <span class="op">=</span> <span class="st">"grp"</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">dd</span>
-<span class="co">#&gt;       id         x        y grp</span>
-<span class="co">#&gt;   1:   1 11.191960 8.949389   4</span>
-<span class="co">#&gt;   2:   2 10.418375 7.372060   4</span>
-<span class="co">#&gt;   3:   3  8.512109 6.925844   3</span>
-<span class="co">#&gt;   4:   4 11.361632 9.850340   4</span>
-<span class="co">#&gt;   5:   5  9.928811 6.515463   4</span>
-<span class="co">#&gt;  ---                           </span>
-<span class="co">#&gt; 246: 246  8.220609 7.898416   2</span>
-<span class="co">#&gt; 247: 247  8.531483 8.681783   2</span>
-<span class="co">#&gt; 248: 248 10.507370 8.552350   3</span>
-<span class="co">#&gt; 249: 249  8.621339 6.652300   1</span>
-<span class="co">#&gt; 250: 250  9.508164 7.083845   3</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy" class="external-link">simstudy</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1965</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span><span class="op">(</span>varname<span class="op">=</span><span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">2</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
+<span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname<span class="op">=</span><span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"3 + 0.5 * x"</span>, variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
+<span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">250</span>, <span class="va">def</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, nTrt <span class="op">=</span> <span class="fl">4</span>, grpName <span class="op">=</span> <span class="st">"grp"</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dd</span></span>
+<span><span class="co">#&gt;       id  x y grp</span></span>
+<span><span class="co">#&gt;   1:   1 11 8   4</span></span>
+<span><span class="co">#&gt;   2:   2 10 7   4</span></span>
+<span><span class="co">#&gt;   3:   3  8 6   3</span></span>
+<span><span class="co">#&gt;   4:   4 11 9   4</span></span>
+<span><span class="co">#&gt;   5:   5  9 6   4</span></span>
+<span><span class="co">#&gt;  ---             </span></span>
+<span><span class="co">#&gt; 246: 246  8 7   2</span></span>
+<span><span class="co">#&gt; 247: 247  8 8   2</span></span>
+<span><span class="co">#&gt; 248: 248 10 8   3</span></span>
+<span><span class="co">#&gt; 249: 249  8 6   1</span></span>
+<span><span class="co">#&gt; 250: 250  9 7   3</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="contributing--support">Contributing &amp; Support<a class="anchor" aria-label="anchor" href="#contributing--support"></a>
@@ -193,6 +191,7 @@
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+<li><a href="SUPPORT.html">Getting help</a></li>
 </ul>
 </div>
 
@@ -212,17 +211,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/kgoldfeld/simstudy/actions" target="_blank" class="external-link"><img src="https://github.com/kgoldfeld/simstudy/workflows/R-CMD-check/badge.svg?branch=main" alt="R build status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=simstudy" target="_blank" class="external-link"><img src="https://www.r-pkg.org/badges/version/simstudy" alt="CRAN status"></a></li>
-<li><a href="https://joss.theoj.org/papers/10.21105/joss.02763" target="_blank" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.02763/status.svg" alt="status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=simstudy" target="_blank" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/simstudy" alt="CRAN downloads"></a></li>
-<li><a href="https://app.codecov.io/gh/kgoldfeld/simstudy" target="_blank" class="external-link"><img src="https://app.codecov.io/gh/kgoldfeld/simstudy/branch/main/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html" target="_blank" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>
@@ -235,7 +224,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer>

@@ -20,7 +20,7 @@ until the nth event."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@ until the nth event."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -95,44 +95,55 @@ until the nth event.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genNthEvent</span><span class="op">(</span><span class="va">dtName</span>, <span class="va">defEvent</span>, nEvents <span class="op">=</span> <span class="fl">1</span>, perName <span class="op">=</span> <span class="st">"period"</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genNthEvent</span><span class="op">(</span><span class="va">dtName</span>, <span class="va">defEvent</span>, nEvents <span class="op">=</span> <span class="fl">1</span>, perName <span class="op">=</span> <span class="st">"period"</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtName</dt>
 <dd><p>name of existing data table</p></dd>
+
+
 <dt>defEvent</dt>
 <dd><p>data definition table (created with defDataAdd) that
 determines the event generating process.</p></dd>
+
+
 <dt>nEvents</dt>
 <dd><p>maximum number of events that will be generated (the nth
 event).</p></dd>
+
+
 <dt>perName</dt>
 <dd><p>variable name for period field. Defaults to "period"</p></dd>
+
+
 <dt>id</dt>
 <dd><p>string representing name of the id
 field in table specified by dtName</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.table that stops after "nEvents" are reached.</p>
+    
+
+<p>data.table that stops after "nEvents" are reached.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">defD</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span></span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"effect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  dist <span class="op">=</span> <span class="st">"normal"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">defE</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span></span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"died"</span>, formula <span class="op">=</span> <span class="st">"-2.5 + 0.3*period + effect"</span>,</span>
-<span class="r-in">  dist <span class="op">=</span> <span class="st">"binary"</span>, link <span class="op">=</span> <span class="st">"logit"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">defD</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genNthEvent</span><span class="op">(</span><span class="va">d</span>, defEvent <span class="op">=</span> <span class="va">defE</span>, nEvents <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">defD</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"effect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  dist <span class="op">=</span> <span class="st">"normal"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">defE</span> <span class="op">&lt;-</span> <span class="fu"><a href="defDataAdd.html">defDataAdd</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"died"</span>, formula <span class="op">=</span> <span class="st">"-2.5 + 0.3*period + effect"</span>,</span></span>
+<span class="r-in"><span>  dist <span class="op">=</span> <span class="st">"binary"</span>, link <span class="op">=</span> <span class="st">"logit"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">defD</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genNthEvent</span><span class="op">(</span><span class="va">d</span>, defEvent <span class="op">=</span> <span class="va">defE</span>, nEvents <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -147,7 +158,7 @@ field in table specified by dtName</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

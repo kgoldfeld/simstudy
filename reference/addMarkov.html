@@ -18,7 +18,7 @@ specifying a transition matrix."><!-- mathjax --><script src="https://cdnjs.clou
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -30,7 +30,7 @@ specifying a transition matrix."><!-- mathjax --><script src="https://cdnjs.clou
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -92,88 +92,109 @@ specifying a transition matrix.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addMarkov</span><span class="op">(</span>
-  <span class="va">dd</span>,
-  <span class="va">transMat</span>,
-  <span class="va">chainLen</span>,
-  wide <span class="op">=</span> <span class="cn">FALSE</span>,
-  id <span class="op">=</span> <span class="st">"id"</span>,
-  pername <span class="op">=</span> <span class="st">"period"</span>,
-  varname <span class="op">=</span> <span class="st">"state"</span>,
-  widePrefix <span class="op">=</span> <span class="st">"S"</span>,
-  start0lab <span class="op">=</span> <span class="cn">NULL</span>,
-  trimvalue <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addMarkov</span><span class="op">(</span></span>
+<span>  <span class="va">dd</span>,</span>
+<span>  <span class="va">transMat</span>,</span>
+<span>  <span class="va">chainLen</span>,</span>
+<span>  wide <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  pername <span class="op">=</span> <span class="st">"period"</span>,</span>
+<span>  varname <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  widePrefix <span class="op">=</span> <span class="st">"S"</span>,</span>
+<span>  start0lab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trimvalue <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dd</dt>
 <dd><p>data.table with a unique identifier</p></dd>
+
+
 <dt>transMat</dt>
 <dd><p>Square transition matrix where the sum of each row
 must equal 1. The dimensions of the matrix equal the number of possible
 states.</p></dd>
+
+
 <dt>chainLen</dt>
 <dd><p>Length of each chain that will be generated for each
 chain; minimum chain length is 2.</p></dd>
+
+
 <dt>wide</dt>
 <dd><p>Logical variable (TRUE or FALSE) indicating whether the
 resulting data table should be returned in wide or long format. The
 wide format includes all elements of a chain on a single row; the long
 format includes each element of a chain in its own row. The default is
 wide = FALSE, so the long format is returned by default.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>Character string that represents name of "id" field.
 Defaults to "id".</p></dd>
+
+
 <dt>pername</dt>
 <dd><p>Character string that represents the variable name of the
 chain sequence in the long format. Defaults "period",</p></dd>
+
+
 <dt>varname</dt>
 <dd><p>Character string that represents the variable name of the
 state in the long format. Defaults to "state".</p></dd>
+
+
 <dt>widePrefix</dt>
 <dd><p>Character string that represents the variable name
 prefix for the state fields in the wide format. Defaults to "S".</p></dd>
+
+
 <dt>start0lab</dt>
 <dd><p>Character string that represents name of the integer
 field containing starting state (State 0) of the chain for each individual.
 If it is NULL, starting state defaults to 1. Default is NULL.</p></dd>
+
+
 <dt>trimvalue</dt>
 <dd><p>Integer value indicating end state. If trimvalue is not NULL,
 all records after the first instance of state = trimvalue will be deleted.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data table with n rows if in wide format, or n by chainLen rows
+    
+
+<p>A data table with n rows if in wide format, or n by chainLen rows
 if in long format.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>,</span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"S0"</span>, formula <span class="op">=</span> <span class="st">".6;.3;.1"</span>,</span>
-<span class="r-in">  dist <span class="op">=</span> <span class="st">"categorical"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">20</span>, <span class="va">def1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Transition matrix P</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span>
-<span class="r-in">  <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>,</span>
-<span class="r-in">  <span class="fl">0.0</span>, <span class="fl">0.7</span>, <span class="fl">0.3</span></span>
-<span class="r-in"><span class="op">)</span>,</span>
-<span class="r-in">nrow <span class="op">=</span> <span class="fl">3</span></span>
-<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d3</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, wide <span class="op">=</span> <span class="cn">TRUE</span>, start0lab <span class="op">=</span> <span class="st">"S0"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d4</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, start0lab <span class="op">=</span> <span class="st">"S0"</span>, trimvalue <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>,</span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"S0"</span>, formula <span class="op">=</span> <span class="st">".6;.3;.1"</span>,</span></span>
+<span class="r-in"><span>  dist <span class="op">=</span> <span class="st">"categorical"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">20</span>, <span class="va">def1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Transition matrix P</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">0.0</span>, <span class="fl">0.7</span>, <span class="fl">0.3</span></span></span>
+<span class="r-in"><span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>nrow <span class="op">=</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d3</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, wide <span class="op">=</span> <span class="cn">TRUE</span>, start0lab <span class="op">=</span> <span class="st">"S0"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d4</span> <span class="op">&lt;-</span> <span class="fu">addMarkov</span><span class="op">(</span><span class="va">dd</span>, <span class="va">P</span>, chainLen <span class="op">=</span> <span class="fl">5</span>, start0lab <span class="op">=</span> <span class="st">"S0"</span>, trimvalue <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -188,7 +209,7 @@ if in long format.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

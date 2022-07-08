@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,30 +90,35 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">delColumns</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">vars</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">delColumns</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">vars</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtOld</dt>
 <dd><p>Name of data table that is to be updated.</p></dd>
+
+
 <dt>vars</dt>
 <dd><p>Vector of column names (as strings).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An updated data.table without <code>vars</code>.</p>
+    
+
+<p>An updated data.table without <code>vars</code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># New data set</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">7</span>, id <span class="op">=</span> <span class="st">"idnum"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xUni"</span>, dist <span class="op">=</span> <span class="st">"uniformInt"</span>, formula <span class="op">=</span> <span class="st">"x-3;x+3"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># New data set</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">7</span>, id <span class="op">=</span> <span class="st">"idnum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xUni"</span>, dist <span class="op">=</span> <span class="st">"uniformInt"</span>, formula <span class="op">=</span> <span class="st">"x-3;x+3"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     idnum  x xUni</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1 11   10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2  7    5</span>
@@ -125,11 +130,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  8:     8  8   10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  9:     9  6    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10:    10  9    7</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Delete column</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">delColumns</span><span class="op">(</span><span class="va">dt</span>, <span class="st">"x"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Delete column</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">delColumns</span><span class="op">(</span><span class="va">dt</span>, <span class="st">"x"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     idnum xUni</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1   10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2    5</span>
@@ -155,7 +160,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

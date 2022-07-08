@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,38 +90,51 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">defMiss</span><span class="op">(</span>
-  dtDefs <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">varname</span>,
-  <span class="va">formula</span>,
-  logit.link <span class="op">=</span> <span class="cn">FALSE</span>,
-  baseline <span class="op">=</span> <span class="cn">FALSE</span>,
-  monotonic <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">defMiss</span><span class="op">(</span></span>
+<span>  dtDefs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">varname</span>,</span>
+<span>  <span class="va">formula</span>,</span>
+<span>  logit.link <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  baseline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  monotonic <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtDefs</dt>
 <dd><p>Definition data.table to be modified</p></dd>
+
+
 <dt>varname</dt>
 <dd><p>Name of variable with missingness</p></dd>
+
+
 <dt>formula</dt>
 <dd><p>Formula to describe pattern of missingness</p></dd>
+
+
 <dt>logit.link</dt>
 <dd><p>Indicator set to TRUE when the probability of missingness
 is based on a logit model.</p></dd>
+
+
 <dt>baseline</dt>
 <dd><p>Indicator is set to TRUE if the variable is a baseline
 measure and should be missing throughout an entire observation period. This
 is applicable to repeated measures/longitudinal data.</p></dd>
+
+
 <dt>monotonic</dt>
 <dd><p>Indicator set to TRUE if missingness at time t is followed
 by missingness at all follow-up times &gt; t.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table named dtName that is an updated data definitions table</p>
+    
+
+<p>A data.table named dtName that is an updated data definitions table</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -130,29 +143,29 @@ by missingness at all follow-up times &gt; t.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"m"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"u"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x1"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x2"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x3"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">def1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu">defMiss</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">.15</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu">defMiss</span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="st">".05 + m * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu">defMiss</span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x3"</span>, formula <span class="op">=</span> <span class="st">".05 + u * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu">defMiss</span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"u"</span>, formula <span class="op">=</span> <span class="fl">1</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># not observed</span></span>
-<span class="r-in"><span class="va">defM</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"m"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"u"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x1"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x2"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def1</span>, <span class="st">"x3"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"20*m + 20*u"</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtAct</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">def1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu">defMiss</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">.15</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu">defMiss</span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="st">".05 + m * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu">defMiss</span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"x3"</span>, formula <span class="op">=</span> <span class="st">".05 + u * 0.25"</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">defM</span> <span class="op">&lt;-</span> <span class="fu">defMiss</span><span class="op">(</span><span class="va">defM</span>, varname <span class="op">=</span> <span class="st">"u"</span>, formula <span class="op">=</span> <span class="fl">1</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># not observed</span></span></span>
+<span class="r-in"><span><span class="va">defM</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    varname        formula logit.link baseline monotonic</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      x1           0.15      FALSE    FALSE     FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      x2 .05 + m * 0.25      FALSE    FALSE     FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      x3 .05 + u * 0.25      FALSE    FALSE     FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:       u              1      FALSE    FALSE     FALSE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Generate missing data matrix</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">missMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="genMiss.html">genMiss</a></span><span class="op">(</span>dtName <span class="op">=</span> <span class="va">dtAct</span>, missDefs <span class="op">=</span> <span class="va">defM</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">missMat</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Generate missing data matrix</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">missMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="genMiss.html">genMiss</a></span><span class="op">(</span>dtName <span class="op">=</span> <span class="va">dtAct</span>, missDefs <span class="op">=</span> <span class="va">defM</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">missMat</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         id x1 x2 x3 u m</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1  0  0  1 1 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2  1  0  0 1 0</span>
@@ -165,11 +178,11 @@ by missingness at all follow-up times &gt; t.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  998:  998  0  1  0 1 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  999:  999  1  0  0 1 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1000: 1000  1  0  0 1 0</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Generate observed data from actual data and missing data matrix</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="genObs.html">genObs</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">missMat</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dtObs</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Generate observed data from actual data and missing data matrix</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="genObs.html">genObs</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">missMat</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dtObs</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         id m  u        x1          x2        x3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1 0 NA 21.820790 20.43769558        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2 1 NA        NA 41.30834431 41.063218</span>
@@ -196,7 +209,7 @@ by missingness at all follow-up times &gt; t.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,54 +90,65 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addMultiFac</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">nFactors</span>, levels <span class="op">=</span> <span class="fl">2</span>, coding <span class="op">=</span> <span class="st">"dummy"</span>, colNames <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addMultiFac</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">nFactors</span>, levels <span class="op">=</span> <span class="fl">2</span>, coding <span class="op">=</span> <span class="st">"dummy"</span>, colNames <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtOld</dt>
 <dd><p>data.table that is to be modified</p></dd>
+
+
 <dt>nFactors</dt>
 <dd><p>Number of factors (columns) to generate.</p></dd>
+
+
 <dt>levels</dt>
 <dd><p>Vector or scalar. If a vector is specified, it must be
 the same length as nFatctors. Each value of the vector represents the
 number of levels of each corresponding factor. If a scalar is specified,
 each factor will have the same number of levels. The default is 2 levels
 for each factor.</p></dd>
+
+
 <dt>coding</dt>
 <dd><p>String value to specify if "dummy" or "effect" coding is used.
 Defaults to "dummy".</p></dd>
+
+
 <dt>colNames</dt>
 <dd><p>A vector of strings, with a length of nFactors. The strings
 represent the name for each factor.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table that contains the added simulated data. Each new column contains
+    
+
+<p>A data.table that contains the added simulated data. Each new column contains
 an integer.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">defD</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">360</span>, <span class="va">defD</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, colNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">DT</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">defD</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">360</span>, <span class="va">defD</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, colNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">DT</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id          x A B C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  1.5911128 2 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2 -0.0697195 2 2 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  0.1267355 2 1 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4  1.2116312 2 3 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 -1.1699184 1 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  1.1443539 1 2 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2 -0.1587733 1 2 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3 -0.9833839 2 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4  0.4309030 1 3 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 -1.5886082 2 2 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356  1.1154606 1 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357 -1.7117348 1 1 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358  0.6033390 2 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359  0.4960044 2 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360  0.8324418 1 2 2</span>
-<span class="r-in"><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span><span class="op">)</span><span class="op">]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356 -1.1223208 1 1 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357  0.1811029 2 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358  0.6556653 1 1 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359 -1.2114957 1 3 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360 -0.9776979 1 3 1</span>
+<span class="r-in"><span><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     A B C  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1 1 1 20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2: 1 1 2 20</span>
@@ -157,14 +168,14 @@ an integer.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2 3 1 20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2 3 2 20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2 3 3 20</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">defD</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Var1</span>, <span class="va">Var2</span>, <span class="va">Var3</span><span class="op">)</span><span class="op">]</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">defD</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Var1</span>, <span class="va">Var2</span>, <span class="va">Var3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Var1 Var2 Var3  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    0    0    0 37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:    0    1    0 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:    0    1    0 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:    0    1    1 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:    1    0    0 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:    1    0    1 37</span>
@@ -184,7 +195,7 @@ an integer.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

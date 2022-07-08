@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -115,7 +115,10 @@
 
     
     
-<p>Time-to-event data, including both survival and censoring times, are created using functions <code>defSurv</code> and <code>genSurv</code>. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the <code>formula</code> field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the <em>shape</em> of the distribution can be specified. A <code>shape</code> value of 1 reflects the <em>exponential</em> distribution.</p>
+<p>Time-to-event data, including both survival and censoring times, are created using functions <code>defSurv</code> and <code>genSurv</code>. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the <code>formula</code> field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the <em>shape</em> of the distribution can be specified. A <code>shape</code> value of 1 reflects the <em>exponential</em> distribution. As of <code>simstudy</code> version 0.5.0, it is also possible to generate survival data that violate a proportional hazards assumption. In addition, data with two or more competing risks can be generated.</p>
+<div class="section level3">
+<h3 id="weibull-distribution">Weibull distribution<a class="anchor" aria-label="anchor" href="#weibull-distribution"></a>
+</h3>
 <p>The density, mean, and variance of the Weibull distribution that is used in the data generation process are defined by the parameters <span class="math inline">\(\lambda\)</span> (scale) and <span class="math inline">\(\nu\)</span> (shape) as shown below.</p>
 <span class="math display">\[\begin{aligned}
 f(t) &amp;= \frac{t^{\frac{1}{\nu}-1}}{\lambda \nu} exp\left(-\frac{t^\frac{1}{\nu}}{\lambda}\right) \\
@@ -128,105 +131,102 @@ Var(T) &amp;= (\lambda^2)^\nu \left( \Gamma(2 \nu + 1) - \Gamma^2(\nu + 1) \righ
 T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 \]</span></p>
 <p>where <span class="math inline">\(U\)</span> is a uniform random variable between 0 and 1, <span class="math inline">\(\beta\)</span> is a vector of parameters in a Cox proportional hazard model, and <span class="math inline">\(x\)</span> is a vector of covariates that impact survival time. <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\nu\)</span> can also vary by covariates.</p>
+</div>
+<div class="section level3">
+<h3 id="generating-standard-survival-data-with-censoring">Generating standard survival data with censoring<a class="anchor" aria-label="anchor" href="#generating-standard-survival-data-with-censoring"></a>
+</h3>
 <p>Here is an example showing how to generate data with covariates. In this case the scale and shape parameters will vary by group membership.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Baseline data definitions</span>
-
-<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span>
-<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span>
-<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"grp"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span>
-
-<span class="co"># Survival data definitions</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">282716</span><span class="op">)</span>
-
-<span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"survTime"</span>, formula <span class="op">=</span> <span class="st">"1.5*x1"</span>, scale <span class="op">=</span> <span class="st">"grp*50 + (1-grp)*25"</span>,
-    shape <span class="op">=</span> <span class="st">"grp*1 + (1-grp)*1.5"</span><span class="op">)</span>
-<span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="va">sdef</span></code></pre></div>
-<pre><code><span class="co">##       varname formula               scale               shape</span>
-<span class="co">## 1:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5</span>
-<span class="co">## 2: censorTime       0                  80                   1</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Baseline data definitions</span></span>
+<span></span>
+<span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"grp"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Survival data definitions</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">282716</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"survTime"</span>, formula <span class="op">=</span> <span class="st">"1.5*x1"</span>, scale <span class="op">=</span> <span class="st">"grp*50 + (1-grp)*25"</span>,</span>
+<span>    shape <span class="op">=</span> <span class="st">"grp*1 + (1-grp)*1.5"</span><span class="op">)</span></span>
+<span><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sdef</span></span></code></pre></div>
+<pre><code><span><span class="co">##       varname formula               scale               shape transition</span></span>
+<span><span class="co">## 1: censorTime       0                  80                   1          0</span></span>
+<span><span class="co">## 2:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5          0</span></span></code></pre>
 <p>The data are generated with calls to <code>genData</code> and <code>genSurv</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Baseline data definitions</span>
-
-<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span>
-<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##    id x1 x2 grp survTime censorTime</span>
-<span class="co">## 1:  1  0  0   1    9.206     95.976</span>
-<span class="co">## 2:  2  0  1   0   25.525     46.754</span>
-<span class="co">## 3:  3  0  1   0  604.203     31.620</span>
-<span class="co">## 4:  4  1  1   0   23.631    338.427</span>
-<span class="co">## 5:  5  1  0   0  108.276    287.553</span>
-<span class="co">## 6:  6  0  1   1    8.122     53.406</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Baseline data definitions</span></span>
+<span></span>
+<span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span></span>
+<span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    id x1 grp censorTime survTime</span></span>
+<span><span class="co">## 1:  1  0   0     42.923    9.875</span></span>
+<span><span class="co">## 2:  2  0   1     77.166   17.338</span></span>
+<span><span class="co">## 3:  3  0   1    143.773  142.939</span></span>
+<span><span class="co">## 4:  4  1   1    181.853   16.470</span></span>
+<span><span class="co">## 5:  5  1   0    210.939  108.276</span></span>
+<span><span class="co">## 6:  6  0   1     34.096    8.122</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># A comparison of survival by group and x1</span>
-
-<span class="va">dtSurv</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">survTime</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">grp</span>, <span class="va">x1</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code><span class="co">##    grp x1    V1</span>
-<span class="co">## 1:   0  0 156.2</span>
-<span class="co">## 2:   0  1  19.0</span>
-<span class="co">## 3:   1  0  43.3</span>
-<span class="co">## 4:   1  1  14.1</span></code></pre>
-<p>Observed survival times and censoring indicators can be generated by defining new fields:</p>
+<code class="sourceCode R"><span><span class="co"># A comparison of survival by group and x1</span></span>
+<span></span>
+<span><span class="va">dtSurv</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">survTime</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">grp</span>, <span class="va">x1</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##    grp x1    V1</span></span>
+<span><span class="co">## 1:   0  0 149.2</span></span>
+<span><span class="co">## 2:   0  1  23.4</span></span>
+<span><span class="co">## 3:   1  0  46.3</span></span>
+<span><span class="co">## 4:   1  1  12.2</span></span></code></pre>
+<p>Observed survival times and censoring indicators can be generated using the competing risk functionality and specifying a censoring variable:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"obsTime"</span>, formula <span class="op">=</span> <span class="st">"pmin(survTime, censorTime)"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
-<span class="va">cdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">cdef</span>, varname <span class="op">=</span> <span class="st">"status"</span>, formula <span class="op">=</span> <span class="st">"I(survTime &lt;= censorTime)"</span>,
-    dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
-
-<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">cdef</span>, <span class="va">dtSurv</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##    id x1 x2 grp survTime censorTime obsTime status</span>
-<span class="co">## 1:  1  0  0   1    9.206     95.976   9.206   TRUE</span>
-<span class="co">## 2:  2  0  1   0   25.525     46.754  25.525   TRUE</span>
-<span class="co">## 3:  3  0  1   0  604.203     31.620  31.620  FALSE</span>
-<span class="co">## 4:  4  1  1   0   23.631    338.427  23.631   TRUE</span>
-<span class="co">## 5:  5  1  0   0  108.276    287.553 108.276   TRUE</span>
-<span class="co">## 6:  6  0  1   1    8.122     53.406   8.122   TRUE</span></code></pre>
+<code class="sourceCode R"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span></span>
+<span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span>, timeName <span class="op">=</span> <span class="st">"obsTime"</span>, censorName <span class="op">=</span> <span class="st">"censorTime"</span>,</span>
+<span>    eventName <span class="op">=</span> <span class="st">"status"</span>, keepEvents <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    id x1 grp censorTime survTime obsTime status       type</span></span>
+<span><span class="co">## 1:  1  0   1     92.368   49.071  49.071      1   survTime</span></span>
+<span><span class="co">## 2:  2  1   0     45.801   25.639  25.639      1   survTime</span></span>
+<span><span class="co">## 3:  3  1   1    278.210    4.045   4.045      1   survTime</span></span>
+<span><span class="co">## 4:  4  0   0     12.663   13.325  12.663      0 censorTime</span></span>
+<span><span class="co">## 5:  5  0   0     26.531  323.764  26.531      0 censorTime</span></span>
+<span><span class="co">## 6:  6  1   0     23.514    0.157   0.157      1   survTime</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># estimate proportion of censoring by x1 and group</span>
-
-<span class="va">dtSurv</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">grp</span>, <span class="va">x1</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code><span class="co">##    grp x1   V1</span>
-<span class="co">## 1:   0  0 0.51</span>
-<span class="co">## 2:   0  1 0.13</span>
-<span class="co">## 3:   1  0 0.37</span>
-<span class="co">## 4:   1  1 0.17</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># estimate proportion of censoring by x1 and group</span></span>
+<span></span>
+<span><span class="va">dtSurv</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">grp</span>, <span class="va">x1</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##    grp x1   V1</span></span>
+<span><span class="co">## 1:   0  0 0.71</span></span>
+<span><span class="co">## 2:   0  1 0.10</span></span>
+<span><span class="co">## 3:   1  0 0.44</span></span>
+<span><span class="co">## 4:   1  1 0.13</span></span></code></pre>
 <p>Here is a Kaplan-Meier plot of the data by the four groups:</p>
-<p><img src="survival_files/figure-html/unnamed-chunk-5-1.png" width="624"></p>
-<p>Here is a survival analysis (using a Cox proportional hazard model) of a slightly simplified data set:</p>
+<p><img src="survival_files/figure-html/unnamed-chunk-6-1.png" width="624"></p>
+<p>Here is a survival analysis (using a Cox proportional hazard model) of a slightly simplified data set with two baseline covariates only:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Baseline data definitions</span>
-
-<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span>
-<span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span>
-
-<span class="co"># Survival data definitions</span>
-
-<span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"survTime"</span>, formula <span class="op">=</span> <span class="st">"1.5*x1 - .8*x2"</span>, scale <span class="op">=</span> <span class="fl">50</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>
-<span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span>
-<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span><span class="op">)</span>
-
-<span class="va">cdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"obsTime"</span>, formula <span class="op">=</span> <span class="st">"pmin(survTime, censorTime)"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
-<span class="va">cdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defDataAdd.html">defDataAdd</a></span><span class="op">(</span><span class="va">cdef</span>, varname <span class="op">=</span> <span class="st">"status"</span>, formula <span class="op">=</span> <span class="st">"I(survTime &lt;= censorTime)"</span>,
-    dist <span class="op">=</span> <span class="st">"nonrandom"</span><span class="op">)</span>
-
-<span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addColumns.html">addColumns</a></span><span class="op">(</span><span class="va">cdef</span>, <span class="va">dtSurv</span><span class="op">)</span>
-<span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">obsTime</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">dtSurv</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Baseline data definitions</span></span>
+<span></span>
+<span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Survival data definitions</span></span>
+<span></span>
+<span><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"survTime"</span>, formula <span class="op">=</span> <span class="st">"1.5*x1 - .8*x2"</span>, scale <span class="op">=</span> <span class="fl">50</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span></span>
+<span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span>, timeName <span class="op">=</span> <span class="st">"obsTime"</span>, censorName <span class="op">=</span> <span class="st">"censorTime"</span>,</span>
+<span>    eventName <span class="op">=</span> <span class="st">"status"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">obsTime</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">dtSurv</span><span class="op">)</span></span></code></pre></div>
 <p>The 95% confidence intervals of the parameter estimates include the values used to generate the data:</p>
-<div id="hpjhweirfl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="jckzsswiti" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#hpjhweirfl .gt_table {
+#jckzsswiti .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -251,7 +251,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   border-left-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_heading {
+#jckzsswiti .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -263,33 +263,37 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   border-right-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_title {
+#jckzsswiti .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
   padding-top: 4px;
   padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
 
-#hpjhweirfl .gt_subtitle {
+#jckzsswiti .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
   padding-top: 0;
   padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
 
-#hpjhweirfl .gt_bottom_border {
+#jckzsswiti .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_col_headings {
+#jckzsswiti .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -304,7 +308,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   border-right-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_col_heading {
+#jckzsswiti .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -324,7 +328,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   overflow-x: hidden;
 }
 
-#hpjhweirfl .gt_column_spanner_outer {
+#jckzsswiti .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -336,15 +340,15 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   padding-right: 4px;
 }
 
-#hpjhweirfl .gt_column_spanner_outer:first-child {
+#jckzsswiti .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hpjhweirfl .gt_column_spanner_outer:last-child {
+#jckzsswiti .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hpjhweirfl .gt_column_spanner {
+#jckzsswiti .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -356,8 +360,11 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   width: 100%;
 }
 
-#hpjhweirfl .gt_group_heading {
-  padding: 8px;
+#jckzsswiti .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -378,7 +385,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   vertical-align: middle;
 }
 
-#hpjhweirfl .gt_empty_group_heading {
+#jckzsswiti .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -393,15 +400,15 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   vertical-align: middle;
 }
 
-#hpjhweirfl .gt_from_md > :first-child {
+#jckzsswiti .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hpjhweirfl .gt_from_md > :last-child {
+#jckzsswiti .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hpjhweirfl .gt_row {
+#jckzsswiti .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -420,7 +427,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   overflow-x: hidden;
 }
 
-#hpjhweirfl .gt_stub {
+#jckzsswiti .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -429,10 +436,29 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
-  padding-left: 12px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-#hpjhweirfl .gt_summary_row {
+#jckzsswiti .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#jckzsswiti .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#jckzsswiti .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -442,17 +468,26 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   padding-right: 5px;
 }
 
-#hpjhweirfl .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
+#jckzsswiti .gt_first_summary_row {
   border-top-style: solid;
-  border-top-width: 2px;
   border-top-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_grand_summary_row {
+#jckzsswiti .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#jckzsswiti .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jckzsswiti .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -462,7 +497,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   padding-right: 5px;
 }
 
-#hpjhweirfl .gt_first_grand_summary_row {
+#jckzsswiti .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -472,11 +507,11 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   border-top-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_striped {
+#jckzsswiti .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hpjhweirfl .gt_table_body {
+#jckzsswiti .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -485,7 +520,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   border-bottom-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_footnotes {
+#jckzsswiti .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -499,13 +534,16 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   border-right-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_footnote {
+#jckzsswiti .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-#hpjhweirfl .gt_sourcenotes {
+#jckzsswiti .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -519,44 +557,80 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
   border-right-color: #D3D3D3;
 }
 
-#hpjhweirfl .gt_sourcenote {
+#jckzsswiti .gt_sourcenote {
   font-size: 90%;
-  padding: 4px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-#hpjhweirfl .gt_left {
+#jckzsswiti .gt_left {
   text-align: left;
 }
 
-#hpjhweirfl .gt_center {
+#jckzsswiti .gt_center {
   text-align: center;
 }
 
-#hpjhweirfl .gt_right {
+#jckzsswiti .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hpjhweirfl .gt_font_normal {
+#jckzsswiti .gt_font_normal {
   font-weight: normal;
 }
 
-#hpjhweirfl .gt_font_bold {
+#jckzsswiti .gt_font_bold {
   font-weight: bold;
 }
 
-#hpjhweirfl .gt_font_italic {
+#jckzsswiti .gt_font_italic {
   font-style: italic;
 }
 
-#hpjhweirfl .gt_super {
+#jckzsswiti .gt_super {
   font-size: 65%;
 }
 
-#hpjhweirfl .gt_footnote_marks {
+#jckzsswiti .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#jckzsswiti .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
-  font-size: 65%;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#jckzsswiti .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#jckzsswiti .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#jckzsswiti .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#jckzsswiti .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
 }
 </style>
 <table class="table gt_table">
@@ -579,22 +653,1493 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 </tr>
 <tr>
 <td class="gt_row gt_left">x2</td>
-<td class="gt_row gt_center">-1.0</td>
-<td class="gt_row gt_center">-1.2, -0.70</td>
+<td class="gt_row gt_center">-0.89</td>
+<td class="gt_row gt_center">-1.1, -0.64</td>
 <td class="gt_row gt_center">&lt;0.001</td>
 </tr>
 </tbody>
-<tfoot><tr class="gt_footnotes">
-<td colspan="4">
-        <p class="gt_footnote">
-          <sup class="gt_footnote_marks"><em>1</em>
-          </sup>
-           
-          HR = Hazard Ratio, CI = Confidence Interval
-          <br></p>
-      </td>
+<tfoot class="gt_footnotes"><tr>
+<td class="gt_footnote" colspan="4">
+<sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
     </tr></tfoot>
 </table>
+</div>
+</div>
+<div class="section level3">
+<h3 id="competing-risks">Competing risks<a class="anchor" aria-label="anchor" href="#competing-risks"></a>
+</h3>
+<p>In the previous example, we actually used the competing risk mechanism in <code>genSurv</code> to generate an observed time variable (which was the earliest of the censoring and event time). This is done by specifying a <em>timeName</em> argument that will represent the observed time value. The event status is indicated in the field set by the <em>eventName</em> argument (which defaults to “event”). If a variable name is indicated in the <em>censorName</em> argument, the censored events automatically have a value of 0. As we saw above, competing risk information can be generated as part of <code>genSurv</code>. However, there is an additional function <code>addCompRisk</code> that will generate the competing risk information using an existing data set. The example here will take that approach.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, <span class="st">"x2"</span>, <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"event_1"</span>, formula <span class="op">=</span> <span class="st">"-10 - 0.6*x1 + 0.4*x2"</span>, shape <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">dS</span>, <span class="st">"event_2"</span>, <span class="st">"-6.5 + 0.3*x1 - 0.5*x2"</span>, shape <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">dS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">dS</span>, <span class="st">"censor"</span>, <span class="st">"-7"</span>, shape <span class="op">=</span> <span class="fl">0.55</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1001</span>, <span class="va">d1</span><span class="op">)</span></span>
+<span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">dS</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dtSurv</span></span></code></pre></div>
+<pre><code><span><span class="co">##         id x1 x2 censor event_1 event_2</span></span>
+<span><span class="co">##    1:    1  0  0 81.381  32.797  21.848</span></span>
+<span><span class="co">##    2:    2  0  0 44.712  11.223  28.557</span></span>
+<span><span class="co">##    3:    3  0  1  5.605  22.911  52.990</span></span>
+<span><span class="co">##    4:    4  1  1 14.845  22.182   4.723</span></span>
+<span><span class="co">##    5:    5  0  0 43.832  13.584  36.072</span></span>
+<span><span class="co">##   ---                                  </span></span>
+<span><span class="co">##  997:  997  1  1 14.608  14.756  26.138</span></span>
+<span><span class="co">##  998:  998  1  1 30.186   6.415  16.127</span></span>
+<span><span class="co">##  999:  999  1  0  7.541  26.088  20.332</span></span>
+<span><span class="co">## 1000: 1000  1  0 19.501  27.078   6.435</span></span>
+<span><span class="co">## 1001: 1001  1  0 31.740  11.946  22.595</span></span></code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addCompRisk.html">addCompRisk</a></span><span class="op">(</span><span class="va">dtSurv</span>, events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"event_1"</span>, <span class="st">"event_2"</span>, <span class="st">"censor"</span><span class="op">)</span>, </span>
+<span>            timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span>
+<span><span class="va">dtSurv</span></span></code></pre></div>
+<pre><code><span><span class="co">##         id x1 x2   time event    type</span></span>
+<span><span class="co">##    1:    1  0  0 21.848     2 event_2</span></span>
+<span><span class="co">##    2:    2  0  0 11.223     1 event_1</span></span>
+<span><span class="co">##    3:    3  0  1  5.605     0  censor</span></span>
+<span><span class="co">##    4:    4  1  1  4.723     2 event_2</span></span>
+<span><span class="co">##    5:    5  0  0 13.584     1 event_1</span></span>
+<span><span class="co">##   ---                                </span></span>
+<span><span class="co">##  997:  997  1  1 14.608     0  censor</span></span>
+<span><span class="co">##  998:  998  1  1  6.415     1 event_1</span></span>
+<span><span class="co">##  999:  999  1  0  7.541     0  censor</span></span>
+<span><span class="co">## 1000: 1000  1  0  6.435     2 event_2</span></span>
+<span><span class="co">## 1001: 1001  1  0 11.946     1 event_1</span></span></code></pre>
+<p>The competing risk data can be plotted using the cumulative incidence functions (rather than the survival curves):</p>
+<p><img src="survival_files/figure-html/unnamed-chunk-11-1.png" width="624"></p>
+<p>The data generation can all be done in two (instead of three) steps:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">101</span>, <span class="va">d1</span><span class="op">)</span></span>
+<span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">dS</span>, timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span>
+<span><span class="va">dtSurv</span></span></code></pre></div>
+<pre><code><span><span class="co">##       id x1 x2   time event    type</span></span>
+<span><span class="co">##   1:   1  0  1  4.831     1 event_1</span></span>
+<span><span class="co">##   2:   2  0  1 22.419     1 event_1</span></span>
+<span><span class="co">##   3:   3  1  0  9.159     1 event_1</span></span>
+<span><span class="co">##   4:   4  1  0 25.134     1 event_1</span></span>
+<span><span class="co">##   5:   5  1  0 10.506     1 event_1</span></span>
+<span><span class="co">##  ---                               </span></span>
+<span><span class="co">##  97:  97  0  0 13.881     2 event_2</span></span>
+<span><span class="co">##  98:  98  0  1 19.526     1 event_1</span></span>
+<span><span class="co">##  99:  99  0  0 15.097     0  censor</span></span>
+<span><span class="co">## 100: 100  0  1 10.990     2 event_2</span></span>
+<span><span class="co">## 101: 101  1  1 13.082     1 event_1</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="introducing-non-proportional-hazards">Introducing non-proportional hazards<a class="anchor" aria-label="anchor" href="#introducing-non-proportional-hazards"></a>
+</h3>
+<p>In the standard <code>simstudy</code> data generation process for survival/time-to-event outcomes that includes covariates that effect the hazard rate at various time points, the ratio of hazards comparing different levels of a covariate are constant across all time points. For example, if we have a single binary covariate <span class="math inline">\(x\)</span>, the hazard <span class="math inline">\(\lambda(t)\)</span> at time <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[\lambda(t|x) = \lambda_0(t) e ^ {\beta x}\]</span> where <span class="math inline">\(\lambda_0(t)\)</span> is a baseline hazard when <span class="math inline">\(x=0\)</span>. The ratio of the hazards for <span class="math inline">\(x=1\)</span> compared to <span class="math inline">\(x=0\)</span> is</p>
+<p><span class="math display">\[\frac{\lambda_0(t) e ^ {\beta}}{\lambda_0(t)} = e ^ \beta,\]</span></p>
+<p>so the log of the hazard ratio is a constant <span class="math inline">\(\beta\)</span>, and the hazard ratio is always <span class="math inline">\(e^\beta\)</span>.</p>
+<p>However, we may not always want to make the assumption that the hazard ratio is constant over all time periods. To facilitate this, it is possible to specify two different data definitions for the same outcome, using the <em>transition</em> field to specify when the second definition replaces the first. (While it would theoretically be possible to generate data for more than two periods, the process is more involved, and has not been implemented at this time.)</p>
+<p><br></p>
+<p><strong>Constant/proportional hazard ratio</strong></p>
+<p>To start, here is an example assuming a constant log hazard ratio of -0.7:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0.4</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">defS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"death"</span>, formula <span class="op">=</span> <span class="st">"-14.6 - 0.7*x"</span>, shape <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
+<span><span class="va">defS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">defS</span>, varname <span class="op">=</span> <span class="st">"censor"</span>, scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">13</span><span class="op">)</span>, shape <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500</span>, <span class="va">def</span><span class="op">)</span></span>
+<span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dd</span>, <span class="va">defS</span>, digits <span class="op">=</span> <span class="fl">2</span>, timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survfit</span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
+<p><img src="survival_files/figure-html/unnamed-chunk-14-1.png" width="624"></p>
+<p>The Cox proportional hazards model recovers the correct log hazards rate:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">coxph</span><span class="op">(</span>formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
+<div id="antenoidnc" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#antenoidnc .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#antenoidnc .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#antenoidnc .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#antenoidnc .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#antenoidnc .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#antenoidnc .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#antenoidnc .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#antenoidnc .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#antenoidnc .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#antenoidnc .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#antenoidnc .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#antenoidnc .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#antenoidnc .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#antenoidnc .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#antenoidnc .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#antenoidnc .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#antenoidnc .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#antenoidnc .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#antenoidnc .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#antenoidnc .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#antenoidnc .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#antenoidnc .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#antenoidnc .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#antenoidnc .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#antenoidnc .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#antenoidnc .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#antenoidnc .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#antenoidnc .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#antenoidnc .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#antenoidnc .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#antenoidnc .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#antenoidnc .gt_left {
+  text-align: left;
+}
+
+#antenoidnc .gt_center {
+  text-align: center;
+}
+
+#antenoidnc .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#antenoidnc .gt_font_normal {
+  font-weight: normal;
+}
+
+#antenoidnc .gt_font_bold {
+  font-weight: bold;
+}
+
+#antenoidnc .gt_font_italic {
+  font-style: italic;
+}
+
+#antenoidnc .gt_super {
+  font-size: 65%;
+}
+
+#antenoidnc .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#antenoidnc .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#antenoidnc .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#antenoidnc .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#antenoidnc .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#antenoidnc .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="table gt_table">
+<thead class="gt_col_headings"><tr>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<strong>log(HR)</strong><sup class="gt_footnote_marks">1</sup>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<strong>95% CI</strong><sup class="gt_footnote_marks">1</sup>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+    </tr></thead>
+<tbody class="gt_table_body"><tr>
+<td class="gt_row gt_left">x</td>
+<td class="gt_row gt_center">-0.72</td>
+<td class="gt_row gt_center">-0.92, -0.52</td>
+<td class="gt_row gt_center">&lt;0.001</td>
+</tr></tbody>
+<tfoot class="gt_footnotes"><tr>
+<td class="gt_footnote" colspan="4">
+<sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
+    </tr></tfoot>
+</table>
+</div>
+<p>We can test the assumption of proportional hazards using weighted residuals. If the <span class="math inline">\(\text{p-value} &lt; 0.05\)</span>, then we would conclude that the assumption of proportional hazards is not warranted. In this case <span class="math inline">\(p = 0.22\)</span>, so the model is apparently reasonable:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##        chisq df    p</span></span>
+<span><span class="co">## x       1.51  1 0.22</span></span>
+<span><span class="co">## GLOBAL  1.51  1 0.22</span></span></code></pre>
+<p><br></p>
+<p><strong>Non-constant/non-proportional hazard ratio</strong></p>
+<p>In this next case, the risk of death when <span class="math inline">\(x=1\)</span> is lower at all time points compared to when <span class="math inline">\(x=0\)</span>, but the relative risk (or hazard ratio) changes at 150 days:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0.4</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">defS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"death"</span>, formula <span class="op">=</span> <span class="st">"-14.6 - 1.3*x"</span>, shape <span class="op">=</span> <span class="fl">0.35</span>, transition <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">defS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">defS</span>, varname <span class="op">=</span> <span class="st">"death"</span>, formula <span class="op">=</span> <span class="st">"-14.6 - 0.4*x"</span>, shape <span class="op">=</span> <span class="fl">0.35</span>,</span>
+<span>    transition <span class="op">=</span> <span class="fl">150</span><span class="op">)</span></span>
+<span><span class="va">defS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">defS</span>, varname <span class="op">=</span> <span class="st">"censor"</span>, scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">13</span><span class="op">)</span>, shape <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500</span>, <span class="va">def</span><span class="op">)</span></span>
+<span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dd</span>, <span class="va">defS</span>, digits <span class="op">=</span> <span class="fl">2</span>, timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survfit</span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
+<p>The survival curve for the sample with <span class="math inline">\(x=1\)</span> has a slightly different shape under this data generation process compared to the previous example under a constant hazard ratio assumption; there is more separation early on (prior to day 150), and then the gap is closed at a quicker rate.</p>
+<p><img src="survival_files/figure-html/unnamed-chunk-19-1.png" width="624"></p>
+<p>If we ignore the possibility that there might be a different relationship over time, the Cox proportional hazards model gives an estimate of the log hazard ratio quite close to -0.70:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
+<div id="qjrptpzqug" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#qjrptpzqug .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#qjrptpzqug .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#qjrptpzqug .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#qjrptpzqug .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#qjrptpzqug .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#qjrptpzqug .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#qjrptpzqug .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#qjrptpzqug .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#qjrptpzqug .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#qjrptpzqug .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#qjrptpzqug .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#qjrptpzqug .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#qjrptpzqug .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qjrptpzqug .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#qjrptpzqug .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#qjrptpzqug .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qjrptpzqug .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#qjrptpzqug .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qjrptpzqug .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#qjrptpzqug .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qjrptpzqug .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qjrptpzqug .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qjrptpzqug .gt_left {
+  text-align: left;
+}
+
+#qjrptpzqug .gt_center {
+  text-align: center;
+}
+
+#qjrptpzqug .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#qjrptpzqug .gt_font_normal {
+  font-weight: normal;
+}
+
+#qjrptpzqug .gt_font_bold {
+  font-weight: bold;
+}
+
+#qjrptpzqug .gt_font_italic {
+  font-style: italic;
+}
+
+#qjrptpzqug .gt_super {
+  font-size: 65%;
+}
+
+#qjrptpzqug .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#qjrptpzqug .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#qjrptpzqug .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#qjrptpzqug .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#qjrptpzqug .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#qjrptpzqug .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="table gt_table">
+<thead class="gt_col_headings"><tr>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<strong>log(HR)</strong><sup class="gt_footnote_marks">1</sup>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<strong>95% CI</strong><sup class="gt_footnote_marks">1</sup>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+    </tr></thead>
+<tbody class="gt_table_body"><tr>
+<td class="gt_row gt_left">x</td>
+<td class="gt_row gt_center">-0.71</td>
+<td class="gt_row gt_center">-0.90, -0.52</td>
+<td class="gt_row gt_center">&lt;0.001</td>
+</tr></tbody>
+<tfoot class="gt_footnotes"><tr>
+<td class="gt_footnote" colspan="4">
+<sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
+    </tr></tfoot>
+</table>
+</div>
+<p>However, further inspection of the proportionality assumption should make us question the appropriateness of the model. Since <span class="math inline">\(p&lt;0.05\)</span>, we would be wise to see if we can improve on the model.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##        chisq df      p</span></span>
+<span><span class="co">## x        7.4  1 0.0065</span></span>
+<span><span class="co">## GLOBAL   7.4  1 0.0065</span></span></code></pre>
+<p>We might be able to see from the plot where proportionality diverges, in which case we can split the data set into two parts at the identified time point. (In many cases, the transition point or points won’t be so obvious, in which case the investigation might be more involved.) By splitting the data at day 150, we get the desired estimates:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dd2</span> <span class="op">&lt;-</span> <span class="fu">survSplit</span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">.</span>, data<span class="op">=</span> <span class="va">dd</span>, cut<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span>,</span>
+<span>                 episode<span class="op">=</span> <span class="st">"tgroup"</span>, id<span class="op">=</span><span class="st">"newid"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">coxfit2</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">tstart</span>, <span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span><span class="op">:</span><span class="fu">strata</span><span class="op">(</span><span class="va">tgroup</span><span class="op">)</span>, data<span class="op">=</span><span class="va">dd2</span><span class="op">)</span></span></code></pre></div>
+<div id="pxoeswagdb" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#pxoeswagdb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#pxoeswagdb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#pxoeswagdb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#pxoeswagdb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#pxoeswagdb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#pxoeswagdb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#pxoeswagdb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#pxoeswagdb .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#pxoeswagdb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#pxoeswagdb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#pxoeswagdb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#pxoeswagdb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#pxoeswagdb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pxoeswagdb .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#pxoeswagdb .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#pxoeswagdb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pxoeswagdb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#pxoeswagdb .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pxoeswagdb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#pxoeswagdb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pxoeswagdb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pxoeswagdb .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pxoeswagdb .gt_left {
+  text-align: left;
+}
+
+#pxoeswagdb .gt_center {
+  text-align: center;
+}
+
+#pxoeswagdb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#pxoeswagdb .gt_font_normal {
+  font-weight: normal;
+}
+
+#pxoeswagdb .gt_font_bold {
+  font-weight: bold;
+}
+
+#pxoeswagdb .gt_font_italic {
+  font-style: italic;
+}
+
+#pxoeswagdb .gt_super {
+  font-size: 65%;
+}
+
+#pxoeswagdb .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#pxoeswagdb .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#pxoeswagdb .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#pxoeswagdb .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#pxoeswagdb .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#pxoeswagdb .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="table gt_table">
+<thead class="gt_col_headings"><tr>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<strong>log(HR)</strong><sup class="gt_footnote_marks">1</sup>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<strong>95% CI</strong><sup class="gt_footnote_marks">1</sup>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td class="gt_row gt_left">x * strata(tgroup)</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+</tr>
+<tr>
+<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">x * tgroup=1</td>
+<td class="gt_row gt_center">-1.3</td>
+<td class="gt_row gt_center">-1.6, -0.93</td>
+<td class="gt_row gt_center">&lt;0.001</td>
+</tr>
+<tr>
+<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">x * tgroup=2</td>
+<td class="gt_row gt_center">-0.38</td>
+<td class="gt_row gt_center">-0.62, -0.13</td>
+<td class="gt_row gt_center">0.003</td>
+</tr>
+</tbody>
+<tfoot class="gt_footnotes"><tr>
+<td class="gt_footnote" colspan="4">
+<sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
+    </tr></tfoot>
+</table>
+</div>
+<p>And the diagnostic test of proportionality confirms the appropriateness of the model:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                  chisq df   p</span></span>
+<span><span class="co">## x:strata(tgroup)  2.44  2 0.3</span></span>
+<span><span class="co">## GLOBAL            2.44  2 0.3</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="generating-parameters-for-survival-distribution">Generating parameters for survival distribution<a class="anchor" aria-label="anchor" href="#generating-parameters-for-survival-distribution"></a>
+</h3>
+<p>Throughout this vignette, I have been using various assumptions for the parameters - <em>formula</em>, <em>scale</em>, and <em>shape</em> - that define the Weibull-based survival distribution. Where do these assumptions come from and how can we determine what is appropriate to use in our simulations? That will depend, of course, on each specific application and use of the simulation, but there are two helper functions in <code>simstudy</code>, <code>survGetParams</code> and <code>survParamPlot</code>, that are intended to guide the process.</p>
+<p><code>survGetParams</code> will provide the <em>formula</em> and <em>shape</em> parameters (the <em>scale</em> parameter will always be set to 1) that define a curve close to points provided as inputs. For example, if we would like to find the parameters for a distribution where 80% survive until day 100, and 10% survive until day 200 (any number of points may be provided):</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">0.80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">0.10</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survGetParams.html">survGetParams</a></span><span class="op">(</span><span class="va">points</span><span class="op">)</span></span>
+<span><span class="va">r</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] -17.0065167   0.2969817</span></span></code></pre>
+<p>We can visualize the curve that is defined by these parameters:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/survParamPlot.html">survParamPlot</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">r</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, shape <span class="op">=</span> <span class="va">r</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">points</span><span class="op">)</span></span></code></pre></div>
+<p><img src="survival_files/figure-html/unnamed-chunk-27-1.png" width="624"></p>
+<p>And we can generate data based on these parameters:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">defS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"death"</span>, formula <span class="op">=</span> <span class="op">-</span><span class="fl">17</span>, scale <span class="op">=</span> <span class="fl">1</span>, shape <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span><span class="va">defS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">defS</span>, varname <span class="op">=</span> <span class="st">"censor"</span>, formula <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">18.5</span><span class="op">)</span>, shape <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span>
+<span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dd</span>, <span class="va">defS</span>, timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="survival_files/figure-html/unnamed-chunk-29-1.png" width="624"></p>
 </div>
   </div>
 
@@ -613,7 +2158,7 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,38 +90,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genFactor</span><span class="op">(</span><span class="va">dtName</span>, <span class="va">varname</span>, labels <span class="op">=</span> <span class="cn">NULL</span>, prefix <span class="op">=</span> <span class="st">"f"</span>, replace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genFactor</span><span class="op">(</span><span class="va">dtName</span>, <span class="va">varname</span>, labels <span class="op">=</span> <span class="cn">NULL</span>, prefix <span class="op">=</span> <span class="st">"f"</span>, replace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtName</dt>
 <dd><p>Data table with columns.</p></dd>
+
+
 <dt>varname</dt>
 <dd><p>Name of field(s) to be converted.</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>Factor level labels. If not provided, the generated factor
 levels will be used as the labels. Can be a vector (if only one new factor or
 all factors have the same labels) or a list of character vectors of the same
 length as varname.</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>By default, the new field name will be a concatenation of "f"
 and the old field name. A prefix string can be provided.</p></dd>
+
+
 <dt>replace</dt>
 <dd><p>If replace is set to TRUE (defaults to FALSE) the field
 referenced varname will be removed.</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># First example:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"cat"</span>, formula <span class="op">=</span> <span class="st">".2;.3;.5"</span>, dist <span class="op">=</span> <span class="st">"categorical"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">5</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dx</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># First example:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"cat"</span>, formula <span class="op">=</span> <span class="st">".2;.3;.5"</span>, dist <span class="op">=</span> <span class="st">"categorical"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">5</span>, variance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dx</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id cat         x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1   3 6.3663010</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2   3 5.7637293</span>
@@ -134,9 +143,9 @@ referenced varname will be removed.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 198: 198   2 1.6055998</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 199: 199   3 0.2882947</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 200: 200   3 5.7856142</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genFactor</span><span class="op">(</span><span class="va">dx</span>, <span class="st">"cat"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"three"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dx</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genFactor</span><span class="op">(</span><span class="va">dx</span>, <span class="st">"cat"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"three"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dx</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id cat         x  fcat</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1   3 6.3663010 three</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2   3 5.7637293 three</span>
@@ -149,13 +158,14 @@ referenced varname will be removed.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 198: 198   2 1.6055998   two</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 199: 199   3 0.2882947 three</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 200: 200   3 5.7856142 three</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Second example:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="trtAssign.html">trtAssign</a></span><span class="op">(</span>dtName <span class="op">=</span> <span class="va">dx</span>, <span class="fl">2</span>, grpName <span class="op">=</span> <span class="st">"studyArm"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genFactor</span><span class="op">(</span><span class="va">dx</span>, varname <span class="op">=</span> <span class="st">"studyArm"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"treatment"</span><span class="op">)</span>, prefix <span class="op">=</span> <span class="st">"t_"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dx</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Second example:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="trtAssign.html">trtAssign</a></span><span class="op">(</span>dtName <span class="op">=</span> <span class="va">dx</span>, <span class="fl">2</span>, grpName <span class="op">=</span> <span class="st">"studyArm"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genFactor</span><span class="op">(</span><span class="va">dx</span>, varname <span class="op">=</span> <span class="st">"studyArm"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"treatment"</span><span class="op">)</span>, prefix <span class="op">=</span> <span class="st">"t_"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Invalid .internal.selfref detected and fixed by taking a (shallow) copy of the data.table so that := can add this new column by reference. At an earlier point, this data.table has been copied by R (or was created manually using structure() or similar). Avoid names&lt;- and attr&lt;- which in R currently (and oddly) may copy the whole data.table. Use set* syntax instead to avoid copying: ?set, ?setnames and ?setattr. If this message doesn't help, please report your use case to the data.table issue tracker so the root cause can be fixed or this message improved.</span>
+<span class="r-in"><span><span class="va">dx</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id studyArm t_studyArm</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1        0    control</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2        0    control</span>
@@ -181,7 +191,7 @@ referenced varname will be removed.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

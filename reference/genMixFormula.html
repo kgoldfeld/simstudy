@@ -18,7 +18,7 @@ an optional vector of probabilities."><!-- mathjax --><script src="https://cdnjs
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -30,7 +30,7 @@ an optional vector of probabilities."><!-- mathjax --><script src="https://cdnjs
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -92,35 +92,42 @@ an optional vector of probabilities.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">genMixFormula</span><span class="op">(</span><span class="va">vars</span>, probs <span class="op">=</span> <span class="cn">NULL</span>, varLength <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genMixFormula</span><span class="op">(</span><span class="va">vars</span>, probs <span class="op">=</span> <span class="cn">NULL</span>, varLength <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>vars</dt>
 <dd><p>Character vector/list of variable names.</p></dd>
+
+
 <dt>probs</dt>
 <dd><p>Numeric vector/list of probabilities. Has to be same length as
 vars or NULL. Probabilities will be normalized if the sum to &gt; 1.</p></dd>
+
+
 <dt>varLength</dt>
 <dd><p>If <code>vars</code> is of length one and varLength is set to any
 integer &gt; 0, <code>vars</code> will be interpreted as array of length <code>varLength</code> and
 all elements will used in sequence.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The mixture formula as a string.</p>
+    
+
+<p>The mixture formula as a string.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">genMixFormula</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"..b[..i]"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">genMixFormula</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"..b[..i]"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a | 0.333333333333333 + ..b[..i] | 0.333333333333333 + c | 0.333333333333333"</span>
-<span class="r-in"><span class="fu">genMixFormula</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"..b"</span>, <span class="st">"c"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.5</span>, <span class="fl">.3</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">genMixFormula</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"..b"</span>, <span class="st">"c"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.5</span>, <span class="fl">.3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a | 0.2 + ..b | 0.5 + c | 0.3"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Shorthand to use external vectors/lists</span></span>
-<span class="r-in"><span class="fu">genMixFormula</span><span class="op">(</span><span class="st">"..arr"</span>, varLength <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Shorthand to use external vectors/lists</span></span></span>
+<span class="r-in"><span><span class="fu">genMixFormula</span><span class="op">(</span><span class="st">"..arr"</span>, varLength <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "..arr[[1]] | 0.2 + ..arr[[2]] | 0.2 + ..arr[[3]] | 0.2 + ..arr[[4]] | 0.2 + ..arr[[5]] | 0.2"</span>
 </code></pre></div>
     </div>
@@ -136,7 +143,7 @@ all elements will used in sequence.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

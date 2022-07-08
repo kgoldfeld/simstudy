@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,110 +90,124 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addPeriods</span><span class="op">(</span>
-  <span class="va">dtName</span>,
-  nPeriods <span class="op">=</span> <span class="cn">NULL</span>,
-  idvars <span class="op">=</span> <span class="st">"id"</span>,
-  timevars <span class="op">=</span> <span class="cn">NULL</span>,
-  timevarName <span class="op">=</span> <span class="st">"timevar"</span>,
-  timeid <span class="op">=</span> <span class="st">"timeID"</span>,
-  perName <span class="op">=</span> <span class="st">"period"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addPeriods</span><span class="op">(</span></span>
+<span>  <span class="va">dtName</span>,</span>
+<span>  nPeriods <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  idvars <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  timevars <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  timevarName <span class="op">=</span> <span class="st">"timevar"</span>,</span>
+<span>  timeid <span class="op">=</span> <span class="st">"timeID"</span>,</span>
+<span>  perName <span class="op">=</span> <span class="st">"period"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtName</dt>
 <dd><p>Name of existing data table</p></dd>
+
+
 <dt>nPeriods</dt>
 <dd><p>Number of time periods for each record</p></dd>
+
+
 <dt>idvars</dt>
 <dd><p>Names of index variables (in a string vector) that will be
 repeated during each time period</p></dd>
+
+
 <dt>timevars</dt>
 <dd><p>Names of time dependent variables. Defaults to NULL.</p></dd>
+
+
 <dt>timevarName</dt>
 <dd><p>Name of new time dependent variable</p></dd>
+
+
 <dt>timeid</dt>
 <dd><p>Variable name for new index field. Defaults to "timevar"</p></dd>
+
+
 <dt>perName</dt>
 <dd><p>Variable name for period field. Defaults to "period"</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An updated data.table that that has multiple rows
+    
+
+<p>An updated data.table that that has multiple rows
 per observation in dtName</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"T"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">tdef</span>, varname <span class="op">=</span> <span class="st">"Y0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">tdef</span>, varname <span class="op">=</span> <span class="st">"Y1"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"Y0 + 5 + 5 * T"</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">tdef</span>, varname <span class="op">=</span> <span class="st">"Y2"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"Y0 + 10 + 5 * T"</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtTrial</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">tdef</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dtTrial</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"T"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">tdef</span>, varname <span class="op">=</span> <span class="st">"Y0"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">10</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">tdef</span>, varname <span class="op">=</span> <span class="st">"Y1"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"Y0 + 5 + 5 * T"</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">tdef</span>, varname <span class="op">=</span> <span class="st">"Y2"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="st">"Y0 + 10 + 5 * T"</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtTrial</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">tdef</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dtTrial</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id T        Y0       Y1       Y2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1 1 10.447277 21.46210 26.66717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2 1  9.429358 19.71649 23.47828</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3 1  9.179985 20.00182 25.08347</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4 0  9.237500 13.77300 19.15319</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  5 1  9.756593 18.91725 24.42946</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu">addPeriods</span><span class="op">(</span><span class="va">dtTrial</span>,</span>
-<span class="r-in">  nPeriods <span class="op">=</span> <span class="fl">3</span>, idvars <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span class="r-in">  timevars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Y0"</span>, <span class="st">"Y1"</span>, <span class="st">"Y2"</span><span class="op">)</span>, timevarName <span class="op">=</span> <span class="st">"Y"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">dtTime</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1 0  9.841812 14.20441 19.33004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2 0 10.110208 14.39470 18.92173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3 0 10.791076 15.95899 20.36058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4 1  8.389855 18.67971 24.19510</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  5 0 10.197447 14.88791 21.28267</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu">addPeriods</span><span class="op">(</span><span class="va">dtTrial</span>,</span></span>
+<span class="r-in"><span>  nPeriods <span class="op">=</span> <span class="fl">3</span>, idvars <span class="op">=</span> <span class="st">"id"</span>,</span></span>
+<span class="r-in"><span>  timevars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Y0"</span>, <span class="st">"Y1"</span>, <span class="st">"Y2"</span><span class="op">)</span>, timevarName <span class="op">=</span> <span class="st">"Y"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dtTime</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id period T         Y timeID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1      0 1 10.447277      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  1      1 1 21.462095      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  1      2 1 26.667167      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  2      0 1  9.429358      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  2      1 1 19.716491      5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  2      2 1 23.478276      6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  3      0 1  9.179985      7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  3      1 1 20.001823      8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  3      2 1 25.083465      9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  4      0 0  9.237500     10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:  4      1 0 13.773005     11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:  4      2 0 19.153193     12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:  5      0 1  9.756593     13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:  5      1 1 18.917252     14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:  5      2 1 24.429462     15</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Varying # of periods and intervals - need to have variables</span></span>
-<span class="r-in"><span class="co"># called nCount and mInterval</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xbase"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">20</span>, variance <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"nCount"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"mInterval"</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, formula <span class="op">=</span> <span class="fl">30</span>, variance <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"vInterval"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>, formula <span class="op">=</span> <span class="fl">.07</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span><span class="op">[</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1      0 0  9.841812      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  1      1 0 14.204406      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  1      2 0 19.330038      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  2      0 0 10.110208      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  2      1 0 14.394697      5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  2      2 0 18.921730      6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  3      0 0 10.791076      7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  3      1 0 15.958988      8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  3      2 0 20.360580      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  4      0 1  8.389855     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:  4      1 1 18.679706     11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:  4      2 1 24.195099     12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:  5      0 0 10.197447     13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:  5      1 0 14.887915     14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:  5      2 0 21.282669     15</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Varying # of periods and intervals - need to have variables</span></span></span>
+<span class="r-in"><span><span class="co"># called nCount and mInterval</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xbase"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">20</span>, variance <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"nCount"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"mInterval"</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, formula <span class="op">=</span> <span class="fl">30</span>, variance <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"vInterval"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>, formula <span class="op">=</span> <span class="fl">.07</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span><span class="op">[</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id    xbase nCount mInterval vInterval</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   8 21.41532     10  28.59648      0.07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 121 20.96470      4  27.09522      0.07</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dtPeriod</span> <span class="op">&lt;-</span> <span class="fu">addPeriods</span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dtPeriod</span><span class="op">[</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span> <span class="co"># View individuals 8 and 121 only</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   8 19.40999      7  24.59696      0.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 121 16.49650      6  30.80184      0.07</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dtPeriod</span> <span class="op">&lt;-</span> <span class="fu">addPeriods</span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dtPeriod</span><span class="op">[</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span> <span class="co"># View individuals 8 and 121 only</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id period    xbase time timeID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:   8      0 21.41532    0     37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:   8      1 21.41532   21     38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:   8      2 21.41532   41     39</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:   8      3 21.41532   64     40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:   8      4 21.41532   95     41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   8      5 21.41532  151     42</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   8      6 21.41532  180     43</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:   8      7 21.41532  217     44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:   8      8 21.41532  268     45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:   8      9 21.41532  293     46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 121      0 20.96470    0    722</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 121      1 20.96470   40    723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 121      2 20.96470   68    724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 121      3 20.96470   92    725</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:   8      0 19.40999    0     39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:   8      1 19.40999   22     40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:   8      2 19.40999   57     41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:   8      3 19.40999   74     42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:   8      4 19.40999  110     43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   8      5 19.40999  138     44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   8      6 19.40999  155     45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 121      0 16.49650    0    731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 121      1 16.49650   17    732</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 121      2 16.49650   50    733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 121      3 16.49650   85    734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 121      4 16.49650  112    735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 121      5 16.49650  144    736</span>
 </code></pre></div>
     </div>
   </div>
@@ -208,7 +222,7 @@ per observation in dtName</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

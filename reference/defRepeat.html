@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,40 +90,57 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">defRepeat</span><span class="op">(</span>
-  dtDefs <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">nVars</span>,
-  <span class="va">prefix</span>,
-  <span class="va">formula</span>,
-  variance <span class="op">=</span> <span class="fl">0</span>,
-  dist <span class="op">=</span> <span class="st">"normal"</span>,
-  link <span class="op">=</span> <span class="st">"identity"</span>,
-  id <span class="op">=</span> <span class="st">"id"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">defRepeat</span><span class="op">(</span></span>
+<span>  dtDefs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">nVars</span>,</span>
+<span>  <span class="va">prefix</span>,</span>
+<span>  <span class="va">formula</span>,</span>
+<span>  variance <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  dist <span class="op">=</span> <span class="st">"normal"</span>,</span>
+<span>  link <span class="op">=</span> <span class="st">"identity"</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"id"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtDefs</dt>
 <dd><p>Definition data.table to be modified</p></dd>
+
+
 <dt>nVars</dt>
 <dd><p>Number of new variables to define</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>Prefix (character) for new variables</p></dd>
+
+
 <dt>formula</dt>
 <dd><p>An R expression for mean (string)</p></dd>
+
+
 <dt>variance</dt>
 <dd><p>Number or formula</p></dd>
+
+
 <dt>dist</dt>
 <dd><p>Distribution. For possibilities, see details</p></dd>
+
+
 <dt>link</dt>
 <dd><p>The link function for the mean, see details</p></dd>
+
+
 <dt>id</dt>
 <dd><p>A string indicating the field name for the unique record identifier</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table named dtName that is an updated data definitions table</p>
+    
+
+<p>A data.table named dtName that is an updated data definitions table</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -136,15 +153,15 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defRepeat</span><span class="op">(</span></span>
-<span class="r-in">  nVars <span class="op">=</span> <span class="fl">4</span>, prefix <span class="op">=</span> <span class="st">"g"</span>, formula <span class="op">=</span> <span class="st">"1/3;1/3;1/3"</span>,</span>
-<span class="r-in">  variance <span class="op">=</span> <span class="fl">0</span>, dist <span class="op">=</span> <span class="st">"categorical"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"a"</span>, formula <span class="op">=</span> <span class="st">"1;1"</span>, dist <span class="op">=</span> <span class="st">"trtAssign"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defRepeat</span><span class="op">(</span><span class="va">def</span>, <span class="fl">8</span>, <span class="st">"b"</span>, formula <span class="op">=</span> <span class="st">"5 + a"</span>, variance <span class="op">=</span> <span class="fl">3</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, <span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"0.10"</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defRepeat</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  nVars <span class="op">=</span> <span class="fl">4</span>, prefix <span class="op">=</span> <span class="st">"g"</span>, formula <span class="op">=</span> <span class="st">"1/3;1/3;1/3"</span>,</span></span>
+<span class="r-in"><span>  variance <span class="op">=</span> <span class="fl">0</span>, dist <span class="op">=</span> <span class="st">"categorical"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"a"</span>, formula <span class="op">=</span> <span class="st">"1;1"</span>, dist <span class="op">=</span> <span class="st">"trtAssign"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defRepeat</span><span class="op">(</span><span class="va">def</span>, <span class="fl">8</span>, <span class="st">"b"</span>, formula <span class="op">=</span> <span class="st">"5 + a"</span>, variance <span class="op">=</span> <span class="fl">3</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, <span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"0.10"</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     varname     formula variance        dist     link</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:      g1 1/3;1/3;1/3        0 categorical identity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:      g2 1/3;1/3;1/3        0 categorical identity</span>
@@ -174,7 +191,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

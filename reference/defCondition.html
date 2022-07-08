@@ -20,7 +20,7 @@ existing definitions table"><!-- mathjax --><script src="https://cdnjs.cloudflar
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@ existing definitions table"><!-- mathjax --><script src="https://cdnjs.cloudflar
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -95,34 +95,47 @@ existing definitions table</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">defCondition</span><span class="op">(</span>
-  dtDefs <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">condition</span>,
-  <span class="va">formula</span>,
-  variance <span class="op">=</span> <span class="fl">0</span>,
-  dist <span class="op">=</span> <span class="st">"normal"</span>,
-  link <span class="op">=</span> <span class="st">"identity"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">defCondition</span><span class="op">(</span></span>
+<span>  dtDefs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">condition</span>,</span>
+<span>  <span class="va">formula</span>,</span>
+<span>  variance <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  dist <span class="op">=</span> <span class="st">"normal"</span>,</span>
+<span>  link <span class="op">=</span> <span class="st">"identity"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtDefs</dt>
 <dd><p>Name of definition table to be modified. Null if this is a new definition.</p></dd>
+
+
 <dt>condition</dt>
 <dd><p>Formula specifying condition to be checked</p></dd>
+
+
 <dt>formula</dt>
 <dd><p>An R expression for mean (string)</p></dd>
+
+
 <dt>variance</dt>
 <dd><p>Number</p></dd>
+
+
 <dt>dist</dt>
 <dd><p>Distribution. For possibilities, see details</p></dd>
+
+
 <dt>link</dt>
 <dd><p>The link function for the mean, see details</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table named dtName that is an updated data definitions table</p>
+    
+
+<p>A data.table named dtName that is an updated data definitions table</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -131,40 +144,40 @@ existing definitions table</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># New data set</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"y"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">def</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Add columns to dt</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">defC</span> <span class="op">&lt;-</span> <span class="fu">defCondition</span><span class="op">(</span></span>
-<span class="r-in">  condition <span class="op">=</span> <span class="st">"x == 1"</span>, formula <span class="op">=</span> <span class="st">"5 + 2*y"</span>,</span>
-<span class="r-in">  variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">defC</span> <span class="op">&lt;-</span> <span class="fu">defCondition</span><span class="op">(</span><span class="va">defC</span>,</span>
-<span class="r-in">  condition <span class="op">=</span> <span class="st">"x &lt;= 5 &amp; x &gt;= 2"</span>, formula <span class="op">=</span> <span class="st">"3 - 2*y"</span>,</span>
-<span class="r-in">  variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">defC</span> <span class="op">&lt;-</span> <span class="fu">defCondition</span><span class="op">(</span><span class="va">defC</span>,</span>
-<span class="r-in">  condition <span class="op">=</span> <span class="st">"x &gt;= 6"</span>, formula <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">defC</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># New data set</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, dist <span class="op">=</span> <span class="st">"noZeroPoisson"</span>, formula <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"y"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">def</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add columns to dt</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">defC</span> <span class="op">&lt;-</span> <span class="fu">defCondition</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  condition <span class="op">=</span> <span class="st">"x == 1"</span>, formula <span class="op">=</span> <span class="st">"5 + 2*y"</span>,</span></span>
+<span class="r-in"><span>  variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">defC</span> <span class="op">&lt;-</span> <span class="fu">defCondition</span><span class="op">(</span><span class="va">defC</span>,</span></span>
+<span class="r-in"><span>  condition <span class="op">=</span> <span class="st">"x &lt;= 5 &amp; x &gt;= 2"</span>, formula <span class="op">=</span> <span class="st">"3 - 2*y"</span>,</span></span>
+<span class="r-in"><span>  variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">defC</span> <span class="op">&lt;-</span> <span class="fu">defCondition</span><span class="op">(</span><span class="va">defC</span>,</span></span>
+<span class="r-in"><span>  condition <span class="op">=</span> <span class="st">"x &gt;= 6"</span>, formula <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">defC</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          condition formula variance   dist     link</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:          x == 1 5 + 2*y        1 normal identity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: x &lt;= 5 &amp; x &gt;= 2 3 - 2*y        1 normal identity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:          x &gt;= 6       1        1 normal identity</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Add conditional column with field name "z"</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="addCondition.html">addCondition</a></span><span class="op">(</span><span class="va">defC</span>, <span class="va">dt</span>, <span class="st">"z"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add conditional column with field name "z"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="addCondition.html">addCondition</a></span><span class="op">(</span><span class="va">defC</span>, <span class="va">dt</span>, <span class="st">"z"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id           z  x          y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1 12.60493882  5 -4.8401325</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2  0.06657201  4  1.1153079</span>
@@ -190,7 +203,7 @@ existing definitions table</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

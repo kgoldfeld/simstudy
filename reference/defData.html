@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,37 +90,52 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">defData</span><span class="op">(</span>
-  dtDefs <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">varname</span>,
-  <span class="va">formula</span>,
-  variance <span class="op">=</span> <span class="fl">0</span>,
-  dist <span class="op">=</span> <span class="st">"normal"</span>,
-  link <span class="op">=</span> <span class="st">"identity"</span>,
-  id <span class="op">=</span> <span class="st">"id"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">defData</span><span class="op">(</span></span>
+<span>  dtDefs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">varname</span>,</span>
+<span>  <span class="va">formula</span>,</span>
+<span>  variance <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  dist <span class="op">=</span> <span class="st">"normal"</span>,</span>
+<span>  link <span class="op">=</span> <span class="st">"identity"</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"id"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dtDefs</dt>
 <dd><p>Definition data.table to be modified</p></dd>
+
+
 <dt>varname</dt>
 <dd><p>Name (string) of new variable</p></dd>
+
+
 <dt>formula</dt>
 <dd><p>An R expression for mean (string)</p></dd>
+
+
 <dt>variance</dt>
 <dd><p>Number</p></dd>
+
+
 <dt>dist</dt>
 <dd><p>Distribution. For possibilities, see details</p></dd>
+
+
 <dt>link</dt>
 <dd><p>The link function for the mean, see details</p></dd>
+
+
 <dt>id</dt>
 <dd><p>A string indicating the field name for the unique record identifier</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table named dtName that is an updated data definitions table</p>
+    
+
+<p>A data.table named dtName that is an updated data definitions table</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -133,31 +148,31 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">extVar</span> <span class="op">&lt;-</span> <span class="fl">2.3</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xNr"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>, formula <span class="op">=</span> <span class="fl">7</span>, id <span class="op">=</span> <span class="st">"idnum"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xUni"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span>, formula <span class="op">=</span> <span class="st">"10;20"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"xNorm"</span>, formula <span class="op">=</span> <span class="st">"xNr + xUni * 2"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>,</span>
-<span class="r-in">  variance <span class="op">=</span> <span class="fl">8</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"xPois"</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, formula <span class="op">=</span> <span class="st">"xNr - 0.2 * xUni"</span>,</span>
-<span class="r-in">  link <span class="op">=</span> <span class="st">"log"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xCat"</span>, formula <span class="op">=</span> <span class="st">"0.3;0.2;0.5"</span>, dist <span class="op">=</span> <span class="st">"categorical"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"xGamma"</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, formula <span class="op">=</span> <span class="st">"5+xCat"</span>,</span>
-<span class="r-in">  variance <span class="op">=</span> <span class="fl">1</span>, link <span class="op">=</span> <span class="st">"log"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"xBin"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="st">"-3 + xCat"</span>,</span>
-<span class="r-in">  link <span class="op">=</span> <span class="st">"logit"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span>
-<span class="r-in">  varname <span class="op">=</span> <span class="st">"external"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>,</span>
-<span class="r-in">  formula <span class="op">=</span> <span class="st">"xBin * log(..extVar)"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">def</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">extVar</span> <span class="op">&lt;-</span> <span class="fl">2.3</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"xNr"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>, formula <span class="op">=</span> <span class="fl">7</span>, id <span class="op">=</span> <span class="st">"idnum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xUni"</span>, dist <span class="op">=</span> <span class="st">"uniform"</span>, formula <span class="op">=</span> <span class="st">"10;20"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"xNorm"</span>, formula <span class="op">=</span> <span class="st">"xNr + xUni * 2"</span>, dist <span class="op">=</span> <span class="st">"normal"</span>,</span></span>
+<span class="r-in"><span>  variance <span class="op">=</span> <span class="fl">8</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"xPois"</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, formula <span class="op">=</span> <span class="st">"xNr - 0.2 * xUni"</span>,</span></span>
+<span class="r-in"><span>  link <span class="op">=</span> <span class="st">"log"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>, varname <span class="op">=</span> <span class="st">"xCat"</span>, formula <span class="op">=</span> <span class="st">"0.3;0.2;0.5"</span>, dist <span class="op">=</span> <span class="st">"categorical"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"xGamma"</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, formula <span class="op">=</span> <span class="st">"5+xCat"</span>,</span></span>
+<span class="r-in"><span>  variance <span class="op">=</span> <span class="fl">1</span>, link <span class="op">=</span> <span class="st">"log"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"xBin"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="st">"-3 + xCat"</span>,</span></span>
+<span class="r-in"><span>  link <span class="op">=</span> <span class="st">"logit"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu">defData</span><span class="op">(</span><span class="va">def</span>,</span></span>
+<span class="r-in"><span>  varname <span class="op">=</span> <span class="st">"external"</span>, dist <span class="op">=</span> <span class="st">"nonrandom"</span>,</span></span>
+<span class="r-in"><span>  formula <span class="op">=</span> <span class="st">"xBin * log(..extVar)"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">def</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     varname              formula variance        dist     link</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      xNr                    7        0   nonrandom identity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     xUni                10;20        0     uniform identity</span>
@@ -181,7 +196,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>
