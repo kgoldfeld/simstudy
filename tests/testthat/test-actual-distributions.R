@@ -1,6 +1,3 @@
-library(hedgehog)
-freeze_eval <- names(.GlobalEnv)
-
 test_that("beta distributed data are generated correctly", {
   skip_on_cran()
   
@@ -42,4 +39,3 @@ test_that("gamma distributed data are generated correctly", {
   expect_true(all(abs(diffv - 1) < 0.25))
 })
 
-rm(list = setdiff(names(.GlobalEnv), freeze_eval), pos = .GlobalEnv)

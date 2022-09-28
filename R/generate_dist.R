@@ -515,6 +515,15 @@
 .parseUnifFormula <- function(formula, dtSim, n, envir) {
   range <- .splitFormula(formula)
 
+  if (length(range) != 2) {
+    stop(
+      paste(
+        "Formula for unifrom distributions must have",
+        "the format: 'min;max'. See ?distributions"
+      )
+    )
+  }
+  
   parsedRange <- .evalWith(range, .parseDotVars(range, envir), dtSim, n)
 
   r_min <- parsedRange[, 1]
