@@ -129,7 +129,7 @@ test_that("ordinal categorical data is generated correctly.", {
         as.numeric() / n
     },
     probs,
-    tolerance = 0.01
+    tolerance = 0.015
   )
   
   oldSeed <- .Random.seed
