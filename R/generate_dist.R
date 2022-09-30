@@ -523,12 +523,11 @@
       )
     )
   }
-
+  
   parsedRange <- .evalWith(range, .parseDotVars(range, envir), dtSim, n)
 
   r_min <- parsedRange[, 1]
   r_max <- parsedRange[, 2]
-
 
   if (any(r_min == r_max)) {
     warning(

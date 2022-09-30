@@ -70,14 +70,19 @@ test_that("'uniform' formula checked correctly", {
       x
     }),
     function(x) {
-      expect_silent(.genunif(x$n, x$range, NULL, environment()))
+      expect_silent(defData(varname = "z", formula = x$range, dist = "uniform"))
     }
   )
 
-  expect_warning(.genunif(3, "1;1", NULL, environment()), "are equal")
-  expect_error(.genunif(3, "", NULL, environment()), "format")
-  expect_error(.genunif(3, "1;2;3", NULL, environment()), "format")
-  expect_error(.genunif(3, "2;1", NULL, environment()), "'max' < 'min'")
+  expect_error(defData(varname = "z", formula = NULL, dist = "uniform", "format"))
+  expect_error(defData(varname = "z", formula = "1;2;3", dist = "uniform"), "format")
+  
+  def <- defData(varname = "z", formula = "2;1", dist = "uniform")
+  expect_error(genData(5, def), "Formula invalid: 'max' < 'min'")
+  
+  def <- defData(varname = "z", formula = "2;2", dist = "uniform")
+  expect_warning(genData(5, def), "'min' and 'max' are equal")
+  
 })
 
 # .genUnifInt ----
@@ -122,3 +127,24 @@ test_that("mixtures are generated correctly", {
   env <- environment()
   expect_silent(genData(1000, def, envir = env))
 })
+
+
+
+test_that("runif throws errors", {
+  expect_error(defData(varname = "u", formula = "5", dist = "uniform"))
+})
+
+test_that("treatment assignment data is generated as expected.",{
+  skip_on_cran()
+  n <- 100
+  def <- defData(varname = "grp", formula = .5, dist = "binary")
+  dt <- genData(n, def)
+  
+  expect_silent(.genAssign(dt, balanced = "identity", strata = 0, grpName = "rx", ratio = "1;1"))
+  expect_silent(.genAssign(dt, balanced = "identity", strata = "grp", grpName = "rx", ratio = "1;1"))
+  expect_silent(.genAssign(dt, balanced = "identity", strata = "grp", grpName = "rx", ratio = 4))
+  }
+)
+
+
+

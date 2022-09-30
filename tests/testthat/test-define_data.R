@@ -184,4 +184,5 @@ test_that("defRepeat throws errors correctly.", {
   expect_error(defRepeat(nVars = 4, prefix = "b", formula = "5 + a", variance = 3, dist = "normal"))
 })
 
+
 rm(list = setdiff(names(.GlobalEnv), freeze_eval), pos = .GlobalEnv)

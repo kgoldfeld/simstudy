@@ -1,5 +1,9 @@
 # simstudy (development version)
 
+## Minor fixes
+
+* Fixed bug in `trtAssign`
+
 # simstudy 0.5.0
 
 ## New features

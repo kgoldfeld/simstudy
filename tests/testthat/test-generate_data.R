@@ -39,8 +39,6 @@ test_that("vectorized variables work in formulas", {
 
 # genOrdCat ----
 test_that("genOrdCat throws errors.", {
-  oldSeed <- .Random.seed
-  set.seed(87920)
 
   expect_error(genOrdCat("not a data table", NULL, c(.1, .1)), class = "simstudy::wrongClass")
   expect_error(genOrdCat(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
@@ -101,14 +99,12 @@ test_that("genOrdCat throws errors.", {
     )
   })
 
-  set.seed(oldSeed)
 })
 
 library(magrittr)
 library(dplyr)
 test_that("ordinal categorical data is generated correctly.", {
-  oldSeed <- .Random.seed
-  set.seed(230920)
+
   n <- 10000
   probs_short <- c(.2, .4, .2)
   probs <- c(.2, .2, .6)
@@ -133,16 +129,19 @@ test_that("ordinal categorical data is generated correctly.", {
         as.numeric() / n
     },
     probs,
-    tolerance = 0.01
+    tolerance = 0.015
   )
+  
+  oldSeed <- .Random.seed
+  newSeed <- ceiling(runif(1)*1000000)
 
   expect_equal(
-    {
-      set.seed(123)
+    { 
+      set.seed(newSeed)
       genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "ind")
     },
     {
-      set.seed(123)
+      set.seed(newSeed)
       suppressWarnings(genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "notValid"),
         classes = "simstudy::optionInvalid"
       )
@@ -154,8 +153,7 @@ test_that("ordinal categorical data is generated correctly.", {
 
 
 test_that("non-proportional ordinal categorical data are generated correctly.", {
-  oldSeed <- .Random.seed
-  set.seed(87920)
+  skip_on_cran()
   n <- 100000
 
   d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
@@ -208,7 +206,6 @@ test_that("non-proportional ordinal categorical data are generated correctly.", 
     1.5,
   )
 
-  set.seed(oldSeed)
 })
 
 
@@ -218,9 +215,9 @@ test_that("deprecation warning shows up.", {
 })
 
 test_that("correlated ordinal categorical data is generated correctly.", {
+  skip_on_cran()
   library(pracma)
-  oldSeed <- .Random.seed
-  set.seed(230920)
+
   probs <- matrix(0.25, 5, 4)
   rownames(probs) <- letters[1:5]
   n <- 10000
@@ -232,7 +229,6 @@ test_that("correlated ordinal categorical data is generated correctly.", {
   distSum <- sum(diag(distmat(cdX, truMat)))
   expect_lte(distSum, 1)
 
-  set.seed(oldSeed)
 })
 
 # genFactor ----
@@ -264,6 +260,7 @@ test_that("genFactor throws erros", {
 })
 
 test_that("genFactor works.", {
+  skip_on_cran()
   dt <- data.table(
     id = 1:100, q1 = sample(1:5, 100, replace = TRUE),
     q2 = sample(1:5, 100, replace = TRUE),
@@ -279,12 +276,16 @@ test_that("genFactor works.", {
   expect_length(genFactor(copy(dt), c("q1", "q2")), 6)
   expect_length(genFactor(copy(dt), c("q1", "q2"), replace = TRUE), 4)
   expect_equal(genFactor(copy(dt), c("q1", "q2"), labels = labels), dt_res)
+  
+  def <- defData(varname = "cat", formula = ".2;.3;.5", dist = "categorical")
+  
+  dx <- genData(20, def)
+  expect_silent(genFactor(dx, "cat", labels = c("one", "two", "three")))
+
 })
 
 # genDummy ----
 test_that("genDummy throws errors.", {
-  oldSeed <- .Random.seed
-  set.seed(10076)
 
   d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
   d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
@@ -317,7 +318,6 @@ test_that("genDummy throws errors.", {
 
   expect_error(genDummy(dd3, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::alreadyDefined")
 
-  set.seed(oldSeed)
 })
 
 test_that("genDummy works.", {
@@ -375,8 +375,6 @@ test_that("genDummy works.", {
 
 # genFormula ----
 test_that("genFormula throws errors.", {
-  oldSeed <- .Random.seed
-  set.seed(24761)
 
   # Check coefficients and variables properly specified
   expect_error(genFormula(c(1, 2), c("a", "b", "c", "d")), class = "simstudy::coeffVar")
@@ -387,12 +385,9 @@ test_that("genFormula throws errors.", {
   # Check vars are type character
   expect_error(genFormula(c(1, 2, 3), c(12, 23, 34)), class = "simstudy::wrongType")
 
-  set.seed(oldSeed)
 })
 
 test_that("genFormula works.", {
-  oldSeed <- .Random.seed
-  set.seed(23456)
 
   # intercept
   expect_equal(genFormula(c(42, 54, 32, 2), c("A", "B", "C")), "42 + 54 * A + 32 * B + 2 * C")
@@ -406,13 +401,10 @@ test_that("genFormula works.", {
   # no intercept, double dot
   expect_equal(genFormula(c("..x", "..y", 4.1), c("a", "b", "..z")), "..x * a + ..y * b + 4.1 * ..z")
 
-  set.seed(oldSeed)
 })
 
 # genMarkov ----
 test_that("genMarkov throws errors.", {
-  oldSeed <- .Random.seed
-  set.seed(24761)
 
   # check transMat is matrix
   mat1 <- c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9)
@@ -439,14 +431,15 @@ test_that("genMarkov throws errors.", {
   mat6 <- t(matrix(c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9), nrow = 3, ncol = 3))
   expect_error(genMarkov(n = 10, transMat = mat6, chainLen = 5, wide = TRUE, startProb = ".7;.3"), class = "simstudy::lengthMismatch")
 
-  set.seed(oldSeed)
 })
 
 test_that("genMarkov works.", {
+  
+  skip_on_cran()
+  
   oldSeed <- .Random.seed
-  set.seed(23456)
-
-
+  newSeed <- ceiling(runif(1)*1000000)
+  
   # not startProb
   ## pk
   mat_pow <- function(x, k) {
@@ -467,7 +460,9 @@ test_that("genMarkov works.", {
   theoretical_p <- mat_pow(matr, 100)[1, ]
 
   nind <- 10
-  nchain <- 5000
+  nchain <- 10000
+  
+  set.seed(newSeed)
 
   gm1 <- genMarkov(n = nind, transMat = matr, chainLen = nchain)
 
@@ -476,7 +471,7 @@ test_that("genMarkov works.", {
   prop[, t.p := rep(theoretical_p, max(id))]
   prop[, dif := abs(p - t.p)]
 
-  expect_true(all(prop[, dif < 0.02]))
+  expect_true(all(prop[, dif < 0.03]))
 
   ## correct number of events gen
   expect_equal(nchain, gm1[, max(period)])
@@ -486,7 +481,6 @@ test_that("genMarkov works.", {
 
   # startProb
   ## pk
-  set.seed(23456)
   gm2 <- genMarkov(n = nind, transMat = matr, chainLen = nchain, startProb = "0.65;0.25;0.05;0.05")
 
   prop <- gm1[, .N, keyby = .(id, state)]
@@ -494,7 +488,7 @@ test_that("genMarkov works.", {
   prop[, t.p := rep(theoretical_p, max(id))]
   prop[, dif := abs(p - t.p)]
 
-  expect_true(all(prop[, dif < 0.02]))
+  expect_true(all(prop[, dif < 0.03]))
 
   ## correct number of events gen
   expect_equal(nchain, gm2[, max(period)])
@@ -504,10 +498,11 @@ test_that("genMarkov works.", {
 
 
   # not wide == wide
-  set.seed(23456)
+  
+  set.seed(newSeed)
+  
   gm1_w <- genMarkov(n = nind, transMat = matr, chainLen = nchain, wide = TRUE)
 
-  set.seed(23456)
   gm2_w <- genMarkov(n = nind, transMat = matr, chainLen = nchain, wide = TRUE, startProb = "0.65;0.25;0.05;0.05")
 
   check_equal <- function(gm_not_wide, gm_wide) {
@@ -519,18 +514,15 @@ test_that("genMarkov works.", {
     expect_equal(as.numeric(gmnw), as.numeric(gmw))
   }
 
-  for (i in 1:5) {
-    check_equal(gm1, gm1_w)
-    check_equal(gm2, gm2_w)
-  }
-
+  
+  check_equal(gm1, gm1_w)
+  check_equal(gm2, gm2_w)
+  
   set.seed(oldSeed)
 })
 
 # genMultiFac ----
 test_that("genMultiFac throws errors.", {
-  oldSeed <- .Random.seed
-  set.seed(98765)
 
   # check nFactors are integers
   expect_error(genMultiFac(1.4, each = 4), class = "simstudy::wrongType")
@@ -544,11 +536,9 @@ test_that("genMultiFac throws errors.", {
   # check coding == 'effect' or 'dummy'
   expect_error(genMultiFac(2, each = 3, coding = "trtAssign"), class = "simstudy::codingVal")
 
-  set.seed(oldSeed)
 })
 
 test_that("genMultiFac works.", {
-  oldSeed <- .Random.seed
 
   # coding == dummy, levels == 2
   nFac <- sample(2:5, size = 1)
@@ -644,8 +634,6 @@ test_that("genMultiFac works.", {
   columnNames <- colnames(g5[, 2:(nFac + 1)])
   expect_equal(colNames, columnNames)
 
-
-  set.seed(oldSeed)
 })
 
 
@@ -703,5 +691,115 @@ test_that("genSynthetic works.", {
   S <- genSynthetic(A, n = n, vars = c("a", "b"))
   expect_true(all(names(S) == c("id", "a", "b")))
   expect_true(nrow(S) == n)
+})
+
+test_that("genSurv works correctly.", {
+  skip_on_cran()
+  def <- defData(varname = "x1", formula = 0.5, dist = "binary")
+  def <- defData(def, varname = "grp", formula = 0.5, dist = "binary")
+  
+  sdef <- defSurv(varname = "survTime", formula = "1.5*x1", scale = "grp*50 + (1-grp)*25",
+                  shape = "grp*1 + (1-grp)*1.5")
+  sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
+  dtSurv <- genData(300, def)
+  expect_silent(genSurv(dtSurv, sdef))
+  
+  def <- defData(varname = "x", formula = 0.4, dist = "binary")
+  
+  defS <- defSurv(varname = "death", formula = "-14.6 - 1.3*x", shape = 0.35, transition = 0)
+  defS <- defSurv(defS, varname = "death", formula = "-14.6 - 0.4*x", shape = 0.35,
+                  transition = 150)
+  defS <- defSurv(defS, varname = "censor", scale = exp(13), shape = 0.5)
+  
+  dd <- genData(500, def)
+  expect_silent(genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor"))
+  
+})
+
+test_that("genSurv throws off correct errors.", {
+  skip_on_cran()
+  def <- defData(varname = "x1", formula = 0.5, dist = "binary")
+  def <- defData(def,varname = "x2", formula = 0.5, dist = "binary")
+  def <- defData(def, varname = "grp", formula = 0.5, dist = "binary")
+  dtSurv <- genData(300, def)
+  
+  sdef <- defSurv(varname = "survTime", formula = "1.5*x1", scale = "grp*50 + (1-grp)*25",
+                  shape = "grp*1 + (1-grp)*1.5")
+  sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
+  
+  expect_error(genSurv(dtSurv), class = "simstudy::missingArgument")
+  
+  notDef <- 0
+  expect_error(genSurv(dtSurv, notDef), class = "simstudy::wrongClass")
+  
+  sdefbad <- defSurv(varname = "x2", formula = "1.5*x1", scale = 25,
+                  shape = 1.5)
+  expect_error(genSurv(dtSurv, sdefbad), class = "simstudy::alreadyDefined")
+
+  expect_error(genSurv(dtSurv, sdef, digits = "a"), class = "simstudy::wrongClass")
+  expect_error(genSurv(dtSurv, sdef, digits = c(1,2,3)), class = "simstudy::lengthMismatch")
+
+  expect_error(genSurv(dtSurv, sdef, idName = "ID"), class = "simstudy::notDefined")
+})
+
+test_that("genSpline doesn't throw any errors", {
+  
+  skip_on_cran()
+  
+  ddef <- defData(varname = "x1", formula = "0;1", dist = "uniform")
+  theta1 <- c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
+
+  knots <- c(0.25, 0.5, 0.75)
+  expect_silent(viewSplines(knots = knots, theta = theta1, degree = 3))
+
+  dt <- genData(1000, ddef)
+  expect_silent(genSpline( dt = dt, newvar = "weight",
+                 predictor = "x1", theta = theta1,
+                 knots = knots, degree = 3,
+                 noise.var = .025))
+  
+  ddef <- defData(varname = "x1", formula = "20;60", dist = "uniform")
+  dt <- genData(1000, ddef)
+  expect_silent(genSpline( dt = dt, newvar = "weight",
+                           predictor = "x1", theta = theta1,
+                           knots = knots, degree = 3,
+                           noise.var = .025))
+  
+  expect_silent(genSpline( dt = dt, newvar = "weight",
+                           predictor = "x1", theta = theta1,
+                           knots = knots, degree = 3,newrange = "0;10",
+                           noise.var = .025))
+  
+})
+
+test_that("genSpline throws errors", {
+  skip_on_cran()
+  
+  ddef <- defData(varname = "x1", formula = "0;1", dist = "uniform")
+  theta1 <- c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
+  
+  knots <- c(0.25, 0.5, 0.75)
+  
+  dt <- genData(1000, ddef)
+  expect_error(genSpline( dt = ddd, newvar = "weight",
+                           predictor = "x1", theta = theta1,
+                           knots = knots, degree = 3,
+                           noise.var = .025), regexp = "Data table does not exist.")
+  expect_error(genSpline( dt = dt, newvar = "weight",
+                          predictor = "x2", theta = theta1,
+                          knots = knots, degree = 3,
+                          noise.var = .025), regexp = "not in data.table")
+  expect_error(genSpline( dt = dt, newvar = 5,
+                          predictor = "x1", theta = theta1,
+                          knots = knots, degree = 3,
+                          noise.var = .025), regexp = "newvar must be a string")
+  expect_error(genSpline( dt = dt, newvar = "weight",
+                          predictor = "x1", theta = theta1,
+                          knots = knots, degree = 3, newrange = "4;3;2",
+                          noise.var = .025), regexp = "Range not specified as two values")
+  # expect_error(genSpline( dt = dt, newvar = "weight",
+  #                         predictor = "x1", theta = theta1,
+  #                         knots = knots, degree = 3, newrange = "1;a",
+  #                         noise.var = .025), regexp = "Non-numbers entered in range")
 })
 
