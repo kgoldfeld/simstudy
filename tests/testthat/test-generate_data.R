@@ -597,8 +597,7 @@ test_that("genMultiFac works.", {
 
   # checks all values are in correct range
   expect_true(all(g3[, 2:(nFac + 1), with = FALSE] <= nLev))
-  expect_true(all(g3[, 2:(nFac + 1), with = FALSE] > 0))
-
+  if (nLev > 2) expect_true(all(g3[, 2:(nFac + 1), with = FALSE] > 0))
 
   ## levels == other, len(levels) != 1
   nFac <- sample(2:5, size = 1)

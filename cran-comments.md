@@ -1,6 +1,6 @@
-## Resubmission 2022JUL08
+## Resubmission 2022OCT03
 
-This is a submission of version 0.5.0
+This is a submission of version 0.5.1
 
 Developed with R Version 4.2.1
 

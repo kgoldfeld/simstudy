@@ -55,15 +55,13 @@ So, the parameterization of some of the data generating processes may
 not follow the standard parameterizations for the specific
 distributions. For example, in `simstudy` *gamma*-distributed data are
 generated based on the specification of a mean μ (or log(μ)) and a
-dispersion
-![d](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;d "d"),
-rather than shape α and rate β parameters that more typically
-characterize the *gamma* distribution. When we estimate the parameters,
-we are modeling μ (or some function of μ), so we should explicitly
-recover the `simstudy` parameters used to generate the model, thus
-illuminating the relationship between the underlying data generating
-processes and the models. For more details on the package, use cases,
-examples, and function reference see the [documentation
+dispersion $d$, rather than shape α and rate β parameters that more
+typically characterize the *gamma* distribution. When we estimate the
+parameters, we are modeling μ (or some function of μ), so we should
+explicitly recover the `simstudy` parameters used to generate the model,
+thus illuminating the relationship between the underlying data
+generating processes and the models. For more details on the package,
+use cases, examples, and function reference see the [documentation
 page](https://kgoldfeld.github.io/simstudy/articles/simstudy.html).
 
 ## Installation
@@ -98,18 +96,18 @@ dd <- genData(250, def)
 dd <- trtAssign(dd, nTrt = 4, grpName = "grp", balanced = TRUE)
 
 dd
-#>       id  x y grp
-#>   1:   1 11 8   4
-#>   2:   2 10 7   4
-#>   3:   3  8 6   3
-#>   4:   4 11 9   4
-#>   5:   5  9 6   4
-#>  ---             
-#> 246: 246  8 7   2
-#> 247: 247  8 8   2
-#> 248: 248 10 8   3
-#> 249: 249  8 6   1
-#> 250: 250  9 7   3
+#>       id         x        y grp
+#>   1:   1 11.191960 8.949389   4
+#>   2:   2 10.418375 7.372060   4
+#>   3:   3  8.512109 6.925844   3
+#>   4:   4 11.361632 9.850340   4
+#>   5:   5  9.928811 6.515463   4
+#>  ---                           
+#> 246: 246  8.220609 7.898416   2
+#> 247: 247  8.531483 8.681783   2
+#> 248: 248 10.507370 8.552350   3
+#> 249: 249  8.621339 6.652300   1
+#> 250: 250  9.508164 7.083845   3
 ```
 
 ## Contributing & Support

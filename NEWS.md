@@ -1,4 +1,4 @@
-# simstudy (development version)
+# simstudy 0.5.1
 
 ## Minor fixes
 
