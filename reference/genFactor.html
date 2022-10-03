@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -164,7 +164,6 @@ referenced varname will be removed.</p></dd>
 <span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="trtAssign.html">trtAssign</a></span><span class="op">(</span>dtName <span class="op">=</span> <span class="va">dx</span>, <span class="fl">2</span>, grpName <span class="op">=</span> <span class="st">"studyArm"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genFactor</span><span class="op">(</span><span class="va">dx</span>, varname <span class="op">=</span> <span class="st">"studyArm"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"treatment"</span><span class="op">)</span>, prefix <span class="op">=</span> <span class="st">"t_"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Invalid .internal.selfref detected and fixed by taking a (shallow) copy of the data.table so that := can add this new column by reference. At an earlier point, this data.table has been copied by R (or was created manually using structure() or similar). Avoid names&lt;- and attr&lt;- which in R currently (and oddly) may copy the whole data.table. Use set* syntax instead to avoid copying: ?set, ?setnames and ?setattr. If this message doesn't help, please report your use case to the data.table issue tracker so the root cause can be fixed or this message improved.</span>
 <span class="r-in"><span><span class="va">dx</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id studyArm t_studyArm</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1        0    control</span>
@@ -191,7 +190,7 @@ referenced varname will be removed.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer></div>
