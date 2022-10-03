@@ -1,5 +1,3 @@
-# simstudy 0.5.2
-
 # simstudy 0.5.1
 
 ## Minor fixes
