@@ -137,17 +137,17 @@
 <span></span>
 <span><span class="va">study1</span></span></code></pre></div>
 <pre><code><span><span class="co">##      cid male over65  baseDBP rxGrp</span></span>
-<span><span class="co">##   1:   1    0      0 67.55686     2</span></span>
-<span><span class="co">##   2:   2    0      0 79.76768     3</span></span>
-<span><span class="co">##   3:   3    0      0 66.81909     3</span></span>
-<span><span class="co">##   4:   4    1      0 65.01641     3</span></span>
-<span><span class="co">##   5:   5    1      1 59.35080     2</span></span>
+<span><span class="co">##   1:   1    0      0 74.72340     2</span></span>
+<span><span class="co">##   2:   2    0      0 66.98379     3</span></span>
+<span><span class="co">##   3:   3    1      1 61.23984     2</span></span>
+<span><span class="co">##   4:   4    0      0 69.45394     2</span></span>
+<span><span class="co">##   5:   5    0      0 79.65551     3</span></span>
 <span><span class="co">##  ---                               </span></span>
-<span><span class="co">## 326: 326    0      0 83.18956     1</span></span>
-<span><span class="co">## 327: 327    0      0 79.10286     2</span></span>
-<span><span class="co">## 328: 328    0      0 71.82892     2</span></span>
-<span><span class="co">## 329: 329    1      1 68.69527     1</span></span>
-<span><span class="co">## 330: 330    1      0 66.10161     3</span></span></code></pre>
+<span><span class="co">## 326: 326    0      1 74.02863     3</span></span>
+<span><span class="co">## 327: 327    0      0 68.87904     3</span></span>
+<span><span class="co">## 328: 328    0      0 69.37061     1</span></span>
+<span><span class="co">## 329: 329    1      0 69.03187     2</span></span>
+<span><span class="co">## 330: 330    1      0 84.17809     1</span></span></code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></span></code></pre></div>
@@ -173,29 +173,29 @@
 <span><span class="va">dtstudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">330</span>, <span class="va">def</span><span class="op">)</span></span>
 <span><span class="va">dtstudy</span></span></code></pre></div>
 <pre><code><span><span class="co">##      cid male over65 rx         y</span></span>
-<span><span class="co">##   1:   1    0      1  1 38.256599</span></span>
-<span><span class="co">##   2:   2    0      0  1 30.269997</span></span>
-<span><span class="co">##   3:   3    0      0  0  9.672143</span></span>
-<span><span class="co">##   4:   4    0      0  0 21.471403</span></span>
-<span><span class="co">##   5:   5    0      1  0 31.187661</span></span>
+<span><span class="co">##   1:   1    0      0  1 33.095906</span></span>
+<span><span class="co">##   2:   2    1      0  1 37.220943</span></span>
+<span><span class="co">##   3:   3    0      0  1  9.109047</span></span>
+<span><span class="co">##   4:   4    1      1  0 35.783409</span></span>
+<span><span class="co">##   5:   5    1      0  0 30.706387</span></span>
 <span><span class="co">##  ---                             </span></span>
-<span><span class="co">## 326: 326    0      0  0  8.843979</span></span>
-<span><span class="co">## 327: 327    0      0  1 28.894270</span></span>
-<span><span class="co">## 328: 328    1      0  1 44.572280</span></span>
-<span><span class="co">## 329: 329    0      0  1 19.111388</span></span>
-<span><span class="co">## 330: 330    1      1  0 39.449855</span></span></code></pre>
+<span><span class="co">## 326: 326    0      0  1 33.339397</span></span>
+<span><span class="co">## 327: 327    1      0  0 25.250282</span></span>
+<span><span class="co">## 328: 328    1      0  1 42.951131</span></span>
+<span><span class="co">## 329: 329    0      0  0 29.420319</span></span>
+<span><span class="co">## 330: 330    0      0  1 26.944537</span></span></code></pre>
 <p>Here are the counts and average outcomes for each <em>gender</em>, <em>age</em>, and <em>treatment</em> combination:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtstudy</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>n <span class="op">=</span> <span class="va">.N</span>, avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">male</span>, <span class="va">over65</span>, <span class="va">rx</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##    male over65 rx  n  avg</span></span>
-<span><span class="co">## 1:    0      0  0 73 20.3</span></span>
-<span><span class="co">## 2:    0      0  1 74 30.8</span></span>
-<span><span class="co">## 3:    0      1  0 16 31.2</span></span>
-<span><span class="co">## 4:    0      1  1 17 38.0</span></span>
-<span><span class="co">## 5:    1      0  0 49 25.2</span></span>
-<span><span class="co">## 6:    1      0  1 49 36.5</span></span>
-<span><span class="co">## 7:    1      1  0 26 37.3</span></span>
-<span><span class="co">## 8:    1      1  1 26 43.2</span></span></code></pre>
+<span><span class="co">## 1:    0      0  0 68 19.7</span></span>
+<span><span class="co">## 2:    0      0  1 68 30.0</span></span>
+<span><span class="co">## 3:    0      1  0 11 28.7</span></span>
+<span><span class="co">## 4:    0      1  1 12 41.6</span></span>
+<span><span class="co">## 5:    1      0  0 61 25.7</span></span>
+<span><span class="co">## 6:    1      0  1 61 33.3</span></span>
+<span><span class="co">## 7:    1      1  0 25 35.0</span></span>
+<span><span class="co">## 8:    1      1  1 24 44.9</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="observed-treatment">Observed treatment<a class="anchor" aria-label="anchor" href="#observed-treatment"></a>
