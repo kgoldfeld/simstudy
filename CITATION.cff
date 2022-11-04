@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.2.1
+# CITATION file created with {cffr} R package, v0.3.0
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -8,7 +8,7 @@ message: 'To cite package "simstudy" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'simstudy: Simulation of Study Data'
-version: 0.4.0.9000
+version: 0.5.1.9000
 doi: 10.21105/joss.02763
 abstract: Simulates data sets in order to explore modeling techniques or better understand
   data generating processes. The user specifies a set of relationships between covariates,
@@ -49,7 +49,7 @@ preferred-citation:
 repository: https://CRAN.R-project.org/package=simstudy
 repository-code: https://github.com/kgoldfeld/simstudy
 url: https://kgoldfeld.github.io/simstudy/
-date-released: '2022-01-18'
+date-released: '2022-10-03'
 contact:
 - family-names: Goldfeld
   given-names: Keith
@@ -329,6 +329,9 @@ references:
     given-names: Martin
     email: mmaechler+Matrix@gmail.com
     orcid: https://orcid.org/0000-0002-8685-9910
+  - family-names: Jagan
+    given-names: Mikael
+    orcid: https://orcid.org/0000-0002-3542-2938
   year: '2022'
   url: https://CRAN.R-project.org/package=Matrix
 - type: software
@@ -485,6 +488,16 @@ references:
     email: przemyslaw.biecek@gmail.com
   year: '2022'
   url: https://CRAN.R-project.org/package=survminer
+- type: software
+  title: blockmatrix
+  abstract: 'blockmatrix: blockmatrix: Tools to solve algebraic systems with partitioned
+    matrices'
+  notes: Suggests
+  authors:
+  - family-names: Cordano
+    given-names: Emanuele
+  year: '2022'
+  url: https://CRAN.R-project.org/package=blockmatrix
 identifiers:
 - type: url
   value: https://kgoldfeld.github.io/simstudy/dev/
