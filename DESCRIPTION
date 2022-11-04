@@ -57,7 +57,8 @@ Suggests:
     survival,
     testthat,
     gtsummary,
-    survminer
+    survminer,
+    blockmatrix
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
