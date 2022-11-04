@@ -87,6 +87,21 @@ assertAtLeastLength <- function(..., length, call = sys.call(-1)) {
   }
 }
 
+#' Are all elements of vector probabilities?
+#'
+#' @description Checks if passed vector includes only proper probabilities
+#' @param vec Vector under consideration
+#' @noRd
+assertAtLeast <- function(..., minVal, call = sys.call(-1)) {
+  
+  dots <- dots2argNames(...)
+  correctSize <- dots$args >= minVal
+  
+  if (!all(correctSize)) {
+    minError(dots$names[!correctSize], minVal, call = call)
+  }
+}
+
 #' Check for Class
 #'
 #' @description Checks if all passed vars inherit from class.
@@ -334,6 +349,8 @@ assertProbability <- function(vec, call = sys.call(-1)) {
     probError(name, call = call)
   }
 }
+
+
 
 #' Ensure Length
 #'

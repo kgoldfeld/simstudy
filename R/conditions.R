@@ -49,6 +49,24 @@ lengthError <- function(names,
   stop(c)
 }
 
+#' Value below threshold error
+#'
+#' @param names Names of fields below threshold
+#' @param prop Which property should hold e.g. "equal".
+#' @param call sys.call to pass on to the error.
+#' @param msg Error message as glueCollapse'able string.
+#' @noRd
+minError <- function(names,
+                        value = 1,
+                        call = sys.call(-1),
+                        msg = "{ names *} should be at least { value }!", ...) {
+  c <- condition(
+    c("simstudy::minError", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
+}
+
 #' Order Error
 #'
 #' @param name Name of the incorrectly ordered vector

@@ -600,12 +600,11 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' @param corstr Correlation structure for the matrix. Options include "ind" 
 #' for an independence structure (default), cs" for a compound symmetry 
 #' structure and "ar1" for an autoregressive structure.
-#' @param iRho Optional second correlation coefficient for within-individual
+#' @param iRho Optional second correlation coefficient for within-individual across-period
 #' correlation in case the measurements for individuals are repeated over time. 
 #' This will use the same correlation structure as the between-individual correlation
-#' specified by *corstr*.
+#' specified by "corstr".
 #' @return A block correlation matrix of size (nInds \* nPeriods) x (nInds \* nPeriods) 
-#' @details
 #' @examples
 #' genBlockMat(rho = 0.6, nInds = 2, nPeriods = 3, corstr = "ind")
 #' genBlockMat(rho = 0.6, nInds = 2, nPeriods = 3, corstr = "cs")
@@ -616,9 +615,8 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' @export
 #' @concept correlated
 genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind", 
-                           iRho = NULL) {
+                        iRho = NULL) {
   
-  # check nPeriods > 1 and integer
   # check rho >=0 and <=1
   # can't have iRho != NULL and corstr == ind
   # if length(rho) > 1 then length(rho) == nPeriods
@@ -626,6 +624,16 @@ genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind",
   # if length(rho > 1) then ignore corstr
   
   # add vector of rho and iRho (must be same as nPeriods (1 less for iRho))
+  
+  ### Checking
+  
+  assertNotMissing(rho = missing(rho), nInds = missing(nInds),
+                   nPeriods = missing(nPeriods))
+  
+  assertInteger(nInds = nInds, nPeriods = nPeriods)
+  assertAtLeast(nPeriods = nPeriods, minVal = 2)
+  
+  ###
   
   assignDiag <- function(block, value) {
     diag(block) <- value
@@ -681,4 +689,3 @@ genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind",
   as.matrix(bm)
   
 }
-
