@@ -49,6 +49,23 @@ assertEqual <- function(..., val, call = sys.call(-1)) {
   }
 }
 
+#' Are arguments not equal to value?
+#'
+#' @description Checks if all passed vars are not equal to given value.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param val Value to check if variables are equal to
+#' @noRd
+assertNotEqual <- function(..., val, call = sys.call(-1), msg="") {
+  dots <- dots2argNames(...)
+  
+  Equal <- !sapply(dots$args, function(i) {
+    i != val
+  })
+  if (any(Equal)) {
+    equalError(dots$names, val, call = call, msg)
+  }
+}
+
 #' Is length correct?
 #'
 #' @description Checks if all passed vars are of length 'length'. Caveat:
@@ -321,6 +338,7 @@ assertDescending <- function(vec, call = sys.call(-1)) {
     orderError(name, "descending", call = call)
   }
 }
+
 
 #' Are all elements of vector positive?
 #'

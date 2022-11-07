@@ -587,7 +587,6 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
   )
 }
 
-
 #' Create a block correlation matrix
 #' @description  The function genBlockMat() generates correlation matrices that 
 #' can accommodate clustered observations over time where the within-cluster 
@@ -617,14 +616,6 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind", 
                         iRho = NULL) {
   
-  # check rho >=0 and <=1
-  # can't have iRho != NULL and corstr == ind
-  # if length(rho) > 1 then length(rho) == nPeriods
-  # if length(rho) > 1 and iRho != NULL, then length(iRho) == (nPeriods - 1)
-  # if length(rho > 1) then ignore corstr
-  
-  # add vector of rho and iRho (must be same as nPeriods (1 less for iRho))
-  
   ### Checking
   
   assertNotMissing(rho = missing(rho), nInds = missing(nInds),
@@ -632,6 +623,24 @@ genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind",
   
   assertInteger(nInds = nInds, nPeriods = nPeriods)
   assertAtLeast(nPeriods = nPeriods, minVal = 2)
+  assertInRange(rho = rho, range = c(-1,1))
+  
+  if (!is.null(iRho)) {
+    assertInRange(iRho = iRho, range = c(-1,1))
+    if (length(rho) == 1) {
+      assertNotEqual(corstr = corstr, val = "ind", 
+        msg = " With iRho set, corstr should be either cs or ar1.")  
+    }
+  }
+  
+  if (length(rho) > 1) {
+    assertLength(rho = rho, length = nPeriods)
+    if (!is.null(iRho)) {
+      assertLength(iRho = iRho, length = (nPeriods - 1))
+    }
+  }
+  
+  assertOption(corstr = corstr, options = c("ind", "cs", "ar1"))
   
   ###
   

@@ -7,6 +7,43 @@ test_that("assertNotMissing works.", {
   expect_error(testFunc(3, 2), regexp = "z", class = "simstudy::missingArgument")
 })
 
+test_that("assertNotEqual works.", {
+  expect_silent(assertNotEqual(x = 1, y = 1, val = 2))
+  expect_error(assertNotEqual(x = 1, val = 1, class = "simstudy::equal"))
+})
+
+test_that("assertAtLeast works.", {
+  expect_silent(assertAtLeast(x = 2,  minVal = 2))
+  expect_error(assertAtLeast(x = 1, minVal = 2), class = "simstudy::minError")
+})
+
+test_that("assertNotInVector works.", {
+  expect_silent(assertNotInVector(var = 4, vec = c(1, 2, 3)))
+  expect_error(assertNotInVector(var = 2, vec = c(1, 2, 3)), class = "simstudy::alreadyInVector")
+})
+
+test_that("assertAscending works.", {
+  expect_silent(assertAscending(vec = c(1, 3, 5)))
+  expect_error(assertAscending(vec = c(3, 1, 5)), class = "simstudy::wrongOrder")
+})
+
+test_that("assertDescending works.", {
+  expect_silent(assertDescending(vec = c(5, 3, 1)))
+  expect_error(assertDescending(vec = c(3, 1, 5)), class = "simstudy::wrongOrder")
+})
+
+test_that("assertPositive works.", {
+  expect_silent(assertPositive(vec = c(1, 2, 1)))
+  expect_error(assertPositive(vec = c(3, 1, 0)), class = "simstudy::wrongSign")
+})
+
+test_that("assertProbability works.", {
+  p <- runif(5, 0, 1)
+  expect_silent(assertProbability(vec = p))
+  n <- rnorm(5, 0, 25)
+  expect_error(assertProbability(vec = n), class = "simstudy::probError")
+})
+
 test_that("assertLengthEqual works.", {
   expect_error(assertLengthEqual(x = 5, y = c(1, 3)), class = "simstudy::lengthMismatch")
   expect_error(assertLengthEqual(x = 5, y = c(1, 3), z = list(a = 1, b = 2)), class = "simstudy::lengthMismatch")

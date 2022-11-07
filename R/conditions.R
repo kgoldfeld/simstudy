@@ -424,3 +424,23 @@ notEqualError <- function(names, val, call = sys.call(-1), msg = "", ...) {
   )
   stop(c)
 }
+
+#' Variables not equal to value error.
+#'
+#' @param names Names of the variables.
+#' @param val Value to be not equal to.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+equalError <- function(names, val, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "{ names *} equal to {val}!", msg
+  )
+  
+  c <- condition(
+    c("simstudy::equal", "error"),
+    message, call, ...
+  )
+  stop(c)
+}
