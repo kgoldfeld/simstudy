@@ -616,6 +616,13 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind", 
                         iRho = NULL) {
   
+  if (!requireNamespace("blockmatrix", quietly = TRUE)) {
+    stop(
+      "Package \"blockmatrix\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
+  
   ### Checking
   
   assertNotMissing(rho = missing(rho), nInds = missing(nInds),
@@ -684,7 +691,6 @@ genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind",
   blocks <- lapply(1:nPeriods, function(x) matrix(rvec[x], nInds, nInds))
   blocks <- lapply(1:nPeriods, function(x) assignDiag(blocks[[x]], irvec[x]))
   
-  diag(blocks[[1]]) <- 1
   names(blocks) <- paste0("M", c(1 : nPeriods))
   
   ### put blocks together
