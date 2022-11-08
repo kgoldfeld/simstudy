@@ -49,6 +49,23 @@ assertEqual <- function(..., val, call = sys.call(-1)) {
   }
 }
 
+#' Are arguments not equal to value?
+#'
+#' @description Checks if all passed vars are not equal to given value.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param val Value to check if variables are equal to
+#' @noRd
+assertNotEqual <- function(..., val, call = sys.call(-1), msg="") {
+  dots <- dots2argNames(...)
+  
+  Equal <- !sapply(dots$args, function(i) {
+    i != val
+  })
+  if (any(Equal)) {
+    equalError(dots$names, val, call = call, msg)
+  }
+}
+
 #' Is length correct?
 #'
 #' @description Checks if all passed vars are of length 'length'. Caveat:
@@ -84,6 +101,21 @@ assertAtLeastLength <- function(..., length, call = sys.call(-1)) {
       prop = length,
       msg = "{ names *} should be at least length { prop }!", call = call
     )
+  }
+}
+
+#' Are all elements of vector probabilities?
+#'
+#' @description Checks if passed vector includes only proper probabilities
+#' @param vec Vector under consideration
+#' @noRd
+assertAtLeast <- function(..., minVal, call = sys.call(-1)) {
+  
+  dots <- dots2argNames(...)
+  correctSize <- dots$args >= minVal
+  
+  if (!all(correctSize)) {
+    minError(dots$names[!correctSize], minVal, call = call)
   }
 }
 
@@ -307,6 +339,7 @@ assertDescending <- function(vec, call = sys.call(-1)) {
   }
 }
 
+
 #' Are all elements of vector positive?
 #'
 #' @description Checks if passed vector is includes only positive values
@@ -334,6 +367,8 @@ assertProbability <- function(vec, call = sys.call(-1)) {
     probError(name, call = call)
   }
 }
+
+
 
 #' Ensure Length
 #'

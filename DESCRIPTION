@@ -57,10 +57,11 @@ Suggests:
     survival,
     testthat,
     gtsummary,
-    survminer
+    survminer,
+    blockmatrix
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1

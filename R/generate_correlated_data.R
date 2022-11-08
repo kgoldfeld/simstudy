@@ -586,3 +586,121 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
     asFactor = FALSE
   )
 }
+
+#' Create a block correlation matrix
+#' @description  The function genBlockMat() generates correlation matrices that 
+#' can accommodate clustered observations over time where the within-cluster 
+#' between-individual correlation in the same time period can be different from the 
+#' within-cluster between-individual correlation across time periods.The matrix
+#' generated here can be used in function addCorGen().
+#' @param rho The correlation coefficient between 0 and 1.
+#' @param nInds The number of units (individuals) in each period.
+#' @param nPeriods The number periods that data are observed.
+#' @param corstr Correlation structure for the matrix. Options include "ind" 
+#' for an independence structure (default), cs" for a compound symmetry 
+#' structure and "ar1" for an autoregressive structure.
+#' @param iRho Optional second correlation coefficient for within-individual across-period
+#' correlation in case the measurements for individuals are repeated over time. 
+#' This will use the same correlation structure as the between-individual correlation
+#' specified by "corstr".
+#' @return A block correlation matrix of size (nInds \* nPeriods) x (nInds \* nPeriods) 
+#' @examples
+#' genBlockMat(rho = 0.6, nInds = 2, nPeriods = 3, corstr = "ind")
+#' genBlockMat(rho = 0.6, nInds = 2, nPeriods = 3, corstr = "cs")
+#' genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "ar1")
+#' 
+#' genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "cs", iRho = 0.8)
+#' genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "ar1", iRho = 0.8)
+#' @export
+#' @concept correlated
+genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind", 
+                        iRho = NULL) {
+  
+  if (!requireNamespace("blockmatrix", quietly = TRUE)) {
+    stop(
+      "Package \"blockmatrix\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
+  
+  ### Checking
+  
+  assertNotMissing(rho = missing(rho), nInds = missing(nInds),
+                   nPeriods = missing(nPeriods))
+  
+  assertInteger(nInds = nInds, nPeriods = nPeriods)
+  assertAtLeast(nPeriods = nPeriods, minVal = 2)
+  assertInRange(rho = rho, range = c(-1,1))
+  
+  if (!is.null(iRho)) {
+    assertInRange(iRho = iRho, range = c(-1,1))
+    if (length(rho) == 1) {
+      assertNotEqual(corstr = corstr, val = "ind", 
+        msg = " With iRho set, corstr should be either cs or ar1.")  
+    }
+  }
+  
+  if (length(rho) > 1) {
+    assertLength(rho = rho, length = nPeriods)
+    if (!is.null(iRho)) {
+      assertLength(iRho = iRho, length = (nPeriods - 1))
+    }
+  }
+  
+  assertOption(corstr = corstr, options = c("ind", "cs", "ar1"))
+  
+  ###
+  
+  assignDiag <- function(block, value) {
+    diag(block) <- value
+    return(block)
+  }
+  
+  ### create rvec from rho
+  
+  if (length(rho) == nPeriods) {
+    rvec <- rho
+  } else {
+    if (corstr == "ind") {
+      rvec <- vapply(1:nPeriods, function(x) rho*(x==1), numeric(1))
+    } else if (corstr == "cs") {
+      rvec <- vapply(1:nPeriods, function(x) rho, numeric(1))
+    } else if (corstr == "ar1") {
+      rvec <- vapply(1:nPeriods, function(x) rho^x, numeric(1))
+    }
+  }
+  
+  ### create irvec from iRho
+  
+  if (! is.null(iRho)) {
+    
+    if (length(iRho) < (nPeriods - 1)) {
+      if (corstr == "cs") {
+        irvec <- vapply(2:nPeriods, function(x) iRho, numeric(1))  
+      } else if (corstr == "ar1") {
+        irvec <- vapply(2:nPeriods, function(x) iRho^(x-1), numeric(1))
+      }
+    } else { irvec <- iRho }
+    irvec <- c(1, irvec)
+  } else if (is.null(iRho)) {
+    irvec <- c(1, rvec[2:nPeriods])
+  }
+  
+  ### generate blocks
+  
+  blocks <- lapply(1:nPeriods, function(x) matrix(rvec[x], nInds, nInds))
+  blocks <- lapply(1:nPeriods, function(x) assignDiag(blocks[[x]], irvec[x]))
+  
+  names(blocks) <- paste0("M", c(1 : nPeriods))
+  
+  ### put blocks together
+  
+  block_str <- sapply(nPeriods:1, 
+                      function(x) data.table::shift(1:nPeriods, nPeriods - x, fill = 0))
+  block_str[upper.tri(block_str)] = t(block_str)[upper.tri(block_str)]
+  block_str <- matrix(paste0("M", block_str), nPeriods)
+  
+  bm <- blockmatrix::blockmatrix(value = block_str, list = blocks, dim=c(nPeriods, nPeriods))
+  as.matrix(bm)
+  
+}

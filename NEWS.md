@@ -1,5 +1,10 @@
 # simstudy (development version)
 
+## New features
+* Added function `genBlockMat`. Users can now generate correlation matrices that can
+accommodate clustered observations over time where the within-cluster correlation
+in the same time period can be different from the within-cluster correlation across time periods.
+
 # simstudy 0.5.1
 
 ## Minor fixes
