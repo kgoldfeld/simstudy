@@ -116,27 +116,50 @@
 
     
     
-<p>Time-to-event data, including both survival and censoring times, are created using functions <code>defSurv</code> and <code>genSurv</code>. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the <code>formula</code> field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the <em>shape</em> of the distribution can be specified. A <code>shape</code> value of 1 reflects the <em>exponential</em> distribution. As of <code>simstudy</code> version 0.5.0, it is also possible to generate survival data that violate a proportional hazards assumption. In addition, data with two or more competing risks can be generated.</p>
+<p>Time-to-event data, including both survival and censoring times, are
+created using functions <code>defSurv</code> and <code>genSurv</code>.
+The survival data definitions require a variable name as well as a
+specification of a scale value, which determines the mean survival time
+at a baseline level of covariates (i.e. all covariates set to 0). The
+Weibull distribution is used to generate these survival times. In
+addition, covariates (which have been defined previously) that influence
+survival time can be included in the <code>formula</code> field.
+Positive coefficients are associated with longer survival times (and
+lower hazard rates). Finally, the <em>shape</em> of the distribution can
+be specified. A <code>shape</code> value of 1 reflects the
+<em>exponential</em> distribution. As of <code>simstudy</code> version
+0.5.0, it is also possible to generate survival data that violate a
+proportional hazards assumption. In addition, data with two or more
+competing risks can be generated.</p>
 <div class="section level3">
 <h3 id="weibull-distribution">Weibull distribution<a class="anchor" aria-label="anchor" href="#weibull-distribution"></a>
 </h3>
-<p>The density, mean, and variance of the Weibull distribution that is used in the data generation process are defined by the parameters <span class="math inline">\(\lambda\)</span> (scale) and <span class="math inline">\(\nu\)</span> (shape) as shown below.</p>
+<p>The density, mean, and variance of the Weibull distribution that is
+used in the data generation process are defined by the parameters <span class="math inline">\(\lambda\)</span> (scale) and <span class="math inline">\(\nu\)</span> (shape) as shown below.</p>
 <span class="math display">\[\begin{aligned}
-f(t) &amp;= \frac{t^{\frac{1}{\nu}-1}}{\lambda \nu} exp\left(-\frac{t^\frac{1}{\nu}}{\lambda}\right) \\
+f(t) &amp;= \frac{t^{\frac{1}{\nu}-1}}{\lambda \nu}
+exp\left(-\frac{t^\frac{1}{\nu}}{\lambda}\right) \\
 E(T) &amp;= \lambda ^ \nu \Gamma(\nu + 1) \\
-Var(T) &amp;= (\lambda^2)^\nu \left( \Gamma(2 \nu + 1) - \Gamma^2(\nu + 1) \right) \\
+Var(T) &amp;= (\lambda^2)^\nu \left( \Gamma(2 \nu + 1) - \Gamma^2(\nu +
+1) \right) \\
 \end{aligned}\]</span>
 <p><br></p>
-<p>The survival time <span class="math inline">\(T\)</span> data are generated based on this formula:</p>
+<p>The survival time <span class="math inline">\(T\)</span> data are
+generated based on this formula:</p>
 <p><span class="math display">\[
 T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 \]</span></p>
-<p>where <span class="math inline">\(U\)</span> is a uniform random variable between 0 and 1, <span class="math inline">\(\beta\)</span> is a vector of parameters in a Cox proportional hazard model, and <span class="math inline">\(x\)</span> is a vector of covariates that impact survival time. <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\nu\)</span> can also vary by covariates.</p>
+<p>where <span class="math inline">\(U\)</span> is a uniform random
+variable between 0 and 1, <span class="math inline">\(\beta\)</span> is
+a vector of parameters in a Cox proportional hazard model, and <span class="math inline">\(x\)</span> is a vector of covariates that impact
+survival time. <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\nu\)</span> can also vary by covariates.</p>
 </div>
 <div class="section level3">
 <h3 id="generating-standard-survival-data-with-censoring">Generating standard survival data with censoring<a class="anchor" aria-label="anchor" href="#generating-standard-survival-data-with-censoring"></a>
 </h3>
-<p>Here is an example showing how to generate data with covariates. In this case the scale and shape parameters will vary by group membership.</p>
+<p>Here is an example showing how to generate data with covariates. In
+this case the scale and shape parameters will vary by group
+membership.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Baseline data definitions</span></span>
 <span></span>
@@ -155,7 +178,8 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <pre><code><span><span class="co">##       varname formula               scale               shape transition</span></span>
 <span><span class="co">## 1: censorTime       0                  80                   1          0</span></span>
 <span><span class="co">## 2:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5          0</span></span></code></pre>
-<p>The data are generated with calls to <code>genData</code> and <code>genSurv</code>:</p>
+<p>The data are generated with calls to <code>genData</code> and
+<code>genSurv</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Baseline data definitions</span></span>
 <span></span>
@@ -179,7 +203,9 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <span><span class="co">## 2:   0  1  23.4</span></span>
 <span><span class="co">## 3:   1  0  46.3</span></span>
 <span><span class="co">## 4:   1  1  12.2</span></span></code></pre>
-<p>Observed survival times and censoring indicators can be generated using the competing risk functionality and specifying a censoring variable:</p>
+<p>Observed survival times and censoring indicators can be generated
+using the competing risk functionality and specifying a censoring
+variable:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">300</span>, <span class="va">def</span><span class="op">)</span></span>
 <span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">sdef</span>, timeName <span class="op">=</span> <span class="st">"obsTime"</span>, censorName <span class="op">=</span> <span class="st">"censorTime"</span>,</span>
@@ -204,7 +230,8 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <span><span class="co">## 4:   1  1 0.13</span></span></code></pre>
 <p>Here is a Kaplan-Meier plot of the data by the four groups:</p>
 <p><img src="survival_files/figure-html/unnamed-chunk-6-1.png" width="624"></p>
-<p>Here is a survival analysis (using a Cox proportional hazard model) of a slightly simplified data set with two baseline covariates only:</p>
+<p>Here is a survival analysis (using a Cox proportional hazard model)
+of a slightly simplified data set with two baseline covariates only:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Baseline data definitions</span></span>
 <span></span>
@@ -221,7 +248,8 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <span>    eventName <span class="op">=</span> <span class="st">"status"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">obsTime</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">dtSurv</span><span class="op">)</span></span></code></pre></div>
-<p>The 95% confidence intervals of the parameter estimates include the values used to generate the data:</p>
+<p>The 95% confidence intervals of the parameter estimates include the
+values used to generate the data:</p>
 <div id="jckzsswiti" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
@@ -662,7 +690,19 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <div class="section level3">
 <h3 id="competing-risks">Competing risks<a class="anchor" aria-label="anchor" href="#competing-risks"></a>
 </h3>
-<p>In the previous example, we actually used the competing risk mechanism in <code>genSurv</code> to generate an observed time variable (which was the earliest of the censoring and event time). This is done by specifying a <em>timeName</em> argument that will represent the observed time value. The event status is indicated in the field set by the <em>eventName</em> argument (which defaults to “event”). If a variable name is indicated in the <em>censorName</em> argument, the censored events automatically have a value of 0. As we saw above, competing risk information can be generated as part of <code>genSurv</code>. However, there is an additional function <code>addCompRisk</code> that will generate the competing risk information using an existing data set. The example here will take that approach.</p>
+<p>In the previous example, we actually used the competing risk
+mechanism in <code>genSurv</code> to generate an observed time variable
+(which was the earliest of the censoring and event time). This is done
+by specifying a <em>timeName</em> argument that will represent the
+observed time value. The event status is indicated in the field set by
+the <em>eventName</em> argument (which defaults to “event”). If a
+variable name is indicated in the <em>censorName</em> argument, the
+censored events automatically have a value of 0. As we saw above,
+competing risk information can be generated as part of
+<code>genSurv</code>. However, there is an additional function
+<code>addCompRisk</code> that will generate the competing risk
+information using an existing data set. The example here will take that
+approach.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
 <span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, <span class="st">"x2"</span>, <span class="fl">.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
@@ -703,9 +743,11 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <span><span class="co">##  999:  999  1  0  7.541     0  censor</span></span>
 <span><span class="co">## 1000: 1000  1  0  6.435     2 event_2</span></span>
 <span><span class="co">## 1001: 1001  1  0 11.946     1 event_1</span></span></code></pre>
-<p>The competing risk data can be plotted using the cumulative incidence functions (rather than the survival curves):</p>
+<p>The competing risk data can be plotted using the cumulative incidence
+functions (rather than the survival curves):</p>
 <p><img src="survival_files/figure-html/unnamed-chunk-11-1.png" width="624"></p>
-<p>The data generation can all be done in two (instead of three) steps:</p>
+<p>The data generation can all be done in two (instead of three)
+steps:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">101</span>, <span class="va">d1</span><span class="op">)</span></span>
 <span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dtSurv</span>, <span class="va">dS</span>, timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span>
@@ -726,14 +768,31 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <div class="section level3">
 <h3 id="introducing-non-proportional-hazards">Introducing non-proportional hazards<a class="anchor" aria-label="anchor" href="#introducing-non-proportional-hazards"></a>
 </h3>
-<p>In the standard <code>simstudy</code> data generation process for survival/time-to-event outcomes that includes covariates that effect the hazard rate at various time points, the ratio of hazards comparing different levels of a covariate are constant across all time points. For example, if we have a single binary covariate <span class="math inline">\(x\)</span>, the hazard <span class="math inline">\(\lambda(t)\)</span> at time <span class="math inline">\(t\)</span> is</p>
-<p><span class="math display">\[\lambda(t|x) = \lambda_0(t) e ^ {\beta x}\]</span> where <span class="math inline">\(\lambda_0(t)\)</span> is a baseline hazard when <span class="math inline">\(x=0\)</span>. The ratio of the hazards for <span class="math inline">\(x=1\)</span> compared to <span class="math inline">\(x=0\)</span> is</p>
-<p><span class="math display">\[\frac{\lambda_0(t) e ^ {\beta}}{\lambda_0(t)} = e ^ \beta,\]</span></p>
-<p>so the log of the hazard ratio is a constant <span class="math inline">\(\beta\)</span>, and the hazard ratio is always <span class="math inline">\(e^\beta\)</span>.</p>
-<p>However, we may not always want to make the assumption that the hazard ratio is constant over all time periods. To facilitate this, it is possible to specify two different data definitions for the same outcome, using the <em>transition</em> field to specify when the second definition replaces the first. (While it would theoretically be possible to generate data for more than two periods, the process is more involved, and has not been implemented at this time.)</p>
+<p>In the standard <code>simstudy</code> data generation process for
+survival/time-to-event outcomes that includes covariates that effect the
+hazard rate at various time points, the ratio of hazards comparing
+different levels of a covariate are constant across all time points. For
+example, if we have a single binary covariate <span class="math inline">\(x\)</span>, the hazard <span class="math inline">\(\lambda(t)\)</span> at time <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[\lambda(t|x) = \lambda_0(t) e ^ {\beta
+x}\]</span> where <span class="math inline">\(\lambda_0(t)\)</span> is a
+baseline hazard when <span class="math inline">\(x=0\)</span>. The ratio
+of the hazards for <span class="math inline">\(x=1\)</span> compared to
+<span class="math inline">\(x=0\)</span> is</p>
+<p><span class="math display">\[\frac{\lambda_0(t) e ^
+{\beta}}{\lambda_0(t)} = e ^ \beta,\]</span></p>
+<p>so the log of the hazard ratio is a constant <span class="math inline">\(\beta\)</span>, and the hazard ratio is always
+<span class="math inline">\(e^\beta\)</span>.</p>
+<p>However, we may not always want to make the assumption that the
+hazard ratio is constant over all time periods. To facilitate this, it
+is possible to specify two different data definitions for the same
+outcome, using the <em>transition</em> field to specify when the second
+definition replaces the first. (While it would theoretically be possible
+to generate data for more than two periods, the process is more
+involved, and has not been implemented at this time.)</p>
 <p><br></p>
 <p><strong>Constant/proportional hazard ratio</strong></p>
-<p>To start, here is an example assuming a constant log hazard ratio of -0.7:</p>
+<p>To start, here is an example assuming a constant log hazard ratio of
+-0.7:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0.4</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
 <span></span>
@@ -745,7 +804,8 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survfit</span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
 <p><img src="survival_files/figure-html/unnamed-chunk-14-1.png" width="624"></p>
-<p>The Cox proportional hazards model recovers the correct log hazards rate:</p>
+<p>The Cox proportional hazards model recovers the correct log hazards
+rate:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">coxph</span><span class="op">(</span>formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
 <div id="antenoidnc" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1176,7 +1236,11 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
     </tr></tfoot>
 </table>
 </div>
-<p>We can test the assumption of proportional hazards using weighted residuals. If the <span class="math inline">\(\text{p-value} &lt; 0.05\)</span>, then we would conclude that the assumption of proportional hazards is not warranted. In this case <span class="math inline">\(p = 0.22\)</span>, so the model is apparently reasonable:</p>
+<p>We can test the assumption of proportional hazards using weighted
+residuals. If the <span class="math inline">\(\text{p-value} &lt;
+0.05\)</span>, then we would conclude that the assumption of
+proportional hazards is not warranted. In this case <span class="math inline">\(p = 0.22\)</span>, so the model is apparently
+reasonable:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        chisq df    p</span></span>
@@ -1184,7 +1248,9 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <span><span class="co">## GLOBAL  1.51  1 0.22</span></span></code></pre>
 <p><br></p>
 <p><strong>Non-constant/non-proportional hazard ratio</strong></p>
-<p>In this next case, the risk of death when <span class="math inline">\(x=1\)</span> is lower at all time points compared to when <span class="math inline">\(x=0\)</span>, but the relative risk (or hazard ratio) changes at 150 days:</p>
+<p>In this next case, the risk of death when <span class="math inline">\(x=1\)</span> is lower at all time points compared
+to when <span class="math inline">\(x=0\)</span>, but the relative risk
+(or hazard ratio) changes at 150 days:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0.4</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
 <span></span>
@@ -1197,9 +1263,14 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genSurv.html">genSurv</a></span><span class="op">(</span><span class="va">dd</span>, <span class="va">defS</span>, digits <span class="op">=</span> <span class="fl">2</span>, timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survfit</span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
-<p>The survival curve for the sample with <span class="math inline">\(x=1\)</span> has a slightly different shape under this data generation process compared to the previous example under a constant hazard ratio assumption; there is more separation early on (prior to day 150), and then the gap is closed at a quicker rate.</p>
+<p>The survival curve for the sample with <span class="math inline">\(x=1\)</span> has a slightly different shape under
+this data generation process compared to the previous example under a
+constant hazard ratio assumption; there is more separation early on
+(prior to day 150), and then the gap is closed at a quicker rate.</p>
 <p><img src="survival_files/figure-html/unnamed-chunk-19-1.png" width="624"></p>
-<p>If we ignore the possibility that there might be a different relationship over time, the Cox proportional hazards model gives an estimate of the log hazard ratio quite close to -0.70:</p>
+<p>If we ignore the possibility that there might be a different
+relationship over time, the Cox proportional hazards model gives an
+estimate of the log hazard ratio quite close to -0.70:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
 <div id="qjrptpzqug" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1630,13 +1701,19 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
     </tr></tfoot>
 </table>
 </div>
-<p>However, further inspection of the proportionality assumption should make us question the appropriateness of the model. Since <span class="math inline">\(p&lt;0.05\)</span>, we would be wise to see if we can improve on the model.</p>
+<p>However, further inspection of the proportionality assumption should
+make us question the appropriateness of the model. Since <span class="math inline">\(p&lt;0.05\)</span>, we would be wise to see if we
+can improve on the model.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        chisq df      p</span></span>
 <span><span class="co">## x        7.4  1 0.0065</span></span>
 <span><span class="co">## GLOBAL   7.4  1 0.0065</span></span></code></pre>
-<p>We might be able to see from the plot where proportionality diverges, in which case we can split the data set into two parts at the identified time point. (In many cases, the transition point or points won’t be so obvious, in which case the investigation might be more involved.) By splitting the data at day 150, we get the desired estimates:</p>
+<p>We might be able to see from the plot where proportionality diverges,
+in which case we can split the data set into two parts at the identified
+time point. (In many cases, the transition point or points won’t be so
+obvious, in which case the investigation might be more involved.) By
+splitting the data at day 150, we get the desired estimates:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dd2</span> <span class="op">&lt;-</span> <span class="fu">survSplit</span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">.</span>, data<span class="op">=</span> <span class="va">dd</span>, cut<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span>,</span>
 <span>                 episode<span class="op">=</span> <span class="st">"tgroup"</span>, id<span class="op">=</span><span class="st">"newid"</span><span class="op">)</span></span>
@@ -2084,7 +2161,8 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
     </tr></tfoot>
 </table>
 </div>
-<p>And the diagnostic test of proportionality confirms the appropriateness of the model:</p>
+<p>And the diagnostic test of proportionality confirms the
+appropriateness of the model:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                  chisq df   p</span></span>
@@ -2094,8 +2172,20 @@ T = \left( -\frac{log(U) \lambda}{exp(\beta ^ \prime x)}  \right)^\nu,
 <div class="section level3">
 <h3 id="generating-parameters-for-survival-distribution">Generating parameters for survival distribution<a class="anchor" aria-label="anchor" href="#generating-parameters-for-survival-distribution"></a>
 </h3>
-<p>Throughout this vignette, I have been using various assumptions for the parameters - <em>formula</em>, <em>scale</em>, and <em>shape</em> - that define the Weibull-based survival distribution. Where do these assumptions come from and how can we determine what is appropriate to use in our simulations? That will depend, of course, on each specific application and use of the simulation, but there are two helper functions in <code>simstudy</code>, <code>survGetParams</code> and <code>survParamPlot</code>, that are intended to guide the process.</p>
-<p><code>survGetParams</code> will provide the <em>formula</em> and <em>shape</em> parameters (the <em>scale</em> parameter will always be set to 1) that define a curve close to points provided as inputs. For example, if we would like to find the parameters for a distribution where 80% survive until day 100, and 10% survive until day 200 (any number of points may be provided):</p>
+<p>Throughout this vignette, I have been using various assumptions for
+the parameters - <em>formula</em>, <em>scale</em>, and <em>shape</em> -
+that define the Weibull-based survival distribution. Where do these
+assumptions come from and how can we determine what is appropriate to
+use in our simulations? That will depend, of course, on each specific
+application and use of the simulation, but there are two helper
+functions in <code>simstudy</code>, <code>survGetParams</code> and
+<code>survParamPlot</code>, that are intended to guide the process.</p>
+<p><code>survGetParams</code> will provide the <em>formula</em> and
+<em>shape</em> parameters (the <em>scale</em> parameter will always be
+set to 1) that define a curve close to points provided as inputs. For
+example, if we would like to find the parameters for a distribution
+where 80% survive until day 100, and 10% survive until day 200 (any
+number of points may be provided):</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">0.80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">0.10</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survGetParams.html">survGetParams</a></span><span class="op">(</span><span class="va">points</span><span class="op">)</span></span>

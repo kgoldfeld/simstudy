@@ -116,32 +116,86 @@
 
     
     
-<p>Using the <code>defData</code> and <code>genData</code> functions, it is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related to strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on four possible values: (1) strongly disagree, (2) disagree, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.</p>
-<p>It is common to summarize the data by looking at <em>cumulative</em> probabilities, odds, or log-odds. Comparisons of different exposures or individual characteristics typically look at how these cumulative measures vary across the different exposures or characteristics. So, if we were interested in cumulative odds, we would compare <span class="math display">\[\small{\frac{P(response = 1|exposed)}{P(response &gt; 1|exposed)} \ \ vs. \ \frac{P(response = 1|unexposed)}{P(response &gt; 1|unexposed)}},\]</span></p>
+<p>Using the <code>defData</code> and <code>genData</code> functions, it
+is relatively easy to specify multinomial distributions that
+characterize categorical data. Order becomes relevant when the
+categories take on meanings related to strength of opinion or agreement
+(as in a Likert-type response) or frequency. A motivating example could
+be when a response variable takes on four possible values: (1) strongly
+disagree, (2) disagree, (4) agree, (5) strongly agree. There is a
+natural order to the response possibilities.</p>
+<p>It is common to summarize the data by looking at <em>cumulative</em>
+probabilities, odds, or log-odds. Comparisons of different exposures or
+individual characteristics typically look at how these cumulative
+measures vary across the different exposures or characteristics. So, if
+we were interested in cumulative odds, we would compare <span class="math display">\[\small{\frac{P(response = 1|exposed)}{P(response
+&gt; 1|exposed)} \ \ vs. \ \frac{P(response = 1|unexposed)}{P(response
+&gt; 1|unexposed)}},\]</span></p>
 <p>and continue until the last (in this case, third) comparison</p>
-<p><span class="math display">\[\small{\frac{P(response \le 3|exposed)}{P(response &gt; 3|exposed)} \ \ vs. \ \frac{P(response \le 3|unexposed)}{P(response &gt; 3|unexposed)}},\]</span></p>
-<p>We can use an underlying (continuous) latent process as the basis for data generation. If we assume that probabilities are determined by segments of a logistic distribution (see below), we can define the ordinal mechanism using thresholds along the support of the distribution. If there are <span class="math inline">\(k\)</span> possible responses (in the meat example, we have 4), then there will be <span class="math inline">\(k-1\)</span> thresholds. The area under the logistic density curve of each of the regions defined by those thresholds (there will be <span class="math inline">\(k\)</span> distinct regions) represents the probability of each possible response tied to that region.</p>
+<p><span class="math display">\[\small{\frac{P(response \le
+3|exposed)}{P(response &gt; 3|exposed)} \ \ vs. \ \frac{P(response \le
+3|unexposed)}{P(response &gt; 3|unexposed)}},\]</span></p>
+<p>We can use an underlying (continuous) latent process as the basis for
+data generation. If we assume that probabilities are determined by
+segments of a logistic distribution (see below), we can define the
+ordinal mechanism using thresholds along the support of the
+distribution. If there are <span class="math inline">\(k\)</span>
+possible responses (in the meat example, we have 4), then there will be
+<span class="math inline">\(k-1\)</span> thresholds. The area under the
+logistic density curve of each of the regions defined by those
+thresholds (there will be <span class="math inline">\(k\)</span>
+distinct regions) represents the probability of each possible response
+tied to that region.</p>
 <p><img src="ordinal_files/figure-html/threshold-1.png" width="504"></p>
 <div class="section level2">
 <h2 id="comparing-response-distributions-of-different-populations">Comparing response distributions of different populations<a class="anchor" aria-label="anchor" href="#comparing-response-distributions-of-different-populations"></a>
 </h2>
-<p>In the cumulative logit model, the underlying assumption is that the odds ratio of one population relative to another is constant across all the possible responses. This means that all of the cumulative odds ratios are equal:</p>
-<p><span class="math display">\[\small{\frac{codds(P(Resp = 1 | exposed))}{codds(P(Resp = 1 | unexposed))} =  \ ... \ = \frac{codds(P(Resp \leq 3 | exposed))}{codds(P(Resp \leq 3 | unexposed))}}\]</span></p>
-<p>In terms of the underlying process, this means that each of the thresholds shifts the same amount (as shown below) where we add 0.7 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.</p>
+<p>In the cumulative logit model, the underlying assumption is that the
+odds ratio of one population relative to another is constant across all
+the possible responses. This means that all of the cumulative odds
+ratios are equal:</p>
+<p><span class="math display">\[\small{\frac{codds(P(Resp = 1 |
+exposed))}{codds(P(Resp = 1 | unexposed))} =  \ ... \ =
+\frac{codds(P(Resp \leq 3 | exposed))}{codds(P(Resp \leq 3 |
+unexposed))}}\]</span></p>
+<p>In terms of the underlying process, this means that each of the
+thresholds shifts the same amount (as shown below) where we add 0.7
+units to each threshold that was set for the exposed group. What this
+effectively does is create a greater probability of a lower outcome for
+the unexposed group.</p>
+<pre><code><span><span class="co">## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span></code></pre>
 <p><img src="ordinal_files/figure-html/plotB-1.png" width="504"></p>
 </div>
 <div class="section level2">
 <h2 id="the-cumulative-proportional-odds-model">The cumulative proportional odds model<a class="anchor" aria-label="anchor" href="#the-cumulative-proportional-odds-model"></a>
 </h2>
-<p>In the <code>R</code> package <code>ordinal</code>, the model is fit using function <code>clm</code>. The model that is being estimated has the form</p>
-<p><span class="math display">\[log \left( \frac{P(Resp \leq  i)}{P(Resp &gt; i)} | Group \right) = \alpha_i - \beta*I(Group=exposed) \  \ , \ i \in \{1, 2, 3\}\]</span></p>
-<p>The model specifies that the cumulative log-odds for a particular category is a function of two parameters, <span class="math inline">\(\alpha_i\)</span> and <span class="math inline">\(\beta\)</span>. (Note that in this parameterization and the model fit, <span class="math inline">\(-\beta\)</span> is used.) <span class="math inline">\(\alpha_i\)</span> represents the cumulative log odds of being in category <span class="math inline">\(i\)</span> or lower for those in the reference exposure group, which in our example is Group A. <em><span class="math inline">\(\alpha_i\)</span> also represents the threshold of the latent continuous (logistic) data generating process.</em> <span class="math inline">\(\beta\)</span> is the cumulative log-odds ratio for the category <span class="math inline">\(i\)</span> comparing the unexposed to reference group, which is the exposed. <em><span class="math inline">\(\beta\)</span> also represents the shift of the threshold on the latent continuous process for the exposed relative to the unexposed</em>. The proportionality assumption implies that the shift of the threshold for each of the categories is identical.</p>
+<p>In the <code>R</code> package <code>ordinal</code>, the model is fit
+using function <code>clm</code>. The model that is being estimated has
+the form</p>
+<p><span class="math display">\[log \left( \frac{P(Resp \leq  i)}{P(Resp
+&gt; i)} | Group \right) = \alpha_i - \beta*I(Group=exposed) \  \ , \ i
+\in \{1, 2, 3\}\]</span></p>
+<p>The model specifies that the cumulative log-odds for a particular
+category is a function of two parameters, <span class="math inline">\(\alpha_i\)</span> and <span class="math inline">\(\beta\)</span>. (Note that in this
+parameterization and the model fit, <span class="math inline">\(-\beta\)</span> is used.) <span class="math inline">\(\alpha_i\)</span> represents the cumulative log
+odds of being in category <span class="math inline">\(i\)</span> or
+lower for those in the reference exposure group, which in our example is
+Group A. <em><span class="math inline">\(\alpha_i\)</span> also
+represents the threshold of the latent continuous (logistic) data
+generating process.</em> <span class="math inline">\(\beta\)</span> is
+the cumulative log-odds ratio for the category <span class="math inline">\(i\)</span> comparing the unexposed to reference
+group, which is the exposed. <em><span class="math inline">\(\beta\)</span> also represents the shift of the
+threshold on the latent continuous process for the exposed relative to
+the unexposed</em>. The proportionality assumption implies that the
+shift of the threshold for each of the categories is identical.</p>
 </div>
 <div class="section level2">
 <h2 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
 </h2>
-<p>To generate ordered categorical data using <code>simstudy</code>, there is a function <code>genOrdCat</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<p>To generate ordered categorical data using <code>simstudy</code>,
+there is a function <code>genOrdCat</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">baseprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.31</span>, <span class="fl">0.29</span>, <span class="fl">.20</span>, <span class="fl">0.20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">defA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"exposed"</span>, formula <span class="op">=</span> <span class="st">"1;1"</span>, dist <span class="op">=</span> <span class="st">"trtAssign"</span><span class="op">)</span></span>
@@ -152,8 +206,9 @@
 <span><span class="va">dT_1_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="va">defA</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dX</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genOrdCat.html">genOrdCat</a></span><span class="op">(</span><span class="va">dT_1_cat</span>, adjVar <span class="op">=</span> <span class="st">"z"</span>, <span class="va">baseprobs</span>, catVar <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span></code></pre></div>
-<p>Estimating the parameters of the model using function <code>clm</code>, we can recover the original parameters quite well.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>Estimating the parameters of the model using function
+<code>clm</code>, we can recover the original parameters quite well.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/runehaubo/ordinal" class="external-link">ordinal</a></span><span class="op">)</span></span>
 <span><span class="va">clmFit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ordinal/man/clm.html" class="external-link">clm</a></span><span class="op">(</span><span class="va">r</span> <span class="op">~</span> <span class="va">exposed</span>, data <span class="op">=</span> <span class="va">dX</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">clmFit</span><span class="op">)</span></span></code></pre></div>
@@ -174,61 +229,102 @@
 <span><span class="co">## 1|2  -0.8391     0.0180   -46.7</span></span>
 <span><span class="co">## 2|3   0.3768     0.0173    21.8</span></span>
 <span><span class="co">## 3|4   1.3696     0.0201    68.3</span></span></code></pre>
-<p>In the model output, the <code>exposed</code> coefficient of -1.15 is the estimate of <span class="math inline">\(-\beta\)</span> (i.e. <span class="math inline">\(\hat{\beta} = 1.15\)</span>), which was set to -1.1 in the simulation. The threshold coefficients are the estimates of the <span class="math inline">\(\alpha_i\)</span>’s in the model - and match the thresholds for the unexposed group.</p>
-<p>The log of the cumulative odds for groups 1 to 4 from the data without exposure are</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>In the model output, the <code>exposed</code> coefficient of -1.15 is
+the estimate of <span class="math inline">\(-\beta\)</span> (i.e. <span class="math inline">\(\hat{\beta} = 1.15\)</span>), which was set to
+-1.1 in the simulation. The threshold coefficients are the estimates of
+the <span class="math inline">\(\alpha_i\)</span>’s in the model - and
+match the thresholds for the unexposed group.</p>
+<p>The log of the cumulative odds for groups 1 to 4 from the data
+without exposure are</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">logOdds.unexp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu">odds</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">dX</span><span class="op">[</span><span class="va">exposed</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     1     2     3 </span></span>
 <span><span class="co">## -0.83  0.38  1.36</span></span></code></pre>
 <p>And under exposure:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">logOdds.expos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu">odds</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">dX</span><span class="op">[</span><span class="va">exposed</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      1      2      3 </span></span>
 <span><span class="co">## -0.084  1.135  2.147</span></span></code></pre>
-<p>The log of the cumulative odds ratios for each of the four groups is</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>The log of the cumulative odds ratios for each of the four groups
+is</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">logOdds.expos</span> <span class="op">-</span> <span class="va">logOdds.unexp</span></span></code></pre></div>
 <pre><code><span><span class="co">##    1    2    3 </span></span>
 <span><span class="co">## 0.75 0.76 0.79</span></span></code></pre>
-<p>A plot of the modeled cumulative probabilities (the lines) shows that the proportionality assumption fit the observed data (the points) quite well.</p>
+<p>A plot of the modeled cumulative probabilities (the lines) shows that
+the proportionality assumption fit the observed data (the points) quite
+well.</p>
 <p><img src="ordinal_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="non-proportional-odds">Non-proportional odds<a class="anchor" aria-label="anchor" href="#non-proportional-odds"></a>
 </h2>
-<p>By default, the function <code>genOrdCat</code> generates ordinal categorical data under the assumption of proportional cumulative odds. On the underlying logistic scale, this means that there is a consistent shift of the thresholds; in the initial example above, the exposure thresholds were shifted 0.7 units to the right on the logistic scale. In the figure below, the rightward shift of the threshold to the left varies for each threshold (0.4 units for the first threshold, 0.0 for the second, and 1.7 for the last), which violates the underlying assumption of proportionality:</p>
+<p>By default, the function <code>genOrdCat</code> generates ordinal
+categorical data under the assumption of proportional cumulative odds.
+On the underlying logistic scale, this means that there is a consistent
+shift of the thresholds; in the initial example above, the exposure
+thresholds were shifted 0.7 units to the right on the logistic scale. In
+the figure below, the rightward shift of the threshold to the left
+varies for each threshold (0.4 units for the first threshold, 0.0 for
+the second, and 1.7 for the last), which violates the underlying
+assumption of proportionality:</p>
 <p><img src="ordinal_files/figure-html/plotNP-1.png" width="504"></p>
-<p>It is possible to generate data under these assumptions using the <code>npVar</code> and <code>npAdj</code> arguments. <code>npVar</code> indicates the variable(s) for which the non-proportional assumption is violated, and <code>npAdj</code> indicates the various shifts of the intervals. (Note that the last cut point is at <code>Inf</code>, so there is no impact of a shift related to that threshold.)</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>It is possible to generate data under these assumptions using the
+<code>npVar</code> and <code>npAdj</code> arguments. <code>npVar</code>
+indicates the variable(s) for which the non-proportional assumption is
+violated, and <code>npAdj</code> indicates the various shifts of the
+intervals. (Note that the last cut point is at <code>Inf</code>, so
+there is no impact of a shift related to that threshold.)</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">baseprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.31</span>, <span class="fl">0.29</span>, <span class="fl">.20</span>, <span class="fl">0.20</span><span class="op">)</span></span>
 <span><span class="va">npAdj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.4</span>, <span class="fl">0.0</span>, <span class="op">-</span><span class="fl">1.7</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dX</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genOrdCat.html">genOrdCat</a></span><span class="op">(</span><span class="va">dT_1_cat</span>, baseprobs <span class="op">=</span> <span class="va">baseprobs</span>, adjVar <span class="op">=</span> <span class="st">"z"</span>,</span>
 <span>                catVar <span class="op">=</span> <span class="st">"r"</span>, npVar <span class="op">=</span> <span class="st">"exposed"</span>, npAdj <span class="op">=</span> <span class="va">npAdj</span><span class="op">)</span></span></code></pre></div>
 <p>The calculation of the log cumulative odds follows as before:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">logOdds.unexp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu">odds</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">dX</span><span class="op">[</span><span class="va">exposed</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     1     2     3 </span></span>
 <span><span class="co">## -0.80  0.42  1.40</span></span></code></pre>
 <p>And under exposure:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">logOdds.expos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu">odds</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">dX</span><span class="op">[</span><span class="va">exposed</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    1    2    3 </span></span>
 <span><span class="co">## 0.29 1.10 3.72</span></span></code></pre>
-<p>But, now, the log of the cumulative odds ratios for each of the four groups varies across the different levels.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<p>But, now, the log of the cumulative odds ratios for each of the four
+groups varies across the different levels.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">logOdds.expos</span> <span class="op">-</span> <span class="va">logOdds.unexp</span></span></code></pre></div>
 <pre><code><span><span class="co">##    1    2    3 </span></span>
 <span><span class="co">## 1.09 0.69 2.32</span></span></code></pre>
-<p>This is confirmed by a plot of the model fit with a proportional odds assumption along with the observed cumulative proportions. Since the model imposes a consistent shift of each threshold, the observed points no longer lie along the prediction line, indicating a violation of the proportional odds assumption:</p>
+<p>This is confirmed by a plot of the model fit with a proportional odds
+assumption along with the observed cumulative proportions. Since the
+model imposes a consistent shift of each threshold, the observed points
+no longer lie along the prediction line, indicating a violation of the
+proportional odds assumption:</p>
 <p><img src="ordinal_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="correlated-multivariate-ordinal-data">Correlated multivariate ordinal data<a class="anchor" aria-label="anchor" href="#correlated-multivariate-ordinal-data"></a>
 </h2>
-<p>Function <code>genOrdCat</code> generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale and is specified with a value of <code>rho</code> and a correlation structure (<em>independence</em>, <em>compound symmetry</em>, or <em>AR-1</em>). Alternatively, a correlation matrix can be specified.</p>
-<p>In this example, there are 5 questions, each of which has three possible responses: “none”, “some”, “a lot”. The probabilities of response are specified in a <span class="math inline">\(5 \times 3\)</span> matrix, and the rows sum to 1:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<p>Function <code>genOrdCat</code> generates multiple categorical
+response variables that may be correlated. For example, a survey of
+multiple Likert-type questions could have many response variables. The
+function generates correlated latent variables (using a normal copula)
+to simulate correlated categorical outcomes. The user specifies a matrix
+of probabilities, with each row representing a single item or
+categorical variable. The across each row must be 1. Adjustment
+variables can be specified for each item, or a single adjustment
+variable can be specified for all items. The correlation is on the
+standard normal scale and is specified with a value of <code>rho</code>
+and a correlation structure (<em>independence</em>, <em>compound
+symmetry</em>, or <em>AR-1</em>). Alternatively, a correlation matrix
+can be specified.</p>
+<p>In this example, there are 5 questions, each of which has three
+possible responses: “none”, “some”, “a lot”. The probabilities of
+response are specified in a <span class="math inline">\(5 \times
+3\)</span> matrix, and the rows sum to 1:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">baseprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.7</span>,</span>
 <span>                      <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span>
 <span>                      <span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>,</span>
@@ -243,8 +339,9 @@
 <span></span>
 <span><span class="va">dX</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genOrdCat.html">genOrdCat</a></span><span class="op">(</span><span class="va">dT_5_cat</span>, adjVar <span class="op">=</span> <span class="cn">NULL</span>, baseprobs <span class="op">=</span> <span class="va">baseprobs</span>, </span>
 <span>                   prefix <span class="op">=</span> <span class="st">"q"</span>, rho <span class="op">=</span> <span class="fl">0.15</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, asFactor <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>The observed correlation of the items is slightly less than the specified correlations as expected:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<p>The observed correlation of the items is slightly less than the
+specified correlations as expected:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dX</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">q1</span>, <span class="va">q2</span>, <span class="va">q3</span>, <span class="va">q4</span>, <span class="va">q5</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      q1   q2   q3   q4   q5</span></span>
 <span><span class="co">## q1 1.00 0.08 0.10 0.10 0.08</span></span>
@@ -252,8 +349,9 @@
 <span><span class="co">## q3 0.10 0.09 1.00 0.11 0.11</span></span>
 <span><span class="co">## q4 0.10 0.09 0.11 1.00 0.10</span></span>
 <span><span class="co">## q5 0.08 0.09 0.11 0.10 1.00</span></span></code></pre>
-<p>However, the marginal probability distributions of each item match quite closely with the specified probabilities:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<p>However, the marginal probability distributions of each item match
+quite closely with the specified probabilities:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu">melt</span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
 <span><span class="va">dProp</span> <span class="op">&lt;-</span> <span class="va">dM</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">variable</span><span class="op">]</span></span>
 <span><span class="va">dProp</span><span class="op">[</span>, <span class="va">response</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
@@ -266,7 +364,7 @@
 <span><span class="co">## 3:       q3 0.50 0.20 0.30</span></span>
 <span><span class="co">## 4:       q4 0.40 0.20 0.40</span></span>
 <span><span class="co">## 5:       q5 0.60 0.20 0.21</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># specified probabilities</span></span>
 <span><span class="va">baseprobs</span></span></code></pre></div>
 <pre><code><span><span class="co">##      [,1] [,2] [,3]</span></span>
@@ -275,8 +373,11 @@
 <span><span class="co">## [3,]  0.5  0.2  0.3</span></span>
 <span><span class="co">## [4,]  0.4  0.2  0.4</span></span>
 <span><span class="co">## [5,]  0.6  0.2  0.2</span></span></code></pre>
-<p>In the next example, the structure of the correlation is changed to AR-1, so the correlation between questions closer to each other is higher than for questions farther apart. But the probability distributions are unaffected:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<p>In the next example, the structure of the correlation is changed to
+AR-1, so the correlation between questions closer to each other is
+higher than for questions farther apart. But the probability
+distributions are unaffected:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dX</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genOrdCat.html">genOrdCat</a></span><span class="op">(</span><span class="va">dT_5_cat</span>, adjVar <span class="op">=</span> <span class="cn">NULL</span>, baseprobs <span class="op">=</span> <span class="va">baseprobs</span>, </span>
 <span>                   prefix <span class="op">=</span> <span class="st">"q"</span>, rho <span class="op">=</span> <span class="fl">0.40</span>, corstr <span class="op">=</span> <span class="st">"ar1"</span>, asFactor <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -288,7 +389,7 @@
 <span><span class="co">## q3 0.10 0.29 1.00 0.31 0.11</span></span>
 <span><span class="co">## q4 0.05 0.10 0.31 1.00 0.29</span></span>
 <span><span class="co">## q5 0.02 0.03 0.11 0.29 1.00</span></span></code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu">melt</span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
 <span><span class="va">dProp</span> <span class="op">&lt;-</span> <span class="va">dM</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">variable</span><span class="op">]</span></span>
 <span><span class="va">dProp</span><span class="op">[</span>, <span class="va">response</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
