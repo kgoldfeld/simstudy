@@ -422,29 +422,34 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' @export
 addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL,
-                      method = "copula", formSpec = NULL, periodvar = "period") {
+                      method = "copula", formSpec = NULL, periodvar = "period",
+                      rowID = "timeID") {
 
   # "Declare" vars to avoid R CMD warning
 
-  id <- NULL
+  .id <- NULL
   N <- NULL
   .U <- NULL
   Unew <- NULL
   .XX <- NULL
   X <- NULL
-  timeID <- NULL
+  .rowID <- NULL
   .param1 <- NULL
   .param2 <- NULL
 
-  ## Need to check if wide or long
-
-  dtTemp <- copy(dtOld)
-
   #### Check args
+  
+  assertNotMissing(dtOld = missing(dtOld), nvars = missing(nvars), rho = missing(rho), 
+                   corstr = missing(corstr), dist = missing(dist), param1 = missing(param1))
+  assertOption(dist = dist, 
+               options = c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))
+  
 
-  if (!(dist %in% c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))) {
-    stop("Distribution not properly specified.")
-  }
+  # if (!(dist %in% c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))) {
+  #   stop("Distribution not properly specified.")
+  # }
+  
+  dtTemp <- copy(dtOld)
 
   if (!(idvar %in% names(dtTemp))) {
     stop(paste(idvar, "(id) not a valid field/column."))
@@ -480,13 +485,13 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
 
   ####
 
-  setnames(dtTemp, idvar, "id")
-
+  setnames(dtTemp, c(idvar, rowID), c(".id", ".rowid"))
+  
   ####
 
   # wide(ness) is determined by incoming data structure.
 
-  maxN <- dtTemp[, .N, by = id][, max(N)]
+  maxN <- dtTemp[, .N, by = .id][, max(N)]
   if (maxN == 1) {
     wide <- TRUE
   } else {
@@ -513,10 +518,10 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   ####
 
   if (method == "copula") {
-    n <- length(unique(dtTemp[, id])) # should check if n's are correct
+    n <- length(unique(dtTemp[, .id])) # should check if n's are correct
     dtM <- .genQuantU(nvars, n, rho, corstr, corMatrix)
 
-    xid <- "id"
+    xid <- ".id"
     if (wide == TRUE) {
       dtTemp <- dtM[dtTemp[, c(xid, param1, param2), with = FALSE]]
       dtTemp[, .U := Unew]
@@ -618,20 +623,20 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
 
     dres <- rbindlist(dres)
 
-    setkeyv(dres, c(.Vars, periodvar, "id"))
+    setkeyv(dres, c(.Vars, periodvar, ".id"))
 
-    setkeyv(dtTemp, c(.Vars, periodvar, "id"))
+    setkeyv(dtTemp, c(.Vars, periodvar, ".id"))
     dtTemp[, .XX := dres[, X]]
 
-    setkeyv(dtTemp, c("id", periodvar))
+    setkeyv(dtTemp, c(".id", periodvar))
   }
 
 
   if (wide == TRUE) {
-    dtTemp <- dtTemp[, list(id, seq, .XX)]
+    dtTemp <- dtTemp[, list(.id, seq, .XX)]
 
 
-    dWide <- dcast(dtTemp, id ~ seq, value.var = ".XX")
+    dWide <- dcast(dtTemp, .id ~ seq, value.var = ".XX")
     dtTemp <- copy(dtOld)
 
     dtTemp <- dtTemp[dWide]
@@ -640,18 +645,18 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       setnames(dtTemp, paste0("V", 1:nvars), nnames)
     }
 
-    setnames(dtTemp, idvar, "id")
+    setnames(dtTemp, idvar, ".id")
   } else if (wide == FALSE) {
     if (method == "copula") {
-      dtTempLong <- dtTemp[, list(timeID, .XX)]
+      dtTempLong <- dtTemp[, list(.rowid, .XX)]
       dtTemp <- copy(dtOld)
+      
+      setnames(dtTemp, c(idvar, rowID), c(".id", ".rowid"))
 
-      setkey(dtTempLong, timeID)
-      setkey(dtTemp, timeID)
+      setkey(dtTempLong, .rowid)
+      setkey(dtTemp, .rowid)
 
       dtTemp <- dtTemp[dtTempLong]
-
-      setnames(dtTemp, idvar, "id")
     }
 
     if (!is.null(cnames)) {
@@ -659,10 +664,10 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     } else {
       setnames(dtTemp, ".XX", "X")
     }
+    
+    setnames(dtTemp, c(".id", ".rowid"), c(idvar, rowID))
+    
   }
-
-  setnames(dtTemp, "id", idvar)
-
 
   return(dtTemp[])
 }
