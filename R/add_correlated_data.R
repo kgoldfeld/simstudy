@@ -448,8 +448,8 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
                options = c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))
   
   if (!is.null(param2)) {
-    assertInDataTable(vars = c(idvar, param1, param2, rowID), dt = dtOld)
-  } else assertInDataTable(vars = c(idvar, param1, rowID), dt = dtOld)
+    assertInDataTable(vars = c(idvar, param1, param2), dt = dtOld)
+  } else assertInDataTable(vars = c(idvar, param1), dt = dtOld)
   
   assertOption(method = method, options = c("copula", "ep"))
 
@@ -467,43 +467,47 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     stop("Method `ep` applies only to binary data generation")
   }
 
-  ####
-  
-  dtTemp <- copy(dtOld)
-
-  setnames(dtTemp, c(idvar, rowID), c(".id", ".rowid"))
-  
-  ####
-
   # wide(ness) is determined by incoming data structure.
 
-  maxN <- dtTemp[, .N, by = .id][, max(N)]
+  maxN <- dtOld[, .N, by = idvar][, max(N)]
   if (maxN == 1) {
     wide <- TRUE
   } else {
     wide <- FALSE
   }
-
-  if (wide == FALSE) {
-    if (maxN != nvars) stop(paste0("Number of records per id (", maxN, ") not equal to specified nvars (", nvars, ")."))
-  } else {
-    if (maxN > 1) stop(paste0("Data are in long format and parameter wide as been specified as TRUE"))
-  }
-
+  
+  ####
+  
   if (!is.null(cnames)) {
     nnames <- trimws(unlist(strsplit(cnames, split = ",")))
     lnames <- length(nnames)
-
-    if (wide == TRUE) {
-      if (lnames != nvars) stop(paste0("Number of names (", lnames, ") not equal to specified nvars (", nvars, ")."))
-    } else {
-      if (lnames > 1) stop(paste("Long format can have only 1 name.", lnames, "have been provided."))
-    }
   }
+
+  if (!wide) {
+    if (maxN != nvars) stop(paste0("Number of records per id (", maxN, ") not equal to specified nvars (", nvars, ")."))
+    if (lnames > 1) stop(paste("Long format can have only 1 name.", lnames, "have been provided."))
+    assertInDataTable(vars = c(rowID, periodvar), dt = dtOld)
+  } else if (wide) {
+    if (maxN > 1) stop(paste0("Data are in long format and parameter wide as been specified as TRUE"))
+    if (lnames != nvars) stop(paste0("Number of names (", lnames, ") not equal to specified nvars (", nvars, ")."))
+  }
+
+  ####
+  
+  dtTemp <- copy(dtOld)
+  
+  if (wide) {
+    rowID <- ".rowid"
+    dtTemp[, .rowid := id]
+  }
+  
+  setnames(dtTemp, c(idvar, rowID), c(".id", ".rowid"))
+  
 
   ####
 
   if (method == "copula") {
+    
     n <- length(unique(dtTemp[, .id])) # should check if n's are correct
     dtM <- .genQuantU(nvars, n, rho, corstr, corMatrix)
 
@@ -515,7 +519,6 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       dtTemp[, .U := dtM$Unew]
       dtTemp[, seq := dtM$seq]
     }
-
 
     if (dist == "poisson") {
       setnames(dtTemp, param1, ".param1")
@@ -546,14 +549,10 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       setnames(dtTemp, param2, ".param2")
       dtTemp[, .XX := stats::qnorm(p = .U, mean = .param1, sd = sqrt(.param2))]
     }
+    
   } else if (method == "ep") {
-    if (is.null(formSpec)) {
-      stop("Must specify formula used to generate probability")
-    }
-
-    if (!periodvar %in% names(dtTemp)) {
-      stop(paste(periodvar, "not in data set."))
-    }
+    
+    assertNotMissing(formSpec = missing(formSpec))
 
     newExpress <- try(parse(text = formSpec), silent = TRUE)
     if (.isError(newExpress)) stop("!")
@@ -579,8 +578,9 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       dres[[1]] <- data.table(genCorGen(
         n = nindiv, nvars = length(p), params1 = p,
         dist = "binary", rho = rho, corstr = corstr,
-        method = method
+        method = method, idname = ".id"
       ))
+      
     } else { # covariates
 
 
@@ -600,12 +600,11 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
           genCorGen(
             n = n, nvars = length(p), params1 = p,
             dist = "binary", rho = rho, corstr = corstr,
-            method = method
+            method = method, idname = ".id"
           )
         )
       }
     }
-
 
     dres <- rbindlist(dres)
 
@@ -615,12 +614,12 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     dtTemp[, .XX := dres[, X]]
 
     setkeyv(dtTemp, c(".id", periodvar))
-  }
+    
+  } # end (if ep)
 
 
-  if (wide == TRUE) {
+  if (wide) {
     dtTemp <- dtTemp[, list(.id, seq, .XX)]
-
 
     dWide <- dcast(dtTemp, .id ~ seq, value.var = ".XX")
     dtTemp <- copy(dtOld)
@@ -632,7 +631,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     }
 
     setnames(dtTemp, idvar, ".id")
-  } else if (wide == FALSE) {
+  } else if (!wide) {
     if (method == "copula") {
       dtTempLong <- dtTemp[, list(.rowid, .XX)]
       dtTemp <- copy(dtOld)
