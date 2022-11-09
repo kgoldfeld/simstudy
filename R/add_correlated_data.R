@@ -441,29 +441,17 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   
   assertNotMissing(dtOld = missing(dtOld), nvars = missing(nvars), rho = missing(rho), 
                    corstr = missing(corstr), dist = missing(dist), param1 = missing(param1))
+  
+  assertClass(dtOld = dtOld, class = "data.table")
+  
   assertOption(dist = dist, 
                options = c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))
   
-
-  # if (!(dist %in% c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))) {
-  #   stop("Distribution not properly specified.")
-  # }
-  
-  dtTemp <- copy(dtOld)
-
-  if (!(idvar %in% names(dtTemp))) {
-    stop(paste(idvar, "(id) not a valid field/column."))
-  }
-
-  if (!(param1 %in% names(dtTemp))) {
-    stop(paste(param1, "(parameter 1) not a valid field/column."))
-  }
-
   if (!is.null(param2)) {
-    if (!(param2 %in% names(dtTemp))) {
-      stop(paste(param2, "(parameter 2) not a valid field/column."))
-    }
-  }
+    assertInDataTable(vars = c(idvar, param1, param2, rowID), dt = dtOld)
+  } else assertInDataTable(vars = c(idvar, param1, rowID), dt = dtOld)
+  
+  assertOption(method = method, options = c("copula", "ep"))
 
   nparams <- as.numeric(!is.null(param1)) + as.numeric(!is.null(param2))
 
@@ -475,15 +463,13 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     stop(paste0("Too few parameters (", nparams, ") for ", dist))
   }
 
-  if (!(method %in% c("copula", "ep"))) {
-    stop(paste(method, "is not a valid method"))
-  }
-
   if (dist != "binary" & method == "ep") {
     stop("Method `ep` applies only to binary data generation")
   }
 
   ####
+  
+  dtTemp <- copy(dtOld)
 
   setnames(dtTemp, c(idvar, rowID), c(".id", ".rowid"))
   
