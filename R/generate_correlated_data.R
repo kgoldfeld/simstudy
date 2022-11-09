@@ -632,6 +632,8 @@ genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind",
   assertAtLeast(nPeriods = nPeriods, minVal = 2)
   assertInRange(rho = rho, range = c(-1,1))
   
+  assertOption(corstr = corstr, options = c("ind", "cs", "ar1"))
+  
   if (!is.null(iRho)) {
     assertInRange(iRho = iRho, range = c(-1,1))
     if (length(rho) == 1) {
@@ -647,7 +649,6 @@ genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind",
     }
   }
   
-  assertOption(corstr = corstr, options = c("ind", "cs", "ar1"))
   
   ###
   

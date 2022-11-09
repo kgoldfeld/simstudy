@@ -420,7 +420,7 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' )
 #' @concept correlated
 #' @export
-addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
+addCorGen <- function(dtOld, nvars, idvar = "id", rho=NULL, corstr=NULL, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL,
                       method = "copula", formSpec = NULL, periodvar = "period",
                       rowID = "timeID") {
@@ -439,8 +439,8 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
 
   #### Check args
   
-  assertNotMissing(dtOld = missing(dtOld), nvars = missing(nvars), rho = missing(rho), 
-                   corstr = missing(corstr), dist = missing(dist), param1 = missing(param1))
+  assertNotMissing(dtOld = missing(dtOld), nvars = missing(nvars), 
+                   dist = missing(dist), param1 = missing(param1))
   
   assertClass(dtOld = dtOld, class = "data.table")
   
@@ -472,8 +472,15 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   maxN <- dtOld[, .N, by = idvar][, max(N)]
   if (maxN == 1) {
     wide <- TRUE
+    if (maxN > 1) {
+      stop(paste0("Data are in long format and parameter wide as been specified as TRUE"))
+    }
   } else {
     wide <- FALSE
+    if (maxN != nvars) {
+      stop(paste0("Number of records per id (", maxN, ") not equal to specified nvars (", nvars, ")."))
+    }
+    assertInDataTable(vars = c(rowID, periodvar), dt = dtOld)
   }
   
   ####
@@ -481,29 +488,24 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
   if (!is.null(cnames)) {
     nnames <- trimws(unlist(strsplit(cnames, split = ",")))
     lnames <- length(nnames)
-  }
-
-  if (!wide) {
-    if (maxN != nvars) stop(paste0("Number of records per id (", maxN, ") not equal to specified nvars (", nvars, ")."))
-    if (lnames > 1) stop(paste("Long format can have only 1 name.", lnames, "have been provided."))
-    assertInDataTable(vars = c(rowID, periodvar), dt = dtOld)
-  } else if (wide) {
-    if (maxN > 1) stop(paste0("Data are in long format and parameter wide as been specified as TRUE"))
-    if (lnames != nvars) stop(paste0("Number of names (", lnames, ") not equal to specified nvars (", nvars, ")."))
+    if (!wide) {
+      if (lnames > 1) stop(paste("Long format can have only 1 name.", lnames, "have been provided."))
+      assertInDataTable(vars = c(rowID, periodvar), dt = dtOld)
+    } else if (wide) {
+      if (lnames != nvars) stop(paste0("Number of names (", lnames, ") not equal to specified nvars (", nvars, ")."))
+    }
   }
 
   ####
   
   dtTemp <- copy(dtOld)
   
-  if (wide) {
-    rowID <- ".rowid"
-    dtTemp[, .rowid := id]
+  if (wide) { # Convert to long form temporarily
+    dtTemp <- addPeriods(dtTemp, nPeriods = nvars, idvars = idvar)
   }
   
   setnames(dtTemp, c(idvar, rowID), c(".id", ".rowid"))
   
-
   ####
 
   if (method == "copula") {
@@ -512,13 +514,10 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     dtM <- .genQuantU(nvars, n, rho, corstr, corMatrix)
 
     xid <- ".id"
-    if (wide == TRUE) {
-      dtTemp <- dtM[dtTemp[, c(xid, param1, param2), with = FALSE]]
-      dtTemp[, .U := Unew]
-    } else {
-      dtTemp[, .U := dtM$Unew]
-      dtTemp[, seq := dtM$seq]
-    }
+    
+    dtTemp[, .U := dtM$Unew]
+    dtTemp[, seq := dtM$seq]
+    
 
     if (dist == "poisson") {
       setnames(dtTemp, param1, ".param1")
@@ -559,8 +558,9 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
 
     .Vars <- all.vars(newExpress)
     .Vars <- .Vars[.Vars != periodvar]
+    
     listvar <- c(.Vars, periodvar, param1)
-
+    
     dperms <- dtTemp[, .N, keyby = listvar]
     dcombos <- dperms[, .SD[1, list(N = N)], keyby = .Vars]
 
@@ -578,11 +578,10 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       dres[[1]] <- data.table(genCorGen(
         n = nindiv, nvars = length(p), params1 = p,
         dist = "binary", rho = rho, corstr = corstr,
-        method = method, idname = ".id"
+        corMatrix = corMatrix, method = method, idname = ".id"
       ))
       
     } else { # covariates
-
 
       if (numcombos > 200) {
         cat(paste0(
@@ -600,7 +599,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
           genCorGen(
             n = n, nvars = length(p), params1 = p,
             dist = "binary", rho = rho, corstr = corstr,
-            method = method, idname = ".id"
+            corMatrix = corMatrix, method = method, idname = ".id"
           )
         )
       }
@@ -614,11 +613,12 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     dtTemp[, .XX := dres[, X]]
 
     setkeyv(dtTemp, c(".id", periodvar))
+    dtTemp[, seq := paste0("V", ( get(periodvar) + 1 )) ]
     
   } # end (if ep)
 
-
   if (wide) {
+    
     dtTemp <- dtTemp[, list(.id, seq, .XX)]
 
     dWide <- dcast(dtTemp, .id ~ seq, value.var = ".XX")
@@ -630,19 +630,17 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       setnames(dtTemp, paste0("V", 1:nvars), nnames)
     }
 
-    setnames(dtTemp, idvar, ".id")
   } else if (!wide) {
-    if (method == "copula") {
-      dtTempLong <- dtTemp[, list(.rowid, .XX)]
-      dtTemp <- copy(dtOld)
+    
+    dtTempLong <- dtTemp[, list(.rowid, .XX)]
+    dtTemp <- copy(dtOld)
       
-      setnames(dtTemp, c(idvar, rowID), c(".id", ".rowid"))
+    setnames(dtTemp, rowID, ".rowid")
 
-      setkey(dtTempLong, .rowid)
-      setkey(dtTemp, .rowid)
+    setkey(dtTempLong, .rowid)
+    setkey(dtTemp, .rowid)
 
-      dtTemp <- dtTemp[dtTempLong]
-    }
+    dtTemp <- dtTemp[dtTempLong]
 
     if (!is.null(cnames)) {
       setnames(dtTemp, ".XX", cnames)
@@ -650,7 +648,7 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       setnames(dtTemp, ".XX", "X")
     }
     
-    setnames(dtTemp, c(".id", ".rowid"), c(idvar, rowID))
+    setnames(dtTemp, ".rowid", rowID)
     
   }
 
