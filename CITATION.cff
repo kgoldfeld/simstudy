@@ -180,6 +180,15 @@ references:
   year: '2022'
   url: https://CRAN.R-project.org/package=backports
 - type: software
+  title: pbv
+  abstract: 'pbv: Probabilities for Bivariate Normal Distribution'
+  notes: Imports
+  authors:
+  - family-names: Robitzsch
+    given-names: Alexander
+  year: '2022'
+  url: https://CRAN.R-project.org/package=pbv
+- type: software
   title: covr
   abstract: 'covr: Test Coverage for Packages'
   notes: Suggests
