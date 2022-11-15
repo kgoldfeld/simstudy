@@ -1,8 +1,5 @@
 #include <Rcpp.h>
 
-/** // [[Rcpp::depends(RcppArmadillo)]]
-#include <RcppArmadillo.h> **/
-
 // [[Rcpp::depends(pbv)]]
 #include <pbv.h>
 

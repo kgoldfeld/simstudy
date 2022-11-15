@@ -408,7 +408,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 
     if (!is.null(cnames)) setnames(dFinal, "X", cnames)
   } else {
-    dFinal <- dcast(dtM, id ~ seq, value.var = "X")
+    dFinal <- data.table::dcast(dtM, id ~ seq, value.var = "X")
     if (!is.null(cnames)) {
       nnames <- trimws(unlist(strsplit(cnames, split = ",")))
       setnames(dFinal, paste0("V", 1:nvars), nnames)
@@ -419,66 +419,6 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 
   return(dFinal[])
 }
-
-
-# TODO Implement Emrich and Piedmonte algorithm for correlated binary data?
-#' Internal functions called by genCorGen and addCorGen - returns matrix
-#'
-# @param nvars Number of new variables to generate
-# @param corMatrix Correlation matrix
-# @param rho Correlation coefficient
-# @param corstr Correlation structure
-# @return A correlation matrix
-# @noRd
-# .checkBoundsBin <- function(p1, p2, d) {
-#   l <- (p1 * p2) / ((1 - p1) * (1 - p2))
-#   L <- max(-sqrt(l), -sqrt(1 / l))
-# 
-#   u <- (p1 * (1 - p2)) / (p2 * (1 - p1))
-#   U <- min(sqrt(u), sqrt(1 / u))
-# 
-#   if ((d < L & isTRUE(all.equal(d, L)) == FALSE) |
-#     (d > U & isTRUE(all.equal(d, U)) == FALSE)) {
-#     LU <- paste0("(", round(L, 2), " ... ", round(U, 2), ")")
-#     stopText <- paste("Specified correlation", d, "out of range", LU)
-#     stop(stopText)
-#   }
-# }
-
-
-#'
-# .findRhoBin <- function(p1, p2, d) {
-#   .checkBoundsBin(p1, p2, d)
-# 
-#   target <- d * sqrt(p1 * p2 * (1 - p1) * (1 - p2)) + p1 * p2
-# 
-#   # given p1, p2 & d, bisection search for corresponding rho
-# 
-#   Max <- 1
-#   Min <- -1
-#   test <- 0
-#   found <- FALSE
-# 
-#   while (!found) {
-#     corr <- diag(2)
-#     corr[1, 2] <- corr[2, 1] <- test
-# 
-#     est <- mvtnorm::pmvnorm(lower = rep(-Inf, 2), upper = c(stats::qnorm(p1), stats::qnorm(p2)), mean = c(0, 0), corr = corr)
-# 
-#     if (round(est, 5) == round(target, 5)) {
-#       found <- TRUE
-#       rho <- test
-#     } else if (est < target) {
-#       Min <- test
-#       test <- (Min + Max) / 2
-#     } else {
-#       Max <- test
-#       test <- (Min + Max) / 2
-#     }
-#   }
-#   
-#   return(rho)
-# }
 
 #'
 .genBinEP <- function(n, p, tcorr) {
