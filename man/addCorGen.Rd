@@ -8,8 +8,8 @@ addCorGen(
   dtOld,
   nvars,
   idvar = "id",
-  rho,
-  corstr,
+  rho = NULL,
+  corstr = NULL,
   corMatrix = NULL,
   dist,
   param1,
@@ -17,7 +17,8 @@ addCorGen(
   cnames = NULL,
   method = "copula",
   formSpec = NULL,
-  periodvar = "period"
+  periodvar = "period",
+  rowID = "timeID"
 )
 }
 \arguments{

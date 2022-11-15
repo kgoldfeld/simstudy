@@ -35,7 +35,8 @@ Imports:
     mvnfast,
     mvtnorm,
     Rcpp,
-    backports
+    backports,
+    pbv
 Suggests: 
     covr,
     dplyr,
@@ -60,7 +61,7 @@ Suggests:
     survminer,
     blockmatrix
 LinkingTo: 
-    Rcpp
+    Rcpp, pbv
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

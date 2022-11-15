@@ -17,3 +17,15 @@ chkNonIncreasing <- function(adjmatrix) {
     .Call(`_simstudy_chkNonIncreasing`, adjmatrix)
 }
 
+checkBoundsBin <- function(p1, p2, d) {
+    invisible(.Call(`_simstudy_checkBoundsBin`, p1, p2, d))
+}
+
+findRhoBin <- function(p1, p2, d) {
+    .Call(`_simstudy_findRhoBin`, p1, p2, d)
+}
+
+getRhoMat <- function(N, P, TCORR) {
+    .Call(`_simstudy_getRhoMat`, N, P, TCORR)
+}
+
