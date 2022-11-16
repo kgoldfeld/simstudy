@@ -296,10 +296,8 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' the multivariate Gaussian copula method that is applied to all other distributions; this
 #' applies to all available distributions. (2) "ep" uses an algorithm developed by
 #' Emrich and Piedmonte (1991).
-#' @param formSpec This is no longer a valid argument - it is not necessary and will
-#' be ignored.
-#' @param periodvar This is no longer a valid argument - it is not necessary and will
-#' be ignored.
+#' @param ... May include additional arguments that have been deprecated and are
+#' no longer used.
 #' @return Original data.table with added column(s) of correlated data
 #' @references Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
 #' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
@@ -308,18 +306,12 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #'
 #' def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
 #' def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log")
-#' def <- defData(def, varname = "p", formula = "-2 + .3*xbase", dist = "nonrandom", link = "logit")
 #'
-#' dt <- genData(500, def)
+#' dt <- genData(100, def)
 #'
-#' dtX1 <- addCorGen(
+#' addCorGen(
 #'   dtOld = dt, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
 #'   dist = "poisson", param1 = "lambda"
-#' )
-#'
-#' dtX2 <- addCorGen(
-#'   dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
-#'   dist = "binary", param1 = "p"
 #' )
 #'
 #' # Long example
@@ -328,76 +320,20 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
 #'
 #' def2 <- defDataAdd(
-#'   varname = "lambda", formula = ".5+.5*period + .1*xbase",
-#'   dist = "nonrandom", link = "log"
-#' )
-#' def2 <- defDataAdd(def2,
 #'   varname = "p", formula = "-3+.2*period + .3*xbase",
 #'   dist = "nonrandom", link = "logit"
 #' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "gammaMu", formula = ".2*period + .3*xbase",
-#'   dist = "nonrandom", link = "log"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "gammaDis",
-#'   formula = 1, dist = "nonrandom"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "normMu",
-#'   formula = "5+period + .5*xbase", dist = "nonrandom"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "normVar", formula = 4,
-#'   dist = "nonrandom"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "unifMin",
-#'   formula = "5 + 2*period + .2*xbase", dist = "nonrandom"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "unifMax",
-#'   formula = "unifMin + 20", dist = "nonrandom"
-#' )
 #'
-#' dt <- genData(1000, def)
+#' dt <- genData(100, def)
 #'
 #' dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
 #' dtLong <- addColumns(def2, dtLong)
 #'
-#' # Poisson distribution
-#'
-#' dtX3 <- addCorGen(
-#'   dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
-#'   dist = "poisson", param1 = "lambda", cnames = "NewPois"
-#' )
-#' dtX3
-#'
 #' # Binomial distribution - copula method
 #'
-#' dtX4 <- addCorGen(
+#' addCorGen(
 #'   dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
 #'   dist = "binary", param1 = "p", cnames = "NewBin"
-#' )
-#'
-#' dtX4
-#'
-#' # Gamma distribution
-#'
-#' dtX6 <- addCorGen(
-#'   dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
-#'   dist = "gamma", param1 = "gammaMu", param2 = "gammaDis",
-#'   cnames = "NewGamma"
-#' )
-#'
-#' dtX6
-#'
-#' # Normal distribution
-#'
-#' dtX7 <- addCorGen(
-#'   dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
-#'   dist = "normal", param1 = "normMu", param2 = "normVar",
-#'   cnames = "NewNorm"
 #' )
 #'
 #' # Binary outcome - ep method
@@ -411,17 +347,16 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' dx <- addPeriods(dx, nPeriods = 4)
 #' dx <- addColumns(def1, dx)
 #'
-#' dg <- addCorGen(dx,
+#' addCorGen(dx,
 #'   nvars = 4,
 #'   corMatrix = NULL, rho = .3, corstr = "cs",
-#'   dist = "binary", param1 = "p",
-#'   method = "ep"
+#'   dist = "binary", param1 = "p", method = "ep"
 #' )
 #' @concept correlated
 #' @export
 addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL,
-                      method = "copula", formSpec = NULL, periodvar = NULL) {
+                      method = "copula", ...) {
 
   ### can deprecate formSpec - no longer relevant
   ### can deprecate periodvar - no longer relevant
