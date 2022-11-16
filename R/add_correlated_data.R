@@ -373,21 +373,21 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   .param2 <- NULL
   seq_ <- NULL
   period <- NULL
+  p <- NULL
+  corM <- NULL
+  seqid <- NULL
   
   ####
   
   .genByID <- function(p, rho, corstr, corMatrix) {
-      
-    n <- length(p)
-      
-    genCorGen(
-      n = 1, nvars = length(p), params1 = p,
-      dist = "binary", rho = rho, corstr = corstr,
-      corMatrix = corMatrix, method = "ep",  
-      idname = ".dummyid"
-    )  
-  }
+
+    corM <- .buildCorMat(nvars = length(p), corMatrix, corstr, rho)
+    dtM <- .genBinEP(1, p, corM)
+    dtM <- dtM[, list(X, seq_ = seqid)]
+    dtM[]
     
+  }
+  
   #### Check args
   
   assertNotMissing(dtOld = missing(dtOld), 
@@ -458,10 +458,10 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
 
   if (method == "copula") {
     
-    n <- length(unique(dtTemp[, .id]))
-    
-    dtM <- rbindlist(lapply(1:n, 
-          function(x) .genQuantU(dtTemp[.id == x, .N], 1, rho, corstr, corMatrix))
+    ns <- as.list(dtTemp[, .N, keyby = .id][,N])
+
+    dtM <- rbindlist(lapply(ns,
+          function(x) .genQuantU(x, 1, rho, corstr, corMatrix))
     )
 
     xid <- ".id"
@@ -504,8 +504,9 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   } else if (method == "ep") {
     
     dX <- dtTemp[, .genByID(p = get(param1), rho, corstr, corMatrix), keyby = .id]
-    dX[, seq_ := period + 1]
-    dX[, `:=`(.dummyid = NULL, period = NULL)]
+    
+    # dX[, seq_ := period + 1]
+    # dX[, `:=`(.dummyid = NULL, period = NULL)]
     setnames(dX, "X", ".XX")
     
   } # end (if ep)
