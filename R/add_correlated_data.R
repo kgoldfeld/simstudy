@@ -296,6 +296,10 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' the multivariate Gaussian copula method that is applied to all other distributions; this
 #' applies to all available distributions. (2) "ep" uses an algorithm developed by
 #' Emrich and Piedmonte (1991).
+#' @param formSpec This is no longer a valid argument - it is not necessary and will
+#' be ignored.
+#' @param periodvar This is no longer a valid argument - it is not necessary and will
+#' be ignored.
 #' @return Original data.table with added column(s) of correlated data
 #' @references Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
 #' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
@@ -430,9 +434,10 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   Unew <- NULL
   .XX <- NULL
   X <- NULL
-  .rowID <- NULL
   .param1 <- NULL
   .param2 <- NULL
+  seq_ <- NULL
+  period <- NULL
   
   ####
   
@@ -559,7 +564,7 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
       dtTemp[, .XX := stats::qnorm(p = .U, mean = .param1, sd = sqrt(.param2))]
     }
     
-    dX <- dtTemp[, .(.id, seq_, .XX)]
+    dX <- dtTemp[, list(.id, seq_, .XX)]
 
   } else if (method == "ep") {
     

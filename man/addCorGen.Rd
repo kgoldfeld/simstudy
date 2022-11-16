@@ -61,6 +61,12 @@ represents the column.}
 the multivariate Gaussian copula method that is applied to all other distributions; this
 applies to all available distributions. (2) "ep" uses an algorithm developed by
 Emrich and Piedmonte (1991).}
+
+\item{formSpec}{This is no longer a valid argument - it is not necessary and will
+be ignored.}
+
+\item{periodvar}{This is no longer a valid argument - it is not necessary and will
+be ignored.}
 }
 \value{
 Original data.table with added column(s) of correlated data
