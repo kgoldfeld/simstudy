@@ -266,9 +266,12 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 
 #' Create multivariate (correlated) data - for general distributions
 #'
-#' @param dtOld If an existing data.table is specified, then wide will be set to TRUE and n
-#' will be set to the nrow(dt) without any warning or error.
-#' @param nvars Number of new variables to create for each id.
+#' @param dtOld The data set that will be augmented. If the data set includes a
+#' single record per id, the new data table will be created as a "wide" data set.
+#' If the original data set includes multiple records per id, the new data set will 
+#' be in "long" format.
+#' @param nvars The number of new variables to create for each id. This is only applicable
+#' when the data are generated from a data set that includes one record per id.
 #' @param idvar String variable name of column represents individual level id for correlated
 #' data.
 #' @param dist A string indicating "normal", "binary", "poisson" or "gamma".
@@ -293,11 +296,6 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' the multivariate Gaussian copula method that is applied to all other distributions; this
 #' applies to all available distributions. (2) "ep" uses an algorithm developed by
 #' Emrich and Piedmonte (1991).
-#' @param formSpec The formula (as a string) that was used to generate the binary
-#' outcome in the `defDataAdd` statement. This is only necessary when method "ep" is
-#' requested.
-#' @param periodvar A string value that indicates the name of the field that indexes
-#' the repeated measurement for an individual unit. The value defaults to "period".
 #' @return Original data.table with added column(s) of correlated data
 #' @references Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
 #' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
@@ -400,10 +398,8 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #'
 #' # Binary outcome - ep method
 #'
-#' probform <- "-2 + .3*period"
-#'
 #' def1 <- defDataAdd(
-#'   varname = "p", formula = probform,
+#'   varname = "p", formula =  "-2 + .3*period",
 #'   dist = "nonrandom", link = "logit"
 #' )
 #'
@@ -415,8 +411,7 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #'   nvars = 4,
 #'   corMatrix = NULL, rho = .3, corstr = "cs",
 #'   dist = "binary", param1 = "p",
-#'   method = "ep", formSpec = probform,
-#'   periodvar = "period"
+#'   method = "ep"
 #' )
 #' @concept correlated
 #' @export
@@ -424,11 +419,10 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
                       dist, param1, param2 = NULL, cnames = NULL,
                       method = "copula", formSpec = NULL, periodvar = NULL) {
 
-  # "Declare" vars to avoid R CMD warning
+  ### can deprecate formSpec - no longer relevant
+  ### can deprecate periodvar - no longer relevant
   
-  ### nvars can be NULL if data is in long form ...
-  ### can deprecate formSpec
-  ### can deprecate periodvar
+  # "Declare" vars to avoid R CMD warning
 
   .id <- NULL
   N <- NULL
@@ -441,7 +435,6 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   .param2 <- NULL
   
   ####
-  
   
   .genByID <- function(p, rho, corstr, corMatrix) {
       
@@ -492,15 +485,8 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
     wide <- TRUE
     assertNotMissing(nvars = missing(nvars))
     assertAtLeast(nvars = nvars, minVal = 2)
-    # if (maxN > 1) {
-    #   stop(paste0("Data are in long format and parameter wide as been specified as TRUE"))
-    # }
   } else if (maxN > 1) {
     wide <- FALSE
-    # if (maxN != nvars) {
-    #   stop(paste0("Number of records per id (", maxN, ") not equal to specified nvars (", nvars, ")."))
-    # }
-    # assertInDataTable(vars = c(periodvar), dt = dtOld)
   }
   
   ####
@@ -510,7 +496,6 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
     lnames <- length(nnames)
     if (!wide) {
       if (lnames > 1) stop(paste("Long format can have only 1 name.", lnames, "have been provided."))
-      # assertInDataTable(vars = c(periodvar), dt = dtOld)
     } else if (wide) {
       if (lnames != nvars) stop(paste0("Number of names (", lnames, ") not equal to specified nvars (", nvars, ")."))
     }
@@ -576,7 +561,6 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
     
     dX <- dtTemp[, .(.id, seq_, .XX)]
 
-    
   } else if (method == "ep") {
     
     dX <- dtTemp[, .genByID(p = get(param1), rho, corstr, corMatrix), keyby = .id]
@@ -621,10 +605,8 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
     
     dtTemp[, seq_ := NULL]
     
-  }
+  } # end if !wide
   
   setnames(dtTemp, ".id", idvar)
-  
-
   return(dtTemp[])
 }

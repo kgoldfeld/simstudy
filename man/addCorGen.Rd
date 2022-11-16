@@ -6,7 +6,7 @@
 \usage{
 addCorGen(
   dtOld,
-  nvars,
+  nvars = NULL,
   idvar = "id",
   rho = NULL,
   corstr = NULL,
@@ -17,15 +17,17 @@ addCorGen(
   cnames = NULL,
   method = "copula",
   formSpec = NULL,
-  periodvar = "period",
-  rowID = "timeID"
+  periodvar = NULL
 )
 }
 \arguments{
-\item{dtOld}{If an existing data.table is specified, then wide will be set to TRUE and n
-will be set to the nrow(dt) without any warning or error.}
+\item{dtOld}{The data set that will be augmented. If the data set includes a
+single record per id, the new data table will be created as a "wide" data set.
+If the original data set includes multiple records per id, the new data set will 
+be in "long" format.}
 
-\item{nvars}{Number of new variables to create for each id.}
+\item{nvars}{The number of new variables to create for each id. This is only applicable
+when the data are generated from a data set that includes one record per id.}
 
 \item{idvar}{String variable name of column represents individual level id for correlated
 data.}
@@ -59,13 +61,6 @@ represents the column.}
 the multivariate Gaussian copula method that is applied to all other distributions; this
 applies to all available distributions. (2) "ep" uses an algorithm developed by
 Emrich and Piedmonte (1991).}
-
-\item{formSpec}{The formula (as a string) that was used to generate the binary
-outcome in the `defDataAdd` statement. This is only necessary when method "ep" is
-requested.}
-
-\item{periodvar}{A string value that indicates the name of the field that indexes
-the repeated measurement for an individual unit. The value defaults to "period".}
 }
 \value{
 Original data.table with added column(s) of correlated data
@@ -172,10 +167,8 @@ dtX7 <- addCorGen(
 
 # Binary outcome - ep method
 
-probform <- "-2 + .3*period"
-
 def1 <- defDataAdd(
-  varname = "p", formula = probform,
+  varname = "p", formula =  "-2 + .3*period",
   dist = "nonrandom", link = "logit"
 )
 
@@ -187,8 +180,7 @@ dg <- addCorGen(dx,
   nvars = 4,
   corMatrix = NULL, rho = .3, corstr = "cs",
   dist = "binary", param1 = "p",
-  method = "ep", formSpec = probform,
-  periodvar = "period"
+  method = "ep"
 )
 }
 \references{
