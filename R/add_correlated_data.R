@@ -266,9 +266,12 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 
 #' Create multivariate (correlated) data - for general distributions
 #'
-#' @param dtOld If an existing data.table is specified, then wide will be set to TRUE and n
-#' will be set to the nrow(dt) without any warning or error.
-#' @param nvars Number of new variables to create for each id.
+#' @param dtOld The data set that will be augmented. If the data set includes a
+#' single record per id, the new data table will be created as a "wide" data set.
+#' If the original data set includes multiple records per id, the new data set will 
+#' be in "long" format.
+#' @param nvars The number of new variables to create for each id. This is only applicable
+#' when the data are generated from a data set that includes one record per id.
 #' @param idvar String variable name of column represents individual level id for correlated
 #' data.
 #' @param dist A string indicating "normal", "binary", "poisson" or "gamma".
@@ -293,11 +296,8 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' the multivariate Gaussian copula method that is applied to all other distributions; this
 #' applies to all available distributions. (2) "ep" uses an algorithm developed by
 #' Emrich and Piedmonte (1991).
-#' @param formSpec The formula (as a string) that was used to generate the binary
-#' outcome in the `defDataAdd` statement. This is only necessary when method "ep" is
-#' requested.
-#' @param periodvar A string value that indicates the name of the field that indexes
-#' the repeated measurement for an individual unit. The value defaults to "period".
+#' @param ... May include additional arguments that have been deprecated and are
+#' no longer used.
 #' @return Original data.table with added column(s) of correlated data
 #' @references Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
 #' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
@@ -306,18 +306,12 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #'
 #' def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
 #' def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log")
-#' def <- defData(def, varname = "p", formula = "-2 + .3*xbase", dist = "nonrandom", link = "logit")
 #'
-#' dt <- genData(500, def)
+#' dt <- genData(100, def)
 #'
-#' dtX1 <- addCorGen(
+#' addCorGen(
 #'   dtOld = dt, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
 #'   dist = "poisson", param1 = "lambda"
-#' )
-#'
-#' dtX2 <- addCorGen(
-#'   dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
-#'   dist = "binary", param1 = "p"
 #' )
 #'
 #' # Long example
@@ -326,139 +320,66 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
 #'
 #' def2 <- defDataAdd(
-#'   varname = "lambda", formula = ".5+.5*period + .1*xbase",
-#'   dist = "nonrandom", link = "log"
-#' )
-#' def2 <- defDataAdd(def2,
 #'   varname = "p", formula = "-3+.2*period + .3*xbase",
 #'   dist = "nonrandom", link = "logit"
 #' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "gammaMu", formula = ".2*period + .3*xbase",
-#'   dist = "nonrandom", link = "log"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "gammaDis",
-#'   formula = 1, dist = "nonrandom"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "normMu",
-#'   formula = "5+period + .5*xbase", dist = "nonrandom"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "normVar", formula = 4,
-#'   dist = "nonrandom"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "unifMin",
-#'   formula = "5 + 2*period + .2*xbase", dist = "nonrandom"
-#' )
-#' def2 <- defDataAdd(def2,
-#'   varname = "unifMax",
-#'   formula = "unifMin + 20", dist = "nonrandom"
-#' )
 #'
-#' dt <- genData(1000, def)
+#' dt <- genData(100, def)
 #'
 #' dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
 #' dtLong <- addColumns(def2, dtLong)
 #'
-#' # Poisson distribution
-#'
-#' dtX3 <- addCorGen(
-#'   dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
-#'   dist = "poisson", param1 = "lambda", cnames = "NewPois"
-#' )
-#' dtX3
-#'
-#' # Binomial distribution - copula method
-#'
-#' dtX4 <- addCorGen(
-#'   dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
-#'   dist = "binary", param1 = "p", cnames = "NewBin"
-#' )
-#'
-#' dtX4
-#'
-#' # Gamma distribution
-#'
-#' dtX6 <- addCorGen(
-#'   dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
-#'   dist = "gamma", param1 = "gammaMu", param2 = "gammaDis",
-#'   cnames = "NewGamma"
-#' )
-#'
-#' dtX6
-#'
-#' # Normal distribution
-#'
-#' dtX7 <- addCorGen(
-#'   dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
-#'   dist = "normal", param1 = "normMu", param2 = "normVar",
-#'   cnames = "NewNorm"
-#' )
-#'
-#' # Binary outcome - ep method
-#'
-#' probform <- "-2 + .3*period"
-#'
-#' def1 <- defDataAdd(
-#'   varname = "p", formula = probform,
-#'   dist = "nonrandom", link = "logit"
-#' )
-#'
-#' dx <- genData(100)
-#' dx <- addPeriods(dx, nPeriods = 4)
-#' dx <- addColumns(def1, dx)
-#'
-#' dg <- addCorGen(dx,
-#'   nvars = 4,
-#'   corMatrix = NULL, rho = .3, corstr = "cs",
-#'   dist = "binary", param1 = "p",
-#'   method = "ep", formSpec = probform,
-#'   periodvar = "period"
-#' )
 #' @concept correlated
 #' @export
-addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
+addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL,
-                      method = "copula", formSpec = NULL, periodvar = "period") {
+                      method = "copula", ...) {
 
+  ### can deprecate formSpec - no longer relevant
+  ### can deprecate periodvar - no longer relevant
+  
   # "Declare" vars to avoid R CMD warning
 
-  id <- NULL
+  .id <- NULL
   N <- NULL
   .U <- NULL
   Unew <- NULL
   .XX <- NULL
   X <- NULL
-  timeID <- NULL
   .param1 <- NULL
   .param2 <- NULL
+  seq_ <- NULL
+  period <- NULL
+  p <- NULL
+  corM <- NULL
+  seqid <- NULL
+  
+  ####
+  
+  .genByID <- function(p, rho, corstr, corMatrix) {
 
-  ## Need to check if wide or long
-
-  dtTemp <- copy(dtOld)
-
+    corM <- .buildCorMat(nvars = length(p), corMatrix, corstr, rho)
+    dtM <- .genBinEP(1, p, corM)
+    dtM <- dtM[, list(X, seq_ = seqid)]
+    dtM[]
+    
+  }
+  
   #### Check args
-
-  if (!(dist %in% c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))) {
-    stop("Distribution not properly specified.")
-  }
-
-  if (!(idvar %in% names(dtTemp))) {
-    stop(paste(idvar, "(id) not a valid field/column."))
-  }
-
-  if (!(param1 %in% names(dtTemp))) {
-    stop(paste(param1, "(parameter 1) not a valid field/column."))
-  }
-
+  
+  assertNotMissing(dtOld = missing(dtOld), 
+                   dist = missing(dist), param1 = missing(param1))
+  
+  assertClass(dtOld = dtOld, class = "data.table")
+  
+  assertOption(dist = dist, 
+               options = c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))
+  
   if (!is.null(param2)) {
-    if (!(param2 %in% names(dtTemp))) {
-      stop(paste(param2, "(parameter 2) not a valid field/column."))
-    }
-  }
+    assertInDataTable(vars = c(idvar, param1, param2), dt = dtOld)
+  } else assertInDataTable(vars = c(idvar, param1), dt = dtOld)
+  
+  assertOption(method = method, options = c("copula", "ep"))
 
   nparams <- as.numeric(!is.null(param1)) + as.numeric(!is.null(param2))
 
@@ -470,62 +391,61 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
     stop(paste0("Too few parameters (", nparams, ") for ", dist))
   }
 
-  if (!(method %in% c("copula", "ep"))) {
-    stop(paste(method, "is not a valid method"))
-  }
-
   if (dist != "binary" & method == "ep") {
     stop("Method `ep` applies only to binary data generation")
   }
 
-  ####
-
-  setnames(dtTemp, idvar, "id")
-
-  ####
-
   # wide(ness) is determined by incoming data structure.
 
-  maxN <- dtTemp[, .N, by = id][, max(N)]
+  maxN <- dtOld[, .N, by = idvar][, max(N)]
   if (maxN == 1) {
     wide <- TRUE
-  } else {
+    assertNotMissing(nvars = missing(nvars))
+    assertAtLeast(nvars = nvars, minVal = 2)
+  } else if (maxN > 1) {
     wide <- FALSE
   }
-
-  if (wide == FALSE) {
-    if (maxN != nvars) stop(paste0("Number of records per id (", maxN, ") not equal to specified nvars (", nvars, ")."))
-  } else {
-    if (maxN > 1) stop(paste0("Data are in long format and parameter wide as been specified as TRUE"))
-  }
-
+  
+  ####
+  
   if (!is.null(cnames)) {
     nnames <- trimws(unlist(strsplit(cnames, split = ",")))
     lnames <- length(nnames)
-
-    if (wide == TRUE) {
-      if (lnames != nvars) stop(paste0("Number of names (", lnames, ") not equal to specified nvars (", nvars, ")."))
-    } else {
+    if (!wide) {
       if (lnames > 1) stop(paste("Long format can have only 1 name.", lnames, "have been provided."))
+    } else if (wide) {
+      if (lnames != nvars) stop(paste0("Number of names (", lnames, ") not equal to specified nvars (", nvars, ")."))
     }
   }
 
   ####
+  
+  dtOrig <- copy(dtOld)
+  setnames(dtOrig, idvar, ".id")
+  
+  dtTemp <- copy(dtOrig)
+  
+  if (wide) { # Convert to long form temporarily
+    dtTemp <- addPeriods(dtTemp, nPeriods = nvars, idvars = ".id")
+  }
+  
+  dtTemp[, seq_ := 1:.N, keyby = .id]
+  
+  ####
 
   if (method == "copula") {
-    n <- length(unique(dtTemp[, id])) # should check if n's are correct
-    dtM <- .genQuantU(nvars, n, rho, corstr, corMatrix)
+    
+    ns <- as.list(dtTemp[, .N, keyby = .id][,N])
 
-    xid <- "id"
-    if (wide == TRUE) {
-      dtTemp <- dtM[dtTemp[, c(xid, param1, param2), with = FALSE]]
-      dtTemp[, .U := Unew]
-    } else {
-      dtTemp[, .U := dtM$Unew]
-      dtTemp[, seq := dtM$seq]
-    }
+    dtM <- rbindlist(lapply(ns,
+          function(x) .genQuantU(x, 1, rho, corstr, corMatrix))
+    )
 
-
+    xid <- ".id"
+    
+    dtTemp[, .U := dtM$Unew]
+    dtTemp[, seq := dtM$seq]
+    
     if (dist == "poisson") {
       setnames(dtTemp, param1, ".param1")
       dtTemp[, .XX := stats::qpois(p = .U, lambda = .param1)]
@@ -555,114 +475,56 @@ addCorGen <- function(dtOld, nvars, idvar = "id", rho, corstr, corMatrix = NULL,
       setnames(dtTemp, param2, ".param2")
       dtTemp[, .XX := stats::qnorm(p = .U, mean = .param1, sd = sqrt(.param2))]
     }
+    
+    dX <- dtTemp[, list(.id, seq_, .XX)]
+
   } else if (method == "ep") {
-    if (is.null(formSpec)) {
-      stop("Must specify formula used to generate probability")
-    }
+    
+    dX <- dtTemp[, .genByID(p = get(param1), rho, corstr, corMatrix), keyby = .id]
+    
+    # dX[, seq_ := period + 1]
+    # dX[, `:=`(.dummyid = NULL, period = NULL)]
+    setnames(dX, "X", ".XX")
+    
+  } # end (if ep)
 
-    if (!periodvar %in% names(dtTemp)) {
-      stop(paste(periodvar, "not in data set."))
-    }
+  if (wide) {
+    
+    setkey(dX, .id, seq_)
 
-    newExpress <- try(parse(text = formSpec), silent = TRUE)
-    if (.isError(newExpress)) stop("!")
-
-    .Vars <- all.vars(newExpress)
-    .Vars <- .Vars[.Vars != periodvar]
-    listvar <- c(.Vars, periodvar, param1)
-
-    dperms <- dtTemp[, .N, keyby = listvar]
-    dcombos <- dperms[, .SD[1, list(N = N)], keyby = .Vars]
-
-    setkeyv(dperms, c(.Vars, periodvar))
-
-    numcombos <- nrow(dcombos)
-
-    dres <- vector("list", numcombos)
-
-    if (numcombos == 1) { # no covariates, only repeated data
-
-      p <- dperms$p
-      nindiv <- dcombos$N
-
-      dres[[1]] <- data.table(genCorGen(
-        n = nindiv, nvars = length(p), params1 = p,
-        dist = "binary", rho = rho, corstr = corstr,
-        method = method
-      ))
-    } else { # covariates
-
-
-      if (numcombos > 200) {
-        cat(paste0(
-          "\nNumber of covariate combinations is large: ", numcombos,
-          ". Data generation might be slow.\n\n"
-        ))
-      }
-
-      for (i in 1:numcombos) {
-        p <- dperms[dcombos[i, ], p]
-        n <- dcombos[i, N]
-
-        dres[[i]] <- data.table(
-          dcombos[i, ],
-          genCorGen(
-            n = n, nvars = length(p), params1 = p,
-            dist = "binary", rho = rho, corstr = corstr,
-            method = method
-          )
-        )
-      }
-    }
-
-
-    dres <- rbindlist(dres)
-
-    setkeyv(dres, c(.Vars, periodvar, "id"))
-
-    setkeyv(dtTemp, c(.Vars, periodvar, "id"))
-    dtTemp[, .XX := dres[, X]]
-
-    setkeyv(dtTemp, c("id", periodvar))
-  }
-
-
-  if (wide == TRUE) {
-    dtTemp <- dtTemp[, list(id, seq, .XX)]
-
-
-    dWide <- dcast(dtTemp, id ~ seq, value.var = ".XX")
-    dtTemp <- copy(dtOld)
-
-    dtTemp <- dtTemp[dWide]
+    dWide <- dcast(dX, .id ~ seq_, value.var = ".XX")
+    setnames(dWide, c(".id", paste0("V", 1:nvars)))
+    
+    setkey(dWide, ".id")
+    setkey(dtOrig, ".id")
+    
+    dtTemp <- dtOrig[dWide]
 
     if (!is.null(cnames)) {
       setnames(dtTemp, paste0("V", 1:nvars), nnames)
     }
 
-    setnames(dtTemp, idvar, "id")
-  } else if (wide == FALSE) {
-    if (method == "copula") {
-      dtTempLong <- dtTemp[, list(timeID, .XX)]
-      dtTemp <- copy(dtOld)
-
-      setkey(dtTempLong, timeID)
-      setkey(dtTemp, timeID)
-
-      dtTemp <- dtTemp[dtTempLong]
-
-      setnames(dtTemp, idvar, "id")
-    }
-
+  } else if (!wide) {
+    
+    dtTemp <- copy(dtOld)
+    setnames(dtTemp, c(idvar), c(".id"))
+    dtTemp[, seq_ := 1:.N, keyby = .id]
+    
+    setkey(dX, .id, seq_)
+    setkey(dtTemp, .id, seq_)
+    
+    dtTemp <- dtTemp[dX]
+    
     if (!is.null(cnames)) {
       setnames(dtTemp, ".XX", cnames)
     } else {
       setnames(dtTemp, ".XX", "X")
     }
-  }
-
-  setnames(dtTemp, "id", idvar)
-
-
+    
+    dtTemp[, seq_ := NULL]
+    
+  } # end if !wide
+  
+  setnames(dtTemp, ".id", idvar)
   return(dtTemp[])
 }

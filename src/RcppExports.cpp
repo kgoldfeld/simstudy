@@ -11,18 +11,18 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // matMultinom
-Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix);
+IntegerVector matMultinom(NumericMatrix probmatrix);
 RcppExport SEXP _simstudy_matMultinom(SEXP probmatrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type probmatrix(probmatrixSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type probmatrix(probmatrixSEXP);
     rcpp_result_gen = Rcpp::wrap(matMultinom(probmatrix));
     return rcpp_result_gen;
 END_RCPP
 }
 // markovChains
-Rcpp::IntegerMatrix markovChains(int nchains, NumericMatrix P, int chainLen, IntegerVector state0);
+IntegerMatrix markovChains(int nchains, NumericMatrix P, int chainLen, IntegerVector state0);
 RcppExport SEXP _simstudy_markovChains(SEXP nchainsSEXP, SEXP PSEXP, SEXP chainLenSEXP, SEXP state0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -36,7 +36,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // clipVec
-Rcpp::IntegerVector clipVec(IntegerVector id, IntegerVector seq, IntegerVector event);
+IntegerVector clipVec(IntegerVector id, IntegerVector seq, IntegerVector event);
 RcppExport SEXP _simstudy_clipVec(SEXP idSEXP, SEXP seqSEXP, SEXP eventSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -49,13 +49,51 @@ BEGIN_RCPP
 END_RCPP
 }
 // chkNonIncreasing
-bool chkNonIncreasing(Rcpp::NumericMatrix adjmatrix);
+bool chkNonIncreasing(NumericMatrix adjmatrix);
 RcppExport SEXP _simstudy_chkNonIncreasing(SEXP adjmatrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type adjmatrix(adjmatrixSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type adjmatrix(adjmatrixSEXP);
     rcpp_result_gen = Rcpp::wrap(chkNonIncreasing(adjmatrix));
+    return rcpp_result_gen;
+END_RCPP
+}
+// checkBoundsBin
+void checkBoundsBin(double p1, double p2, double d);
+RcppExport SEXP _simstudy_checkBoundsBin(SEXP p1SEXP, SEXP p2SEXP, SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p1(p1SEXP);
+    Rcpp::traits::input_parameter< double >::type p2(p2SEXP);
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    checkBoundsBin(p1, p2, d);
+    return R_NilValue;
+END_RCPP
+}
+// findRhoBin
+double findRhoBin(double p1, double p2, double d);
+RcppExport SEXP _simstudy_findRhoBin(SEXP p1SEXP, SEXP p2SEXP, SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p1(p1SEXP);
+    Rcpp::traits::input_parameter< double >::type p2(p2SEXP);
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(findRhoBin(p1, p2, d));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getRhoMat
+NumericMatrix getRhoMat(int N, NumericVector P, NumericMatrix TCORR);
+RcppExport SEXP _simstudy_getRhoMat(SEXP NSEXP, SEXP PSEXP, SEXP TCORRSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type P(PSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type TCORR(TCORRSEXP);
+    rcpp_result_gen = Rcpp::wrap(getRhoMat(N, P, TCORR));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -65,6 +103,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simstudy_markovChains", (DL_FUNC) &_simstudy_markovChains, 4},
     {"_simstudy_clipVec", (DL_FUNC) &_simstudy_clipVec, 3},
     {"_simstudy_chkNonIncreasing", (DL_FUNC) &_simstudy_chkNonIncreasing, 1},
+    {"_simstudy_checkBoundsBin", (DL_FUNC) &_simstudy_checkBoundsBin, 3},
+    {"_simstudy_findRhoBin", (DL_FUNC) &_simstudy_findRhoBin, 3},
+    {"_simstudy_getRhoMat", (DL_FUNC) &_simstudy_getRhoMat, 3},
     {NULL, NULL, 0}
 };
 

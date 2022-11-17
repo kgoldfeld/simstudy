@@ -5,6 +5,12 @@
 accommodate clustered observations over time where the within-cluster correlation
 in the same time period can be different from the within-cluster correlation across time periods.
 
+## Major fixes
+
+* Overhauled function `addCorGen` to make it more flexible. It can now handle cluster
+dependent data, and not just time-dependent data. In addition, performance has been
+dramatically improved.
+
 # simstudy 0.5.1
 
 ## Minor fixes

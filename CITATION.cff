@@ -124,25 +124,6 @@ references:
   year: '2022'
   url: https://CRAN.R-project.org/package=mvnfast
 - type: software
-  title: mvtnorm
-  abstract: 'mvtnorm: Multivariate Normal and t Distributions'
-  notes: Imports
-  authors:
-  - family-names: Genz
-    given-names: Alan
-  - family-names: Bretz
-    given-names: Frank
-  - family-names: Miwa
-    given-names: Tetsuhisa
-  - family-names: Mi
-    given-names: Xuefei
-  - family-names: Hothorn
-    given-names: Torsten
-    email: Torsten.Hothorn@R-project.org
-    orcid: https://orcid.org/0000-0001-8301-0471
-  year: '2022'
-  url: https://CRAN.R-project.org/package=mvtnorm
-- type: software
   title: Rcpp
   abstract: 'Rcpp: Seamless R and C++ Integration'
   notes: Imports
@@ -498,6 +479,16 @@ references:
     given-names: Emanuele
   year: '2022'
   url: https://CRAN.R-project.org/package=blockmatrix
+- type: software
+  title: pbv
+  abstract: 'pbv: Probabilities for Bivariate Normal Distribution'
+  notes: LinkingTo
+  authors:
+  - family-names: Robitzsch
+    given-names: Alexander
+  year: '2022'
+  url: https://CRAN.R-project.org/package=pbv
+  version: '>= 0.4-22'
 identifiers:
 - type: url
   value: https://kgoldfeld.github.io/simstudy/dev/

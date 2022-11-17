@@ -6,25 +6,27 @@
 \usage{
 addCorGen(
   dtOld,
-  nvars,
+  nvars = NULL,
   idvar = "id",
-  rho,
-  corstr,
+  rho = NULL,
+  corstr = NULL,
   corMatrix = NULL,
   dist,
   param1,
   param2 = NULL,
   cnames = NULL,
   method = "copula",
-  formSpec = NULL,
-  periodvar = "period"
+  ...
 )
 }
 \arguments{
-\item{dtOld}{If an existing data.table is specified, then wide will be set to TRUE and n
-will be set to the nrow(dt) without any warning or error.}
+\item{dtOld}{The data set that will be augmented. If the data set includes a
+single record per id, the new data table will be created as a "wide" data set.
+If the original data set includes multiple records per id, the new data set will 
+be in "long" format.}
 
-\item{nvars}{Number of new variables to create for each id.}
+\item{nvars}{The number of new variables to create for each id. This is only applicable
+when the data are generated from a data set that includes one record per id.}
 
 \item{idvar}{String variable name of column represents individual level id for correlated
 data.}
@@ -59,12 +61,8 @@ the multivariate Gaussian copula method that is applied to all other distributio
 applies to all available distributions. (2) "ep" uses an algorithm developed by
 Emrich and Piedmonte (1991).}
 
-\item{formSpec}{The formula (as a string) that was used to generate the binary
-outcome in the `defDataAdd` statement. This is only necessary when method "ep" is
-requested.}
-
-\item{periodvar}{A string value that indicates the name of the field that indexes
-the repeated measurement for an individual unit. The value defaults to "period".}
+\item{...}{May include additional arguments that have been deprecated and are
+no longer used.}
 }
 \value{
 Original data.table with added column(s) of correlated data
@@ -77,18 +75,12 @@ Create multivariate (correlated) data - for general distributions
 
 def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
 def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log")
-def <- defData(def, varname = "p", formula = "-2 + .3*xbase", dist = "nonrandom", link = "logit")
 
-dt <- genData(500, def)
+dt <- genData(100, def)
 
-dtX1 <- addCorGen(
+addCorGen(
   dtOld = dt, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
   dist = "poisson", param1 = "lambda"
-)
-
-dtX2 <- addCorGen(
-  dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
-  dist = "binary", param1 = "p"
 )
 
 # Long example
@@ -97,98 +89,15 @@ def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id
 def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
 
 def2 <- defDataAdd(
-  varname = "lambda", formula = ".5+.5*period + .1*xbase",
-  dist = "nonrandom", link = "log"
-)
-def2 <- defDataAdd(def2,
   varname = "p", formula = "-3+.2*period + .3*xbase",
   dist = "nonrandom", link = "logit"
 )
-def2 <- defDataAdd(def2,
-  varname = "gammaMu", formula = ".2*period + .3*xbase",
-  dist = "nonrandom", link = "log"
-)
-def2 <- defDataAdd(def2,
-  varname = "gammaDis",
-  formula = 1, dist = "nonrandom"
-)
-def2 <- defDataAdd(def2,
-  varname = "normMu",
-  formula = "5+period + .5*xbase", dist = "nonrandom"
-)
-def2 <- defDataAdd(def2,
-  varname = "normVar", formula = 4,
-  dist = "nonrandom"
-)
-def2 <- defDataAdd(def2,
-  varname = "unifMin",
-  formula = "5 + 2*period + .2*xbase", dist = "nonrandom"
-)
-def2 <- defDataAdd(def2,
-  varname = "unifMax",
-  formula = "unifMin + 20", dist = "nonrandom"
-)
 
-dt <- genData(1000, def)
+dt <- genData(100, def)
 
 dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
 dtLong <- addColumns(def2, dtLong)
 
-# Poisson distribution
-
-dtX3 <- addCorGen(
-  dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
-  dist = "poisson", param1 = "lambda", cnames = "NewPois"
-)
-dtX3
-
-# Binomial distribution - copula method
-
-dtX4 <- addCorGen(
-  dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
-  dist = "binary", param1 = "p", cnames = "NewBin"
-)
-
-dtX4
-
-# Gamma distribution
-
-dtX6 <- addCorGen(
-  dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
-  dist = "gamma", param1 = "gammaMu", param2 = "gammaDis",
-  cnames = "NewGamma"
-)
-
-dtX6
-
-# Normal distribution
-
-dtX7 <- addCorGen(
-  dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "ar1",
-  dist = "normal", param1 = "normMu", param2 = "normVar",
-  cnames = "NewNorm"
-)
-
-# Binary outcome - ep method
-
-probform <- "-2 + .3*period"
-
-def1 <- defDataAdd(
-  varname = "p", formula = probform,
-  dist = "nonrandom", link = "logit"
-)
-
-dx <- genData(100)
-dx <- addPeriods(dx, nPeriods = 4)
-dx <- addColumns(def1, dx)
-
-dg <- addCorGen(dx,
-  nvars = 4,
-  corMatrix = NULL, rho = .3, corstr = "cs",
-  dist = "binary", param1 = "p",
-  method = "ep", formSpec = probform,
-  periodvar = "period"
-)
 }
 \references{
 Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
