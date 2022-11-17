@@ -98,29 +98,6 @@ dt <- genData(100, def)
 dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
 dtLong <- addColumns(def2, dtLong)
 
-# Binomial distribution - copula method
-
-addCorGen(
-  dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
-  dist = "binary", param1 = "p", cnames = "NewBin"
-)
-
-# Binary outcome - ep method
-
-def1 <- defDataAdd(
-  varname = "p", formula =  "-2 + .3*period",
-  dist = "nonrandom", link = "logit"
-)
-
-dx <- genData(100)
-dx <- addPeriods(dx, nPeriods = 4)
-dx <- addColumns(def1, dx)
-
-addCorGen(dx,
-  nvars = 4,
-  corMatrix = NULL, rho = .3, corstr = "cs",
-  dist = "binary", param1 = "p", method = "ep"
-)
 }
 \references{
 Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
