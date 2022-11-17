@@ -126,34 +126,34 @@ referenced varname will be removed.</p></dd>
 <span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">def</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dx</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id cat        x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1   2 6.450340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2   3 7.922583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3   1 4.786523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4   3 8.716692</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5   2 4.981055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1   1 5.234123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2   2 4.100791</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3   3 6.225520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4   2 6.188477</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5   1 5.303907</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 196   3 4.778965</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 197   3 4.974389</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 198   2 2.618697</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 199   3 6.289800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 200   3 6.357688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 196   3 4.144871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 197   3 6.773981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 198   2 2.501137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 199   3 3.028021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 200   3 4.447496</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="genFactor.html">genFactor</a></span><span class="op">(</span><span class="va">dx</span>, <span class="st">"cat"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"three"</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu">genDummy</span><span class="op">(</span><span class="va">dx</span>, varname <span class="op">=</span> <span class="st">"fcat"</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dx</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id        x  fcat fcat_one fcat_two fcat_three</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 6.450340   two        0        1          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2 7.922583 three        0        0          1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3 4.786523   one        1        0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 8.716692 three        0        0          1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 4.981055   two        0        1          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 5.234123   one        1        0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2 4.100791   two        0        1          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3 6.225520 three        0        0          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 6.188477   two        0        1          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 5.303907   one        1        0          0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 196 4.778965 three        0        0          1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 197 4.974389 three        0        0          1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 198 2.618697   two        0        1          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 199 6.289800 three        0        0          1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 200 6.357688 three        0        0          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 196 4.144871 three        0        0          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 197 6.773981 three        0        0          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 198 2.501137   two        0        1          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 199 3.028021 three        0        0          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 200 4.447496 three        0        0          1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Second example:</span></span></span>
 <span class="r-in"><span></span></span>
@@ -163,19 +163,19 @@ referenced varname will be removed.</p></dd>
 <span class="r-in"><span><span class="va">dx</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id arm arm.1 arm.2 arm.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1   1     1     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2   2     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2   1     1     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3   2     0     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  4:  4   1     1     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5   2     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6   1     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5   3     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6   2     0     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  7:  7   3     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8   2     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9   1     1     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10   3     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8   1     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9   2     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10   2     0     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11: 11   3     0     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12: 12   1     1     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 13   3     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 14   2     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 13   2     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 14   3     0     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15: 15   3     0     0     1</span>
 </code></pre></div>
     </div>
