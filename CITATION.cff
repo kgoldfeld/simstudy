@@ -488,6 +488,7 @@ references:
     given-names: Alexander
   year: '2022'
   url: https://CRAN.R-project.org/package=pbv
+  version: '>= 0.4-22'
 identifiers:
 - type: url
   value: https://kgoldfeld.github.io/simstudy/dev/
