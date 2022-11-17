@@ -652,7 +652,7 @@ viewBasis <- function(knots, degree) {
   )
 
   ggplot2::ggplot(data = dtmelt, ggplot2::aes(x = x, y = value, group = basis)) +
-    ggplot2::geom_line(ggplot2::aes(color = basis), size = 1) +
+    ggplot2::geom_line(ggplot2::aes(color = basis), linewidth = 1) +
     ggplot2::theme(
       legend.position = "none",
       panel.grid.minor = ggplot2::element_blank()
@@ -727,7 +727,8 @@ viewSplines <- function(knots, degree, theta) {
   dx[, Spline := factor(index)]
 
   p <- ggplot2::ggplot(data = dx) +
-    ggplot2::geom_line(ggplot2::aes(x = x, y = y.spline, color = Spline), size = 1) +
+    ggplot2::geom_line(ggplot2::aes(x = x, y = y.spline, color = Spline), 
+        linewidth = 1) +
     ggplot2::scale_y_continuous(limits = c(0, 1)) +
     ggplot2::scale_x_continuous(limits = c(0, 1), breaks = knots) +
     ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
@@ -841,7 +842,7 @@ survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1) {
   )
   
   p <- ggplot2::ggplot(data = dd, ggplot2::aes(x = T, y = p)) +
-    ggplot2::geom_line(size = 0.8) +
+    ggplot2::geom_line(linewidth = 0.8) +
     ggplot2::scale_y_continuous(limits = c(0,1), name = "probability of survival") +
     ggplot2::scale_x_continuous(name = "time") +
     ggplot2::theme(panel.grid = ggplot2::element_blank(),

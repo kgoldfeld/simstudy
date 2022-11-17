@@ -1,7 +1,7 @@
 # .checkBoundsBin ----
 test_that("Correlation boundaries for binary variables are correct", {
-  x1 <- c(0, 0, 0, 1, 0)
-  x2 <- c(1, 1, 1, 0, 0)
+  x1 <- c(0, 0, 0, 1, 0, 1)
+  x2 <- c(1, 1, 1, 0, 0, 0)
 
   p1 <- mean(x1)
   p2 <- mean(x2)
