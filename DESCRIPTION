@@ -59,8 +59,9 @@ Suggests:
     survminer,
     blockmatrix
 LinkingTo: 
-    Rcpp, pbv
+    Rcpp, 
+    pbv (>= 0.4-22)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
