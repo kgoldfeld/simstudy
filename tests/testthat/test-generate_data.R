@@ -783,22 +783,22 @@ test_that("genSpline throws errors", {
   expect_error(genSpline( dt = ddd, newvar = "weight",
                            predictor = "x1", theta = theta1,
                            knots = knots, degree = 3,
-                           noise.var = .025), regexp = "Data table does not exist.")
+                           noise.var = .025), regexp = "object 'ddd' not found")
   expect_error(genSpline( dt = dt, newvar = "weight",
                           predictor = "x2", theta = theta1,
                           knots = knots, degree = 3,
-                          noise.var = .025), regexp = "not in data.table")
+                          noise.var = .025), regexp = "Variable x2 not previously defined!")
   expect_error(genSpline( dt = dt, newvar = 5,
                           predictor = "x1", theta = theta1,
                           knots = knots, degree = 3,
-                          noise.var = .025), regexp = "newvar must be a string")
+                          noise.var = .025), regexp = "newvar should be a character")
   expect_error(genSpline( dt = dt, newvar = "weight",
                           predictor = "x1", theta = theta1,
                           knots = knots, degree = 3, newrange = "4;3;2",
-                          noise.var = .025), regexp = "Range not specified as two values")
-  # expect_error(genSpline( dt = dt, newvar = "weight",
-  #                         predictor = "x1", theta = theta1,
-  #                         knots = knots, degree = 3, newrange = "1;a",
-  #                         noise.var = .025), regexp = "Non-numbers entered in range")
+                          noise.var = .025), regexp = "newrange should be of length 2!")
+  expect_error(genSpline( dt = dt, newvar = "weight",
+                          predictor = "x1", theta = theta1,
+                          knots = knots, degree = 3, newrange = "1;a",
+                          noise.var = .025), regexp = "newrange should be a numeric!")
 })
 

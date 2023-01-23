@@ -888,33 +888,27 @@ genSpline <- function(dt, newvar, predictor, theta,
 
   # Check arguments
 
-  if (!exists(deparse(substitute(dt)), envir = parent.frame())) {
-    stop("Data table does not exist.")
-  }
-
-  if (!predictor %in% names(dt)) {
-    stop(paste0("Variable ", predictor, " not in data.table"))
-  }
-
-
-  if (!is.character(newvar)) {
-    stop("newvar must be a string")
-  }
+  assertNotMissing(
+    dt = missing(dt), 
+    newvar = missing(newvar), 
+    predictor = missing(predictor), 
+    theta = missing(theta)
+  )
+  
+  assertClass(dt = dt, class = "data.table")
+  assertInDataTable(predictor, dt)
+  assertClass(newvar = newvar, class = "character")
 
   if (!(is.null(newrange))) {
-    rangestr <- unlist(strsplit(as.character(newrange), split = ";", fixed = TRUE))
-    rangenum <- as.numeric(rangestr)
+    
+    newrange <- unlist(strsplit(as.character(newrange), split = ";", fixed = TRUE))
+    
+    assertLength(newrange = newrange, length = 2)
+    newrange <- tryCatch(as.numeric(newrange), warning = function(x) NULL)
+    assertClass(newrange = newrange, class = "numeric")
 
-    if (length(rangenum) != 2) {
-      stop("Range not specified as two values")
-    }
-
-    if (!(all(!is.na(rangenum)))) {
-      stop("Non-numbers entered in range")
-    }
-
-    newmin <- min(rangenum)
-    newmax <- max(rangenum)
+    newmin <- min(newrange)
+    newmax <- max(newrange)
   }
 
   ### All checks passed
