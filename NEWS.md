@@ -11,6 +11,10 @@ in the same time period can be different from the within-cluster correlation acr
 dependent data, and not just time-dependent data. In addition, performance has been
 dramatically improved.
 
+## Minor fixes
+
+* Fixed bug in `genSpline`
+
 # simstudy 0.5.1
 
 ## Minor fixes

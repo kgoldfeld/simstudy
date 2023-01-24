@@ -373,7 +373,7 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   assertClass(dtOld = dtOld, class = "data.table")
   
   assertOption(dist = dist, 
-               options = c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))
+    options = c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))
   
   if (!is.null(param2)) {
     assertInDataTable(vars = c(idvar, param1, param2), dt = dtOld)

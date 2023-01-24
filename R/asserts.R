@@ -430,7 +430,7 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
   stopifnot(...length() == 1)
   dots <- dots2argNames(...)
   matrix <- dots$args[[1]]
-  isSym <- isSymmetric(matrix)
+  isSym <- isSymmetric(round(matrix, 7))
   eigenValues <- unlist(eigen(matrix, only.values = TRUE))
 
   if (!all(eigenValues > 0) || !isSym) {

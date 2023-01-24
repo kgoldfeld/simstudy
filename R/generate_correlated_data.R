@@ -443,6 +443,11 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 #'
 #' @param nvars number of rows and columns (i.e. number of variables) for correlation matrix
 #' @param cors vector of correlations.
+#' @param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.
+#' @param corstr Correlation structure of the variance-covariance matrix
+#' defined by sigma and rho. Options include "cs" for a compound symmetry structure
+#' and "ar1" for an autoregressive structure.
+#' @param nclusters An integer that indicates the number of matrices that will be generated.
 #' @return correlation matrix of size nvars x nvars
 #' @details If the vector cors is not specified, a random correlation matrix is generated with no assumptions.
 #' If the vector is provided, it should be interpreted as the lower triangle of the correlation
@@ -456,35 +461,101 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 #' genCorMat(5)
 #' @export
 #' @concept correlated
-genCorMat <- function(nvars, cors = NULL) {
-  if (is.null(cors)) {
-    ev <- stats::runif(nvars, 0, 10)
-
-    Z <- matrix(ncol = nvars, stats::rnorm(nvars^2))
-
-    decomp <- qr(Z)
-    Q <- qr.Q(decomp)
-    R <- qr.R(decomp)
-    d <- diag(R)
-    ph <- d / abs(d)
-    O <- Q %*% diag(ph)
-    Z <- t(O) %*% diag(ev) %*% O
-
-    cm <- stats::cov2cor(Z)
-  } else {
+genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters = 1) {
+  
+  assertNotMissing(nvars = missing(nvars))
+  assertInteger(nvars = nvars, nclusters = nclusters)
+  assertLength(corstr = corstr, length = 1)
+  assertOption(corstr = corstr, options = c("cs", "ar1"))
+  
+  .randMat <- function(nvars) {
+    
+    posDef <- FALSE
+    
+    while (!posDef) {
+      
+      ev <- stats::runif(nvars, 0, 10)
+      Z <- matrix(ncol = nvars, stats::rnorm(nvars^2))
+      decomp <- qr(Z)
+      Q <- qr.Q(decomp)
+      R <- qr.R(decomp)
+      d <- diag(R)
+      ph <- d / abs(d)
+      O <- Q %*% diag(ph)
+      Z <- t(O) %*% diag(ev) %*% O
+      
+      cm <- stats::cov2cor(Z)
+      
+      eigenValues <- unlist(eigen(cm, only.values = TRUE))
+      if (all(eigenValues > 0)) posDef <- TRUE
+    }
+    
+    assertPositiveDefinite(corMat = cm)
+    cm
+  }
+  
+  .rhoMat <- function(nvars, rho, corstr) {
+    assertNumeric(rho = rho)
+    assertInRange(rho = rho, range = c(-1, 1))
+    
+    cm <- .buildCorMat(nvars = nvars, corMatrix = NULL, corstr, rho)
+    assertPositiveDefinite(corMat = cm)
+    
+    cm
+    
+  }
+  
+  .corMat <- function(nvars, cors) {
     if (choose(nvars, 2) != length(cors)) stop("Correlations improperly specified")
-
+    
     cmLower <- matrix(0, nrow = nvars, ncol = nvars)
     cmLower[lower.tri(cmLower)] <- cors
     cmUpper <- t(cmLower)
-
+    
     cm <- cmLower + cmUpper
-
     diag(cm) <- 1
+    
+    assertPositiveDefinite(corMat = cm)
+    
   }
-
-  assertPositiveDefinite(corMat = cm)
+  
+  if (!is.null(cors)) {  
+    cm <- .corMat(nvars, cors)  
+    
+  } else if (is.null(cors) & is.null(rho)) {
+    
+    if (nclusters == 1) {
+      assertLength(nvars = nvars, length = 1)
+      
+      cm <- .randMat(nvars)
+    } else {
+      if (length(nvars) == 1) nvars <- rep(nvars, nclusters)
+      assertLength(nvars = nvars, length = nclusters)
+      
+      cm <- lapply(nvars, function(x) .randMat(x))
+    }
+    
+  } else if (is.null(cors) & !is.null(rho)) {
+   
+    if (nclusters == 1) {
+      assertLength(nvars = nvars, length = nclusters)
+      assertLength(rho = rho, length = nclusters)
+      
+      cm <- .rhoMat(nvars, rho, corstr)
+    } else {
+      
+      if (length(nvars) == 1) nvars <- rep(nvars, nclusters)
+      if (length(rho) == 1) rho <- rep(rho, nclusters)
+      assertLength(nvars = nvars, length = nclusters)
+      assertLength(rho = rho, length = nclusters)
+    
+      xx <- data.table(nvars = nvars, rho = rho, corstr = rep(corstr, nclusters))
+      cm <- lapply(split(xx, seq(nrow(xx))), function(x) .rhoMat(x$nvars, x$rho, x$corstr))
+    }
+  }
+  
   cm
+  
 }
 
 
