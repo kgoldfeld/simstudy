@@ -213,6 +213,23 @@ assertFactor <- function(..., type, call = sys.call(-1)) {
   }
 }
 
+#' Check for numeric matrix (character matrices not allowed)
+#'
+#' @description Checks if all passed vars and their content are numeric matrices
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertNumericMatrix <- function(..., call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  notNumericMatrix <- !sapply(dots$args, function(mat) {
+    isMatrix <- is.matrix(mat)
+    isNumeric <- is.numeric(c(mat))
+    isMatrix & isNumeric
+  })
+  if (any(notNumericMatrix)) {
+    typeError(dots$names[notNumericMatrix], type = "numeric matrix", call = call)
+  }
+}
+
 #' Check for Value
 #'
 #' @description Checks if all passed vars have a value other than NULL and NA

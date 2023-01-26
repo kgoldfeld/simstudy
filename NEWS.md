@@ -4,6 +4,7 @@
 * Added function `genBlockMat`. Users can now generate correlation matrices that can
 accommodate clustered observations over time where the within-cluster correlation
 in the same time period can be different from the within-cluster correlation across time periods.
+* Updated function `genCorMat` to allow generation of cluster-specific correlation matrices in case one wants to induce variability in correlation across clusters.
 
 ## Major fixes
 

@@ -225,7 +225,7 @@ test_that("correlated ordinal categorical data is generated correctly.", {
   dT <- genData(n)
   dX <- genOrdCat(dT, baseprobs = probs, prefix = "q", rho = 0.2, corstr = "cs", asFactor = FALSE)
   cdX <- cor(dX[, -1])
-  truMat <- genCorMat(nvars = 5, rep(0.2, 10))
+  truMat <- genCorMat(nvars = 5, cors = rep(0.2, 10))
   distSum <- sum(diag(distmat(cdX, truMat)))
   expect_lte(distSum, 1)
 

@@ -517,6 +517,8 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     
     assertPositiveDefinite(corMat = cm)
     
+    cm
+    
   }
   
   if (!is.null(cors)) {  

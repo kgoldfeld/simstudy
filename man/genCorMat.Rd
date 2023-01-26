@@ -4,12 +4,20 @@
 \alias{genCorMat}
 \title{Create a correlation matrix}
 \usage{
-genCorMat(nvars, cors = NULL)
+genCorMat(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters = 1)
 }
 \arguments{
 \item{nvars}{number of rows and columns (i.e. number of variables) for correlation matrix}
 
 \item{cors}{vector of correlations.}
+
+\item{rho}{Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.}
+
+\item{corstr}{Correlation structure of the variance-covariance matrix
+defined by sigma and rho. Options include "cs" for a compound symmetry structure
+and "ar1" for an autoregressive structure.}
+
+\item{nclusters}{An integer that indicates the number of matrices that will be generated.}
 }
 \value{
 correlation matrix of size nvars x nvars
