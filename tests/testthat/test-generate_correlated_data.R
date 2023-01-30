@@ -58,3 +58,67 @@ test_that("genBlockMat errors correctly.", {
 })
 
 
+test_that("genCorMat works", {
+  
+  expect_silent(genCorMat(nvars = 4, cors = c(.3, .2, .1), corstr = "structured"))
+  expect_silent(genCorMat(nvars = 4, cors = c(0.6, 0.5, 0.4, .3, .2, .1)))
+  expect_silent(genCorMat(nvars = 4, corstr = "arx"))
+  expect_silent(genCorMat(nvars = 4))
+  expect_silent(genCorMat(nvars = 4, rho = .4))
+  
+  expect_silent(genCorMat(nvars = 4, nclusters = 3))
+  expect_silent(genCorMat(nvars = c(4, 2, 5), rho = c(0.6, .3, .2), corst = "ar1", nclusters = 3))
+  expect_silent(genCorMat(nvars = c(4, 2, 5), rho = 0.6, corstr = "ar1", nclusters = 3))
+  
+  expect_silent(genCorMat(nvars = 3, corstr = "arx", nclusters=5))
+  expect_silent(genCorMat(nvars = 3, rho = .4, nclusters=5))
+  
+  
+})
+
+test_that("genCorMat generates errors correctly.", {
+  expect_error(genCorMat(cors = c(.3, .2, .1), corstr = "structured"), class="simstudy::missingArgument")
+  expect_error(genCorMat(nvars = 4.5), class="simstudy::wrongType")
+  expect_error(genCorMat(nvars = 4, nclusters = 4.3), class="simstudy::wrongType")
+  expect_error(genCorMat(nvars = 4, corstr = c("ar1", "arx"), nclusters = 4), class="simstudy::lengthMismatch")
+  expect_error(genCorMat(nvars = 4, corstr = "ar2", nclusters = 4), class="simstudy::optionInvalid")
+  expect_error(genCorMat(nvars = 4, rho = "0.5"), class="simstudy::wrongType")
+  expect_error(genCorMat(nvars = 4, rho = 4.5), class="simstudy::valueError")
+  
+  expect_error(genCorMat(nvars = 3, cors = c(.4, .3)), class="simstudy::lengthMismatch")
+  expect_error(genCorMat(nvars = 3, cors = c(.4, .3), corstr = "structured", nclusters=2), 
+          class="simstudy::notEqual")
+  expect_error(genCorMat(nvars = c(3, 2), cors = c(.4, .3), corstr = "structured", nclusters=1), 
+               class="simstudy::lengthMismatch")
+  
+  expect_error(genCorMat(nvars = c(3), cors = c(.4, .3), nclusters=2), 
+               class="simstudy::notEqual")
+  expect_error(genCorMat(nvars = c(3, 2), cors = c(.4, .3), nclusters=1), 
+               class="simstudy::lengthMismatch")
+  
+  expect_error(genCorMat(nvars = c(3, 2), corstr = "arx", nclusters=1), 
+               class="simstudy::lengthMismatch")
+  expect_error(genCorMat(nvars = c(3, 2), corstr = "arx", nclusters=3), 
+               class="simstudy::lengthMismatch")
+  
+  expect_error(genCorMat(nvars = c(3, 2), nclusters=1), 
+               class="simstudy::lengthMismatch")
+  expect_error(genCorMat(nvars = c(3, 2), nclusters=3), 
+               class="simstudy::lengthMismatch")
+  
+  expect_error(genCorMat(nvars = c(3, 2), rho = .5, nclusters=1), 
+               class="simstudy::lengthMismatch")
+  expect_error(genCorMat(nvars = c(3), rho = c(.5, .3), nclusters=1), 
+               class="simstudy::lengthMismatch")
+  
+  expect_error(genCorMat(nvars = c(3, 2, 2), rho = c(.5, .3), nclusters=2), 
+               class="simstudy::lengthMismatch")
+  expect_error(genCorMat(nvars = c(3, 2), rho = c(.5, .3, .2), nclusters=2), 
+               class="simstudy::lengthMismatch")
+  
+  
+  expect_error(genCorMat(nvars = c(3, 2), nclusters=3), 
+               class="simstudy::lengthMismatch")
+  
+})
+

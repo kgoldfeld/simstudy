@@ -441,24 +441,60 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 
 #' Create a correlation matrix
 #'
-#' @param nvars number of rows and columns (i.e. number of variables) for correlation matrix
+#' @param nvars number of rows and columns (i.e. number of variables) for correlation matrix. It can be
+#' a scalar or vector (see details).
 #' @param cors vector of correlations.
-#' @param rho Correlation coefficient, -1 <= rho <= 1. Use if corMatrix is not provided.
-#' @param corstr Correlation structure of the variance-covariance matrix
-#' defined by sigma and rho. Options include "cs" for a compound symmetry structure
-#' and "ar1" for an autoregressive structure.
+#' @param rho Correlation coefficient, \code{-1 <= rho <= 1}. Use if corMatrix is not provided. It can
+#' be a scalar or vector (see details).
+#' @param corstr Correlation structure. Options include "cs" for a compound symmetry structure, "ar1" 
+#' for an autoregressive structure of order 1, "arx" for an autoregressive structure 
+#' that has a general decay pattern, and "structured" that imposes a prescribed
+#' pattern between observation based on distance (see details).
 #' @param nclusters An integer that indicates the number of matrices that will be generated.
-#' @return correlation matrix of size nvars x nvars
-#' @details If the vector cors is not specified, a random correlation matrix is generated with no assumptions.
-#' If the vector is provided, it should be interpreted as the lower triangle of the correlation
-#' matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and
-#' nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].
+#' @return a single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
+#' different sizes with length indicated by \code{nclusters}.
+#' @details This function can generate correlation matrices randomly or deterministically, 
+#' depending on the combination of arguments provided. A single matrix will be
+#' generated when \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+#' \code{nclusters > 1}.
+#' 
+#' If the vector `cors` is specified with length `nvars - 1` then `corstr` must be "structured". If
+#' `cors` is specified with length `choose(nvars, 2)` then `corstr` should not be specified as
+#' "structured". In this case the `cors` vector should be interpreted as the lower triangle of the correlation
+#' matrix, and is specified by reading down the columns. For example, if \bold{CM} is the correlation matrix and
+#' \code{nvars = 3}, then \code{CM[2,1] = CM[1,2] = cors[1]},  \code{CM[3,1] = CM[1,3] = cors[2]}, 
+#' and \code{CM[3,2] = CM[2,3] = cors[3]}.
+#' 
+#' If the vector \code{cors} and \code{rho} are not specified, random correlation matrices are generated
+#' based on the specified \code{corstr}. If the structure is "arx", then a random vector of 
+#' length \code{nvars - 1} is randomly generated and sorted in descending order; the correlation matrix
+#' will be generated base on this set of structured correlations. If the structure is \emph{not} specified
+#' as "arx" then a random positive definite of dimensions nvars x nvars with no structural 
+#' assumptions is generated.
+#' 
+#' If \code{cors} is not specified but \code{rho} is specified, then a matrix with either a "cs" or "ar1" 
+#' structure is generated.
+#' 
+#' If \code{nclusters > 1}, \code{nvars} can be of length 1 or \code{nclusters}. If it is of length 1,
+#' each cluster will have correlation matrices with the same dimension. Likewise, if \code{nclusters > 1}, 
+#' \code{rho} can be of length 1 or \code{nclusters}. If length of \code{rho} is 1,
+#' each cluster will have correlation matrices with the same autocorrelation.
+#' 
 #' @examples
-#' genCorMat(3, c(.3, -.2, .1))
-#' genCorMat(3)
+#' genCorMat(nvars = 3, cors = c(.3, -.2, .1))
+#' genCorMat(nvars = 3)
 #'
-#' genCorMat(5, c(.3, -.2, .1, .2, .5, .2, -.1, .3, .1, .2))
-#' genCorMat(5)
+#' genCorMat(nvars = 4, c(.3, -.2, .1, .2, .5, .2))
+#' genCorMat(4)
+#' 
+#' genCorMat(nvars = 4, cors = c(.3, .2, .1), corstr = "structured") 
+#' genCorMat(nvars = 4, corstr = "arx") 
+#' 
+#' genCorMat(nvars = 4, rho = .4, corstr = "cs") 
+#' genCorMat(nvars = 4, rho = .4, corstr = "ar1") 
+#' 
+#' genCorMat(nvars = c(3, 2, 5), rho = c(.4, .8, .7), corstr = "ar1", nclusters = 3) 
+#' 
 #' @export
 #' @concept correlated
 genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters = 1) {
@@ -466,7 +502,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
   assertNotMissing(nvars = missing(nvars))
   assertInteger(nvars = nvars, nclusters = nclusters)
   assertLength(corstr = corstr, length = 1)
-  assertOption(corstr = corstr, options = c("cs", "ar1"))
+  assertOption(corstr = corstr, options = c("cs", "ar1", "arx", "structured"))
   
   .randMat <- function(nvars) {
     
@@ -494,6 +530,15 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     cm
   }
   
+  .structCors <- function(x) {
+    for (i in seq_along(x)) {
+      if (i == 1) y <- x[1]
+      else y <- c(x[1:i], y)
+    }
+    
+    return(y)
+  }
+  
   .rhoMat <- function(nvars, rho, corstr) {
     assertNumeric(rho = rho)
     assertInRange(rho = rho, range = c(-1, 1))
@@ -505,8 +550,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     
   }
   
-  .corMat <- function(nvars, cors) {
-    if (choose(nvars, 2) != length(cors)) stop("Correlations improperly specified")
+  .fillCor <- function(nvars, cors) {
     
     cmLower <- matrix(0, nrow = nvars, ncol = nvars)
     cmLower[lower.tri(cmLower)] <- cors
@@ -514,52 +558,106 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     
     cm <- cmLower + cmUpper
     diag(cm) <- 1
+    cm
+  }
+  
+  .corMat <- function(nvars, cors) {
     
+    assertLength(cors = cors, length = choose(nvars, 2))
+    cm <- .fillCor(nvars, cors)
     assertPositiveDefinite(corMat = cm)
     
     cm
     
   }
   
-  if (!is.null(cors)) {  
-    cm <- .corMat(nvars, cors)  
+  .arxRandMat <- function(nvars) {
     
-  } else if (is.null(cors) & is.null(rho)) {
+    posDef <- FALSE
+    
+    while (!posDef) {
+      x <- rbeta((nvars - 1), 1, 1)
+      x <- x[order(x, decreasing = TRUE)]
+      cm <- .fillCor(nvars, cors = .structCors(x))
+      
+      eigenValues <- unlist(eigen(cm, only.values = TRUE))
+      if (all(eigenValues > 0)) posDef <- TRUE
+    }
+    
+    assertPositiveDefinite(corMat = cm)
+    cm
+    
+  }
+  
+  if ( !is.null(cors) & (corstr == "structured")) {
+    
+    assertEqual(nlusters = nclusters, val = 1)
+    assertLength(nvars = nvars, length = 1)
+    assertLength(cors = cors, length = (nvars - 1))
+    cm <- .corMat(nvars, cors = .structCors(cors))
+      
+  } else if ( !is.null(cors) & (corstr != "structured") ) {  
+    
+    assertEqual(nlusters = nclusters, val = 1)
+    assertLength(nvars = nvars, length = 1)
+    cm <- .corMat(nvars, cors)
+
+  } else if ( is.null(cors) & is.null(rho) & (corstr == "arx") ) {
     
     if (nclusters == 1) {
-      assertLength(nvars = nvars, length = 1)
       
-      cm <- .randMat(nvars)
+      assertLength(nvars = nvars, length = 1)
+      cm <- .arxRandMat(nvars)
+      
     } else {
+      
       if (length(nvars) == 1) nvars <- rep(nvars, nclusters)
       assertLength(nvars = nvars, length = nclusters)
       
-      cm <- lapply(nvars, function(x) .randMat(x))
-    }
-    
-  } else if (is.null(cors) & !is.null(rho)) {
-   
-    if (nclusters == 1) {
-      assertLength(nvars = nvars, length = nclusters)
-      assertLength(rho = rho, length = nclusters)
+      cm <- lapply(nvars, function(x) .arxRandMat(x))
       
-      cm <- .rhoMat(nvars, rho, corstr)
+    }
+
+  } else if ( is.null(cors) & is.null(rho) & (corstr != "arx") )  {
+
+    if (nclusters == 1) {
+      
+      assertLength(nvars = nvars, length = 1)
+      cm <- .randMat(nvars)
+      
     } else {
       
+      if (length(nvars) == 1) nvars <- rep(nvars, nclusters)
+        
+      assertLength(nvars = nvars, length = nclusters)
+      cm <- lapply(nvars, function(x) .randMat(x))
+      
+    }
+
+  } else if  (is.null(cors) & !is.null(rho)) {
+
+    if (nclusters == 1) {
+      
+      assertLength(nvars = nvars, length = nclusters)
+      assertLength(rho = rho, length = nclusters)
+      cm <- .rhoMat(nvars, rho, corstr)
+      
+    } else {
+
       if (length(nvars) == 1) nvars <- rep(nvars, nclusters)
       if (length(rho) == 1) rho <- rep(rho, nclusters)
       assertLength(nvars = nvars, length = nclusters)
       assertLength(rho = rho, length = nclusters)
-    
+
       xx <- data.table(nvars = nvars, rho = rho, corstr = rep(corstr, nclusters))
       cm <- lapply(split(xx, seq(nrow(xx))), function(x) .rhoMat(x$nvars, x$rho, x$corstr))
+      
     }
   }
   
   cm
   
 }
-
 
 #' @title Generate correlated ordinal categorical data
 #' @description This function is deprecated, please use [genOrdCat] instead.
