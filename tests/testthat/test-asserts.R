@@ -105,6 +105,18 @@ test_that("assertNumeric works.", {
   ))
 })
 
+test_that("assertNumericMatrix works.", {
+  a <- matrix(rnorm(16), nrow = 4)
+  b <- a
+  d <- rnorm(3)
+  b[3, 4] <- sample(letters, 1)
+  expect_error(assertNumericMatrix(b = b),
+    class = "simstudy::wrongType")
+  expect_error(assertNumericMatrix(d = d),
+               class = "simstudy::wrongType")
+  expect_silent(assertNumericMatrix(a = a))
+})
+
 test_that("assertInteger works.", {
   expect_error(assertInteger(
     a = c(1, 2, 3), b = list(a = 1, b = 2.2),
