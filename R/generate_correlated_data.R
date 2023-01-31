@@ -576,7 +576,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     posDef <- FALSE
     
     while (!posDef) {
-      x <- rbeta((nvars - 1), 1, 1)
+      x <- stats::rbeta((nvars - 1), 1, 1)
       x <- x[order(x, decreasing = TRUE)]
       cm <- .fillCor(nvars, cors = .structCors(x))
       
