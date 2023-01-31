@@ -686,28 +686,27 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' between-individual correlation in the same time period can be different from the 
 #' within-cluster between-individual correlation across time periods.The matrix
 #' generated here can be used in function addCorGen().
-#' @param rho The correlation coefficient between 0 and 1.
 #' @param nInds The number of units (individuals) in each period.
 #' @param nPeriods The number periods that data are observed.
-#' @param corstr Correlation structure for the matrix. Options include "ind" 
-#' for an independence structure (default), cs" for a compound symmetry 
-#' structure and "ar1" for an autoregressive structure.
-#' @param iRho Optional second correlation coefficient for within-individual across-period
-#' correlation in case the measurements for individuals are repeated over time. 
-#' This will use the same correlation structure as the between-individual correlation
-#' specified by "corstr".
+#' @param rho_w The within-period correlation coefficient between -1 and 1.
+#' @param rho_b The between-period correlation coefficient between -1 and 1.
+#' @param rho_a The between-period within individual auto-correlation coefficient 
+#' between -1 and 1.
+#' @param r The decay parameter if correlation declines over time
+#' @param decay The decay type can be "exp" or "prop". The decay structure
 #' @return A block correlation matrix of size (nInds \* nPeriods) x (nInds \* nPeriods) 
 #' @examples
-#' genBlockMat(rho = 0.6, nInds = 2, nPeriods = 3, corstr = "ind")
-#' genBlockMat(rho = 0.6, nInds = 2, nPeriods = 3, corstr = "cs")
-#' genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "ar1")
+#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8)
+#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5)
+#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7)
 #' 
-#' genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "cs", iRho = 0.8)
-#' genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "ar1", iRho = 0.8)
+#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "exp")
+#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "prop")
+#' 
 #' @export
 #' @concept correlated
-genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind", 
-                        iRho = NULL) {
+genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a=NULL, 
+                        r = NULL, decay = NULL) {
   
   if (!requireNamespace("blockmatrix", quietly = TRUE)) {
     stop(
@@ -718,30 +717,29 @@ genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind",
   
   ### Checking
   
-  assertNotMissing(rho = missing(rho), nInds = missing(nInds),
-                   nPeriods = missing(nPeriods))
+  assertNotMissing(nInds = missing(nInds), nPeriods = missing(nPeriods),
+                  rho_w = missing(rho_w))
   
   assertInteger(nInds = nInds, nPeriods = nPeriods)
   assertAtLeast(nPeriods = nPeriods, minVal = 2)
-  assertInRange(rho = rho, range = c(-1,1))
+  assertInRange(rho_w = rho_w, range = c(-1,1))
   
-  assertOption(corstr = corstr, options = c("ind", "cs", "ar1"))
+  if (!is.null(r)) {
+    assertNotNull(decay = decay)
+  }
   
-  if (!is.null(iRho)) {
-    assertInRange(iRho = iRho, range = c(-1,1))
-    if (length(rho) == 1) {
-      assertNotEqual(corstr = corstr, val = "ind", 
-        msg = " With iRho set, corstr should be either cs or ar1.")  
+  if (is.null(decay)) {
+    assertInRange(rho_b = rho_b, range = c(-1,1))
+    
+    if (!is.null(rho_a)) {
+      assertInRange(rho_a = rho_a, range = c(-1,1))
     }
   }
   
-  if (length(rho) > 1) {
-    assertLength(rho = rho, length = nPeriods)
-    if (!is.null(iRho)) {
-      assertLength(iRho = iRho, length = (nPeriods - 1))
-    }
+  if (!is.null(decay)) {
+    assertNotNull(r = r)
+    assertOption(decay = decay, options = c("exp", "prop"))
   }
-  
   
   ###
   
@@ -750,40 +748,28 @@ genBlockMat <- function(rho, nInds, nPeriods, corstr = "ind",
     return(block)
   }
   
-  ### create rvec from rho
-  
-  if (length(rho) == nPeriods) {
-    rvec <- rho
-  } else {
-    if (corstr == "ind") {
-      rvec <- vapply(1:nPeriods, function(x) rho*(x==1), numeric(1))
-    } else if (corstr == "cs") {
-      rvec <- vapply(1:nPeriods, function(x) rho, numeric(1))
-    } else if (corstr == "ar1") {
-      rvec <- vapply(1:nPeriods, function(x) rho^x, numeric(1))
-    }
-  }
-  
-  ### create irvec from iRho
-  
-  if (! is.null(iRho)) {
-    
-    if (length(iRho) < (nPeriods - 1)) {
-      if (corstr == "cs") {
-        irvec <- vapply(2:nPeriods, function(x) iRho, numeric(1))  
-      } else if (corstr == "ar1") {
-        irvec <- vapply(2:nPeriods, function(x) iRho^(x-1), numeric(1))
-      }
-    } else { irvec <- iRho }
-    irvec <- c(1, irvec)
-  } else if (is.null(iRho)) {
-    irvec <- c(1, rvec[2:nPeriods])
-  }
-  
   ### generate blocks
   
-  blocks <- lapply(1:nPeriods, function(x) matrix(rvec[x], nInds, nInds))
-  blocks <- lapply(1:nPeriods, function(x) assignDiag(blocks[[x]], irvec[x]))
+  diagblock <- matrix(rho_w, nInds, nInds)
+  diag(diagblock) <- 1
+  
+  if (is.null(decay)) {
+    edgeblocks <- lapply(1:(nPeriods-1), function(x) matrix(rho_b, nInds, nInds))
+    if (!is.null(rho_a)) {
+      edgeblocks <- lapply(1:(nPeriods-1), function(x) assignDiag(edgeblocks[[x]], rho_a))  
+    }
+  } else {
+    edgeblocks <- lapply(1:(nPeriods-1), function(x) matrix(rho_w * (r^x), nInds, nInds))
+    if (decay == "prop") {
+      edgeblocks <- lapply(1:(nPeriods-1), function(x) assignDiag(edgeblocks[[x]], r^x))  
+    }
+  }
+ 
+  # create list of blocks 
+  
+  blocks <- NULL
+  blocks[[1]] <- diagblock
+  blocks <- append(blocks, edgeblocks)
   
   names(blocks) <- paste0("M", c(1 : nPeriods))
   

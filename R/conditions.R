@@ -158,6 +158,26 @@ typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
   stop(c)
 }
 
+#' Null Error
+#'
+#' @param names Names of the vars.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+nullError <- function(names, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "{ names *} should not be NULL!",
+    msg
+  )
+  
+  c <- condition(
+    c("simstudy::nullError", "error"),
+    message, call, ...
+  )
+  stop(c)
+}
+
 #' No Value Error
 #'
 #' @param names Names of the vars.

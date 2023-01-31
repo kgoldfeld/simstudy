@@ -4,23 +4,31 @@
 \alias{genBlockMat}
 \title{Create a block correlation matrix}
 \usage{
-genBlockMat(rho, nInds, nPeriods, corstr = "ind", iRho = NULL)
+genBlockMat(
+  nInds,
+  nPeriods,
+  rho_w,
+  rho_b = 0,
+  rho_a = NULL,
+  r = NULL,
+  decay = NULL
+)
 }
 \arguments{
-\item{rho}{The correlation coefficient between 0 and 1.}
-
 \item{nInds}{The number of units (individuals) in each period.}
 
 \item{nPeriods}{The number periods that data are observed.}
 
-\item{corstr}{Correlation structure for the matrix. Options include "ind" 
-for an independence structure (default), cs" for a compound symmetry 
-structure and "ar1" for an autoregressive structure.}
+\item{rho_w}{The within-period correlation coefficient between -1 and 1.}
 
-\item{iRho}{Optional second correlation coefficient for within-individual across-period
-correlation in case the measurements for individuals are repeated over time. 
-This will use the same correlation structure as the between-individual correlation
-specified by "corstr".}
+\item{rho_b}{The between-period correlation coefficient between -1 and 1.}
+
+\item{rho_a}{The between-period within individual auto-correlation coefficient 
+between -1 and 1.}
+
+\item{r}{The decay parameter if correlation declines over time}
+
+\item{decay}{The decay type can be "exp" or "prop". The decay structure}
 }
 \value{
 A block correlation matrix of size (nInds \* nPeriods) x (nInds \* nPeriods)
@@ -33,11 +41,12 @@ within-cluster between-individual correlation across time periods.The matrix
 generated here can be used in function addCorGen().
 }
 \examples{
-genBlockMat(rho = 0.6, nInds = 2, nPeriods = 3, corstr = "ind")
-genBlockMat(rho = 0.6, nInds = 2, nPeriods = 3, corstr = "cs")
-genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "ar1")
+genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8)
+genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5)
+genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7)
 
-genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "cs", iRho = 0.8)
-genBlockMat(rho = 0.6, nInds = 3, nPeriods = 3, corstr = "ar1", iRho = 0.8)
+genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "exp")
+genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "prop")
+
 }
 \concept{correlated}

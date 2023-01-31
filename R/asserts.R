@@ -162,6 +162,19 @@ assertType <- function(..., type, deep = TRUE, call = sys.call(-1)) {
 
 #' Check for Numeric
 #'
+#' @description Checks if all passed vars and their content are not null
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertNotNull <- function(..., call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  isNull <- sapply(dots$args, function(x) is.null(x))
+  if (any(isNull)) {
+    nullError(dots$names[isNull], type = "numeric", call = call)
+  }
+}
+
+#' Check for Numeric
+#'
 #' @description Checks if all passed vars and their content are numeric.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
