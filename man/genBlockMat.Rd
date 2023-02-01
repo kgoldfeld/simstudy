@@ -11,7 +11,8 @@ genBlockMat(
   rho_b = 0,
   rho_a = NULL,
   r = NULL,
-  decay = NULL
+  decay = NULL,
+  nclusters = 1
 )
 }
 \arguments{
@@ -26,12 +27,16 @@ genBlockMat(
 \item{rho_a}{The between-period within individual auto-correlation coefficient 
 between -1 and 1.}
 
-\item{r}{The decay parameter if correlation declines over time}
+\item{r}{The decay parameter if correlation declines over time, and can have values of
+"exp" or "prop". See details.}
 
 \item{decay}{The decay type can be "exp" or "prop". The decay structure}
+
+\item{nclusters}{An integer that indicates the number of matrices that will be generated.}
 }
 \value{
-A block correlation matrix of size (nInds \* nPeriods) x (nInds \* nPeriods)
+A single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
+different sizes with length indicated by \code{nclusters}.
 }
 \description{
 The function genBlockMat() generates correlation matrices that 
@@ -40,6 +45,24 @@ between-individual correlation in the same time period can be different from the
 within-cluster between-individual correlation across time periods.The matrix
 generated here can be used in function addCorGen().
 }
+\details{
+This function can generate correlation matrices randomly or deterministically, 
+depending on the combination of arguments provided. A single matrix will be
+generated when \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+\code{nclusters > 1}.
+
+\code{decay = "exp"} when the desired pattern is cross-sectional and
+is decaying in an exponential manner (as described in Li et al. Mixed-effects models for the 
+design and analysis of stepped wedge cluster randomized trials: An overview. 
+Statistical Methods in Medical Research. 2021;30(2):612-639. doi:10.1177/0962280220932962). When
+the data have repeated measurements over time, \code{decay} = "prop" for proportional decay.
+
+When there is no decay, the cross-sectional exchangeable structure is specifed by setting \code{rho_b}.
+For the repeated measures case, \code{rho_a} can be specified for the within-individual/between-period
+correlation.
+
+See vignettes for more details.
+}
 \examples{
 genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8)
 genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5)
@@ -47,6 +70,11 @@ genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7)
 
 genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "exp")
 genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "prop")
+
+genBlockMat(nInds = c(2, 3), nPeriods = 2, rho_w = .8, r = .9, 
+  decay = "prop", nclusters=2)
+
+
 
 }
 \concept{correlated}

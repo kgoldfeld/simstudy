@@ -451,7 +451,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 #' that has a general decay pattern, and "structured" that imposes a prescribed
 #' pattern between observation based on distance (see details).
 #' @param nclusters An integer that indicates the number of matrices that will be generated.
-#' @return a single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
+#' @return A single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
 #' different sizes with length indicated by \code{nclusters}.
 #' @details This function can generate correlation matrices randomly or deterministically, 
 #' depending on the combination of arguments provided. A single matrix will be
@@ -692,9 +692,29 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' @param rho_b The between-period correlation coefficient between -1 and 1.
 #' @param rho_a The between-period within individual auto-correlation coefficient 
 #' between -1 and 1.
-#' @param r The decay parameter if correlation declines over time
+#' @param r The decay parameter if correlation declines over time, and can have values of
+#' "exp" or "prop". See details.
 #' @param decay The decay type can be "exp" or "prop". The decay structure
-#' @return A block correlation matrix of size (nInds \* nPeriods) x (nInds \* nPeriods) 
+#' @param nclusters An integer that indicates the number of matrices that will be generated.
+#' @return A single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
+#' different sizes with length indicated by \code{nclusters}.
+#' @details This function can generate correlation matrices randomly or deterministically, 
+#' depending on the combination of arguments provided. A single matrix will be
+#' generated when \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+#' \code{nclusters > 1}.
+#' 
+#'\code{decay = "exp"} when the desired pattern is cross-sectional and
+#' is decaying in an exponential manner (as described in Li et al. Mixed-effects models for the 
+#' design and analysis of stepped wedge cluster randomized trials: An overview. 
+#' Statistical Methods in Medical Research. 2021;30(2):612-639. doi:10.1177/0962280220932962). When
+#' the data have repeated measurements over time, \code{decay} = "prop" for proportional decay.
+#' 
+#' When there is no decay, the cross-sectional exchangeable structure is specifed by setting \code{rho_b}.
+#' For the repeated measures case, \code{rho_a} can be specified for the within-individual/between-period
+#' correlation.
+#' 
+#' See vignettes for more details.
+#' 
 #' @examples
 #' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8)
 #' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5)
@@ -703,10 +723,15 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "exp")
 #' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "prop")
 #' 
+#' genBlockMat(nInds = c(2, 3), nPeriods = 2, rho_w = .8, r = .9, 
+#'   decay = "prop", nclusters=2)
+#' 
+#' 
+#' 
 #' @export
 #' @concept correlated
-genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a=NULL, 
-                        r = NULL, decay = NULL) {
+genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a = NULL, 
+                        r = NULL, decay = NULL, nclusters = 1) {
   
   if (!requireNamespace("blockmatrix", quietly = TRUE)) {
     stop(
@@ -743,44 +768,85 @@ genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a=NULL,
   
   ###
   
-  assignDiag <- function(block, value) {
+  .assignDiag <- function(block, value) {
     diag(block) <- value
     return(block)
   }
   
   ### generate blocks
   
-  diagblock <- matrix(rho_w, nInds, nInds)
-  diag(diagblock) <- 1
-  
-  if (is.null(decay)) {
-    edgeblocks <- lapply(1:(nPeriods-1), function(x) matrix(rho_b, nInds, nInds))
-    if (!is.null(rho_a)) {
-      edgeblocks <- lapply(1:(nPeriods-1), function(x) assignDiag(edgeblocks[[x]], rho_a))  
+  .genMat <- function(nInds, nPeriods, rho_w, rho_b, rho_a, r, decay) {
+    diagblock <- matrix(rho_w, nInds, nInds)
+    diag(diagblock) <- 1
+    
+    if (is.null(decay)) {
+      edgeblocks <- lapply(1:(nPeriods-1), function(x) matrix(rho_b, nInds, nInds))
+      if (!is.null(rho_a)) {
+        edgeblocks <- lapply(1:(nPeriods-1), function(x) .assignDiag(edgeblocks[[x]], rho_a))  
+      }
+    } else {
+      edgeblocks <- lapply(1:(nPeriods-1), function(x) matrix(rho_w * (r^x), nInds, nInds))
+      if (decay == "prop") {
+        edgeblocks <- lapply(1:(nPeriods-1), function(x) .assignDiag(edgeblocks[[x]], r^x))  
+      }
     }
-  } else {
-    edgeblocks <- lapply(1:(nPeriods-1), function(x) matrix(rho_w * (r^x), nInds, nInds))
-    if (decay == "prop") {
-      edgeblocks <- lapply(1:(nPeriods-1), function(x) assignDiag(edgeblocks[[x]], r^x))  
-    }
+    
+    # create list of blocks 
+    
+    blocks <- NULL
+    blocks[[1]] <- diagblock
+    blocks <- append(blocks, edgeblocks)
+    
+    names(blocks) <- paste0("M", c(1 : nPeriods))
+    
+    ### put blocks together
+    
+    block_str <- sapply(nPeriods:1, 
+                        function(x) data.table::shift(1:nPeriods, nPeriods - x, fill = 0))
+    block_str[upper.tri(block_str)] = t(block_str)[upper.tri(block_str)]
+    block_str <- matrix(paste0("M", block_str), nPeriods)
+    
+    bm <- blockmatrix::blockmatrix(value = block_str, list = blocks, dim=c(nPeriods, nPeriods))
+    newCorMatrix <-  as.matrix(bm)
+    assertPositiveDefinite(newCorMatrix = newCorMatrix)
+    
+    newCorMatrix
+   
   }
- 
-  # create list of blocks 
   
-  blocks <- NULL
-  blocks[[1]] <- diagblock
-  blocks <- append(blocks, edgeblocks)
+  if (nclusters == 1) {
+    
+    assertLength(nInds = nInds, length = nclusters)
+    assertLength(rho_w = rho_w, length = nclusters)
+    assertLength(rho_b = rho_b, length = nclusters)
+    if (!is.null(rho_a)) assertLength(rho_a = rho_a, length = nclusters)
+    
+    cm <- .genMat(nInds, nPeriods, rho_w, rho_b, rho_a, r, decay)
+
+  } else {
+    
+    if (length(nInds) == 1) nInds <- rep(nInds, nclusters)
+    if (length(rho_w) == 1) rho_w <- rep(rho_w, nclusters)
+    if (length(rho_b) == 1) rho_b <- rep(rho_b, nclusters)
+    if (length(rho_a) == 1) rho_a <- rep(rho_a, nclusters)
+    
+    assertLength(nInds = nInds, length = nclusters)
+    assertLength(rho_w = rho_w, length = nclusters)
+    assertLength(rho_b = rho_b, length = nclusters)
+    if (!is.null(rho_a)) assertLength(rho_a = rho_a, length = nclusters)
+    
+    dd <- data.table(
+      nInds = nInds,
+      rho_w = rho_w,
+      rho_b = rho_b,
+      rho_a = rho_a
+    )
+    
+    cm <- lapply(split(dd, seq(nrow(dd))), 
+      function(x) .genMat(x$nInds, nPeriods, x$rho_w, x$rho_b, x$rho_a, r, decay)
+    )
+  }
   
-  names(blocks) <- paste0("M", c(1 : nPeriods))
-  
-  ### put blocks together
-  
-  block_str <- sapply(nPeriods:1, 
-                      function(x) data.table::shift(1:nPeriods, nPeriods - x, fill = 0))
-  block_str[upper.tri(block_str)] = t(block_str)[upper.tri(block_str)]
-  block_str <- matrix(paste0("M", block_str), nPeriods)
-  
-  bm <- blockmatrix::blockmatrix(value = block_str, list = blocks, dim=c(nPeriods, nPeriods))
-  as.matrix(bm)
+  cm
   
 }

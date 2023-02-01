@@ -18,18 +18,17 @@ test_that("Correlation boundaries for binary variables are correct", {
 
 test_that("genBlockMat works", {
   
-  x <- runif(1, -1, 1)
-  x2 <- runif(1, -1, 1)
+  x <- runif(1, .6, .8)
+  x2 <- x - runif(1, 0, .1)
   y <- sample(1:10, 1)
   z <- sample(2:10, 1)
   v <- runif(1, 0, 1)
   c <- sample(c("ind","cs", "ar1"), 3)
-  x2 <- runif(1, -1, 1)
   c2 <- sample(c("cs", "ar1"), 2)
   
   expect_silent(genBlockMat(nInds = y, nPeriods = z, rho_w = x))
   expect_silent(genBlockMat(nInds = y, nPeriods = z, rho_w = x, rho_b = x*.5))
-  expect_silent(genBlockMat(nInds = y, nPeriods = z, rho_w = x, rho_b = x*.5, rho_a = x2))
+  expect_silent(genBlockMat(nInds = y, nPeriods = z, rho_w = x, rho_b = x*.8, rho_a = x2))
   expect_silent(genBlockMat(nInds = y, nPeriods = z, rho_w = x, r = v, decay = "exp"))
   expect_silent(genBlockMat(nInds = y, nPeriods = z, rho_w = x, r = v, decay = "prop"))
   

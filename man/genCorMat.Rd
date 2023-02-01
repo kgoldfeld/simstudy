@@ -23,7 +23,7 @@ pattern between observation based on distance (see details).}
 \item{nclusters}{An integer that indicates the number of matrices that will be generated.}
 }
 \value{
-a single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
+A single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
 different sizes with length indicated by \code{nclusters}.
 }
 \description{

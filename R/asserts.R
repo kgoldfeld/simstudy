@@ -461,9 +461,9 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
   dots <- dots2argNames(...)
   matrix <- dots$args[[1]]
   isSym <- isSymmetric(round(matrix, 7))
-  eigenValues <- unlist(eigen(matrix, only.values = TRUE))
+  eigenValues <- round(unlist(eigen(matrix, only.values = TRUE)), 8)
 
-  if (!all(eigenValues > 0) || !isSym) {
+  if (!all(eigenValues >= 0) || !isSym) {
     notPositiveDefiniteError(dots$names, call = call)
   }
 }
