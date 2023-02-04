@@ -680,6 +680,215 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
   )
 }
 
+
+
+# internal function used by blockExchangeMat and blockDecayMat
+
+.genMat <- function(ninds, nperiods, rho_w, rho_b, rho_a, r, pattern, type) {
+  
+  .assignDiag <- function(block, value) {
+    diag(block) <- value
+    return(block)
+  }
+  
+  diagblocks <- lapply(1:nperiods, function(x) matrix(rho_w, nrow = ninds[x], ncol = ninds[x]))
+  diagblocks <- lapply(1:nperiods, function(x) .assignDiag(diagblocks[[x]],1))
+  
+  if (type == "exchange") {
+    
+    combos <- combn(ninds, 2)
+    ncombos <- ncol(combos)
+    lower <- lapply(1:ncombos, 
+                    function(x) matrix(rho_b, nrow = combos[2, x], ncol = combos[1, x]))
+    
+    offdiag <- append(lower, lapply(lower, function(x) t(x)))
+    
+    if (pattern == "cohort") {
+      offdiag <- lapply(1:(ncombos*2), function(x) .assignDiag(offdiag[[x]], rho_a))  
+    }
+    
+  } else if (type == "decay") {
+    
+    combos <- combn(ninds, 2)
+    ncombos <- ncol(combos)
+    z <- unlist(lapply((nperiods-1):1, function(x) 1:x))
+    lower <- lapply(1:ncombos, 
+                    function(x) matrix(rho_w*(r^z[x]), nrow = combos[2, x], ncol = combos[1, x]))
+    
+    offdiag <- append(lower, lapply(lower, function(x) t(x)))
+    
+    if (pattern == "cohort") {
+      z <- c(z, z)
+      offdiag <- lapply(1:(ncombos*2), function(x) .assignDiag(offdiag[[x]], r^z[x]))  
+    }
+  }
+  
+  # construct block matrix from diagblocks and offdiag
+  
+  names(diagblocks) <- paste0("D", 1:nperiods)
+  names(offdiag) <- paste0("O", c(1 : (ncombos * 2)))
+  
+  blocks <- diagblocks
+  blocks <- append(blocks, offdiag)
+  
+  block_str <- matrix(0, nperiods, nperiods)
+  block_str[lower.tri(block_str)] <- paste0("O", c((ncombos + 1) : (ncombos*2) ))
+  block_str <- t(block_str)
+  block_str[lower.tri(block_str)] <- paste0("O", c(1 : ncombos ))
+  diag(block_str) <- names(diagblocks)
+  
+  cbinds <- NULL
+  for (i in 1: nperiods) {
+    cbinds[[i]] <- do.call("cbind", lapply(1:nperiods, function(x) blocks[[ block_str[i, x] ]]))  
+  }
+  newCorMatrix <- do.call("rbind", cbinds)
+  
+  # Check and return
+  
+  assertPositiveDefinite(newCorMatrix = newCorMatrix)
+  
+  newCorMatrix
+  
+}
+
+#' Create a block correlation matrix with exchangeable structure
+#' @description  The function \code{blockExchangeMat} generates exchangeable correlation matrices that 
+#' can accommodate clustered observations over time where the within-cluster 
+#' between-individual correlation in the same time period can be different from the 
+#' within-cluster between-individual correlation across time periods. The matrix
+#' generated here can be used in function \code{addCorGen}.
+#' @param ninds The number of units (individuals) in each cluster in each period. 
+#' @param nperiods The number periods that data are observed.
+#' @param rho_w The within-period/between-individual correlation coefficient between -1 and 1. 
+#' @param rho_b The between-period/between-individual correlation coefficient between -1 and 1. 
+#' @param rho_a The between-period/within-individual auto-correlation coefficient
+#' between -1 and 1.
+#' @param xsection An logical indicator for whether the matrices are cross-sectional.
+#' @param nclusters An integer that indicates the number of matrices that will be generated.
+#' @return A single correlation matrix or a list of matrices of potentially
+#' different sizes with length indicated by \code{nclusters}.
+#' @details Two general exchangeable correlation structures are currently supported: a *cross-sectional* exchangeable
+#' structure and a *closed cohort* exchangeable structure. In the *cross-sectional* case, individuals or units in each time period are distinct.
+#' In the *closed cohort* structure, individuals or units are repeated in each time period. The 
+#' desired structure is specified using \code{xsection}, which defaults to TRUE if not specified. \code{rho_a} is the within-individual/unit 
+#' exchangeable correlation over time, and can only be used when \code{xsection = FALSE}.
+#' 
+#' This function can generate correlation matrices of different sizes, depending on the combination of arguments provided. 
+#' A single matrix will be generated when \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+#' \code{nclusters > 1}.
+#' 
+#' If \code{nclusters > 1}, the length of \code{ninds} will depend on if sample sizes will vary by cluster
+#' and/or period. There are three scenarios,  and function evaluates the length of \code{ninds} to determine which approach 
+#' to take:
+#' 
+#' \itemize{
+#' 
+#' \item{if the sample size is the same for all clusters in all periods, \code{ninds} will be
+#' a single value (i.e., length = 1).}
+#' 
+#' \item{if the sample size differs by cluster but is the same for each period within each cluster
+#' each period, then \code{ninds} will have a value for each cluster (i.e., length = \code{nclusters}).} 
+#' 
+#' \item{if the sample size differs across clusters and across periods within clusters, \code{ninds} will have a
+#' value for each cluster-period combination (i.e., length = \code{nclusters x nperiods}).} This option is
+#' only valid when \code{xsection = TRUE}.
+#' 
+#' }
+#' 
+#' In addition, \code{rho_w}, \code{rho_b}, and \code{rho_a} can be specified as a single value (in which case they are consistent
+#' across all clusters) or as a vector of length \code{nclusters}, in which case any or all of these parameters can vary by cluster.
+#' 
+#' See vignettes for more details.
+#' 
+#' @references Li et al. Mixed-effects models for the design and analysis of stepped wedge cluster randomized trials: An overview. 
+#' Statistical Methods in Medical Research. 2021;30(2):612-639. doi:10.1177/0962280220932962
+#' 
+#' @seealso \code{\link{blockDecayMat}} and \code{\link{addCorGen}}
+#' 
+#' @examples
+#' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8)
+#' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5)
+#' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, pattern = "cohort")
+#' 
+#' blockExchangeMat(ninds = 2, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 3, pattern = "cohort")
+#' blockExchangeMat(ninds = c(2, 3), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 2, pattern="cohort")
+#' blockExchangeMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 2, pattern="cohort")
+#' @export
+#' @concept correlated
+blockExchangeMat <- function(ninds, nperiods, rho_w, rho_b = 0, rho_a = NULL, 
+                             pattern = "xsection", nclusters = 1) {
+  
+  if (!requireNamespace("blockmatrix", quietly = TRUE)) {
+    stop(
+      "Package \"blockmatrix\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
+  
+  ### Checking
+  
+  # check rho_a and pattern == "cohort"
+
+  assertNotMissing(
+    ninds = missing(ninds),
+    nperiods = missing(nperiods),
+    rho_w = missing(rho_w)
+  )
+  
+  assertInteger(ninds = ninds, nperiods = nperiods, nclusters = nclusters)
+  assertAtLeast(nperiods = nperiods, minVal = 2)
+  assertInRange(rho_b = rho_b, rho_w = rho_w, range = c(-1,1))
+  if (!is.null(rho_a))  assertInRange(rho_a = rho_a, range = c(-1,1))
+
+  assertOption(pattern = pattern, options = c("xsection", "cohort"))
+  
+  ### generate blocks
+  
+  if (length(ninds) == 1) {
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else if (length(ninds) == nclusters) {
+    ninds <- rep(ninds, each = nperiods )
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else if (length(ninds) == nclusters*nperiods) {
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else {
+    stop("Length of ninds must be 1, nclusters, or nclusters x nperiods")
+  }
+  
+  if (length(rho_w) == 1) rho_w <- rep(rho_w, nclusters)
+  if (length(rho_b) == 1) rho_b <- rep(rho_b, nclusters)
+  if (length(rho_a) == 1) rho_a <- rep(rho_a, nclusters)
+  
+  assertLength(rho_w = rho_w, length = nclusters)
+  assertLength(rho_b = rho_b, length = nclusters)
+  if (!is.null(rho_a)) assertLength(rho_a = rho_a, length = nclusters)
+   
+  dd <- lapply(1:nclusters, 
+               function(x) list(
+                 ninds = ninds[x,], 
+                 rho_w = rho_w[x], 
+                 rho_b = rho_b[x], 
+                 rho_a = rho_a[x]
+               )
+  )
+  
+  cm <- lapply(dd, function(x) {
+    .genMat(ninds = x$ninds, 
+            nperiods = nperiods,
+            rho_w = x$rho_w, 
+            rho_b = x$rho_b,
+            rho_a = x$rho_a,
+            r = NULL,
+            pattern = pattern,
+            type = "exchange"
+    ) }
+  )
+    
+  if (nclusters == 1) cm <- cm[[1]]
+  cm
+  
+}
+
 #' Create a block correlation matrix
 #' @description  The function genBlockMat() generates correlation matrices that 
 #' can accommodate clustered observations over time where the within-cluster 
@@ -716,21 +925,19 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' See vignettes for more details.
 #' 
 #' @examples
-#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8)
-#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5)
-#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7)
+#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8)
+#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5)
+#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7)
 #' 
-#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "exp")
-#' genBlockMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "prop")
+#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "exp")
+#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "prop")
 #' 
-#' genBlockMat(nInds = c(2, 3), nPeriods = 2, rho_w = .8, r = .9, 
+#' blockDecayMat(nInds = c(2, 3), nPeriods = 2, rho_w = .8, r = .9, 
 #'   decay = "prop", nclusters=2)
-#' 
-#' 
 #' 
 #' @export
 #' @concept correlated
-genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a = NULL, 
+blockDecayMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a = NULL, 
                         r = NULL, decay = NULL, nclusters = 1) {
   
   if (!requireNamespace("blockmatrix", quietly = TRUE)) {
@@ -743,7 +950,7 @@ genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a = NULL,
   ### Checking
   
   assertNotMissing(nInds = missing(nInds), nPeriods = missing(nPeriods),
-                  rho_w = missing(rho_w))
+                   rho_w = missing(rho_w))
   
   assertInteger(nInds = nInds, nPeriods = nPeriods)
   assertAtLeast(nPeriods = nPeriods, minVal = 2)
@@ -773,47 +980,6 @@ genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a = NULL,
     return(block)
   }
   
-  ### generate blocks
-  
-  .genMat <- function(nInds, nPeriods, rho_w, rho_b, rho_a, r, decay) {
-    diagblock <- matrix(rho_w, nInds, nInds)
-    diag(diagblock) <- 1
-    
-    if (is.null(decay)) {
-      edgeblocks <- lapply(1:(nPeriods-1), function(x) matrix(rho_b, nInds, nInds))
-      if (!is.null(rho_a)) {
-        edgeblocks <- lapply(1:(nPeriods-1), function(x) .assignDiag(edgeblocks[[x]], rho_a))  
-      }
-    } else {
-      edgeblocks <- lapply(1:(nPeriods-1), function(x) matrix(rho_w * (r^x), nInds, nInds))
-      if (decay == "prop") {
-        edgeblocks <- lapply(1:(nPeriods-1), function(x) .assignDiag(edgeblocks[[x]], r^x))  
-      }
-    }
-    
-    # create list of blocks 
-    
-    blocks <- NULL
-    blocks[[1]] <- diagblock
-    blocks <- append(blocks, edgeblocks)
-    
-    names(blocks) <- paste0("M", c(1 : nPeriods))
-    
-    ### put blocks together
-    
-    block_str <- sapply(nPeriods:1, 
-                        function(x) data.table::shift(1:nPeriods, nPeriods - x, fill = 0))
-    block_str[upper.tri(block_str)] = t(block_str)[upper.tri(block_str)]
-    block_str <- matrix(paste0("M", block_str), nPeriods)
-    
-    bm <- blockmatrix::blockmatrix(value = block_str, list = blocks, dim=c(nPeriods, nPeriods))
-    newCorMatrix <-  as.matrix(bm)
-    assertPositiveDefinite(newCorMatrix = newCorMatrix)
-    
-    newCorMatrix
-   
-  }
-  
   if (nclusters == 1) {
     
     assertLength(nInds = nInds, length = nclusters)
@@ -822,7 +988,7 @@ genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a = NULL,
     if (!is.null(rho_a)) assertLength(rho_a = rho_a, length = nclusters)
     
     cm <- .genMat(nInds, nPeriods, rho_w, rho_b, rho_a, r, decay)
-
+    
   } else {
     
     if (length(nInds) == 1) nInds <- rep(nInds, nclusters)
@@ -843,7 +1009,7 @@ genBlockMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a = NULL,
     )
     
     cm <- lapply(split(dd, seq(nrow(dd))), 
-      function(x) .genMat(x$nInds, nPeriods, x$rho_w, x$rho_b, x$rho_a, r, decay)
+                 function(x) .genMat(x$nInds, nPeriods, x$rho_w, x$rho_b, x$rho_a, r, decay)
     )
   }
   
