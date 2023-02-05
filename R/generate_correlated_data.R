@@ -696,7 +696,7 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
   
   if (type == "exchange") {
     
-    combos <- combn(ninds, 2)
+    combos <- utils::combn(ninds, 2)
     ncombos <- ncol(combos)
     lower <- lapply(1:ncombos, 
                     function(x) matrix(rho_b, nrow = combos[2, x], ncol = combos[1, x]))
@@ -709,7 +709,7 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
     
   } else if (type == "decay") {
     
-    combos <- combn(ninds, 2)
+    combos <- utils::combn(ninds, 2)
     ncombos <- ncol(combos)
     z <- unlist(lapply((nperiods-1):1, function(x) 1:x))
     lower <- lapply(1:ncombos, 
@@ -763,14 +763,14 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' @param rho_b The between-period/between-individual correlation coefficient between -1 and 1. 
 #' @param rho_a The between-period/within-individual auto-correlation coefficient
 #' between -1 and 1.
-#' @param xsection An logical indicator for whether the matrices are cross-sectional.
+#' @param pattern A string argument with options "xsection" (default) or "cohort".
 #' @param nclusters An integer that indicates the number of matrices that will be generated.
 #' @return A single correlation matrix or a list of matrices of potentially
 #' different sizes with length indicated by \code{nclusters}.
 #' @details Two general exchangeable correlation structures are currently supported: a *cross-sectional* exchangeable
 #' structure and a *closed cohort* exchangeable structure. In the *cross-sectional* case, individuals or units in each time period are distinct.
-#' In the *closed cohort* structure, individuals or units are repeated in each time period. The 
-#' desired structure is specified using \code{xsection}, which defaults to TRUE if not specified. \code{rho_a} is the within-individual/unit 
+#' In the *closed cohort* structure, individuals or units are repeated in each time period. 
+#' The desired structure is specified using \code{pattern}, which defaults to "xsection" if not specified. \code{rho_a} is the within-individual/unit 
 #' exchangeable correlation over time, and can only be used when \code{xsection = FALSE}.
 #' 
 #' This function can generate correlation matrices of different sizes, depending on the combination of arguments provided. 
@@ -791,7 +791,7 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' 
 #' \item{if the sample size differs across clusters and across periods within clusters, \code{ninds} will have a
 #' value for each cluster-period combination (i.e., length = \code{nclusters x nperiods}).} This option is
-#' only valid when \code{xsection = TRUE}.
+#' only valid when \code{pattern = "xsection"}.
 #' 
 #' }
 #' 
@@ -808,23 +808,18 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
 #' @examples
 #' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8)
 #' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5)
-#' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, pattern = "cohort")
-#' 
-#' blockExchangeMat(ninds = 2, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 3, pattern = "cohort")
-#' blockExchangeMat(ninds = c(2, 3), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 2, pattern="cohort")
-#' blockExchangeMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 2, pattern="cohort")
+#' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+#'     pattern = "cohort")
+#' blockExchangeMat(ninds = 2, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+#'     nclusters = 3, pattern = "cohort")
+#' blockExchangeMat(ninds = c(2, 3), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+#'     nclusters = 2, pattern="cohort")
+#' blockExchangeMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, rho_b = 0.5, 
+#'     nclusters = 2)
 #' @export
 #' @concept correlated
 blockExchangeMat <- function(ninds, nperiods, rho_w, rho_b = 0, rho_a = NULL, 
                              pattern = "xsection", nclusters = 1) {
-  
-  if (!requireNamespace("blockmatrix", quietly = TRUE)) {
-    stop(
-      "Package \"blockmatrix\" must be installed to use this function.",
-      call. = FALSE
-    )
-  }
-  
   ### Checking
   
   # check rho_a and pattern == "cohort"
@@ -842,6 +837,14 @@ blockExchangeMat <- function(ninds, nperiods, rho_w, rho_b = 0, rho_a = NULL,
 
   assertOption(pattern = pattern, options = c("xsection", "cohort"))
   
+  if (!is.null(rho_a) & pattern == "xsection") {
+    stop("rho_a has been specified but is not valid for a cross-sectional design")
+  }
+  
+  if (is.null(rho_a) & pattern == "cohort") {
+    stop("A cohort design has been specified so rho_a must also be specified")
+  }
+  
   ### generate blocks
   
   if (length(ninds) == 1) {
@@ -850,9 +853,10 @@ blockExchangeMat <- function(ninds, nperiods, rho_w, rho_b = 0, rho_a = NULL,
     ninds <- rep(ninds, each = nperiods )
     ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
   } else if (length(ninds) == nclusters*nperiods) {
+    if (pattern == "cohort") stop("The number of individuals per period must be constant across periods with a cohort design")
     ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
   } else {
-    stop("Length of ninds must be 1, nclusters, or nclusters x nperiods")
+    stop("Length of ninds must be 1, nclusters, or nclusters x nperiods (for cross-section only)")
   }
   
   if (length(rho_w) == 1) rho_w <- rep(rho_w, nclusters)
@@ -895,124 +899,130 @@ blockExchangeMat <- function(ninds, nperiods, rho_w, rho_b = 0, rho_a = NULL,
 #' between-individual correlation in the same time period can be different from the 
 #' within-cluster between-individual correlation across time periods.The matrix
 #' generated here can be used in function addCorGen().
-#' @param nInds The number of units (individuals) in each period.
-#' @param nPeriods The number periods that data are observed.
-#' @param rho_w The within-period correlation coefficient between -1 and 1.
-#' @param rho_b The between-period correlation coefficient between -1 and 1.
-#' @param rho_a The between-period within individual auto-correlation coefficient 
-#' between -1 and 1.
+#' @param ninds The number of units (individuals) in each cluster in each period. 
+#' @param nperiods The number periods that data are observed.
+#' @param rho_w The within-period/between-individual correlation coefficient between -1 and 1. 
 #' @param r The decay parameter if correlation declines over time, and can have values of
 #' "exp" or "prop". See details.
-#' @param decay The decay type can be "exp" or "prop". The decay structure
+#' @param pattern A string argument with options "xsection" (default) or "cohort".
+#' @param nclusters An integer that indicates the number of matrices that will be generated.
+
 #' @param nclusters An integer that indicates the number of matrices that will be generated.
 #' @return A single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
 #' different sizes with length indicated by \code{nclusters}.
-#' @details This function can generate correlation matrices randomly or deterministically, 
-#' depending on the combination of arguments provided. A single matrix will be
-#' generated when \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+#' @return A single correlation matrix or a list of matrices of potentially
+#' different sizes with length indicated by \code{nclusters}.
+#' @details Two general decay correlation structures are currently supported: a *cross-sectional* 
+#' exchangeable structure and a *closed cohort* exchangeable structure. In the *cross-sectional* 
+#' case, individuals or units in each time period are distinct. In the *closed cohort* structure, 
+#' individuals or units are repeated in each time period. The desired structure is specified 
+#' using \code{pattern}, which defaults to "xsection" if not specified. 
+#' 
+#' This function can generate correlation matrices of different sizes, depending on the 
+#' combination of arguments provided. A single matrix will be generated when 
+#' \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
 #' \code{nclusters > 1}.
 #' 
-#'\code{decay = "exp"} when the desired pattern is cross-sectional and
-#' is decaying in an exponential manner (as described in Li et al. Mixed-effects models for the 
-#' design and analysis of stepped wedge cluster randomized trials: An overview. 
-#' Statistical Methods in Medical Research. 2021;30(2):612-639. doi:10.1177/0962280220932962). When
-#' the data have repeated measurements over time, \code{decay} = "prop" for proportional decay.
+#' If \code{nclusters > 1}, the length of \code{ninds} will depend on if sample sizes will vary by cluster
+#' and/or period. There are three scenarios,  and function evaluates the length of \code{ninds} to 
+#' determine which approach to take:
 #' 
-#' When there is no decay, the cross-sectional exchangeable structure is specifed by setting \code{rho_b}.
-#' For the repeated measures case, \code{rho_a} can be specified for the within-individual/between-period
-#' correlation.
+#' \itemize{
+#' 
+#' \item{if the sample size is the same for all clusters in all periods, \code{ninds} will be
+#' a single value (i.e., length = 1).}
+#' 
+#' \item{if the sample size differs by cluster but is the same for each period within each cluster
+#' each period, then \code{ninds} will have a value for each cluster (i.e., length = \code{nclusters}).} 
+#' 
+#' \item{if the sample size differs across clusters and across periods within clusters, \code{ninds} will have a
+#' value for each cluster-period combination (i.e., length = \code{nclusters x nperiods}).} This option is
+#' only valid when \code{pattern = "xsection"}.
+#' 
+#' }
+#' 
+#' In addition, \code{rho_w} and \code{r} can be specified as a single value (in which case they are consistent
+#' across all clusters) or as a vector of length \code{nclusters}, in which case either one or 
+#' both of these parameters can vary by cluster.
 #' 
 #' See vignettes for more details.
 #' 
+#' @references Li et al. Mixed-effects models for the design and analysis of stepped wedge 
+#' cluster randomized trials: An overview. Statistical Methods in Medical Research. 
+#' 2021;30(2):612-639. doi:10.1177/0962280220932962
+#' 
+#' @seealso \code{\link{blockExchangeMat}} and \code{\link{addCorGen}}
+#' 
 #' @examples
-#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8)
-#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5)
-#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7)
+#' blockDecayMat(ninds = 4, nperiods = 3, rho_w = .8, r = .9)
+#' blockDecayMat(ninds = 4, nperiods = 3, rho_w = .8, r = .9, pattern = "cohort")
 #' 
-#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "exp")
-#' blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "prop")
-#' 
-#' blockDecayMat(nInds = c(2, 3), nPeriods = 2, rho_w = .8, r = .9, 
-#'   decay = "prop", nclusters=2)
+#' blockDecayMat(ninds = 2, nperiods = 3, rho_w = .8, r = .9, pattern = "cohort", nclusters=2)
+#' blockDecayMat(ninds = c(2, 3), nperiods = 3, rho_w = c(.8,0.7), r = c(.9,.8), 
+#'   pattern = "cohort", nclusters=2)
+#' blockDecayMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, r = .9, nclusters=2)
 #' 
 #' @export
 #' @concept correlated
-blockDecayMat <- function(nInds, nPeriods, rho_w, rho_b = 0, rho_a = NULL, 
-                        r = NULL, decay = NULL, nclusters = 1) {
-  
-  if (!requireNamespace("blockmatrix", quietly = TRUE)) {
-    stop(
-      "Package \"blockmatrix\" must be installed to use this function.",
-      call. = FALSE
-    )
-  }
+blockDecayMat <- function(ninds, nperiods, rho_w, r, pattern = "xsection", nclusters = 1) {
   
   ### Checking
   
-  assertNotMissing(nInds = missing(nInds), nPeriods = missing(nPeriods),
-                   rho_w = missing(rho_w))
+  assertNotMissing(
+    ninds = missing(ninds),
+    nperiods = missing(nperiods),
+    rho_w = missing(rho_w),
+    r = missing(r)
+  )
   
-  assertInteger(nInds = nInds, nPeriods = nPeriods)
-  assertAtLeast(nPeriods = nPeriods, minVal = 2)
+  assertInteger(ninds = ninds, nperiods = nperiods, nclusters = nclusters)
+  assertAtLeast(nperiods = nperiods, minVal = 2)
   assertInRange(rho_w = rho_w, range = c(-1,1))
+  assertInRange(r = r, range = c(0,1))
   
-  if (!is.null(r)) {
-    assertNotNull(decay = decay)
-  }
+  assertOption(pattern = pattern, options = c("xsection", "cohort"))
   
-  if (is.null(decay)) {
-    assertInRange(rho_b = rho_b, range = c(-1,1))
-    
-    if (!is.null(rho_a)) {
-      assertInRange(rho_a = rho_a, range = c(-1,1))
-    }
-  }
+  ### generate blocks
   
-  if (!is.null(decay)) {
-    assertNotNull(r = r)
-    assertOption(decay = decay, options = c("exp", "prop"))
-  }
-  
-  ###
-  
-  .assignDiag <- function(block, value) {
-    diag(block) <- value
-    return(block)
-  }
-  
-  if (nclusters == 1) {
-    
-    assertLength(nInds = nInds, length = nclusters)
-    assertLength(rho_w = rho_w, length = nclusters)
-    assertLength(rho_b = rho_b, length = nclusters)
-    if (!is.null(rho_a)) assertLength(rho_a = rho_a, length = nclusters)
-    
-    cm <- .genMat(nInds, nPeriods, rho_w, rho_b, rho_a, r, decay)
-    
+  if (length(ninds) == 1) {
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else if (length(ninds) == nclusters) {
+    ninds <- rep(ninds, each = nperiods )
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else if (length(ninds) == nclusters*nperiods) {
+    if (pattern == "cohort") stop("The number of individuals per period must be constant across periods with a cohort design")
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
   } else {
-    
-    if (length(nInds) == 1) nInds <- rep(nInds, nclusters)
-    if (length(rho_w) == 1) rho_w <- rep(rho_w, nclusters)
-    if (length(rho_b) == 1) rho_b <- rep(rho_b, nclusters)
-    if (length(rho_a) == 1) rho_a <- rep(rho_a, nclusters)
-    
-    assertLength(nInds = nInds, length = nclusters)
-    assertLength(rho_w = rho_w, length = nclusters)
-    assertLength(rho_b = rho_b, length = nclusters)
-    if (!is.null(rho_a)) assertLength(rho_a = rho_a, length = nclusters)
-    
-    dd <- data.table(
-      nInds = nInds,
-      rho_w = rho_w,
-      rho_b = rho_b,
-      rho_a = rho_a
-    )
-    
-    cm <- lapply(split(dd, seq(nrow(dd))), 
-                 function(x) .genMat(x$nInds, nPeriods, x$rho_w, x$rho_b, x$rho_a, r, decay)
-    )
+    stop("Length of ninds must be 1, nclusters, or nclusters x nperiods (for cross-section only)")
   }
   
-  cm
+  if (length(rho_w) == 1) rho_w <- rep(rho_w, nclusters)
+  if (length(r) == 1) r <- rep(r, nclusters)
   
+  assertLength(rho_w = rho_w, length = nclusters)
+  assertLength(r = r, length = nclusters)
+  
+  dd <- lapply(1:nclusters, 
+               function(x) list(
+                 ninds = ninds[x,], 
+                 rho_w = rho_w[x], 
+                 r = r[x]
+               )
+  )
+  
+  cm <- lapply(dd, function(x) {
+    .genMat(ninds = x$ninds, 
+            nperiods = nperiods,
+            rho_w = x$rho_w, 
+            rho_b = NULL,
+            rho_a = NULL,
+            r = x$r,
+            pattern = pattern,
+            type = "decay"
+    ) }
+  )
+  
+  if (nclusters == 1) cm <- cm[[1]]
+  cm
+ 
 }

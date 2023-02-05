@@ -4,38 +4,27 @@
 \alias{blockDecayMat}
 \title{Create a block correlation matrix}
 \usage{
-blockDecayMat(
-  nInds,
-  nPeriods,
-  rho_w,
-  rho_b = 0,
-  rho_a = NULL,
-  r = NULL,
-  decay = NULL,
-  nclusters = 1
-)
+blockDecayMat(ninds, nperiods, rho_w, r, pattern = "xsection", nclusters = 1)
 }
 \arguments{
-\item{nInds}{The number of units (individuals) in each period.}
+\item{ninds}{The number of units (individuals) in each cluster in each period.}
 
-\item{nPeriods}{The number periods that data are observed.}
+\item{nperiods}{The number periods that data are observed.}
 
-\item{rho_w}{The within-period correlation coefficient between -1 and 1.}
-
-\item{rho_b}{The between-period correlation coefficient between -1 and 1.}
-
-\item{rho_a}{The between-period within individual auto-correlation coefficient 
-between -1 and 1.}
+\item{rho_w}{The within-period/between-individual correlation coefficient between -1 and 1.}
 
 \item{r}{The decay parameter if correlation declines over time, and can have values of
 "exp" or "prop". See details.}
 
-\item{decay}{The decay type can be "exp" or "prop". The decay structure}
+\item{pattern}{A string argument with options "xsection" (default) or "cohort".}
 
 \item{nclusters}{An integer that indicates the number of matrices that will be generated.}
 }
 \value{
 A single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
+different sizes with length indicated by \code{nclusters}.
+
+A single correlation matrix or a list of matrices of potentially
 different sizes with length indicated by \code{nclusters}.
 }
 \description{
@@ -46,33 +35,57 @@ within-cluster between-individual correlation across time periods.The matrix
 generated here can be used in function addCorGen().
 }
 \details{
-This function can generate correlation matrices randomly or deterministically, 
-depending on the combination of arguments provided. A single matrix will be
-generated when \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+Two general decay correlation structures are currently supported: a *cross-sectional* 
+exchangeable structure and a *closed cohort* exchangeable structure. In the *cross-sectional* 
+case, individuals or units in each time period are distinct. In the *closed cohort* structure, 
+individuals or units are repeated in each time period. The desired structure is specified 
+using \code{pattern}, which defaults to "xsection" if not specified. 
+
+This function can generate correlation matrices of different sizes, depending on the 
+combination of arguments provided. A single matrix will be generated when 
+\code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
 \code{nclusters > 1}.
 
-\code{decay = "exp"} when the desired pattern is cross-sectional and
-is decaying in an exponential manner (as described in Li et al. Mixed-effects models for the 
-design and analysis of stepped wedge cluster randomized trials: An overview. 
-Statistical Methods in Medical Research. 2021;30(2):612-639. doi:10.1177/0962280220932962). When
-the data have repeated measurements over time, \code{decay} = "prop" for proportional decay.
+If \code{nclusters > 1}, the length of \code{ninds} will depend on if sample sizes will vary by cluster
+and/or period. There are three scenarios,  and function evaluates the length of \code{ninds} to 
+determine which approach to take:
 
-When there is no decay, the cross-sectional exchangeable structure is specifed by setting \code{rho_b}.
-For the repeated measures case, \code{rho_a} can be specified for the within-individual/between-period
-correlation.
+\itemize{
+
+\item{if the sample size is the same for all clusters in all periods, \code{ninds} will be
+a single value (i.e., length = 1).}
+
+\item{if the sample size differs by cluster but is the same for each period within each cluster
+each period, then \code{ninds} will have a value for each cluster (i.e., length = \code{nclusters}).} 
+
+\item{if the sample size differs across clusters and across periods within clusters, \code{ninds} will have a
+value for each cluster-period combination (i.e., length = \code{nclusters x nperiods}).} This option is
+only valid when \code{pattern = "xsection"}.
+
+}
+
+In addition, \code{rho_w} and \code{r} can be specified as a single value (in which case they are consistent
+across all clusters) or as a vector of length \code{nclusters}, in which case either one or 
+both of these parameters can vary by cluster.
 
 See vignettes for more details.
 }
 \examples{
-blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8)
-blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5)
-blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7)
+blockDecayMat(ninds = 4, nperiods = 3, rho_w = .8, r = .9)
+blockDecayMat(ninds = 4, nperiods = 3, rho_w = .8, r = .9, pattern = "cohort")
 
-blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "exp")
-blockDecayMat(nInds = 4, nPeriods = 3, rho_w = .8, r = .9, decay = "prop")
+blockDecayMat(ninds = 2, nperiods = 3, rho_w = .8, r = .9, pattern = "cohort", nclusters=2)
+blockDecayMat(ninds = c(2, 3), nperiods = 3, rho_w = c(.8,0.7), r = c(.9,.8), 
+  pattern = "cohort", nclusters=2)
+blockDecayMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, r = .9, nclusters=2)
 
-blockDecayMat(nInds = c(2, 3), nPeriods = 2, rho_w = .8, r = .9, 
-  decay = "prop", nclusters=2)
-
+}
+\references{
+Li et al. Mixed-effects models for the design and analysis of stepped wedge 
+cluster randomized trials: An overview. Statistical Methods in Medical Research. 
+2021;30(2):612-639. doi:10.1177/0962280220932962
+}
+\seealso{
+\code{\link{blockExchangeMat}} and \code{\link{addCorGen}}
 }
 \concept{correlated}

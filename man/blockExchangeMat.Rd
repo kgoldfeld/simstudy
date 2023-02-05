@@ -26,9 +26,9 @@ blockExchangeMat(
 \item{rho_a}{The between-period/within-individual auto-correlation coefficient
 between -1 and 1.}
 
-\item{nclusters}{An integer that indicates the number of matrices that will be generated.}
+\item{pattern}{A string argument with options "xsection" (default) or "cohort".}
 
-\item{xsection}{An logical indicator for whether the matrices are cross-sectional.}
+\item{nclusters}{An integer that indicates the number of matrices that will be generated.}
 }
 \value{
 A single correlation matrix or a list of matrices of potentially
@@ -44,8 +44,8 @@ generated here can be used in function \code{addCorGen}.
 \details{
 Two general exchangeable correlation structures are currently supported: a *cross-sectional* exchangeable
 structure and a *closed cohort* exchangeable structure. In the *cross-sectional* case, individuals or units in each time period are distinct.
-In the *closed cohort* structure, individuals or units are repeated in each time period. The 
-desired structure is specified using \code{xsection}, which defaults to TRUE if not specified. \code{rho_a} is the within-individual/unit 
+In the *closed cohort* structure, individuals or units are repeated in each time period. 
+The desired structure is specified using \code{pattern}, which defaults to "xsection" if not specified. \code{rho_a} is the within-individual/unit 
 exchangeable correlation over time, and can only be used when \code{xsection = FALSE}.
 
 This function can generate correlation matrices of different sizes, depending on the combination of arguments provided. 
@@ -66,7 +66,7 @@ each period, then \code{ninds} will have a value for each cluster (i.e., length 
 
 \item{if the sample size differs across clusters and across periods within clusters, \code{ninds} will have a
 value for each cluster-period combination (i.e., length = \code{nclusters x nperiods}).} This option is
-only valid when \code{xsection = TRUE}.
+only valid when \code{pattern = "xsection"}.
 
 }
 
@@ -78,11 +78,14 @@ See vignettes for more details.
 \examples{
 blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8)
 blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5)
-blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, pattern = "cohort")
-
-blockExchangeMat(ninds = 2, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 3, pattern = "cohort")
-blockExchangeMat(ninds = c(2, 3), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 2, pattern="cohort")
-blockExchangeMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, nclusters = 2, pattern="cohort")
+blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+    pattern = "cohort")
+blockExchangeMat(ninds = 2, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+    nclusters = 3, pattern = "cohort")
+blockExchangeMat(ninds = c(2, 3), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+    nclusters = 2, pattern="cohort")
+blockExchangeMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, rho_b = 0.5, 
+    nclusters = 2)
 }
 \references{
 Li et al. Mixed-effects models for the design and analysis of stepped wedge cluster randomized trials: An overview. 
