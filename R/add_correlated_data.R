@@ -366,14 +366,14 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   }
   
   #### Check args
-  
+
   assertNotMissing(dtOld = missing(dtOld), 
                    dist = missing(dist), param1 = missing(param1))
   
   assertClass(dtOld = dtOld, class = "data.table")
   
   assertOption(dist = dist, 
-               options = c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))
+    options = c("poisson", "binary", "gamma", "uniform", "negBinomial", "normal"))
   
   if (!is.null(param2)) {
     assertInDataTable(vars = c(idvar, param1, param2), dt = dtOld)
@@ -394,6 +394,7 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   if (dist != "binary" & method == "ep") {
     stop("Method `ep` applies only to binary data generation")
   }
+  
 
   # wide(ness) is determined by incoming data structure.
 
@@ -422,8 +423,45 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   
   dtOrig <- copy(dtOld)
   setnames(dtOrig, idvar, ".id")
-  
   dtTemp <- copy(dtOrig)
+  
+  # check corMatrix
+  
+  if (!is.null(corMatrix)) {
+    if (is.list(corMatrix)) {
+      
+      # check if corMatrix is a numeric matrix
+      
+      test <- 
+        sapply(corMatrix, function(corMatrix) assertNumericMatrix(corMatrix = corMatrix))
+      
+      # check if there are the same number of correlation matrices as there are clusters
+      
+      dn <- dtTemp[, .N, keyby = .id]
+      assertLength(corMatrix = corMatrix, length = nrow(dn))
+      
+      # check if the dimensions of corr matrices match cluster sizes
+      
+      dn$dim <- sapply(corMatrix, function(x) nrow(x))
+      compare_cluster_size <- dn[, sum(N != dim)]
+      if (compare_cluster_size != 0) {
+        stop("Dimensions of correlation matrices in corMatrix not equal to cluster sizes!")
+      }
+    
+    } else { # not a list
+      assertNumericMatrix(corMatrix = corMatrix)
+      
+      # check if the dimensions of corr matrix matches (equal) cluster size
+      
+      dn <- dtTemp[, .N, keyby = .id]
+      dn[, dim := nrow(corMatrix)]
+      compare_cluster_size <- dn[, sum(N != dim)]
+      if (compare_cluster_size != 0) {
+        stop("Dimensions of corMatrix not equal to cluster sizes!")
+      }
+    }
+  }
+  
   
   if (wide) { # Convert to long form temporarily
     dtTemp <- addPeriods(dtTemp, nPeriods = nvars, idvars = ".id")
@@ -435,11 +473,17 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
 
   if (method == "copula") {
     
-    ns <- as.list(dtTemp[, .N, keyby = .id][,N])
-
-    dtM <- rbindlist(lapply(ns,
-          function(x) .genQuantU(x, 1, rho, corstr, corMatrix))
-    )
+    if (is.list(corMatrix)) {
+      ns <- split(dtTemp[, .N, keyby = .id], by = ".id")
+      dtM <- rbindlist(
+        lapply(ns, function(x) .genQuantU(x$N, 1, rho, corstr, corMatrix[[x$.id]])) 
+      )
+    } else {
+      ns <- as.list(dtTemp[, .N, keyby = .id][,N])
+      dtM <- rbindlist(
+        lapply(ns, function(x) .genQuantU(x, 1, rho, corstr, corMatrix))
+      ) 
+    }
 
     xid <- ".id"
     
@@ -480,10 +524,12 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
 
   } else if (method == "ep") {
     
-    dX <- dtTemp[, .genByID(p = get(param1), rho, corstr, corMatrix), keyby = .id]
+    if (is.list(corMatrix)) {
+      dX <- dtTemp[, .genByID(p = get(param1), rho, corstr, corMatrix[[.id]]), keyby = .id]
+    } else {
+      dX <- dtTemp[, .genByID(p = get(param1), rho, corstr, corMatrix), keyby = .id]
+    }
     
-    # dX[, seq_ := period + 1]
-    # dX[, `:=`(.dummyid = NULL, period = NULL)]
     setnames(dX, "X", ".XX")
     
   } # end (if ep)

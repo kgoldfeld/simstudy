@@ -2,7 +2,7 @@ Type: Package
 Package: simstudy
 Title: Simulation of Study Data
 Version: 0.5.1.9000
-Date: 2022-11-16
+Date: 2023-02-04
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",
@@ -56,12 +56,11 @@ Suggests:
     survival,
     testthat,
     gtsummary,
-    survminer,
-    blockmatrix
+    survminer
 LinkingTo: 
     Rcpp, 
     pbv (>= 0.4-22)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3

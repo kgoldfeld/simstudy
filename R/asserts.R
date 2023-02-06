@@ -162,6 +162,19 @@ assertType <- function(..., type, deep = TRUE, call = sys.call(-1)) {
 
 #' Check for Numeric
 #'
+#' @description Checks if all passed vars and their content are not null
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertNotNull <- function(..., call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  isNull <- sapply(dots$args, function(x) is.null(x))
+  if (any(isNull)) {
+    nullError(dots$names[isNull], type = "numeric", call = call)
+  }
+}
+
+#' Check for Numeric
+#'
 #' @description Checks if all passed vars and their content are numeric.
 #' @param ... Any number of variables as named elements e.g. var1 = var1.
 #' @noRd
@@ -210,6 +223,23 @@ assertFactor <- function(..., type, call = sys.call(-1)) {
   })
   if (any(notFactor)) {
     typeError(dots$names[notFactor], type = "factor", call = call)
+  }
+}
+
+#' Check for numeric matrix (character matrices not allowed)
+#'
+#' @description Checks if all passed vars and their content are numeric matrices
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertNumericMatrix <- function(..., call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  notNumericMatrix <- !sapply(dots$args, function(mat) {
+    isMatrix <- is.matrix(mat)
+    isNumeric <- is.numeric(c(mat))
+    isMatrix & isNumeric
+  })
+  if (any(notNumericMatrix)) {
+    typeError(dots$names[notNumericMatrix], type = "numeric matrix", call = call)
   }
 }
 
@@ -430,10 +460,10 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
   stopifnot(...length() == 1)
   dots <- dots2argNames(...)
   matrix <- dots$args[[1]]
-  isSym <- isSymmetric(matrix)
-  eigenValues <- unlist(eigen(matrix, only.values = TRUE))
+  isSym <- isSymmetric(round(matrix, 7))
+  eigenValues <- round(unlist(eigen(matrix, only.values = TRUE)), 8)
 
-  if (!all(eigenValues > 0) || !isSym) {
+  if (!all(eigenValues >= 0) || !isSym) {
     notPositiveDefiniteError(dots$names, call = call)
   }
 }
