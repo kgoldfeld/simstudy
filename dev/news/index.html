@@ -88,11 +88,17 @@
 <h2 class="page-header" data-toc-text="development version" id="simstudy-development-version">simstudy (development version)<a class="anchor" aria-label="anchor" href="#simstudy-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>Added function <code>genBlockMat</code>. Users can now generate correlation matrices that can accommodate clustered observations over time where the within-cluster correlation in the same time period can be different from the within-cluster correlation across time periods.</li>
+<ul><li>Added function <code>blockExchangekMat</code> and <code>blockDecayMat</code>. Users can now generate correlation matrices that can accommodate clustered observations over time where the within-cluster correlation in the same time period can be different from the within-cluster correlation across time periods.</li>
+<li>Updated function <code>genCorMat</code> to allow generation of cluster-specific correlation matrices in case one wants to induce variability in correlation across clusters.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="major-fixes-development-version">Major fixes<a class="anchor" aria-label="anchor" href="#major-fixes-development-version"></a></h3>
-<ul><li>Overhauled function <code>addCorGen</code> to make it more flexible. It can now handle cluster dependent data, and not just time-dependent data. In addition, performance has been dramatically improved.</li>
+<ul><li>Overhauled function <code>addCorGen</code> to make it more flexible. It can now handle cluster-dependent data, and not just time-dependent data. In addition, performance has been dramatically improved.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-fixes-development-version">Minor fixes<a class="anchor" aria-label="anchor" href="#minor-fixes-development-version"></a></h3>
+<ul><li>Fixed bug in <code>genSpline</code>
+</li>
 </ul></div>
 </div>
     <div class="section level2">

@@ -90,60 +90,142 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genCorMat</span><span class="op">(</span><span class="va">nvars</span>, cors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">genCorMat</span><span class="op">(</span><span class="va">nvars</span>, cors <span class="op">=</span> <span class="cn">NULL</span>, rho <span class="op">=</span> <span class="cn">NULL</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, nclusters <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>nvars</dt>
-<dd><p>number of rows and columns (i.e. number of variables) for correlation matrix</p></dd>
+<dd><p>number of rows and columns (i.e. number of variables) for correlation matrix. It can be
+a scalar or vector (see details).</p></dd>
 
 
 <dt>cors</dt>
 <dd><p>vector of correlations.</p></dd>
+
+
+<dt>rho</dt>
+<dd><p>Correlation coefficient, <code>-1 &lt;= rho &lt;= 1</code>. Use if corMatrix is not provided. It can
+be a scalar or vector (see details).</p></dd>
+
+
+<dt>corstr</dt>
+<dd><p>Correlation structure. Options include "cs" for a compound symmetry structure, "ar1" 
+for an autoregressive structure of order 1, "arx" for an autoregressive structure 
+that has a general decay pattern, and "structured" that imposes a prescribed
+pattern between observation based on distance (see details).</p></dd>
+
+
+<dt>nclusters</dt>
+<dd><p>An integer that indicates the number of matrices that will be generated.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>correlation matrix of size nvars x nvars</p>
+<p>A single correlation matrix of size <code>nvars x nvars</code>, or a list of matrices of potentially
+different sizes with length indicated by <code>nclusters</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>If the vector cors is not specified, a random correlation matrix is generated with no assumptions.
-If the vector is provided, it should be interpreted as the lower triangle of the correlation
-matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and
-nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].</p>
+    <p>This function can generate correlation matrices randomly or deterministically, 
+depending on the combination of arguments provided. A single matrix will be
+generated when <code>nclusters == 1</code> (the default), and a list of matrices of matrices will be generated when
+<code>nclusters &gt; 1</code>.</p>
+<p>If the vector `cors` is specified with length `nvars - 1` then `corstr` must be "structured". If
+`cors` is specified with length `choose(nvars, 2)` then `corstr` should not be specified as
+"structured". In this case the `cors` vector should be interpreted as the lower triangle of the correlation
+matrix, and is specified by reading down the columns. For example, if <b>CM</b> is the correlation matrix and
+<code>nvars = 3</code>, then <code>CM[2,1] = CM[1,2] = cors[1]</code>,  <code>CM[3,1] = CM[1,3] = cors[2]</code>, 
+and <code>CM[3,2] = CM[2,3] = cors[3]</code>.</p>
+<p>If the vector <code>cors</code> and <code>rho</code> are not specified, random correlation matrices are generated
+based on the specified <code>corstr</code>. If the structure is "arx", then a random vector of 
+length <code>nvars - 1</code> is randomly generated and sorted in descending order; the correlation matrix
+will be generated base on this set of structured correlations. If the structure is <em>not</em> specified
+as "arx" then a random positive definite of dimensions nvars x nvars with no structural 
+assumptions is generated.</p>
+<p>If <code>cors</code> is not specified but <code>rho</code> is specified, then a matrix with either a "cs" or "ar1" 
+structure is generated.</p>
+<p>If <code>nclusters &gt; 1</code>, <code>nvars</code> can be of length 1 or <code>nclusters</code>. If it is of length 1,
+each cluster will have correlation matrices with the same dimension. Likewise, if <code>nclusters &gt; 1</code>, 
+<code>rho</code> can be of length 1 or <code>nclusters</code>. If length of <code>rho</code> is 1,
+each cluster will have correlation matrices with the same autocorrelation.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">3</span>, cors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.3 -0.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.3  1.0  0.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2  0.1  1.0</span>
-<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]        [,3]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.00000000  0.34882294 -0.04048001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.34882294  1.00000000 -0.03448154</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.04048001 -0.03448154  1.00000000</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.5</span>, <span class="fl">.2</span>, <span class="op">-</span><span class="fl">.1</span>, <span class="fl">.3</span>, <span class="fl">.1</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.3 -0.2  0.1  0.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.3  1.0  0.5  0.2 -0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2  0.5  1.0  0.3  0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.1  0.2  0.3  1.0  0.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  0.2 -0.1  0.1  0.2  1.0</span>
-<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]         [,2]         [,3]        [,4]        [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.00000000 -0.153879212  0.067746478 -0.11808856 -0.08844994</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.15387921  1.000000000 -0.002672034 -0.01573187  0.02665726</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.06774648 -0.002672034  1.000000000  0.13895797  0.14377590</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] -0.11808856 -0.015731874  0.138957974  1.00000000  0.10444783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] -0.08844994  0.026657261  0.143775898  0.10444783  1.00000000</span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.5</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.3 -0.2  0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.3  1.0  0.2  0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2  0.2  1.0  0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.1  0.5  0.2  1.0</span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]        [,2]        [,3]         [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.000000000 -0.03444972 -0.21452382 -0.005877583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.034449723  1.00000000  0.12050698 -0.144038321</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.214523816  0.12050698  1.00000000 -0.043593674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] -0.005877583 -0.14403832 -0.04359367  1.000000000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, cors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span>, corstr <span class="op">=</span> <span class="st">"structured"</span><span class="op">)</span> </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.3  0.2  0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.3  1.0  0.3  0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.2  0.3  1.0  0.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.1  0.2  0.3  1.0</span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, corstr <span class="op">=</span> <span class="st">"arx"</span><span class="op">)</span> </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           [,1]      [,2]      [,3]      [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.0000000 0.4718393 0.2530470 0.1303249</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.4718393 1.0000000 0.4718393 0.2530470</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.2530470 0.4718393 1.0000000 0.4718393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 0.1303249 0.2530470 0.4718393 1.0000000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, rho <span class="op">=</span> <span class="fl">.4</span>, corstr <span class="op">=</span> <span class="st">"cs"</span><span class="op">)</span> </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.4  0.4  0.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.4  1.0  0.4  0.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.4  0.4  1.0  0.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.4  0.4  0.4  1.0</span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, rho <span class="op">=</span> <span class="fl">.4</span>, corstr <span class="op">=</span> <span class="st">"ar1"</span><span class="op">)</span> </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1] [,2] [,3]  [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.000 0.40 0.16 0.064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.400 1.00 0.40 0.160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.160 0.40 1.00 0.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 0.064 0.16 0.40 1.000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, rho <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.8</span>, <span class="fl">.7</span><span class="op">)</span>, corstr <span class="op">=</span> <span class="st">"ar1"</span>, nclusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`1`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.00  0.4 0.16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.40  1.0 0.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.16  0.4 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`2`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.8  1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`3`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        [,1]  [,2] [,3]  [,4]   [,5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.0000 0.700 0.49 0.343 0.2401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.7000 1.000 0.70 0.490 0.3430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.4900 0.700 1.00 0.700 0.4900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 0.3430 0.490 0.70 1.000 0.7000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] 0.2401 0.343 0.49 0.700 1.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

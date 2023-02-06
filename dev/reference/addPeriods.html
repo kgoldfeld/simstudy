@@ -150,11 +150,11 @@ per observation in dtName</p>
 <span class="r-in"><span><span class="va">dtTrial</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">5</span>, <span class="va">tdef</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dtTrial</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id T        Y0       Y1       Y2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1 1 10.185951 21.04748 27.08363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2 0  9.865677 14.05208 18.50072</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3 1 11.145429 21.61925 27.01519</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4 0 11.837659 17.24380 22.62769</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  5 0  7.978921 13.08261 16.30404</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1 0 11.649583 15.76368 20.03512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2 0 10.472046 15.33428 20.12014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3 1  9.668415 18.01738 24.32966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4 1 10.156056 21.80222 24.91249</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  5 1  9.739324 21.09755 25.08160</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dtTime</span> <span class="op">&lt;-</span> <span class="fu">addPeriods</span><span class="op">(</span><span class="va">dtTrial</span>,</span></span>
 <span class="r-in"><span>  nPeriods <span class="op">=</span> <span class="fl">3</span>, idvars <span class="op">=</span> <span class="st">"id"</span>,</span></span>
@@ -162,21 +162,21 @@ per observation in dtName</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dtTime</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id period T         Y timeID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1      0 1 10.185951      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  1      1 1 21.047475      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  1      2 1 27.083632      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  2      0 0  9.865677      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  2      1 0 14.052085      5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  2      2 0 18.500722      6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  3      0 1 11.145429      7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  3      1 1 21.619248      8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  3      2 1 27.015187      9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  4      0 0 11.837659     10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:  4      1 0 17.243795     11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:  4      2 0 22.627692     12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:  5      0 0  7.978921     13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:  5      1 0 13.082611     14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:  5      2 0 16.304042     15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1      0 0 11.649583      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  1      1 0 15.763675      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  1      2 0 20.035125      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  2      0 0 10.472046      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  2      1 0 15.334277      5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  2      2 0 20.120137      6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  3      0 1  9.668415      7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  3      1 1 18.017385      8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  3      2 1 24.329658      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  4      0 1 10.156056     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:  4      1 1 21.802224     11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:  4      2 1 24.912485     12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:  5      0 1  9.739324     13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:  5      1 1 21.097552     14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:  5      2 1 25.081601     15</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Varying # of periods and intervals - need to have variables</span></span></span>
 <span class="r-in"><span><span class="co"># called nCount and mInterval</span></span></span>
@@ -189,22 +189,20 @@ per observation in dtName</p>
 <span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">def</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dt</span><span class="op">[</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id    xbase nCount mInterval vInterval</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   8 18.92268      4  32.72869      0.07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 121 21.11796      6  30.41614      0.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   8 19.21957      4  29.21872      0.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 121 19.10168      4  33.46208      0.07</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dtPeriod</span> <span class="op">&lt;-</span> <span class="fu">addPeriods</span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dtPeriod</span><span class="op">[</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">121</span><span class="op">)</span><span class="op">]</span> <span class="co"># View individuals 8 and 121 only</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      id period    xbase time timeID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:   8      0 18.92268    0     45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:   8      1 18.92268   24     46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:   8      2 18.92268   78     47</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:   8      3 18.92268  121     48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 121      0 21.11796    0    734</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 121      1 21.11796   35    735</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 121      2 21.11796   88    736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 121      3 21.11796  129    737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 121      4 21.11796  164    738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 121      5 21.11796  190    739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     id period    xbase time timeID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   8      0 19.21957    0     38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   8      1 19.21957   25     39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   8      2 19.21957   59     40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:   8      3 19.21957   94     41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 121      0 19.10168    0    744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 121      1 19.10168   45    745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: 121      2 19.10168   80    746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: 121      3 19.10168  110    747</span>
 </code></pre></div>
     </div>
   </div>
