@@ -66,14 +66,15 @@
 
   if (!missing(dtSim) && !is.null(dtSim)) {
     e$dtSim <- as.data.table(dtSim)
-    e$def_id <- names(dtSim)[[1]]
-  }
+    # e$def_id <- names(dtSim)[[1]] # original, but incorrect
+    e$def_id <- key(dtSim)
+    }
 
   if (missing(dtSim) || is.null(dtSim)) {
     e$dtSim <- genData(n)
     e$def_id <- "id"
   }
-
+  
   if (!is.null(e$formula2parse)) {
     stop("'formula2parse' is a reserved variable name!")
   }
