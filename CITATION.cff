@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.3.0
+# CITATION file created with {cffr} R package, v0.4.1
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -49,7 +49,7 @@ preferred-citation:
 repository: https://CRAN.R-project.org/package=simstudy
 repository-code: https://github.com/kgoldfeld/simstudy
 url: https://kgoldfeld.github.io/simstudy/
-date-released: '2022-10-03'
+date-released: '2023-02-04'
 contact:
 - family-names: Goldfeld
   given-names: Keith
@@ -65,12 +65,12 @@ references:
 - type: software
   title: 'R: A Language and Environment for Statistical Computing'
   notes: Depends
+  url: https://www.R-project.org/
   authors:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2022'
-  url: https://www.R-project.org/
+  year: '2023'
   institution:
     name: R Foundation for Statistical Computing
   version: '>= 3.3.0'
@@ -78,6 +78,8 @@ references:
   title: data.table
   abstract: 'data.table: Extension of `data.frame`'
   notes: Imports
+  url: https://r-datatable.com
+  repository: https://CRAN.R-project.org/package=data.table
   authors:
   - family-names: Dowle
     given-names: Matt
@@ -85,12 +87,13 @@ references:
   - family-names: Srinivasan
     given-names: Arun
     email: asrini@pm.me
-  year: '2022'
-  url: https://CRAN.R-project.org/package=data.table
+  year: '2023'
 - type: software
   title: glue
   abstract: 'glue: Interpreted String Literals'
   notes: Imports
+  url: https://glue.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=glue
   authors:
   - family-names: Hester
     given-names: Jim
@@ -99,8 +102,7 @@ references:
     given-names: Jennifer
     email: jenny@rstudio.com
     orcid: https://orcid.org/0000-0002-6983-2759
-  year: '2022'
-  url: https://CRAN.R-project.org/package=glue
+  year: '2023'
 - type: software
   title: methods
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -109,24 +111,26 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2022'
-  url: https://www.R-project.org/
+  year: '2023'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
   title: mvnfast
   abstract: 'mvnfast: Fast Multivariate Normal and Student''s t Methods'
   notes: Imports
+  url: https://github.com/mfasiolo/mvnfast/
+  repository: https://CRAN.R-project.org/package=mvnfast
   authors:
   - family-names: Fasiolo
     given-names: Matteo
     email: matteo.fasiolo@gmail.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=mvnfast
+  year: '2023'
 - type: software
   title: Rcpp
   abstract: 'Rcpp: Seamless R and C++ Integration'
   notes: Imports
+  url: https://www.rcpp.org
+  repository: https://CRAN.R-project.org/package=Rcpp
   authors:
   - family-names: Eddelbuettel
     given-names: Dirk
@@ -146,38 +150,41 @@ references:
     given-names: Douglas
   - family-names: Chambers
     given-names: John
-  year: '2022'
-  url: https://CRAN.R-project.org/package=Rcpp
+  year: '2023'
 - type: software
   title: backports
   abstract: 'backports: Reimplementations of Functions Introduced Since R-3.0.0'
   notes: Imports
+  url: https://github.com/r-lib/backports
+  repository: https://CRAN.R-project.org/package=backports
   authors:
   - family-names: Lang
     given-names: Michel
     email: michellang@gmail.com
     orcid: https://orcid.org/0000-0001-9754-0393
   - name: R Core Team
-  year: '2022'
-  url: https://CRAN.R-project.org/package=backports
+  year: '2023'
 - type: software
   title: covr
   abstract: 'covr: Test Coverage for Packages'
   notes: Suggests
+  url: https://covr.r-lib.org
+  repository: https://CRAN.R-project.org/package=covr
   authors:
   - family-names: Hester
     given-names: Jim
     email: james.f.hester@gmail.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=covr
+  year: '2023'
 - type: software
   title: dplyr
   abstract: 'dplyr: A Grammar of Data Manipulation'
   notes: Suggests
+  url: https://dplyr.tidyverse.org
+  repository: https://CRAN.R-project.org/package=dplyr
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
     orcid: https://orcid.org/0000-0003-4757-117X
   - family-names: François
     given-names: Romain
@@ -187,36 +194,42 @@ references:
   - family-names: Müller
     given-names: Kirill
     orcid: https://orcid.org/0000-0002-1416-3412
-  year: '2022'
-  url: https://CRAN.R-project.org/package=dplyr
+  - family-names: Vaughan
+    given-names: Davis
+    email: davis@posit.co
+    orcid: https://orcid.org/0000-0003-4777-038X
+  year: '2023'
 - type: software
   title: formatR
   abstract: 'formatR: Format R Code Automatically'
   notes: Suggests
+  url: https://github.com/yihui/formatR
+  repository: https://CRAN.R-project.org/package=formatR
   authors:
   - family-names: Xie
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2022'
-  url: https://CRAN.R-project.org/package=formatR
+  year: '2023'
 - type: software
   title: gee
   abstract: 'gee: Generalized Estimation Equation Solver'
   notes: Suggests
+  repository: https://CRAN.R-project.org/package=gee
   authors:
   - family-names: Carey
     given-names: Vincent J
-  year: '2022'
-  url: https://CRAN.R-project.org/package=gee
+  year: '2023'
 - type: software
   title: ggplot2
   abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
   notes: Suggests
+  url: https://ggplot2.tidyverse.org
+  repository: https://CRAN.R-project.org/package=ggplot2
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
     orcid: https://orcid.org/0000-0003-4757-117X
   - family-names: Chang
     given-names: Winston
@@ -225,7 +238,7 @@ references:
     given-names: Lionel
   - family-names: Pedersen
     given-names: Thomas Lin
-    email: thomas.pedersen@rstudio.com
+    email: thomas.pedersen@posit.co
     orcid: https://orcid.org/0000-0002-5147-4711
   - family-names: Takahashi
     given-names: Kohske
@@ -241,8 +254,7 @@ references:
   - family-names: Dunnington
     given-names: Dewey
     orcid: https://orcid.org/0000-0002-9415-4582
-  year: '2022'
-  url: https://CRAN.R-project.org/package=ggplot2
+  year: '2023'
 - type: software
   title: grid
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -251,45 +263,48 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2022'
-  url: https://www.R-project.org/
+  year: '2023'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
   title: gridExtra
   abstract: 'gridExtra: Miscellaneous Functions for "Grid" Graphics'
   notes: Suggests
+  repository: https://CRAN.R-project.org/package=gridExtra
   authors:
   - family-names: Auguie
     given-names: Baptiste
     email: baptiste.auguie@gmail.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=gridExtra
+  year: '2023'
 - type: software
   title: hedgehog
   abstract: 'hedgehog: Property-Based Testing'
   notes: Suggests
+  url: https://hedgehog.qa
+  repository: https://CRAN.R-project.org/package=hedgehog
   authors:
   - family-names: Campbell
     given-names: Huw
     email: huw.campbell@gmail.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=hedgehog
+  year: '2023'
 - type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
   notes: Suggests
+  url: https://yihui.org/knitr/
+  repository: https://CRAN.R-project.org/package=knitr
   authors:
   - family-names: Xie
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2022'
-  url: https://CRAN.R-project.org/package=knitr
+  year: '2023'
 - type: software
   title: magrittr
   abstract: 'magrittr: A Forward-Pipe Operator for R'
   notes: Suggests
+  url: https://magrittr.tidyverse.org
+  repository: https://CRAN.R-project.org/package=magrittr
   authors:
   - family-names: Bache
     given-names: Stefan Milton
@@ -297,12 +312,13 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=magrittr
+  year: '2023'
 - type: software
   title: Matrix
   abstract: 'Matrix: Sparse and Dense Matrix Classes and Methods'
   notes: Suggests
+  url: https://R-forge.R-project.org/tracker/?atid=294&group_id=61
+  repository: https://CRAN.R-project.org/package=Matrix
   authors:
   - family-names: Bates
     given-names: Douglas
@@ -313,42 +329,44 @@ references:
   - family-names: Jagan
     given-names: Mikael
     orcid: https://orcid.org/0000-0002-3542-2938
-  year: '2022'
-  url: https://CRAN.R-project.org/package=Matrix
+  year: '2023'
 - type: software
   title: mgcv
   abstract: 'mgcv: Mixed GAM Computation Vehicle with Automatic Smoothness Estimation'
   notes: Suggests
+  repository: https://CRAN.R-project.org/package=mgcv
   authors:
   - family-names: Wood
     given-names: Simon
     email: simon.wood@r-project.org
-  year: '2022'
-  url: https://CRAN.R-project.org/package=mgcv
+  year: '2023'
 - type: software
   title: ordinal
   abstract: 'ordinal: Regression Models for Ordinal Data'
   notes: Suggests
+  url: https://github.com/runehaubo/ordinal
+  repository: https://CRAN.R-project.org/package=ordinal
   authors:
   - family-names: Christensen
     given-names: Rune Haubo Bojesen
     email: rune.haubo@gmail.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=ordinal
+  year: '2023'
 - type: software
   title: pracma
   abstract: 'pracma: Practical Numerical Math Functions'
   notes: Suggests
+  repository: https://CRAN.R-project.org/package=pracma
   authors:
   - family-names: Borchers
     given-names: Hans W.
     email: hwborchers@googlemail.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=pracma
+  year: '2023'
 - type: software
   title: rmarkdown
   abstract: 'rmarkdown: Dynamic Documents for R'
   notes: Suggests
+  url: https://pkgs.rstudio.com/rmarkdown/
+  repository: https://CRAN.R-project.org/package=rmarkdown
   authors:
   - family-names: Allaire
     given-names: JJ
@@ -382,20 +400,20 @@ references:
     given-names: Richard
     email: rich@rstudio.com
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2022'
-  url: https://CRAN.R-project.org/package=rmarkdown
+  year: '2023'
 - type: software
   title: scales
   abstract: 'scales: Scale Functions for Visualization'
   notes: Suggests
+  url: https://scales.r-lib.org
+  repository: https://CRAN.R-project.org/package=scales
   authors:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
   - family-names: Seidel
     given-names: Dana
-  year: '2022'
-  url: https://CRAN.R-project.org/package=scales
+  year: '2023'
 - type: software
   title: splines
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -404,45 +422,48 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2022'
-  url: https://www.R-project.org/
+  year: '2023'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
   title: survival
   abstract: 'survival: Survival Analysis'
   notes: Suggests
+  url: https://github.com/therneau/survival
+  repository: https://CRAN.R-project.org/package=survival
   authors:
   - family-names: Therneau
     given-names: Terry M
     email: therneau.terry@mayo.edu
-  year: '2022'
-  url: https://CRAN.R-project.org/package=survival
+  year: '2023'
 - type: software
   title: testthat
   abstract: 'testthat: Unit Testing for R'
   notes: Suggests
+  url: https://testthat.r-lib.org
+  repository: https://CRAN.R-project.org/package=testthat
   authors:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=testthat
+  year: '2023'
 - type: software
   title: gtsummary
   abstract: 'gtsummary: Presentation-Ready Data Summary and Analytic Result Tables'
   notes: Suggests
+  url: https://www.danieldsjoberg.com/gtsummary/
+  repository: https://CRAN.R-project.org/package=gtsummary
   authors:
   - family-names: Sjoberg
     given-names: Daniel D.
     email: danield.sjoberg@gmail.com
     orcid: https://orcid.org/0000-0003-0862-2018
-  - family-names: Curry
-    given-names: Michael
-    orcid: https://orcid.org/0000-0002-0261-4044
   - family-names: Larmarange
     given-names: Joseph
     orcid: https://orcid.org/0000-0001-7097-700X
+  - family-names: Curry
+    given-names: Michael
+    orcid: https://orcid.org/0000-0002-0261-4044
   - family-names: Lavery
     given-names: Jessica
     orcid: https://orcid.org/0000-0002-2746-5647
@@ -452,12 +473,13 @@ references:
   - family-names: Zabor
     given-names: Emily C.
     orcid: https://orcid.org/0000-0002-1402-4498
-  year: '2022'
-  url: https://CRAN.R-project.org/package=gtsummary
+  year: '2023'
 - type: software
   title: survminer
   abstract: 'survminer: Drawing Survival Curves using ''ggplot2'''
   notes: Suggests
+  url: https://rpkgs.datanovia.com/survminer/index.html
+  repository: https://CRAN.R-project.org/package=survminer
   authors:
   - family-names: Kassambara
     given-names: Alboukadel
@@ -467,27 +489,29 @@ references:
   - family-names: Biecek
     given-names: Przemyslaw
     email: przemyslaw.biecek@gmail.com
-  year: '2022'
-  url: https://CRAN.R-project.org/package=survminer
+  year: '2023'
 - type: software
-  title: blockmatrix
-  abstract: 'blockmatrix: blockmatrix: Tools to solve algebraic systems with partitioned
-    matrices'
+  title: katex
+  abstract: 'katex: Rendering Math to HTML, ''MathML'', or R-Documentation Format'
   notes: Suggests
+  url: https://docs.ropensci.org/katex/
+  repository: https://CRAN.R-project.org/package=katex
   authors:
-  - family-names: Cordano
-    given-names: Emanuele
-  year: '2022'
-  url: https://CRAN.R-project.org/package=blockmatrix
+  - family-names: Ooms
+    given-names: Jeroen
+    email: jeroen@berkeley.edu
+    orcid: https://orcid.org/0000-0002-4035-0289
+  year: '2023'
 - type: software
   title: pbv
   abstract: 'pbv: Probabilities for Bivariate Normal Distribution'
   notes: LinkingTo
+  url: https://sites.google.com/site/alexanderrobitzsch2/software
+  repository: https://CRAN.R-project.org/package=pbv
   authors:
   - family-names: Robitzsch
     given-names: Alexander
-  year: '2022'
-  url: https://CRAN.R-project.org/package=pbv
+  year: '2023'
   version: '>= 0.4-22'
 identifiers:
 - type: url

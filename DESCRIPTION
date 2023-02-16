@@ -56,7 +56,8 @@ Suggests:
     survival,
     testthat,
     gtsummary,
-    survminer
+    survminer,
+    katex
 LinkingTo: 
     Rcpp, 
     pbv (>= 0.4-22)

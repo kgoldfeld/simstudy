@@ -1,0 +1,761 @@
+---
+title: "Correlation Matrices"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Correlation Matrices}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+```{r, echo = FALSE, message = FALSE}
+library(simstudy)
+library(ggplot2)
+library(scales)
+library(grid)
+library(gridExtra)
+library(survival)
+library(gee)
+library(data.table)
+
+plotcolors <- c("#B84226", "#1B8445", "#1C5974")
+
+cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
+                "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+ggtheme <- function(panelback = "white") {
+  
+  ggplot2::theme(
+    panel.background = element_rect(fill = panelback),
+    panel.grid = element_blank(),
+    axis.ticks =  element_line(colour = "black"),
+    panel.spacing =unit(0.25, "lines"),  # requires package grid
+    panel.border = element_rect(fill = NA, colour="gray90"), 
+    plot.title = element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size = 8)
+  )  
+  
+}
+```
+
+The functions `genCorGen` and `addCorGen` generate correlated data from a number of distributions (see the more general vignette discussing correlated data). Each function includes an option to specify a correlation matrix. There are three functions that will facilitate the creation of matrices that can be used to in both `CorGen` functions: `genCorMat`, `blockExchangeMat`, and `blockDecayMat`. This vignette provides a brief introduction to each. 
+
+## Simple correlation matrix generation
+
+In its most simple form, `genCorMat` can generate a single (square) correlation matrix of a specified dimension. This can be a completely *randomly* generated (valid) correlation matrix or a correlation matrix with a set of specified coefficients.
+
+Here is an example of the first, a randomly generated correlation matrix:
+
+```{r, message=FALSE}
+library(simstudy)
+library(data.table)
+set.seed(37265)
+
+genCorMat(4)
+```
+
+And here is a matrix with a specified set of coefficients (and you well get an error message if it is not positive semidefinite!). These coefficients define the lower triangle (and upper) triangle of the matrix, reading down the columns:
+
+```{r, message=FALSE}
+R <- genCorMat(4, cors = c(0.6, 0.4, 0.2, 0.5, 0.3, 0.8))
+R
+```
+
+This matrix can be used to generate data using functions `genCorData` or `genCorGen`:
+
+```{r}
+dd <- genCorGen(n = 1000, nvars = 4, corMatrix = R, params1 = c(3, 5, 8, 9), 
+  dist = "poisson", wide = TRUE)
+
+head(dd)
+```
+
+And the correlation from this data set is quite close to the specified matrix **R**.
+
+```{r}
+round(cor(as.matrix(dd[, -1])), 1)
+```
+
+## Specifying a structure
+
+It is also possible to specify an exchangeable/compound symmetry or auto-regressive structure. Here is the compound symmetry structure:
+
+```{r, echo=FALSE}
+matform <- "
+R = \\left (
+\\begin{matrix} 
+1.0 & \\rho & \\rho & \\rho \\\\
+\\rho & 1.0 & \\rho & \\rho \\\\
+\\rho & \\rho & 1.0 & \\rho \\\\
+\\rho & \\rho & \\rho & 1.0
+\\end{matrix}
+\\right )
+"
+
+katex::katex_html(matform, include_css = TRUE)
+```
+
+```{r}
+genCorMat(nvars = 4, rho = 0.6, corstr = "cs")
+```
+
+And here is a matrix with an auto-regressive or decaying structure:
+
+```{r, echo=FALSE}
+matform <- "
+R = \\left (
+\\begin{matrix} 
+1.0 & \\rho & \\rho^2 & \\rho^3 \\\\
+\\rho & 1.0 & \\rho & \\rho^2 \\\\
+\\rho^2 & \\rho & 1.0 & \\rho \\\\
+\\rho^3 & \\rho^2 & \\rho & 1.0
+\\end{matrix}
+\\right )
+"
+
+katex::katex_html(matform)
+```
+
+```{r}
+genCorMat(nvars = 4, rho = 0.6, corstr = "ar1")
+```
+
+## Cluster-specific correlation matrices
+
+It is also possible to generate a *list* of correlation matrices, each of which corresponds to a specific cluster. These matrices can be of different sizes (to accommodate different cluster sizes) and have different parameters (if not random). The only constraints are that the overall structure of matrices need to be the same (i.e. random, *cs*, or *ar1*), and it is not possible to use the `cors` argument (since the number of correlation parameters would be different depending on the cluster size).
+
+In this example, I am generating matrices with a *cs* structure for four clusters with sizes 2, 3, 4, and 3, respectively, and within-cluster correlations of $\rho_1 = 0.6$, $\rho_2 = 0.7$, $\rho_3 = 0.5$, and $\rho_4 = 0.4$. This reflects an overall block correlation matrix that looks like this:
+
+```{r, echo=FALSE}
+matform <- "\\footnotesize{
+
+R = \\left ( \\begin{array}{c|c|c|c}
+
+\\begin{matrix} 
+1.0 & 0.6 \\\\
+0.6 & 1.0
+\\end{matrix} &
+  
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+0.0 & 0.0 \\\\
+0.0 & 0.0 \\\\
+0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+1.0 & 0.7 & 0.7  \\\\
+0.7 & 1.0 & 0.7  \\\\
+0.7 & 0.7 & 1.0
+\\end{matrix} &
+
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+0.0 & 0.0 \\\\
+0.0 & 0.0 \\\\
+0.0 & 0.0 \\\\
+0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+1.0 & 0.5 & 0.5 & 0.5 \\\\
+0.5 & 1.0 & 0.5 & 0.5 \\\\
+0.5 & 0.5 & 1.0 & 0.5 \\\\
+0.5 & 0.5 & 0.5 & 1.0
+\\end{matrix} &
+
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+0.0 & 0.0 \\\\
+0.0 & 0.0 \\\\
+0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+0.0 & 0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 & 0.0 \\\\
+0.0 & 0.0 & 0.0 & 0.0
+\\end{matrix} &
+
+\\begin{matrix} 
+1.0 & 0.4 & 0.4  \\\\
+0.4 & 1.0 & 0.4  \\\\
+0.4 & 0.4 & 1.0
+\\end{matrix} \\\\
+
+\\end{array} \\right ) }"
+
+katex::katex_html(matform)
+```
+
+Each column represents an individual unit (and so does each row). Reading down a column (or across a row) gives the correlations with the other individual units. The clusters are represented by the grids drawn over the matrix. In this case, individuals are correlated only with other individuals in the same cluster. 
+
+To generate this system of matrices, we just need to specify the number of observations per cluster ($nvars$), the correlation coefficients for each cluster ($rho$, which in this case is a vector), and the number of clusters. The $nvars$ argument needs to match the numbers of individuals in each cluster in the data set, and the lengths of $nvars$ and $rho$ must be the same as the number of clusters (though either or both can be scalars, in which case the values are shared across the clusters). The output is a list of correlation matrices, one for each cluster.
+
+```{r}
+RC <- genCorMat(nvars = c(2, 3, 4, 3), rho = c(0.6, 0.7, 0.5, 0.4), 
+  corstr = "cs", nclusters = 4)
+
+RC
+```
+
+To create the correlated data, first we can generate a data set of individuals that are clustered in groups. The outcome will be Poisson distributed, so we are specifying mean $\lambda$ for each cluster:
+
+```{r}
+d1 <- defData(varname = "n", formula = "c(2, 3, 4, 3)", dist = "nonrandom")
+d1 <- defData(d1, varname = "lambda", formula = "c(6, 7, 9, 8)", dist = "nonrandom")
+
+ds <- genData(4, d1, id = "site")
+dc <- genCluster(dtClust = ds, cLevelVar = "site", numIndsVar = "n", "id")
+```
+
+Now, we can generate data using the correlation matrix **RC**:
+
+```{r}
+dd <- addCorGen(dc, idvar = "site", param1 = "lambda", corMatrix = RC,
+          dist = "poisson", cnames = "y", method = "copula")
+
+dd
+```
+
+If we want to confirm that everything is working as expected, we can recover the overall correlation matrix by generating a large number of data sets (in this case 5000):
+
+```{r, eval=FALSE}
+replicate <- function(R, dc) {
+  reps <- lapply(1:5000, function(x)
+  addCorGen(dc, idvar = "site", param1 = "lambda", corMatrix = R,
+    dist = "poisson", cnames = "y", method = "copula")
+  )
+
+  drep <- data.table::rbindlist(reps, idcol = "rep")
+  drep[, seq := 1:.N, keyby = rep]
+  dmat <- as.matrix(dcast(drep, rep ~ seq, value.var = "y")[, -1])
+  round(cor(dmat), 1) 
+}
+
+replicate(R = RC, dc = dc)
+
+```
+
+It seems to have worked quite well - the empirical matrix matches the hypothetical matrix above. In the next post, I'll describe how block matrices for different clusters over different time periods can also be flexibly generated for different groups.
+
+### More elaborate example
+
+Here is an example that generates data for a large number of clusters, where the parameters (cluster means and correlation coefficients) themselves are randomly generated. By providing this flexibility, we induce extra variability in the data generation process.
+
+```{r, eval=TRUE}
+d1 <- defData(varname = "n", formula = 20, dist = "noZeroPoisson")
+d1 <- defData(d1, varname = "mu", formula = 10, variance = 8, dist = "normal")
+d1 <- defData(d1, varname = "s2", formula = 4, dist = "nonrandom")
+
+ds <- genData(100, d1, id = "site")
+dc <- genCluster(dtClust = ds, cLevelVar = "site", numIndsVar = "n", "id")
+
+n <- dc[, .N, keyby = site][, N]
+nsites <- length(n)
+rho <- rbeta(nsites, 25, 15)
+
+RM <- genCorMat(nvars = n, rho = rho, corstr = "cs", nclusters = nsites)
+```
+
+Here are the first three rows and columns of the correlation matrices for three clusters, as well as the dimensions for each matrix.
+
+```{r}
+lapply(RM[c(1, 38, 97)], function(x) x[1:3, 1:3])
+lapply(RM[c(1, 38, 97)], function(x) dim(x))
+```
+
+And here is how we generate the data
+
+```{r}
+dd <- addCorGen(dc, idvar = "site", param1 = "mu", param2 = "s2",
+                corMatrix = RM, dist = "normal", cnames = "y", method = "copula")
+
+dd
+```
+
+## Block matrices for temporal data
+
+There are two functions,`blockExchangeMat` and `blockDecayMat`, that generate correlation matrices that reflect different correlation patterns over time. This type of correlation has a block structure, where time periods define the blocks. The general idea is that the correlation of individuals measured in the same time period (within-period correlation) could be different from the correlation of individuals measured in different time periods (between-period correlation).
+
+A parameterization of the structure of these block correlation matrices is described by [Li *et al*](https://journals.sagepub.com/doi/pdf/10.1177/0962280220932962){target="_blank"} and has been implemented in these two functions. The options for the block matrices depend on the distinction between  *cross-sectional* vs *cohort* samples as well as the *exchangeability* vs. *decay* patterns of correlation. 
+
+### Cross-sectional data
+
+In the case where individuals are measured only once, the sample is considered *cross-sectional*.  The key point is that in a cross-sectional design who are measured at different time periods will be unique. The structure the correlation will depend on the assumption we make about how correlation changes over time: the correlation can reflect either *exchangeability* or *decay*.
+
+#### Exchangeable
+
+Under the assumption of exchangeability, there is a constant within-period correlation ($\rho_w$) across all study participants in the same period. For participants in *different* periods, the between-period correlation ($\rho_b$) is different (presumably lower) but constant over time.
+
+A conceptual diagram of this exchangeable correlation matrix for a cross-sectional design is shown below; it includes three periods and two individuals per period. Each box represents a different time period. So, the correlation represented in the box in the upper left hand corner is the within-period correlation for the first period. The bottom left box represents the between-period correlation for the individuals in the first and third periods.
+
+<br>
+
+```{r, echo=FALSE}
+library(katex)
+matform <- "\\footnotesize{
+
+R = \\left ( \\begin{array}{c|c|c}
+
+\\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_b & \\rho_b \\\\
+\\rho_b & \\rho_b
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_b & \\rho_b \\\\
+\\rho_b & \\rho_b
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+\\rho_b & \\rho_b \\\\
+\\rho_b & \\rho_b
+\\end{matrix} &
+  
+  \\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_b & \\rho_b \\\\
+\\rho_b & \\rho_b
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+\\rho_b & \\rho_b \\\\
+\\rho_b & \\rho_b 
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_b & \\rho_b \\\\
+\\rho_b & \\rho_b 
+\\end{matrix} &
+  
+\\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1 
+\\end{matrix}
+
+\\end{array} \\right ) }"
+
+katex_html(matform)
+```
+
+#### Decay
+
+Under the assumption of decay, the within-period correlation ($\rho_w$) is the same as under the exchangeability assumptions. The between-period correlation is now a function of the difference in time when the two individuals were measured. It is $\rho_w * r^{|s-t|}$, where $r$ is a decay parameter between 0 and 1, and $s$ and $t$ are the periods under consideration. For example, in the lower left-hand box, we have the correlation between individuals in the first period ($s=1$) and individuals in the third period ($t=3$), which gives a correlation coefficient of $\rho_w \times r^{|1-3|} = \rho_w \times r^2$. As the difference in periods grows, $r^{|s-t|}$ gets smaller.
+
+<br>
+
+```{r, echo=FALSE}
+matform <- "\\footnotesize{
+
+R = \\left ( \\begin{array}{c|c|c}
+
+\\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1
+\\end{matrix} &
+  
+\\begin{matrix} 
+\\rho_w r & \\rho_w r \\\\
+\\rho_w r & \\rho_w r
+\\end{matrix} &
+  
+\\begin{matrix} 
+\\rho_w r^2 & \\rho_w r^2 \\\\
+\\rho_w r^2 & \\rho_w r^2
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+\\rho_w r & \\rho_w r \\\\
+\\rho_w r & \\rho_w r
+\\end{matrix}&
+  
+  \\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_w r & \\rho_w r \\\\
+\\rho_w r & \\rho_w r
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+\\rho_w r^2 & \\rho_w r^2 \\\\
+\\rho_w r^2 & \\rho_w r^2
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_w r & \\rho_w r \\\\
+\\rho_w r & \\rho_w r
+\\end{matrix} &
+  
+\\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1 
+\\end{matrix}
+
+\\end{array} \\right ) }"
+
+katex_html(matform)
+```
+
+### Closed cohort
+
+When individuals measured repeatedly (i.e.,  in each period of a study), the sample is considered to be a *cohort*. Actually, if every individual is measured in each period, as I've just described, this would be a *closed* cohort, closed in the sense that once the cohort is defined at the beginning of the study, no new participants are added. If we allow participants to start and stop and random points, this would be an *open* cohort design. For the purposes of simulation it is challenging to generate data under an open cohort design with this marginal approach (using correlation matrices), and is much easier to do with random effects. What I am describing here applies to closed cohorts only.
+
+#### Exchangeable
+
+The key difference between the cross-sectional and cohort design is the within-individual between-period (auto) correlation. Under the exchangeable assumption, the autocorrelation is specified with the correlation coefficient $\rho_a$. The within-period between-individual correlation is still $\rho_w$, and the between-period between-individual correlation is still $\rho_b$. All of these correlations remain constant in the exchangeable framework:
+
+<br>
+
+```{r, echo=FALSE}
+matform <- "\\footnotesize{
+
+R = \\left ( \\begin{array}{c|c|c}
+
+\\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_a & \\rho_b \\\\
+\\rho_b & \\rho_a
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_a & \\rho_b \\\\
+\\rho_b & \\rho_a
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+\\rho_a & \\rho_b \\\\
+\\rho_b & \\rho_a
+\\end{matrix} &
+  
+  \\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_a & \\rho_b \\\\
+\\rho_b & \\rho_a
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+\\rho_a & \\rho_b \\\\
+\\rho_b & \\rho_a 
+\\end{matrix} &
+  
+  \\begin{matrix} 
+\\rho_a & \\rho_b \\\\
+\\rho_b & \\rho_a 
+\\end{matrix} &
+  
+\\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1 
+\\end{matrix}
+
+\\end{array} \\right ) }"
+
+katex_html(matform)
+```
+
+#### Decay
+
+The decay structure under an assumption of a closed cohort is the last of the four possible variations. The within-period between-individual correlation $\rho_w$ remains the same as the cross-sectional case, and so does the between-period between-individual correlation $\rho_wr^{|s-t|}$. However, the between-period within-individual correlation is specified as $r^{|s-t|}$:
+
+<br>
+
+```{r, echo=FALSE}
+matform <- "\\footnotesize{
+
+R = \\left ( \\begin{array}{c|c|c}
+
+\\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1
+\\end{matrix} &
+  
+\\begin{matrix} 
+r & \\rho_w r \\\\
+\\rho_w r & r
+\\end{matrix} &
+  
+\\begin{matrix} 
+r^2 & \\rho_w r^2 \\\\
+\\rho_w r^2 & r^2
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+r & \\rho_w r \\\\
+\\rho_w r & r
+\\end{matrix}&
+  
+  \\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1
+\\end{matrix} &
+  
+  \\begin{matrix} 
+r & \\rho_w r \\\\
+\\rho_w r & r
+\\end{matrix} \\\\
+
+\\hline
+
+\\begin{matrix} 
+r^2 & \\rho_w r^2 \\\\
+\\rho_w r^2 & r^2
+\\end{matrix} &
+  
+  \\begin{matrix} 
+r & \\rho_w r \\\\
+\\rho_w r & r
+\\end{matrix} &
+  
+\\begin{matrix} 
+1 & \\rho_w \\\\
+\\rho_w & 1 
+\\end{matrix}
+
+\\end{array} \\right ) }"
+
+katex_html(matform)
+```
+
+### Generating block matrices and simulating data
+
+These variations are implmented in `blockExchangeMat` and `blockDecayMat`. In the simulations that follow, I will generate a single corrlation matrix that reflects three periods and two indviduals per period, just to keep it simple. 
+
+#### Cross-sectional data with exchangeable correlation
+
+In the first example, we specify $\rho_w = 0.5$ and $\rho_b = 0.3$:
+
+```{r}
+library(simstudy)
+library(data.table)
+
+R_XE <- blockExchangeMat(ninds = 2 , nperiods = 3, rho_w = 0.5,
+  rho_b = 0.3, pattern = "xsection")
+
+R_XE
+```
+
+The correlated data are generated using `genCorGen`, using the correlation matrix $R_XE$. I am effectively generating 5000 data sets with 6 observations each, all based on a Poisson distribution with mean = 7. I then report the empirical correlation matrix.
+
+```{r}
+dd <- genCorGen(n = 5000, nvars = 6, corMatrix = R_XE,
+  dist = "poisson", params1 = 7, wide = TRUE)
+
+round(cor(as.matrix(dd[, -1])), 2)
+```
+
+#### Cross-sectional data with correlation decay
+
+Here, there is a decay parameter $r = 0.8$ and no parameter $\rho_b$.
+
+```{r}
+R_XD <- blockDecayMat(ninds = 2 , nperiods = 3, rho_w = 0.5,
+  r = 0.8, pattern = "xsection")
+
+R_XD
+
+dd <- genCorGen(n = 5000, nvars = 6, corMatrix = R_XD,
+  dist = "poisson", params1 = 7, wide = TRUE)
+```
+
+```{r, echo=FALSE}
+round(cor(as.matrix(dd[, -1])), 2)
+```
+
+#### Cohort data with exchangeable correlation
+
+Since we have a cohort, we introduce $\rho_a$ = 0.4, and specify $pattern = \text{"cohort"}$:
+
+```{r}
+R_CE <- blockExchangeMat(ninds = 2 , nperiods = 3, rho_w = 0.5, 
+  rho_b = 0.3, rho_a = 0.4, pattern = "cohort")
+
+R_CE
+
+dd <- genCorGen(n = 5000, nvars = 6, corMatrix = R_CE,
+  dist = "poisson", params1 = 7, wide = TRUE)
+```
+
+```{r, echo=FALSE}
+round(cor(as.matrix(dd[, -1])), 2)
+```
+
+#### Cohort data with correlation decay
+
+In the final case, the parameterization for decaying correlation with a cohort is the same as a decay in the case of a cross sectional design; the only difference that we set $pattern = \text{"cohort"}$:
+
+```{r}
+R_CD <- blockDecayMat(ninds = 2 , nperiods = 3, rho_w = 0.5, 
+  r = 0.8, pattern = "cohort")
+
+R_CD
+
+dd <- genCorGen(n = 5000, nvars = 6, corMatrix = R_CD,
+  dist = "poisson", params1 = 7, wide = TRUE)
+```
+
+```{r, echo=FALSE}
+round(cor(as.matrix(dd[, -1])), 2)
+```
+
+### Varying correlation matrices by cluster
+
+In the case of a cross-sectional design, the number of observations per period for a specific cluster does not need to remain constant (though in the case of data generation under a cohort design it does). We can vary the total number of observations as well as the correlation parameters by cluster.
+
+In this example, there are 10 clusters and three periods. The number of individuals per cluster per period ranges from two to four, and are randomly generated. The decay rate $r$ varies by cluster (generated using the *beta* distribution with shape parameters 6 and 2). The parameter $\rho_w$ is constant across all clusters and is 0.6
+
+```{r}
+defC <- defData(varname = "lambda", formula = "sample(5:10, 1)", dist = "nonrandom")
+defP <- defDataAdd(varname = "n", formula = "2;4", dist="uniformInt")
+
+dc <- genData(n = 10, dtDefs = defC, id = "site")
+dc <- addPeriods(dtName = dc, nPeriods = 3, 
+                 idvars = "site", perName = "period")
+dc <- addColumns(defP, dc)
+
+dd <- genCluster(dtClust = dc, cLevelVar = "timeID", 
+  numIndsVar = "n", level1ID = "id")
+
+```
+
+In this example, the 10 clusters will have varying numbers of observations per period. Here are the counts for three sites:
+
+```{r}
+dc[site %in% c(1, 3, 7), .(site, period, n)]
+```
+
+The sites will also have unique decay rates:
+
+```{r}
+r <- round(rbeta(10, 6, 2), 2)
+r[c(1, 3, 7)]
+```
+
+Here are the correlation matrices for these three sites:
+
+```{r}
+N <- dd[, .N, keyby = .(site, period)][, N]
+
+R <- blockDecayMat(ninds = N , nperiods = 3, rho_w = 0.6, r = r, nclusters = 10)
+
+lapply(R, function(x) round(x,2))[c(1, 3, 7)]
+```
+
+And here are the empirical correlation matrices for the three sites, based on 5000 replications of the data:
+
+```{r, eval=TRUE}
+reps <- lapply(1:5000, 
+  function(x) addCorGen(dd, idvar = "site", corMatrix = R,
+    dist = "poisson", param1 = "lambda", cnames = "y")
+)
+
+drep <- data.table::rbindlist(reps, idcol = "rep")
+
+empir_corr <- function(cluster) {
+  dcrep <- drep[site == cluster, ]
+  dcrep[, seq := 1:.N, keyby = rep]
+  dmat <- as.matrix(dcast(dcrep, rep ~ seq, value.var = "y")[, -1])
+  
+  return(round(cor(dmat), 2))
+}
+```
+
+```{r, eval=TRUE}
+empir_corr(cluster = 1)
+empir_corr(cluster = 3)
+empir_corr(cluster = 7)
+```
+
+<p><small><font color="darkkhaki">
+Reference:
+
+Li, Fan, James P. Hughes, Karla Hemming, Monica Taljaard, Edward R. Melnick, and Patrick J. Heagerty. "Mixed-effects models for the design and analysis of stepped wedge cluster randomized trials: an overview." Statistical Methods in Medical Research 30, no. 2 (2021): 612-639.
+
+</font></small></p>
+
+<br>
