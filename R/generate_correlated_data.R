@@ -396,6 +396,7 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
     dFinal <- data.table::dcast(dtM, id ~ seq, value.var = "X")
     if (!is.null(cnames)) {
       nnames <- trimws(unlist(strsplit(cnames, split = ",")))
+      assertLength(cnames = nnames, length = nvars)
       setnames(dFinal, paste0("V", 1:nvars), nnames)
     }
   }
