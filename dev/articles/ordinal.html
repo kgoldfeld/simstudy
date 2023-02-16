@@ -57,6 +57,9 @@
       <a href="../articles/clustered.html">Clustered Data</a>
     </li>
     <li>
+      <a href="../articles/corelationmat.html">Correlation Matrices</a>
+    </li>
+    <li>
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
@@ -352,12 +355,12 @@ specified correlations as expected:</p>
 <p>However, the marginal probability distributions of each item match
 quite closely with the specified probabilities:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu">melt</span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
 <span><span class="va">dProp</span> <span class="op">&lt;-</span> <span class="va">dM</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">variable</span><span class="op">]</span></span>
 <span><span class="va">dProp</span><span class="op">[</span>, <span class="va">response</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># observed probabilities</span></span>
-<span><span class="fu">dcast</span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>, value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>, value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    variable    1    2    3</span></span>
 <span><span class="co">## 1:       q1 0.20 0.10 0.70</span></span>
 <span><span class="co">## 2:       q2 0.69 0.21 0.10</span></span>
@@ -390,12 +393,12 @@ distributions are unaffected:</p>
 <span><span class="co">## q4 0.05 0.10 0.31 1.00 0.29</span></span>
 <span><span class="co">## q5 0.02 0.03 0.11 0.29 1.00</span></span></code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu">melt</span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
 <span><span class="va">dProp</span> <span class="op">&lt;-</span> <span class="va">dM</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">variable</span><span class="op">]</span></span>
 <span><span class="va">dProp</span><span class="op">[</span>, <span class="va">response</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># probabilities</span></span>
-<span><span class="fu">dcast</span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>, value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>, value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    variable    1    2     3</span></span>
 <span><span class="co">## 1:       q1 0.20 0.10 0.692</span></span>
 <span><span class="co">## 2:       q2 0.70 0.20 0.099</span></span>

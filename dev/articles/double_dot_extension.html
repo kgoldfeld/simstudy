@@ -57,6 +57,9 @@
       <a href="../articles/clustered.html">Clustered Data</a>
     </li>
     <li>
+      <a href="../articles/corelationmat.html">Correlation Matrices</a>
+    </li>
+    <li>
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
@@ -244,7 +247,7 @@ create a range of data sets under different assumptions:</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">sigma2s</span>, <span class="kw">function</span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="fu">gen_data</span><span class="op">(</span><span class="va">s</span>, <span class="va">def</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu">rbindlist</span><span class="op">(</span><span class="va">dd_4</span><span class="op">)</span></span>
+<span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="va">dd_4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dd_4</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">.5</span>, color <span class="op">=</span> <span class="st">"grey30"</span><span class="op">)</span> <span class="op">+</span></span>
