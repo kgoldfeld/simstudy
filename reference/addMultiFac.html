@@ -139,18 +139,18 @@ an integer.</p>
 <span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">360</span>, <span class="va">defD</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, colNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">DT</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       id           x A B C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 -1.33912713 2 2 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  0.11327754 2 3 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  0.18075940 2 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 -1.06259943 1 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 -1.08625103 1 3 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356 -0.02341924 1 3 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357 -0.15806321 1 2 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358 -0.51012699 2 2 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359  1.24277580 1 2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360  0.24401235 2 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id          x A B C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  0.6454198 2 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  0.7710369 2 2 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  0.3605039 1 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 -1.0029913 1 3 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5  1.3114219 2 2 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356 -0.4497413 1 3 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357  0.8329443 2 3 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358 -0.6189631 2 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359 -1.6054068 1 3 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360  1.2230155 1 1 1</span>
 <span class="r-in"><span><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     A B C  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1 1 1 20</span>
@@ -177,12 +177,12 @@ an integer.</p>
 <span class="r-in"><span><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Var1</span>, <span class="va">Var2</span>, <span class="va">Var3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Var1 Var2 Var3  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    0    0    0 38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:    0    1    0 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:    0    1    1 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:    1    0    0 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:    1    0    1 37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:    1    1    0 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:    1    1    0 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8:    1    1    1 38</span>
 </code></pre></div>
     </div>
