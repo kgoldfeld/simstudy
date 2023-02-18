@@ -72,19 +72,19 @@ IntegerVector clipVec(IntegerVector id, IntegerVector seq,
   IntegerVector last(uid);
   
   int maxperiod = max(seq);
-  int xid;
+  int x_uid;
   
   for(int i=0; i<id.length(); ++i) {
     
     if (seq[i] == 1) {
-      xid = id[i] - 1;
+      x_uid = id[i] - 1;
     }
     
-    if (last[xid] == 0) {
+    if (last[x_uid] == 0) {
       
       if (seq[i] < maxperiod) {
-        if (event[i] == 1) last[xid] = seq[i];
-      } else last[xid] = seq[i];
+        if (event[i] == 1) last[x_uid] = seq[i];
+      } else last[x_uid] = seq[i];
       
     }
     
