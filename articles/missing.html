@@ -177,24 +177,24 @@ dependent on <code>u</code>, an unmeasured predictor of
 <span><span class="co">##    5:    5  1  1  0 1 0</span></span>
 <span><span class="co">##   ---                  </span></span>
 <span><span class="co">##  996:  996  0  0  0 1 0</span></span>
-<span><span class="co">##  997:  997  1  0  0 1 0</span></span>
-<span><span class="co">##  998:  998  0  0  0 1 0</span></span>
+<span><span class="co">##  997:  997  1  0  1 1 0</span></span>
+<span><span class="co">##  998:  998  0  1  1 1 0</span></span>
 <span><span class="co">##  999:  999  0  0  0 1 0</span></span>
 <span><span class="co">## 1000: 1000  0  0  0 1 0</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtObs</span></span></code></pre></div>
 <pre><code><span><span class="co">##         id m  u        x1        x2        x3</span></span>
-<span><span class="co">##    1:    1 1 NA 40.051527 39.384118 42.057471</span></span>
-<span><span class="co">##    2:    2 1 NA 19.560885 18.435733 20.668171</span></span>
-<span><span class="co">##    3:    3 1 NA        NA 23.435857 21.309959</span></span>
-<span><span class="co">##    4:    4 1 NA        NA 22.928374 21.562697</span></span>
-<span><span class="co">##    5:    5 1 NA        NA        NA 21.201477</span></span>
+<span><span class="co">##    1:    1 1 NA 18.727126 20.815038 20.085465</span></span>
+<span><span class="co">##    2:    2 1 NA 21.202816 20.946073 20.774162</span></span>
+<span><span class="co">##    3:    3 0 NA        NA  0.652261 -0.908369</span></span>
+<span><span class="co">##    4:    4 1 NA        NA 38.451512 37.655179</span></span>
+<span><span class="co">##    5:    5 1 NA        NA        NA 42.145496</span></span>
 <span><span class="co">##   ---                                        </span></span>
-<span><span class="co">##  996:  996 1 NA 21.741742 17.545449 19.354647</span></span>
-<span><span class="co">##  997:  997 1 NA        NA 20.412398 18.904263</span></span>
-<span><span class="co">##  998:  998 0 NA -1.307796  1.017787 -2.066837</span></span>
-<span><span class="co">##  999:  999 0 NA -1.168798  1.458432  1.821717</span></span>
-<span><span class="co">## 1000: 1000 0 NA 20.392110 22.058318 21.315932</span></span></code></pre>
+<span><span class="co">##  996:  996 1 NA 19.313886 21.108592 19.757038</span></span>
+<span><span class="co">##  997:  997 1 NA        NA 37.437730        NA</span></span>
+<span><span class="co">##  998:  998 1 NA 40.378560        NA        NA</span></span>
+<span><span class="co">##  999:  999 0 NA -2.127907 -3.343757 -1.579350</span></span>
+<span><span class="co">## 1000: 1000 1 NA 19.227945 18.379227 18.079049</span></span></code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen
 with a simple calculation of means using both the “true” data set
 without missing data as a comparison for the “observed” data set. Since
@@ -222,9 +222,9 @@ actual is not close to 0:</p>
 <span></span>
 <span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##              x1   x2   x3</span></span>
-<span><span class="co">## Actual     19.8 19.8 19.8</span></span>
-<span><span class="co">## Observed   19.6 18.6 18.1</span></span>
-<span><span class="co">## Difference  0.2  1.2  1.7</span></span></code></pre>
+<span><span class="co">## Actual     19.3 19.3 19.4</span></span>
+<span><span class="co">## Observed   19.2 17.5 17.5</span></span>
+<span><span class="co">## Difference  0.1  1.8  1.9</span></span></code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias
 for the estimate of the mean of <code>x2</code> is mitigated, but not
 for <code>x3</code>, since <code>u</code> is not observed:</p>
@@ -235,18 +235,18 @@ for <code>x3</code>, since <code>u</code> is not observed:</p>
 <code class="sourceCode R"><span><span class="co"># compare observed and actual when m = 0</span></span>
 <span></span>
 <span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##             x1   x2  x3</span></span>
-<span><span class="co">## Actual     9.7  9.6 9.6</span></span>
-<span><span class="co">## Observed   9.3  9.8 8.1</span></span>
-<span><span class="co">## Difference 0.4 -0.2 1.5</span></span></code></pre>
+<pre><code><span><span class="co">##             x1  x2  x3</span></span>
+<span><span class="co">## Actual     9.6 9.6 9.7</span></span>
+<span><span class="co">## Observed   9.5 9.5 8.0</span></span>
+<span><span class="co">## Difference 0.1 0.1 1.7</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compare observed and actual when m = 1</span></span>
 <span></span>
 <span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##              x1   x2   x3</span></span>
 <span><span class="co">## Actual     30.3 30.3 30.4</span></span>
-<span><span class="co">## Observed   30.0 30.9 28.6</span></span>
-<span><span class="co">## Difference  0.3 -0.6  1.8</span></span></code></pre>
+<span><span class="co">## Observed   30.3 30.2 28.6</span></span>
+<span><span class="co">## Difference  0.0  0.1  1.8</span></span></code></pre>
 <div class="section level2">
 <h2 id="longitudinal-data-with-missingness">Longitudinal data with missingness<a class="anchor" aria-label="anchor" href="#longitudinal-data-with-missingness"></a>
 </h2>
