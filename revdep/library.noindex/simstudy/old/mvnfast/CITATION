@@ -1,0 +1,16 @@
+citHeader("To cite the mvnfast package in publications use:")
+
+citEntry(
+         entry="Manual",
+         title="An introduction to mvnfast. R package version 0.1.6.",
+         author=personList(
+     as.person("Matteo Fasiolo")
+	   ),	   
+	 year=2016,
+	 url="https://CRAN.R-project.org/package=mvnfast",
+	 textVersion=paste(
+			   "Matteo Fasiolo.",
+			   "An introduction to mvnfast (2016). R package version 0.1.6."
+			  ))	 
+
+citFooter("As mvnfast is often updated, you may want to cite its version number. Find it with 'help(package=mvnfast)'.")

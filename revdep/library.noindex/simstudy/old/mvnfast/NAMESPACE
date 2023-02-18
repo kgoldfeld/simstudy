@@ -1,0 +1,17 @@
+useDynLib("mvnfast", .registration = TRUE)
+
+# Exports
+export(dmixn)
+export(dmixt)
+export(dmvn)
+export(dmvt)
+export(maha)
+export(ms)
+export(rmixn)
+export(rmixt)
+export(rmvn)
+export(rmvt)
+
+
+# Imports
+importFrom(Rcpp, evalCpp)

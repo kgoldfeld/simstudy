@@ -1,0 +1,22 @@
+COPYRIGHT STATUS
+----------------
+  
+The code in "mvnfast/source/sitmo/sitmo.hpp" is 
+
+Copyright (c) 2012-2013 M.A. (Thijs) van den Berg, http://sitmo.com/
+Use, modification and distribution are subject to the MIT Software License. 
+
+
+The code in "mvnfast/source/boost/boost_normal.hpp" is 
+
+Copyright (c) Jens Maurer 2000-2001
+Copyright (c) Steven Watanabe 2010-2011
+Distributed under the Boost Software License, Version 1.0. 
+
+
+All the remaining code is 
+
+Copyright (C) 2014 by Matteo Fasiolo.
+All code is subject to the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.

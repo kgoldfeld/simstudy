@@ -329,7 +329,7 @@ dd
 
 There are two functions,`blockExchangeMat` and `blockDecayMat`, that generate correlation matrices that reflect different correlation patterns over time. This type of correlation has a block structure, where time periods define the blocks. The general idea is that the correlation of individuals measured in the same time period (within-period correlation) could be different from the correlation of individuals measured in different time periods (between-period correlation).
 
-A parameterization of the structure of these block correlation matrices is described by [Li *et al*](https://journals.sagepub.com/doi/pdf/10.1177/0962280220932962){target="_blank"} and has been implemented in these two functions. The options for the block matrices depend on the distinction between  *cross-sectional* vs *cohort* samples as well as the *exchangeability* vs. *decay* patterns of correlation. 
+A parameterization of the structure of these block correlation matrices is described by *Li et al* (see reference) and has been implemented in these two functions. The options for the block matrices depend on the distinction between  *cross-sectional* vs *cohort* samples as well as the *exchangeability* vs. *decay* patterns of correlation. 
 
 ### Cross-sectional data
 

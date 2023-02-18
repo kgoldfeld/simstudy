@@ -1,0 +1,20 @@
+dmixn                   Fast density computation for mixture of
+                        multivariate normal distributions.
+dmixt                   Fast density computation for mixture of
+                        multivariate Student's t distributions.
+dmvn                    Fast computation of the multivariate normal
+                        density.
+dmvt                    Fast computation of the multivariate Student's
+                        t density.
+maha                    Fast computation of squared mahalanobis
+                        distance between all rows of 'X' and the vector
+                        'mu' with respect to sigma.
+ms                      Mean-shift mode seeking algorithm
+rmixn                   Fast simulation of r.v.s from a mixture of
+                        multivariate normal densities
+rmixt                   Fast simulation of r.v.s from a mixture of
+                        multivariate Student's t densities
+rmvn                    Fast simulation of multivariate normal random
+                        variables
+rmvt                    Fast simulation of multivariate Student's t
+                        random variables

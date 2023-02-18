@@ -1,0 +1,11 @@
+package,old,new,delta
+simstudy,0.5.1,0.6.0,*
+backports,1.4.1,1.4.1,
+BH,1.81.0-1,1.81.0-1,
+data.table,1.14.8,1.14.8,
+glue,1.6.2,1.6.2,
+mvnfast,0.2.7,0.2.7,
+mvtnorm,1.1-3,NA,*
+pbv,NA,0.4-22,*
+Rcpp,1.0.10,1.0.10,
+RcppArmadillo,0.11.4.4.0,0.11.4.4.0,

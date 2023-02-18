@@ -1,4 +1,4 @@
-# simstudy (development version)
+# simstudy 0.6.0
 
 ## New features
 * Added function `blockExchangekMat` and `blockDecayMat`. Users can now generate correlation matrices that can accommodate clustered observations over time where the within-cluster correlation in the same time period can be different from the within-cluster correlation across time periods.

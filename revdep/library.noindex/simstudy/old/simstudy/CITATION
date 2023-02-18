@@ -1,0 +1,19 @@
+citHeader("To cite simstudy in publications, please use:")
+
+bibentry(
+  bibtype    = "Article",
+  title    = "simstudy: Illuminating research methods through data generation",
+  author   = "Keith Goldfeld and Jacob Wujciak-Jens",
+  publisher = "The Open Journal",
+  journal  = "Journal of Open Source Software",
+  year     = 2020,
+  volume   = 5,
+  number   = 54,
+  pages    = 2763,
+  url      = "https://doi.org/10.21105/joss.02763",
+  doi      = "10.21105/joss.02763",
+  textVersion = paste0('Goldfeld K, Wujciak-Jens J (2020).',
+                ' "simstudy: Illuminating research methods through data generation."',
+                ' Journal of Open Source Software, 5(54), 2763. doi:10.21105/joss.02763',
+                ' (URL: https://doi.org/10.21105/joss.02763).')
+)
