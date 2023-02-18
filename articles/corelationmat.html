@@ -1149,8 +1149,8 @@ observations per period. Here are the counts for three sites:</p>
 <span><span class="co">## [10,] 0.45 0.45 0.45 0.45 0.52 0.52 0.52 0.52 0.60  1.00  0.60  0.60</span></span>
 <span><span class="co">## [11,] 0.45 0.45 0.45 0.45 0.52 0.52 0.52 0.52 0.60  0.60  1.00  0.60</span></span>
 <span><span class="co">## [12,] 0.45 0.45 0.45 0.45 0.52 0.52 0.52 0.52 0.60  0.60  0.60  1.00</span></span></code></pre>
-<p>And here are the empirical correlation matrices for the three sites,
-based on 5000 replications of the data:</p>
+<p>And here is code to generate the empirical correlation matrices for
+the three sites, based on 5000 replications of the data:</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5000</span>, </span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/addCorGen.html">addCorGen</a></span><span class="op">(</span><span class="va">dd</span>, idvar <span class="op">=</span> <span class="st">"site"</span>, corMatrix <span class="op">=</span> <span class="va">R</span>,</span>
@@ -1165,44 +1165,12 @@ based on 5000 replications of the data:</p>
 <span>  <span class="va">dmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">dcrep</span>, <span class="va">rep</span> <span class="op">~</span> <span class="va">seq</span>, value.var <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dmat</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">empir_corr</span><span class="op">(</span>cluster <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##      1    2    3    4    5    6    7    8</span></span>
-<span><span class="co">## 1 1.00 0.59 0.59 0.58 0.47 0.45 0.35 0.33</span></span>
-<span><span class="co">## 2 0.59 1.00 0.59 0.59 0.45 0.44 0.35 0.33</span></span>
-<span><span class="co">## 3 0.59 0.59 1.00 0.59 0.46 0.45 0.36 0.34</span></span>
-<span><span class="co">## 4 0.58 0.59 0.59 1.00 0.45 0.45 0.34 0.32</span></span>
-<span><span class="co">## 5 0.47 0.45 0.46 0.45 1.00 0.61 0.46 0.45</span></span>
-<span><span class="co">## 6 0.45 0.44 0.45 0.45 0.61 1.00 0.46 0.44</span></span>
-<span><span class="co">## 7 0.35 0.35 0.36 0.34 0.46 0.46 1.00 0.60</span></span>
-<span><span class="co">## 8 0.33 0.33 0.34 0.32 0.45 0.44 0.60 1.00</span></span></code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">empir_corr</span><span class="op">(</span>cluster <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##      1    2    3    4    5    6    7    8</span></span>
-<span><span class="co">## 1 1.00 0.59 0.59 0.53 0.55 0.53 0.52 0.52</span></span>
-<span><span class="co">## 2 0.59 1.00 0.59 0.54 0.55 0.53 0.51 0.52</span></span>
-<span><span class="co">## 3 0.59 0.59 1.00 0.55 0.56 0.55 0.53 0.54</span></span>
-<span><span class="co">## 4 0.53 0.54 0.55 1.00 0.58 0.55 0.54 0.56</span></span>
-<span><span class="co">## 5 0.55 0.55 0.56 0.58 1.00 0.56 0.55 0.56</span></span>
-<span><span class="co">## 6 0.53 0.53 0.55 0.55 0.56 1.00 0.60 0.61</span></span>
-<span><span class="co">## 7 0.52 0.51 0.53 0.54 0.55 0.60 1.00 0.60</span></span>
-<span><span class="co">## 8 0.52 0.52 0.54 0.56 0.56 0.61 0.60 1.00</span></span></code></pre>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">empir_corr</span><span class="op">(</span>cluster <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##       1    2    3    4    5    6    7    8    9   10   11   12</span></span>
-<span><span class="co">## 1  1.00 0.58 0.58 0.59 0.50 0.50 0.50 0.51 0.45 0.44 0.44 0.44</span></span>
-<span><span class="co">## 2  0.58 1.00 0.60 0.59 0.51 0.50 0.49 0.51 0.45 0.44 0.45 0.44</span></span>
-<span><span class="co">## 3  0.58 0.60 1.00 0.59 0.52 0.51 0.50 0.51 0.45 0.45 0.43 0.45</span></span>
-<span><span class="co">## 4  0.59 0.59 0.59 1.00 0.51 0.51 0.50 0.51 0.45 0.45 0.43 0.44</span></span>
-<span><span class="co">## 5  0.50 0.51 0.52 0.51 1.00 0.59 0.58 0.58 0.51 0.51 0.49 0.51</span></span>
-<span><span class="co">## 6  0.50 0.50 0.51 0.51 0.59 1.00 0.59 0.60 0.51 0.51 0.51 0.52</span></span>
-<span><span class="co">## 7  0.50 0.49 0.50 0.50 0.58 0.59 1.00 0.58 0.51 0.49 0.50 0.51</span></span>
-<span><span class="co">## 8  0.51 0.51 0.51 0.51 0.58 0.60 0.58 1.00 0.52 0.51 0.52 0.52</span></span>
-<span><span class="co">## 9  0.45 0.45 0.45 0.45 0.51 0.51 0.51 0.52 1.00 0.59 0.58 0.60</span></span>
-<span><span class="co">## 10 0.44 0.44 0.45 0.45 0.51 0.51 0.49 0.51 0.59 1.00 0.59 0.59</span></span>
-<span><span class="co">## 11 0.44 0.45 0.43 0.43 0.49 0.51 0.50 0.52 0.58 0.59 1.00 0.58</span></span>
-<span><span class="co">## 12 0.44 0.44 0.45 0.44 0.51 0.52 0.51 0.52 0.60 0.59 0.58 1.00</span></span></code></pre>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">empir_corr</span><span class="op">(</span>cluster <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu">empir_corr</span><span class="op">(</span>cluster <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu">empir_corr</span><span class="op">(</span>cluster <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <p>
 </p>
 <p><small><font color="darkkhaki"> Reference:</font></small></p>
