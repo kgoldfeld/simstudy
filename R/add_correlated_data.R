@@ -484,8 +484,6 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
         lapply(ns, function(x) .genQuantU(x, 1, rho, corstr, corMatrix))
       ) 
     }
-
-    xid <- ".id"
     
     dtTemp[, .U := dtM$Unew]
     dtTemp[, seq := dtM$seq]
