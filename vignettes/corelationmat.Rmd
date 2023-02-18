@@ -726,9 +726,9 @@ R <- blockDecayMat(ninds = N , nperiods = 3, rho_w = 0.6, r = r, nclusters = 10)
 lapply(R, function(x) round(x,2))[c(1, 3, 7)]
 ```
 
-And here are the empirical correlation matrices for the three sites, based on 5000 replications of the data:
+And here is code to generate the empirical correlation matrices for the three sites, based on 5000 replications of the data:
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 reps <- lapply(1:5000, 
   function(x) addCorGen(dd, idvar = "site", corMatrix = R,
     dist = "poisson", param1 = "lambda", cnames = "y")
@@ -743,9 +743,8 @@ empir_corr <- function(cluster) {
   
   return(round(cor(dmat), 2))
 }
-```
 
-```{r, eval=TRUE}
+
 empir_corr(cluster = 1)
 empir_corr(cluster = 3)
 empir_corr(cluster = 7)
