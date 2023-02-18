@@ -1,5 +1,6 @@
 # .checkBoundsBin ----
 test_that("Correlation boundaries for binary variables are correct", {
+  skip_on_cran()
   
   p1 <- .5
   p2 <- .8
@@ -18,6 +19,8 @@ test_that("Correlation boundaries for binary variables are correct", {
 
 
 test_that("blockExchangeMat works", {
+  skip_on_cran()
+  
   
   x <- runif(1, .6, .8)
   x2 <- x - runif(1, 0, .1)
@@ -37,6 +40,8 @@ test_that("blockExchangeMat works", {
 
 
 test_that("blockExchangeMat errors correctly.", {
+  skip_on_cran()
+  
   expect_error(blockExchangeMat(ninds = 2, nperiods = 3), class="simstudy::missingArgument")
   expect_error(blockExchangeMat(nperiods = 3, rho_w = .8), class="simstudy::missingArgument")
   expect_error(blockExchangeMat(ninds = 3, rho_w = .8), class="simstudy::missingArgument")
@@ -67,6 +72,7 @@ test_that("blockExchangeMat errors correctly.", {
 ###
 
 test_that("blockDecayMat works", {
+  skip_on_cran()
   
   x <- runif(1, .6, .8)
   y <- sample(1:10, 1)
@@ -85,6 +91,8 @@ test_that("blockDecayMat works", {
 
 
 test_that("blockDecayMat errors correctly.", {
+  skip_on_cran()
+  
   expect_error(blockDecayMat(ninds = 2, nperiods = 3, r = .8), class="simstudy::missingArgument")
   expect_error(blockDecayMat(nperiods = 3, rho_w = .8, r = .7), class="simstudy::missingArgument")
   expect_error(blockDecayMat(ninds = 3, rho_w = .8, r - .3), class="simstudy::missingArgument")
@@ -111,6 +119,8 @@ test_that("blockDecayMat errors correctly.", {
 
 test_that("genCorMat works", {
   
+  skip_on_cran()
+  
   expect_silent(genCorMat(nvars = 4, cors = c(.3, .2, .1), corstr = "structured"))
   expect_silent(genCorMat(nvars = 4, cors = c(0.6, 0.5, 0.4, .3, .2, .1)))
   expect_silent(genCorMat(nvars = 4, corstr = "arx"))
@@ -128,6 +138,9 @@ test_that("genCorMat works", {
 })
 
 test_that("genCorMat generates errors correctly.", {
+  
+  skip_on_cran()
+  
   expect_error(genCorMat(cors = c(.3, .2, .1), corstr = "structured"), class="simstudy::missingArgument")
   expect_error(genCorMat(nvars = 4.5), class="simstudy::wrongType")
   expect_error(genCorMat(nvars = 4, nclusters = 4.3), class="simstudy::wrongType")

@@ -1,4 +1,6 @@
 test_that("assertNotMissing works.", {
+  skip_on_cran()
+  
   testFunc <- function(x, y, z) {
     assertNotMissing(x = missing(x), y = missing(y), z = missing(z))
   }
@@ -8,36 +10,50 @@ test_that("assertNotMissing works.", {
 })
 
 test_that("assertNotEqual works.", {
+  skip_on_cran()
+  
   expect_silent(assertNotEqual(x = 1, y = 1, val = 2))
   expect_error(assertNotEqual(x = 1, val = 1, class = "simstudy::equal"))
 })
 
 test_that("assertAtLeast works.", {
+  skip_on_cran()
+  
   expect_silent(assertAtLeast(x = 2,  minVal = 2))
   expect_error(assertAtLeast(x = 1, minVal = 2), class = "simstudy::minError")
 })
 
 test_that("assertNotInVector works.", {
+  skip_on_cran()
+  
   expect_silent(assertNotInVector(var = 4, vec = c(1, 2, 3)))
   expect_error(assertNotInVector(var = 2, vec = c(1, 2, 3)), class = "simstudy::alreadyInVector")
 })
 
 test_that("assertAscending works.", {
+  skip_on_cran()
+  
   expect_silent(assertAscending(vec = c(1, 3, 5)))
   expect_error(assertAscending(vec = c(3, 1, 5)), class = "simstudy::wrongOrder")
 })
 
 test_that("assertDescending works.", {
+  skip_on_cran()
+  
   expect_silent(assertDescending(vec = c(5, 3, 1)))
   expect_error(assertDescending(vec = c(3, 1, 5)), class = "simstudy::wrongOrder")
 })
 
 test_that("assertPositive works.", {
+  skip_on_cran()
+  
   expect_silent(assertPositive(vec = c(1, 2, 1)))
   expect_error(assertPositive(vec = c(3, 1, 0)), class = "simstudy::wrongSign")
 })
 
 test_that("assertProbability works.", {
+  skip_on_cran()
+  
   p <- runif(5, 0, 1)
   expect_silent(assertProbability(vec = p))
   n <- rnorm(5, 0, 25)
@@ -45,6 +61,8 @@ test_that("assertProbability works.", {
 })
 
 test_that("assertLengthEqual works.", {
+  skip_on_cran()
+  
   expect_error(assertLengthEqual(x = 5, y = c(1, 3)), class = "simstudy::lengthMismatch")
   expect_error(assertLengthEqual(x = 5, y = c(1, 3), z = list(a = 1, b = 2)), class = "simstudy::lengthMismatch")
   expect_silent(assertLengthEqual(y = c(1, 3), z = list(a = 1, b = 2), a = data.table(a = 1:3, b = 3:5)))
@@ -52,6 +70,8 @@ test_that("assertLengthEqual works.", {
 })
 
 test_that("assertEqual works.", {
+  skip_on_cran()
+  
   expect_error(assertEqual(x = 5, val = 6), class = "simstudy::notEqual")
   expect_error(assertEqual(x = 5, y = 6, val = 5), class = "simstudy::notEqual")
   expect_error(assertEqual(x = "one", val = "two"), class = "simstudy::notEqual")
@@ -59,6 +79,8 @@ test_that("assertEqual works.", {
 })
 
 test_that("assertLength works", {
+  skip_on_cran()
+  
   expect_error(assertLength(x = 5, y = c(1, 3), z = list(a = 3, b = 4), length = 2),
     class = "simstudy::lengthMismatch"
   )
@@ -66,6 +88,8 @@ test_that("assertLength works", {
 })
 
 test_that("assertAtLeastLength works", {
+  skip_on_cran()
+  
   expect_error(assertAtLeastLength(x = c("3", "4"), length = 3),
     class = "simstudy::lengthMismatch"
   )
@@ -75,11 +99,15 @@ test_that("assertAtLeastLength works", {
 
 
 test_that("assertClass works.", {
+  skip_on_cran()
+  
   expect_error(assertClass(x = c(1, 2, 3), y = "b", class = "data.frame"), class = "simstudy::wrongClass")
   expect_silent(assertClass(x = c(1, 2, 3), class = "numeric"))
 })
 
 test_that("assertType works.", {
+  skip_on_cran()
+  
   expect_error(assertType(vec = c(1.1, 2.2, 3.3), list = list(a = 1:10, b = "a"), type = "double"),
     class = "simstudy::wrongType"
   )
@@ -92,6 +120,8 @@ test_that("assertType works.", {
 })
 
 test_that("assertNumeric works.", {
+  skip_on_cran()
+  
   expect_error(assertNumeric(
     a = c(1, 2, 3), b = list(a = 1, b = 2.2, c = "d"),
     c = data.frame(a = 1:10, b = (1:10) * 1.1)
@@ -105,7 +135,9 @@ test_that("assertNumeric works.", {
   ))
 })
 
-test_that("assertNumericMatrix works.", {
+test_that("assertNumericMatrix works.", {  
+  skip_on_cran()
+
   a <- matrix(rnorm(16), nrow = 4)
   b <- a
   d <- rnorm(3)
@@ -118,6 +150,8 @@ test_that("assertNumericMatrix works.", {
 })
 
 test_that("assertInteger works.", {
+  skip_on_cran()
+  
   expect_error(assertInteger(
     a = c(1, 2, 3), b = list(a = 1, b = 2.2),
     c = data.frame(a = 1:10, b = (1:10) * 1.1),
@@ -134,6 +168,8 @@ test_that("assertInteger works.", {
 })
 
 test_that("assertFactor works.", {
+  skip_on_cran()
+  
   expect_error(assertFactor(
     a = "two", b = 123.456,
     c = as.factor(c(1, 2, 3)),
@@ -150,6 +186,8 @@ test_that("assertFactor works.", {
 })
 
 test_that("assertValue works.", {
+  skip_on_cran()
+  
   expect_error(assertValue(a = NULL, b = NA, c = character(0)),
     regexp = "b and c",
     class = "simstudy::noValue"
@@ -159,6 +197,8 @@ test_that("assertValue works.", {
 })
 
 test_that("assertUnique works.", {
+  skip_on_cran()
+  
   expect_error(assertUnique(a = c(1, 2, 3, 2), b = list(a = 1:3, b = 1:3)),
     regexp = "a and b",
     class = "simstudy::uniqueValue"
@@ -168,6 +208,8 @@ test_that("assertUnique works.", {
 })
 
 test_that("assertInDataTable works.", {
+  skip_on_cran()
+  
   dt <- data.table(a = 1:10)
   expect_error(assertInDataTable(vars = c("a", "b"), dt),
     regexp = "b",
@@ -177,6 +219,8 @@ test_that("assertInDataTable works.", {
 })
 
 test_that("assertInDataTable works.", {
+  skip_on_cran()
+  
   dt <- data.table(a = 1:10)
   expect_error(assertNotInDataTable(vars = c("a", "b"), dt),
     regexp = "a",
@@ -186,6 +230,8 @@ test_that("assertInDataTable works.", {
 })
 
 test_that("ensureLength works.", {
+  skip_on_cran()
+  
   expect_length(ensureLength(a = c(1, 2, 3), n = 3), 3)
   expect_length(ensureLength(a = "5", n = 5), 5)
   expect_length(ensureLength(a = list(a = 5), n = 5), 5)
@@ -193,12 +239,16 @@ test_that("ensureLength works.", {
 })
 
 test_that("ensureMatrix works", {
+  skip_on_cran()
+  
   expect_error(ensureMatrix(data.frame("a")), class = "simpleError")
   expect_is(ensureMatrix(c(1, 2, 3, 4)), "matrix")
   expect_is(ensureMatrix(matrix(1:25, 5)), "matrix")
 })
 
 test_that("assertPositiveDefinite works.", {
+  skip_on_cran()
+  
   notPosDef <- matrix(rep(-.5, 25), 5, 5)
   diag(notPosDef) <- 1
   posDef <- matrix(rep(-.2, 25), 5, 5)
@@ -209,6 +259,8 @@ test_that("assertPositiveDefinite works.", {
 })
 
 test_that("assertOption works", {
+  skip_on_cran()
+  
   expect_silent(assertOption(opt = 2, options = c(1, 2, 3, 5)))
   expect_error(assertOption(opt = FALSE, options = c(1, 2, 3)), class = "simstudy::optionInvalid")
   expect_error(assertOption(opt = FALSE, options = TRUE), class = "simstudy::optionInvalid")
@@ -217,6 +269,8 @@ test_that("assertOption works", {
 })
 
 test_that("ensureOption works", {
+  skip_on_cran()
+  
   expect_equal(suppressWarnings(
     ensureOption(opt = "b", options = letters[4:7], default = "d"),
     classes = "simstudy::optionInvalid"
@@ -234,12 +288,16 @@ test_that("ensureOption works", {
 })
 
 test_that("assertInRange works", {
+  skip_on_cran()
+  
   expect_error(assertInRange(a = 1, b = 2, range = c(2, 3)), class = "simstudy::valueError")
   expect_error(assertInRange(a = -100, b = 2, range = c(2, Inf), maxCheck = "<"), class = "simstudy::valueError")
   expect_silent(assertInRange(a = 1:5, range = c(0, 100)))
 })
 
 test_that("dots2args works.", {
+  skip_on_cran()
+  
   expect_error(dots2argNames(), class = "simpleError")
   expect_error(dots2argNames(a = 3, 2), class = "simpleError")
   expect_silent(dots2argNames(a = 3, b = 4))

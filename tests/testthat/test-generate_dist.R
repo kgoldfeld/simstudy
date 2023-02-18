@@ -1,5 +1,6 @@
 # .gencat ----
 test_that(".gencat throws errors", {
+  skip_on_cran()
   expect_error(.gencat(
     n = n,
     formula = "1;",
@@ -24,6 +25,7 @@ test_that(".gencat throws errors", {
 })
 
 test_that("categorical data is generated as expected.", {
+  skip_on_cran()
   expect_type(.gencat(
     n = 10,
     formula = genCatFormula(n = 3),
@@ -48,6 +50,7 @@ test_that("categorical data is generated as expected.", {
 })
 # .genunif ----
 test_that("unif data is generated as expected.", {
+  skip_on_cran()
   n <- 20
   def <- defData(varname = "test", formula = 5, dist = "nonrandom")
   def <- defData(def, varname = "test2", formula = "test + 3", dist = "normal")
@@ -87,6 +90,7 @@ test_that("'uniform' formula checked correctly", {
 
 # .genUnifInt ----
 test_that("unifInt data is generated as expected.", {
+  skip_on_cran()
   n <- 20
   def <- defData(varname = "test", formula = 5, dist = "nonrandom")
   def <- defData(def, varname = "test2", formula = "test + 3", dist = "normal")
@@ -118,6 +122,7 @@ test_that("'uniformInt' formula checked correctly", {
 
 # .genmixture ----
 test_that("mixtures are generated correctly", {
+  skip_on_cran()
   def <- defData(varname = "a", formula = 5)
   def <- defData(def,
     varname = "blksize",
@@ -131,6 +136,7 @@ test_that("mixtures are generated correctly", {
 
 
 test_that("runif throws errors", {
+  skip_on_cran()
   expect_error(defData(varname = "u", formula = "5", dist = "uniform"))
 })
 

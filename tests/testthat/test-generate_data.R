@@ -1,5 +1,7 @@
 # genData ----
 test_that("data is generated as expected", {
+  skip_on_cran()
+  
   n <- 20
 
   null_def <- defData(varname = "test", formula = .3, dist = "nonrandom", id = NULL)
@@ -28,6 +30,9 @@ test_that("data is generated as expected", {
 })
 
 test_that("vectorized variables work in formulas", {
+  
+  skip_on_cran()
+  
   d <- defData(varname = "a", formula = 0.6, dist = "binary")
   d <- defData(d, varname = "b", formula = 0.4, dist = "binary")
   d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
@@ -39,6 +44,8 @@ test_that("vectorized variables work in formulas", {
 
 # genOrdCat ----
 test_that("genOrdCat throws errors.", {
+  
+  skip_on_cran()
 
   expect_error(genOrdCat("not a data table", NULL, c(.1, .1)), class = "simstudy::wrongClass")
   expect_error(genOrdCat(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
@@ -104,6 +111,8 @@ test_that("genOrdCat throws errors.", {
 library(magrittr)
 library(dplyr)
 test_that("ordinal categorical data is generated correctly.", {
+  
+  skip_on_cran()
 
   n <- 10000
   probs_short <- c(.2, .4, .2)
@@ -211,6 +220,8 @@ test_that("non-proportional ordinal categorical data are generated correctly.", 
 
 
 test_that("deprecation warning shows up.", {
+  skip_on_cran()
+  
   expect_warning(genCorOrdCat(genData(5), baseprobs = c(.2, .3, .5), rho = 0, corstr = "cs"), "deprecated")
 })
 
@@ -233,6 +244,8 @@ test_that("correlated ordinal categorical data is generated correctly.", {
 
 # genFactor ----
 test_that("genFactor throws erros", {
+  skip_on_cran()
+  
   expect_error(genFactor(),
     regexp = "dtName and varname", class = "simstudy::missingArgument"
   )
@@ -286,6 +299,8 @@ test_that("genFactor works.", {
 
 # genDummy ----
 test_that("genDummy throws errors.", {
+  skip_on_cran()
+  
 
   d1 <- defData(varname = "rx", formula = "1;1", dist = "trtAssign")
   d1 <- defData(d1, varname = "male", formula = .4, dist = "binary")
@@ -321,6 +336,8 @@ test_that("genDummy throws errors.", {
 })
 
 test_that("genDummy works.", {
+  skip_on_cran()
+  
   d4 <- defData(varname = "a", formula = ".2;.3;.5", dist = "trtAssign")
   dd4 <- genData(10, d4)
 
@@ -375,6 +392,8 @@ test_that("genDummy works.", {
 
 # genFormula ----
 test_that("genFormula throws errors.", {
+  
+  skip_on_cran()
 
   # Check coefficients and variables properly specified
   expect_error(genFormula(c(1, 2), c("a", "b", "c", "d")), class = "simstudy::coeffVar")
@@ -388,6 +407,8 @@ test_that("genFormula throws errors.", {
 })
 
 test_that("genFormula works.", {
+  
+  skip_on_cran()
 
   # intercept
   expect_equal(genFormula(c(42, 54, 32, 2), c("A", "B", "C")), "42 + 54 * A + 32 * B + 2 * C")
@@ -405,6 +426,8 @@ test_that("genFormula works.", {
 
 # genMarkov ----
 test_that("genMarkov throws errors.", {
+  
+  skip_on_cran()
 
   # check transMat is matrix
   mat1 <- c(0.7, 0.2, 0.1, 0.5, 0.3, 0.2, 0.0, 0.1, 0.9)
@@ -523,6 +546,8 @@ test_that("genMarkov works.", {
 
 # genMultiFac ----
 test_that("genMultiFac throws errors.", {
+  
+  skip_on_cran()
 
   # check nFactors are integers
   expect_error(genMultiFac(1.4, each = 4), class = "simstudy::wrongType")
@@ -539,6 +564,8 @@ test_that("genMultiFac throws errors.", {
 })
 
 test_that("genMultiFac works.", {
+  
+  skip_on_cran()
 
   # coding == dummy, levels == 2
   nFac <- sample(2:5, size = 1)
@@ -638,6 +665,9 @@ test_that("genMultiFac works.", {
 
 # genSyntheticc ----
 test_that("genSynthetic throws errors.", {
+  
+  skip_on_cran()
+  
   mu_a <- rnorm(1)
   v_a <- rgamma(1, 9)
   mu_b <- rgamma(1, 4)
@@ -664,6 +694,9 @@ test_that("genSynthetic throws errors.", {
 })
 
 test_that("genSynthetic works.", {
+  
+  skip_on_cran()
+  
   mu_a <- rnorm(1)
   v_a <- rgamma(1, 9)
   mu_b <- rgamma(1, 4)
@@ -693,6 +726,7 @@ test_that("genSynthetic works.", {
 })
 
 test_that("genSurv works correctly.", {
+
   skip_on_cran()
   def <- defData(varname = "x1", formula = 0.5, dist = "binary")
   def <- defData(def, varname = "grp", formula = 0.5, dist = "binary")
