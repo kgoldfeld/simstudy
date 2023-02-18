@@ -72,7 +72,7 @@ IntegerVector clipVec(IntegerVector id, IntegerVector seq,
   IntegerVector last(uid);
   
   int maxperiod = max(seq);
-  int x_uid;
+  int x_uid = 0;
   
   for(int i=0; i<id.length(); ++i) {
     
