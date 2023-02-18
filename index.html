@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="articles/corelationmat.html">Correlation Matrices</a>
     </li>
     <li>
       <a href="articles/correlated.html">Correlated Data</a>
@@ -113,7 +116,9 @@
 <div class="section level1">
 <div class="page-header"><h1 id="simstudy">simstudy<a class="anchor" aria-label="anchor" href="#simstudy"></a>
 </h1></div>
-<!-- README.md is generated from README.Rmd. Please edit that file --><!-- badges: start -->
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- badges: start -->
+
 <p>The <code>simstudy</code> package is a collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
 <p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create datasets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> datasets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
 <p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean μ (or log(μ)) and a dispersion <span class="math inline"><em>d</em></span>, rather than shape α and rate β parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling μ (or some function of μ), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model, thus illuminating the relationship between the underlying data generating processes and the models. For more details on the package, use cases, examples, and function reference see the <a href="https://kgoldfeld.github.io/simstudy/articles/simstudy.html" class="external-link">documentation page</a>.</p>
@@ -224,7 +229,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer>

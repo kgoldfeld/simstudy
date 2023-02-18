@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -36,6 +36,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/corelationmat.html">Correlation Matrices</a>
     </li>
     <li>
       <a href="../articles/correlated.html">Correlated Data</a>
@@ -188,156 +191,363 @@ Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">23432</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">12</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">l</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id period  X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0  4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1  5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2  6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0  8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 21</span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="fl">5</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id period X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 3</span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">l</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id V1 V2 V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1  5 11  9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2  8 12 14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    3  5  8 12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    4  9  9 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    5  4  7 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:  996  7 11  8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:  997  8  6 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:  998  5  6  8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:  999  5 11 11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000: 1000  5  6 11</span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="fl">5</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id V1 V2 V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1  4 10  3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2  3  4  6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    3  5  5  7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    4  4  4  4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    5  2  1  2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:  996  3  2  5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:  997  1  1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:  998  4  0  2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:  999  5  7  8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000: 1000  3  3  6</span>
+<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">100</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">lambda</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id period  X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1      0  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   1      1  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   1      2  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   2      0  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   2      1 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 296:  99      1  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 297:  99      2 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 298: 100      0  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 299: 100      1  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 300: 100      2  8</span>
+<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">100</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="fl">5</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id period X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1      0 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   1      1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   1      2 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   2      0 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   2      1 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 296:  99      1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 297:  99      2 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 298: 100      0 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 299: 100      1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 300: 100      2 1</span>
+<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">100</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">lambda</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id V1 V2 V3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  5 11  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  8 12 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  5  8 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4  9  9 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5  4  7 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   6:   6  6  3  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   7:   7  9 13 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   8:   8 11 12 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   9:   9 11 14 17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  10:  10  7  8  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  11:  11  7 12 19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  12:  12  6  8 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  13:  13 13  8 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  14:  14 14 13 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  15:  15  4  7  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  16:  16 13 12 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  17:  17  7  6  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  18:  18 12 12 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  19:  19  4  8  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  20:  20 11  9  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  21:  21 11 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  22:  22  6 11 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  23:  23 10 12 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  24:  24  4  8  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  25:  25  4  4  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  26:  26 14 10 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  27:  27 11 14 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  28:  28  4  6  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  29:  29  7  9 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  30:  30  8  9  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  31:  31 11  8 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  32:  32 10 14 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  33:  33 13 12 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  34:  34  7  9 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  35:  35  7 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  36:  36  6 10 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  37:  37 10 11 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  38:  38  6  5  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  39:  39  7  8  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  40:  40 11 12 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  41:  41 11 14 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  42:  42  5  7 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  43:  43  5  9 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  44:  44 12 13 20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  45:  45  7  8 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  46:  46  3  5  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  47:  47  7 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  48:  48  4  5 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  49:  49  7 10  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  50:  50  6  7 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  51:  51  6  9 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  52:  52 11 13 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  53:  53  8 11 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  54:  54  7  7 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  55:  55  8 12 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  56:  56  7 11  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  57:  57  8  9 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  58:  58  9  8 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  59:  59  8 15 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  60:  60  9  6  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  61:  61 11 17 17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  62:  62  8  6 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  63:  63  6  6 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  64:  64  3  5  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  65:  65  9  8 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  66:  66  9 10 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  67:  67  8 17 23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  68:  68  9  9 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  69:  69 10 10 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  70:  70  5  7  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  71:  71  9 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  72:  72  7 12 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  73:  73  9  7  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  74:  74 12 16 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  75:  75  8  7  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  76:  76 11 10  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  77:  77 12 17 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  78:  78 11 10 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  79:  79  9 12 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  80:  80  7  8 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  81:  81 10 12 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  82:  82  5  6  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  83:  83  8  8 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  84:  84  9  5  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  85:  85  6 11 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  86:  86 15 10 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  87:  87 13 15 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  88:  88 12  9 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  89:  89  4  8  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  90:  90  6  9 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  91:  91 10 11 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  92:  92 12 13 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  93:  93  7  8 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  94:  94  9  9 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  95:  95  7  9  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  96:  96  6  8 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  97:  97  4 10  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  98:  98 16 18 20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  99:  99  4 11 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100: 100  7  9  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id V1 V2 V3</span>
+<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">100</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="fl">5</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id V1 V2 V3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  4 10  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  3  4  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  5  5  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4  4  4  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5  2  1  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   6:   6  7  8  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   7:   7  6  7  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   8:   8  6  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   9:   9  5  5  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  10:  10  9  9  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  11:  11  1  1  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  12:  12  2  3  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  13:  13  4  3  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  14:  14  6  6  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  15:  15  8  5  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  16:  16  5  7  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  17:  17  5  4  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  18:  18  2  3  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  19:  19  3  3  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  20:  20  2  2  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  21:  21  5  3  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  22:  22  8  9  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  23:  23  3  3  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  24:  24  3  0  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  25:  25  3  3  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  26:  26  1  3  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  27:  27 11  9 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  28:  28  4  2  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  29:  29  7  6  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  30:  30  4  2  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  31:  31  6  6  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  32:  32  4  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  33:  33  9  9  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  34:  34  4  4  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  35:  35  3  2  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  36:  36  8  5  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  37:  37  5  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  38:  38  3  2  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  39:  39  9  7  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  40:  40  3  3  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  41:  41  9  9  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  42:  42  6  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  43:  43  8  7  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  44:  44  6  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  45:  45  4  4  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  46:  46  3  3  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  47:  47  6  5  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  48:  48  1  2  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  49:  49  4  7  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  50:  50  4  5  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  51:  51 11  8  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  52:  52  6  7  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  53:  53  4  6  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  54:  54  3  4  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  55:  55  4  2  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  56:  56  6  8  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  57:  57  4  3  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  58:  58  8  6  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  59:  59  6  6  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  60:  60  4  3  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  61:  61  5  6  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  62:  62  6  7  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  63:  63  6  3  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  64:  64  5  6  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  65:  65  6  6  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  66:  66  4  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  67:  67  6  7  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  68:  68  8  7  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  69:  69  5  5  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  70:  70  1  0  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  71:  71  5  3  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  72:  72  4  6  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  73:  73  7  7  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  74:  74  3  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  75:  75  6  4  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  76:  76  7  4  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  77:  77  4  3  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  78:  78  5  6  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  79:  79  6  6  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  80:  80  7  6  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  81:  81  2  1  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  82:  82  3  2  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  83:  83  3  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  84:  84  7  6  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  85:  85  5  5  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  86:  86  9  6  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  87:  87  4  3  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  88:  88  4  9  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  89:  89  9  4  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  90:  90  7  5  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  91:  91  2  1  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  92:  92  6  3  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  93:  93  2  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  94:  94  7  9 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  95:  95  8  4  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  96:  96  0  0  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  97:  97  4  2  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  98:  98  5  5  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  99:  99  3  3  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100: 100  2  4  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id V1 V2 V3</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">l</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>,</span></span>
+<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">lambda</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>,</span></span>
 <span class="r-in"><span>  cnames <span class="op">=</span> <span class="st">"new_var"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id period new_var</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0      11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1      12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2      16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0       9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1      15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1       6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2       8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0      10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1      12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2      13</span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">l</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id period new_var</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1      0      11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   1      1      12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   1      2      16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   2      0       9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   2      1      15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 296:  99      1      10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 297:  99      2      11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 298: 100      0       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 299: 100      1      10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 300: 100      2      13</span>
+<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">lambda</span>, dist <span class="op">=</span> <span class="st">"poisson"</span>, rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span>,</span></span>
 <span class="r-in"><span>  wide <span class="op">=</span> <span class="cn">TRUE</span>, cnames <span class="op">=</span> <span class="st">"a, b, c"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id a  b  c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1 8 10 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2 5  9 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    3 6  8 12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    4 7  8 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    5 9  9 19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:  996 7 12  9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:  997 7  8 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:  998 4 10 11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:  999 9 10 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000: 1000 5  9  7</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>, nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.5</span>, <span class="fl">.7</span><span class="op">)</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, rho <span class="op">=</span> <span class="fl">.3</span>, corstr <span class="op">=</span> <span class="st">"cs"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id period X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 1</span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="va">l</span>, params2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, dist <span class="op">=</span> <span class="st">"gamma"</span>, rho <span class="op">=</span> <span class="fl">.3</span>,</span></span>
-<span class="r-in"><span>  corstr <span class="op">=</span> <span class="st">"cs"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id        V1        V2         V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1  3.651421  4.493988 11.6813305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    2  1.414711  2.286705  3.4485920</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    3 12.325773  6.052076 32.7730153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    4  9.871108 35.677670  5.9017059</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    5  2.154601  5.883472 11.1502204</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:  996 39.379123 13.638101 11.0539855</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:  997  1.173825 28.220637 12.4952549</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:  998  2.208063  2.455229  0.3416593</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:  999  4.558461 10.266519  1.7471471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000: 1000  4.625952 10.278182  1.3732234</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.5</span>, <span class="fl">.7</span><span class="op">)</span>, dist <span class="op">=</span> <span class="st">"binary"</span>,</span></span>
-<span class="r-in"><span>  corMatrix <span class="op">=</span> <span class="fu"><a href="genCorMat.html">genCorMat</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"ep"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id period X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 1</span>
-<span class="r-in"><span><span class="fu">genCorGen</span><span class="op">(</span><span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  nvars <span class="op">=</span> <span class="fl">3</span>, params1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.5</span>, <span class="fl">.7</span><span class="op">)</span>, dist <span class="op">=</span> <span class="st">"binary"</span>,</span></span>
-<span class="r-in"><span>  corMatrix <span class="op">=</span> <span class="fu"><a href="genCorMat.html">genCorMat</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"copula"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         id period X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    1      0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    1      1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    1      2 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    2      0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    2      1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2996:  999      1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2997:  999      2 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2998: 1000      0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2999: 1000      1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3000: 1000      2 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id  a  b  c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  8 10 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  5  9 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  6  8 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4  7  8 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5  9  9 19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   6:   6 10 10 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   7:   7  7 10  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   8:   8 10 10 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   9:   9 10 11 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  10:  10  9 12 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  11:  11  8 13 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  12:  12  6  9 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  13:  13 11 11 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  14:  14 10 11 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  15:  15 10 11 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  16:  16 12 10 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  17:  17 10 11 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  18:  18 13 12 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  19:  19 13 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  20:  20  6  7 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  21:  21  7  9 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  22:  22  9 12  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  23:  23  9 10 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  24:  24  9  9 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  25:  25  6  5  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  26:  26  5  5  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  27:  27  9 13 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  28:  28  4 11 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  29:  29  9 12 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  30:  30 11 13 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  31:  31  6  9 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  32:  32  9 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  33:  33  3  2  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  34:  34  6  7 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  35:  35  5  9 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  36:  36  4  7  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  37:  37  6 12  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  38:  38  7 11 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  39:  39  7 12 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  40:  40 10  8 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  41:  41  7  7 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  42:  42 11 11 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  43:  43  5  4  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  44:  44  6  8 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  45:  45  9 10 17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  46:  46  6 10 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  47:  47 11 13 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  48:  48 13 21 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  49:  49  8 13 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  50:  50 13 10 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  51:  51  7  9 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  52:  52  7  8 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  53:  53  7 12 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  54:  54 10  9 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  55:  55 11 12 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  56:  56 13 15 25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  57:  57 13 15 17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  58:  58 11 11 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  59:  59  8 13 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  60:  60  6 10  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  61:  61  9 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  62:  62  8 10 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  63:  63  6  7 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  64:  64  7 12 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  65:  65 17 13 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  66:  66  5  7  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  67:  67 11  9 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  68:  68  4  8 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  69:  69 11 13 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  70:  70 12 11 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  71:  71 11 12 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  72:  72 11 11 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  73:  73 16 14 19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  74:  74  5  6 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  75:  75  4  5  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  76:  76 13 12 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  77:  77  7  9  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  78:  78  9 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  79:  79  8 11  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  80:  80  6  5  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  81:  81  7 12 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  82:  82  9 11 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  83:  83  5  9  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  84:  84  6  5  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  85:  85 10  9 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  86:  86  9 14 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  87:  87 11 12 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  88:  88  6  9  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  89:  89  9 11 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  90:  90 11 11 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  91:  91  3  4  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  92:  92  5  8 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  93:  93  5 10 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  94:  94  6  7 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  95:  95  8 13 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  96:  96 11 17 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  97:  97  5  6 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  98:  98  7  7 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  99:  99  3  7  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100: 100  9 11 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id  a  b  c</span>
 </code></pre></div>
     </div>
   </div>
@@ -352,7 +562,7 @@ Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>

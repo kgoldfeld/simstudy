@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -54,6 +54,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/clustered.html">Clustered Data</a>
+    </li>
+    <li>
+      <a href="../articles/corelationmat.html">Correlation Matrices</a>
     </li>
     <li>
       <a href="../articles/correlated.html">Correlated Data</a>
@@ -115,12 +118,27 @@
 
     
     
-<p>Often, we’d like to explore data generation and modeling under different scenarios. For example, we might want to understand the operating characteristics of a model given different variance or other parametric assumptions. There is functionality built into <code>simstudy</code> to facilitate this type of dynamic exploration. First, the functions <code>updateDef</code> and <code>updateDefAdd</code> essentially allow us to edit lines of existing data definition tables. Second, there is a built-in mechanism - called <em>double-dot</em> reference - to access external variables that do not exist in a defined data set or data definition.</p>
+<p>Often, we’d like to explore data generation and modeling under
+different scenarios. For example, we might want to understand the
+operating characteristics of a model given different variance or other
+parametric assumptions. There is functionality built into
+<code>simstudy</code> to facilitate this type of dynamic exploration.
+First, the functions <code>updateDef</code> and
+<code>updateDefAdd</code> essentially allow us to edit lines of existing
+data definition tables. Second, there is a built-in mechanism - called
+<em>double-dot</em> reference - to access external variables that do not
+exist in a defined data set or data definition.</p>
 <div class="section level2">
 <h2 id="updating-existing-definition-tables">Updating existing definition tables<a class="anchor" aria-label="anchor" href="#updating-existing-definition-tables"></a>
 </h2>
-<p>The <code>updateDef</code> function updates a row in a definition table created by functions <code>defData</code> or <code>defRead</code>. Analogously, <code>updateDefAdd</code> function updates a row in a definition table created by functions <code>defDataAdd</code> or <code>defReadAdd</code>.</p>
-<p>The original data set definition includes three variables <code>x</code>, <code>y</code>, and <code>z</code>, all normally distributed:</p>
+<p>The <code>updateDef</code> function updates a row in a definition
+table created by functions <code>defData</code> or <code>defRead</code>.
+Analogously, <code>updateDefAdd</code> function updates a row in a
+definition table created by functions <code>defDataAdd</code> or
+<code>defReadAdd</code>.</p>
+<p>The original data set definition includes three variables
+<code>x</code>, <code>y</code>, and <code>z</code>, all normally
+distributed:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">3</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
 <span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">defs</span>, varname <span class="op">=</span> <span class="st">"y"</span>, formula <span class="op">=</span> <span class="st">"2 + 3*x"</span>, variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
@@ -131,7 +149,8 @@
 <span><span class="co">## 1:       x             0        3 normal identity</span></span>
 <span><span class="co">## 2:       y       2 + 3*x        1 normal identity</span></span>
 <span><span class="co">## 3:       z 4 + 3*x - 2*y        1 normal identity</span></span></code></pre>
-<p>In the first case, we are changing the relationship of <code>y</code> with <code>x</code> as well as the variance:</p>
+<p>In the first case, we are changing the relationship of <code>y</code>
+with <code>x</code> as well as the variance:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span>dtDefs <span class="op">=</span> <span class="va">defs</span>, changevar <span class="op">=</span> <span class="st">"y"</span>, newformula <span class="op">=</span> <span class="st">"x + 5"</span>, newvariance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">defs</span></span></code></pre></div>
@@ -139,7 +158,9 @@
 <span><span class="co">## 1:       x             0        3 normal identity</span></span>
 <span><span class="co">## 2:       y         x + 5        2 normal identity</span></span>
 <span><span class="co">## 3:       z 4 + 3*x - 2*y        1 normal identity</span></span></code></pre>
-<p>In this second case, we are changing the distribution of <code>z</code> to <em>Poisson</em> and updating the link function to <em>log</em>:</p>
+<p>In this second case, we are changing the distribution of
+<code>z</code> to <em>Poisson</em> and updating the link function to
+<em>log</em>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span>dtDefs <span class="op">=</span> <span class="va">defs</span>, changevar <span class="op">=</span> <span class="st">"z"</span>, newdist <span class="op">=</span> <span class="st">"poisson"</span>, newlink <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span></span>
 <span><span class="va">defs</span></span></code></pre></div>
@@ -147,7 +168,11 @@
 <span><span class="co">## 1:       x             0        3  normal identity</span></span>
 <span><span class="co">## 2:       y         x + 5        2  normal identity</span></span>
 <span><span class="co">## 3:       z 4 + 3*x - 2*y        1 poisson      log</span></span></code></pre>
-<p>And in the last case, we remove a variable from a data set definition. Note in the case of a definition created by <code>defData</code> that it is not possible to remove a variable that is a predictor of a subsequent variable, such as <code>x</code> or <code>y</code> in this case.</p>
+<p>And in the last case, we remove a variable from a data set
+definition. Note in the case of a definition created by
+<code>defData</code> that it is not possible to remove a variable that
+is a predictor of a subsequent variable, such as <code>x</code> or
+<code>y</code> in this case.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span>dtDefs <span class="op">=</span> <span class="va">defs</span>, changevar <span class="op">=</span> <span class="st">"z"</span>, remove <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">defs</span></span></code></pre></div>
@@ -158,7 +183,12 @@
 <div class="section level2">
 <h2 id="double-dot-external-variable-reference">Double-dot external variable reference<a class="anchor" aria-label="anchor" href="#double-dot-external-variable-reference"></a>
 </h2>
-<p>For a truly dynamic data definition process, <code>simstudy</code> (as of <code>version 0.2.0</code>) allows users to reference variables that exist outside of data generation. These can be thought of as a type of hyperparameter of the data generation process. The reference is made directly in the formula itself, using a double-dot (“..”) notation before the variable name. Here is a simple example:</p>
+<p>For a truly dynamic data definition process, <code>simstudy</code>
+(as of <code>version 0.2.0</code>) allows users to reference variables
+that exist outside of data generation. These can be thought of as a type
+of hyperparameter of the data generation process. The reference is made
+directly in the formula itself, using a double-dot (“..”) notation
+before the variable name. Here is a simple example:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0</span>, </span>
 <span>  variance <span class="op">=</span> <span class="fl">5</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
@@ -187,7 +217,9 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">sigma</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 2.83</span></span></code></pre>
-<p>It is easy to create a new data set on the fly with a difference variance assumption without having to go to the trouble of updating the data definitions.</p>
+<p>It is easy to create a new data set on the fly with a difference
+variance assumption without having to go to the trouble of updating the
+data definitions.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fl">16</span></span>
 <span></span>
@@ -201,7 +233,9 @@
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">sigma</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 4.21</span></span></code></pre>
-<p>The double-dot notation can be flexibly applied using <code>lapply</code> (or the parallel version <code>mclapply</code>) to create a range of data sets under different assumptions:</p>
+<p>The double-dot notation can be flexibly applied using
+<code>lapply</code> (or the parallel version <code>mclapply</code>) to
+create a range of data sets under different assumptions:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sigma2s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span></span>
 <span></span>
@@ -212,7 +246,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">sigma2s</span>, <span class="kw">function</span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="fu">gen_data</span><span class="op">(</span><span class="va">s</span>, <span class="va">def</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu">rbindlist</span><span class="op">(</span><span class="va">dd_4</span><span class="op">)</span></span>
+<span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="va">dd_4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dd_4</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">.5</span>, color <span class="op">=</span> <span class="st">"grey30"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -223,7 +257,11 @@
 <div class="section level2">
 <h2 id="using-non-scalar-double-dot-variable-reference">Using non-scalar double-dot variable reference<a class="anchor" aria-label="anchor" href="#using-non-scalar-double-dot-variable-reference"></a>
 </h2>
-<p>The double-dot notation is also <em>array-friendly</em>. For example if we want to create a mixture distribution from a vector of values (which we can also do using a <em>categorical</em> distribution), we can define the mixture formula in terms of the vector. In this case we are generating permuted block sizes of 2 and 4:</p>
+<p>The double-dot notation is also <em>array-friendly</em>. For example
+if we want to create a mixture distribution from a vector of values
+(which we can also do using a <em>categorical</em> distribution), we can
+define the mixture formula in terms of the vector. In this case we are
+generating permuted block sizes of 2 and 4:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">defblk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"blksize"</span>, </span>
 <span>   formula <span class="op">=</span> <span class="st">"..sizes[1] | .5 + ..sizes[2] | .5"</span>, dist <span class="op">=</span> <span class="st">"mixture"</span><span class="op">)</span></span>
@@ -246,7 +284,11 @@
 <span><span class="co">##  998:  998       4</span></span>
 <span><span class="co">##  999:  999       4</span></span>
 <span><span class="co">## 1000: 1000       4</span></span></code></pre>
-<p>In this second example, there is a vector variable <em>tau</em> of positive real numbers that sum to 1, and we want to calculate the weighted average of three numbers using <em>tau</em> as the weights. We could use the following code to estimate a weighted average <em>theta</em>:</p>
+<p>In this second example, there is a vector variable <em>tau</em> of
+positive real numbers that sum to 1, and we want to calculate the
+weighted average of three numbers using <em>tau</em> as the weights. We
+could use the following code to estimate a weighted average
+<em>theta</em>:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tau</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">tau</span> <span class="op">&lt;-</span> <span class="va">tau</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tau</span><span class="op">)</span></span>
@@ -266,7 +308,8 @@
 <span><span class="co">## 2:  2 3.37 6.84 10.3  6.18</span></span>
 <span><span class="co">## 3:  3 1.33 8.69 14.7  7.13</span></span>
 <span><span class="co">## 4:  4 6.19 9.04 12.0  8.52</span></span></code></pre>
-<p>We can simplify the calculation of <em>theta</em> by using matrix multiplication:</p>
+<p>We can simplify the calculation of <em>theta</em> by using matrix
+multiplication:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span><span class="va">d</span>, changevar <span class="op">=</span> <span class="st">"theta"</span>, newformula <span class="op">=</span> <span class="st">"t(..tau) %*% c(a, b, c)"</span><span class="op">)</span></span>
 <span></span>
@@ -277,14 +320,20 @@
 <span><span class="co">## 2:  2 3.37 6.84 10.3  6.18</span></span>
 <span><span class="co">## 3:  3 1.33 8.69 14.7  7.13</span></span>
 <span><span class="co">## 4:  4 6.19 9.04 12.0  8.52</span></span></code></pre>
-<p>These arrays can also have <strong>multiple dimensions</strong>, as in a <span class="math inline">\(2 \times 2\)</span> matrix. If we want to specify the mean outcomes for a factorial study design with two interventions <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, we can use a simple matrix and draw the means directly from the matrix, which in this example is stored in the variable <em>effect</em>:</p>
+<p>These arrays can also have <strong>multiple dimensions</strong>, as
+in a <span class="math inline">\(2 \times 2\)</span> matrix. If we want
+to specify the mean outcomes for a factorial study design with two
+interventions <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, we can use a simple matrix and draw
+the means directly from the matrix, which in this example is stored in
+the variable <em>effect</em>:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">effect</span></span></code></pre></div>
 <pre><code><span><span class="co">##      [,1] [,2]</span></span>
 <span><span class="co">## [1,]    0    5</span></span>
 <span><span class="co">## [2,]    4    7</span></span></code></pre>
-<p>Using double dot notation, it is possible to reference the matrix cell values directly:</p>
+<p>Using double dot notation, it is possible to reference the matrix
+cell values directly:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"a"</span>, formula <span class="op">=</span> <span class="st">".5;.5"</span>, variance <span class="op">=</span> <span class="st">"1;2"</span>, dist <span class="op">=</span> <span class="st">"categorical"</span><span class="op">)</span></span>
 <span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"b"</span>, formula <span class="op">=</span> <span class="st">".5;.5"</span>, variance <span class="op">=</span> <span class="st">"1;2"</span>, dist <span class="op">=</span> <span class="st">"categorical"</span><span class="op">)</span></span>
@@ -301,11 +350,15 @@
 <span><span class="co">## 6:  6 2 2       7</span></span>
 <span><span class="co">## 7:  7 2 1       4</span></span>
 <span><span class="co">## 8:  8 1 2       5</span></span></code></pre>
-<p>It is possible to generate normally distributed data based on these means:</p>
+<p>It is possible to generate normally distributed data based on these
+means:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span><span class="va">d1</span>, <span class="st">"outcome"</span>, newvariance <span class="op">=</span> <span class="fl">9</span>, newdist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
 <span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">d1</span><span class="op">)</span></span></code></pre></div>
-<p>The plot shows the individual values as well as the mean values by intervention arm:</p>
+<p>The plot shows the individual values as well as the mean values by
+intervention arm:</p>
+<pre><code><span><span class="co">## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span></code></pre>
 <p><img src="double_dot_extension_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
   </div>
@@ -327,7 +380,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer>

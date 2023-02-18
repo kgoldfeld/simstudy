@@ -19,6 +19,9 @@
     <loc>/articles/clustered.html</loc>
   </url>
   <url>
+    <loc>/articles/corelationmat.html</loc>
+  </url>
+  <url>
     <loc>/articles/correlated.html</loc>
   </url>
   <url>
@@ -89,6 +92,12 @@
   </url>
   <url>
     <loc>/reference/betaGetShapes.html</loc>
+  </url>
+  <url>
+    <loc>/reference/blockDecayMat.html</loc>
+  </url>
+  <url>
+    <loc>/reference/blockExchangeMat.html</loc>
   </url>
   <url>
     <loc>/reference/catProbs.html</loc>
