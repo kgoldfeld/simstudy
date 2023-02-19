@@ -1,7 +1,7 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.6.0
+Version: 0.6.0.9000
 Date: 2023-02-18
 Authors@R: 
     c(person(given = "Keith",
