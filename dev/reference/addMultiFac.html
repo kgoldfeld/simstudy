@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.1.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -139,18 +139,18 @@ an integer.</p>
 <span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu"><a href="genData.html">genData</a></span><span class="op">(</span><span class="fl">360</span>, <span class="va">defD</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, colNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">DT</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       id           x A B C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 -0.98837037 1 1 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  0.08822669 1 1 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3  0.88858837 1 2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 -0.66410124 2 3 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5  0.68073986 1 3 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356 -0.50604452 2 3 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357 -0.88712836 2 1 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358 -0.49955731 2 2 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359 -0.25401723 1 3 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360 -0.66493324 1 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id          x A B C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1  1.2644047 1 2 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   2  0.3122308 2 3 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   3 -1.1251369 1 2 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   4 -2.6478030 1 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   5 -1.6251153 1 1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356: 356  0.3778209 2 3 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 357: 357 -0.1580632 2 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 358: 358 -1.6910216 1 1 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 359: 359 -2.1117633 1 3 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360: 360  0.2628258 2 2 1</span>
 <span class="r-in"><span><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     A B C  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1 1 1 20</span>
@@ -176,14 +176,14 @@ an integer.</p>
 <span class="r-in"><span><span class="va">DT</span> <span class="op">&lt;-</span> <span class="fu">addMultiFac</span><span class="op">(</span><span class="va">DT</span>, nFactors <span class="op">=</span> <span class="fl">3</span>, levels <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">DT</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">Var1</span>, <span class="va">Var2</span>, <span class="va">Var3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Var1 Var2 Var3  N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    0    0    0 38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    0    0    0 37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    0    0    1 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:    0    1    0 38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:    0    1    1 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:    1    0    0 37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:    1    0    1 38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:    1    1    0 37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    1    1    1 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:    1    1    0 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    1    1    1 37</span>
 </code></pre></div>
     </div>
   </div>
