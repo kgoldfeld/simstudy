@@ -1,5 +1,9 @@
 # simstudy (development version)
 
+## Minor fix
+
+* Modifed internal function to speed up beta data generation.
+
 # simstudy 0.6.0
 
 ## New features
