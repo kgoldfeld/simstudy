@@ -537,6 +537,8 @@ assertInRange <- function(...,
       )
     )
   }
+  
+  dots$args <- lapply(dots$args, range)
 
   notInRange <- !sapply(dots$args, inRange)
 
