@@ -1,8 +1,11 @@
 # simstudy (development version)
 
-## Minor fix
+## New features
+* Added double-dot (dynamic) functionality to defSurv. Users can now specificy 
+double-dot variables in scale, shape, and formula parameters.
 
-* Modifed internal function to speed up beta data generation.
+## Minor fix
+* Modified internal function to speed up beta distribution data generation.
 
 # simstudy 0.6.0
 
