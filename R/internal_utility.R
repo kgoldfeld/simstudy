@@ -191,7 +191,8 @@
       "negBinomial",
       "exponential",
       "mixture",
-      "trtAssign"
+      "trtAssign",
+      "clusterSize"
     )
   }
 

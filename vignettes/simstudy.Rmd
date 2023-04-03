@@ -184,18 +184,19 @@ d <- list()
 d[[1]] <- data.table("beta", "mean", "both", "-", "dispersion", "X", "-", "X") 
 d[[2]] <- data.table("binary", "probability", "both", "-", "-", "X", "-", "X") 
 d[[3]] <- data.table("binomial", "probability", "both", "-", "# of trials", "X", "-", "X")
-d[[4]] <- data.table("categorical", "probability", "string", " p_1;p_2;...;p_n", "a;b;c", "X", "-", "-")
-d[[5]] <- data.table("exponential", "mean", "both", "-", "-", "X", "X", "-")
-d[[6]] <- data.table("gamma", "mean", "both", "-", "dispersion", "X", "X", "-")
-d[[7]] <- data.table("mixture", "formula", "string", "x_1 | p_1 + ... + x_n | p_n", "-", "X", "-", "-")
-d[[8]] <- data.table("negBinomial", "mean", "both", "-", "dispersion", "X", "X", "-")
-d[[9]] <- data.table("nonrandom", "formula", "both", "-", "-", "X", "-", "-")
-d[[10]] <- data.table("normal", "mean", "both", "-", "variance", "X", "-", "-")
-d[[11]] <- data.table("noZeroPoisson", "mean", "both", "-", "-", "X", "X", "-")
-d[[12]] <- data.table("poisson", "mean", "both", "-", "-", "X", "X", "-")
-d[[13]] <- data.table("trtAssign", "ratio", "string", "r_1;r_2;...;r_n", "stratification", "X", "X", "-")
-d[[14]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
-d[[15]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[4]] <- data.table("categorical", "probability", "string", "p_1;p_2;...;p_n", "a;b;c", "X", "-", "-")
+d[[5]] <- data.table("clusterSize", "total N", "both", "-", "dispersion", "X", "-", "-")
+d[[6]] <- data.table("exponential", "mean", "both", "-", "-", "X", "X", "-")
+d[[7]] <- data.table("gamma", "mean", "both", "-", "dispersion", "X", "X", "-")
+d[[8]] <- data.table("mixture", "formula", "string", "x_1 | p_1 + ... + x_n | p_n", "-", "X", "-", "-")
+d[[9]] <- data.table("negBinomial", "mean", "both", "-", "dispersion", "X", "X", "-")
+d[[10]] <- data.table("nonrandom", "formula", "both", "-", "-", "X", "-", "-")
+d[[11]] <- data.table("normal", "mean", "both", "-", "variance", "X", "-", "-")
+d[[12]] <- data.table("noZeroPoisson", "mean", "both", "-", "-", "X", "X", "-")
+d[[13]] <- data.table("poisson", "mean", "both", "-", "-", "X", "X", "-")
+d[[14]] <- data.table("trtAssign", "ratio", "string", "r_1;r_2;...;r_n", "stratification", "X", "X", "-")
+d[[15]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[16]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
 
 
 d <- rbindlist(d)
@@ -218,6 +219,10 @@ A *binomial* distribution is a discrete data distribution that represents the co
 #### categorical
 
 A *categorical* distribution is a discrete data distribution taking on values from $1$ to $K$, with each value representing a specific category, and there are $K$ categories. The categories may or may not be ordered. For a categorical variable with $k$ categories, the `formula` is a string of probabilities that sum to 1, each separated by a semi-colon: $(p_1 ; p_2 ; ... ; p_k)$. $p_1$ is the probability of the random variable falling in category $1$, $p_2$ is the probability of category $2$, etc. The probabilities can be specified as functions of other variables previously defined. The helper function `genCatFormula` is an easy way to create different probability strings. The `link` options are *identity* or *logit*. The `variance` field is optional an allows to provide categories other than the default `1...n` in the same format as `formula`: "a;b;c". Numeric variance Strings (e.g.  "50;100;200") will be converted to numeric when possible. All probabilities will be rounded to 1e12 decimal points to prevent possible rounding errors.
+
+#### clusterSize
+
+The *clusterSize* distribution allocates a total sample size *N* (specified in the *formula* argument) across the *k* rows of the data.table such that the sum of the rows equals *N*. If the *dispersion* argument is set to 0, the allocation to each row is *N/k*, with some rows getting an increment of 1 to ensure that the sum is N. It is possible to relax the assumption of balanced cluster sizes by setting *dispersion > 0*. As the dispersion, the variability of cluster sizes across clusters increases. 
 
 #### exponential
 

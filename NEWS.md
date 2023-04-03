@@ -3,6 +3,8 @@
 ## New features
 * Added double-dot (dynamic) functionality to defSurv. Users can now specificy 
 double-dot variables in scale, shape, and formula parameters.
+* It is possible to generate variable cluster sizes using the *clusterSize*
+distribution in `defData` and `defDataAdd`.
 
 ## Minor fix
 * Modified internal function to speed up beta distribution data generation.

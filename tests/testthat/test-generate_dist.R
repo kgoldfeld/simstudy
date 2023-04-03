@@ -152,5 +152,21 @@ test_that("treatment assignment data is generated as expected.",{
   }
 )
 
-
-
+# .genclustsize ----
+test_that("clusterSize data is generated as expected.", {
+  skip_on_cran()
+ 
+  n <- sample(10:50, 1)
+  tot <- sample(100:1000, 1)
+  
+  def <- defData(varname = "test", formula = tot, dist = "clusterSize")
+  dt1 <- genData(n, def)
+  
+  def <- defData(varname = "test", formula = tot, variance = .05, dist = "clusterSize")
+  dt2 <- genData(n, def)
+  
+  expect_equal(dt1[, sum(test)], tot)
+  expect_equal(dt2[, sum(test)], tot)
+  expect_true(dt2[, var(test)] > dt1[, var(test)])
+  
+})
