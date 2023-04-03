@@ -1035,27 +1035,38 @@ genSurv <- function(dtName, survDefs, digits = 3,
   
   for (i in (seq_along(events))) {
     
-    nlogu <--log(stats::runif(nrow(dtSurv), min = 0, max = 1))
+    nlogu <- -log(stats::runif(nrow(dtSurv), min = 0, max = 1))
     
     subDef <- survDefs[varname == events[i]]
+
+    formshape <- subDef[1, shape]
+    shape <- as.vector(.evalWith(formshape, .parseDotVars(formshape), dtSurv))
+
+    formscale <- subDef[1, scale]
+    scale <- as.vector(.evalWith(formscale, .parseDotVars(formscale), dtSurv))
     
-    shape <- dtSurv[, eval(parse(text = subDef[1, shape]))]
-    scale <- dtSurv[, eval(parse(text = subDef[1, scale]))]
     formulas <- subDef[, formula]
-    
-    form1 <- dtSurv[, eval(parse(text = formulas[1])), keyby = id][, V1]
+    form1 <- as.vector(.evalWith(formulas[1], .parseDotVars(formulas[1]), dtSurv))
     
     if (nrow(subDef) > 1) {
+      
+      if (subDef[2, shape] != subDef[1, shape]) {
+        warning("Shape definitions over periods are different. Only first definition will be used.")
+      }
+      
+      if (subDef[2, scale] != subDef[1, scale]) {
+        warning("Scale definitions over periods are different. Only first definition will be used.")
+      }
       
       transition <- subDef[2, transition]
       t_adj <- transition ^ (1/shape)
      
-      form2 <- dtSurv[, eval(parse(text = formulas[2])), keyby = id][, V1]
+      form2 <- as.vector(.evalWith(formulas[2], .parseDotVars(formulas[2]), dtSurv))
       
       threshold <- exp(form1) * t_adj
       period <- 1*(nlogu < threshold) + 2*(nlogu >= threshold)
       
-      tempdt <- data.table(nlogu, form1, form2, period)
+      tempdt <- data.table(nlogu, form1, form2, period, shape, scale, t_adj)
       
       tempdt[period == 1, survx := (nlogu/((1/scale)*exp(form1)))^shape]
       tempdt[period == 2, survx := ((nlogu - (1/scale)*exp(form1)*t_adj + (1/scale)*exp(form2)*t_adj)/((1/scale)*exp(form2)))^shape]
