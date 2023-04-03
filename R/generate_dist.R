@@ -605,10 +605,10 @@
 # Internal function called by .generate - returns cluster size data
 
 .genclustsize <- function(dtSim, totalss, dispersion = 0,  
-                          n = nrow(dtSim), envir = parent.frame()) { 
+                          n = nrow(dtSim), envir) { 
   
-    total <- .evalWith(totalss, .parseDotVars(totalss, parent.frame()))
-    d <- .evalWith(dispersion, .parseDotVars(dispersion, parent.frame()))
+    total <- .evalWith(totalss, .parseDotVars(totalss, envir))
+    d <- .evalWith(dispersion, .parseDotVars(dispersion, envir))
   
     if (d == 0) {
       ss <- floor(total/n)
