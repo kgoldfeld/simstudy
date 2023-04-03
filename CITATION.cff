@@ -8,7 +8,7 @@ message: 'To cite package "simstudy" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'simstudy: Simulation of Study Data'
-version: 0.6.0
+version: 0.6.0.9000
 doi: 10.21105/joss.02763
 abstract: Simulates data sets in order to explore modeling techniques or better understand
   data generating processes. The user specifies a set of relationships between covariates,
@@ -370,35 +370,38 @@ references:
   authors:
   - family-names: Allaire
     given-names: JJ
-    email: jj@rstudio.com
+    email: jj@posit.co
   - family-names: Xie
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: Dervieux
+    given-names: Christophe
+    email: cderv@posit.co
+    orcid: https://orcid.org/0000-0003-4474-2498
   - family-names: McPherson
     given-names: Jonathan
-    email: jonathan@rstudio.com
+    email: jonathan@posit.co
   - family-names: Luraschi
     given-names: Javier
-    email: javier@rstudio.com
   - family-names: Ushey
     given-names: Kevin
-    email: kevin@rstudio.com
+    email: kevin@posit.co
   - family-names: Atkins
     given-names: Aron
-    email: aron@rstudio.com
+    email: aron@posit.co
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   - family-names: Cheng
     given-names: Joe
-    email: joe@rstudio.com
+    email: joe@posit.co
   - family-names: Chang
     given-names: Winston
-    email: winston@rstudio.com
+    email: winston@posit.co
   - family-names: Iannone
     given-names: Richard
-    email: rich@rstudio.com
+    email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
   year: '2023'
 - type: software
@@ -501,6 +504,16 @@ references:
     given-names: Jeroen
     email: jeroen@berkeley.edu
     orcid: https://orcid.org/0000-0002-4035-0289
+  year: '2023'
+- type: software
+  title: dirmult
+  abstract: 'dirmult: Estimation in Dirichlet-Multinomial Distribution'
+  notes: Suggests
+  repository: https://CRAN.R-project.org/package=dirmult
+  authors:
+  - family-names: Tvedebrink
+    given-names: Torben
+    email: tvede@math.aau.dk
   year: '2023'
 - type: software
   title: pbv
