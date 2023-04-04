@@ -57,7 +57,8 @@ Suggests:
     testthat,
     gtsummary,
     survminer,
-    katex
+    katex,
+    dirmult
 LinkingTo: 
     Rcpp, 
     pbv (>= 0.4-22)

@@ -52,4 +52,9 @@ iccRE(targetICC, "gamma", disp = .5)
 
 iccRE(targetICC, "negBinomial", lambda = 40, disp = .5)
 }
+\references{
+Nakagawa, Shinichi, and Holger Schielzeth. "A general and simple 
+method for obtaining R2 from generalized linear mixed‐effects models." 
+Methods in ecology and evolution 4, no. 2 (2013): 133-142.
+}
 \concept{utility}

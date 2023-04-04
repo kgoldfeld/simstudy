@@ -109,3 +109,26 @@ ggplot(data=dtStudent,aes(x=factor(idClass),y=test,group=idClass)) +
   theme(legend.key=element_rect(fill=NA)) +
   ggtheme()
 ```
+
+### Setting cluster sizes
+
+It could be helpful to relax the assumption of exactly balanced cluster size when estimating statistical power using simulation. There is a "distribution" called *clusterSize* that facilitates these stochastic cluster sizes. As part of data definitions, you can specify the overall sample size *N* in the formula argument, and a dispersion parameter (in the variance field) Indicating a dispersion of 0 (the default) implies exact balance, and larger values of dispersion imply more variability in the cluster sizes.
+
+Here are two examples with exact or close to exact balance:
+
+```{r}
+d1 <- defData(varname = "clustSize", formula = 120, dist = "clusterSize")
+
+genData(8, d1, id = "site")
+genData(7, d1, id = "site")
+```
+
+This is a second example with variability across sites:
+
+```{r}
+d1 <- defData(varname = "randEffect", formula = 0, variance = 1, dist = "normal")
+d1 <- defData(d1, varname = "clustSize", formula = 120, 
+  variance = .05, dist = "clusterSize")
+
+genData(8, d1, id = "site")
+```

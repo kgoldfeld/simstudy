@@ -47,6 +47,12 @@
       dtSim = copy(dfSim),
       envir = envir
     ),
+    clusterSize = .genclustsize(
+      dtSim = copy(dfSim),
+      totalss = args$formula,
+      dispersion = args$variance,
+      envir = envir
+    ),
     exponential = .genexp(
       n = n,
       formula = args$formula,
@@ -594,4 +600,36 @@
     dtName,
     nTrt, balanced, strata, grpName, ratio
   )[, get(grpName)]
+}
+
+# Internal function called by .generate - returns cluster size data
+
+.genclustsize <- function(dtSim, totalss, dispersion = 0,  
+                          n = nrow(dtSim), envir) { 
+  
+  if (!requireNamespace("dirmult", quietly = TRUE)) {
+    stop(
+      "Package \"dirmult\" must be installed to use this function with 
+       the Poisson distribution.",
+        call. = FALSE
+    )
+  }
+  
+    total <- .evalWith(totalss, .parseDotVars(totalss, envir))
+    d <- .evalWith(dispersion, .parseDotVars(dispersion, envir))
+  
+    if (d == 0) {
+      ss <- floor(total/n)
+      s <- rep(ss, n)
+      surplus <- total - ss*n
+      if (surplus > 0) {
+        upgrade <- sample(1:n, surplus, replace = FALSE)
+        s[upgrade] <- s[upgrade] + 1
+      }
+    } else {
+      x <- dirmult::rdirichlet(1, alpha = rep(1/d, n) )[1,]
+      s <- as.vector(stats::rmultinom(1, size = total, prob = x))
+    }
+  
+    return(s)
 }

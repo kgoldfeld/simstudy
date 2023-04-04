@@ -723,6 +723,10 @@ defSurv <- function(dtDefs = NULL,
       uniform = ,
       uniformInt = .checkUniform(newform),
       trtAssign = .checkCategorical(newform),
+      clusterSize = {
+        .isValidArithmeticFormula(newform, defVars)
+        .isValidArithmeticFormula(variance, defVars)
+      },
       stop("Unknown distribution.")
     )
 
