@@ -7,8 +7,10 @@ double-dot variables in scale, shape, and formula parameters.
 distribution in `defData` and `defDataAdd`.
 
 ## Major fix
-* Updated the random effect variance generation for function `iccRE` under the
-Poisson distribution.
+* Improved the random effect variance generation for function `iccRE` under the
+Poisson distribution. The current approach is based on the 2013 paper by
+Nakagawa & Schielzeth titled "A general and simple method for obtaining $R^2$ from
+generalized linear mixed-effects models"
 
 ## Minor fix
 * Modified internal function to speed up beta distribution data generation.

@@ -607,6 +607,14 @@
 .genclustsize <- function(dtSim, totalss, dispersion = 0,  
                           n = nrow(dtSim), envir) { 
   
+  if (!requireNamespace("dirmult", quietly = TRUE)) {
+    stop(
+      "Package \"dirmult\" must be installed to use this function with 
+       the Poisson distribution.",
+        call. = FALSE
+    )
+  }
+  
     total <- .evalWith(totalss, .parseDotVars(totalss, envir))
     d <- .evalWith(dispersion, .parseDotVars(dispersion, envir))
   
