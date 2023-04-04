@@ -144,15 +144,21 @@ specified when distribution is "gamma".</p></dd>
 <p>A vector of values that represents the variances of random effects
 at the cluster level that correspond to the ICC vector.</p>
     </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Nakagawa, Shinichi, and Holger Schielzeth. "A general and simple 
+method for obtaining R2 from generalized linear mixed‐effects models." 
+Methods in ecology and evolution 4, no. 2 (2013): 133-142.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">targetICC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.20</span>, by <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">iccRE</span><span class="op">(</span><span class="va">targetICC</span>, <span class="st">"poisson"</span>, lambda <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0017513 0.0021231 0.0025026 0.0028901 0.0032858 0.0036900 0.0041029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0045249 0.0049562 0.0053971 0.0058480 0.0063092 0.0067811 0.0072640</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.0077584 0.0082647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.001725780 0.002092967 0.002468051 0.002851289 0.003242950 0.003643314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.004052675 0.004471339 0.004899629 0.005337878 0.005786439 0.006245681</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.006715988 0.007197766 0.007691440 0.008197456</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">iccRE</span><span class="op">(</span><span class="va">targetICC</span>, <span class="st">"binary"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.1731510 0.2099916 0.2476245 0.2860755 0.3253716 0.3655409 0.4066129</span>

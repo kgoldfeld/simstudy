@@ -502,6 +502,16 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 </tr>
 <tr class="odd">
+<td align="left">clusterSize</td>
+<td align="left">total N</td>
+<td align="left">both</td>
+<td align="left">-</td>
+<td align="left">dispersion</td>
+<td align="center">X</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr class="even">
 <td align="left">exponential</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -511,7 +521,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">gamma</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -521,7 +531,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">mixture</td>
 <td align="left">formula</td>
 <td align="left">string</td>
@@ -531,7 +541,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">negBinomial</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -541,7 +551,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">nonrandom</td>
 <td align="left">formula</td>
 <td align="left">both</td>
@@ -551,7 +561,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">normal</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -561,7 +571,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">noZeroPoisson</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -571,7 +581,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">poisson</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -581,7 +591,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">trtAssign</td>
 <td align="left">ratio</td>
 <td align="left">string</td>
@@ -591,7 +601,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">uniform</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -601,7 +611,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">uniformInt</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -667,6 +677,19 @@ same format as <code>formula</code>: “a;b;c”. Numeric variance Strings
 (e.g. “50;100;200”) will be converted to numeric when possible. All
 probabilities will be rounded to 1e12 decimal points to prevent possible
 rounding errors.</p>
+</div>
+<div class="section level4">
+<h4 id="clustersize">clusterSize<a class="anchor" aria-label="anchor" href="#clustersize"></a>
+</h4>
+<p>The <em>clusterSize</em> distribution allocates a total sample size
+<em>N</em> (specified in the <em>formula</em> argument) across the
+<em>k</em> rows of the data.table such that the sum of the rows equals
+<em>N</em>. If the <em>dispersion</em> argument is set to 0, the
+allocation to each row is <em>N/k</em>, with some rows getting an
+increment of 1 to ensure that the sum is N. It is possible to relax the
+assumption of balanced cluster sizes by setting <em>dispersion &gt;
+0</em>. As the dispersion, the variability of cluster sizes across
+clusters increases.</p>
 </div>
 <div class="section level4">
 <h4 id="exponential">exponential<a class="anchor" aria-label="anchor" href="#exponential"></a>

@@ -200,6 +200,58 @@ intervention group is highlighted by dark outlines:</p>
 <span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
 <p><img src="clustered_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<div class="section level3">
+<h3 id="setting-cluster-sizes">Setting cluster sizes<a class="anchor" aria-label="anchor" href="#setting-cluster-sizes"></a>
+</h3>
+<p>It could be helpful to relax the assumption of exactly balanced
+cluster size when estimating statistical power using simulation. There
+is a “distribution” called <em>clusterSize</em> that facilitates these
+stochastic cluster sizes. As part of data definitions, you can specify
+the overall sample size <em>N</em> in the formula argument, and a
+dispersion parameter (in the variance field) Indicating a dispersion of
+0 (the default) implies exact balance, and larger values of dispersion
+imply more variability in the cluster sizes.</p>
+<p>Here are two examples with exact or close to exact balance:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"clustSize"</span>, formula <span class="op">=</span> <span class="fl">120</span>, dist <span class="op">=</span> <span class="st">"clusterSize"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">8</span>, <span class="va">d1</span>, id <span class="op">=</span> <span class="st">"site"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    site clustSize</span></span>
+<span><span class="co">## 1:    1        15</span></span>
+<span><span class="co">## 2:    2        15</span></span>
+<span><span class="co">## 3:    3        15</span></span>
+<span><span class="co">## 4:    4        15</span></span>
+<span><span class="co">## 5:    5        15</span></span>
+<span><span class="co">## 6:    6        15</span></span>
+<span><span class="co">## 7:    7        15</span></span>
+<span><span class="co">## 8:    8        15</span></span></code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">7</span>, <span class="va">d1</span>, id <span class="op">=</span> <span class="st">"site"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    site clustSize</span></span>
+<span><span class="co">## 1:    1        17</span></span>
+<span><span class="co">## 2:    2        17</span></span>
+<span><span class="co">## 3:    3        17</span></span>
+<span><span class="co">## 4:    4        17</span></span>
+<span><span class="co">## 5:    5        17</span></span>
+<span><span class="co">## 6:    6        18</span></span>
+<span><span class="co">## 7:    7        17</span></span></code></pre>
+<p>This is a second example with variability across sites:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"randEffect"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
+<span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"clustSize"</span>, formula <span class="op">=</span> <span class="fl">120</span>, </span>
+<span>  variance <span class="op">=</span> <span class="fl">.05</span>, dist <span class="op">=</span> <span class="st">"clusterSize"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">8</span>, <span class="va">d1</span>, id <span class="op">=</span> <span class="st">"site"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    site randEffect clustSize</span></span>
+<span><span class="co">## 1:    1  1.7644575        18</span></span>
+<span><span class="co">## 2:    2  0.3883990        10</span></span>
+<span><span class="co">## 3:    3  0.3563656        13</span></span>
+<span><span class="co">## 4:    4 -0.5323265        11</span></span>
+<span><span class="co">## 5:    5 -0.8228643        27</span></span>
+<span><span class="co">## 6:    6 -0.7604611        22</span></span>
+<span><span class="co">## 7:    7 -0.6189891         8</span></span>
+<span><span class="co">## 8:    8 -0.7089864        11</span></span></code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
