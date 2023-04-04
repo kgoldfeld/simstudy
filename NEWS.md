@@ -1,10 +1,14 @@
 # simstudy (development version)
 
 ## New features
-* Added double-dot (dynamic) functionality to defSurv. Users can now specificy 
+* Added double-dot (dynamic) functionality to defSurv. Users can now specify 
 double-dot variables in scale, shape, and formula parameters.
 * It is possible to generate variable cluster sizes using the *clusterSize*
 distribution in `defData` and `defDataAdd`.
+
+## Major fix
+* Updated the random effect variance generation for function `iccRE` under the
+Poisson distribution.
 
 ## Minor fix
 * Modified internal function to speed up beta distribution data generation.

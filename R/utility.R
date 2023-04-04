@@ -236,6 +236,9 @@ gammaGetShapeRate <- function(mean, dispersion) {
 #' specified when distribution is "gamma".
 #' @return A vector of values that represents the variances of random effects
 #' at the cluster level that correspond to the ICC vector.
+#' @references Nakagawa, Shinichi, and Holger Schielzeth. "A general and simple 
+#' method for obtaining R2 from generalized linear mixed‐effects models." 
+#' Methods in ecology and evolution 4, no. 2 (2013): 133-142.
 #' @examples
 #' targetICC <- seq(0.05, 0.20, by = .01)
 #'
@@ -255,7 +258,7 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
   if (dist == "poisson") {
     if (is.null(lambda)) stop("Specify a value for lambda")
 
-    vars <- unlist(lapply(ICC, function(x) .findPoisVar(1 / lambda * x / (1 - x))))
+    vars <- unlist(lapply(ICC, function(x) .findPoisVar(x, lambda)))
   } else if (dist == "binary") {
     vars <- unlist(lapply(ICC, function(x) (x / (1 - x) * (pi^2) / 3)))
   } else if (dist == "normal") {
