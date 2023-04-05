@@ -194,64 +194,64 @@ Defaults to <a href="https://rdrr.io/r/base/sys.parent.html" class="external-lin
 <span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dc</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">di</span><span class="op">[</span><span class="va">idClust</span> <span class="op">==</span> <span class="va">i</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span>, <span class="va">D</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           A        B         C         D</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.483668 0.5012373 0.3685702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4836680 1.000000 0.5626090 0.5623180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.5012373 0.562609 1.0000000 0.4863089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3685702 0.562318 0.4863089 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4238216 0.3478132 0.3856049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4238216 1.0000000 0.4370424 0.5115332</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.3478132 0.4370424 1.0000000 0.3978229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3856049 0.5115332 0.3978229 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.5829181 0.5557868 0.6121580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.5829181 1.0000000 0.4360344 0.5383517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.5557868 0.4360344 1.0000000 0.4313864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.6121580 0.5383517 0.4313864 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4797487 0.4515907 0.3086960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4797487 1.0000000 0.3281492 0.3965045</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4515907 0.3281492 1.0000000 0.3790229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3086960 0.3965045 0.3790229 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4713803 0.5262921 0.3998548</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4713803 1.0000000 0.3608654 0.5238419</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.5262921 0.3608654 1.0000000 0.3631684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3998548 0.5238419 0.3631684 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.3487488 0.4307091 0.4742911</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.3487488 1.0000000 0.5280477 0.4214067</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4307091 0.5280477 1.0000000 0.5919587</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.4742911 0.4214067 0.5919587 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.2747757 0.4840548 0.4324151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.2747757 1.0000000 0.4114905 0.3153959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4840548 0.4114905 1.0000000 0.3783190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.4324151 0.3153959 0.3783190 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4966475 0.4449040 0.4532057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4966475 1.0000000 0.4185161 0.4645007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4449040 0.4185161 1.0000000 0.5565226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.4532057 0.4645007 0.5565226 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.3839373 0.4933473 0.2972508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.3839373 1.0000000 0.3739827 0.4128751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4933473 0.3739827 1.0000000 0.4195197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.2972508 0.4128751 0.4195197 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.3654791 0.5022213 0.3543391</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.3654791 1.0000000 0.4362452 0.4419172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.5022213 0.4362452 1.0000000 0.6752558</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3543391 0.4419172 0.6752558 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4921205 0.2955253 0.3089486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4921205 1.0000000 0.4557617 0.4738516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.2955253 0.4557617 1.0000000 0.2304006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3089486 0.4738516 0.2304006 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.3261743 0.4319515 0.4080797</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.3261743 1.0000000 0.4736814 0.4510687</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4319515 0.4736814 1.0000000 0.4567030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.4080797 0.4510687 0.4567030 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4427686 0.4010048 0.3400720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4427686 1.0000000 0.6224871 0.3826891</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4010048 0.6224871 1.0000000 0.4407901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3400720 0.3826891 0.4407901 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.3546986 0.4274920 0.3626490</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.3546986 1.0000000 0.4764789 0.5648192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4274920 0.4764789 1.0000000 0.5278207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3626490 0.5648192 0.5278207 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4933815 0.3933120 0.3700533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4933815 1.0000000 0.3409079 0.4312417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.3933120 0.3409079 1.0000000 0.3885959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3700533 0.4312417 0.3885959 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.5087083 0.4793057 0.4116898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.5087083 1.0000000 0.2140769 0.2525559</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4793057 0.2140769 1.0000000 0.2879476</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.4116898 0.2525559 0.2879476 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.3786615 0.4136816 0.3696689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.3786615 1.0000000 0.4390988 0.3363311</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4136816 0.4390988 1.0000000 0.3289900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3696689 0.3363311 0.3289900 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4909945 0.3512931 0.4332597</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4909945 1.0000000 0.2727513 0.3873452</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.3512931 0.2727513 1.0000000 0.5063320</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.4332597 0.3873452 0.5063320 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           A         B         C         D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.4277422 0.6061513 0.2001477</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.4277422 1.0000000 0.4230411 0.4575437</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.6061513 0.4230411 1.0000000 0.3750906</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.2001477 0.4575437 0.3750906 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000 0.3068650 0.4125796 0.3701627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.3068650 1.0000000 0.3373737 0.2780338</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.4125796 0.3373737 1.0000000 0.2916731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3701627 0.2780338 0.2916731 1.0000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Check global correlations - should not be as correlated</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">di</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span>, <span class="va">D</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             A          B           C           D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A  1.00000000 0.31194381 -0.02998433  0.42408543</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B  0.31194381 1.00000000  0.05535125  0.07691569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C -0.02998433 0.05535125  1.00000000 -0.22335260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D  0.42408543 0.07691569 -0.22335260  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           A           B           C         D</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1.0000000  0.27424836  0.26104422 0.6002829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.2742484  1.00000000 -0.02833458 0.4960623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.2610442 -0.02833458  1.00000000 0.2467560</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.6002829  0.49606234  0.24675598 1.0000000</span>
 </code></pre></div>
     </div>
   </div>
