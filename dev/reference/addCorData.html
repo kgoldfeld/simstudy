@@ -176,29 +176,29 @@ represents the column.</p></dd>
 <span class="r-in"><span>  rho <span class="op">=</span> <span class="fl">.7</span>, corstr <span class="op">=</span> <span class="st">"cs"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dtAdd</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      myID     xUni    xNorm       V1        V2       V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    1 11.81830 22.73116 3.473544  9.729288 13.58880</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    2 15.71819 35.78792 2.849460  9.612787 16.10299</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    3 10.50281 23.09657 3.024960  9.007620 17.26003</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    4 19.28689 39.41817 3.385623  8.781563 19.56243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    5 14.86630 32.07448 2.404199  9.089195 16.72414</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 246:  246 16.13128 34.74417 2.413153  6.117129 15.54769</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 247:  247 12.58145 23.13879 3.227353  8.764350 17.96064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 248:  248 10.83786 20.74007 3.700228 11.197461 18.72154</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 249:  249 11.75461 25.63930 5.154307  9.418543 19.19873</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 250:  250 13.15337 27.65107 3.469368  7.455029 13.98642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      myID     xUni    xNorm       V1       V2       V3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    1 10.40272 20.15544 4.012958 8.766688 18.26748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    2 19.17440 38.88084 2.015977 4.370378 11.88618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    3 14.32240 32.72256 2.558533 8.849542 15.04455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    4 19.56715 42.43410 1.653928 5.202183 12.24683</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    5 15.33081 36.78350 3.290797 6.217022 12.57738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 246:  246 18.70009 36.42191 3.208072 8.973852 15.63990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 247:  247 15.28596 35.91271 2.621804 7.132250 12.05373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 248:  248 18.82153 37.37105 3.309789 7.758548 15.77065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 249:  249 19.00115 38.21571 2.927650 5.795055 15.35603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 250:  250 19.23492 40.30210 1.748173 6.446975 15.69880</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">dtAdd</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       V1    V2    V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V1 0.922 1.252 1.883</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V2 1.252 3.795 3.798</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V3 1.883 3.798 8.532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V1 0.972 1.539 2.201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V2 1.539 4.560 5.013</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V3 2.201 5.013 9.667</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dtAdd</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      V1   V2   V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.67 0.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.67 1.00 0.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.67 0.67 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.73 0.72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.73 1.00 0.76</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.72 0.76 1.00</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dtAdd</span> <span class="op">&lt;-</span> <span class="fu">addCorData</span><span class="op">(</span><span class="va">dt</span>, <span class="st">"myID"</span>,</span></span>
 <span class="r-in"><span>  mu <span class="op">=</span> <span class="va">mu</span>, sigma <span class="op">=</span> <span class="va">sigma</span>,</span></span>
@@ -206,9 +206,9 @@ represents the column.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dtAdd</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      V1   V2   V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.67 0.54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.67 1.00 0.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.54 0.67 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.71 0.51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.71 1.00 0.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.51 0.68 1.00</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">corMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">.2</span>, <span class="fl">.8</span>, <span class="fl">.2</span>, <span class="fl">1</span>, <span class="fl">.6</span>, <span class="fl">.8</span>, <span class="fl">.6</span>, <span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -218,9 +218,9 @@ represents the column.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dtAdd</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      V1   V2   V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.14 0.78</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.14 1.00 0.57</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.78 0.57 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.18 0.81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.18 1.00 0.57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.81 0.57 1.00</span>
 </code></pre></div>
     </div>
   </div>
