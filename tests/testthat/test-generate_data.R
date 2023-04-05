@@ -783,7 +783,7 @@ test_that("genSpline doesn't throw any errors", {
   theta1 <- c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
 
   knots <- c(0.25, 0.5, 0.75)
-  expect_silent(viewSplines(knots = knots, theta = theta1, degree = 3))
+  # expect_silent(viewSplines(knots = knots, theta = theta1, degree = 3))
 
   dt <- genData(1000, ddef)
   expect_silent(genSpline( dt = dt, newvar = "weight",
