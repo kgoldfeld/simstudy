@@ -104,9 +104,9 @@ assertAtLeastLength <- function(..., length, call = sys.call(-1)) {
   }
 }
 
-#' Are all elements of vector probabilities?
+#' Are all elements greater than or equal to a value?
 #'
-#' @description Checks if passed vector includes only proper probabilities
+#' @description Checks if passed vector is >= a minimum value
 #' @param vec Vector under consideration
 #' @noRd
 assertAtLeast <- function(..., minVal, call = sys.call(-1)) {
