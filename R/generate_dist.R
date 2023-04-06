@@ -628,14 +628,14 @@
     s <- rep(ss, n)
   } else {
     x <- dirmult::rdirichlet(1, alpha = rep(1/variance, n) )[1,]
-    s <- round(x * formula, 0)
+    s <- floor(x * formula)
   }
     
-  amt_off <- formula - sum(s)
+  surplus <- formula - sum(s)
     
-  if (abs(amt_off) > 0) {
-    upgrade <- sample(1:n, abs(amt_off), replace = FALSE)
-    s[upgrade] <- s[upgrade] + 1*sign(amt_off)[1]
+  if (surplus > 0) {
+    upgrade <- sample(1:n, surplus, replace = FALSE)
+    s[upgrade] <- s[upgrade] + 1
   }
   
   return(s)
