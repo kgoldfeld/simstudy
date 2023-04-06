@@ -126,9 +126,8 @@ genData(7, d1, id = "site")
 This is a second example with variability across sites:
 
 ```{r}
-d1 <- defData(varname = "randEffect", formula = 0, variance = 1, dist = "normal")
-d1 <- defData(d1, varname = "clustSize", formula = 120, 
-  variance = .05, dist = "clusterSize")
+d1 <- defData(varname = "clustSize", formula = 120, 
+  variance = .1, dist = "clusterSize")
 
 genData(8, d1, id = "site")
 ```

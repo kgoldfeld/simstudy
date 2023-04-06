@@ -48,9 +48,9 @@
       envir = envir
     ),
     clusterSize = .genclustsize(
-      dtSim = copy(dfSim),
-      totalss = args$formula,
-      dispersion = args$variance,
+      n = nrow(dfSim),
+      formula = args$formula,
+      variance = args$variance,
       envir = envir
     ),
     exponential = .genexp(
@@ -604,8 +604,7 @@
 
 # Internal function called by .generate - returns cluster size data
 
-.genclustsize <- function(dtSim, totalss, dispersion = 0,  
-                          n = nrow(dtSim), envir) { 
+.genclustsize <- function(n, formula, variance = 0,  envir) { 
   
   if (!requireNamespace("dirmult", quietly = TRUE)) {
     stop(
@@ -615,21 +614,29 @@
     )
   }
   
-    total <- .evalWith(totalss, .parseDotVars(totalss, envir))
-    d <- .evalWith(dispersion, .parseDotVars(dispersion, envir))
+  formula <- .evalWith(formula, .parseDotVars(formula, envir))[1]
+  variance <- .evalWith(variance, .parseDotVars(variance, envir))[1]
   
-    if (d == 0) {
-      ss <- floor(total/n)
-      s <- rep(ss, n)
-      surplus <- total - ss*n
-      if (surplus > 0) {
-        upgrade <- sample(1:n, surplus, replace = FALSE)
-        s[upgrade] <- s[upgrade] + 1
-      }
-    } else {
-      x <- dirmult::rdirichlet(1, alpha = rep(1/d, n) )[1,]
-      s <- as.vector(stats::rmultinom(1, size = total, prob = x))
-    }
+  assertInteger(formula = formula)
+  assertAtLeast(formula = formula, minVal = 1)
   
-    return(s)
+  assertNumeric(variance = variance)
+  assertAtLeast(variance = variance, minVal = 0)
+  
+  if (variance == 0) {
+    ss <- floor(formula/n)
+    s <- rep(ss, n)
+  } else {
+    x <- dirmult::rdirichlet(1, alpha = rep(1/variance, n) )[1,]
+    s <- round(x * formula, 0)
+  }
+    
+  amt_off <- formula - sum(s)
+    
+  if (abs(amt_off) > 0) {
+    upgrade <- sample(1:n, abs(amt_off), replace = FALSE)
+    s[upgrade] <- s[upgrade] + 1*sign(amt_off)[1]
+  }
+  
+  return(s)
 }
