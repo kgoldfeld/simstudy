@@ -246,7 +246,7 @@ test_that("ensureMatrix works", {
   expect_is(ensureMatrix(matrix(1:25, 5)), "matrix")
 })
 
-test_that("assertPositiveDefinite works.", {
+test_that("assertPositiveSemiDefinite works.", {
   skip_on_cran()
   
   notPosDef <- matrix(rep(-.5, 25), 5, 5)
@@ -254,8 +254,8 @@ test_that("assertPositiveDefinite works.", {
   posDef <- matrix(rep(-.2, 25), 5, 5)
   diag(posDef) <- 1
 
-  expect_silent(assertPositiveDefinite(mat = posDef))
-  expect_error(assertPositiveDefinite(mat = notPosDef), class = "simstudy::notPositiveDefinite")
+  expect_silent(assertPositiveSemiDefinite(mat = posDef))
+  expect_error(assertPositiveSemiDefinite(mat = notPosDef), class = "simstudy::notPositiveSemiDefinite")
 })
 
 test_that("assertOption works", {
