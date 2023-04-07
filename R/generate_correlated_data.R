@@ -527,7 +527,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
       if (all(eigenValues > 0)) posDef <- TRUE
     }
     
-    assertPositiveDefinite(corMat = cm)
+    assertPositiveSemiDefinite(corMat = cm)
     cm
   }
   
@@ -545,7 +545,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     assertInRange(rho = rho, range = c(-1, 1))
     
     cm <- .buildCorMat(nvars = nvars, corMatrix = NULL, corstr, rho)
-    assertPositiveDefinite(corMat = cm)
+    assertPositiveSemiDefinite(corMat = cm)
     
     cm
     
@@ -566,7 +566,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     
     assertLength(cors = cors, length = choose(nvars, 2))
     cm <- .fillCor(nvars, cors)
-    assertPositiveDefinite(corMat = cm)
+    assertPositiveSemiDefinite(corMat = cm)
     
     cm
     
@@ -585,7 +585,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
       if (all(eigenValues > 0)) posDef <- TRUE
     }
     
-    assertPositiveDefinite(corMat = cm)
+    assertPositiveSemiDefinite(corMat = cm)
     cm
     
   }
@@ -746,7 +746,7 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
   
   # Check and return
   
-  assertPositiveDefinite(newCorMatrix = newCorMatrix)
+  assertPositiveSemiDefinite(newCorMatrix = newCorMatrix)
   
   newCorMatrix
   

@@ -334,20 +334,20 @@ alreadyInVectorError <- function(elementOfVar, nameVar, nameVec,
 
 }
 
-#' Not Positive Definite Error
+#' Not Positive Semi-definite Error
 #'
 #' @param var Name of matrix.
 #' @param call sys.call to pass on to the error.
 #' @param msg Additional information for the error message as
 #' glueCollapse'able string.
 #' @noRd
-notPositiveDefiniteError <- function(var,
+notPositiveSemiDefiniteError <- function(var,
                                      call = sys.call(-1),
                                      msg = "", ...) {
-  message <- glueCollapse("{ var *} is not positive definite!", msg)
+  message <- glueCollapse("{ var *} is not positive semi-definite!", msg)
 
   c <- condition(
-    c("simstudy::notPositiveDefinite", "error"),
+    c("simstudy::notPositiveSemiDefinite", "error"),
     message, call, ...
   )
   stop(c)
