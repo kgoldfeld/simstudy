@@ -4,7 +4,7 @@
 \alias{survParamPlot}
 \title{Plot survival curves}
 \usage{
-survParamPlot(formula, shape, points = NULL, n = 100, scale = 1)
+survParamPlot(formula, shape, points = NULL, n = 100, scale = 1, limits = NULL)
 }
 \arguments{
 \item{formula}{This is the "formula" parameter of the Weibull-based survival curve
@@ -21,6 +21,9 @@ define the line. Defaults to 100.}
 
 \item{scale}{An optional scale parameter that defaults to 1. If the value is 
 1, the scale of the distribution is determined entirely by the argument "f".}
+
+\item{limits}{A vector of length 2 that specifies x-axis limits for the plot. 
+The default is NULL, in which case no limits are imposed.}
 }
 \value{
 A ggplot of the survival curve defined by the specified parameters.
@@ -34,5 +37,6 @@ points <- list(c(60, 0.90), c(100, .75), c(200, .25), c(250, .10))
 r <- survGetParams(points)
 survParamPlot(r[1], r[2])
 survParamPlot(r[1], r[2], points = points)
+survParamPlot(r[1], r[2], points = points, limits = c(0, 100))
 }
 \concept{utility}

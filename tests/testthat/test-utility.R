@@ -118,4 +118,7 @@ test_that("survParamPlot works.", {
   expect_is(survParamPlot(formula = r[1], shape = r[2], points = points),
     class = "ggplot"
   )
+  expect_is(survParamPlot(formula = r[1], shape = r[2], points = points, limits=c(0, 220)),
+            class = "ggplot"
+  )
 })
