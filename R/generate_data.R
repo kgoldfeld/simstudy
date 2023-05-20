@@ -998,6 +998,8 @@ genSurv <- function(dtName, survDefs, digits = 3,
   timeName = NULL, censorName = NULL, eventName = "event", 
   typeName = "type", keepEvents = FALSE, idName = "id") {
   
+  # For double-dot notation
+  
   assertNotMissing(
     dtName = missing(dtName),
     survDefs = missing(survDefs),
@@ -1040,13 +1042,13 @@ genSurv <- function(dtName, survDefs, digits = 3,
     subDef <- survDefs[varname == events[i]]
 
     formshape <- subDef[1, shape]
-    shape <- as.vector(.evalWith(formshape, .parseDotVars(formshape), dtSurv))
+    shape <- as.vector(.evalWith(formshape, .parseDotVars(formshape,  envir = parent.frame()), dtSurv))
 
     formscale <- subDef[1, scale]
-    scale <- as.vector(.evalWith(formscale, .parseDotVars(formscale), dtSurv))
+    scale <- as.vector(.evalWith(formscale, .parseDotVars(formscale, envir = parent.frame()), dtSurv))
     
     formulas <- subDef[, formula]
-    form1 <- as.vector(.evalWith(formulas[1], .parseDotVars(formulas[1]), dtSurv))
+    form1 <- as.vector(.evalWith(formulas[1], .parseDotVars(formulas[1], envir = parent.frame()), dtSurv))
     
     if (nrow(subDef) > 1) {
       
@@ -1061,7 +1063,7 @@ genSurv <- function(dtName, survDefs, digits = 3,
       transition <- subDef[2, transition]
       t_adj <- transition ^ (1/shape)
      
-      form2 <- as.vector(.evalWith(formulas[2], .parseDotVars(formulas[2]), dtSurv))
+      form2 <- as.vector(.evalWith(formulas[2], .parseDotVars(formulas[2], envir = parent.frame()), dtSurv))
       
       threshold <- exp(form1) * t_adj
       period <- 1*(nlogu < threshold) + 2*(nlogu >= threshold)
