@@ -1,4 +1,4 @@
-# simstudy (development version)
+# simstudy 0.7.0
 
 ## New features
 * Added double-dot (dynamic) functionality to defSurv. Users can now specify 
