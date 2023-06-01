@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -501,6 +501,16 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 </tr>
 <tr class="odd">
+<td align="left">clusterSize</td>
+<td align="left">total N</td>
+<td align="left">both</td>
+<td align="left">-</td>
+<td align="left">dispersion</td>
+<td align="center">X</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr class="even">
 <td align="left">exponential</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -510,7 +520,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">gamma</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -520,7 +530,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">mixture</td>
 <td align="left">formula</td>
 <td align="left">string</td>
@@ -530,7 +540,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">negBinomial</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -540,7 +550,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">nonrandom</td>
 <td align="left">formula</td>
 <td align="left">both</td>
@@ -550,7 +560,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">normal</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -560,7 +570,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">noZeroPoisson</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -570,7 +580,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">poisson</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -580,7 +590,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">trtAssign</td>
 <td align="left">ratio</td>
 <td align="left">string</td>
@@ -590,7 +600,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">uniform</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -600,7 +610,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">uniformInt</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -666,6 +676,19 @@ same format as <code>formula</code>: “a;b;c”. Numeric variance Strings
 (e.g. “50;100;200”) will be converted to numeric when possible. All
 probabilities will be rounded to 1e12 decimal points to prevent possible
 rounding errors.</p>
+</div>
+<div class="section level4">
+<h4 id="clustersize">clusterSize<a class="anchor" aria-label="anchor" href="#clustersize"></a>
+</h4>
+<p>The <em>clusterSize</em> distribution allocates a total sample size
+<em>N</em> (specified in the <em>formula</em> argument) across the
+<em>k</em> rows of the data.table such that the sum of the rows equals
+<em>N</em>. If the <em>dispersion</em> argument is set to 0, the
+allocation to each row is <em>N/k</em>, with some rows getting an
+increment of 1 to ensure that the sum is N. It is possible to relax the
+assumption of balanced cluster sizes by setting <em>dispersion &gt;
+0</em>. As the dispersion, the variability of cluster sizes across
+clusters increases.</p>
 </div>
 <div class="section level4">
 <h4 id="exponential">exponential<a class="anchor" aria-label="anchor" href="#exponential"></a>
@@ -914,7 +937,10 @@ predictor <span class="math inline">\(x\)</span>:</p>
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">d</span><span class="op">)</span></span>
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addCondition.html">addCondition</a></span><span class="op">(</span><span class="va">dc</span>, <span class="va">dd</span>, newvar <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span></code></pre>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
 <p><img src="simstudy_files/figure-html/unnamed-chunk-16-1.png" width="480"></p>
 </div>
 </div>
