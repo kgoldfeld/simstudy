@@ -85,7 +85,8 @@
     res <- with(e, {
       expr <- parse(text = as.character(formula2parse))
       tryCatch(
-        expr = dtSim[, newVar := eval(expr), keyby = def_id],
+        expr = dtSim[, newVar := eval(expr)],
+        # expr = dtSim[, newVar := eval(expr), keyby = def_id],
         error = function(err) {
           if (grepl("RHS length must either be 1", gettext(err), fixed = T)) {
             dtSim[, newVar := eval(expr)]
