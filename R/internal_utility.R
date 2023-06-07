@@ -84,16 +84,18 @@
     
     res <- with(e, {
       expr <- parse(text = as.character(formula2parse))
-      tryCatch(
+      suppressWarnings( tryCatch(
         expr = dtSim[, newVar := eval(expr)],
         error = function(err) {
-          
-          if (grep("non-conformable arguments", err$message, fixed = T)) {
+          text <- err$message
+          recover <- grep("non-conformable arguments", text, fixed = T) ||
+                grepl("If you wish to 'recycle' the RHS", text, fixed = T)
+          if (recover) {
             dtSim[, newVar := eval(expr), keyby = def_id]
           } else {
             stop(gettext(err))
           }
-        }
+        })
       )
       copy(dtSim$newVar)
     })

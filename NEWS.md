@@ -1,3 +1,14 @@
+# simstudy 0.7.0.0009
+
+## New features
+* Function `getBeta0` determines the numeric value of the intercept parameter 
+for a data generating process (based on a logistic regression model) that has 
+a specific target population prevalence of a binary outcome.
+
+## Major fix
+* Data generation speed has been improved for very large data sets with many 
+variables.
+
 # simstudy 0.7.0
 
 ## New features

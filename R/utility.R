@@ -973,3 +973,75 @@ addCompRisk <- function(dtName, events, timeName,
 }
   
   
+#' Determine intercept parameter for logistic regression with target prevalence
+#' @description  An iterative bisection procedure that can be used to determine 
+#' the numeric value of the intercept parameter for a data generating process 
+#' (based on a logistic regression model) that has a specific target population 
+#' prevalence of a binary outcome.
+#' @param targetProp The target proportion. A value between 0 and 1.
+#' @param def A data definition table for the covariates in the underlying
+#' population.
+#' @param coefs A vector of coefficients that reflect the relationship between 
+#' each of the covariates and the log-odds of the outcome.
+#' @param intLow The low endpoint for the search range. Defaults to -10.
+#' @param intHigh The high endpoint for the search range. Defaults to 10.
+#' @param tolerance The minimum stopping distance between the adjusted low and high
+#' endpoints. Defaults to 0.00001.
+#' @references Austin, Peter C. "The iterative bisection procedure: a useful 
+#' tool for determining parameter values in data-generating processes in 
+#' Monte Carlo simulations." BMC Medical Research Methodology 23, 
+#' no. 1 (2023): 1-10.
+#' @return A value representing th desired intercept parameter for the logistic
+#' model.
+#' @examples
+#' d1 <- defData(varname = "x1", formula = 0, variance = 1)
+#' d1 <- defData(d1, varname = "b1", formula = 0.5, dist = "binary")
+#' 
+#' coefs <- log(c(1.2, 0.8))
+#' 
+#' getBeta0(targetProp = 0.11, def = d1, coefs = coefs)
+#' 
+#' @export
+#' @concept utility
+#' 
+getBeta0 <- function(targetProp, def, coefs, intLow = -10, intHigh = 10, tolerance = .00001) {
+  
+  assertNotMissing(targetProp = missing(targetProp), 
+                   def = missing(def), 
+                   coefs = missing(coefs))
+  assertLength(coefs = coefs, length = nrow(def))
+  assertProbability(targetProp)
+  assertNumeric(coefs = coefs)
+  
+  outcome.function <- function(b0, dd){
+    
+    l <- dd[, l + b0]
+    p <- 1/(1 + exp(-l))
+    mean(stats::rbinom(length(p), 1, p))
+    
+  }
+  
+  dd <- genData(500000, def)
+  
+  vars <- names(dd)[-1]
+  form <- paste(paste(coefs, vars, sep = "*"), collapse =  " + ")
+  def2 <- defDataAdd(varname = "l", formula = form, dist = "nonrandom")
+  dd <- addColumns(def2, dd)
+  
+  while(abs(intHigh - intLow) > tolerance){
+    
+    int.mid <- (intLow + intHigh)/2
+    
+    outcome.prev <- outcome.function(b0 = int.mid, dd)
+    
+    if (outcome.prev < targetProp) {
+      intLow <- int.mid
+    } else {
+      intHigh <- int.mid
+    }
+    
+  }
+  
+  return(int.mid)
+  
+}
