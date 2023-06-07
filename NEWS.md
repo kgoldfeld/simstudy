@@ -1,4 +1,4 @@
-# simstudy 0.7.0.0009
+# simstudy 0.7.0.9000
 
 ## New features
 * Function `getBeta0` determines the numeric value of the intercept parameter 
