@@ -86,16 +86,15 @@
       expr <- parse(text = as.character(formula2parse))
       tryCatch(
         expr = dtSim[, newVar := eval(expr)],
-        # expr = dtSim[, newVar := eval(expr), keyby = def_id],
         error = function(err) {
-          if (grepl("RHS length must either be 1", gettext(err), fixed = T)) {
-            dtSim[, newVar := eval(expr)]
+          if (grep("non-conformable arguments", err$message, fixed = T)) {
+            dtSim[, newVar := eval(expr), keyby = def_id]
           } else {
             stop(gettext(err))
           }
         }
       )
-      copy(dtSim$newVar)
+      dtSim$newVar
     })
 
     if (length(res) == 1) {
