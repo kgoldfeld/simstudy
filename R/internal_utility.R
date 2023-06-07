@@ -81,12 +81,13 @@
 
   evalFormula <- function(formula) {
     e$formula2parse <- formula
-
+    
     res <- with(e, {
       expr <- parse(text = as.character(formula2parse))
       tryCatch(
         expr = dtSim[, newVar := eval(expr)],
         error = function(err) {
+          
           if (grep("non-conformable arguments", err$message, fixed = T)) {
             dtSim[, newVar := eval(expr), keyby = def_id]
           } else {
@@ -94,9 +95,9 @@
           }
         }
       )
-      dtSim$newVar
+      copy(dtSim$newVar)
     })
-
+    
     if (length(res) == 1) {
       rep(res, n)
     } else {
