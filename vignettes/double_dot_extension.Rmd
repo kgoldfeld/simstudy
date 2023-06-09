@@ -196,7 +196,7 @@ d1 <- defData(d1, varname = "outcome", formula = "..effect[a, b]", dist="nonrand
 ```
 
 ```{r}
-dx <- genData(100, d1)
+dx <- genData(1000, d1)
 dx
 ```
 

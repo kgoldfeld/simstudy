@@ -82,23 +82,26 @@
   evalFormula <- function(formula) {
     e$formula2parse <- formula
     
-    res <- with(e, {
-      expr <- parse(text = as.character(formula2parse))
-      suppressWarnings( tryCatch(
-        expr = dtSim[, newVar := eval(expr)],
-        error = function(err) {
-          text <- err$message
-          recover <- grep("non-conformable arguments", text, fixed = T) ||
-                grepl("If you wish to 'recycle' the RHS", text, fixed = T)
-          if (recover) {
-            dtSim[, newVar := eval(expr), keyby = def_id]
-          } else {
-            stop(gettext(err))
-          }
-        })
-      )
-      copy(dtSim$newVar)
-    })
+    if ( grepl("%.*%", formula) || grepl("\\[.*,.*\\]", formula) ) {
+      res <- with(e, {
+        expr <- parse(text = as.character(formula2parse))
+        tryCatch(
+          expr = dtSim[, newVar := eval(expr), keyby = def_id],
+          error = function(err) stop(gettext(err))
+        )
+        copy(dtSim$newVar)
+        
+      })
+    } else {
+      res <- with(e, {
+        expr <- parse(text = as.character(formula2parse))
+        tryCatch(
+          expr = dtSim[, newVar := eval(expr)],
+          error = function(err) stop(gettext(err))
+        )
+        copy(dtSim$newVar)
+      })
+    } 
     
     if (length(res) == 1) {
       rep(res, n)
