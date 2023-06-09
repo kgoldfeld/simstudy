@@ -978,7 +978,7 @@ addCompRisk <- function(dtName, events, timeName,
 #' the numeric value of the intercept parameter for a data generating process 
 #' (based on a logistic regression model) that has a specific target population 
 #' prevalence of a binary outcome.
-#' @param targetProp The target proportion. A value between 0 and 1.
+#' @param targetPrev The target population prevalence. A value between 0 and 1.
 #' @param def A data definition table for the covariates in the underlying
 #' population.
 #' @param coefs A vector of coefficients that reflect the relationship between 
@@ -986,7 +986,10 @@ addCompRisk <- function(dtName, events, timeName,
 #' @param intLow The low endpoint for the search range. Defaults to -10.
 #' @param intHigh The high endpoint for the search range. Defaults to 10.
 #' @param tolerance The minimum stopping distance between the adjusted low and high
-#' endpoints. Defaults to 0.00001.
+#' endpoints. Defaults to 0.0001.
+#' @param sampleSize The number of units to generate for the bisection algorithm. 
+#' The default is 5e+05. To get a reliable estimate, the value 
+#' should be no smaller than 1e+05.
 #' @references Austin, Peter C. "The iterative bisection procedure: a useful 
 #' tool for determining parameter values in data-generating processes in 
 #' Monte Carlo simulations." BMC Medical Research Methodology 23, 
@@ -999,49 +1002,128 @@ addCompRisk <- function(dtName, events, timeName,
 #' 
 #' coefs <- log(c(1.2, 0.8))
 #' 
-#' getBeta0(targetProp = 0.11, def = d1, coefs = coefs)
+#' getBeta0(targetPrev = 0.11, def = d1, coefs = coefs)
 #' 
 #' @export
 #' @concept utility
 #' 
-getBeta0 <- function(targetProp, def, coefs, intLow = -10, intHigh = 10, tolerance = .00001) {
+getBeta0 <- function(targetPrev, def, coefs, intLow = -10, 
+  intHigh = 10, tolerance = 0.0001, sampleSize = 5e+05) {
   
-  assertNotMissing(targetProp = missing(targetProp), 
+  assertNotMissing(targetPrev = missing(targetPrev), 
                    def = missing(def), 
                    coefs = missing(coefs))
   assertLength(coefs = coefs, length = nrow(def))
-  assertProbability(targetProp)
+  assertProbability(targetPrev)
   assertNumeric(coefs = coefs)
   
-  outcome.function <- function(b0, dd){
-    
-    l <- dd[, l + b0]
-    p <- 1/(1 + exp(-l))
-    mean(stats::rbinom(length(p), 1, p))
-    
-  }
-  
-  dd <- genData(500000, def)
-  
-  vars <- names(dd)[-1]
-  form <- paste(paste(coefs, vars, sep = "*"), collapse =  " + ")
-  def2 <- defDataAdd(varname = "l", formula = form, dist = "nonrandom")
-  dd <- addColumns(def2, dd)
+  dd <- genData(sampleSize, def)
+  lvec <- as.matrix(dd[, -1]) %*% coefs
   
   while(abs(intHigh - intLow) > tolerance){
     
-    int.mid <- (intLow + intHigh)/2
+    B <- (intLow + intHigh)/2
+    outcome.prev <- mean(stats::plogis(lvec + B))
     
-    outcome.prev <- outcome.function(b0 = int.mid, dd)
-    
-    if (outcome.prev < targetProp) {
-      intLow <- int.mid
+    if (outcome.prev < targetPrev) {
+      intLow <- B
     } else {
-      intHigh <- int.mid
+      intHigh <- B
     }
     
   }
   
-  return(int.mid)
+  B <- (intLow + intHigh)/2
+
+  return(B)
+  
+}
+
+#' Determine parameters for logistic regression with target prevalence and 
+#' risk ratio or risk difference
+#' @description  An iterative bisection procedure that can be used to determine 
+#' the numeric value of the intercept and treatment effect parameter for a 
+#' data generating process (based on a logistic regression model) that has a 
+#' specific target population prevalence of a binary outcome, and a target risk
+#' ratio or risk difference.
+#' @param targetPrev The target population prevalence. A value between 0 and 1.
+#' @param targetComp The target risk ratio or risk difference. The risk ratio can be
+#' any positive value, and the risk difference is in any value between -1 and 1.
+#' @param comparison This indicates whether the target is a risk ratio ("rr") 
+#' or risk difference ("rd"). The default value is "rr."
+#' @param def A data definition table for the covariates in the underlying
+#' population.
+#' @param coefs A vector of coefficients that reflect the relationship between 
+#' each of the covariates and the log-odds of the outcome.
+#' @param intLow The low endpoint for the search range. Defaults to -10.
+#' @param intHigh The high endpoint for the search range. Defaults to 10.
+#' @param tolerance The minimum stopping distance between the adjusted low and high
+#' endpoints. Defaults to 0.0001.
+#' @param sampleSize The number of units to generate for the bisection algorithm. 
+#' The default is 5e+05. To get a reliable estimate, the value 
+#' should be no smaller than 1e+05.
+#' @references Austin, Peter C. "The iterative bisection procedure: a useful 
+#' tool for determining parameter values in data-generating processes in 
+#' Monte Carlo simulations." BMC Medical Research Methodology 23, 
+#' no. 1 (2023): 1-10.
+#' @return A value representing th desired intercept parameter for the logistic
+#' model.
+#' @examples
+#' d1 <- defData(varname = "x1", formula = 0, variance = 1)
+#' d1 <- defData(d1, varname = "b1", formula = 0.5, dist = "binary")
+#' 
+#' coefs <- log(c(1.2, 0.8))
+#' 
+#' getBetas(targetPrev = 0.10, targetComp = 1.2, def = d1, coefs = coefs)
+#' 
+#' @export
+#' @concept utility
+#' 
+getBetas <- function(targetPrev, targetComp, def, coefs, comparison = "rr", intLow = -10, 
+                     intHigh = 10, tolerance = 0.0001, sampleSize = 5e+05) {
+  
+  assertNotMissing(targetPrev = missing(targetPrev), 
+                   targetComp = missing(targetComp),
+                   def = missing(def), 
+                   coefs = missing(coefs))
+  assertLength(coefs = coefs, length = nrow(def))
+  assertOption(comparison = comparison, options = c("rr","rd"))
+  if (comparison == "rr") {
+    assertAtLeast(targetComp = targetComp, minVal = 0)
+  } else { # "rd"
+    assertInRange(targetComp = targetComp, range = c(-1, 1))
+  }
+  assertNumeric(coefs = coefs)
+  
+  ### get B0 - intercept
+  
+  B <- getBeta0(targetPrev, def, coefs, sampleSize = sampleSize)
+  
+  ### get Delta - treatment effect
+  
+  dd <- genData(sampleSize, def)
+  lvec <- cbind(1, as.matrix(dd[, -1])) %*% c(B, coefs)
+  
+  while(abs(intHigh - intLow) > tolerance){
+    
+    Delta <- (intLow + intHigh)/2
+    
+    if (comparison == "rr") {
+      outcome.prev <- mean(stats::plogis(lvec + Delta)) / mean(stats::plogis(lvec))
+    } else { # "rd"
+      outcome.prev <- mean(stats::plogis(lvec + Delta)) - mean(stats::plogis(lvec)) 
+    }
+     
+    if (outcome.prev < targetComp) {
+      intLow <- Delta
+    } else {
+      intHigh <- Delta
+    }
+    
+  }
+  
+  Delta <-  (intLow + intHigh)/2
+  
+  return(c(B, Delta))
   
 }
