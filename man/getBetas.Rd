@@ -14,7 +14,8 @@ getBetas(
   intLow = -10,
   intHigh = 10,
   tolerance = 1e-04,
-  sampleSize = 5e+05
+  sampleSize = 5e+05,
+  trtName = "A"
 )
 }
 \arguments{
@@ -42,10 +43,14 @@ endpoints. Defaults to 0.0001.}
 \item{sampleSize}{The number of units to generate for the bisection algorithm. 
 The default is 5e+05. To get a reliable estimate, the value 
 should be no smaller than 1e+05.}
+
+\item{trtName}{The name of the variable treatment/exposure variable. Defaults 
+to "A".}
 }
 \value{
-A value representing th desired intercept parameter for the logistic
-model.
+A vector of parameters including the intercept, treatment/exposure
+effect, and covariate coefficients for the logistic model data generating 
+process.
 }
 \description{
 An iterative bisection procedure that can be used to determine 
