@@ -884,7 +884,7 @@ survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1,
   
 }
 
-#' Generating single competing risk survival varible
+#' Generating single competing risk survival variable
 #' 
 #' @param dtName Name of complete data set to be updated
 #' @param events Vector of column names that include
@@ -1054,11 +1054,7 @@ logisticCoefs <- function(defCovar, coefs, popPrev, rr = NULL, rd = NULL,
   } 
   
   if (!is.null(rd)) { 
-    assertInRange(rd = rd, range = c(-1, 1))
-    if ( ((popPrev + rd) < 0) || ((popPrev + rd) > 1)) {
-      stop(paste0("popPrev is ", formatC(popPrev, digits = 3), 
-        ", so rd must be between ", -popPrev, " and ", 1-popPrev, ".")) 
-    }
+    assertInRange(rd = rd, range = c(-popPrev, 1-popPrev))
   }
   
   if (!is.null(auc)) {
