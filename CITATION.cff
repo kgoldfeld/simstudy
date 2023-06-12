@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.4.1
+# CITATION file created with {cffr} R package, v0.5.0
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -8,7 +8,7 @@ message: 'To cite package "simstudy" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'simstudy: Simulation of Study Data'
-version: 0.6.0.9000
+version: 0.7.0
 doi: 10.21105/joss.02763
 abstract: Simulates data sets in order to explore modeling techniques or better understand
   data generating processes. The user specifies a set of relationships between covariates,
@@ -49,7 +49,7 @@ preferred-citation:
 repository: https://CRAN.R-project.org/package=simstudy
 repository-code: https://github.com/kgoldfeld/simstudy
 url: https://kgoldfeld.github.io/simstudy/
-date-released: '2023-02-18'
+date-released: '2023-06-01'
 contact:
 - family-names: Goldfeld
   given-names: Keith
@@ -448,7 +448,7 @@ references:
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   year: '2023'
 - type: software
   title: gtsummary
@@ -514,6 +514,17 @@ references:
   - family-names: Tvedebrink
     given-names: Torben
     email: tvede@math.aau.dk
+  year: '2023'
+- type: software
+  title: rms
+  abstract: 'rms: Regression Modeling Strategies'
+  notes: Suggests
+  url: https://hbiostat.org/R/rms/
+  repository: https://CRAN.R-project.org/package=rms
+  authors:
+  - family-names: Harrell Jr
+    given-names: Frank E
+    email: fh@fharrell.com
   year: '2023'
 - type: software
   title: pbv
