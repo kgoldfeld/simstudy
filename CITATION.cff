@@ -8,7 +8,7 @@ message: 'To cite package "simstudy" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'simstudy: Simulation of Study Data'
-version: 0.7.0
+version: 0.7.0.9000
 doi: 10.21105/joss.02763
 abstract: Simulates data sets in order to explore modeling techniques or better understand
   data generating processes. The user specifies a set of relationships between covariates,
