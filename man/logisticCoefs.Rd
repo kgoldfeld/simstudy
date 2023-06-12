@@ -2,10 +2,11 @@
 % Please edit documentation in R/utility.R
 \name{logisticCoefs}
 \alias{logisticCoefs}
-\title{Determine intercept parameter for logistic regression with target prevalence}
+\title{Determine intercept, treatment/exposure and covariate coefficients that can 
+be used for binary data generation with a logit link and a set of covariates}
 \usage{
 logisticCoefs(
-  defCov,
+  defCovar,
   coefs,
   popPrev,
   rr = NULL,
@@ -17,8 +18,8 @@ logisticCoefs(
 )
 }
 \arguments{
-\item{defCov}{A data definition table for the covariates in the underlying
-population. This specifies the underlying distribution of the covariates.}
+\item{defCovar}{A definition table for the covariates in the underlying
+population. This tables specifies the distribution of the covariates.}
 
 \item{coefs}{A vector of coefficients that reflect the relationship between 
 each of the covariates and the log-odds of the outcome.}
@@ -26,14 +27,14 @@ each of the covariates and the log-odds of the outcome.}
 \item{popPrev}{The target population prevalence of the outcome. 
 A value between 0 and 1.}
 
-\item{rr}{If the target statistic is a risk ratio, a value between 0 and
-1/popPrev must be provided. Defaults to NULL.}
+\item{rr}{The target risk ratio, which must be a value between 0 and
+1/popPrev. Defaults to NULL.}
 
-\item{rd}{If the target statistic is a risk difference, a value between
--(popPrev) and (1 - popPrev) must be provided. Defaults to NULL}
+\item{rd}{The target risk difference, which must be between
+-(popPrev) and (1 - popPrev). Defaults to NULL}
 
-\item{auc}{If the target statistic is the AUC, a value between 0.5 and 1.0 
-must be provided. Defaults to NULL.}
+\item{auc}{The target AUC, which must be a value between 0.5 and 1.0 . 
+Defaults to NULL.}
 
 \item{tolerance}{The minimum stopping distance between the adjusted low and high
 endpoints. Defaults to 0.001.}
@@ -43,17 +44,26 @@ The default is 5e+05. To get a reliable estimate, the value
 should be no smaller than 1e+05.}
 
 \item{trtName}{If either a risk ratio or risk difference is the target statistic,
-a treatment/exposure variable name can be provided. trtName defaults to "A".}
+a treatment/exposure variable name can be provided. Defaults to "A".}
 }
 \value{
 A vector of parameters including the intercept and covariate 
 coefficients for the logistic model data generating process.
 }
 \description{
-An iterative bisection procedure that can be used to determine 
-the numeric value of the intercept parameter for a data generating process 
-(based on a logistic regression model) that has a specific target population 
-prevalence of a binary outcome.
+This is an implementation of an iterative bisection procedure 
+that can be used to determine coefficient values for a target population 
+prevalence as well as a target risk ratio, risk difference, or AUC. These 
+coefficients can be used in a subsequent data generation process to simulate
+data with these desire characteristics.
+}
+\details{
+If no specific target statistic is specified, then only the intercept
+is returned along with the original coefficients. Only one target statistic (risk ratio, risk
+difference or AUC) can be specified with a single function call; in all three cases, a target
+prevalence is still required. The algorithm for the target AUC is considerably
+slower than the others, because the intercept needs to be re-determined at
+each iteration as the covariate coefficients are changing at each iteration.
 }
 \examples{
 d1 <- defData(varname = "x1", formula = 0, variance = 1)

@@ -972,30 +972,38 @@ addCompRisk <- function(dtName, events, timeName,
   dtSurv[]
 }
 
-#' Determine intercept parameter for logistic regression with target prevalence
-#' @description  An iterative bisection procedure that can be used to determine 
-#' the numeric value of the intercept parameter for a data generating process 
-#' (based on a logistic regression model) that has a specific target population 
-#' prevalence of a binary outcome.
-#' @param defCovar A data definition table for the covariates in the underlying
-#' population. This specifies the underlying distribution of the covariates.
+#' Determine intercept, treatment/exposure and covariate coefficients that can 
+#' be used for binary data generation with a logit link and a set of covariates
+#' @description  This is an implementation of an iterative bisection procedure 
+#' that can be used to determine coefficient values for a target population 
+#' prevalence as well as a target risk ratio, risk difference, or AUC. These 
+#' coefficients can be used in a subsequent data generation process to simulate
+#' data with these desire characteristics.
+#' @param defCovar A definition table for the covariates in the underlying
+#' population. This tables specifies the distribution of the covariates.
 #' @param coefs A vector of coefficients that reflect the relationship between 
 #' each of the covariates and the log-odds of the outcome.
 #' @param popPrev The target population prevalence of the outcome. 
 #' A value between 0 and 1.
-#' @param rr If the target statistic is a risk ratio, a value between 0 and
-#' 1/popPrev must be provided. Defaults to NULL.
-#' @param rd If the target statistic is a risk difference, a value between
-#' -(popPrev) and (1 - popPrev) must be provided. Defaults to NULL
-#' @param auc If the target statistic is the AUC, a value between 0.5 and 1.0 
-#' must be provided. Defaults to NULL.
+#' @param rr The target risk ratio, which must be a value between 0 and
+#' 1/popPrev. Defaults to NULL.
+#' @param rd The target risk difference, which must be between
+#' -(popPrev) and (1 - popPrev). Defaults to NULL
+#' @param auc The target AUC, which must be a value between 0.5 and 1.0 . 
+#' Defaults to NULL.
 #' @param tolerance The minimum stopping distance between the adjusted low and high
 #' endpoints. Defaults to 0.001.
 #' @param sampleSize The number of units to generate for the bisection algorithm. 
 #' The default is 5e+05. To get a reliable estimate, the value 
 #' should be no smaller than 1e+05.
 #' @param trtName If either a risk ratio or risk difference is the target statistic,
-#' a treatment/exposure variable name can be provided. trtName defaults to "A".
+#' a treatment/exposure variable name can be provided. Defaults to "A".
+#' @details If no specific target statistic is specified, then only the intercept
+#' is returned along with the original coefficients. Only one target statistic (risk ratio, risk
+#' difference or AUC) can be specified with a single function call; in all three cases, a target
+#' prevalence is still required. The algorithm for the target AUC is considerably
+#' slower than the others, because the intercept needs to be re-determined at
+#' each iteration as the covariate coefficients are changing at each iteration.
 #' @references Austin, Peter C. "The iterative bisection procedure: a useful 
 #' tool for determining parameter values in data-generating processes in 
 #' Monte Carlo simulations." BMC Medical Research Methodology 23, 
