@@ -58,7 +58,8 @@ Suggests:
     gtsummary,
     survminer,
     katex,
-    dirmult
+    dirmult,
+    rms
 LinkingTo: 
     Rcpp, 
     pbv (>= 0.4-22)

@@ -1011,6 +1011,7 @@ addCompRisk <- function(dtName, events, timeName,
 #' @return A vector of parameters including the intercept and covariate 
 #' coefficients for the logistic model data generating process.
 #' @examples
+#' \dontrun{
 #' d1 <- defData(varname = "x1", formula = 0, variance = 1)
 #' d1 <- defData(d1, varname = "b1", formula = 0.5, dist = "binary")
 #' 
@@ -1020,6 +1021,7 @@ addCompRisk <- function(dtName, events, timeName,
 #' logisticCoefs(d1, coefs, popPrev = 0.20, rr = 1.50, trtName = "rx") 
 #' logisticCoefs(d1, coefs, popPrev = 0.20, rd = 0.30, trtName = "rx")
 #' logisticCoefs(d1, coefs, popPrev = 0.20, auc = 0.80)
+#' }
 #' @export
 #' @concept utility
 #' 
