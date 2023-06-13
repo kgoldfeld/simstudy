@@ -1001,9 +1001,7 @@ addCompRisk <- function(dtName, events, timeName,
 #' @details If no specific target statistic is specified, then only the intercept
 #' is returned along with the original coefficients. Only one target statistic (risk ratio, risk
 #' difference or AUC) can be specified with a single function call; in all three cases, a target
-#' prevalence is still required. The algorithm for the target AUC is considerably
-#' slower than the others, because the intercept needs to be re-determined at
-#' each iteration as the covariate coefficients are changing at each iteration.
+#' prevalence is still required.
 #' @references Austin, Peter C. "The iterative bisection procedure: a useful 
 #' tool for determining parameter values in data-generating processes in 
 #' Monte Carlo simulations." BMC Medical Research Methodology 23, 
@@ -1068,32 +1066,6 @@ logisticCoefs <- function(defCovar, coefs, popPrev, rr = NULL, rd = NULL,
   
   ####
   
-  .getBeta0 <- function(dd, popPrev, coefs, tolerance, sampleSize) {
-    
-    intLow <- -10
-    intHigh <- 10
-    
-    lvec <- as.matrix(dd[, -1]) %*% coefs
-    
-    while(abs(intHigh - intLow) > tolerance){
-      
-      B0 <- (intLow + intHigh)/2
-      PREV <- mean(stats::plogis(lvec + B0))
-      
-      if (PREV < popPrev) {
-        intLow <- B0
-      } else {
-        intHigh <- B0
-      }
-      
-    }
-    
-    return( (intLow + intHigh)/2 )
-  
-  }
-  
-  #####
-  
   if (num_notNull == 0) targetStat <- "prev"
   if (!is.null(rr)) targetStat <- "rr"
   if (!is.null(rd)) targetStat <- "rd"
@@ -1103,7 +1075,7 @@ logisticCoefs <- function(defCovar, coefs, popPrev, rr = NULL, rd = NULL,
   
   if (targetStat == "prev") {
     
-    B0 <- .getBeta0(dd, popPrev, coefs, tolerance, sampleSize)
+    B0 <- getBeta0(lvec = as.matrix(dd[, -1]) %*% coefs, popPrev, tolerance)
     B <- c(B0, coefs)
     names(B) <- c("B0", defCovar$varname)
     
@@ -1115,7 +1087,7 @@ logisticCoefs <- function(defCovar, coefs, popPrev, rr = NULL, rd = NULL,
       statValue <- rd
     }
     
-    B0 <- .getBeta0(dd, popPrev, coefs, tolerance, sampleSize)
+    B0 <- getBeta0(lvec = as.matrix(dd[, -1]) %*% coefs, popPrev, tolerance)
     
     lvec <- cbind(1, as.matrix(dd[, -1])) %*% c(B0, coefs)
     
@@ -1147,39 +1119,12 @@ logisticCoefs <- function(defCovar, coefs, popPrev, rr = NULL, rd = NULL,
     
   } else if (targetStat == "auc") {
     
-    form <- paste("y ~", paste(defCovar[, varname], collapse = " + "))
+    dmatrix <- as.matrix(dd[, -1])
+    results <- getBeta_auc(dmatrix, coefs, auc = auc, popPrev = popPrev, tolerance = tolerance)
     
-    dx <- data.table::copy(dd)
-    intLow <- 0
-    intHigh <- 20
-    
-    while(abs(intHigh - intLow) > tolerance){
-      
-      alpha <- (intLow + intHigh)/2
-      
-      B0 <- .getBeta0(dd, popPrev, alpha*coefs, tolerance, sampleSize)
-      lvec <- cbind(1, as.matrix(dd[, -1])) %*% c(B0, alpha*coefs)
-      
-      dx[, y := stats::rbinom(.N, 1, stats::plogis(lvec))]
-      fit <- stats::glm(stats::as.formula(form), data = dx)
-      dx[, py := stats::predict(fit)]
-      
-      Y1 <- dx[y == 1, sample(py, 1000000, replace = TRUE)]
-      Y0 <- dx[y == 0, sample(py, 1000000, replace = TRUE)]
-      aStat <-  mean(Y1 > Y0) 
-      
-      if (aStat < auc) {
-        intLow <- alpha
-      } else {
-        intHigh <- alpha
-      }
-      
-    }
-    
-    alpha <-  (intLow + intHigh)/2
-    
-    B <- c(B0, alpha*coefs)
+    B <- c(results[1], results[2]*coefs)
     names(B) <- c("B0", defCovar$varname)
+    
   }
   
   return(B)

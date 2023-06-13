@@ -97,6 +97,46 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// getBeta0
+double getBeta0(NumericVector lvec, double popPrev, double tolerance);
+RcppExport SEXP _simstudy_getBeta0(SEXP lvecSEXP, SEXP popPrevSEXP, SEXP toleranceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type lvec(lvecSEXP);
+    Rcpp::traits::input_parameter< double >::type popPrev(popPrevSEXP);
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    rcpp_result_gen = Rcpp::wrap(getBeta0(lvec, popPrev, tolerance));
+    return rcpp_result_gen;
+END_RCPP
+}
+// estAUC
+double estAUC(NumericMatrix dmatrix, NumericVector y);
+RcppExport SEXP _simstudy_estAUC(SEXP dmatrixSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type dmatrix(dmatrixSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(estAUC(dmatrix, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getBeta_auc
+NumericVector getBeta_auc(NumericMatrix covmat, NumericVector coefs, double auc, double popPrev, double tolerance);
+RcppExport SEXP _simstudy_getBeta_auc(SEXP covmatSEXP, SEXP coefsSEXP, SEXP aucSEXP, SEXP popPrevSEXP, SEXP toleranceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type covmat(covmatSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type coefs(coefsSEXP);
+    Rcpp::traits::input_parameter< double >::type auc(aucSEXP);
+    Rcpp::traits::input_parameter< double >::type popPrev(popPrevSEXP);
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    rcpp_result_gen = Rcpp::wrap(getBeta_auc(covmat, coefs, auc, popPrev, tolerance));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simstudy_matMultinom", (DL_FUNC) &_simstudy_matMultinom, 1},
@@ -106,6 +146,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simstudy_checkBoundsBin", (DL_FUNC) &_simstudy_checkBoundsBin, 3},
     {"_simstudy_findRhoBin", (DL_FUNC) &_simstudy_findRhoBin, 3},
     {"_simstudy_getRhoMat", (DL_FUNC) &_simstudy_getRhoMat, 3},
+    {"_simstudy_getBeta0", (DL_FUNC) &_simstudy_getBeta0, 3},
+    {"_simstudy_estAUC", (DL_FUNC) &_simstudy_estAUC, 2},
+    {"_simstudy_getBeta_auc", (DL_FUNC) &_simstudy_getBeta_auc, 5},
     {NULL, NULL, 0}
 };
 

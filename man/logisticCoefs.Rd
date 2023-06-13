@@ -61,11 +61,10 @@ data with these desire characteristics.
 If no specific target statistic is specified, then only the intercept
 is returned along with the original coefficients. Only one target statistic (risk ratio, risk
 difference or AUC) can be specified with a single function call; in all three cases, a target
-prevalence is still required. The algorithm for the target AUC is considerably
-slower than the others, because the intercept needs to be re-determined at
-each iteration as the covariate coefficients are changing at each iteration.
+prevalence is still required.
 }
 \examples{
+\dontrun{
 d1 <- defData(varname = "x1", formula = 0, variance = 1)
 d1 <- defData(d1, varname = "b1", formula = 0.5, dist = "binary")
 
@@ -75,6 +74,7 @@ logisticCoefs(d1, coefs, popPrev = 0.20)
 logisticCoefs(d1, coefs, popPrev = 0.20, rr = 1.50, trtName = "rx") 
 logisticCoefs(d1, coefs, popPrev = 0.20, rd = 0.30, trtName = "rx")
 logisticCoefs(d1, coefs, popPrev = 0.20, auc = 0.80)
+}
 }
 \references{
 Austin, Peter C. "The iterative bisection procedure: a useful 

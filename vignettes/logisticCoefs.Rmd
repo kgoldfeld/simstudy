@@ -200,7 +200,7 @@ dd[rx==1, mean(y)] - dd[rx==0, mean(y)]
 
 ### AUC
 
-The AUC is another commonly used statistic to evaulate a logistic model. We can use `logisticCoefs` to find the parameters that will allow us to generate data from a model with a specific AUC. To get the coefficients related to a population prevalence of 0.40 and an AUC of 0.85, we use the *auc* argument (the *auc* must be between 0.5 and 1:
+The AUC is another commonly used statistic to evaulate a logistic model. We can use `logisticCoefs` to find the parameters that will allow us to generate data from a model with a specific AUC. To get the coefficients related to a population prevalence of 0.40 and an AUC of 0.85, we use the *auc* argument (the *auc* must be between 0.5 and 1):
 
 ```{r}
 C1 <- logisticCoefs(d1, coefs1, popPrev = 0.40, auc = 0.85)

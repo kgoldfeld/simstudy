@@ -62,7 +62,8 @@ Suggests:
     rms
 LinkingTo: 
     Rcpp, 
-    pbv (>= 0.4-22)
+    pbv (>= 0.4-22),
+    fastglm
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
