@@ -3,7 +3,6 @@
 #include<string.h>
 
 // [[Rcpp::depends(pbv)]]
-// [[Rcpp::depends(fastglm)]]
 
 using namespace std;
 using namespace Rcpp;
@@ -220,7 +219,6 @@ double getBeta0(NumericVector lvec, double popPrev, double tolerance) {
   while(abs(intHigh - intLow) > tolerance){
     
     B0 = (intLow + intHigh)/2;
-    /* Rcout << "hello" << B0 << "\n"; */
     for (int i = 0; i < lvec.length(); i++) {
       nvec(i) = lvec(i) + B0;
     }
@@ -258,8 +256,12 @@ double estAUC(NumericMatrix dmatrix, NumericVector y) {
   Environment pkg = Environment::namespace_env("fastglm");
   Function f = pkg["fastglm"];
   Function p = pkg["predict.fastglm"];
+
+  // model should be include "Named("family", "binomial")", but occasionally 
+  // throws off warning. Using Gaussian works very slightly less well, but
+  // there are no warnings
   
-  List fit = f(Named("x", dmatrix), Named("y", y));
+  List fit = f(Named("x", dmatrix), Named("y", y)); 
   NumericVector pred = p(Named("object", fit), Named("newdata", dmatrix));
   
   int i1 = 0;
@@ -285,8 +287,6 @@ double estAUC(NumericMatrix dmatrix, NumericVector y) {
   }
   
   double AUC = n_greater/aucN;
-  
-  // Rcout << n_greater << " " << aucN << " " << AUC << "\n";
   
   return(AUC);
   
