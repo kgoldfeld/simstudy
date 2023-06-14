@@ -537,6 +537,17 @@ references:
     given-names: Alexander
   year: '2023'
   version: '>= 0.4-22'
+- type: software
+  title: fastglm
+  abstract: 'fastglm: Fast and Stable Fitting of Generalized Linear Models using ''RcppEigen'''
+  notes: LinkingTo
+  url: https://github.com/jaredhuling/fastglm
+  repository: https://CRAN.R-project.org/package=fastglm
+  authors:
+  - family-names: Huling
+    given-names: Jared
+    email: jaredhuling@gmail.com
+  year: '2023'
 identifiers:
 - type: url
   value: https://kgoldfeld.github.io/simstudy/dev/
