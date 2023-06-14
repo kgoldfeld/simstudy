@@ -176,6 +176,17 @@ references:
     email: jaredhuling@gmail.com
   year: '2023'
 - type: software
+  title: stats
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2023'
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
   title: covr
   abstract: 'covr: Test Coverage for Packages'
   notes: Suggests
