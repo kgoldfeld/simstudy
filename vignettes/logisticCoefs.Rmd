@@ -1,5 +1,5 @@
 ---
-title: "Simulating data from logistic model with specified characterstics"
+title: "Targeted logistic model coefficients"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Logistic Model Simulation}
@@ -20,7 +20,7 @@ options(digits = 2)
 
 In `simstudy`, there are at least two ways to define a binary data generating process. The first is to operate on the scale of the proportion or probability using the *identity* link. This allows users to characterize a data generating process that reflects assumptions about risk ratios and risk differences when comparing two groups defined by an exposure or treatment. However, this process can become challenging when introducing other covariates, because it can be difficult to constrain the probabilities so that they fall between 0 and 1. 
 
-Alternatively, the second approach works on the log-odds scale and uses the *logit* link, and is much more amenable to accomodating covariates. Unfortunately, this comes at the price of being able to easily generate specific risk ratios and risk differences, because all parameters are log-odds ratios. If we are interested in the controlling overall probability in a population with a set of covariates that each have a certain distribution and particular association with an outcome, the overall (marginal) proportion will vary across different distributions and associations.
+Alternatively, the second approach works on the log-odds scale and uses the *logit* link, and is much more amenable to accommodating covariates. Unfortunately, this comes at the price of being able to easily generate specific risk ratios and risk differences, because all parameters are log-odds ratios. If we are interested in the controlling overall probability in a population with a set of covariates that each have a certain distribution and particular association with an outcome, the overall (marginal) proportion will vary across different distributions and associations.
 
 Here we start with the simplest case where we have a target marginal proportion or prevalence, and illustrate data generation with three other target statistics: **risk ratios**, **risk differences**, and **AUCs**.
 
@@ -115,7 +115,7 @@ logisticCoefs(defCovar = d2, coefs = coefs2, popPrev = 0.40)
 
 ### Risk ratios
 
-Just as the prevalance depends on the distribution of covariates and their association with the outcome, risk ratios comparing the outcome probabilities for two groups also depend on the additional covariates. The risk ratio comparing treatment ($A =1$ to control ($A=0$) is
+Just as the prevalence depends on the distribution of covariates and their association with the outcome, risk ratios comparing the outcome probabilities for two groups also depend on the additional covariates. The risk ratio comparing treatment ($A =1$ to control ($A=0$) is
 
 $$RR = \frac{P(y=1 | A = 1)}{P(y=1 | A = 0)}$$
 In the data generation process we use a log-odds ratio of -0.40 (odds ratio of approximately 0.67) in both cases, but we get different risk ratios (0.82 vs. 0.90).
@@ -200,7 +200,7 @@ dd[rx==1, mean(y)] - dd[rx==0, mean(y)]
 
 ### AUC
 
-The AUC is another commonly used statistic to evaulate a logistic model. We can use `logisticCoefs` to find the parameters that will allow us to generate data from a model with a specific AUC. To get the coefficients related to a population prevalence of 0.40 and an AUC of 0.85, we use the *auc* argument (the *auc* must be between 0.5 and 1):
+The AUC is another commonly used statistic to evaluate a logistic model. We can use `logisticCoefs` to find the parameters that will allow us to generate data from a model with a specific AUC. To get the coefficients related to a population prevalence of 0.40 and an AUC of 0.85, we use the *auc* argument (the *auc* must be between 0.5 and 1):
 
 ```{r}
 C1 <- logisticCoefs(d1, coefs1, popPrev = 0.40, auc = 0.85)
