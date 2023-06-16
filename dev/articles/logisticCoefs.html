@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulating data from logistic model with specified characterstics • simstudy</title>
+<title>Targeted logistic model coefficients • simstudy</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Simulating data from logistic model with specified characterstics">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Targeted logistic model coefficients">
 <meta property="og:description" content="simstudy">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -66,7 +66,7 @@
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
-      <a href="../articles/logisticCoefs.html">Simulating data from logistic model with specified characterstics</a>
+      <a href="../articles/logisticCoefs.html">Targeted logistic model coefficients</a>
     </li>
     <li>
       <a href="../articles/longitudinal.html">Longitudinal Data</a>
@@ -112,8 +112,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Simulating data from logistic model with
-specified characterstics</h1>
+      <h1 data-toc-skip>Targeted logistic model coefficients</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/HEAD/vignettes/logisticCoefs.Rmd" class="external-link"><code>vignettes/logisticCoefs.Rmd</code></a></small>
@@ -133,7 +132,7 @@ become challenging when introducing other covariates, because it can be
 difficult to constrain the probabilities so that they fall between 0 and
 1.</p>
 <p>Alternatively, the second approach works on the log-odds scale and
-uses the <em>logit</em> link, and is much more amenable to accomodating
+uses the <em>logit</em> link, and is much more amenable to accommodating
 covariates. Unfortunately, this comes at the price of being able to
 easily generate specific risk ratios and risk differences, because all
 parameters are log-odds ratios. If we are interested in the controlling
@@ -255,7 +254,7 @@ definitions in definition tables <em>d1</em> and <em>d2</em>.</p>
 <div class="section level3">
 <h3 id="risk-ratios">Risk ratios<a class="anchor" aria-label="anchor" href="#risk-ratios"></a>
 </h3>
-<p>Just as the prevalance depends on the distribution of covariates and
+<p>Just as the prevalence depends on the distribution of covariates and
 their association with the outcome, risk ratios comparing the outcome
 probabilities for two groups also depend on the additional covariates.
 The risk ratio comparing treatment (<span class="math inline">\(A
@@ -351,7 +350,7 @@ prevalence and risk difference:</p>
 <div class="section level3">
 <h3 id="auc">AUC<a class="anchor" aria-label="anchor" href="#auc"></a>
 </h3>
-<p>The AUC is another commonly used statistic to evaulate a logistic
+<p>The AUC is another commonly used statistic to evaluate a logistic
 model. We can use <code>logisticCoefs</code> to find the parameters that
 will allow us to generate data from a model with a specific AUC. To get
 the coefficients related to a population prevalence of 0.40 and an AUC
