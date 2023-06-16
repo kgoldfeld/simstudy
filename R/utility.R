@@ -884,7 +884,7 @@ survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1,
   
 }
 
-#' Generating single competing risk survival varible
+#' Generating single competing risk survival variable
 #' 
 #' @param dtName Name of complete data set to be updated
 #' @param events Vector of column names that include
@@ -971,5 +971,163 @@ addCompRisk <- function(dtName, events, timeName,
   setnames(dtSurv, "id", idName)
   dtSurv[]
 }
+
+#' Determine intercept, treatment/exposure and covariate coefficients that can 
+#' be used for binary data generation with a logit link and a set of covariates
+#' @description  This is an implementation of an iterative bisection procedure 
+#' that can be used to determine coefficient values for a target population 
+#' prevalence as well as a target risk ratio, risk difference, or AUC. These 
+#' coefficients can be used in a subsequent data generation process to simulate
+#' data with these desire characteristics.
+#' @param defCovar A definition table for the covariates in the underlying
+#' population. This tables specifies the distribution of the covariates.
+#' @param coefs A vector of coefficients that reflect the relationship between 
+#' each of the covariates and the log-odds of the outcome.
+#' @param popPrev The target population prevalence of the outcome. 
+#' A value between 0 and 1.
+#' @param rr The target risk ratio, which must be a value between 0 and
+#' 1/popPrev. Defaults to NULL.
+#' @param rd The target risk difference, which must be between
+#' -(popPrev) and (1 - popPrev). Defaults to NULL
+#' @param auc The target AUC, which must be a value between 0.5 and 1.0 . 
+#' Defaults to NULL.
+#' @param tolerance The minimum stopping distance between the adjusted low and high
+#' endpoints. Defaults to 0.001.
+#' @param sampleSize The number of units to generate for the bisection algorithm. 
+#' The default is 5e+05. To get a reliable estimate, the value 
+#' should be no smaller than 1e+05.
+#' @param trtName If either a risk ratio or risk difference is the target statistic,
+#' a treatment/exposure variable name can be provided. Defaults to "A".
+#' @details If no specific target statistic is specified, then only the intercept
+#' is returned along with the original coefficients. Only one target statistic (risk ratio, risk
+#' difference or AUC) can be specified with a single function call; in all three cases, a target
+#' prevalence is still required.
+#' @references Austin, Peter C. "The iterative bisection procedure: a useful 
+#' tool for determining parameter values in data-generating processes in 
+#' Monte Carlo simulations." BMC Medical Research Methodology 23, 
+#' no. 1 (2023): 1-10.
+#' @return A vector of parameters including the intercept and covariate 
+#' coefficients for the logistic model data generating process.
+#' @examples
+#' \dontrun{
+#' d1 <- defData(varname = "x1", formula = 0, variance = 1)
+#' d1 <- defData(d1, varname = "b1", formula = 0.5, dist = "binary")
+#' 
+#' coefs <- log(c(1.2, 0.8))
+#'
+#' logisticCoefs(d1, coefs, popPrev = 0.20) 
+#' logisticCoefs(d1, coefs, popPrev = 0.20, rr = 1.50, trtName = "rx") 
+#' logisticCoefs(d1, coefs, popPrev = 0.20, rd = 0.30, trtName = "rx")
+#' logisticCoefs(d1, coefs, popPrev = 0.20, auc = 0.80)
+#' }
+#' @export
+#' @concept utility
+#' 
+logisticCoefs <- function(defCovar, coefs, popPrev, rr = NULL, rd = NULL, 
+  auc = NULL, tolerance = 0.001, sampleSize = 5e+05, trtName = "A") {
   
+  ### "initialize" variables 
   
+  varname <- NULL
+  y <- NULL
+  py <- NULL
+  
+  ###
+  
+  num_notNull <- sum(sapply(list(rr, rd, auc), function(x) !is.null(x)))
+  
+  if ( num_notNull > 1) {
+    stop("Specify only one target statistic")
+  }
+  
+  assertNotMissing(popPrev = missing(popPrev), 
+                   defCovar = missing(defCovar), 
+                   coefs = missing(coefs))
+  
+  assertLength(coefs = coefs, length = nrow(defCovar))
+
+  if (!is.null(rr)) {
+    assertAtLeast(rr = rr, minVal = 0)
+    if (rr > 1/popPrev) {
+      stop(paste("rr is", rr, "but must be at most", formatC(1/popPrev, digits = 3), "(1/popPrev)"))
+    }
+  } 
+  
+  if (!is.null(rd)) { 
+    assertInRange(rd = rd, range = c(-popPrev, 1-popPrev))
+  }
+  
+  if (!is.null(auc)) {
+    assertInRange(auc = auc, range = c(0.5, 1))
+  } 
+    
+  assertInRange(popPrev = popPrev, range = c(0, 1))
+  assertNumeric(coefs = coefs)
+  
+  ####
+  
+  if (num_notNull == 0) targetStat <- "prev"
+  if (!is.null(rr)) targetStat <- "rr"
+  if (!is.null(rd)) targetStat <- "rd"
+  if (!is.null(auc)) targetStat <- "auc"
+  
+  dd <- genData(sampleSize, defCovar)
+  
+  if (targetStat == "prev") {
+    
+    B0 <- getBeta0(lvec = as.matrix(dd[, -1]) %*% coefs, popPrev, tolerance)
+    B <- c(B0, coefs)
+    names(B) <- c("B0", defCovar$varname)
+    
+  } else if (targetStat %in% c("rr", "rd")) {
+    
+    if (targetStat == "rr") {
+      statValue <- rr
+    } else {
+      statValue <- rd
+    }
+    
+    B0 <- getBeta0(lvec = as.matrix(dd[, -1]) %*% coefs, popPrev, tolerance)
+    
+    lvec <- cbind(1, as.matrix(dd[, -1])) %*% c(B0, coefs)
+    
+    intLow <- -10
+    intHigh <- 10
+    
+    while(abs(intHigh - intLow) > tolerance){
+      
+      Delta <- (intLow + intHigh)/2
+      
+      if (targetStat == "rr") {
+        rStat <- mean(stats::plogis(lvec + Delta)) / mean(stats::plogis(lvec))
+      } else {
+        rStat <- mean(stats::plogis(lvec + Delta)) - mean(stats::plogis(lvec))
+      }
+      
+      if (rStat < statValue) {
+        intLow <- Delta
+      } else {
+        intHigh <- Delta
+      }
+      
+    }
+    
+    Delta <-  (intLow + intHigh)/2
+    
+    B <- c(B0, Delta, coefs)
+    names(B) <- c("B0", trtName, defCovar$varname)
+    
+  } else if (targetStat == "auc") {
+    
+    dmatrix <- as.matrix(dd[, -1])
+    results <- getBeta_auc(dmatrix, coefs, auc = auc, popPrev = popPrev, tolerance = tolerance)
+    
+    B <- c(results[1], results[2]*coefs)
+    names(B) <- c("B0", defCovar$varname)
+    
+  }
+  
+  return(B)
+  
+}
+

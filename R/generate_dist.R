@@ -2,6 +2,7 @@
 #'
 #' @useDynLib simstudy
 #' @importFrom Rcpp sourceCpp
+#' @importFrom fastglm fastglm
 #'
 #' @param args One row from data definitions data.table
 #' @param n The number of observations required in the data set

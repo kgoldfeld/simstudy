@@ -2,7 +2,7 @@
 % Please edit documentation in R/utility.R
 \name{addCompRisk}
 \alias{addCompRisk}
-\title{Generating single competing risk survival varible}
+\title{Generating single competing risk survival variable}
 \usage{
 addCompRisk(
   dtName,
@@ -46,7 +46,7 @@ to FALSE.}
 An updated data table
 }
 \description{
-Generating single competing risk survival varible
+Generating single competing risk survival variable
 }
 \examples{
 d1 <- defData(varname = "x1", formula = .5, dist = "binary")

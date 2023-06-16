@@ -196,7 +196,7 @@ d1 <- defData(d1, varname = "outcome", formula = "..effect[a, b]", dist="nonrand
 ```
 
 ```{r}
-dx <- genData(8, d1)
+dx <- genData(1000, d1)
 dx
 ```
 
@@ -215,7 +215,7 @@ dsum <- dx[, .(outcome=mean(outcome)), keyby = .(a, b)]
 ggplot(data = dx, aes(x = factor(a), y = outcome)) +
   geom_jitter(aes(color = factor(b)), width = .2, alpha = .4, size = .2) +
   geom_point(data = dsum, size = 2, aes(color = factor(b))) + 
-  geom_line(data = dsum, size = 1, aes(color = factor(b), group = factor(b))) +
+  geom_line(data = dsum, linewidth = 1, aes(color = factor(b), group = factor(b))) +
   scale_color_manual(values = cbbPalette, name = "  b") +
   theme(panel.grid = element_blank()) +
   xlab ("a")

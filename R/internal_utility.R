@@ -81,22 +81,28 @@
 
   evalFormula <- function(formula) {
     e$formula2parse <- formula
-
-    res <- with(e, {
-      expr <- parse(text = as.character(formula2parse))
-      tryCatch(
-        expr = dtSim[, newVar := eval(expr), keyby = def_id],
-        error = function(err) {
-          if (grepl("RHS length must either be 1", gettext(err), fixed = T)) {
-            dtSim[, newVar := eval(expr)]
-          } else {
-            stop(gettext(err))
-          }
-        }
-      )
-      copy(dtSim$newVar)
-    })
-
+    
+    if ( grepl("%.*%", formula) || grepl("\\[.*,.*\\]", formula) ) {
+      res <- with(e, {
+        expr <- parse(text = as.character(formula2parse))
+        tryCatch(
+          expr = dtSim[, newVar := eval(expr), keyby = def_id],
+          error = function(err) stop(gettext(err))
+        )
+        copy(dtSim$newVar)
+        
+      })
+    } else {
+      res <- with(e, {
+        expr <- parse(text = as.character(formula2parse))
+        tryCatch(
+          expr = dtSim[, newVar := eval(expr)],
+          error = function(err) stop(gettext(err))
+        )
+        copy(dtSim$newVar)
+      })
+    } 
+    
     if (length(res) == 1) {
       rep(res, n)
     } else {

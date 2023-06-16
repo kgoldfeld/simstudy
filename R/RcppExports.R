@@ -29,3 +29,15 @@ getRhoMat <- function(N, P, TCORR) {
     .Call(`_simstudy_getRhoMat`, N, P, TCORR)
 }
 
+getBeta0 <- function(lvec, popPrev, tolerance) {
+    .Call(`_simstudy_getBeta0`, lvec, popPrev, tolerance)
+}
+
+estAUC <- function(dmatrix, y) {
+    .Call(`_simstudy_estAUC`, dmatrix, y)
+}
+
+getBeta_auc <- function(covmat, coefs, auc, popPrev, tolerance) {
+    .Call(`_simstudy_getBeta_auc`, covmat, coefs, auc, popPrev, tolerance)
+}
+
