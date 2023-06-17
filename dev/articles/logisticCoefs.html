@@ -248,7 +248,7 @@ definitions in definition tables <em>d1</em> and <em>d2</em>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/logisticCoefs.html">logisticCoefs</a></span><span class="op">(</span>defCovar <span class="op">=</span> <span class="va">d2</span>, coefs <span class="op">=</span> <span class="va">coefs2</span>, popPrev <span class="op">=</span> <span class="fl">0.40</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    B0    x1    x2    b1    b2 </span></span>
-<span><span class="co">## -2.14  0.20  0.35  0.20  0.45</span></span></code></pre>
+<span><span class="co">## -2.13  0.20  0.35  0.20  0.45</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -272,7 +272,7 @@ different risk ratios (0.82 vs. 0.90).</p>
 <span></span>
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500000</span>, <span class="va">d1a</span><span class="op">)</span></span>
 <span><span class="va">dd</span><span class="op">[</span><span class="va">rx</span><span class="op">==</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span><span class="op">/</span><span class="va">dd</span><span class="op">[</span><span class="va">rx</span><span class="op">==</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.83</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.82</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d2a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d2</span>, varname <span class="op">=</span> <span class="st">"rx"</span>, formula <span class="op">=</span> <span class="st">"1;1"</span>, dist <span class="op">=</span> <span class="st">"trtAssign"</span><span class="op">)</span></span>
 <span><span class="va">d2a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d2a</span>, varname <span class="op">=</span> <span class="st">"y"</span>,</span>
@@ -311,7 +311,7 @@ prevalence and risk ratio:</p>
 <pre><code><span><span class="co">## [1] 0.4</span></span></code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dd</span><span class="op">[</span><span class="va">rx</span><span class="op">==</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span><span class="op">/</span><span class="va">dd</span><span class="op">[</span><span class="va">rx</span><span class="op">==</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.85</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.86</span></span></code></pre>
 <p>You can do the same for the second set of assumptions.</p>
 </div>
 <div class="section level3">
@@ -360,7 +360,7 @@ between 0.5 and 1):</p>
 <code class="sourceCode R"><span><span class="va">C1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/logisticCoefs.html">logisticCoefs</a></span><span class="op">(</span><span class="va">d1</span>, <span class="va">coefs1</span>, popPrev <span class="op">=</span> <span class="fl">0.40</span>, auc <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span></span>
 <span><span class="va">C1</span></span></code></pre></div>
 <pre><code><span><span class="co">##    B0    x1    x2    b1    b2 </span></span>
-<span><span class="co">## -2.09  0.89  1.48  0.59  1.78</span></span></code></pre>
+<span><span class="co">## -1.99  0.85  1.41  0.56  1.69</span></span></code></pre>
 <p>Again, using <span class="math inline">\(C_1\)</span> in the data
 generation process, we will get a data set with the desired target
 prevalence and the AUC (calculated here using the <code>lrm</code>
@@ -379,7 +379,7 @@ function in the <code>rms</code> package:</p>
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">+</span> <span class="va">b2</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span>
 <span><span class="va">fit</span><span class="op">$</span><span class="va">stats</span><span class="op">[</span><span class="st">"C"</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##    C </span></span>
-<span><span class="co">## 0.86</span></span></code></pre>
+<span><span class="co">## 0.85</span></span></code></pre>
 <p>
 </p>
 <p><small><font color="darkkhaki"> References:</font></small></p>

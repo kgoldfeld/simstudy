@@ -112,7 +112,7 @@ data with these desire characteristics.</p>
 <span>  rd <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  auc <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tolerance <span class="op">=</span> <span class="fl">0.001</span>,</span>
-<span>  sampleSize <span class="op">=</span> <span class="fl">5e+05</span>,</span>
+<span>  sampleSize <span class="op">=</span> <span class="fl">1e+05</span>,</span>
 <span>  trtName <span class="op">=</span> <span class="st">"A"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -156,8 +156,9 @@ endpoints. Defaults to 0.001.</p></dd>
 
 <dt>sampleSize</dt>
 <dd><p>The number of units to generate for the bisection algorithm. 
-The default is 5e+05. To get a reliable estimate, the value 
-should be no smaller than 1e+05.</p></dd>
+The default is 1e+05. To get a reliable estimate, the value 
+should be no smaller than the default, though larger values can be used, though
+computing time will increase.</p></dd>
 
 
 <dt>trtName</dt>
