@@ -994,8 +994,9 @@ addCompRisk <- function(dtName, events, timeName,
 #' @param tolerance The minimum stopping distance between the adjusted low and high
 #' endpoints. Defaults to 0.001.
 #' @param sampleSize The number of units to generate for the bisection algorithm. 
-#' The default is 5e+05. To get a reliable estimate, the value 
-#' should be no smaller than 1e+05.
+#' The default is 1e+05. To get a reliable estimate, the value 
+#' should be no smaller than the default, though larger values can be used, though
+#' computing time will increase.
 #' @param trtName If either a risk ratio or risk difference is the target statistic,
 #' a treatment/exposure variable name can be provided. Defaults to "A".
 #' @details If no specific target statistic is specified, then only the intercept
@@ -1024,7 +1025,7 @@ addCompRisk <- function(dtName, events, timeName,
 #' @concept utility
 #' 
 logisticCoefs <- function(defCovar, coefs, popPrev, rr = NULL, rd = NULL, 
-  auc = NULL, tolerance = 0.001, sampleSize = 5e+05, trtName = "A") {
+  auc = NULL, tolerance = 0.001, sampleSize = 1e+05, trtName = "A") {
   
   ### "initialize" variables 
   

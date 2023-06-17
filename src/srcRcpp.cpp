@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include <pbv.h>
-#include<string.h>
+#include <string.h>
 
 // [[Rcpp::depends(pbv)]]
 

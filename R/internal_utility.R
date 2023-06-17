@@ -82,7 +82,7 @@
   evalFormula <- function(formula) {
     e$formula2parse <- formula
     
-    if ( grepl("%.*%", formula) || grepl("\\[.*,.*\\]", formula) ) {
+    if ( grepl("%.*%|\\[.*,.*\\]", formula) )  {
       res <- with(e, {
         expr <- parse(text = as.character(formula2parse))
         tryCatch(
