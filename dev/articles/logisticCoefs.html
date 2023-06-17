@@ -125,35 +125,43 @@
 <p>In <code>simstudy</code>, there are at least two ways to define a
 binary data generating process. The first is to operate on the scale of
 the proportion or probability using the <em>identity</em> link. This
-allows users to characterize a data generating process that reflects
+allows users to define a data generating process that reflects
 assumptions about risk ratios and risk differences when comparing two
 groups defined by an exposure or treatment. However, this process can
 become challenging when introducing other covariates, because it can be
 difficult to constrain the probabilities so that they fall between 0 and
 1.</p>
-<p>Alternatively, the second approach works on the log-odds scale and
-uses the <em>logit</em> link, and is much more amenable to accommodating
+<p>The second approach works on the log-odds scale using a
+<em>logit</em> link, and is much more amenable to accommodating
 covariates. Unfortunately, this comes at the price of being able to
 easily generate specific risk ratios and risk differences, because all
-parameters are log-odds ratios. If we are interested in the controlling
-overall probability in a population with a set of covariates that each
-have a certain distribution and particular association with an outcome,
-the overall (marginal) proportion will vary across different
-distributions and associations.</p>
+parameters are log-odds ratios. The overall (marginal) prevalence of an
+outcome in a population will vary depending on the distribution of
+covariates in that population, and the strengths (both absolute and
+relative) of the association of those covariates with the outcome. That
+is, the coefficients of a logistic model (including the intercept)
+determine the prevalence. The same is true regarding the risk ratio and
+risk difference (if there is one particular exposure or treatment of
+interest) and the AUC.</p>
 <p>Here we start with the simplest case where we have a target marginal
-proportion or prevalence, and illustrate data generation with three
+proportion or prevalence, and then illustrate data generation with three
 other target statistics: <strong>risk ratios</strong>, <strong>risk
 differences</strong>, and <strong>AUCs</strong>.</p>
 <div class="section level3">
 <h3 id="prevalence">Prevalence<a class="anchor" aria-label="anchor" href="#prevalence"></a>
 </h3>
 <p>In this first example, we start with one set of assumptions for four
-covariates <span class="math inline">\(x_1 \sim N(0, 1)\)</span>, <span class="math inline">\(x_2 \sim N(0, 1)\)</span>, <span class="math inline">\(b_1 \sim Bin(0.3)\)</span>, and <span class="math inline">\(b_2 \sim Bin(0.7)\)</span>, and generate the
+covariates <span class="math inline">\(x_1, x2 \sim N(0, 1)\)</span>,
+<span class="math inline">\(b_1 \sim Bin(0.3)\)</span>, and <span class="math inline">\(b_2 \sim Bin(0.7)\)</span>, and generate the
 outcome <em>y</em> with the following data generating process:</p>
-<p><span class="math display">\[ \text{logit}(y) = 0.15*x1 + 0.25*x2 +
-0.10*b1 + 0.30*b2\]</span></p>
+<p><span class="math display">\[ \text{logit}(y) = 0.15x_1 + 0.25x_2 +
+0.10b_1 + 0.30b_2\]</span> <br></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">coefs1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.10</span>, <span class="fl">0.30</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kgoldfeld/simstudy" class="external-link">simstudy</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">coefs1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.10</span>, <span class="fl">0.30</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"x2"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -187,20 +195,20 @@ this case is</p>
 <pre><code><span><span class="co">## [1] 0.56</span></span></code></pre>
 <p>If we have a desired marginal proportion of 0.40, then we can add an
 intercept of -0.66 to the data generating process:</p>
-<p><span class="math display">\[ \text{logit}(y) = -0.66 + 0.15*x1 +
-0.25 *x2 + 0.10*b1 + 0.30*b2\]</span></p>
+<p><span class="math display">\[ \text{logit}(y) = -0.66 + 0.15x_1 +
+0.25x_2 + 0.10b_1 + 0.30b_2\]</span></p>
 <p>The simulation now gives us the desired target:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"y"</span>, </span>
-<span>  formula <span class="op">=</span> <span class="st">"t(c(-0.66,..coefs1)) %*% c(1, x1, x2, b1, b2)"</span>,</span>
+<span>  formula <span class="op">=</span> <span class="st">"t(c(-0.66, ..coefs1)) %*% c(1, x1, x2, b1, b2)"</span>,</span>
 <span>  dist <span class="op">=</span> <span class="st">"binary"</span>, link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500000</span>, <span class="va">d1a</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.4</span></span></code></pre>
 <p>If we change the distribution of the covariates, so that <span class="math inline">\(x_1 \sim N(1, 1)\)</span>, <span class="math inline">\(x_2 \sim N(2, 1)\)</span>, <span class="math inline">\(b_1 \sim Bin(0.5)\)</span>, and <span class="math inline">\(b_2 \sim Bin(0.8)\)</span>, and the strength of
 the association of these covariates with the outcome so that</p>
-<p><span class="math display">\[ \text{logit}(y) = 0.20*x1 + 0.35 *x2 +
-0.20*b1 + 0.45*b2,\]</span></p>
+<p><span class="math display">\[ \text{logit}(y) = 0.20x_1 + 0.35x_2 +
+0.20b_1 + 0.45b_2,\]</span></p>
 <p>the marginal proportion/prevalence (assuming no intercept term) also
 changes, going from 0.56 to 0.84:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -217,13 +225,14 @@ changes, going from 0.56 to 0.84:</p>
 <span></span>
 <span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500000</span>, <span class="va">d2a</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.84</span></span></code></pre>
-<p>But under this new distribution, adding an intercept of -2.14 yields
+<p>But under this new distribution, adding an intercept of -2.13 yields
 the desired target.</p>
-<p><span class="math display">\[ \text{logit}(y) = -2.14 + 0.20*x1 +
-0.35 *x2 + 0.20*b1 + 0.45*b2 \]</span></p>
+<p><span class="math display">\[ \text{logit}(y) = -2.13 + 0.20x_1 +
+0.35x_2 + 0.20b_1 + 0.45b_2 \]</span></p>
+<p><br></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d2a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d2</span>, varname <span class="op">=</span> <span class="st">"y"</span>, </span>
-<span>  formula <span class="op">=</span> <span class="st">"t(c(-2.14,..coefs2)) %*% c(1, x1, x2, b1, b2)"</span>,</span>
+<span>  formula <span class="op">=</span> <span class="st">"t(c(-2.13, ..coefs2)) %*% c(1, x1, x2, b1, b2)"</span>,</span>
 <span>  dist <span class="op">=</span> <span class="st">"binary"</span>, link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500000</span>, <span class="va">d1a</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
@@ -231,16 +240,28 @@ the desired target.</p>
 <div class="section level4">
 <h4 id="finding-the-intercept">Finding the intercept<a class="anchor" aria-label="anchor" href="#finding-the-intercept"></a>
 </h4>
-<p>Where did those two intercepts come from? A <a href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5" target="_blank" class="external-link">paper</a> by Peter Austin describes an iterative
+<p>Where did those two intercepts come from? The <a href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5" target="_blank" class="external-link">paper</a> by Peter Austin describes an iterative
 bisection procedure that takes a distribution of covariates and a set of
 coefficients to identify the intercept coefficient that yields the
-target marginal proportion or prevalence. This algorithm has been
-implemented in <code>simstudy</code> through the function
-<code>logisticCoefs</code>. (If you want the details for the algorithm,
-take a look at the paper. Here, I will demonstrate the application.)</p>
-<p>The intercept is provided by a simple call to
-<code>logisticCoefs</code>. Here are the calls for the two sets of
-definitions in definition tables <em>d1</em> and <em>d2</em>.</p>
+target marginal proportion or prevalence.</p>
+<p>The general idea of the algorithm is to try out series of different
+intercepts in an intelligent way that ends up at the right spot. (If you
+want the details for the algorithm, take a look at the <a href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5" target="_blank" class="external-link">paper</a>.) The starting search range is pre-defined
+(we’ve used -10 to 10 for the intercept), and we start with an value of
+0 for the initial intercept and simulate a large data set (the paper
+uses 1 million observations, but 100,000 seems to work just fine) and
+record the population prevalence. If we’ve overshot the target
+prevalence, we turn our attention to the range between -10 and 0, taking
+the average, which is -5. Otherwise, we focus on the range between 0 and
+10. We iterate this way, choosing the range we need to focus on and
+setting the intercept at the mid-point (hence the name
+<em>bisection</em>). The algorithm will converge pretty quickly on the
+value of the intercept that gives the target population prevalence for
+the underlying covariate distribution and coefficient assumptions.</p>
+<p>In the current implementation in <code>simstudy</code>, the intercept
+is provided by a simple call to <code>logisticCoefs</code>. Here are the
+calls for the two sets of definitions in definition tables <em>d1</em>
+and <em>d2</em>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/logisticCoefs.html">logisticCoefs</a></span><span class="op">(</span>defCovar <span class="op">=</span> <span class="va">d1</span>, coefs <span class="op">=</span> <span class="va">coefs1</span>, popPrev <span class="op">=</span> <span class="fl">0.40</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    B0    x1    x2    b1    b2 </span></span>
@@ -257,12 +278,13 @@ definitions in definition tables <em>d1</em> and <em>d2</em>.</p>
 <p>Just as the prevalence depends on the distribution of covariates and
 their association with the outcome, risk ratios comparing the outcome
 probabilities for two groups also depend on the additional covariates.
-The risk ratio comparing treatment (<span class="math inline">\(A
-=1\)</span> to control (<span class="math inline">\(A=0\)</span>) is</p>
+The marginal risk ratio comparing treatment (<span class="math inline">\(A =1\)</span> to control (<span class="math inline">\(A=0\)</span>) (given the distribution of
+covariates) is</p>
 <p><span class="math display">\[RR = \frac{P(y=1 | A = 1)}{P(y=1 | A =
 0)}\]</span> In the data generation process we use a log-odds ratio of
 -0.40 (odds ratio of approximately 0.67) in both cases, but we get
-different risk ratios (0.82 vs. 0.90).</p>
+different risk ratios (0.82 vs. 0.93), depending on the covariates
+(defined in <em>d1</em> and <em>d2</em>).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"rx"</span>, formula <span class="op">=</span> <span class="st">"1;1"</span>, dist <span class="op">=</span> <span class="st">"trtAssign"</span><span class="op">)</span></span>
 <span><span class="va">d1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1a</span>, varname <span class="op">=</span> <span class="st">"y"</span>,</span>
@@ -354,8 +376,8 @@ prevalence and risk difference:</p>
 model. We can use <code>logisticCoefs</code> to find the parameters that
 will allow us to generate data from a model with a specific AUC. To get
 the coefficients related to a population prevalence of 0.40 and an AUC
-of 0.85, we use the <em>auc</em> argument (the <em>auc</em> must be
-between 0.5 and 1):</p>
+of 0.85, we use the <em>auc</em> argument (which must be between 0.5 and
+1):</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">C1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/logisticCoefs.html">logisticCoefs</a></span><span class="op">(</span><span class="va">d1</span>, <span class="va">coefs1</span>, popPrev <span class="op">=</span> <span class="fl">0.40</span>, auc <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span></span>
 <span><span class="va">C1</span></span></code></pre></div>
