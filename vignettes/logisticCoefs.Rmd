@@ -18,19 +18,24 @@ library(data.table)
 options(digits = 2)
 ```
 
-In `simstudy`, there are at least two ways to define a binary data generating process. The first is to operate on the scale of the proportion or probability using the *identity* link. This allows users to characterize a data generating process that reflects assumptions about risk ratios and risk differences when comparing two groups defined by an exposure or treatment. However, this process can become challenging when introducing other covariates, because it can be difficult to constrain the probabilities so that they fall between 0 and 1. 
+In `simstudy`, there are at least two ways to define a binary data generating process. The first is to operate on the scale of the proportion or probability using the *identity* link. This allows users to define a data generating process that reflects assumptions about risk ratios and risk differences when comparing two groups defined by an exposure or treatment. However, this process can become challenging when introducing other covariates, because it can be difficult to constrain the probabilities so that they fall between 0 and 1. 
 
-Alternatively, the second approach works on the log-odds scale and uses the *logit* link, and is much more amenable to accommodating covariates. Unfortunately, this comes at the price of being able to easily generate specific risk ratios and risk differences, because all parameters are log-odds ratios. If we are interested in the controlling overall probability in a population with a set of covariates that each have a certain distribution and particular association with an outcome, the overall (marginal) proportion will vary across different distributions and associations.
+The second approach works on the log-odds scale using a *logit* link, and is much more amenable to accommodating covariates. Unfortunately, this comes at the price of being able to easily generate specific risk ratios and risk differences, because all parameters are log-odds ratios. The overall (marginal) prevalence of an outcome in a population will vary depending on the distribution of covariates in that population, and the strengths (both absolute and relative) of the association of those covariates with the outcome. That is, the coefficients of a logistic model (including the intercept) determine the prevalence. The same is true regarding the risk ratio and risk difference (if there is one particular exposure or treatment of interest) and the AUC.
 
-Here we start with the simplest case where we have a target marginal proportion or prevalence, and illustrate data generation with three other target statistics: **risk ratios**, **risk differences**, and **AUCs**.
+Here we start with the simplest case where we have a target marginal proportion or prevalence, and then illustrate data generation with three other target statistics: **risk ratios**, **risk differences**, and **AUCs**.
 
 ### Prevalence
 
-In this first example, we start with one set of assumptions for four covariates $x_1 \sim N(0, 1)$, $x_2 \sim N(0, 1)$, $b_1 \sim Bin(0.3)$, and $b_2 \sim Bin(0.7)$, and generate the outcome *y* with the following data generating process:
+In this first example, we start with one set of assumptions for four covariates $x_1, x2 \sim N(0, 1)$, $b_1 \sim Bin(0.3)$, and $b_2 \sim Bin(0.7)$, and generate the outcome *y* with the following data generating process:
 
-$$ \text{logit}(y) = 0.15*x1 + 0.25*x2 + 0.10*b1 + 0.30*b2$$
+$$ \text{logit}(y) = 0.15x_1 + 0.25x_2 + 0.10b_1 + 0.30b_2$$
+<br>
 
 ```{r}
+library(simstudy)
+library(ggplot2)
+library(data.table)
+
 coefs1 <- c(0.15, 0.25, 0.10, 0.30)
 
 d1 <- defData(varname = "x1", formula = 0, variance = 1)
@@ -56,13 +61,13 @@ dd[, mean(y)]
 
 If we have a desired marginal proportion of 0.40, then we can add an intercept of -0.66 to the data generating process:
 
-$$ \text{logit}(y) = -0.66 + 0.15*x1 + 0.25 *x2 + 0.10*b1 + 0.30*b2$$
+$$ \text{logit}(y) = -0.66 + 0.15x_1 + 0.25x_2 + 0.10b_1 + 0.30b_2$$
 
 The simulation now gives us the desired target:
 
 ```{r}
 d1a <- defData(d1, varname = "y", 
-  formula = "t(c(-0.66,..coefs1)) %*% c(1, x1, x2, b1, b2)",
+  formula = "t(c(-0.66, ..coefs1)) %*% c(1, x1, x2, b1, b2)",
   dist = "binary", link = "logit")
 
 genData(500000, d1a)[, mean(y)]
@@ -70,7 +75,7 @@ genData(500000, d1a)[, mean(y)]
 
 If we change the distribution of the covariates, so that $x_1 \sim N(1, 1)$, $x_2 \sim N(2, 1)$, $b_1 \sim Bin(0.5)$, and $b_2 \sim Bin(0.8)$, and the strength of the association of these covariates with the outcome so that 
 
-$$ \text{logit}(y) = 0.20*x1 + 0.35 *x2 + 0.20*b1 + 0.45*b2,$$
+$$ \text{logit}(y) = 0.20x_1 + 0.35x_2 + 0.20b_1 + 0.45b_2,$$
 
 the marginal proportion/prevalence (assuming no intercept term) also changes, going from 0.56 to 0.84:
 
@@ -89,14 +94,15 @@ d2a <- defData(d2, varname = "y",
 genData(500000, d2a)[, mean(y)]
 ```
 
-But under this new distribution, adding an intercept of -2.14 yields the desired target.
+But under this new distribution, adding an intercept of -2.13 yields the desired target.
 
-$$ \text{logit}(y) = -2.14 + 0.20*x1 + 0.35 *x2 + 0.20*b1 + 0.45*b2 $$
+$$ \text{logit}(y) = -2.13 + 0.20x_1 + 0.35x_2 + 0.20b_1 + 0.45b_2 $$
 
+<br>
 
 ```{r}
 d2a <- defData(d2, varname = "y", 
-  formula = "t(c(-2.14,..coefs2)) %*% c(1, x1, x2, b1, b2)",
+  formula = "t(c(-2.13, ..coefs2)) %*% c(1, x1, x2, b1, b2)",
   dist = "binary", link = "logit")
 
 genData(500000, d1a)[, mean(y)]
@@ -104,9 +110,11 @@ genData(500000, d1a)[, mean(y)]
 
 #### Finding the intercept
 
-Where did those two intercepts come from?  A [paper](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5){target="_blank"} by Peter Austin describes an iterative bisection procedure that takes a distribution of covariates and a set of coefficients to identify the intercept coefficient that yields the target marginal proportion or prevalence. This algorithm has been implemented in `simstudy` through the function `logisticCoefs`. (If you want the details for the algorithm, take a look at the paper. Here, I will demonstrate the application.)
+Where did those two intercepts come from?  The [paper](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5){target="_blank"} by Peter Austin describes an iterative bisection procedure that takes a distribution of covariates and a set of coefficients to identify the intercept coefficient that yields the target marginal proportion or prevalence. 
 
-The intercept is provided by a simple call to `logisticCoefs`. Here are the calls for the two sets of definitions in definition tables *d1* and *d2*.
+The general idea of the algorithm is to try out series of different intercepts in an intelligent way that ends up at the right spot. (If you want the details for the algorithm, take a look at the [paper](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5){target="_blank"}.) The starting search range is pre-defined (we've used -10 to 10 for the intercept), and we start with an value of 0 for the initial intercept and simulate a large data set (the paper uses 1 million observations, but 100,000 seems to work just fine) and record the population prevalence. If we've overshot the target prevalence, we turn our attention to the range between -10 and 0, taking the average, which is -5. Otherwise, we focus on the range between 0 and 10. We iterate this way, choosing the range we need to focus on and setting the intercept at the mid-point (hence the name *bisection*). The algorithm will converge pretty quickly on the value of the intercept that gives the target population prevalence for the underlying covariate distribution and coefficient assumptions.
+
+In the current implementation in `simstudy`, the intercept is provided by a simple call to `logisticCoefs`. Here are the calls for the two sets of definitions in definition tables *d1* and *d2*.
 
 ```{r}
 logisticCoefs(defCovar = d1, coefs = coefs1, popPrev = 0.40)
@@ -115,10 +123,10 @@ logisticCoefs(defCovar = d2, coefs = coefs2, popPrev = 0.40)
 
 ### Risk ratios
 
-Just as the prevalence depends on the distribution of covariates and their association with the outcome, risk ratios comparing the outcome probabilities for two groups also depend on the additional covariates. The risk ratio comparing treatment ($A =1$ to control ($A=0$) is
+Just as the prevalence depends on the distribution of covariates and their association with the outcome, risk ratios comparing the outcome probabilities for two groups also depend on the additional covariates. The marginal risk ratio comparing treatment ($A =1$ to control ($A=0$) (given the distribution of covariates) is
 
 $$RR = \frac{P(y=1 | A = 1)}{P(y=1 | A = 0)}$$
-In the data generation process we use a log-odds ratio of -0.40 (odds ratio of approximately 0.67) in both cases, but we get different risk ratios (0.82 vs. 0.90).
+In the data generation process we use a log-odds ratio of -0.40 (odds ratio of approximately 0.67) in both cases, but we get different risk ratios (0.82 vs. 0.93), depending on the covariates (defined in *d1* and *d2*).
 
 ```{r}
 d1a <- defData(d1, varname = "rx", formula = "1;1", dist = "trtAssign")
@@ -200,7 +208,7 @@ dd[rx==1, mean(y)] - dd[rx==0, mean(y)]
 
 ### AUC
 
-The AUC is another commonly used statistic to evaluate a logistic model. We can use `logisticCoefs` to find the parameters that will allow us to generate data from a model with a specific AUC. To get the coefficients related to a population prevalence of 0.40 and an AUC of 0.85, we use the *auc* argument (the *auc* must be between 0.5 and 1):
+The AUC is another commonly used statistic to evaluate a logistic model. We can use `logisticCoefs` to find the parameters that will allow us to generate data from a model with a specific AUC. To get the coefficients related to a population prevalence of 0.40 and an AUC of 0.85, we use the *auc* argument (which must be between 0.5 and 1):
 
 ```{r}
 C1 <- logisticCoefs(d1, coefs1, popPrev = 0.40, auc = 0.85)
