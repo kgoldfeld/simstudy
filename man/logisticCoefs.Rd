@@ -13,7 +13,7 @@ logisticCoefs(
   rd = NULL,
   auc = NULL,
   tolerance = 0.001,
-  sampleSize = 5e+05,
+  sampleSize = 1e+05,
   trtName = "A"
 )
 }
@@ -40,8 +40,9 @@ Defaults to NULL.}
 endpoints. Defaults to 0.001.}
 
 \item{sampleSize}{The number of units to generate for the bisection algorithm. 
-The default is 5e+05. To get a reliable estimate, the value 
-should be no smaller than 1e+05.}
+The default is 1e+05. To get a reliable estimate, the value 
+should be no smaller than the default, though larger values can be used, though
+computing time will increase.}
 
 \item{trtName}{If either a risk ratio or risk difference is the target statistic,
 a treatment/exposure variable name can be provided. Defaults to "A".}
