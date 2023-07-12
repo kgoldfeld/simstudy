@@ -483,11 +483,9 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
       if (is.null(corMatrix)) {
         corMatrix <- .buildCorMat(nvars, corMatrix = NULL, rho = rho, corstr = corstr)
       }
-      ns <- as.list(dtTemp[, .N, keyby = .id][,N])
-      Unew <- unlist(lapply(ns, function(x) {
-          mvnfast::rmvn(n = 1, mu = rep(0, nvars), sigma = corMatrix)
-        })
-      )
+      ns <- nrow(dtTemp[, .N, keyby = .id])
+      Unew <- c(t(mvnfast::rmvn(n = ns, mu = rep(0, nvars), sigma = corMatrix)))
+    
       dtTemp[, .U := stats::pnorm(Unew)]
     }
     
