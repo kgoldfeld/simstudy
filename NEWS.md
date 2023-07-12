@@ -1,7 +1,7 @@
 # simstudy (development version)
 
 ## New features
-* Function `logisticCoefs` determines the intercept and treatmen/exposure 
+* Function `logisticCoefs` determines the intercept and treatment/exposure 
 parameter for a data generating process (based on a logistic regression model) 
 that has a specific target population prevalence of a binary outcome, and an
 option to target a risk ratio, risk difference, or AUC.
