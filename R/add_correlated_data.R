@@ -478,15 +478,18 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
       dtM <- rbindlist(
         lapply(ns, function(x) .genQuantU(x$N, 1, rho, corstr, corMatrix[[x$.id]])) 
       )
+      dtTemp[, .U := dtM$Unew]
     } else {
-      ns <- as.list(dtTemp[, .N, keyby = .id][,N])
-      dtM <- rbindlist(
-        lapply(ns, function(x) .genQuantU(x, 1, rho, corstr, corMatrix))
-      ) 
+      if (is.null(corMatrix)) {
+        corMatrix <- .buildCorMat(nvars, corMatrix = NULL, rho = rho, corstr = corstr)
+      }
+      ns <- nrow(dtTemp[, .N, keyby = .id])
+      Unew <- c(t(mvnfast::rmvn(n = ns, mu = rep(0, nvars), sigma = corMatrix)))
+    
+      dtTemp[, .U := stats::pnorm(Unew)]
     }
     
-    dtTemp[, .U := dtM$Unew]
-    dtTemp[, seq := dtM$seq]
+    # dtTemp[, seq := dtM$seq]
     
     if (dist == "poisson") {
       setnames(dtTemp, param1, ".param1")
