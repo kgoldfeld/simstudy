@@ -86,7 +86,6 @@ addCorGen(
 # Long example
 
 def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
-def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
 
 def2 <- defDataAdd(
   varname = "p", formula = "-3+.2*period + .3*xbase",
@@ -97,6 +96,11 @@ dt <- genData(100, def)
 
 dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
 dtLong <- addColumns(def2, dtLong)
+
+addCorGen(
+  dtOld = dtLong, idvar = "cid", nvars = NULL, rho = .7, corstr = "cs",
+  dist = "binary", param1 = "p"
+)
 
 }
 \references{
