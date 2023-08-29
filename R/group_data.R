@@ -388,7 +388,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
 
     if (is.null(ratio)) {
       if (nTrt == 2) {
-        formula <- .5
+        formula <- c(.5, .5)
       } else {
         formula <- rep(1 / nTrt, nTrt)
       }
