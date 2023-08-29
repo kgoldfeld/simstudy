@@ -1,5 +1,8 @@
 # simstudy (development version)
 
+## Breaking Changes
+* `trtAssign` with `ratio=Null` used to produce 0-index values but 1-indexed values if `ratio` was set. This was adjusted so now both versions produce 1-indexed values. This is a potentially breaking change for existsing scripts that use the generated treatment values while assuming the old behavior (e.g. using hardcoded values to filter).
+
 ## New features
 * Function `logisticCoefs` determines the intercept and treatment/exposure 
 parameter for a data generating process (based on a logistic regression model) 
