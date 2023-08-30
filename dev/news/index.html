@@ -93,6 +93,11 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="simstudy-development-version">simstudy (development version)<a class="anchor" aria-label="anchor" href="#simstudy-development-version"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>
+<code>trtAssign</code> with <code>ratio=NULL</code> used to produce 0-index values but 1-indexed values if <code>ratio</code> was set. This was adjusted so now both versions produce 0-indexed values. This is a potentially breaking change for existing scripts that use the generated treatment values while assuming the old behavior (e.g. using hardcoded values to filter).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li>Function <code>logisticCoefs</code> determines the intercept and treatment/exposure parameter for a data generating process (based on a logistic regression model) that has a specific target population prevalence of a binary outcome, and an option to target a risk ratio, risk difference, or AUC.</li>
 </ul></div>
