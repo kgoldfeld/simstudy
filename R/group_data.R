@@ -362,7 +362,7 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   assertNotMissing(dtName = missing(dtName))
   assertNotInDataTable(grpName, dtName)
   if (!is.null(ratio)) {
-    assertLengthEqual(var1 = length(ratio), var2 = nTrt)
+    assertEqual(nTrt = nTrt, val = length(ratio))
   }
 
   dt <- copy(dtName)
@@ -387,16 +387,14 @@ trtAssign <- function(dtName, nTrt = 2, balanced = TRUE,
   } else { # balanced is FALSE - strata are not relevant
 
     if (is.null(ratio)) {
-      if (nTrt == 2) {
-        formula <- .5
-      } else {
         formula <- rep(1 / nTrt, nTrt)
-      }
     } else { # ratio not null
       formula <- round(ratio / sum(ratio), 8)
     }
 
     dt <- trtObserve(dt, formulas = formula, logit.link = FALSE, grpName)
+    if (nTrt == 2) dt[, (grpName) := get(grpName) - 1]
+    
   }
 
   return(dt[])
