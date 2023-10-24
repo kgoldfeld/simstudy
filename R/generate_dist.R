@@ -327,8 +327,9 @@
 # @return A data.frame column  with the updated simulated data
 
 .gendeterm <- function(n, formula, link, dtSim, envir) {
+  
   new <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
-
+  
   if (link == "log") {
     new <- exp(new)
   } else if (link == "logit") new <- 1 / (1 + exp(-new))

@@ -51,6 +51,7 @@
                       extVars,
                       dtSim = data.table(),
                       n = nrow(dtSim)) {
+  
   if (missing(dtSim) && missing(n)) {
     n <- 1
   }
@@ -80,6 +81,7 @@
   }
 
   evalFormula <- function(formula) {
+    
     e$formula2parse <- formula
     
     if ( grepl("%.*%|\\[.*,.*\\]", formula) )  {
@@ -93,16 +95,20 @@
         
       })
     } else {
+      
       res <- with(e, {
         expr <- parse(text = as.character(formula2parse))
+        print(expr)
         tryCatch(
           expr = dtSim[, newVar := eval(expr)],
           error = function(err) stop(gettext(err))
         )
+        print(dtSim$newVar)
         copy(dtSim$newVar)
       })
     } 
     
+
     if (length(res) == 1) {
       rep(res, n)
     } else {
