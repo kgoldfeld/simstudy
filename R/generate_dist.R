@@ -337,6 +337,30 @@
   new
 }
 
+# Internal function called by .generate - data from a custom function
+#
+# @param n The number of observations required in the data set
+# @param formula String that specifies the formula for the mean
+# @param dtSim Incomplete simulated data.table
+# @return A data.frame column  with the updated simulated data
+
+.gencustom <- function(n, formula, dtSim, envir=parent.frame()) {
+  
+  e <- list2env(.parseDotVars(formula, envir))
+  
+  dtSim[, newVar := eval(parse(text = as.character(formula))),  keyby = id]
+  
+  # with(e, {
+  #   tryCatch(
+  #     expr = dtSim[, newVar := eval(parse(text = as.character(formula))), 
+  #                  keyby = id],
+  #     error = function(err) stop(gettext(err))
+  #   )
+  # })
+  
+  dtSim$newVar
+}
+
 # Internal function called by .generate - returns exp data
 #
 # @param n The number of observations required in the data set
@@ -448,12 +472,16 @@
                            formula,
                            n = nrow(dtSim),
                            envir = parent.frame()) {
+  
   .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  
 }
 
 .gennorm <- function(n, formula, variance, link, dtSim, envir) {
   mean <- .getNormalMean(dtSim, formula, n, envir)
+  
   v <- .evalWith(variance, .parseDotVars(variance, envir), dtSim, n)
+  
 
   return(stats::rnorm(n, mean, sqrt(v)))
 }

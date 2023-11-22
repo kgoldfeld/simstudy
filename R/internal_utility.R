@@ -65,6 +65,7 @@
 
   e <- list2env(extVars)
 
+
   if (!missing(dtSim) && !is.null(dtSim)) {
     e$dtSim <- as.data.table(dtSim)
     # e$def_id <- names(dtSim)[[1]] # original, but incorrect
@@ -98,16 +99,14 @@
       
       res <- with(e, {
         expr <- parse(text = as.character(formula2parse))
-        print(expr)
         tryCatch(
           expr = dtSim[, newVar := eval(expr)],
           error = function(err) stop(gettext(err))
         )
-        print(dtSim$newVar)
         copy(dtSim$newVar)
       })
     } 
-    
+
 
     if (length(res) == 1) {
       rep(res, n)
