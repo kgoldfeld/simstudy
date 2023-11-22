@@ -1,11 +1,13 @@
 # addCondition ----
 test_that("addCondition throws errors.", {
+  skip_on_cran()
   expect_error(addCondition(), class = "simstudy::missingArgument")
   expect_error(addCondition("a"), class = "simstudy::missingArgument")
   expect_error(addCondition(data.frame(), data.frame(), "a"), class = "simstudy::wrongClass")
 })
 
 test_that("addCondition works.", {
+  skip_on_cran()
   def <- defData(varname = "x", formula = "1;10", dist = "uniformInt")
   defC <- defCondition(condition = "x >= 5", formula = "x + 5", dist = "nonrandom")
   defC <- defCondition(defC, condition = "x < 5", formula = "10", dist = "nonrandom")
@@ -20,12 +22,14 @@ test_that("addCondition works.", {
 
 # addColumns ----
 test_that("addColumns throws errors.", {
+  skip_on_cran()
   expect_error(addColumns(), class = "simstudy::missingArgument")
   expect_error(addColumns("a"), class = "simstudy::missingArgument")
   expect_error(addColumns(data.frame(), data.frame()), class = "simstudy::wrongClass")
 })
 
 test_that("addColumns works.", {
+  skip_on_cran()
   def <- defData(varname = "x", formula = "1;10", dist = "uniformInt")
   dt <- genData(100, def)
   def2 <- defDataAdd(varname = "y", formula = "2.3 * (1/x)", dist = "normal")
@@ -34,6 +38,7 @@ test_that("addColumns works.", {
 })
 
 test_that("defRepeatAdd works", {
+  skip_on_cran()
   expect_silent(
     defRepeatAdd(nVars = 4, prefix = "g", formula = "1/3;1/3;1/3", variance = 0, dist = "categorical")
   )
@@ -47,6 +52,7 @@ test_that("defRepeatAdd works", {
 })
 
 test_that("defRepeatAdd throws errors correctly.", {
+  skip_on_cran()
   expect_error(defRepeatAdd(prefix = "b", formula = 5, variance = 3, dist = "normal"),
     class = "simstudy::missingArgument"
   )
@@ -60,6 +66,7 @@ test_that("defRepeatAdd throws errors correctly.", {
 
 # addMarkov ----
 test_that("addMarkov throws errors.", {
+  skip_on_cran()
   d0 <- defData(varname = "xx", formula = 2)
   d0 <- defData(d0, varname = "xy", formula = 5)
   dd <- genData(n = 10, dt = d0)
@@ -94,6 +101,7 @@ test_that("addMarkov throws errors.", {
 # addSynthetic ----
 
 test_that("addSynthetic throws errors.", {
+  skip_on_cran()
 
   ### Create fake "real" data set
 
@@ -125,6 +133,7 @@ test_that("addSynthetic throws errors.", {
 })
 
 test_that("addSynthetic works.", {
+  skip_on_cran()
 
   ### Create fake 'external' data set 'A'
 

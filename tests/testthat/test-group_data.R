@@ -1,5 +1,6 @@
 # .addStrataCode ----
 test_that("strata codes are added as expected.", {
+  skip_on_cran()
   def <- defData(varname = "male", dist = "binary", formula = .5, id = "cid")
   def <- defData(def, varname = "over65", dist = "binary", formula = "-1.7 + .8*male", link = "logit")
   def <- defData(def, varname = "baseDBP", dist = "normal", formula = 70, variance = 40)
@@ -14,6 +15,7 @@ test_that("strata codes are added as expected.", {
 
 # .stratSamp ----
 test_that("stratified samples are drawn correctly.", {
+  skip_on_cran()
   expect_length(.stratSamp(1, 2), 1)
   expect_length(.stratSamp(2, 4), 2)
   expect_length(.stratSamp(50, 3), 50)

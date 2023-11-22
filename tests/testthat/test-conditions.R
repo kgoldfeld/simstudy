@@ -1,4 +1,5 @@
 test_that("conditions have correct class.", {
+  skip_on_cran()
   expect_error(stop(condition(c("error", "custom_Error"), "This is a custom error")),
     class = c("error", "custom_Error")
   )
@@ -11,6 +12,7 @@ test_that("conditions have correct class.", {
 })
 
 test_that("pluralization works.", {
+  skip_on_cran()
   expect_error(argMissingError("arg1"), "argument is missing",
     class = "simstudy::missingArgument"
   )

@@ -1,5 +1,6 @@
 # .parseDotVars ----
 test_that("dotVars are parsed correctly.", {
+  skip_on_cran()
   extVar1 <- 23
   extVar2 <- 42
   res <- list(..extVar1 = 23, ..extVar2 = 42)
@@ -12,6 +13,7 @@ test_that("dotVars are parsed correctly.", {
 })
 
 test_that("variables from different environments are parsed correctly.", {
+  skip_on_cran()
   extVar3 <- 7
   env1 <- new.env()
   env2 <- new.env(parent = env1)
@@ -27,6 +29,7 @@ test_that("variables from different environments are parsed correctly.", {
 
 # .evalWith ----
 test_that("evalWith throws errors.", {
+  skip_on_cran()
   df <- data.frame()
   ext <- list(formula2parse = 2)
 
@@ -35,6 +38,7 @@ test_that("evalWith throws errors.", {
 })
 
 test_that("evalWith output length is correct.", {
+  skip_on_cran()
   df <- data.frame(a = rep.int(5, 5))
   ext <- list(..ev = 2)
 
@@ -43,6 +47,7 @@ test_that("evalWith output length is correct.", {
 })
 
 test_that("evalWith output is Matrix.", {
+  skip_on_cran()
   df <- data.frame(a = rep.int(5, 5))
   ext <- list(..ev = 2)
 
@@ -74,11 +79,13 @@ test_that("probabilities (matrix) are adjusted as documented.", {
 
 # .getDists ----
 test_that("number of Dists is up to date.", {
+  skip_on_cran()
   expect_length(.getDists(), 16)
 })
 
 # .isFormulaScalar ----
 test_that("isFormularScalar works correctly.", {
+  skip_on_cran()
   expect_true(.isFormulaScalar("5 + 3"))
   expect_true(.isFormulaScalar(5 + 3))
 
@@ -89,6 +96,7 @@ test_that("isFormularScalar works correctly.", {
 
 # .isValidVarName ----
 test_that("var names are validated correctly.", {
+  skip_on_cran()
   validNames <- c("var1", "name", "name2", "var1")
   wrongNames <- c("...", "..1", "..5")
 
@@ -103,6 +111,7 @@ test_that("var names are validated correctly.", {
 
 # .isError ----
 test_that("errors are detected correctly.", {
+  skip_on_cran()
   err <- try(nonVar + 4, silent = TRUE)
   noErr <- try(3 + 5, silent = TRUE)
 
@@ -114,6 +123,7 @@ test_that("errors are detected correctly.", {
 
 # .hasValue ----
 test_that("hasValue works.", {
+  skip_on_cran()
   expect_true(.hasValue("value"))
   expect_true((function(x) .hasValue(x))(5))
   expect_true((function(x) .hasValue(x))(NA))
@@ -125,6 +135,7 @@ test_that("hasValue works.", {
 
 # .log2Prob ----
 test_that("log odds are converted correctly.", {
+  skip_on_cran()
   prob <- 0.2
   logOdds <- log(0.25)
 

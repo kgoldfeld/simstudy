@@ -1,4 +1,5 @@
 test_that("Blocks are collapsed as expected.", {
+  skip_on_cran()
   nums <- 1:3
   num <- 23
   expect_equal(
@@ -14,6 +15,7 @@ test_that("Blocks are collapsed as expected.", {
 })
 
 test_that("numbers are formated as expected.", {
+  skip_on_cran()
   nums <- c(1.23, 0.556, 1 / 3)
   ints <- c(1, 2, 3)
   expect_equal(glueFmt("{nums:.2f}"), as.character(round(nums, 2)))
@@ -22,6 +24,7 @@ test_that("numbers are formated as expected.", {
 })
 
 test_that("numbers are collapsed and formated correctly.", {
+  skip_on_cran()
   ints <- c(1, 2, 3)
   expect_equal(glueFmtC("{ints:02d}"), "01, 02 and 03")
   expect_equal(glueFmtC("{2:.1f}"), "2.0")

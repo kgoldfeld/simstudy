@@ -44,6 +44,7 @@ test_that("probabilities (vector) are adjusted as documented.", {
 })
 
 test_that("genCatFormula throws errors.", {
+  skip_on_cran()
   expect_error(genCatFormula(), "Need to specify")
   expect_error(genCatFormula(1, 2, 3, n = 5), "or n, not both")
   expect_error(genCatFormula(1.1), "must be less than 1")
@@ -53,16 +54,19 @@ test_that("genCatFormula throws errors.", {
 
 # betaGetShapes ----
 test_that("betaGetShapes throws errors.", {
+  skip_on_cran()
   expect_error(betaGetShapes(1, 12), class = "simstudy::valueError")
   expect_error(betaGetShapes(.5, -5), class = "simstudy::valueError")
 })
 
 test_that("betaGetShapes works.", {
+  skip_on_cran()
   expect_equal(betaGetShapes(.4, 5), list(shape1 = .4 * 5, shape2 = (1 - .4) * 5))
 })
 
 # genMixFormula ----
 test_that("genMixFormula throws errors.", {
+  skip_on_cran()
   expect_error(genMixFormula(), class = "simstudy::missingArgument")
   expect_error(genMixFormula("a", varLength = 3), class = "simstudy::valueError")
   expect_error(genMixFormula("..a", varLength = "b"), class = "simstudy::wrongType")
@@ -72,6 +76,7 @@ test_that("genMixFormula throws errors.", {
 })
 
 test_that("genMixFormula works.", {
+  skip_on_cran()
   expect_equal(genMixFormula("a"), "a | 1")
   expect_equal(genMixFormula(c("a", "..b"), c(.3, .7)), "a | 0.3 + ..b | 0.7")
   expect_equal(
@@ -83,6 +88,7 @@ test_that("genMixFormula works.", {
 # survGetParams ----
 
 test_that("survGetParams throws errors.", {
+  skip_on_cran()
   expect_error(survGetParams(), class = "simstudy::missingArgument")
   expect_error(survGetParams(c(100, .5)), class = "simstudy::wrongClass")
   points <- list(c(280, 0.85), c(165, .45))
@@ -96,6 +102,7 @@ test_that("survGetParams throws errors.", {
 })
 
 test_that("survGetParam works.", {
+  skip_on_cran()
   points <- list(c(50, 0.90), c(100, 0.10))
   expect_equal(survGetParams(points), c(-19.658, 0.225), tolerance = .001)
   points <- list(c(60, 0.90), c(100, .75), c(200, .25), c(250, .10))
@@ -105,12 +112,14 @@ test_that("survGetParam works.", {
 # plotSurv ----
 
 test_that("survParamPlot throws errors.", {
+  skip_on_cran()
   expect_error(survParamPlot(), class = "simstudy::missingArgument")
   expect_error(survParamPlot(formula = -10), class = "simstudy::missingArgument")
   expect_error(survParamPlot(formula = 4, shape = -1), class = "simstudy::wrongSign")
 })
 
 test_that("survParamPlot works.", {
+  skip_on_cran()
   expect_is(survParamPlot(formula = -4, shape = 1), class = "ggplot")
 
   points <- list(c(100, .8), c(200, .5))

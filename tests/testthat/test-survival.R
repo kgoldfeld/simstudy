@@ -1,8 +1,10 @@
 test_that("defSurv kicks out transition error", {
+  skip_on_cran()
   expect_error(defSurv(varname = "censor", formula = "-7", shape = 0.55, transition = 150))
 })
 
 test_that("genSurv runs OK", {
+  skip_on_cran()
   dS <- defSurv(varname = "event_1", formula = "-10", shape = 0.3)
   dS <- defSurv(dS, "event_2", "-6.5", shape = 0.4)
   dS <- defSurv(dS, "event_3", "-7", shape = 0.5)
@@ -28,6 +30,7 @@ test_that("genSurv runs OK", {
 })
 
 test_that("genSurv throws errors", {
+  skip_on_cran()
   dS <- defSurv(varname = "event_1", formula = "-10", shape = 0.3)
   dS <- defSurv(dS, "event_2", "-6.5", shape = 0.4)
   dS <- defSurv(dS, "event_3", "-7", shape = 0.5)
@@ -38,6 +41,7 @@ test_that("genSurv throws errors", {
 })
 
 test_that("addCmpRisk works", {
+  skip_on_cran()
   dS <- defSurv(varname = "event_1", formula = "-10", shape = 0.3)
   dS <- defSurv(dS, "event_2", "-6.5", shape = 0.4)
 
