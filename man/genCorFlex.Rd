@@ -35,6 +35,7 @@ data.table with added column(s) of correlated data
 Create multivariate (correlated) data - for general distributions
 }
 \examples{
+\dontrun{
 def <- defData(varname = "xNorm", formula = 0, variance = 4, dist = "normal")
 def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
 def <- defData(def, varname = "xBin", formula = 0.5, dist = "binary")
@@ -51,5 +52,6 @@ cor(dt[, -"id"])
 cor(dt[, -"id"], method = "kendall")
 var(dt[, -"id"])
 apply(dt[, -"id"], 2, mean)
+}
 }
 \concept{correlated}
