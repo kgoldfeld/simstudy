@@ -398,8 +398,11 @@ function in the <code>rms</code> package:</p>
 <span><span class="va">dd</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.4</span></span></code></pre>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">+</span> <span class="va">b2</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span>
-<span><span class="va">fit</span><span class="op">$</span><span class="va">stats</span><span class="op">[</span><span class="st">"C"</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">+</span> <span class="va">b2</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in .recacheSubclasses(def@className, def, env): undefined subclass</span></span>
+<span><span class="co">## "ndiMatrix" of class "replValueSp"; definition not updated</span></span></code></pre>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">stats</span><span class="op">[</span><span class="st">"C"</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##    C </span></span>
 <span><span class="co">## 0.85</span></span></code></pre>
 <p>
