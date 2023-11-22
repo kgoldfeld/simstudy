@@ -1,11 +1,12 @@
 pandoc: 2.19.2
 pkgdown: 2.0.7.9000
-pkgdown_sha: 39083f38bbb2de2e1126529392bddf3e6e262ab4
+pkgdown_sha: 5a0a31f89d7c839c04a929844e4b7216196189ca
 articles:
   clustered: clustered.html
   corelationmat: corelationmat.html
   correlated: correlated.html
   double_dot_extension: double_dot_extension.html
+  logisticCoefs: logisticCoefs.html
   longitudinal: longitudinal.html
   missing: missing.html
   ordinal: ordinal.html
@@ -13,5 +14,5 @@ articles:
   spline: spline.html
   survival: survival.html
   treat_and_exposure: treat_and_exposure.html
-last_built: 2023-06-01T13:29Z
+last_built: 2023-11-22T18:07Z
 

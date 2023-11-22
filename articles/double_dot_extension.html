@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1</span>
       </span>
     </div>
 
@@ -63,6 +63,9 @@
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/logisticCoefs.html">Targeted logistic model coefficients</a>
     </li>
     <li>
       <a href="../articles/longitudinal.html">Longitudinal Data</a>
@@ -339,17 +342,20 @@ cell values directly:</p>
 <span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"b"</span>, formula <span class="op">=</span> <span class="st">".5;.5"</span>, variance <span class="op">=</span> <span class="st">"1;2"</span>, dist <span class="op">=</span> <span class="st">"categorical"</span><span class="op">)</span></span>
 <span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"outcome"</span>, formula <span class="op">=</span> <span class="st">"..effect[a, b]"</span>, dist<span class="op">=</span><span class="st">"nonrandom"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">8</span>, <span class="va">d1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">d1</span><span class="op">)</span></span>
 <span><span class="va">dx</span></span></code></pre></div>
-<pre><code><span><span class="co">##    id a b outcome</span></span>
-<span><span class="co">## 1:  1 2 2       7</span></span>
-<span><span class="co">## 2:  2 2 2       7</span></span>
-<span><span class="co">## 3:  3 2 1       4</span></span>
-<span><span class="co">## 4:  4 2 1       4</span></span>
-<span><span class="co">## 5:  5 1 1       0</span></span>
-<span><span class="co">## 6:  6 2 2       7</span></span>
-<span><span class="co">## 7:  7 2 1       4</span></span>
-<span><span class="co">## 8:  8 1 2       5</span></span></code></pre>
+<pre><code><span><span class="co">##         id a b outcome</span></span>
+<span><span class="co">##    1:    1 2 2       7</span></span>
+<span><span class="co">##    2:    2 2 1       4</span></span>
+<span><span class="co">##    3:    3 2 1       4</span></span>
+<span><span class="co">##    4:    4 2 2       7</span></span>
+<span><span class="co">##    5:    5 1 2       5</span></span>
+<span><span class="co">##   ---                 </span></span>
+<span><span class="co">##  996:  996 2 2       7</span></span>
+<span><span class="co">##  997:  997 2 2       7</span></span>
+<span><span class="co">##  998:  998 1 1       0</span></span>
+<span><span class="co">##  999:  999 2 2       7</span></span>
+<span><span class="co">## 1000: 1000 1 2       5</span></span></code></pre>
 <p>It is possible to generate normally distributed data based on these
 means:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
@@ -357,11 +363,6 @@ means:</p>
 <span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">d1</span><span class="op">)</span></span></code></pre></div>
 <p>The plot shows the individual values as well as the mean values by
 intervention arm:</p>
-<pre><code><span><span class="co">## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
-<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
 <p><img src="double_dot_extension_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
   </div>

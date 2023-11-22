@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1</span>
       </span>
     </div>
 
@@ -45,6 +45,9 @@
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/logisticCoefs.html">Targeted logistic model coefficients</a>
     </li>
     <li>
       <a href="../articles/longitudinal.html">Longitudinal Data</a>
@@ -88,7 +91,23 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.7.0" id="simstudy-070">simstudy 0.7.0<a class="anchor" aria-label="anchor" href="#simstudy-070"></a></h2>
+<h2 class="page-header" data-toc-text="0.7.1" id="simstudy-071">simstudy 0.7.1<a class="anchor" aria-label="anchor" href="#simstudy-071"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-7-1">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-7-1"></a></h3>
+<ul><li>
+<code>trtAssign</code> with <code>ratio=NULL</code> used to produce 0-index values but 1-indexed values if <code>ratio</code> was set. This was adjusted so now both versions produce 0-indexed values. This is a potentially breaking change for existing scripts that use the generated treatment values while assuming the old behavior (e.g. using hardcoded values to filter).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-7-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-7-1"></a></h3>
+<ul><li>Function <code>logisticCoefs</code> determines the intercept and treatment/exposure parameter for a data generating process (based on a logistic regression model) that has a specific target population prevalence of a binary outcome, and an option to target a risk ratio, risk difference, or AUC.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="major-fix-0-7-1">Major fix<a class="anchor" aria-label="anchor" href="#major-fix-0-7-1"></a></h3>
+<ul><li>Data generation speed has been improved for very large data sets with many variables.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.7.0" id="simstudy-070">simstudy 0.7.0<small>2023-06-01</small><a class="anchor" aria-label="anchor" href="#simstudy-070"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-7-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-7-0"></a></h3>
 <ul><li>Added double-dot (dynamic) functionality to defSurv. Users can now specify double-dot variables in scale, shape, and formula parameters.</li>

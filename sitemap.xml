@@ -31,6 +31,9 @@
     <loc>/articles/index.html</loc>
   </url>
   <url>
+    <loc>/articles/logisticCoefs.html</loc>
+  </url>
+  <url>
     <loc>/articles/longitudinal.html</loc>
   </url>
   <url>
@@ -209,6 +212,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/logisticCoefs.html</loc>
   </url>
   <url>
     <loc>/reference/mergeData.html</loc>
