@@ -1,4 +1,4 @@
-# simstudy (development version)
+# simstudy (0.7.1)
 
 ## Breaking Changes
 * `trtAssign` with `ratio=NULL` used to produce 0-index values but 1-indexed values if `ratio` was set. This was adjusted so now both versions produce 0-indexed values. This is a potentially breaking change for existing scripts that use the generated treatment values while assuming the old behavior (e.g. using hardcoded values to filter).
