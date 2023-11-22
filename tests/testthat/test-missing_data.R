@@ -31,7 +31,7 @@ test_that("genMiss works", {
   def1 <- defData(def1, "x2", dist = "normal", formula = "20*m + 20*u", variance = 2)
   def1 <- defData(def1, "x3", dist = "normal", formula = "20*m + 20*u", variance = 2)
 
-  dtAct1 <- genData(5000, def1)
+  dtAct1 <- genData(10000, def1)
 
   hardProbForm <- runif(1)
   form1val0 <- runif(1)
