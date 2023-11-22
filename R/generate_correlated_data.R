@@ -97,6 +97,7 @@ genCorData <- function(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
 #' is not specified.
 #' @return data.table with added column(s) of correlated data
 #' @examples
+#' \dontrun{
 #' def <- defData(varname = "xNorm", formula = 0, variance = 4, dist = "normal")
 #' def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
 #' def <- defData(def, varname = "xBin", formula = 0.5, dist = "binary")
@@ -113,6 +114,7 @@ genCorData <- function(n, mu, sigma, corMatrix = NULL, rho, corstr = "ind",
 #' cor(dt[, -"id"], method = "kendall")
 #' var(dt[, -"id"])
 #' apply(dt[, -"id"], 2, mean)
+#' }
 #' @export
 #' @concept correlated
 genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = NULL) {
