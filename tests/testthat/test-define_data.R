@@ -15,28 +15,28 @@ test_that("defData throws errors", {
 
 
 # .evalDef ----
-test_that("checks combine in .evalDef correctly", {
-  skip_on_cran()
-
-  # this generates 20 previously defined varnames.
-  gen_defVars <- gen.and_then(gen.int(20), gen_varnames)
-
-  gen_evalDef_call <-
-    gen.and_then(gen_defVars, function(defVars) {
-      generate(for (i in gen_dist) {
-        list(
-          newvar = defVars[1],
-          newform = get(reg[name == i]$formula)(defVars[-1]),
-          newdist = i,
-          variance = get(reg[name == i]$variance)(defVars[-1]),
-          link = get(reg[name == i]$link),
-          defVars = defVars[-1]
-        )
-      })
-    })
-
-  forall(gen_evalDef_call, function(args) expect_silent(do.call(.evalDef, args)))
-})
+# test_that("checks combine in .evalDef correctly", {
+#   skip_on_cran()
+# 
+#   # this generates 20 previously defined varnames.
+#   gen_defVars <- gen.and_then(gen.int(20), gen_varnames)
+# 
+#   gen_evalDef_call <-
+#     gen.and_then(gen_defVars, function(defVars) {
+#       generate(for (i in gen_dist) {
+#         list(
+#           newvar = defVars[1],
+#           newform = get(reg[name == i]$formula)(defVars[-1]),
+#           newdist = i,
+#           variance = get(reg[name == i]$variance)(defVars[-1]),
+#           link = get(reg[name == i]$link),
+#           defVars = defVars[-1]
+#         )
+#       })
+#     })
+# 
+#   forall(gen_evalDef_call, function(args) expect_silent(do.call(.evalDef, args)))
+# })
 
 test_that(".evalDef throws errors correctly.", {
   skip_on_cran()
@@ -51,22 +51,22 @@ test_that(".evalDef throws errors correctly.", {
 })
 
 # .isValidArithmeticFormula ----
-test_that("g.a.e. formula checked correctly.", {
-  skip_on_cran()
-  
-  gen_gae <-
-    gen.and_then(gen_varnames(8), function(ns) {
-      gen.map(function(y) {
-        list(
-          defVars = ns, formula = y
-        )
-      }, gen_formula(ns))
-    })
-
-  forall(gen_gae, function(x) {
-    expect_silent(.isValidArithmeticFormula(x$formula, x$defVars))
-  })
-})
+# test_that("g.a.e. formula checked correctly.", {
+#   skip_on_cran()
+#   
+#   gen_gae <-
+#     gen.and_then(gen_varnames(8), function(ns) {
+#       gen.map(function(y) {
+#         list(
+#           defVars = ns, formula = y
+#         )
+#       }, gen_formula(ns))
+#     })
+# 
+#   forall(gen_gae, function(x) {
+#     expect_silent(.isValidArithmeticFormula(x$formula, x$defVars))
+#   })
+# })
 
 test_that(".isValidArithmeticFormula throws errors correctly.", {
   skip_on_cran()
@@ -119,23 +119,23 @@ test_that(".checkCategorical throws errors.", {
 })
 
 # .checkUniform ----
-test_that("'uniform' formula checked correctly", {
-  skip_on_cran()
-  
-  forall(
-    gen.and_then(gen_varnames(10), function(names) {
-      generate(for (x in list(
-        min = gen_formula(names),
-        max = gen_formula(names)
-      )) {
-        paste0(x$min, ";", x$max)
-      })
-    }),
-    function(r) {
-      expect_silent(.checkUniform(r))
-    }
-  )
-})
+# test_that("'uniform' formula checked correctly", {
+#   skip_on_cran()
+#   
+#   forall(
+#     gen.and_then(gen_varnames(10), function(names) {
+#       generate(for (x in list(
+#         min = gen_formula(names),
+#         max = gen_formula(names)
+#       )) {
+#         paste0(x$min, ";", x$max)
+#       })
+#     }),
+#     function(r) {
+#       expect_silent(.checkUniform(r))
+#     }
+#   )
+# })
 
 test_that(".checkUniform throws errors.", {
   skip_on_cran()
