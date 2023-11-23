@@ -7,6 +7,9 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
+```{r chunkname, echo=-1}
+data.table::setDTthreads(2)
+```
 
 ```{r, echo = FALSE, message = FALSE}
 library(simstudy)
