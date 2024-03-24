@@ -1,5 +1,9 @@
 # simstudy (development version)
 
+## Minor fix
+
+* Function `logisticCoefs` now correctly handles double dot notation.
+
 # simstudy 0.7.1
 
 ## Breaking Changes

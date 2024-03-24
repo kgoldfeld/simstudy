@@ -1072,6 +1072,18 @@ logisticCoefs <- function(defCovar, coefs, popPrev, rr = NULL, rd = NULL,
   if (!is.null(rd)) targetStat <- "rd"
   if (!is.null(auc)) targetStat <- "auc"
   
+  # Get any double dot vars from calling environment into this environment
+  
+  .formvars <- all.vars(parse(text = defCovar$formula))
+  .dotVars <- .formvars[startsWith(.formvars, "..")]
+  .vars <- gsub("^\\.{2}", "", .dotVars)
+  
+  for (i in seq_along(.vars)) {
+    assign(.vars[i], get(.vars[i], envir = parent.frame()))  
+  }
+  
+  #
+  
   dd <- genData(sampleSize, defCovar)
   
   if (targetStat == "prev") {
