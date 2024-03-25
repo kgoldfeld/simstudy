@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dynamic Data Definition • simstudy</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -150,6 +150,7 @@ distributed:</p>
 <span></span>
 <span><span class="va">defs</span></span></code></pre></div>
 <pre><code><span><span class="co">##    varname       formula variance   dist     link</span></span>
+<span><span class="co">##     &lt;char&gt;        &lt;char&gt;    &lt;num&gt; &lt;char&gt;   &lt;char&gt;</span></span>
 <span><span class="co">## 1:       x             0        3 normal identity</span></span>
 <span><span class="co">## 2:       y       2 + 3*x        1 normal identity</span></span>
 <span><span class="co">## 3:       z 4 + 3*x - 2*y        1 normal identity</span></span></code></pre>
@@ -159,6 +160,7 @@ with <code>x</code> as well as the variance:</p>
 <code class="sourceCode R"><span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span>dtDefs <span class="op">=</span> <span class="va">defs</span>, changevar <span class="op">=</span> <span class="st">"y"</span>, newformula <span class="op">=</span> <span class="st">"x + 5"</span>, newvariance <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">defs</span></span></code></pre></div>
 <pre><code><span><span class="co">##    varname       formula variance   dist     link</span></span>
+<span><span class="co">##     &lt;char&gt;        &lt;char&gt;   &lt;char&gt; &lt;char&gt;   &lt;char&gt;</span></span>
 <span><span class="co">## 1:       x             0        3 normal identity</span></span>
 <span><span class="co">## 2:       y         x + 5        2 normal identity</span></span>
 <span><span class="co">## 3:       z 4 + 3*x - 2*y        1 normal identity</span></span></code></pre>
@@ -169,6 +171,7 @@ with <code>x</code> as well as the variance:</p>
 <code class="sourceCode R"><span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span>dtDefs <span class="op">=</span> <span class="va">defs</span>, changevar <span class="op">=</span> <span class="st">"z"</span>, newdist <span class="op">=</span> <span class="st">"poisson"</span>, newlink <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span></span>
 <span><span class="va">defs</span></span></code></pre></div>
 <pre><code><span><span class="co">##    varname       formula variance    dist     link</span></span>
+<span><span class="co">##     &lt;char&gt;        &lt;char&gt;   &lt;char&gt;  &lt;char&gt;   &lt;char&gt;</span></span>
 <span><span class="co">## 1:       x             0        3  normal identity</span></span>
 <span><span class="co">## 2:       y         x + 5        2  normal identity</span></span>
 <span><span class="co">## 3:       z 4 + 3*x - 2*y        1 poisson      log</span></span></code></pre>
@@ -181,6 +184,7 @@ is a predictor of a subsequent variable, such as <code>x</code> or
 <code class="sourceCode R"><span><span class="va">defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateDef.html">updateDef</a></span><span class="op">(</span>dtDefs <span class="op">=</span> <span class="va">defs</span>, changevar <span class="op">=</span> <span class="st">"z"</span>, remove <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">defs</span></span></code></pre></div>
 <pre><code><span><span class="co">##    varname formula variance   dist     link</span></span>
+<span><span class="co">##     &lt;char&gt;  &lt;char&gt;   &lt;char&gt; &lt;char&gt;   &lt;char&gt;</span></span>
 <span><span class="co">## 1:       x       0        3 normal identity</span></span>
 <span><span class="co">## 2:       y   x + 5        2 normal identity</span></span></code></pre>
 </div>
@@ -201,6 +205,7 @@ before the variable name. Here is a simple example:</p>
 <span></span>
 <span><span class="va">def</span></span></code></pre></div>
 <pre><code><span><span class="co">##    varname         formula variance   dist     link</span></span>
+<span><span class="co">##     &lt;char&gt;          &lt;char&gt;   &lt;char&gt; &lt;char&gt;   &lt;char&gt;</span></span>
 <span><span class="co">## 1:       x               0        5 normal identity</span></span>
 <span><span class="co">## 2:       y ..B0 + ..B1 * x ..sigma2 normal identity</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -250,7 +255,7 @@ create a range of data sets under different assumptions:</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">sigma2s</span>, <span class="kw">function</span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="fu">gen_data</span><span class="op">(</span><span class="va">s</span>, <span class="va">def</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="va">dd_4</span><span class="op">)</span></span>
+<span><span class="va">dd_4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="va">dd_4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dd_4</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">.5</span>, color <span class="op">=</span> <span class="st">"grey30"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -272,22 +277,25 @@ generating permuted block sizes of 2 and 4:</p>
 <span></span>
 <span><span class="va">defblk</span></span></code></pre></div>
 <pre><code><span><span class="co">##    varname                           formula variance    dist     link</span></span>
+<span><span class="co">##     &lt;char&gt;                            &lt;char&gt;    &lt;num&gt;  &lt;char&gt;   &lt;char&gt;</span></span>
 <span><span class="co">## 1: blksize ..sizes[1] | .5 + ..sizes[2] | .5        0 mixture identity</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sizes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">defblk</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##         id blksize</span></span>
-<span><span class="co">##    1:    1       4</span></span>
-<span><span class="co">##    2:    2       4</span></span>
-<span><span class="co">##    3:    3       4</span></span>
-<span><span class="co">##    4:    4       2</span></span>
-<span><span class="co">##    5:    5       4</span></span>
-<span><span class="co">##   ---             </span></span>
-<span><span class="co">##  996:  996       2</span></span>
-<span><span class="co">##  997:  997       2</span></span>
-<span><span class="co">##  998:  998       4</span></span>
-<span><span class="co">##  999:  999       4</span></span>
-<span><span class="co">## 1000: 1000       4</span></span></code></pre>
+<pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
+<span><span class="co">##          id blksize</span></span>
+<span><span class="co">##       &lt;int&gt;   &lt;num&gt;</span></span>
+<span><span class="co">##    1:     1       4</span></span>
+<span><span class="co">##    2:     2       4</span></span>
+<span><span class="co">##    3:     3       4</span></span>
+<span><span class="co">##    4:     4       2</span></span>
+<span><span class="co">##    5:     5       4</span></span>
+<span><span class="co">##   ---              </span></span>
+<span><span class="co">##  996:   996       2</span></span>
+<span><span class="co">##  997:   997       2</span></span>
+<span><span class="co">##  998:   998       4</span></span>
+<span><span class="co">##  999:   999       4</span></span>
+<span><span class="co">## 1000:  1000       4</span></span></code></pre>
 <p>In this second example, there is a vector variable <em>tau</em> of
 positive real numbers that sum to 1, and we want to calculate the
 weighted average of three numbers using <em>tau</em> as the weights. We
@@ -307,11 +315,13 @@ could use the following code to estimate a weighted average
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">4</span>, <span class="va">d</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    id    a    b    c theta</span></span>
-<span><span class="co">## 1:  1 1.75 8.47 12.4  6.84</span></span>
-<span><span class="co">## 2:  2 3.37 6.84 10.3  6.18</span></span>
-<span><span class="co">## 3:  3 1.33 8.69 14.7  7.13</span></span>
-<span><span class="co">## 4:  4 6.19 9.04 12.0  8.52</span></span></code></pre>
+<pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
+<span><span class="co">##       id     a     b     c theta</span></span>
+<span><span class="co">##    &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span></span>
+<span><span class="co">## 1:     1  1.75  8.47  12.4  6.84</span></span>
+<span><span class="co">## 2:     2  3.37  6.84  10.3  6.18</span></span>
+<span><span class="co">## 3:     3  1.33  8.69  14.7  7.13</span></span>
+<span><span class="co">## 4:     4  6.19  9.04  12.0  8.52</span></span></code></pre>
 <p>We can simplify the calculation of <em>theta</em> by using matrix
 multiplication:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
@@ -319,11 +329,13 @@ multiplication:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">4</span>, <span class="va">d</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    id    a    b    c theta</span></span>
-<span><span class="co">## 1:  1 1.75 8.47 12.4  6.84</span></span>
-<span><span class="co">## 2:  2 3.37 6.84 10.3  6.18</span></span>
-<span><span class="co">## 3:  3 1.33 8.69 14.7  7.13</span></span>
-<span><span class="co">## 4:  4 6.19 9.04 12.0  8.52</span></span></code></pre>
+<pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
+<span><span class="co">##       id     a     b     c theta</span></span>
+<span><span class="co">##    &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span></span>
+<span><span class="co">## 1:     1  1.75  8.47  12.4  6.84</span></span>
+<span><span class="co">## 2:     2  3.37  6.84  10.3  6.18</span></span>
+<span><span class="co">## 3:     3  1.33  8.69  14.7  7.13</span></span>
+<span><span class="co">## 4:     4  6.19  9.04  12.0  8.52</span></span></code></pre>
 <p>These arrays can also have <strong>multiple dimensions</strong>, as
 in a <span class="math inline">\(2 \times 2\)</span> matrix. If we want
 to specify the mean outcomes for a factorial study design with two
@@ -345,18 +357,20 @@ cell values directly:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">d1</span><span class="op">)</span></span>
 <span><span class="va">dx</span></span></code></pre></div>
-<pre><code><span><span class="co">##         id a b outcome</span></span>
-<span><span class="co">##    1:    1 2 2       7</span></span>
-<span><span class="co">##    2:    2 2 1       4</span></span>
-<span><span class="co">##    3:    3 2 1       4</span></span>
-<span><span class="co">##    4:    4 2 2       7</span></span>
-<span><span class="co">##    5:    5 1 2       5</span></span>
-<span><span class="co">##   ---                 </span></span>
-<span><span class="co">##  996:  996 2 2       7</span></span>
-<span><span class="co">##  997:  997 2 2       7</span></span>
-<span><span class="co">##  998:  998 1 1       0</span></span>
-<span><span class="co">##  999:  999 2 2       7</span></span>
-<span><span class="co">## 1000: 1000 1 2       5</span></span></code></pre>
+<pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
+<span><span class="co">##          id     a     b outcome</span></span>
+<span><span class="co">##       &lt;int&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;</span></span>
+<span><span class="co">##    1:     1     2     2       7</span></span>
+<span><span class="co">##    2:     2     2     1       4</span></span>
+<span><span class="co">##    3:     3     2     1       4</span></span>
+<span><span class="co">##    4:     4     2     2       7</span></span>
+<span><span class="co">##    5:     5     1     2       5</span></span>
+<span><span class="co">##   ---                          </span></span>
+<span><span class="co">##  996:   996     2     2       7</span></span>
+<span><span class="co">##  997:   997     2     2       7</span></span>
+<span><span class="co">##  998:   998     1     1       0</span></span>
+<span><span class="co">##  999:   999     2     2       7</span></span>
+<span><span class="co">## 1000:  1000     1     2       5</span></span></code></pre>
 <p>It is possible to generate normally distributed data based on these
 means:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
