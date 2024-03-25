@@ -836,3 +836,53 @@ test_that("genSpline throws errors", {
                           noise.var = .025), regexp = "newrange should be a numeric!")
 })
 
+#logisticCoefs
+
+test_that("logistiCoefs works", {
+  
+  skip_on_cran()
+  
+  f <- function(n, prevalence, mu_x, coefs_y) {
+    
+    defs <- defData(varname = "x", formula = "..mu_x", variance = 1, dist = "normal")
+    
+    intercept <- logisticCoefs(defCovar = defs, coefs = coefs_y, popPrev = prevalence)[['B0']]
+    
+    defs <- defData(
+      defs,
+      varname = "y",
+      formula = "t(c(..intercept, ..coefs_y)) %*% c(1, x)",
+      dist = "binary", link = "logit")
+    
+    genData(n, defs)[, .(x= mean(x), y= mean(y) )]
+    
+  }
+  
+  p <- rbeta(1, 6, 3)
+  mu_x <- rnorm(1, 5, 1)
+  coefs_y <- c(rnorm(1, 0,.5))
+  
+  expect_equal(
+    abs(sum(f(n = 999, prevalence = p, mu_x = mu_x, coefs_y = coefs_y) - c(mu_x, p))),
+    0,
+    tolerance = 0.25
+  )
+  
+  defs <- defData(varname = "x", formula = "..mu_x", variance = 1, dist = "normal")
+  
+  intercept <- logisticCoefs(defCovar = defs, coefs = coefs_y, popPrev = p)[['B0']]
+  
+  defs <- defData(
+    defs,
+    varname = "y",
+    formula = "t(c(..intercept, ..coefs_y)) %*% c(1, x)",
+    dist = "binary", link = "logit")
+  
+  expect_equal(
+    abs(sum(genData(n = 999, defs)[, .(x= mean(x), y= mean(y) )] - c(mu_x, p))),
+    0,
+    tolerance = 0.25
+  )
+
+})
+
