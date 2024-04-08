@@ -1,7 +1,10 @@
 # simstudy (development version)
 
-## Minor fix
+## New features
+*`addPeriods` has a new argument `periodVec` that allows user to specify 
+specific measurement time periods as a vector.
 
+## Minor fix
 * Function `logisticCoefs` now correctly handles double dot notation.
 
 # simstudy 0.7.1
