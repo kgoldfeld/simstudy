@@ -31,7 +31,7 @@ repeated during each time period}
 
 \item{perName}{Variable name for period field. Defaults to "period"}
 
-\item{perVec}{Vector of period times. Defaults to NULL}
+\item{periodVec}{Vector of period times. Defaults to NULL}
 }
 \value{
 An updated data.table that that has multiple rows
@@ -47,18 +47,18 @@ each measurement period. This is done by defining specific variables \emph{in} t
 data set that define the number of observations per subject and the average 
 interval time between each observation. \bold{\emph{nCount}} defines the number of 
 measurements for an individual; \bold{\emph{mInterval}} specifies the average time between 
-intervals for a subject; and vInterval specifies the variance of those 
-interval times. If \bold{\emph{vInterval}} is set to 0 or is not defined, the interval for
+intervals for a subject; and \bold{\emph{vInterval}} specifies the variance of those 
+interval times. If \bold{\emph{mInterval}} is not defined, no intervals are used. If \bold{\emph{vInterval}} is set to 0 or is not defined, the interval for
 a subject is determined entirely by the mean interval. If \bold{\emph{vInterval}} is 
 greater than 0, time intervals are generated using a gamma distribution 
 with specified mean and dispersion. If either \bold{\emph{nPeriods}} or \bold{\emph{timevars}} 
 is specified, that will override any \bold{\emph{nCount}}, \bold{\emph{mInterval}}, and 
 \bold{\emph{vInterval}} data.
 
-\bold\emph{{perVec}} is used to specify measurement periods that are different
-the default counting variables. If \bold\emph{{perVec}} is not specified, 
+\bold{\emph{periodVec}} is used to specify measurement periods that are different
+the default counting variables. If \bold{\emph{periodVec}} is not specified, 
 the periods default to \emph{0, 1, ... n-1}, with \emph{n} periods. If 
-\bold\emph{{perVec}} is specified as \emph{c(x_1, x_2, ... x_n)}, then
+\bold{\emph{periodVec}} is specified as \emph{c(x_1, x_2, ... x_n)}, then
 \emph{x_1, x_2, ... x_n} represent the measurement periods.
 }
 \examples{
