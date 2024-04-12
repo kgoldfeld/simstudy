@@ -8,6 +8,26 @@
 #' @param timevarName Name of new time dependent variable
 #' @param timeid Variable name for new index field. Defaults to "timevar"
 #' @param perName Variable name for period field. Defaults to "period"
+#' @param periodVec Vector of period times. Defaults to NULL
+#' @details It is possible to generate longitudinal data with varying 
+#' numbers of measurement periods as well as varying time intervals between 
+#' each measurement period. This is done by defining specific variables \emph{in} the 
+#' data set that define the number of observations per subject and the average 
+#' interval time between each observation. \bold{\emph{nCount}} defines the number of 
+#' measurements for an individual; \bold{\emph{mInterval}} specifies the average time between 
+#' intervals for a subject; and \bold{\emph{vInterval}} specifies the variance of those 
+#' interval times. If \bold{\emph{mInterval}} is not defined, no intervals are used. If \bold{\emph{vInterval}} is set to 0 or is not defined, the interval for
+#' a subject is determined entirely by the mean interval. If \bold{\emph{vInterval}} is 
+#' greater than 0, time intervals are generated using a gamma distribution 
+#' with specified mean and dispersion. If either \bold{\emph{nPeriods}} or \bold{\emph{timevars}} 
+#' is specified, that will override any \bold{\emph{nCount}}, \bold{\emph{mInterval}}, and 
+#' \bold{\emph{vInterval}} data.
+#' 
+#' \bold{\emph{periodVec}} is used to specify measurement periods that are different
+#' the default counting variables. If \bold{\emph{periodVec}} is not specified, 
+#' the periods default to \emph{0, 1, ... n-1}, with \emph{n} periods. If 
+#' \bold{\emph{periodVec}} is specified as \emph{c(x_1, x_2, ... x_n)}, then
+#' \emph{x_1, x_2, ... x_n} represent the measurement periods.
 #' @return An updated data.table that that has multiple rows
 #' per observation in dtName
 #' @examples
@@ -46,7 +66,8 @@ addPeriods <- function(dtName,
                        timevars = NULL,
                        timevarName = "timevar",
                        timeid = "timeID",
-                       perName = "period") {
+                       perName = "period",
+                       periodVec = NULL) {
 
   # "Declare" vars that exist in dtName
   nCount <- NULL
@@ -77,10 +98,13 @@ addPeriods <- function(dtName,
   if (!is.null(nPeriods)) { # same number for each subject
 
     dtTimes1 <- dtX1[, list(.period = (0:(nPeriods - 1))), keyby = idvars]
+
   } else {
+    
     if ("nCount" %in% names(dtX1)) { # specified for each subject
 
       dtTimes1 <- dtX1[, list(.period = (0:(nCount - 1))), keyby = idvars]
+
     } else { # not specified for each subject or for all
 
       stop("No period or count parameter provided")
@@ -92,6 +116,12 @@ addPeriods <- function(dtName,
   data.table::setkeyv(dtX1, idvars)
   dtTimes1 <- dtTimes1[dtX1]
   data.table::setkeyv(dtTimes1, c(idvars, ".period"))
+  
+  # Remove nCount if it was included
+  
+  if ("nCount" %in% names(dtX1)) {
+    dtTimes1[, nCount := NULL]
+  }
 
   # Create code for final index assignment
 
@@ -131,37 +161,42 @@ addPeriods <- function(dtName,
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
-      data.table::setnames(dtTimes1, old = ".period", new = perName)
-      return(dtTimes1[])
-    } else {
+    } else { # if time dependent variables not specified
+      
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
 
-      data.table::setnames(dtTimes1, old = ".period", new = perName)
-      return(dtTimes1[])
     }
+    
+    # if specified different measurement intervals:
+    
+    if (!is.null(periodVec)) {
+      
+      assertNumeric(periodVec = periodVec)
+      assertLength(periodVec = periodVec, length = nPeriods) # Need to make sure
+      
+      dtTimes1[, .period := periodVec[.period + 1]]
+    }
+    
   } else { # is.null(nPeriods) == TRUE
 
-    if (all(c("nCount", "mInterval") %in% names(dtX1))) {
+    if ( "mInterval" %in% names(dtX1) ) {
       if (!("vInterval" %in% names(dtX1))) dtTimes1[, vInterval := 0]
 
       dtTimes1[, timeElapsed := .genPosSkew(1, mInterval, vInterval), keyby = c(idvars, ".period")]
       dtTimes1[.period == 0, timeElapsed := 0]
 
       dtTimes1[, time := round(cumsum(timeElapsed)), keyby = idvars]
-      dtTimes1[, c("timeElapsed", "nCount", "mInterval", "vInterval") := NULL]
+      dtTimes1[, c("timeElapsed", "mInterval", "vInterval") := NULL]
 
       eval(cmd)
       data.table::setkeyv(dtTimes1, timeid)
-
-      data.table::setnames(dtTimes1, old = ".period", new = perName)
-      return(dtTimes1[])
-    } else {
-      stop("No period or count parameter provided")
-    }
+    } 
   }
 
-  # if specified different measurement intervals:
+  data.table::setnames(dtTimes1, old = ".period", new = perName)
+  dtTimes1[]
+  
 }
 
 #' @title  Simulate clustered data
