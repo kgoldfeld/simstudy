@@ -1,7 +1,7 @@
-# -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v1.0.0
+# --------------------------------------------
+# CITATION file created with {cffr} R package
 # See also: https://docs.ropensci.org/cffr/
-# -----------------------------------------------------------
+# --------------------------------------------
  
 cff-version: 1.2.0
 message: 'To cite package "simstudy" in publications use:'
@@ -49,7 +49,7 @@ preferred-citation:
 repository: https://CRAN.R-project.org/package=simstudy
 repository-code: https://github.com/kgoldfeld/simstudy
 url: https://kgoldfeld.github.io/simstudy/
-date-released: '2023-11-22'
+date-released: '2024-05-10'
 contact:
 - family-names: Goldfeld
   given-names: Keith
@@ -568,3 +568,4 @@ references:
 identifiers:
 - type: url
   value: https://kgoldfeld.github.io/simstudy/dev/
+
