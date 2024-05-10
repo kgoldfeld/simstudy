@@ -1,6 +1,8 @@
 # simstudy (development version)
 
 ## New features
+* added the option to specify a customized distribution in `defData` and `defDataAdd` by
+specifying `dist = "custom"`.
 *`addPeriods` now includes a new argument `periodVec` that allows users to designate 
 specific measurement time periods using vector.
 
