@@ -368,7 +368,7 @@
   names(arg_list) <- var_vec
   assertNotInVector("n", names(arg_list))
   arg_list <- c(n = n, arg_list)
-  new <- do.call(fn, arg_list)
+  new <- do.call(fn, arg_list, envir = envir)
   
   new
 }
