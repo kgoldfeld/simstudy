@@ -231,7 +231,7 @@ The *clusterSize* distribution allocates a total sample size *N* (specified in t
 
 #### custom
 
-The *custom* distribution facilitates data generation for a user-defined distribution. The name of the user-defined function is specified as a string in the *formula* argument. The arguments of the function are specified in the *variance* argument, as a comma delimited string, such as "**arg1 = 5, arg2 = x**", where *x* is a previously generated variable. One important feature of the custom function is that the parameter list used to define the function must include "**n = n**", but this will not be included in the data definition.
+The *custom* distribution facilitates data generation for a user-defined distribution. The name of the user-defined function is specified as a string in the *formula* argument. The arguments of the function are specified in the *variance* argument, as a comma delimited string, such as "**name_arg_1 = value/formula_1, name_arg_2 = value/formula_2, ..., name_arg_K = value/formula_K**". The *name_arg_k*, $x \in \{1,2,...,K\}$, are required to create the $K$ arguments that are passed to the customized function. The *val/form_k* represent either values or a formula that is used to generate the values for the argument; if formulas are used, variables in the formulas must have been generated previously. Double dot notation is available in specifying the *value/formula_k*. One important feature of the custom function is that the parameter list used to define the function must include "**n = n**", but this will not be included in the data definition.
 
 #### exponential
 
