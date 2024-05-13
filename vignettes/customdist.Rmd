@@ -1,0 +1,159 @@
+---
+title: "Customized Distributions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Customized Distributions}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r chunkname, echo=-1}
+data.table::setDTthreads(2)
+```
+
+```{r, echo = FALSE, message = FALSE}
+library(simstudy)
+library(ggplot2)
+library(scales)
+library(grid)
+library(gridExtra)
+library(survival)
+library(gee)
+library(data.table)
+library(ordinal)
+
+odds <- function (p)  p/(1 - p) # TODO temporary remove when added to package
+plotcolors <- c("#B84226", "#1B8445", "#1C5974")
+
+cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
+                "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+ggtheme <- function(panelback = "white") {
+  
+  ggplot2::theme(
+    panel.background = element_rect(fill = panelback),
+    panel.grid = element_blank(),
+    axis.ticks =  element_line(colour = "black"),
+    panel.spacing =unit(0.25, "lines"),  # requires package grid
+    panel.border = element_rect(fill = NA, colour="gray90"), 
+    plot.title = element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = element_text(size=8),
+    axis.title = element_text(size = 8)
+  )  
+  
+}
+
+```
+
+Custom distributions can be specified in `defData` and `defDataAdd` by setting the argument *dist* to "custom". When defining a custom distribution, you provide the name of the user-defined function as a string in the *formula* argument. The arguments of the custom function are listed in the *variance* argument, separated by commas and formatted as "**arg_1 = val_form_1, arg_2 = val_form_2, $\dots$, arg_K = val_form_K**".
+
+Here, the *arg_k's* represent the names of the arguments passed to the customized function, where $k$ ranges from $1$ to $K$. You can use values or formulas for each *val_form_k*. If formulas are used, ensure that the variables have been previously generated. Double dot notation is available in specifying *value_formula_k*. One important requirement of the custom function is that the parameter list used to define the function must include an argument"**n = n**", but do not include $n$ in the definition as part of `defData` or `defDataAdd`.
+
+### Example 1
+
+Here is an example where we would like to generate data from a zero-inflated beta distribution. In this case, there is a user-defined function `zeroBeta` that takes on shape parameters $a$ and $b$, as well as $p_0$, the proportion of the sample that is zero. Note that the function also takes an argument $n$ that will not to be be specified in the data definition; $n$ will represent the number of observations being generated:
+
+```{r}
+zeroBeta <- function(n, a, b, p0) {
+  betas <- rbeta(n, a, b)
+  is.zero <- rbinom(n, 1, p0)
+  betas*!(is.zero)
+}
+```
+
+The data definition specifies a new variable $zb$ that sets $a$ and $b$ to 0.75, and $p_0 = 0.02$:
+
+```{r}
+def <- defData(
+  varname = "zb", 
+  formula = "zeroBeta", 
+  variance = "a = 0.75, b = 0.75, p0 = 0.02", 
+  dist = "custom"
+)
+```
+
+The data are generated:
+
+```{r}
+set.seed(1234)
+dd <- genData(100000, def)
+```
+
+```{r, echo = FALSE}
+dd
+```
+
+A plot of the data reveals dis-proportion of zero's:
+
+```{r, fig.width = 6, fig.height = 3, echo = FALSE}
+ggplot(data = dd, aes(x = zb)) +
+  geom_histogram(binwidth = 0.01, boundary = 0, fill = "grey60") +
+  theme(panel.grid = element_blank()) 
+```
+
+### Example 2
+
+In this second example, we are generating sets of truncated Gaussian distributions with means ranging from $-1$ to $1$. The limits of the truncation vary across three different groups. `rnormt` is a customized (user-defined) function that generates the truncated Gaussiandata. The function requires four arguments (the left truncation value, the right truncation value, the distribution average and the standard deviation).
+
+```{r}
+rnormt <- function(n, min, max, mu, s) {
+  
+  F.a <- pnorm(min, mean = mu, sd = s)
+  F.b <- pnorm(max, mean = mu, sd = s)
+  
+  u <- runif(n, min = F.a, max = F.b)
+  qnorm(u, mean = mu, sd = s)
+  
+}
+```
+
+
+In this example, truncation limits vary based on group membership. Initially, three groups are created, followed by the generation of truncated values. For Group 1, truncation occurs within the range of $-1$ to $1$, for Group 2, it's $-2$ to $2$ and for Group 3, it's $-3$ to $3$. We'll generate three data sets, each with a distinct mean denoted by M, using the double-dot notation to implement these different means.
+
+```{r}
+def <-
+  defData(
+    varname = "limit", 
+    formula = "1/4;1/2;1/4",
+    dist = "categorical"
+  ) |>
+  defData(
+    varname = "tn", 
+    formula = "rnormt", 
+    variance = "min = -limit, max = limit, mu = ..M, s = 1.5",
+    dist = "custom"
+  )
+```
+
+The data generation requires three calls to `genData`. The output is a list of three data sets:
+
+```{r}
+mus <- c(-1, 0, 1)
+dd <-lapply(mus, function(M) genData(100000, def))
+```
+
+Here are the first six observations from each of the three data sets:
+
+```{r, echo=FALSE}
+lapply(dd, function(D) head(D))
+```
+
+A plot highlights the group differences.
+
+```{r, fig.width = 8, fig.height = 6, echo = FALSE}
+pfunc <- function(dx, i) {
+  ggplot(data = dx, aes(x = tn)) +
+    geom_histogram(aes(fill = factor(limit)), binwidth = 0.05, boundary = 0, alpha = .8) +
+    facet_grid( ~ limit) +
+    theme(panel.grid = element_blank(),
+          legend.position = "none") +
+    scale_fill_manual(values = plotcolors) +
+    scale_x_continuous(breaks = seq(-3, 3, by =1)) +
+    scale_y_continuous(limits = c(0, 1000)) +
+    ggtitle(paste("mu =", mus[i]))
+}
+
+plist <- lapply(seq_along(dd), function(a) pfunc(dd[[a]], a))
+grid.arrange(grobs = plist, nrow = 3)
+```
+

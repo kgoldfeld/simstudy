@@ -36,7 +36,7 @@ A data.table named dtName that is an updated data definitions table
 Add single row to definitions table
 }
 \details{
-The possible data distributions are: normal, binary, binomial, poisson, noZeroPoisson, uniform, categorical, gamma, beta, nonrandom, uniformInt, negBinomial, exponential, mixture, trtAssign, clusterSize.
+The possible data distributions are: normal, binary, binomial, poisson, noZeroPoisson, uniform, categorical, gamma, beta, nonrandom, uniformInt, negBinomial, exponential, mixture, trtAssign, clusterSize, custom.
 }
 \examples{
 extVar <- 2.3

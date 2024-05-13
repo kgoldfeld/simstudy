@@ -12,6 +12,7 @@
 #' @return A data.frame with the updated simulated data
 #' @noRd
 .generate <- function(args, n, dfSim, idname, envir = parent.frame()) {
+  
   newColumn <- switch(args$dist,
     beta = .genbeta(
       n = n,
@@ -52,6 +53,13 @@
       n = nrow(dfSim),
       formula = args$formula,
       variance = args$variance,
+      envir = envir
+    ),
+    custom = .gencustom(
+      n = n,
+      fn = args$formula,
+      args = args$variance,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     exponential = .genexp(
@@ -327,12 +335,39 @@
 # @return A data.frame column  with the updated simulated data
 
 .gendeterm <- function(n, formula, link, dtSim, envir) {
+  
   new <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
 
   if (link == "log") {
     new <- exp(new)
   } else if (link == "logit") new <- 1 / (1 + exp(-new))
 
+  new
+}
+
+# Internal function called by .generate - returns non-random data
+#
+# @param n The number of observations required in the data set
+# @param fn String that specifies the custom function
+# @param args String of comma delimited arguments that will be passed to fn
+# @param dtSim Incomplete simulated data.table
+# @return A data.frame column  with the updated simulated data
+
+.gencustom <- function(n, fn, args, dtSim, envir) {
+  
+  args <- gsub("\\s+", "", args) # remove any spaces
+  arg_l <- as.list(unlist(strsplit(args, ",")))
+  arg_l <- lapply(arg_l, function(a) as.list(unlist(strsplit(a, "="))))
+  
+  var_vec <- unlist(lapply(arg_l, function(a) a[[1]]))
+  arg_list <- lapply(arg_l, 
+    function(a) .evalWith(a[[2]], .parseDotVars( a[[2]], envir ), dtSim, n)
+  )
+  names(arg_list) <- var_vec
+  assertNotInVector("n", names(arg_list))
+  arg_list <- c(n = n, arg_list)
+  new <- do.call(fn, arg_list, envir = envir)
+  
   new
 }
 

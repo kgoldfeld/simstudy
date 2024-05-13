@@ -51,6 +51,7 @@
                       extVars,
                       dtSim = data.table(),
                       n = nrow(dtSim)) {
+
   if (missing(dtSim) && missing(n)) {
     n <- 1
   }
@@ -198,7 +199,8 @@
       "exponential",
       "mixture",
       "trtAssign",
-      "clusterSize"
+      "clusterSize",
+      "custom"
     )
   }
 

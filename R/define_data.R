@@ -727,6 +727,7 @@ defSurv <- function(dtDefs = NULL,
         .isValidArithmeticFormula(newform, defVars)
         .isValidArithmeticFormula(variance, defVars)
       },
+      custom = {},
       stop("Unknown distribution.")
     )
 

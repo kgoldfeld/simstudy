@@ -170,3 +170,32 @@ test_that("clusterSize data is generated as expected.", {
   expect_true(dt2[, var(test)] > dt1[, var(test)])
   
 })
+
+
+# .gencustom ----
+test_that("custom data is generated as expected.", {
+  skip_on_cran()
+  
+  trunc_norm <- function(n, lower, upper, mu = 0, s = 1.5) {
+    
+    F.a <- pnorm(lower, mean = mu, sd = s)
+    F.b <- pnorm(upper, mean = mu, sd = s)
+    
+    u <- runif(n, min = F.a, max = F.b)
+    qnorm(u, mean = mu, sd = s)
+    
+  }
+
+  def <-
+    defData(varname = "x", formula = 5, dist = "poisson") |>
+    defData(varname = "y", formula = "trunc_norm",
+            variance = "s = 100, lower = x - 1, upper = x + 1",
+            dist = "custom"
+    )
+
+  dd <- genData(10000, def)
+
+  expect_true( dd[, min(y)] > dd[, min(x-1)])
+  expect_true( dd[, max(y)] < dd[, max(x+1)])
+
+})

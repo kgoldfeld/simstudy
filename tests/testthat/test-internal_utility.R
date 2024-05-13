@@ -80,7 +80,7 @@ test_that("probabilities (matrix) are adjusted as documented.", {
 # .getDists ----
 test_that("number of Dists is up to date.", {
   skip_on_cran()
-  expect_length(.getDists(), 16)
+  expect_length(.getDists(), 17)
 })
 
 # .isFormulaScalar ----

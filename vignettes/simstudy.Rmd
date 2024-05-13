@@ -190,17 +190,18 @@ d[[2]] <- data.table("binary", "probability", "both", "-", "-", "X", "-", "X")
 d[[3]] <- data.table("binomial", "probability", "both", "-", "# of trials", "X", "-", "X")
 d[[4]] <- data.table("categorical", "probability", "string", "p_1;p_2;...;p_n", "a;b;c", "X", "-", "-")
 d[[5]] <- data.table("clusterSize", "total N", "both", "-", "dispersion", "X", "-", "-")
-d[[6]] <- data.table("exponential", "mean", "both", "-", "-", "X", "X", "-")
-d[[7]] <- data.table("gamma", "mean", "both", "-", "dispersion", "X", "X", "-")
-d[[8]] <- data.table("mixture", "formula", "string", "x_1 | p_1 + ... + x_n | p_n", "-", "X", "-", "-")
-d[[9]] <- data.table("negBinomial", "mean", "both", "-", "dispersion", "X", "X", "-")
-d[[10]] <- data.table("nonrandom", "formula", "both", "-", "-", "X", "-", "-")
-d[[11]] <- data.table("normal", "mean", "both", "-", "variance", "X", "-", "-")
-d[[12]] <- data.table("noZeroPoisson", "mean", "both", "-", "-", "X", "X", "-")
-d[[13]] <- data.table("poisson", "mean", "both", "-", "-", "X", "X", "-")
-d[[14]] <- data.table("trtAssign", "ratio", "string", "r_1;r_2;...;r_n", "stratification", "X", "X", "-")
-d[[15]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
-d[[16]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[6]] <- data.table("custom", "function", "string", "-", "arguments", "X", "-", "-")
+d[[7]] <- data.table("exponential", "mean", "both", "-", "-", "X", "X", "-")
+d[[8]] <- data.table("gamma", "mean", "both", "-", "dispersion", "X", "X", "-")
+d[[9]] <- data.table("mixture", "formula", "string", "x_1 | p_1 + ... + x_n | p_n", "-", "X", "-", "-")
+d[[10]] <- data.table("negBinomial", "mean", "both", "-", "dispersion", "X", "X", "-")
+d[[11]] <- data.table("nonrandom", "formula", "both", "-", "-", "X", "-", "-")
+d[[12]] <- data.table("normal", "mean", "both", "-", "variance", "X", "-", "-")
+d[[13]] <- data.table("noZeroPoisson", "mean", "both", "-", "-", "X", "X", "-")
+d[[14]] <- data.table("poisson", "mean", "both", "-", "-", "X", "X", "-")
+d[[15]] <- data.table("trtAssign", "ratio", "string", "r_1;r_2;...;r_n", "stratification", "X", "X", "-")
+d[[16]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[17]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
 
 
 d <- rbindlist(d)
@@ -226,7 +227,11 @@ A *categorical* distribution is a discrete data distribution taking on values fr
 
 #### clusterSize
 
-The *clusterSize* distribution allocates a total sample size *N* (specified in the *formula* argument) across the *k* rows of the data.table such that the sum of the rows equals *N*. If the *dispersion* argument is set to 0, the allocation to each row is *N/k*, with some rows getting an increment of 1 to ensure that the sum is N. It is possible to relax the assumption of balanced cluster sizes by setting *dispersion > 0*. As the dispersion, the variability of cluster sizes across clusters increases. 
+The *clusterSize* distribution allocates a total sample size *N* (specified in the *formula* argument) across the *k* rows of the data.table such that the sum of the rows equals *N*. If the *dispersion* argument is set to 0, the allocation to each row is *N/k*, with some rows getting an increment of 1 to ensure that the sum is N. It is possible to relax the assumption of balanced cluster sizes by setting *dispersion > 0*. As the dispersion increases, the variability of cluster sizes across clusters increases. 
+
+#### custom
+
+Custom distributions can be specified in `defData` and `defDataAdd` by setting the argument *dist* to "custom". When defining a custom distribution, provide the name of the user-defined function as a string in the *formula* argument. The arguments of the custom function are listed in the *variance* argument, separated by commas and formatted as "**arg_1 = val_form_1, arg_2 = val_form_2, $\dots$, arg_K = val_form_K**". The *arg_k's* represent the names of the arguments passed to the customized function, where $k$ ranges from $1$ to $K$. Values or formulas can be used for each *val_form_k*. If formulas are used, ensure that the variables have been previously generated. Double dot notation is available in specifying *value_formula_k*. One important requirement of the custom function is that the parameter list used to define the function must include an argument"**n = n**", but do not include $n$ in the definition as part of `defData` or `defDataAdd`.
 
 #### exponential
 
