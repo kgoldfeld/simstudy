@@ -44,6 +44,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -111,40 +114,40 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>dtName</dt>
+    <dl><dt id="arg-dtname">dtName<a class="anchor" aria-label="anchor" href="#arg-dtname"></a></dt>
 <dd><p>data table</p></dd>
 
 
-<dt>clustID</dt>
+<dt id="arg-clustid">clustID<a class="anchor" aria-label="anchor" href="#arg-clustid"></a></dt>
 <dd><p>string representing name of column of cluster level ids</p></dd>
 
 
-<dt>nWaves</dt>
+<dt id="arg-nwaves">nWaves<a class="anchor" aria-label="anchor" href="#arg-nwaves"></a></dt>
 <dd><p>number of treatment waves</p></dd>
 
 
-<dt>lenWaves</dt>
+<dt id="arg-lenwaves">lenWaves<a class="anchor" aria-label="anchor" href="#arg-lenwaves"></a></dt>
 <dd><p>the number of periods between waves</p></dd>
 
 
-<dt>startPer</dt>
+<dt id="arg-startper">startPer<a class="anchor" aria-label="anchor" href="#arg-startper"></a></dt>
 <dd><p>the starting period of the first wave</p></dd>
 
 
-<dt>perName</dt>
+<dt id="arg-pername">perName<a class="anchor" aria-label="anchor" href="#arg-pername"></a></dt>
 <dd><p>string representing name of column of time periods</p></dd>
 
 
-<dt>grpName</dt>
+<dt id="arg-grpname">grpName<a class="anchor" aria-label="anchor" href="#arg-grpname"></a></dt>
 <dd><p>string representing variable name for treatment or
 exposure group</p></dd>
 
 
-<dt>lag</dt>
+<dt id="arg-lag">lag<a class="anchor" aria-label="anchor" href="#arg-lag"></a></dt>
 <dd><p>integer representing length of transition period</p></dd>
 
 
-<dt>xrName</dt>
+<dt id="arg-xrname">xrName<a class="anchor" aria-label="anchor" href="#arg-xrname"></a></dt>
 <dd><p>string representing name of the field that
 indicates whether the cluster status is in transition status</p></dd>
 
@@ -178,19 +181,19 @@ indicates whether the cluster status is in transition status</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dp</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;cluster&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      cluster period     ceffect     m timeID startTrt    rx</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;int&gt;  &lt;int&gt;       &lt;num&gt; &lt;num&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       1      0 -0.03387530    10      1        2     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       1      1 -0.03387530    10      2        2     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:       1      2 -0.03387530    10      3        2     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:       1      3 -0.03387530    10      4        2     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:       1      4 -0.03387530    10      5        2     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 140:      12      7 -0.06267344    10    140        8     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 141:      12      8 -0.06267344    10    141        8     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 142:      12      9 -0.06267344    10    142        8     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 143:      12     10 -0.06267344    10    143        8     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 144:      12     11 -0.06267344    10    144        8     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      cluster period    ceffect     m timeID startTrt    rx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;int&gt;  &lt;int&gt;      &lt;num&gt; &lt;num&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       1      0 -0.2031940    10      1        2     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       1      1 -0.2031940    10      2        2     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:       1      2 -0.2031940    10      3        2     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:       1      3 -0.2031940    10      4        2     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:       1      4 -0.2031940    10      5        2     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140:      12      7 -0.1157863    10    140        8     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141:      12      8 -0.1157863    10    141        8     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142:      12      9 -0.1157863    10    142        8     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143:      12     10 -0.1157863    10    143        8     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144:      12     11 -0.1157863    10    144        8     1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="addPeriods.html">addPeriods</a></span><span class="op">(</span><span class="va">dc</span>, <span class="fl">12</span>, <span class="st">"cluster"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu">trtStepWedge</span><span class="op">(</span><span class="va">dp</span>, <span class="st">"cluster"</span>,</span></span>
@@ -199,19 +202,19 @@ indicates whether the cluster status is in transition status</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dp</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;cluster&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      cluster period     ceffect     m timeID startTrt    xr    rx</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;int&gt;  &lt;int&gt;       &lt;num&gt; &lt;num&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       1      0 -0.03387530    10      1        4     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       1      1 -0.03387530    10      2        4     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:       1      2 -0.03387530    10      3        4     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:       1      3 -0.03387530    10      4        4     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:       1      4 -0.03387530    10      5        4     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 140:      12      7 -0.06267344    10    140        5     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 141:      12      8 -0.06267344    10    141        5     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 142:      12      9 -0.06267344    10    142        5     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 143:      12     10 -0.06267344    10    143        5     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 144:      12     11 -0.06267344    10    144        5     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      cluster period    ceffect     m timeID startTrt    xr    rx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;int&gt;  &lt;int&gt;      &lt;num&gt; &lt;num&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       1      0 -0.2031940    10      1        4     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       1      1 -0.2031940    10      2        4     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:       1      2 -0.2031940    10      3        4     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:       1      3 -0.2031940    10      4        4     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:       1      4 -0.2031940    10      5        4     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140:      12      7 -0.1157863    10    140        5     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141:      12      8 -0.1157863    10    141        5     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142:      12      9 -0.1157863    10    142        5     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143:      12     10 -0.1157863    10    143        5     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144:      12     11 -0.1157863    10    144        5     0     1</span>
 </code></pre></div>
     </div>
   </div>
@@ -226,7 +229,7 @@ indicates whether the cluster status is in transition status</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

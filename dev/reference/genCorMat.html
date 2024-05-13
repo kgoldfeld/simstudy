@@ -44,6 +44,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -101,28 +104,28 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>nvars</dt>
+    <dl><dt id="arg-nvars">nvars<a class="anchor" aria-label="anchor" href="#arg-nvars"></a></dt>
 <dd><p>number of rows and columns (i.e. number of variables) for correlation matrix. It can be
 a scalar or vector (see details).</p></dd>
 
 
-<dt>cors</dt>
+<dt id="arg-cors">cors<a class="anchor" aria-label="anchor" href="#arg-cors"></a></dt>
 <dd><p>vector of correlations.</p></dd>
 
 
-<dt>rho</dt>
+<dt id="arg-rho">rho<a class="anchor" aria-label="anchor" href="#arg-rho"></a></dt>
 <dd><p>Correlation coefficient, <code>-1 &lt;= rho &lt;= 1</code>. Use if corMatrix is not provided. It can
 be a scalar or vector (see details).</p></dd>
 
 
-<dt>corstr</dt>
+<dt id="arg-corstr">corstr<a class="anchor" aria-label="anchor" href="#arg-corstr"></a></dt>
 <dd><p>Correlation structure. Options include "cs" for a compound symmetry structure, "ar1" 
 for an autoregressive structure of order 1, "arx" for an autoregressive structure 
 that has a general decay pattern, and "structured" that imposes a prescribed
 pattern between observation based on distance (see details).</p></dd>
 
 
-<dt>nclusters</dt>
+<dt id="arg-nclusters">nclusters<a class="anchor" aria-label="anchor" href="#arg-nclusters"></a></dt>
 <dd><p>An integer that indicates the number of matrices that will be generated.</p></dd>
 
 </dl></div>
@@ -246,7 +249,7 @@ each cluster will have correlation matrices with the same autocorrelation.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

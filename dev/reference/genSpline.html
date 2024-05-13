@@ -44,6 +44,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -110,42 +113,42 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>dt</dt>
+    <dl><dt id="arg-dt">dt<a class="anchor" aria-label="anchor" href="#arg-dt"></a></dt>
 <dd><p>data.table that will be modified</p></dd>
 
 
-<dt>newvar</dt>
+<dt id="arg-newvar">newvar<a class="anchor" aria-label="anchor" href="#arg-newvar"></a></dt>
 <dd><p>Name of new variable to be created</p></dd>
 
 
-<dt>predictor</dt>
+<dt id="arg-predictor">predictor<a class="anchor" aria-label="anchor" href="#arg-predictor"></a></dt>
 <dd><p>Name of field in old data.table that is predicting new value</p></dd>
 
 
-<dt>theta</dt>
+<dt id="arg-theta">theta<a class="anchor" aria-label="anchor" href="#arg-theta"></a></dt>
 <dd><p>A vector or matrix of values between 0 and 1. Each column of the matrix
 represents the weights/coefficients that will be applied to the basis functions
 determined by the knots and degree. Each column of theta represents a separate
 spline curve.</p></dd>
 
 
-<dt>knots</dt>
+<dt id="arg-knots">knots<a class="anchor" aria-label="anchor" href="#arg-knots"></a></dt>
 <dd><p>A vector of values between 0 and 1, specifying quantile
 cut-points for splines. Defaults to c(0.25, 0.50, 0.75).</p></dd>
 
 
-<dt>degree</dt>
+<dt id="arg-degree">degree<a class="anchor" aria-label="anchor" href="#arg-degree"></a></dt>
 <dd><p>Integer specifying polynomial degree of curvature.</p></dd>
 
 
-<dt>newrange</dt>
+<dt id="arg-newrange">newrange<a class="anchor" aria-label="anchor" href="#arg-newrange"></a></dt>
 <dd><p>Range of the spline function , specified as a string
 with two values separated by a semi-colon. The first value represents the
 minimum, and the second value represents the maximum. Defaults to NULL, which
 sets the range to be between 0 and 1.</p></dd>
 
 
-<dt>noise.var</dt>
+<dt id="arg-noise-var">noise.var<a class="anchor" aria-label="anchor" href="#arg-noise-var"></a></dt>
 <dd><p>Add to normally distributed noise to observation - where mean
 is value of spline curve.</p></dd>
 
@@ -206,7 +209,7 @@ is value of spline curve.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

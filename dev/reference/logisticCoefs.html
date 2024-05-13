@@ -48,6 +48,9 @@ data with these desire characteristics."><meta name="robots" content="noindex"><
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -119,49 +122,49 @@ data with these desire characteristics.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>defCovar</dt>
+    <dl><dt id="arg-defcovar">defCovar<a class="anchor" aria-label="anchor" href="#arg-defcovar"></a></dt>
 <dd><p>A definition table for the covariates in the underlying
 population. This tables specifies the distribution of the covariates.</p></dd>
 
 
-<dt>coefs</dt>
+<dt id="arg-coefs">coefs<a class="anchor" aria-label="anchor" href="#arg-coefs"></a></dt>
 <dd><p>A vector of coefficients that reflect the relationship between 
 each of the covariates and the log-odds of the outcome.</p></dd>
 
 
-<dt>popPrev</dt>
+<dt id="arg-popprev">popPrev<a class="anchor" aria-label="anchor" href="#arg-popprev"></a></dt>
 <dd><p>The target population prevalence of the outcome. 
 A value between 0 and 1.</p></dd>
 
 
-<dt>rr</dt>
+<dt id="arg-rr">rr<a class="anchor" aria-label="anchor" href="#arg-rr"></a></dt>
 <dd><p>The target risk ratio, which must be a value between 0 and
 1/popPrev. Defaults to NULL.</p></dd>
 
 
-<dt>rd</dt>
+<dt id="arg-rd">rd<a class="anchor" aria-label="anchor" href="#arg-rd"></a></dt>
 <dd><p>The target risk difference, which must be between
 -(popPrev) and (1 - popPrev). Defaults to NULL</p></dd>
 
 
-<dt>auc</dt>
+<dt id="arg-auc">auc<a class="anchor" aria-label="anchor" href="#arg-auc"></a></dt>
 <dd><p>The target AUC, which must be a value between 0.5 and 1.0 . 
 Defaults to NULL.</p></dd>
 
 
-<dt>tolerance</dt>
+<dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
 <dd><p>The minimum stopping distance between the adjusted low and high
 endpoints. Defaults to 0.001.</p></dd>
 
 
-<dt>sampleSize</dt>
+<dt id="arg-samplesize">sampleSize<a class="anchor" aria-label="anchor" href="#arg-samplesize"></a></dt>
 <dd><p>The number of units to generate for the bisection algorithm. 
 The default is 1e+05. To get a reliable estimate, the value 
 should be no smaller than the default, though larger values can be used, though
 computing time will increase.</p></dd>
 
 
-<dt>trtName</dt>
+<dt id="arg-trtname">trtName<a class="anchor" aria-label="anchor" href="#arg-trtname"></a></dt>
 <dd><p>If either a risk ratio or risk difference is the target statistic,
 a treatment/exposure variable name can be provided. Defaults to "A".</p></dd>
 
@@ -215,7 +218,7 @@ no. 1 (2023): 1-10.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

@@ -45,6 +45,9 @@ Correlations can be added via correlation matrix or rho and corstr."><meta name=
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -116,17 +119,17 @@ Correlations can be added via correlation matrix or <code>rho</code> and <code>c
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>dtName</dt>
+    <dl><dt id="arg-dtname">dtName<a class="anchor" aria-label="anchor" href="#arg-dtname"></a></dt>
 <dd><p>Name of complete data set</p></dd>
 
 
-<dt>adjVar</dt>
+<dt id="arg-adjvar">adjVar<a class="anchor" aria-label="anchor" href="#arg-adjvar"></a></dt>
 <dd><p>Adjustment variable  name in dtName - determines
 logistic shift. This is specified assuming a cumulative logit
 link.</p></dd>
 
 
-<dt>baseprobs</dt>
+<dt id="arg-baseprobs">baseprobs<a class="anchor" aria-label="anchor" href="#arg-baseprobs"></a></dt>
 <dd><p>Baseline probability expressed as a vector or matrix of
 probabilities. The values (per row) must sum to &lt;= 1. If <code>rowSums(baseprobs) &lt; 1</code>, an additional category is added with probability <code>1 - rowSums(baseprobs)</code>. The number of rows represents the number of new
 categorical variables. The number of columns represents the number of
@@ -134,40 +137,40 @@ possible responses - if an particular category has fewer possible responses,
 assign zero probability to non-relevant columns.</p></dd>
 
 
-<dt>catVar</dt>
+<dt id="arg-catvar">catVar<a class="anchor" aria-label="anchor" href="#arg-catvar"></a></dt>
 <dd><p>Name of the new categorical field. Defaults to "cat". Can be a
 character vector with a name for each new variable defined via <code>baseprobs</code>.
 Will be overridden by <code>prefix</code> if more than one variable is defined and
 <code>length(catVar) == 1</code>.</p></dd>
 
 
-<dt>asFactor</dt>
+<dt id="arg-asfactor">asFactor<a class="anchor" aria-label="anchor" href="#arg-asfactor"></a></dt>
 <dd><p>If <code>asFactor == TRUE</code> (default), new field is returned
 as a factor. If <code>asFactor == FALSE</code>, new field is returned as an integer.</p></dd>
 
 
-<dt>idname</dt>
+<dt id="arg-idname">idname<a class="anchor" aria-label="anchor" href="#arg-idname"></a></dt>
 <dd><p>Name of the id column in <code>dtName</code>.</p></dd>
 
 
-<dt>prefix</dt>
+<dt id="arg-prefix">prefix<a class="anchor" aria-label="anchor" href="#arg-prefix"></a></dt>
 <dd><p>A string. The names of the new variables will be a
 concatenation of the prefix and a sequence of integers indicating the
 variable number.</p></dd>
 
 
-<dt>rho</dt>
+<dt id="arg-rho">rho<a class="anchor" aria-label="anchor" href="#arg-rho"></a></dt>
 <dd><p>Correlation coefficient, -1 &lt; rho &lt; 1. Use if corMatrix is not
 provided.</p></dd>
 
 
-<dt>corstr</dt>
+<dt id="arg-corstr">corstr<a class="anchor" aria-label="anchor" href="#arg-corstr"></a></dt>
 <dd><p>Correlation structure of the variance-covariance matrix defined
 by sigma and rho. Options include "ind" for an independence structure, "cs"
 for a compound symmetry structure, and "ar1" for an autoregressive structure.</p></dd>
 
 
-<dt>corMatrix</dt>
+<dt id="arg-cormatrix">corMatrix<a class="anchor" aria-label="anchor" href="#arg-cormatrix"></a></dt>
 <dd><p>Correlation matrix can be entered directly. It must be
 symmetrical and positive definite. It is not a required field; if a matrix is
 not provided, then a structure and correlation coefficient rho must be
@@ -175,12 +178,12 @@ specified. (The matrix created via <code>rho</code> and <code>corstr</code> must
 definite.)</p></dd>
 
 
-<dt>npVar</dt>
+<dt id="arg-npvar">npVar<a class="anchor" aria-label="anchor" href="#arg-npvar"></a></dt>
 <dd><p>Vector of variable names that indicate which variables are to
 violate the proportionality assumption.</p></dd>
 
 
-<dt>npAdj</dt>
+<dt id="arg-npadj">npAdj<a class="anchor" aria-label="anchor" href="#arg-npadj"></a></dt>
 <dd><p>Matrix with a row for each npVar and a column for each category.
 Each value represents the deviation from the proportional odds assumption on
 the logistic scale.</p></dd>
@@ -339,7 +342,7 @@ the logistic scale.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

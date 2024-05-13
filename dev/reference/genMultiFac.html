@@ -44,6 +44,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -108,15 +111,15 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>nFactors</dt>
+    <dl><dt id="arg-nfactors">nFactors<a class="anchor" aria-label="anchor" href="#arg-nfactors"></a></dt>
 <dd><p>Number of factors (columns) to generate.</p></dd>
 
 
-<dt>each</dt>
+<dt id="arg-each">each<a class="anchor" aria-label="anchor" href="#arg-each"></a></dt>
 <dd><p>Number of replications for each combination of factors. Must be specified.</p></dd>
 
 
-<dt>levels</dt>
+<dt id="arg-levels">levels<a class="anchor" aria-label="anchor" href="#arg-levels"></a></dt>
 <dd><p>Vector or scalar. If a vector is specified, it must be
 the same length as nFatctors. Each value of the vector represents the
 number of levels of each corresponding factor. If a scalar is specified,
@@ -124,17 +127,17 @@ each factor will have the same number of levels. The default is 2 levels
 for each factor.</p></dd>
 
 
-<dt>coding</dt>
+<dt id="arg-coding">coding<a class="anchor" aria-label="anchor" href="#arg-coding"></a></dt>
 <dd><p>String value to specify if "dummy" or "effect" coding is used.
 Defaults to "dummy".</p></dd>
 
 
-<dt>colNames</dt>
+<dt id="arg-colnames">colNames<a class="anchor" aria-label="anchor" href="#arg-colnames"></a></dt>
 <dd><p>A vector of strings, with a length of nFactors. The strings
 represent the name for each factor.</p></dd>
 
 
-<dt>idName</dt>
+<dt id="arg-idname">idName<a class="anchor" aria-label="anchor" href="#arg-idname"></a></dt>
 <dd><p>A string that specifies the id of the record. Defaults to "id".</p></dd>
 
 </dl></div>
@@ -231,7 +234,7 @@ an integer.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

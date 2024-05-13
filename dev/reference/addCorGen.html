@@ -44,6 +44,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -114,70 +117,70 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>dtOld</dt>
+    <dl><dt id="arg-dtold">dtOld<a class="anchor" aria-label="anchor" href="#arg-dtold"></a></dt>
 <dd><p>The data set that will be augmented. If the data set includes a
 single record per id, the new data table will be created as a "wide" data set.
 If the original data set includes multiple records per id, the new data set will 
 be in "long" format.</p></dd>
 
 
-<dt>nvars</dt>
+<dt id="arg-nvars">nvars<a class="anchor" aria-label="anchor" href="#arg-nvars"></a></dt>
 <dd><p>The number of new variables to create for each id. This is only applicable
 when the data are generated from a data set that includes one record per id.</p></dd>
 
 
-<dt>idvar</dt>
+<dt id="arg-idvar">idvar<a class="anchor" aria-label="anchor" href="#arg-idvar"></a></dt>
 <dd><p>String variable name of column represents individual level id for correlated
 data.</p></dd>
 
 
-<dt>rho</dt>
+<dt id="arg-rho">rho<a class="anchor" aria-label="anchor" href="#arg-rho"></a></dt>
 <dd><p>Correlation coefficient, -1 &lt;= rho &lt;= 1. Use if corMatrix is not provided.</p></dd>
 
 
-<dt>corstr</dt>
+<dt id="arg-corstr">corstr<a class="anchor" aria-label="anchor" href="#arg-corstr"></a></dt>
 <dd><p>Correlation structure of the variance-covariance matrix
 defined by sigma and rho. Options include "cs" for a compound symmetry structure
 and "ar1" for an autoregressive structure.</p></dd>
 
 
-<dt>corMatrix</dt>
+<dt id="arg-cormatrix">corMatrix<a class="anchor" aria-label="anchor" href="#arg-cormatrix"></a></dt>
 <dd><p>Correlation matrix can be entered directly. It must be symmetrical and
 positive semi-definite. It is not a required field; if a matrix is not provided, then a
 structure and correlation coefficient rho must be specified.</p></dd>
 
 
-<dt>dist</dt>
+<dt id="arg-dist">dist<a class="anchor" aria-label="anchor" href="#arg-dist"></a></dt>
 <dd><p>A string indicating "normal", "binary", "poisson" or "gamma".</p></dd>
 
 
-<dt>param1</dt>
+<dt id="arg-param-">param1<a class="anchor" aria-label="anchor" href="#arg-param-"></a></dt>
 <dd><p>A string that represents the column in dtOld that contains the parameter
 for the mean of the distribution. In the case of the uniform distribution the column
 specifies the minimum.</p></dd>
 
 
-<dt>param2</dt>
+<dt id="arg-param-">param2<a class="anchor" aria-label="anchor" href="#arg-param-"></a></dt>
 <dd><p>A string that represents the column in dtOld that contains a possible second
 parameter for the distribution. For the normal distribution, this will be the variance;
 for the gamma distribution, this will be the dispersion; and for the uniform distribution,
 this will be the maximum.</p></dd>
 
 
-<dt>cnames</dt>
+<dt id="arg-cnames">cnames<a class="anchor" aria-label="anchor" href="#arg-cnames"></a></dt>
 <dd><p>Explicit column names. A single string with names separated
 by commas. If no string is provided, the default names will be V#, where #
 represents the column.</p></dd>
 
 
-<dt>method</dt>
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>Two methods are available to generate correlated data. (1) "copula" uses
 the multivariate Gaussian copula method that is applied to all other distributions; this
 applies to all available distributions. (2) "ep" uses an algorithm developed by
 Emrich and Piedmonte (1991).</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>May include additional arguments that have been deprecated and are
 no longer used.</p></dd>
 
@@ -359,7 +362,7 @@ Multivariate Binary Variates. The American Statistician 1991;45:302-4.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

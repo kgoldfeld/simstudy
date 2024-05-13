@@ -44,6 +44,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -109,39 +112,39 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>dt</dt>
+    <dl><dt id="arg-dt">dt<a class="anchor" aria-label="anchor" href="#arg-dt"></a></dt>
 <dd><p>Data table that will be updated.</p></dd>
 
 
-<dt>defs</dt>
+<dt id="arg-defs">defs<a class="anchor" aria-label="anchor" href="#arg-defs"></a></dt>
 <dd><p>Field definition table created by function <code>defDataAdd</code>.</p></dd>
 
 
-<dt>rho</dt>
+<dt id="arg-rho">rho<a class="anchor" aria-label="anchor" href="#arg-rho"></a></dt>
 <dd><p>Correlation coefficient, -1 &lt;= rho &lt;= 1. Use if corMatrix is not
 provided.</p></dd>
 
 
-<dt>tau</dt>
+<dt id="arg-tau">tau<a class="anchor" aria-label="anchor" href="#arg-tau"></a></dt>
 <dd><p>Correlation based on Kendall's tau. If tau is specified, then it
 is used as the correlation even if rho is specified. If tau is NULL, then the
 specified value of rho is used, or rho defaults to 0.</p></dd>
 
 
-<dt>corstr</dt>
+<dt id="arg-corstr">corstr<a class="anchor" aria-label="anchor" href="#arg-corstr"></a></dt>
 <dd><p>Correlation structure of the variance-covariance matrix defined
 by sigma and rho. Options include "cs" for a compound symmetry structure
 and "ar1" for an autoregressive structure. Defaults to "cs".</p></dd>
 
 
-<dt>corMatrix</dt>
+<dt id="arg-cormatrix">corMatrix<a class="anchor" aria-label="anchor" href="#arg-cormatrix"></a></dt>
 <dd><p>Correlation matrix can be entered directly. It must be
 symmetrical and positive semi-definite. It is not a required field; if a
 matrix is not provided, then a structure and correlation coefficient rho must
 be specified.</p></dd>
 
 
-<dt>envir</dt>
+<dt id="arg-envir">envir<a class="anchor" aria-label="anchor" href="#arg-envir"></a></dt>
 <dd><p>Environment the data definitions are evaluated in.
 Defaults to <a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">base::parent.frame</a>.</p></dd>
 
@@ -269,7 +272,7 @@ Defaults to <a href="https://rdrr.io/r/base/sys.parent.html" class="external-lin
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

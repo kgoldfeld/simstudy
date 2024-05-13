@@ -63,6 +63,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -537,6 +540,16 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 </tr>
 <tr class="even">
+<td align="left">custom</td>
+<td align="left">function</td>
+<td align="left">string</td>
+<td align="left">-</td>
+<td align="left">arguments</td>
+<td align="center">X</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr class="odd">
 <td align="left">exponential</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -546,7 +559,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">gamma</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -556,7 +569,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">mixture</td>
 <td align="left">formula</td>
 <td align="left">string</td>
@@ -566,7 +579,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">negBinomial</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -576,7 +589,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">nonrandom</td>
 <td align="left">formula</td>
 <td align="left">both</td>
@@ -586,7 +599,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">normal</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -596,7 +609,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">noZeroPoisson</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -606,7 +619,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">poisson</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -616,7 +629,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">trtAssign</td>
 <td align="left">ratio</td>
 <td align="left">string</td>
@@ -626,7 +639,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">uniform</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -636,7 +649,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">uniformInt</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -713,8 +726,30 @@ rounding errors.</p>
 allocation to each row is <em>N/k</em>, with some rows getting an
 increment of 1 to ensure that the sum is N. It is possible to relax the
 assumption of balanced cluster sizes by setting <em>dispersion &gt;
-0</em>. As the dispersion, the variability of cluster sizes across
-clusters increases.</p>
+0</em>. As the dispersion increases, the variability of cluster sizes
+across clusters increases.</p>
+</div>
+<div class="section level4">
+<h4 id="custom">custom<a class="anchor" aria-label="anchor" href="#custom"></a>
+</h4>
+<p>Custom distributions can be specified in <code>defData</code> and
+<code>defDataAdd</code> by setting the argument <em>dist</em> to
+“custom”. When defining a custom distribution, provide the name of the
+user-defined function as a string in the <em>formula</em> argument. The
+arguments of the custom function are listed in the <em>variance</em>
+argument, separated by commas and formatted as “<strong>arg_1 =
+val_form_1, arg_2 = val_form_2, <span class="math inline">\(\dots\)</span>, arg_K = val_form_K</strong>”. The
+<em>arg_k’s</em> represent the names of the arguments passed to the
+customized function, where <span class="math inline">\(k\)</span> ranges
+from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>. Values or formulas can be used for
+each <em>val_form_k</em>. If formulas are used, ensure that the
+variables have been previously generated. Double dot notation is
+available in specifying <em>value_formula_k</em>. One important
+requirement of the custom function is that the parameter list used to
+define the function must include an argument”<strong>n = n</strong>”,
+but do not include <span class="math inline">\(n\)</span> in the
+definition as part of <code>defData</code> or
+<code>defDataAdd</code>.</p>
 </div>
 <div class="section level4">
 <h4 id="exponential">exponential<a class="anchor" aria-label="anchor" href="#exponential"></a>
@@ -994,7 +1029,7 @@ predictor <span class="math inline">\(x\)</span>:</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer>

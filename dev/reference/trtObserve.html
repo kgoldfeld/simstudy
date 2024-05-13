@@ -44,6 +44,9 @@
       <a href="../articles/correlated.html">Correlated Data</a>
     </li>
     <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
+    </li>
+    <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
     </li>
     <li>
@@ -101,20 +104,20 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>dt</dt>
+    <dl><dt id="arg-dt">dt<a class="anchor" aria-label="anchor" href="#arg-dt"></a></dt>
 <dd><p>data table</p></dd>
 
 
-<dt>formulas</dt>
+<dt id="arg-formulas">formulas<a class="anchor" aria-label="anchor" href="#arg-formulas"></a></dt>
 <dd><p>collection of formulas that determine probabilities</p></dd>
 
 
-<dt>logit.link</dt>
+<dt id="arg-logit-link">logit.link<a class="anchor" aria-label="anchor" href="#arg-logit-link"></a></dt>
 <dd><p>indicator that specifies link. If TRUE, then logit link
 is used. If FALSE, the identity link is used.</p></dd>
 
 
-<dt>grpName</dt>
+<dt id="arg-grpname">grpName<a class="anchor" aria-label="anchor" href="#arg-grpname"></a></dt>
 <dd><p>character string representing name of treatment/exposure group
 variable</p></dd>
 
@@ -141,17 +144,17 @@ variable</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;cid&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         cid  male over65  baseDBP</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt; &lt;int&gt;  &lt;int&gt;    &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     0      0 75.16916</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2     0      0 76.26197</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3     1      1 66.78133</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     0      0 71.67887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     1      0 64.18112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     0      0 70.91353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2     0      1 68.09961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3     1      1 75.66393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     1      0 71.98746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     1      1 77.18121</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996     0      1 69.86304</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997     1      0 63.88180</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998     0      0 72.93428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999     0      0 79.72073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000     1      0 81.65354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996     1      1 70.36416</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997     1      0 69.82684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998     1      0 74.31698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999     1      0 71.24927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000     1      1 81.51260</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">formula1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-2 + 2*male - .5*over65"</span>, <span class="st">"-1 + 2*male + .5*over65"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu">trtObserve</span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula1</span>, logit.link <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></span></span>
@@ -159,17 +162,17 @@ variable</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;cid&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         cid exposure  male over65  baseDBP</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt;    &lt;int&gt; &lt;int&gt;  &lt;int&gt;    &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1        1     0      0 75.16916</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2        3     0      0 76.26197</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3        2     1      1 66.78133</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4        2     0      0 71.67887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5        3     1      0 64.18112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1        2     0      0 70.91353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2        3     0      1 68.09961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3        2     1      1 75.66393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4        1     1      0 71.98746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5        2     1      1 77.18121</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996        3     0      1 69.86304</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997        2     1      0 63.88180</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998        1     0      0 72.93428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999        3     0      0 79.72073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000        2     1      0 81.65354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996        2     1      1 70.36416</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997        1     1      0 69.82684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998        2     1      0 74.31698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999        2     1      0 71.24927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000        2     1      1 81.51260</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Check actual distributions</span></span></span>
 <span class="r-in"><span></span></span>
@@ -177,15 +180,15 @@ variable</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;exposure&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    exposure pctMale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt;   &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:        1    0.61</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:        2    0.71</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:        3    0.24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:        1    0.67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:        2    0.70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:        3    0.23</span>
 <span class="r-in"><span><span class="va">dtObs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>pctMale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">over65</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">exposure</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;exposure&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    exposure pctMale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt;   &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:        1    0.15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:        2    0.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:        1    0.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:        2    0.29</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:        3    0.15</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dtSum</span> <span class="op">&lt;-</span> <span class="va">dtObs</span><span class="op">[</span>, <span class="va">.N</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">male</span>, <span class="va">over65</span>, <span class="va">exposure</span><span class="op">)</span><span class="op">]</span></span></span>
@@ -193,34 +196,34 @@ variable</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;male, over65&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      male over65 exposure     N grpPct</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;int&gt;  &lt;int&gt;    &lt;int&gt; &lt;int&gt;  &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     0      0        1    52   0.12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     0      0        2   110   0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     0      0        3   280   0.63</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     0      1        1     3   0.05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     0      1        2    18   0.29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     0      1        3    41   0.66</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     1      0        1    69   0.20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     1      0        2   207   0.59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     1      0        3    77   0.22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:     1      1        1    18   0.13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     1      1        2   101   0.71</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:     1      1        3    24   0.17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     0      0        1    40   0.09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     0      0        2   107   0.24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     0      0        3   290   0.66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     0      1        1     3   0.04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     0      1        2    23   0.34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     0      1        3    41   0.61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     1      0        1    77   0.22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     1      0        2   206   0.58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     1      0        3    75   0.21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:     1      1        1    10   0.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     1      1        2   103   0.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:     1      1        3    25   0.18</span>
 <span class="r-in"><span><span class="va">dtSum</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;male, over65&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      male over65 exposure     N grpPct</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;int&gt;  &lt;int&gt;    &lt;int&gt; &lt;int&gt;  &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     0      0        1    52   0.12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     0      0        2   110   0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     0      0        3   280   0.63</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     0      1        1     3   0.05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     0      1        2    18   0.29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     0      1        3    41   0.66</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     1      0        1    69   0.20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     1      0        2   207   0.59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     1      0        3    77   0.22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:     1      1        1    18   0.13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     1      1        2   101   0.71</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:     1      1        3    24   0.17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     0      0        1    40   0.09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     0      0        2   107   0.24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     0      0        3   290   0.66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     0      1        1     3   0.04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     0      1        2    23   0.34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     0      1        3    41   0.61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     1      0        1    77   0.22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     1      0        2   206   0.58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     1      0        3    75   0.21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:     1      1        1    10   0.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     1      1        2   103   0.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:     1      1        3    25   0.18</span>
 </code></pre></div>
     </div>
   </div>
@@ -235,7 +238,7 @@ variable</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>
