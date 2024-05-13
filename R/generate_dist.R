@@ -355,8 +355,6 @@
 
 .gencustom <- function(n, fn, args, dtSim, envir) {
   
-  # new <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
-  
   args <- gsub("\\s+", "", args) # remove any spaces
   arg_l <- as.list(unlist(strsplit(args, ",")))
   arg_l <- lapply(arg_l, function(a) as.list(unlist(strsplit(a, "="))))
