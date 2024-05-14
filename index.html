@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Simulation of Study Data • simstudy</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@
     </li>
     <li>
       <a href="articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="articles/customdist.html">Customized Distributions</a>
     </li>
     <li>
       <a href="articles/double_dot_extension.html">Dynamic Data Definition</a>
@@ -118,7 +121,7 @@
 
 <p>The <code>simstudy</code> package is a collection of functions that allow users to generate simulated data sets in order to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
 <p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create datasets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> datasets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
-<p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean μ (or log(μ)) and a dispersion <span class="math inline"><em>d</em></span>, rather than shape α and rate β parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling μ (or some function of μ), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model, thus illuminating the relationship between the underlying data generating processes and the models. For more details on the package, use cases, examples, and function reference see the <a href="https://kgoldfeld.github.io/simstudy/articles/simstudy.html" class="external-link">documentation page</a>.</p>
+<p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean μ (or log(μ)) and a dispersion <span class="math inline">\(d\)</span>, rather than shape α and rate β parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling μ (or some function of μ), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model, thus illuminating the relationship between the underlying data generating processes and the models. For more details on the package, use cases, examples, and function reference see the <a href="https://kgoldfeld.github.io/simstudy/articles/simstudy.html" class="external-link">documentation page</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -145,18 +148,20 @@
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dd</span>, nTrt <span class="op">=</span> <span class="fl">4</span>, grpName <span class="op">=</span> <span class="st">"grp"</span>, balanced <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dd</span></span>
-<span><span class="co">#&gt;       id         x        y grp</span></span>
-<span><span class="co">#&gt;   1:   1 11.191960 8.949389   4</span></span>
-<span><span class="co">#&gt;   2:   2 10.418375 7.372060   4</span></span>
-<span><span class="co">#&gt;   3:   3  8.512109 6.925844   3</span></span>
-<span><span class="co">#&gt;   4:   4 11.361632 9.850340   4</span></span>
-<span><span class="co">#&gt;   5:   5  9.928811 6.515463   4</span></span>
-<span><span class="co">#&gt;  ---                           </span></span>
-<span><span class="co">#&gt; 246: 246  8.220609 7.898416   2</span></span>
-<span><span class="co">#&gt; 247: 247  8.531483 8.681783   2</span></span>
-<span><span class="co">#&gt; 248: 248 10.507370 8.552350   3</span></span>
-<span><span class="co">#&gt; 249: 249  8.621339 6.652300   1</span></span>
-<span><span class="co">#&gt; 250: 250  9.508164 7.083845   3</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;         id         x        y   grp</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;     &lt;num&gt;    &lt;num&gt; &lt;int&gt;</span></span>
+<span><span class="co">#&gt;   1:     1 11.191960 8.949389     4</span></span>
+<span><span class="co">#&gt;   2:     2 10.418375 7.372060     4</span></span>
+<span><span class="co">#&gt;   3:     3  8.512109 6.925844     3</span></span>
+<span><span class="co">#&gt;   4:     4 11.361632 9.850340     4</span></span>
+<span><span class="co">#&gt;   5:     5  9.928811 6.515463     4</span></span>
+<span><span class="co">#&gt;  ---                               </span></span>
+<span><span class="co">#&gt; 246:   246  8.220609 7.898416     2</span></span>
+<span><span class="co">#&gt; 247:   247  8.531483 8.681783     2</span></span>
+<span><span class="co">#&gt; 248:   248 10.507370 8.552350     3</span></span>
+<span><span class="co">#&gt; 249:   249  8.621339 6.652300     1</span></span>
+<span><span class="co">#&gt; 250:   250  9.508164 7.083845     3</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="contributing--support">Contributing &amp; Support<a class="anchor" aria-label="anchor" href="#contributing--support"></a>
@@ -226,7 +231,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Targeted logistic model coefficients • simstudy</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@
     </li>
     <li>
       <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
@@ -175,18 +178,20 @@ outcome <em>y</em> with the following data generating process:</p>
 <span></span>
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genData.html">genData</a></span><span class="op">(</span><span class="fl">500000</span>, <span class="va">d1a</span><span class="op">)</span></span>
 <span><span class="va">dd</span></span></code></pre></div>
-<pre><code><span><span class="co">##             id    x1     x2 b1 b2 y</span></span>
-<span><span class="co">##      1:      1  0.29  0.390  0  1 1</span></span>
-<span><span class="co">##      2:      2  0.76 -0.925  0  0 0</span></span>
-<span><span class="co">##      3:      3 -1.47  0.939  0  0 1</span></span>
-<span><span class="co">##      4:      4  1.92  0.560  0  1 1</span></span>
-<span><span class="co">##      5:      5  1.40 -0.238  0  1 0</span></span>
-<span><span class="co">##     ---                            </span></span>
-<span><span class="co">## 499996: 499996 -0.32  0.367  0  0 0</span></span>
-<span><span class="co">## 499997: 499997 -1.08  2.152  0  0 0</span></span>
-<span><span class="co">## 499998: 499998 -1.10  0.380  1  0 0</span></span>
-<span><span class="co">## 499999: 499999  0.56 -1.042  0  1 0</span></span>
-<span><span class="co">## 500000: 500000  0.52  0.076  0  1 1</span></span></code></pre>
+<pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
+<span><span class="co">##             id    x1     x2    b1    b2     y</span></span>
+<span><span class="co">##          &lt;int&gt; &lt;num&gt;  &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;</span></span>
+<span><span class="co">##      1:      1  0.29  0.390     0     1     1</span></span>
+<span><span class="co">##      2:      2  0.76 -0.925     0     0     0</span></span>
+<span><span class="co">##      3:      3 -1.47  0.939     0     0     1</span></span>
+<span><span class="co">##      4:      4  1.92  0.560     0     1     1</span></span>
+<span><span class="co">##      5:      5  1.40 -0.238     0     1     0</span></span>
+<span><span class="co">##     ---                                      </span></span>
+<span><span class="co">## 499996: 499996 -0.32  0.367     0     0     0</span></span>
+<span><span class="co">## 499997: 499997 -1.08  2.152     0     0     0</span></span>
+<span><span class="co">## 499998: 499998 -1.10  0.380     1     0     0</span></span>
+<span><span class="co">## 499999: 499999  0.56 -1.042     0     1     0</span></span>
+<span><span class="co">## 500000: 500000  0.52  0.076     0     1     1</span></span></code></pre>
 <p>The overall proportion of <span class="math inline">\(y=1\)</span> in
 this case is</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -397,11 +402,8 @@ function in the <code>rms</code> package:</p>
 <span><span class="va">dd</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.4</span></span></code></pre>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">+</span> <span class="va">b2</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in .recacheSubclasses(def@className, def, env): undefined subclass</span></span>
-<span><span class="co">## "ndiMatrix" of class "replValueSp"; definition not updated</span></span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">stats</span><span class="op">[</span><span class="st">"C"</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">+</span> <span class="va">b2</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span>
+<span><span class="va">fit</span><span class="op">$</span><span class="va">stats</span><span class="op">[</span><span class="st">"C"</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##    C </span></span>
 <span><span class="co">## 0.85</span></span></code></pre>
 <p>
@@ -431,7 +433,7 @@ Carlo simulations.” BMC Medical Research Methodology 23, no. 1 (2023):
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer>

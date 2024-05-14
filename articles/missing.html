@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Missing Data • simstudy</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@
     </li>
     <li>
       <a href="../articles/correlated.html">Correlated Data</a>
+    </li>
+    <li>
+      <a href="../articles/customdist.html">Customized Distributions</a>
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
@@ -172,32 +175,36 @@ dependent on <code>u</code>, an unmeasured predictor of
 <span><span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/genObs.html">genObs</a></span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">missMat</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">missMat</span></span></code></pre></div>
-<pre><code><span><span class="co">##         id x1 x2 x3 u m</span></span>
-<span><span class="co">##    1:    1  0  0  0 1 0</span></span>
-<span><span class="co">##    2:    2  0  0  0 1 0</span></span>
-<span><span class="co">##    3:    3  1  0  0 1 0</span></span>
-<span><span class="co">##    4:    4  1  0  0 1 0</span></span>
-<span><span class="co">##    5:    5  1  1  0 1 0</span></span>
-<span><span class="co">##   ---                  </span></span>
-<span><span class="co">##  996:  996  0  0  0 1 0</span></span>
-<span><span class="co">##  997:  997  1  0  1 1 0</span></span>
-<span><span class="co">##  998:  998  0  0  1 1 0</span></span>
-<span><span class="co">##  999:  999  0  0  0 1 0</span></span>
-<span><span class="co">## 1000: 1000  0  0  0 1 0</span></span></code></pre>
+<pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
+<span><span class="co">##          id    x1    x2    x3     u     m</span></span>
+<span><span class="co">##       &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt;</span></span>
+<span><span class="co">##    1:     1     0     0     0     1     0</span></span>
+<span><span class="co">##    2:     2     0     0     0     1     0</span></span>
+<span><span class="co">##    3:     3     1     0     0     1     0</span></span>
+<span><span class="co">##    4:     4     1     0     0     1     0</span></span>
+<span><span class="co">##    5:     5     1     1     0     1     0</span></span>
+<span><span class="co">##   ---                                    </span></span>
+<span><span class="co">##  996:   996     0     0     0     1     0</span></span>
+<span><span class="co">##  997:   997     1     0     0     1     0</span></span>
+<span><span class="co">##  998:   998     0     0     1     1     0</span></span>
+<span><span class="co">##  999:   999     0     0     0     1     0</span></span>
+<span><span class="co">## 1000:  1000     0     0     0     1     0</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtObs</span></span></code></pre></div>
-<pre><code><span><span class="co">##         id m  u       x1         x2         x3</span></span>
-<span><span class="co">##    1:    1 0 NA 19.73534 19.7363954 21.1213186</span></span>
-<span><span class="co">##    2:    2 1 NA 20.49482 21.2708839 20.5990707</span></span>
-<span><span class="co">##    3:    3 0 NA       NA -0.2420152 -1.7756890</span></span>
-<span><span class="co">##    4:    4 1 NA       NA 41.0198392 37.2141390</span></span>
-<span><span class="co">##    5:    5 0 NA       NA         NA -0.4618482</span></span>
-<span><span class="co">##   ---                                         </span></span>
-<span><span class="co">##  996:  996 0 NA 18.09142 19.4739691 19.1612655</span></span>
-<span><span class="co">##  997:  997 0 NA       NA 20.2605906         NA</span></span>
-<span><span class="co">##  998:  998 0 NA 20.54327 19.4658608         NA</span></span>
-<span><span class="co">##  999:  999 0 NA 18.39061 20.5933352 18.9103881</span></span>
-<span><span class="co">## 1000: 1000 0 NA 19.05704 21.4676797 18.0868973</span></span></code></pre>
+<pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
+<span><span class="co">##          id     m     u         x1         x2         x3</span></span>
+<span><span class="co">##       &lt;int&gt; &lt;int&gt; &lt;int&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span></span>
+<span><span class="co">##    1:     1     0    NA -0.4761869 -0.2351076  1.5847898</span></span>
+<span><span class="co">##    2:     2     1    NA 19.6947559 20.1700147 20.5655407</span></span>
+<span><span class="co">##    3:     3     1    NA         NA 39.0641664 38.6076676</span></span>
+<span><span class="co">##    4:     4     0    NA         NA 19.2495864 19.2892697</span></span>
+<span><span class="co">##    5:     5     0    NA         NA         NA 21.3960387</span></span>
+<span><span class="co">##   ---                                                   </span></span>
+<span><span class="co">##  996:   996     1    NA 18.6927037 22.8529531 21.4042097</span></span>
+<span><span class="co">##  997:   997     0    NA         NA  1.6908460 -0.7061913</span></span>
+<span><span class="co">##  998:   998     0    NA 19.5788502 20.9285380         NA</span></span>
+<span><span class="co">##  999:   999     1    NA 22.2266678 21.4514043 18.6218252</span></span>
+<span><span class="co">## 1000:  1000     1    NA 37.1989214 40.7356635 43.9419839</span></span></code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen
 with a simple calculation of means using both the “true” data set
 without missing data as a comparison for the “observed” data set. Since
@@ -225,9 +232,9 @@ actual is not close to 0:</p>
 <span></span>
 <span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanAct</span>, <span class="va">meanObs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##              x1   x2   x3</span></span>
-<span><span class="co">## Actual     19.9 19.9 19.9</span></span>
-<span><span class="co">## Observed   19.9 18.7 18.4</span></span>
-<span><span class="co">## Difference  0.0  1.2  1.5</span></span></code></pre>
+<span><span class="co">## Actual     20.3 20.4 20.2</span></span>
+<span><span class="co">## Observed   20.5 19.0 18.9</span></span>
+<span><span class="co">## Difference -0.2  1.4  1.3</span></span></code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias
 for the estimate of the mean of <code>x2</code> is mitigated, but not
 for <code>x3</code>, since <code>u</code> is not observed:</p>
@@ -238,18 +245,18 @@ for <code>x3</code>, since <code>u</code> is not observed:</p>
 <code class="sourceCode R"><span><span class="co"># compare observed and actual when m = 0</span></span>
 <span></span>
 <span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##             x1   x2  x3</span></span>
-<span><span class="co">## Actual     9.8  9.8 9.8</span></span>
-<span><span class="co">## Observed   9.7  9.9 8.4</span></span>
-<span><span class="co">## Difference 0.1 -0.1 1.4</span></span></code></pre>
+<pre><code><span><span class="co">##              x1   x2   x3</span></span>
+<span><span class="co">## Actual     10.1 10.2 10.1</span></span>
+<span><span class="co">## Observed   10.0 10.3  8.7</span></span>
+<span><span class="co">## Difference  0.1 -0.1  1.4</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compare observed and actual when m = 1</span></span>
 <span></span>
 <span><span class="fu">showDif</span><span class="op">(</span><span class="va">meanActm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span>, <span class="va">meanObsm</span><span class="op">[</span><span class="va">m</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">x3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##              x1   x2   x3</span></span>
-<span><span class="co">## Actual     30.0 30.0 29.9</span></span>
-<span><span class="co">## Observed   29.9 30.4 28.3</span></span>
-<span><span class="co">## Difference  0.1 -0.4  1.6</span></span></code></pre>
+<span><span class="co">## Actual     29.8 29.8 29.7</span></span>
+<span><span class="co">## Observed   30.0 29.6 28.5</span></span>
+<span><span class="co">## Difference -0.2  0.2  1.2</span></span></code></pre>
 <div class="section level2">
 <h2 id="longitudinal-data-with-missingness">Longitudinal data with missingness<a class="anchor" aria-label="anchor" href="#longitudinal-data-with-missingness"></a>
 </h2>
@@ -330,7 +337,7 @@ measurements:</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer>
