@@ -1,4 +1,4 @@
-# simstudy (development version)
+# simstudy 0.8.0
 
 ## New features
 * added the option to specify a customized distribution in `defData` and `defDataAdd` by
