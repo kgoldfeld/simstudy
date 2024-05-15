@@ -3,8 +3,6 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -17,10 +15,9 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.7.1.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.8.0.9000</span>
       </span>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
   <a href="../articles/simstudy.html">Get started</a>
@@ -31,7 +28,6 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -77,15 +73,11 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/kgoldfeld/simstudy/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
-
-      
-
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
@@ -93,11 +85,9 @@
     <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/HEAD/R/group_data.R" class="external-link"><code>R/group_data.R</code></a></small>
     <div class="hidden name"><code>addPeriods.Rd</code></div>
     </div>
-
     <div class="ref-description">
     <p>Create longitudinal/panel data</p>
     </div>
-
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addPeriods</span><span class="op">(</span></span>
 <span>  <span class="va">dtName</span>,</span>
@@ -110,71 +100,52 @@
 <span>  periodVec <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
-
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt id="arg-dtname">dtName<a class="anchor" aria-label="anchor" href="#arg-dtname"></a></dt>
 <dd><p>Name of existing data table</p></dd>
-
-
 <dt id="arg-nperiods">nPeriods<a class="anchor" aria-label="anchor" href="#arg-nperiods"></a></dt>
 <dd><p>Number of time periods for each record</p></dd>
-
-
 <dt id="arg-idvars">idvars<a class="anchor" aria-label="anchor" href="#arg-idvars"></a></dt>
 <dd><p>Names of index variables (in a string vector) that will be
 repeated during each time period</p></dd>
-
-
 <dt id="arg-timevars">timevars<a class="anchor" aria-label="anchor" href="#arg-timevars"></a></dt>
 <dd><p>Names of time dependent variables. Defaults to NULL.</p></dd>
-
-
 <dt id="arg-timevarname">timevarName<a class="anchor" aria-label="anchor" href="#arg-timevarname"></a></dt>
 <dd><p>Name of new time dependent variable</p></dd>
-
-
 <dt id="arg-timeid">timeid<a class="anchor" aria-label="anchor" href="#arg-timeid"></a></dt>
 <dd><p>Variable name for new index field. Defaults to "timevar"</p></dd>
-
-
 <dt id="arg-pername">perName<a class="anchor" aria-label="anchor" href="#arg-pername"></a></dt>
 <dd><p>Variable name for period field. Defaults to "period"</p></dd>
-
-
 <dt id="arg-periodvec">periodVec<a class="anchor" aria-label="anchor" href="#arg-periodvec"></a></dt>
 <dd><p>Vector of period times. Defaults to NULL</p></dd>
-
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
 <p>An updated data.table that that has multiple rows
 per observation in dtName</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>It is possible to generate longitudinal data with varying 
-numbers of measurement periods as well as varying time intervals between 
-each measurement period. This is done by defining specific variables <em>in</em> the 
-data set that define the number of observations per subject and the average 
-interval time between each observation. <b><em>nCount</em></b> defines the number of 
-measurements for an individual; <b><em>mInterval</em></b> specifies the average time between 
-intervals for a subject; and <b><em>vInterval</em></b> specifies the variance of those 
+    <p>It is possible to generate longitudinal data with varying
+numbers of measurement periods as well as varying time intervals between
+each measurement period. This is done by defining specific variables <em>in</em> the
+data set that define the number of observations per subject and the average
+interval time between each observation. <b><em>nCount</em></b> defines the number of
+measurements for an individual; <b><em>mInterval</em></b> specifies the average time between
+intervals for a subject; and <b><em>vInterval</em></b> specifies the variance of those
 interval times. If <b><em>mInterval</em></b> is not defined, no intervals are used. If <b><em>vInterval</em></b> is set to 0 or is not defined, the interval for
-a subject is determined entirely by the mean interval. If <b><em>vInterval</em></b> is 
-greater than 0, time intervals are generated using a gamma distribution 
-with specified mean and dispersion. If either <b><em>nPeriods</em></b> or <b><em>timevars</em></b> 
-is specified, that will override any <b><em>nCount</em></b>, <b><em>mInterval</em></b>, and 
+a subject is determined entirely by the mean interval. If <b><em>vInterval</em></b> is
+greater than 0, time intervals are generated using a gamma distribution
+with specified mean and dispersion. If either <b><em>nPeriods</em></b> or <b><em>timevars</em></b>
+is specified, that will override any <b><em>nCount</em></b>, <b><em>mInterval</em></b>, and
 <b><em>vInterval</em></b> data.</p>
 <p><b><em>periodVec</em></b> is used to specify measurement periods that are different
-the default counting variables. If <b><em>periodVec</em></b> is not specified, 
-the periods default to <em>0, 1, ... n-1</em>, with <em>n</em> periods. If 
+the default counting variables. If <b><em>periodVec</em></b> is not specified,
+the periods default to <em>0, 1, ... n-1</em>, with <em>n</em> periods. If
 <b><em>periodVec</em></b> is specified as <em>c(x_1, x_2, ... x_n)</em>, then
 <em>x_1, x_2, ... x_n</em> represent the measurement periods.</p>
     </div>
-
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"T"</span>, dist <span class="op">=</span> <span class="st">"binary"</span>, formula <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
@@ -252,22 +223,12 @@ the periods default to <em>0, 1, ... n-1</em>, with <em>n</em> periods. If
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
     </nav></div>
 </div>
-
-
       <footer><div class="copyright">
   <p></p><p>Developed by <a href="https://www.rdatagen.net/" class="external-link">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
-
 <div class="pkgdown">
   <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
       </footer></div>
-
-  
-
-
-  
-
   </body></html>
 
