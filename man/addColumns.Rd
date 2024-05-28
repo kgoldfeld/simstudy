@@ -7,9 +7,9 @@
 addColumns(dtDefs, dtOld, envir = parent.frame())
 }
 \arguments{
-\item{dtDefs}{name of definitions for added columns}
+\item{dtDefs}{Name of definitions for added columns}
 
-\item{dtOld}{name of data table that is to be updated}
+\item{dtOld}{Name of data table that is to be updated}
 
 \item{envir}{Environment the data definitions are evaluated in.
 Defaults to \link[base:sys.parent]{base::parent.frame}.}
