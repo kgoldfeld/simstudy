@@ -532,8 +532,6 @@ addSynthetic <- function(dtOld, dtFrom,
 #' @param uselimits Indicator to use minimum and maximum of input data vector as 
 #' limits for sampling. Defaults to FALSE, in which case a smoothed density that
 #' extends beyond the limits is used.
-#' @param id A string specifying the field that serves as the record id. The
-#' default field is "id".
 #' @return A data table with the generated data.
 #' @examples
 #' def <- defData(varname = "x1", formula = 5, dist = "poisson")
@@ -557,9 +555,9 @@ addDataDensity <- function(dtOld, dataDist, varname, uselimits = FALSE) {
   dataDist <- round(dataDist, 0)
   
   if (uselimits) {
-    density_est <- density(dataDist, n = 10000, from = min(data_dist), to = max(data_dist))
+    density_est <- stats::density(dataDist, n = 10000, from = min(dataDist), to = max(dataDist))
   } else {
-    density_est <- density(dataDist, n = 10000)
+    density_est <- stats::density(dataDist, n = 10000)
   }
   
   x <- density_est$x

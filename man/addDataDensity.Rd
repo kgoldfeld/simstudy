@@ -16,9 +16,6 @@ addDataDensity(dtOld, dataDist, varname, uselimits = FALSE)
 \item{uselimits}{Indicator to use minimum and maximum of input data vector as 
 limits for sampling. Defaults to FALSE, in which case a smoothed density that
 extends beyond the limits is used.}
-
-\item{id}{A string specifying the field that serves as the record id. The
-default field is "id".}
 }
 \value{
 A data table with the generated data.
