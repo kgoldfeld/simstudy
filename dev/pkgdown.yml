@@ -1,6 +1,6 @@
 pandoc: 3.1.11
 pkgdown: 2.0.9.9000
-pkgdown_sha: cf719ba763fdaaf9b285cb2871dad8c746e9e6b7
+pkgdown_sha: 05e40df45a0454e0cff8bebda18b2f6a2ca0f039
 articles:
   clustered: clustered.html
   corelationmat: corelationmat.html
@@ -15,5 +15,5 @@ articles:
   spline: spline.html
   survival: survival.html
   treat_and_exposure: treat_and_exposure.html
-last_built: 2024-05-15T18:35Z
+last_built: 2024-05-30T12:33Z
 

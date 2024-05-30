@@ -1,261 +1,91 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/SUPPORT.html</loc>
-  </url>
-  <url>
-    <loc>/articles/clustered.html</loc>
-  </url>
-  <url>
-    <loc>/articles/corelationmat.html</loc>
-  </url>
-  <url>
-    <loc>/articles/correlated.html</loc>
-  </url>
-  <url>
-    <loc>/articles/customdist.html</loc>
-  </url>
-  <url>
-    <loc>/articles/double_dot_extension.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/logisticCoefs.html</loc>
-  </url>
-  <url>
-    <loc>/articles/longitudinal.html</loc>
-  </url>
-  <url>
-    <loc>/articles/missing.html</loc>
-  </url>
-  <url>
-    <loc>/articles/ordinal.html</loc>
-  </url>
-  <url>
-    <loc>/articles/simstudy.html</loc>
-  </url>
-  <url>
-    <loc>/articles/spline.html</loc>
-  </url>
-  <url>
-    <loc>/articles/survival.html</loc>
-  </url>
-  <url>
-    <loc>/articles/treat_and_exposure.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addColumns.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addCompRisk.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addCondition.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addCorData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addCorFlex.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addCorGen.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addMarkov.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addMultiFac.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addPeriods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addSynthetic.html</loc>
-  </url>
-  <url>
-    <loc>/reference/betaGetShapes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/blockDecayMat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/blockExchangeMat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/catProbs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defCondition.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defDataAdd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defMiss.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defRead.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defReadAdd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defReadCond.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defRepeat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defRepeatAdd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defSurv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/delColumns.html</loc>
-  </url>
-  <url>
-    <loc>/reference/distributions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gammaGetShapeRate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genCatFormula.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genCluster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genCorData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genCorFlex.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genCorGen.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genCorMat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genCorOrdCat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genDummy.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genFactor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genFormula.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genMarkov.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genMiss.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genMixFormula.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genMultiFac.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genNthEvent.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genObs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genOrdCat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genSpline.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genSurv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genSynthetic.html</loc>
-  </url>
-  <url>
-    <loc>/reference/iccRE.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/logisticCoefs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mergeData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/negbinomGetSizeProb.html</loc>
-  </url>
-  <url>
-    <loc>/reference/simstudy-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/simstudy-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/survGetParams.html</loc>
-  </url>
-  <url>
-    <loc>/reference/survParamPlot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/trimData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/trtAssign.html</loc>
-  </url>
-  <url>
-    <loc>/reference/trtObserve.html</loc>
-  </url>
-  <url>
-    <loc>/reference/trtStepWedge.html</loc>
-  </url>
-  <url>
-    <loc>/reference/updateDef.html</loc>
-  </url>
-  <url>
-    <loc>/reference/updateDefAdd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/viewBasis.html</loc>
-  </url>
-  <url>
-    <loc>/reference/viewSplines.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>/CONTRIBUTING.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/SUPPORT.html</loc></url>
+<url><loc>/articles/clustered.html</loc></url>
+<url><loc>/articles/corelationmat.html</loc></url>
+<url><loc>/articles/correlated.html</loc></url>
+<url><loc>/articles/customdist.html</loc></url>
+<url><loc>/articles/double_dot_extension.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/logisticCoefs.html</loc></url>
+<url><loc>/articles/longitudinal.html</loc></url>
+<url><loc>/articles/missing.html</loc></url>
+<url><loc>/articles/ordinal.html</loc></url>
+<url><loc>/articles/simstudy.html</loc></url>
+<url><loc>/articles/spline.html</loc></url>
+<url><loc>/articles/survival.html</loc></url>
+<url><loc>/articles/treat_and_exposure.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/addColumns.html</loc></url>
+<url><loc>/reference/addCompRisk.html</loc></url>
+<url><loc>/reference/addCondition.html</loc></url>
+<url><loc>/reference/addCorData.html</loc></url>
+<url><loc>/reference/addCorFlex.html</loc></url>
+<url><loc>/reference/addCorGen.html</loc></url>
+<url><loc>/reference/addDataDensity.html</loc></url>
+<url><loc>/reference/addMarkov.html</loc></url>
+<url><loc>/reference/addMultiFac.html</loc></url>
+<url><loc>/reference/addPeriods.html</loc></url>
+<url><loc>/reference/addSynthetic.html</loc></url>
+<url><loc>/reference/betaGetShapes.html</loc></url>
+<url><loc>/reference/blockDecayMat.html</loc></url>
+<url><loc>/reference/blockExchangeMat.html</loc></url>
+<url><loc>/reference/catProbs.html</loc></url>
+<url><loc>/reference/defCondition.html</loc></url>
+<url><loc>/reference/defData.html</loc></url>
+<url><loc>/reference/defDataAdd.html</loc></url>
+<url><loc>/reference/defMiss.html</loc></url>
+<url><loc>/reference/defRead.html</loc></url>
+<url><loc>/reference/defReadAdd.html</loc></url>
+<url><loc>/reference/defReadCond.html</loc></url>
+<url><loc>/reference/defRepeat.html</loc></url>
+<url><loc>/reference/defRepeatAdd.html</loc></url>
+<url><loc>/reference/defSurv.html</loc></url>
+<url><loc>/reference/delColumns.html</loc></url>
+<url><loc>/reference/distributions.html</loc></url>
+<url><loc>/reference/gammaGetShapeRate.html</loc></url>
+<url><loc>/reference/genCatFormula.html</loc></url>
+<url><loc>/reference/genCluster.html</loc></url>
+<url><loc>/reference/genCorData.html</loc></url>
+<url><loc>/reference/genCorFlex.html</loc></url>
+<url><loc>/reference/genCorGen.html</loc></url>
+<url><loc>/reference/genCorMat.html</loc></url>
+<url><loc>/reference/genCorOrdCat.html</loc></url>
+<url><loc>/reference/genData.html</loc></url>
+<url><loc>/reference/genDataDensity.html</loc></url>
+<url><loc>/reference/genDummy.html</loc></url>
+<url><loc>/reference/genFactor.html</loc></url>
+<url><loc>/reference/genFormula.html</loc></url>
+<url><loc>/reference/genMarkov.html</loc></url>
+<url><loc>/reference/genMiss.html</loc></url>
+<url><loc>/reference/genMixFormula.html</loc></url>
+<url><loc>/reference/genMultiFac.html</loc></url>
+<url><loc>/reference/genNthEvent.html</loc></url>
+<url><loc>/reference/genObs.html</loc></url>
+<url><loc>/reference/genOrdCat.html</loc></url>
+<url><loc>/reference/genSpline.html</loc></url>
+<url><loc>/reference/genSurv.html</loc></url>
+<url><loc>/reference/genSynthetic.html</loc></url>
+<url><loc>/reference/iccRE.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/logisticCoefs.html</loc></url>
+<url><loc>/reference/mergeData.html</loc></url>
+<url><loc>/reference/negbinomGetSizeProb.html</loc></url>
+<url><loc>/reference/simstudy-deprecated.html</loc></url>
+<url><loc>/reference/simstudy-package.html</loc></url>
+<url><loc>/reference/survGetParams.html</loc></url>
+<url><loc>/reference/survParamPlot.html</loc></url>
+<url><loc>/reference/trimData.html</loc></url>
+<url><loc>/reference/trtAssign.html</loc></url>
+<url><loc>/reference/trtObserve.html</loc></url>
+<url><loc>/reference/trtStepWedge.html</loc></url>
+<url><loc>/reference/updateDef.html</loc></url>
+<url><loc>/reference/updateDefAdd.html</loc></url>
+<url><loc>/reference/viewBasis.html</loc></url>
+<url><loc>/reference/viewSplines.html</loc></url>
 </urlset>
+
