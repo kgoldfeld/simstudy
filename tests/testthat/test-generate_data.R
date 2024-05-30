@@ -886,3 +886,108 @@ test_that("logistiCoefs works", {
 
 })
 
+#addDataDensity and genDataDensity
+
+test_that("addDataDensity works", {
+  
+  skip_on_cran()
+  
+  f <- function(data_dist) {
+    
+    def <- defData(varname = "x1", formula = 5, dist = "poisson")
+     
+    dd <- genData(10000, def)
+    dd <- addDataDensity(dd, data_dist, varname = "x2", uselimits = TRUE)
+    
+    dd[]
+    
+  }
+  
+  compare <- function() {
+    
+    ints <- rpois(50, rpois(1, 8))
+    dx <- f(ints)
+    suppressWarnings(ks.test(dx$x2, ints))$p.value
+    
+  }
+  
+  kstest <- mean(sapply(1:200, function(x) compare()) < .05)
+  expect_lt(kstest, 0.05)
+  
+  
+  f2 <- function(data_dist) {
+    
+    def <- defData(varname = "x1", formula = 5, dist = "poisson")
+    
+    dd <- genData(10000, def)
+    dd <- genData(10000, def)
+    dd <- addDataDensity(dd, data_dist, varname = "x2")
+    
+    dd[]
+    
+  }
+  
+  compare2 <- function() {
+    
+    ints <- rpois(50, rpois(1, 8))
+    dx <- f2(ints)
+    p.tails <- dx[, mean(x2 <= min(ints) | x2 >= max(ints))]
+    p.value <- suppressWarnings(ks.test(dx$x2, ints))$p.value
+    
+    data.table::data.table(p.tails, p.value)
+    
+  }
+  
+  dp <- data.table::rbindlist(lapply(1:200, function(x) compare2()))
+
+  expect_lte(dp[, round(mean(p.tails), 2)], 0.05)
+  expect_lt(dp[, mean(p.value <= .05)], 0.05)
+ 
+  
+  
+})
+
+test_that("genDataDensity works", {
+  
+  skip_on_cran()
+  
+  f <- function(data_dist) {
+    
+    dd <- genDataDensity(10000, data_dist, varname = "x1", uselimits = TRUE)
+    dd[]
+    
+  }
+  
+  compare <- function() {
+    
+    ints <- rpois(50, rpois(1, 8))
+    dx <- f(ints)
+    suppressWarnings(ks.test(dx$x1, ints))$p.value
+    
+  }
+  
+  kstest <- mean(sapply(1:200, function(x) compare()) < .05)
+  expect_lt(kstest, 0.05)
+  
+})
+
+test_that("genDataDensity and addDataDensity throws errors", {
+  skip_on_cran()
+  
+  dd <- genData(10)
+  ddist <- rpois( 50, 5 )
+  expect_error(genDataDensity(dtOld = dd, distData = ddist, newvar = "weight"))
+  expect_error(genDataDensity(5, distData = xdist, newvar = "weight"))
+  expect_error(genDataDensity(5, distData = ddist))
+  
+  def <- defData(varname = "x1", formula = 5, dist = "poisson")
+  dd <- genData(10, def)
+  
+  expect_error(addDataDensity(dx, ddist, varname = "x2"))
+  expect_error(addDataDensity(dd, xdist, varname = "x2"))
+  expect_error(addDataDensity(dd, ddist, varname = "x1"))
+  expect_error(addDataDensity(dd, ddist))
+  expect_error(addDataDensity(5, ddist, varname = "x2"))
+})
+
+

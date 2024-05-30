@@ -1,7 +1,7 @@
 #' Add columns to existing data set
 #'
-#' @param dtDefs name of definitions for added columns
-#' @param dtOld name of data table that is to be updated
+#' @param dtDefs Name of definitions for added columns
+#' @param dtOld Name of data table that is to be updated
 #' @param envir Environment the data definitions are evaluated in.
 #'  Defaults to [base::parent.frame].
 #' @return an updated data.table that contains the added simulated data
@@ -522,4 +522,55 @@ addSynthetic <- function(dtOld, dtFrom,
   dS <- dtOld[dS, on = id]
   dS[]
   
+}
+
+#' @title Add data from a density defined by a vector of integers
+#' @description Data are generated from an a density defined by a vector of integers.
+#' @param dtOld Name of data table that is to be updated.
+#' @param dataDist Vector that defines the desired density.
+#' @param varname Name of variable name.
+#' @param uselimits Indicator to use minimum and maximum of input data vector as 
+#' limits for sampling. Defaults to FALSE, in which case a smoothed density that
+#' extends beyond the limits is used.
+#' @return A data table with the generated data.
+#' @examples
+#' def <- defData(varname = "x1", formula = 5, dist = "poisson")
+#' 
+#' data_dist <- data_dist <- c(1, 2, 2, 3, 4, 4, 4, 5, 6, 6, 7, 7, 7, 8, 9, 10, 10)
+#' 
+#' dd <- genData(500, def)
+#' dd <- addDataDensity(dd, data_dist, varname = "x2")
+#' dd <- addDataDensity(dd, data_dist, varname = "x3", uselimits = TRUE)
+#' @export
+#' @concept generate_data
+#' 
+#' 
+addDataDensity <- function(dtOld, dataDist, varname, uselimits = FALSE) {
+  
+  assertNotMissing(dtOld = missing(dtOld), dataDist = missing(dataDist), varname = missing(varname))
+  assertClass(dtOld = dtOld, class = "data.table")
+  
+  assertNotInDataTable(varname, dtOld)
+  
+  dataDist <- round(dataDist, 0)
+  
+  if (uselimits) {
+    density_est <- stats::density(dataDist, n = 10000, from = min(dataDist), to = max(dataDist))
+  } else {
+    density_est <- stats::density(dataDist, n = 10000)
+  }
+  
+  x <- density_est$x
+  y <- density_est$y
+  
+  # Normalize the density values to create a probability distribution
+  
+  probabilities <- y / sum(y)
+  
+  # Sample from the x values according to the probabilities
+  
+  .x <- sample(x, size = nrow(dtOld), replace = TRUE, prob = probabilities)
+  
+  dtOld[, (varname) := .x]
+  dtOld[]
 }
