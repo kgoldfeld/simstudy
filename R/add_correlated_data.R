@@ -403,12 +403,22 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   # wide(ness) is determined by incoming data structure.
 
   maxN <- dtOld[, .N, by = idvar][, max(N)]
+  
   if (maxN == 1) {
     wide <- TRUE
-    assertNotMissing(nvars = missing(nvars))
-    assertAtLeast(nvars = nvars, minVal = 2)
+    if ((is.null(nvars) | is.null(rho) | is.null(corstr)) & (is.null(corMatrix))) {
+      stop("Either nvars, rho, and corstr all must be provided or corMatrix must be provided.")
+    }
+    
+    if (is.null(corMatrix)) { # that means that we are using nvars/rho/corstr  
+      assertAtLeast(nvars = nvars, minVal = 2)
+    }
   } else if (maxN > 1) {
     wide <- FALSE
+    if ((is.null(rho) | is.null(corstr)) & (is.null(corMatrix))) {
+      stop("Either both rho and corstr must be provided or corMatrix must be provided.")
+    }
+    
   }
   
   ####
@@ -457,24 +467,41 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
       
       # check if the dimensions of corr matrix matches (equal) cluster size
       
-      dn <- dtTemp[, .N, keyby = .id]
-      dn[, dim := nrow(corMatrix)]
-      compare_cluster_size <- dn[, sum(N != dim)]
-      if (compare_cluster_size != 0) {
-        stop("Dimensions of corMatrix not equal to cluster sizes!")
+      if (!wide) {
+        dn <- dtTemp[, .N, keyby = .id]
+        dn[, dim := nrow(corMatrix)]
+        compare_cluster_size <- dn[, sum(N != dim)]
+        if (compare_cluster_size != 0) {
+          stop("Dimensions of corMatrix not equal to cluster sizes!")
+        }
       }
     }
   }
   
-  
   if (wide) { # Convert to long form temporarily
+    if ( is.null(nvars) ) nvars <- nrow(corMatrix)
     dtTemp <- addPeriods(dtTemp, nPeriods = nvars, idvars = ".id")
   }
   
   dtTemp[, seq_ := 1:.N, keyby = .id]
-  nvars <- dtTemp[.id == 1, .N] # only permits case where number of records per id is the same
-
-  ####
+  # nvars <- dtTemp[.id == 1, .N] # only permits case where number of records per id is the same
+  
+  counts <- dtTemp[, .N, by = .id][, N]
+  same_nvar <- all(counts == counts[1])
+  
+  if (!wide) {    # multiple record per id
+    if (is.null(corMatrix)) {
+      if (same_nvar) {
+        corMatrix <- genCorMat(nvars = counts[1] , rho = rho, corstr = corstr, nclusters = 1)  
+      } else {
+        corMatrix <- genCorMat(nvars = counts , rho = rho, corstr = corstr, nclusters = length(counts))  
+      }
+    }
+  } else  {        # single record per id
+    if (is.null(corMatrix)) {
+      corMatrix <- genCorMat(nvars = nvars , rho = rho, corstr = corstr, nclusters = 1) 
+    }
+  }
 
   if (method == "copula") {
     
@@ -483,18 +510,17 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
       dtM <- rbindlist(
         lapply(ns, function(x) .genQuantU(x$N, 1, rho, corstr, corMatrix[[x$.id]])) 
       )
+      
       dtTemp[, .U := dtM$Unew]
     } else {
-      if (is.null(corMatrix)) {
-        corMatrix <- .buildCorMat(nvars, corMatrix = NULL, rho = rho, corstr = corstr)
-      }
+      
+      nvars <- nrow(corMatrix)
+      
       ns <- nrow(dtTemp[, .N, keyby = .id])
       Unew <- c(t(mvnfast::rmvn(n = ns, mu = rep(0, nvars), sigma = corMatrix)))
     
       dtTemp[, .U := stats::pnorm(Unew)]
     }
-    
-    # dtTemp[, seq := dtM$seq]
     
     if (dist == "poisson") {
       setnames(dtTemp, param1, ".param1")
@@ -527,7 +553,7 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
     }
     
     dX <- dtTemp[, list(.id, seq_, .XX)]
-
+    
   } else if (method == "ep") {
     
     if (is.list(corMatrix)) {
