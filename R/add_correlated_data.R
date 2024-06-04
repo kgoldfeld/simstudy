@@ -298,6 +298,37 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' Emrich and Piedmonte (1991).
 #' @param ... May include additional arguments that have been deprecated and are
 #' no longer used.
+#' @details The original data table can come in one of two formats: a single row 
+#' per **idvar** (where data are *ungrouped*) or multiple rows per **idvar** (in which 
+#' case the data are *grouped* or clustered). The structure of the arguments 
+#' depends on the format of the data.
+#' 
+#' In the case of *ungrouped* data, there are two ways to specify the number of
+#' correlated variables and the covariance matrix. In approach (1), 
+#' **nvars** needs to be specified along with **rho** and **corstr**.
+#' In approach (2), **corMatrix** may be specified by identifying a single square
+#' *n* x *n* covariance matrix. The number of new variables generated for each 
+#' record will be *n*. If **nvars**, **rho**, 
+#' **corstr**, and **corMatrix** are all specified, the data will be 
+#' generated based on the information provided in the covariance matrix alone.
+#' In both (1) and (2), the data will be returned in a wide format.
+#' 
+#' In the case of *grouped* data, where there are *G* groups, there are also two 
+#' ways to proceed. In both cases,
+#' the number of new variables to be generated may vary by group, and will be determined by the
+#' number of records in each group, \eqn{n_i, i \in \{1,...,G\}} (i.e., the number of records that share the same 
+#' value of *idvar*). **nvars** is not used in grouped data.
+#' In approach (1), the arguments **rho** and **corstr** may both be specified 
+#' to determine the structure of the covariance 
+#' matrix. In approach (2), the argument **corMatrix** may be specified.
+#' **corMatrix** can be a single matrix with dimensions \eqn{n \ \text{x} \ n} if 
+#' \eqn{n_i = n} for all *i*. However, if the sample sizes of each group vary 
+#' (i.e., \eqn{n_i \ne n_j} for some groups *i* and *j*), **corMatrix** must be a list
+#' of covariance matrices with a length *G*; each 
+#' covariance matrix in the list will have dimensions 
+#' \eqn{n_i \ \text{x} \ n_i, \ i \in \{1,...,G\}}. In the case of *grouped* data, the
+#' new data will be returned in *long* format (i.e., one new column only).
+#' 
 #' @return Original data.table with added column(s) of correlated data
 #' @references Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
 #' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
@@ -335,6 +366,7 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #'
 #' @concept correlated
 #' @export
+#' @md
 addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL,
                       method = "copula", ...) {
