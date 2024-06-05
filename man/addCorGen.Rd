@@ -103,35 +103,47 @@ covariance matrix in the list will have dimensions
 new data will be returned in \emph{long} format (i.e., one new column only).
 }
 \examples{
-# Wide example
+# Ungrouped data
 
-def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
-def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log")
+cMat <- genCorMat(nvars = 4, rho = .2, corstr = "ar1", nclusters = 1)
 
-dt <- genData(100, def)
+def <-
+  defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma") |>
+  defData(varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log") |>
+  defData(varname = "n", formula = 3, dist = "noZeroPoisson")
+
+dd <- genData(101, def, id = "cid")
+
+## Specify with nvars, rho, and corstr
 
 addCorGen(
-  dtOld = dt, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
+  dtOld = dd, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
   dist = "poisson", param1 = "lambda"
 )
 
-# Long example
-
-def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
-
-def2 <- defDataAdd(
-  varname = "p", formula = "-3+.2*period + .3*xbase",
-  dist = "nonrandom", link = "logit"
-)
-
-dt <- genData(100, def)
-
-dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
-dtLong <- addColumns(def2, dtLong)
+## Specify with covMatrix
 
 addCorGen(
-  dtOld = dtLong, idvar = "cid", nvars = NULL, rho = .7, corstr = "cs",
-  dist = "binary", param1 = "p"
+  dtOld = dd, idvar = "cid", corMatrix = cMat,
+  dist = "poisson", param1 = "lambda"
+)
+
+# Grouped data
+
+cMats <- genCorMat(nvars = dd$n, rho = .5, corstr = "cs", nclusters = nrow(dd))
+
+dx <- genCluster(dd, "cid", "n", "id")
+
+## Specify with nvars, rho, and corstr
+
+addCorGen(
+  dtOld = dx, idvar = "cid", rho = .8, corstr = "ar1", dist = "poisson", param1 = "xbase"
+)
+
+## Specify with covMatrix
+
+addCorGen(
+ dtOld = dx, idvar = "cid", corMatrix = cMats, dist = "poisson", param1 = "xbase"
 )
 
 }
