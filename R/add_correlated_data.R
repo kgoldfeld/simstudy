@@ -597,7 +597,6 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
     }
     
     dX <- dtTemp[, list(.id, seq_, .XX)]
-    
   } else if (method == "ep") {
     
     if (is.list(corMatrix)) {
