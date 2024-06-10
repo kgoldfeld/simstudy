@@ -82,16 +82,25 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/kgoldfeld/simstudy/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/kgoldfeld/simstudy/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="simstudy-development-version">simstudy (development version)<a class="anchor" aria-label="anchor" href="#simstudy-development-version"></a></h2>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>Added the ability to generate data from a empirical distribution by using new functions <code>genDataDensity</code> and <code>addDataDensity</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-fix-development-version">Minor fix<a class="anchor" aria-label="anchor" href="#minor-fix-development-version"></a></h3>
+<ul><li>
+<code>addCorGen</code> no longer requires all clusters to have the same size when using the <em>rho</em> and <em>corstr</em> arguments to define the correlation.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.0" id="simstudy-080">simstudy 0.8.0<small>2024-05-15</small><a class="anchor" aria-label="anchor" href="#simstudy-080"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-8-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-8-0"></a></h3>
-<ul><li>added the option to specify a customized distribution in <code>defData</code> and <code>defDataAdd</code> by specifying <code>dist = "custom"</code>. *<code>addPeriods</code> now includes a new argument <code>periodVec</code> that allows users to designate specific measurement time periods using vector.</li>
+<ul><li>Added the option to specify a customized distribution in <code>defData</code> and <code>defDataAdd</code> by specifying <code>dist = "custom"</code>. *<code>addPeriods</code> now includes a new argument <code>periodVec</code> that allows users to designate specific measurement time periods using vector.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-fix-0-8-0">Minor fix<a class="anchor" aria-label="anchor" href="#minor-fix-0-8-0"></a></h3>
@@ -125,7 +134,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="major-fix-0-7-0">Major fix<a class="anchor" aria-label="anchor" href="#major-fix-0-7-0"></a></h3>
-<ul><li>Improved the random effect variance generation for function <code>iccRE</code> under the Poisson distribution. The current approach is based on the 2013 paper by Nakagawa &amp; Schielzeth titled “A general and simple method for obtaining <span class="math inline">\(R^2\)</span> from generalized linear mixed-effects models”</li>
+<ul><li>Improved the random effect variance generation for function <code>iccRE</code> under the Poisson distribution. The current approach is based on the 2013 paper by Nakagawa &amp; Schielzeth titled “A general and simple method for obtaining <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math> from generalized linear mixed-effects models.”</li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-fix-0-7-0">Minor fix<a class="anchor" aria-label="anchor" href="#minor-fix-0-7-0"></a></h3>
@@ -145,16 +154,14 @@
 </ul></div>
 <div class="section level3">
 <h3 id="minor-fixes-0-6-0">Minor fixes<a class="anchor" aria-label="anchor" href="#minor-fixes-0-6-0"></a></h3>
-<ul><li>Fixed bug in <code>genSpline</code>
-</li>
+<ul><li>Fixed bug in <code>genSpline</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.5.1" id="simstudy-051">simstudy 0.5.1<small>2022-10-03</small><a class="anchor" aria-label="anchor" href="#simstudy-051"></a></h2>
 <div class="section level3">
 <h3 id="minor-fixes-0-5-1">Minor fixes<a class="anchor" aria-label="anchor" href="#minor-fixes-0-5-1"></a></h3>
-<ul><li>Fixed bug in <code>trtAssign</code>
-</li>
+<ul><li>Fixed bug in <code>trtAssign</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -172,7 +179,7 @@
 <h2 class="page-header" data-toc-text="0.4.0" id="simstudy-040">simstudy 0.4.0<small>2022-01-20</small><a class="anchor" aria-label="anchor" href="#simstudy-040"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
-<ul><li>genOrdCat now supports non-proportional odds</li>
+<ul><li>genOrdCat now supports non-proportional odds.</li>
 <li>Added functions defRepeat and defRepeatAdd to facilitate the definition of multiple variables that share identical data definitions.</li>
 </ul></div>
 <div class="section level3">

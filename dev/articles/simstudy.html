@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Simulating Study Data">
-<meta property="og:description" content="simstudy">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -108,7 +107,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulating Study Data</h1>
-                        <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/HEAD/vignettes/simstudy.Rmd" class="external-link"><code>vignettes/simstudy.Rmd</code></a></small>
+                        <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/main/vignettes/simstudy.Rmd" class="external-link"><code>vignettes/simstudy.Rmd</code></a></small>
       <div class="hidden name"><code>simstudy.Rmd</code></div>
     </div>
         <p>The <code>simstudy</code> package is a collection of
@@ -138,12 +137,23 @@ types of data. So, the parameterization of some of the data generating
 processes may not follow the standard parameterizations for the specific
 distributions. For example, in <code>simstudy</code>
 <em>gamma</em>-distributed data are generated based on the specification
-of a mean <span class="math inline">\(\mu\)</span> (or <span class="math inline">\(\log(\mu)\)</span>) and a dispersion <span class="math inline">\(d\)</span>, rather than shape <span class="math inline">\(\alpha\)</span> and rate <span class="math inline">\(\beta\)</span> parameters that more typically
-characterize the <em>gamma</em> distribution. When we estimate the
-parameters, we are modeling <span class="math inline">\(\mu\)</span> (or
-some function of <span class="math inline">\((\mu)\)</span>), so we
-should explicitly recover the <code>simstudy</code> parameters used to
-generate the model - illuminating the relationship between the
+of a mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+(or
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>μ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log(\mu)</annotation></semantics></math>)
+and a dispersion
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>,
+rather than shape
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+and rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
+parameters that more typically characterize the <em>gamma</em>
+distribution. When we estimate the parameters, we are modeling
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+(or some function of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>μ</mi><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\mu)</annotation></semantics></math>),
+so we should explicitly recover the <code>simstudy</code> parameters
+used to generate the model - illuminating the relationship between the
 underlying data generating processes and the models.</p>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
@@ -230,10 +240,11 @@ a new field in the data set that will be generated.</p>
 <h3 id="generating-the-data">Generating the data<a class="anchor" aria-label="anchor" href="#generating-the-data"></a>
 </h3>
 <p>After the data set definitions have been created, a new data set with
-<span class="math inline">\(n\)</span> observations can be created with
-a call to function <strong><code>genData</code></strong>. In this
-example, 1,000 observations are generated using the data set definitions
-in <strong><code>def</code></strong>, and then stored in the object
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+observations can be created with a call to function
+<strong><code>genData</code></strong>. In this example, 1,000
+observations are generated using the data set definitions in
+<strong><code>def</code></strong>, and then stored in the object
 <strong><code>dd</code></strong>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">87261</span><span class="op">)</span></span>
@@ -513,7 +524,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="left">a;b;c</td>
 <td align="center">X</td>
 <td align="center">-</td>
-<td align="center">-</td>
+<td align="center">X</td>
 </tr>
 <tr class="odd">
 <td align="left">clusterSize</td>
@@ -651,53 +662,98 @@ types of distributions, which are listed in the following table:</p>
 <h4 id="beta">beta<a class="anchor" aria-label="anchor" href="#beta"></a>
 </h4>
 <p>A <em>beta</em> distribution is a continuous data distribution that
-takes on values between <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>. The <code>formula</code> specifies the
-mean <span class="math inline">\(\mu\)</span> (with the ‘identity’ link)
-or the log-odds of the mean (with the ‘logit’ link). The scalar value in
-the ‘variance’ represents the dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> for a beta distributed variable
-will be <span class="math inline">\(\mu (1- \mu)/(1 + d)\)</span>.
+takes on values between
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>.
+The <code>formula</code> specifies the mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+(with the ‘identity’ link) or the log-odds of the mean (with the ‘logit’
+link). The scalar value in the ‘variance’ represents the dispersion
+value
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>.
+The variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+for a beta distributed variable will be
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>μ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mu (1- \mu)/(1 + d)</annotation></semantics></math>.
 Typically, the beta distribution is specified using two shape parameters
-<span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, where <span class="math inline">\(\mu = \alpha/(\alpha + \beta)\)</span> and <span class="math inline">\(\sigma^2 = \alpha\beta/[(\alpha + \beta)^2 (\alpha
-+ \beta + 1)]\)</span>.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mi>α</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo>+</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mu = \alpha/(\alpha + \beta)</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mi>α</mi><mi>β</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">[</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo>+</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo>+</mo><mi>β</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\sigma^2 = \alpha\beta/[(\alpha + \beta)^2 (\alpha + \beta + 1)]</annotation></semantics></math>.</p>
 </div>
 <div class="section level4">
 <h4 id="binary">binary<a class="anchor" aria-label="anchor" href="#binary"></a>
 </h4>
 <p>A <em>binary</em> distribution is a discrete data distribution that
-takes values <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>. (It is more conventionally called a
-<em>Bernoulli</em> distribution, or is a <em>binomial</em> distribution
-with a single trial <span class="math inline">\(n=1\)</span>.) The
-<code>formula</code> represents the probability (with the ‘identity’
+takes values
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
+or
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>.
+(It is more conventionally called a <em>Bernoulli</em> distribution, or
+is a <em>binomial</em> distribution with a single trial
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n=1</annotation></semantics></math>.)
+The <code>formula</code> represents the probability (with the ‘identity’
 link) or the log odds (with the ‘logit’ link) that the variable takes
-the value of 1. The mean of this distribution is <span class="math inline">\(p\)</span>, and variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(p(1-p)\)</span>.</p>
+the value of 1. The mean of this distribution is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
+and variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(1-p)</annotation></semantics></math>.</p>
 </div>
 <div class="section level4">
 <h4 id="binomial">binomial<a class="anchor" aria-label="anchor" href="#binomial"></a>
 </h4>
 <p>A <em>binomial</em> distribution is a discrete data distribution that
 represents the count of the number of successes given a number of
-trials. The formula specifies the probability of success <span class="math inline">\(p\)</span>, and the variance field is used to
-specify the number of trials <span class="math inline">\(n\)</span>.
-Given a value of <span class="math inline">\(p\)</span>, the mean <span class="math inline">\(\mu\)</span> of this distribution is <span class="math inline">\(n*p\)</span>, and the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(np(1-p)\)</span>.</p>
+trials. The formula specifies the probability of success
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
+and the variance field is used to specify the number of trials
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>.
+Given a value of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
+the mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+of this distribution is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>*</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">n*p</annotation></semantics></math>,
+and the variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">np(1-p)</annotation></semantics></math>.</p>
 </div>
 <div class="section level4">
 <h4 id="categorical">categorical<a class="anchor" aria-label="anchor" href="#categorical"></a>
 </h4>
 <p>A <em>categorical</em> distribution is a discrete data distribution
-taking on values from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>, with each value representing a
-specific category, and there are <span class="math inline">\(K\)</span>
+taking on values from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>,
+with each value representing a specific category, and there are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
 categories. The categories may or may not be ordered. For a categorical
-variable with <span class="math inline">\(k\)</span> categories, the
-<code>formula</code> is a string of probabilities that sum to 1, each
-separated by a semi-colon: <span class="math inline">\((p_1 ; p_2 ; ...
-; p_k)\)</span>. <span class="math inline">\(p_1\)</span> is the
-probability of the random variable falling in category <span class="math inline">\(1\)</span>, <span class="math inline">\(p_2\)</span> is the probability of category <span class="math inline">\(2\)</span>, etc. The probabilities can be
-specified as functions of other variables previously defined. The helper
-function <code>genCatFormula</code> is an easy way to create different
-probability strings. The <code>link</code> options are <em>identity</em>
-or <em>logit</em>. The <code>variance</code> field is optional an allows
-to provide categories other than the default <code>1...n</code> in the
-same format as <code>formula</code>: “a;b;c”. Numeric variance Strings
+variable with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+categories, the <code>formula</code> is a string of probabilities that
+sum to 1, each separated by a semi-colon:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>1</mn></msub><mo>;</mo><msub><mi>p</mi><mn>2</mn></msub><mo>;</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>;</mo><msub><mi>p</mi><mi>k</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(p_1 ; p_2 ; ... ; p_k)</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>1</mn></msub><annotation encoding="application/x-tex">p_1</annotation></semantics></math>
+is the probability of the random variable falling in category
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>2</mn></msub><annotation encoding="application/x-tex">p_2</annotation></semantics></math>
+is the probability of category
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>,
+etc. The probabilities can be specified as functions of other variables
+previously defined. The helper function <code>genCatFormula</code> is an
+easy way to create different probability strings. The <code>link</code>
+options are <em>identity</em> or <em>logit</em>. The
+<code>variance</code> field is optional an allows to provide categories
+other than the default <code>1...n</code> in the same format as
+<code>formula</code>: “a;b;c”. Numeric variance Strings
 (e.g. “50;100;200”) will be converted to numeric when possible. All
 probabilities will be rounded to 1e12 decimal points to prevent possible
 rounding errors.</p>
@@ -724,17 +780,23 @@ across clusters increases.</p>
 user-defined function as a string in the <em>formula</em> argument. The
 arguments of the custom function are listed in the <em>variance</em>
 argument, separated by commas and formatted as “<strong>arg_1 =
-val_form_1, arg_2 = val_form_2, <span class="math inline">\(\dots\)</span>, arg_K = val_form_K</strong>”. The
-<em>arg_k’s</em> represent the names of the arguments passed to the
-customized function, where <span class="math inline">\(k\)</span> ranges
-from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>. Values or formulas can be used for
-each <em>val_form_k</em>. If formulas are used, ensure that the
-variables have been previously generated. Double dot notation is
-available in specifying <em>value_formula_k</em>. One important
-requirement of the custom function is that the parameter list used to
-define the function must include an argument”<strong>n = n</strong>”,
-but do not include <span class="math inline">\(n\)</span> in the
-definition as part of <code>defData</code> or
+val_form_1, arg_2 = val_form_2,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>…</mi><annotation encoding="application/x-tex">\dots</annotation></semantics></math>,
+arg_K = val_form_K</strong>”. The <em>arg_k’s</em> represent the names
+of the arguments passed to the customized function, where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+ranges from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>.
+Values or formulas can be used for each <em>val_form_k</em>. If formulas
+are used, ensure that the variables have been previously generated.
+Double dot notation is available in specifying <em>value_formula_k</em>.
+One important requirement of the custom function is that the parameter
+list used to define the function must include an argument”<strong>n =
+n</strong>”, but do not include
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+in the definition as part of <code>defData</code> or
 <code>defDataAdd</code>.</p>
 </div>
 <div class="section level4">
@@ -742,19 +804,29 @@ definition as part of <code>defData</code> or
 </h4>
 <p>An <em>exponential</em> distribution is a continuous data
 distribution that takes on non-negative values. The <code>formula</code>
-represents the mean <span class="math inline">\(\theta\)</span> (with
-the ‘identity’ link) or log of the mean (with the ‘log’ link). The
+represents the mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+(with the ‘identity’ link) or log of the mean (with the ‘log’ link). The
 <code>variance</code> argument does not apply to the
-<em>exponential</em> distribution. The variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\theta^2\)</span>.</p>
+<em>exponential</em> distribution. The variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>θ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\theta^2</annotation></semantics></math>.</p>
 </div>
 <div class="section level4">
 <h4 id="gamma">gamma<a class="anchor" aria-label="anchor" href="#gamma"></a>
 </h4>
 <p>A <em>gamma</em> distribution is a continuous data distribution that
 takes on non-negative values. The <code>formula</code> specifies the
-mean <span class="math inline">\(\mu\)</span> (with the ‘identity’ link)
-or the log of the mean (with the ‘log’ link). The <code>variance</code>
-field represents a dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> is is <span class="math inline">\(d \mu^2\)</span>.</p>
+mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+(with the ‘identity’ link) or the log of the mean (with the ‘log’ link).
+The <code>variance</code> field represents a dispersion value
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>.
+The variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+is is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><msup><mi>μ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">d \mu^2</annotation></semantics></math>.</p>
 </div>
 <div class="section level4">
 <h4 id="mixture">mixture<a class="anchor" aria-label="anchor" href="#mixture"></a>
@@ -762,13 +834,23 @@ field represents a dispersion value <span class="math inline">\(d\)</span>. The 
 <p>The <em>mixture</em> distribution is a mixture of other predefined
 variables, which can be defined based on any of the other available
 distributions. The formula is a string structured with a sequence of
-variables <span class="math inline">\(x_i\)</span> and probabilities
-<span class="math inline">\(p_i\)</span>: <span class="math inline">\(x_1 | p_1 + … + x_n | p_n\)</span>. All of the
-<span class="math inline">\(x_i\)</span>’s are required to have been
-previously defined, and the probabilities must sum to <span class="math inline">\(1\)</span> (i.e. <span class="math inline">\(\sum_1^n p_i = 1\)</span>). The result of
-generating from a mixture is the value <span class="math inline">\(x_i\)</span> with probability <span class="math inline">\(p_i\)</span>. The <code>variance</code> and
-<code>link</code> fields do not apply to the <em>mixture</em>
-distribution.</p>
+variables
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math>
+and probabilities
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>i</mi></msub><annotation encoding="application/x-tex">p_i</annotation></semantics></math>:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>p</mi><mn>1</mn></msub><mo>+</mo><mi>…</mi><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><msub><mi>p</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">x_1 | p_1 + … + x_n | p_n</annotation></semantics></math>.
+All of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math>’s
+are required to have been previously defined, and the probabilities must
+sum to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
+(i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mn>1</mn><mi>n</mi></msubsup><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sum_1^n p_i = 1</annotation></semantics></math>).
+The result of generating from a mixture is the value
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math>
+with probability
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>i</mi></msub><annotation encoding="application/x-tex">p_i</annotation></semantics></math>.
+The <code>variance</code> and <code>link</code> fields do not apply to
+the <em>mixture</em> distribution.</p>
 </div>
 <div class="section level4">
 <h4 id="negbinomial">negBinomial<a class="anchor" aria-label="anchor" href="#negbinomial"></a>
@@ -780,8 +862,14 @@ failures occurs. It is often used to model count data more generally
 when a <em>Poisson</em> distribution is not considered appropriate; the
 variance of the negative binomial distribution is larger than the
 <em>Poisson</em> distribution. The <code>formula</code> specifies the
-mean <span class="math inline">\(\mu\)</span> or the log of the mean.
-The variance field represents a dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> will be <span class="math inline">\(\mu + d\mu^2\)</span>.</p>
+mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+or the log of the mean. The variance field represents a dispersion value
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>.
+The variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+will be
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>+</mo><mi>d</mi><msup><mi>μ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mu + d\mu^2</annotation></semantics></math>.</p>
 </div>
 <div class="section level4">
 <h4 id="nonrandom">nonrandom<a class="anchor" aria-label="anchor" href="#nonrandom"></a>
@@ -796,37 +884,57 @@ of the variable to be generated, without any uncertainty. The
 <h4 id="normal">normal<a class="anchor" aria-label="anchor" href="#normal"></a>
 </h4>
 <p>A <em>normal</em> or <em>Gaussian</em> distribution is a continuous
-data distribution that takes on values between <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(\infty\)</span>. The <code>formula</code>
-represents the mean <span class="math inline">\(\mu\)</span> and the
-<code>variance</code> represents <span class="math inline">\(\sigma^2\)</span>. The <code>link</code> field is
-not applied to the <em>normal</em> distribution.</p>
+data distribution that takes on values between
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">-\infty</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>.
+The <code>formula</code> represents the mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+and the <code>variance</code> represents
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>.
+The <code>link</code> field is not applied to the <em>normal</em>
+distribution.</p>
 </div>
 <div class="section level4">
 <h4 id="nozeropoisson">noZeroPoisson<a class="anchor" aria-label="anchor" href="#nozeropoisson"></a>
 </h4>
 <p>The <em>noZeroPoisson</em> distribution is a discrete data
 distribution that takes on positive integers. This is a truncated
-<em>poisson</em> distribution that excludes <span class="math inline">\(0\)</span>. The <code>formula</code> specifies the
-parameter <span class="math inline">\(\lambda\)</span> (link is
-‘identity’) or log() (<code>link</code> is log). The
+<em>poisson</em> distribution that excludes
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>.
+The <code>formula</code> specifies the parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+(link is ‘identity’) or log() (<code>link</code> is log). The
 <code>variance</code> field does not apply to this distribution. The
-mean <span class="math inline">\(\mu\)</span> of this distribution is
-<span class="math inline">\(\lambda/(1-e^{-\lambda})\)</span> and the
-variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\((\lambda + \lambda^2)/(1-e^{-\lambda}) -
-\lambda^2/(1-e^{-\lambda})^2\)</span>. We are not typically interested
-in modeling data drawn from this distribution (except in the case of a
-<em>hurdle model</em>), but it is useful to generate positive count data
-where it is not desirable to have any <span class="math inline">\(0\)</span> values.</p>
+mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+of this distribution is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>λ</mi></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\lambda/(1-e^{-\lambda})</annotation></semantics></math>
+and the variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>λ</mi><mo>+</mo><msup><mi>λ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>λ</mi></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><msup><mi>λ</mi><mn>2</mn></msup><mi>/</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>λ</mi></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">(\lambda + \lambda^2)/(1-e^{-\lambda}) - \lambda^2/(1-e^{-\lambda})^2</annotation></semantics></math>.
+We are not typically interested in modeling data drawn from this
+distribution (except in the case of a <em>hurdle model</em>), but it is
+useful to generate positive count data where it is not desirable to have
+any
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
+values.</p>
 </div>
 <div class="section level4">
 <h4 id="poisson">poisson<a class="anchor" aria-label="anchor" href="#poisson"></a>
 </h4>
 <p>The <em>poisson</em> distribution is a discrete data distribution
 that takes on non-negative integers. The <code>formula</code> specifies
-the mean <span class="math inline">\(\lambda\)</span> (link is
-‘identity’) or log of the mean (<code>link</code> is log). The
+the mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+(link is ‘identity’) or log of the mean (<code>link</code> is log). The
 <code>variance</code> field does not apply to this distribution. The
-variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\lambda\)</span> itself.</p>
+variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+itself.</p>
 </div>
 <div class="section level4">
 <h4 id="trtassign">trtAssign<a class="anchor" aria-label="anchor" href="#trtassign"></a>
@@ -851,23 +959,37 @@ will not be balanced.</p>
 <h4 id="uniform">uniform<a class="anchor" aria-label="anchor" href="#uniform"></a>
 </h4>
 <p>A <em>uniform</em> distribution is a continuous data distribution
-that takes on values from <span class="math inline">\(a\)</span> to
-<span class="math inline">\(b\)</span>, where <span class="math inline">\(b\)</span> &gt; <span class="math inline">\(a\)</span>, and they both lie anywhere on the real
-number line. The <code>formula</code> is a string with the format “a;b”,
-where <em>a</em> and <em>b</em> are scalars or functions of previously
-defined variables. The <code>variance</code> and <code>link</code>
-arguments do not apply to the <em>uniform</em> distribution.</p>
+that takes on values from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
+&gt;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>,
+and they both lie anywhere on the real number line. The
+<code>formula</code> is a string with the format “a;b”, where <em>a</em>
+and <em>b</em> are scalars or functions of previously defined variables.
+The <code>variance</code> and <code>link</code> arguments do not apply
+to the <em>uniform</em> distribution.</p>
 </div>
 <div class="section level4">
 <h4 id="uniformint">uniformInt<a class="anchor" aria-label="anchor" href="#uniformint"></a>
 </h4>
 <p>A <em>uniform integer</em> distribution is a discrete data
-distribution that takes on values from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, where <span class="math inline">\(b\)</span> &gt; <span class="math inline">\(a\)</span>, and they both lie anywhere on the
-integer number line. The <code>formula</code> is a string with the
-format “a;b”, where <em>a</em> and <em>b</em> are scalars or functions
-of previously defined variables. The <code>variance</code> and
-<code>link</code> arguments do not apply to the <em>uniform integer</em>
-distribution.</p>
+distribution that takes on values from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
+&gt;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>,
+and they both lie anywhere on the integer number line. The
+<code>formula</code> is a string with the format “a;b”, where <em>a</em>
+and <em>b</em> are scalars or functions of previously defined variables.
+The <code>variance</code> and <code>link</code> arguments do not apply
+to the <em>uniform integer</em> distribution.</p>
 </div>
 </div>
 </div>
@@ -974,8 +1096,12 @@ condition argument that will be based on a variable that already exists
 in the data set. The new variable can take on any <code>simstudy</code>
 distribution specified with the appropriate <code>formula</code>,
 <code>variance</code>, and <code>link</code> arguments.</p>
-<p>In this example, the slope of a regression line of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> varies depending on the value of the
-predictor <span class="math inline">\(x\)</span>:</p>
+<p>In this example, the slope of a regression line of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+varies depending on the value of the predictor
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">9</span>, dist <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
 <span></span>
@@ -998,9 +1124,7 @@ predictor <span class="math inline">\(x\)</span>:</p>
 </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 </div>
       <footer><div class="copyright">
   <p></p>

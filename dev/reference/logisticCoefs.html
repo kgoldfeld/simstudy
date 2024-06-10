@@ -86,7 +86,7 @@ data with these desire characteristics."><meta name="robots" content="noindex"><
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Determine intercept, treatment/exposure and covariate coefficients that can be used for binary data generation with a logit link and a set of covariates</h1>
-    <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/HEAD/R/utility.R" class="external-link"><code>R/utility.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/main/R/utility.R" class="external-link"><code>R/utility.R</code></a></small>
     <div class="hidden name"><code>logisticCoefs.Rd</code></div>
     </div>
     <div class="ref-description">
@@ -111,7 +111,7 @@ data with these desire characteristics.</p>
     </div>
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt id="arg-defcovar">defCovar<a class="anchor" aria-label="anchor" href="#arg-defcovar"></a></dt>
+<dl><dt id="arg-defcovar">defCovar<a class="anchor" aria-label="anchor" href="#arg-defcovar"></a></dt>
 <dd><p>A definition table for the covariates in the underlying
 population. This tables specifies the distribution of the covariates.</p></dd>
 <dt id="arg-coefs">coefs<a class="anchor" aria-label="anchor" href="#arg-coefs"></a></dt>
@@ -143,7 +143,7 @@ a treatment/exposure variable name can be provided. Defaults to "A".</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-<p>A vector of parameters including the intercept and covariate
+    <p>A vector of parameters including the intercept and covariate
 coefficients for the logistic model data generating process.</p>
     </div>
     <div id="details">
@@ -162,7 +162,7 @@ no. 1 (2023): 1-10.</p>
     </div>
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="st">"x1"</span>, formula <span class="op">=</span> <span class="fl">0</span>, variance <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="defData.html">defData</a></span><span class="op">(</span><span class="va">d1</span>, varname <span class="op">=</span> <span class="st">"b1"</span>, formula <span class="op">=</span> <span class="fl">0.5</span>, dist <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -172,7 +172,7 @@ no. 1 (2023): 1-10.</p>
 <span class="r-in"><span><span class="fu">logisticCoefs</span><span class="op">(</span><span class="va">d1</span>, <span class="va">coefs</span>, popPrev <span class="op">=</span> <span class="fl">0.20</span>, rr <span class="op">=</span> <span class="fl">1.50</span>, trtName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span> </span></span>
 <span class="r-in"><span><span class="fu">logisticCoefs</span><span class="op">(</span><span class="va">d1</span>, <span class="va">coefs</span>, popPrev <span class="op">=</span> <span class="fl">0.20</span>, rd <span class="op">=</span> <span class="fl">0.30</span>, trtName <span class="op">=</span> <span class="st">"rx"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">logisticCoefs</span><span class="op">(</span><span class="va">d1</span>, <span class="va">coefs</span>, popPrev <span class="op">=</span> <span class="fl">0.20</span>, auc <span class="op">=</span> <span class="fl">0.80</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
