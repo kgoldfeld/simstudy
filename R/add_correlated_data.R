@@ -298,43 +298,87 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' Emrich and Piedmonte (1991).
 #' @param ... May include additional arguments that have been deprecated and are
 #' no longer used.
+#' @details The original data table can come in one of two formats: a single row 
+#' per **idvar** (where data are *ungrouped*) or multiple rows per **idvar** (in which 
+#' case the data are *grouped* or clustered). The structure of the arguments 
+#' depends on the format of the data.
+#' 
+#' In the case of *ungrouped* data, there are two ways to specify the number of
+#' correlated variables and the covariance matrix. In approach (1), 
+#' **nvars** needs to be specified along with **rho** and **corstr**.
+#' In approach (2), **corMatrix** may be specified by identifying a single square
+#' *n* x *n* covariance matrix. The number of new variables generated for each 
+#' record will be *n*. If **nvars**, **rho**, 
+#' **corstr**, and **corMatrix** are all specified, the data will be 
+#' generated based on the information provided in the covariance matrix alone.
+#' In both (1) and (2), the data will be returned in a wide format.
+#' 
+#' In the case of *grouped* data, where there are *G* groups, there are also two 
+#' ways to proceed. In both cases,
+#' the number of new variables to be generated may vary by group, and will be determined by the
+#' number of records in each group, \eqn{n_i, i \in \{1,...,G\}} (i.e., the number of records that share the same 
+#' value of *idvar*). **nvars** is not used in grouped data.
+#' In approach (1), the arguments **rho** and **corstr** may both be specified 
+#' to determine the structure of the covariance 
+#' matrix. In approach (2), the argument **corMatrix** may be specified.
+#' **corMatrix** can be a single matrix with dimensions \eqn{n \ \text{x} \ n} if 
+#' \eqn{n_i = n} for all *i*. However, if the sample sizes of each group vary 
+#' (i.e., \eqn{n_i \ne n_j} for some groups *i* and *j*), **corMatrix** must be a list
+#' of covariance matrices with a length *G*; each 
+#' covariance matrix in the list will have dimensions 
+#' \eqn{n_i \ \text{x} \ n_i, \ i \in \{1,...,G\}}. In the case of *grouped* data, the
+#' new data will be returned in *long* format (i.e., one new column only).
+#' 
 #' @return Original data.table with added column(s) of correlated data
 #' @references Emrich LJ, Piedmonte MR. A Method for Generating High-Dimensional
 #' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
 #' @examples
-#' # Wide example
-#'
-#' def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
-#' def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log")
-#'
-#' dt <- genData(100, def)
-#'
-#' addCorGen(
-#'   dtOld = dt, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
-#'   dist = "poisson", param1 = "lambda"
-#' )
-#'
-#' # Long example
-#'
-#' def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
-#'
-#' def2 <- defDataAdd(
-#'   varname = "p", formula = "-3+.2*period + .3*xbase",
-#'   dist = "nonrandom", link = "logit"
-#' )
-#'
-#' dt <- genData(100, def)
-#'
-#' dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
-#' dtLong <- addColumns(def2, dtLong)
+#' # Ungrouped data
+#' 
+#' cMat <- genCorMat(nvars = 4, rho = .2, corstr = "ar1", nclusters = 1)
+#' 
+#' def <-
+#'   defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma") |>
+#'   defData(varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log") |>
+#'   defData(varname = "n", formula = 3, dist = "noZeroPoisson")
+#' 
+#' dd <- genData(101, def, id = "cid")
+#' 
+#' ## Specify with nvars, rho, and corstr
 #' 
 #' addCorGen(
-#'   dtOld = dtLong, idvar = "cid", nvars = NULL, rho = .7, corstr = "cs",
-#'   dist = "binary", param1 = "p"
+#'   dtOld = dd, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
+#'   dist = "poisson", param1 = "lambda"
 #' )
-#'
+#' 
+#' ## Specify with covMatrix
+#' 
+#' addCorGen(
+#'   dtOld = dd, idvar = "cid", corMatrix = cMat,
+#'   dist = "poisson", param1 = "lambda"
+#' )
+#' 
+#' # Grouped data
+#' 
+#' cMats <- genCorMat(nvars = dd$n, rho = .5, corstr = "cs", nclusters = nrow(dd))
+#' 
+#' dx <- genCluster(dd, "cid", "n", "id")
+#' 
+#' ## Specify with nvars, rho, and corstr
+#' 
+#' addCorGen(
+#'   dtOld = dx, idvar = "cid", rho = .8, corstr = "ar1", dist = "poisson", param1 = "xbase"
+#' )
+#' 
+#' ## Specify with covMatrix
+#' 
+#' addCorGen(
+#'  dtOld = dx, idvar = "cid", corMatrix = cMats, dist = "poisson", param1 = "xbase"
+#' )
+#' 
 #' @concept correlated
 #' @export
+#' @md
 addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, corMatrix = NULL,
                       dist, param1, param2 = NULL, cnames = NULL,
                       method = "copula", ...) {
@@ -403,12 +447,22 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   # wide(ness) is determined by incoming data structure.
 
   maxN <- dtOld[, .N, by = idvar][, max(N)]
+  
   if (maxN == 1) {
     wide <- TRUE
-    assertNotMissing(nvars = missing(nvars))
-    assertAtLeast(nvars = nvars, minVal = 2)
+    if ((is.null(nvars) | is.null(rho) | is.null(corstr)) & (is.null(corMatrix))) {
+      stop("Either nvars, rho, and corstr all must be provided or corMatrix must be provided.")
+    }
+    
+    if (is.null(corMatrix)) { # that means that we are using nvars/rho/corstr  
+      assertAtLeast(nvars = nvars, minVal = 2)
+    }
   } else if (maxN > 1) {
     wide <- FALSE
+    if ((is.null(rho) | is.null(corstr)) & (is.null(corMatrix))) {
+      stop("Either both rho and corstr must be provided or corMatrix must be provided.")
+    }
+    
   }
   
   ####
@@ -457,24 +511,41 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
       
       # check if the dimensions of corr matrix matches (equal) cluster size
       
-      dn <- dtTemp[, .N, keyby = .id]
-      dn[, dim := nrow(corMatrix)]
-      compare_cluster_size <- dn[, sum(N != dim)]
-      if (compare_cluster_size != 0) {
-        stop("Dimensions of corMatrix not equal to cluster sizes!")
+      if (!wide) {
+        dn <- dtTemp[, .N, keyby = .id]
+        dn[, dim := nrow(corMatrix)]
+        compare_cluster_size <- dn[, sum(N != dim)]
+        if (compare_cluster_size != 0) {
+          stop("Dimensions of corMatrix not equal to cluster sizes!")
+        }
       }
     }
   }
   
-  
   if (wide) { # Convert to long form temporarily
+    if ( is.null(nvars) ) nvars <- nrow(corMatrix)
     dtTemp <- addPeriods(dtTemp, nPeriods = nvars, idvars = ".id")
   }
   
   dtTemp[, seq_ := 1:.N, keyby = .id]
-  nvars <- dtTemp[.id == 1, .N] # only permits case where number of records per id is the same
-
-  ####
+  # nvars <- dtTemp[.id == 1, .N] # only permits case where number of records per id is the same
+  
+  counts <- dtTemp[, .N, by = .id][, N]
+  same_nvar <- all(counts == counts[1])
+  
+  if (!wide) {    # multiple record per id
+    if (is.null(corMatrix)) {
+      if (same_nvar) {
+        corMatrix <- genCorMat(nvars = counts[1] , rho = rho, corstr = corstr, nclusters = 1)  
+      } else {
+        corMatrix <- genCorMat(nvars = counts , rho = rho, corstr = corstr, nclusters = length(counts))  
+      }
+    }
+  } else  {        # single record per id
+    if (is.null(corMatrix)) {
+      corMatrix <- genCorMat(nvars = nvars , rho = rho, corstr = corstr, nclusters = 1) 
+    }
+  }
 
   if (method == "copula") {
     
@@ -483,18 +554,17 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
       dtM <- rbindlist(
         lapply(ns, function(x) .genQuantU(x$N, 1, rho, corstr, corMatrix[[x$.id]])) 
       )
+      
       dtTemp[, .U := dtM$Unew]
     } else {
-      if (is.null(corMatrix)) {
-        corMatrix <- .buildCorMat(nvars, corMatrix = NULL, rho = rho, corstr = corstr)
-      }
+      
+      nvars <- nrow(corMatrix)
+      
       ns <- nrow(dtTemp[, .N, keyby = .id])
       Unew <- c(t(mvnfast::rmvn(n = ns, mu = rep(0, nvars), sigma = corMatrix)))
     
       dtTemp[, .U := stats::pnorm(Unew)]
     }
-    
-    # dtTemp[, seq := dtM$seq]
     
     if (dist == "poisson") {
       setnames(dtTemp, param1, ".param1")
@@ -527,7 +597,6 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
     }
     
     dX <- dtTemp[, list(.id, seq_, .XX)]
-
   } else if (method == "ep") {
     
     if (is.list(corMatrix)) {

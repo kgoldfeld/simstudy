@@ -1,9 +1,15 @@
 # simstudy (development version)
 
+## New features
+* Added the ability to generate data from a empirical distribution by using new functions `genDataDensity` and `addDataDensity`.
+
+## Minor fix
+* `addCorGen` no longer requires all clusters to have the same size when using the *rho* and *corstr* arguments to define the correlation.
+
 # simstudy 0.8.0
 
 ## New features
-* added the option to specify a customized distribution in `defData` and `defDataAdd` by
+* Added the option to specify a customized distribution in `defData` and `defDataAdd` by
 specifying `dist = "custom"`.
 *`addPeriods` now includes a new argument `periodVec` that allows users to designate 
 specific measurement time periods using vector.
@@ -39,7 +45,7 @@ distribution in `defData` and `defDataAdd`.
 * Improved the random effect variance generation for function `iccRE` under the
 Poisson distribution. The current approach is based on the 2013 paper by
 Nakagawa & Schielzeth titled "A general and simple method for obtaining $R^2$ from
-generalized linear mixed-effects models"
+generalized linear mixed-effects models."
 
 ## Minor fix
 * Modified internal function to speed up beta distribution data generation.
@@ -57,13 +63,13 @@ performance has been dramatically improved.
 
 ## Minor fixes
 
-* Fixed bug in `genSpline`
+* Fixed bug in `genSpline`.
 
 # simstudy 0.5.1
 
 ## Minor fixes
 
-* Fixed bug in `trtAssign`
+* Fixed bug in `trtAssign`.
 
 # simstudy 0.5.0
 
@@ -77,7 +83,7 @@ performance has been dramatically improved.
 # simstudy 0.4.0
 
 ## New features
-* genOrdCat now supports non-proportional odds
+* genOrdCat now supports non-proportional odds.
 * Added functions defRepeat and defRepeatAdd to facilitate the definition of multiple variables that share identical data definitions.
 
 ## Minor improvements and fixes

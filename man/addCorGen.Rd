@@ -22,7 +22,7 @@ addCorGen(
 \arguments{
 \item{dtOld}{The data set that will be augmented. If the data set includes a
 single record per id, the new data table will be created as a "wide" data set.
-If the original data set includes multiple records per id, the new data set will 
+If the original data set includes multiple records per id, the new data set will
 be in "long" format.}
 
 \item{nvars}{The number of new variables to create for each id. This is only applicable
@@ -70,36 +70,80 @@ Original data.table with added column(s) of correlated data
 \description{
 Create multivariate (correlated) data - for general distributions
 }
+\details{
+The original data table can come in one of two formats: a single row
+per \strong{idvar} (where data are \emph{ungrouped}) or multiple rows per \strong{idvar} (in which
+case the data are \emph{grouped} or clustered). The structure of the arguments
+depends on the format of the data.
+
+In the case of \emph{ungrouped} data, there are two ways to specify the number of
+correlated variables and the covariance matrix. In approach (1),
+\strong{nvars} needs to be specified along with \strong{rho} and \strong{corstr}.
+In approach (2), \strong{corMatrix} may be specified by identifying a single square
+\emph{n} x \emph{n} covariance matrix. The number of new variables generated for each
+record will be \emph{n}. If \strong{nvars}, \strong{rho},
+\strong{corstr}, and \strong{corMatrix} are all specified, the data will be
+generated based on the information provided in the covariance matrix alone.
+In both (1) and (2), the data will be returned in a wide format.
+
+In the case of \emph{grouped} data, where there are \emph{G} groups, there are also two
+ways to proceed. In both cases,
+the number of new variables to be generated may vary by group, and will be determined by the
+number of records in each group, \eqn{n_i, i \in \{1,...,G\}} (i.e., the number of records that share the same
+value of \emph{idvar}). \strong{nvars} is not used in grouped data.
+In approach (1), the arguments \strong{rho} and \strong{corstr} may both be specified
+to determine the structure of the covariance
+matrix. In approach (2), the argument \strong{corMatrix} may be specified.
+\strong{corMatrix} can be a single matrix with dimensions \eqn{n \ \text{x} \ n} if
+\eqn{n_i = n} for all \emph{i}. However, if the sample sizes of each group vary
+(i.e., \eqn{n_i \ne n_j} for some groups \emph{i} and \emph{j}), \strong{corMatrix} must be a list
+of covariance matrices with a length \emph{G}; each
+covariance matrix in the list will have dimensions
+\eqn{n_i \ \text{x} \ n_i, \ i \in \{1,...,G\}}. In the case of \emph{grouped} data, the
+new data will be returned in \emph{long} format (i.e., one new column only).
+}
 \examples{
-# Wide example
+# Ungrouped data
 
-def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
-def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log")
+cMat <- genCorMat(nvars = 4, rho = .2, corstr = "ar1", nclusters = 1)
 
-dt <- genData(100, def)
+def <-
+  defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma") |>
+  defData(varname = "lambda", formula = ".5 + .1*xbase", dist = "nonrandom", link = "log") |>
+  defData(varname = "n", formula = 3, dist = "noZeroPoisson")
+
+dd <- genData(101, def, id = "cid")
+
+## Specify with nvars, rho, and corstr
 
 addCorGen(
-  dtOld = dt, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
+  dtOld = dd, idvar = "cid", nvars = 3, rho = .7, corstr = "cs",
   dist = "poisson", param1 = "lambda"
 )
 
-# Long example
-
-def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
-
-def2 <- defDataAdd(
-  varname = "p", formula = "-3+.2*period + .3*xbase",
-  dist = "nonrandom", link = "logit"
-)
-
-dt <- genData(100, def)
-
-dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
-dtLong <- addColumns(def2, dtLong)
+## Specify with covMatrix
 
 addCorGen(
-  dtOld = dtLong, idvar = "cid", nvars = NULL, rho = .7, corstr = "cs",
-  dist = "binary", param1 = "p"
+  dtOld = dd, idvar = "cid", corMatrix = cMat,
+  dist = "poisson", param1 = "lambda"
+)
+
+# Grouped data
+
+cMats <- genCorMat(nvars = dd$n, rho = .5, corstr = "cs", nclusters = nrow(dd))
+
+dx <- genCluster(dd, "cid", "n", "id")
+
+## Specify with nvars, rho, and corstr
+
+addCorGen(
+  dtOld = dx, idvar = "cid", rho = .8, corstr = "ar1", dist = "poisson", param1 = "xbase"
+)
+
+## Specify with covMatrix
+
+addCorGen(
+ dtOld = dx, idvar = "cid", corMatrix = cMats, dist = "poisson", param1 = "xbase"
 )
 
 }
