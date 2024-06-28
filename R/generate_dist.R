@@ -253,6 +253,10 @@
   size <- .evalWith(size, .parseDotVars(size, envir), dtSim, n)
   p <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
 
+  if (link == "log") {
+    p <- exp(p)
+  }
+  
   if (link == "logit") {
     p <- 1 / (1 + exp(-p))
   }

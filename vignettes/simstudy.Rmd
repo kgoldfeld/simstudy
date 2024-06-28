@@ -186,8 +186,8 @@ The foundation of generating data is the assumptions we make about the distribut
 ```{r,  echo=FALSE}
 d <- list()
 d[[1]] <- data.table("beta", "mean", "both", "-", "dispersion", "X", "-", "X") 
-d[[2]] <- data.table("binary", "probability", "both", "-", "-", "X", "-", "X") 
-d[[3]] <- data.table("binomial", "probability", "both", "-", "# of trials", "X", "-", "X")
+d[[2]] <- data.table("binary", "probability", "both", "-", "-", "X", "X", "X") 
+d[[3]] <- data.table("binomial", "probability", "both", "-", "# of trials", "X", "X", "X")
 d[[4]] <- data.table("categorical", "probability", "string", "p_1;p_2;...;p_n", "a;b;c", "X", "-", "X")
 d[[5]] <- data.table("clusterSize", "total N", "both", "-", "dispersion", "X", "-", "-")
 d[[6]] <- data.table("custom", "function", "string", "-", "arguments", "X", "-", "-")
@@ -215,11 +215,11 @@ A *beta* distribution is a continuous data distribution that takes on values bet
 
 #### binary
 
-A *binary* distribution is a discrete data distribution that takes values $0$ or $1$. (It is more conventionally called a *Bernoulli* distribution, or is a *binomial* distribution with a single trial $n=1$.) The `formula` represents the probability (with the 'identity' link) or the log odds (with the 'logit' link) that the variable takes the value of 1. The mean of this distribution is $p$, and variance $\sigma^2$ is $p(1-p)$.
+A *binary* distribution is a discrete data distribution that takes values $0$ or $1$. (It is more conventionally called a *Bernoulli* distribution, or is a *binomial* distribution with a single trial $n=1$.) The `formula` represents the probability (with the 'identity' link), the relative risk (with the 'log' link), or the log odds (with the 'logit' link) that the variable takes the value of 1. The mean of this distribution is $p$, and variance $\sigma^2$ is $p(1-p)$.
 
 #### binomial
 
-A *binomial* distribution is a discrete data distribution that represents the count of the number of successes given a number of trials. The formula specifies the probability of success $p$, and the variance field is used to specify the number of trials $n$. Given a value of $p$, the mean $\mu$ of this distribution is $n*p$, and the variance $\sigma^2$ is $np(1-p)$.
+A *binomial* distribution is a discrete data distribution that represents the count of the number of successes given a number of trials. The formula specifies the probability of success (with the 'identity' link), the relative risk (with the 'log' link), or the log odds (with the 'logit' link) that the variable takes the value of 1. and the variance field is used to specify the number of trials $n$. Given a value of $p$, the mean $\mu$ of this distribution is $n*p$, and the variance $\sigma^2$ is $np(1-p)$.
 
 #### categorical
 
