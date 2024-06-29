@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -34,6 +36,7 @@
         <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.8.0.9000</span>
       </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -45,6 +48,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -94,6 +98,7 @@
 <li>
   <a href="https://github.com/kgoldfeld/simstudy/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
+
   </a>
 </li>
       </ul>
@@ -103,17 +108,26 @@
 <!--/.container -->
 </div>
 <!--/.navbar -->
+
+
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulating Study Data</h1>
-                        <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/main/vignettes/simstudy.Rmd" class="external-link"><code>vignettes/simstudy.Rmd</code></a></small>
+            
+      
+      <small class="dont-index">Source: <a href="https://github.com/kgoldfeld/simstudy/blob/main/vignettes/simstudy.Rmd" class="external-link"><code>vignettes/simstudy.Rmd</code></a></small>
       <div class="hidden name"><code>simstudy.Rmd</code></div>
+
     </div>
-        <p>The <code>simstudy</code> package is a collection of
-functions that allows users to generate simulated data sets to explore
-modeling techniques or better understand data generating processes. The
-user defines the distributions of individual variables, specifies
+
+    
+    
+<p>The <code>simstudy</code> package is a collection of functions that
+allows users to generate simulated data sets to explore modeling
+techniques or better understand data generating processes. The user
+defines the distributions of individual variables, specifies
 relationships between covariates and outcomes, and generates data based
 on these specifications. The final data sets can represent randomized
 control trials, repeated measure designs, cluster-randomized trials, or
@@ -503,7 +517,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="left">-</td>
 <td align="left">-</td>
 <td align="center">X</td>
-<td align="center">-</td>
+<td align="center">X</td>
 <td align="center">X</td>
 </tr>
 <tr class="odd">
@@ -513,7 +527,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="left">-</td>
 <td align="left"># of trials</td>
 <td align="center">X</td>
-<td align="center">-</td>
+<td align="center">X</td>
 <td align="center">X</td>
 </tr>
 <tr class="even">
@@ -697,8 +711,9 @@ or
 is a <em>binomial</em> distribution with a single trial
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n=1</annotation></semantics></math>.)
 The <code>formula</code> represents the probability (with the ‘identity’
-link) or the log odds (with the ‘logit’ link) that the variable takes
-the value of 1. The mean of this distribution is
+link), the relative risk (with the ‘log’ link), or the log odds (with
+the ‘logit’ link) that the variable takes the value of 1. The mean of
+this distribution is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
 and variance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
@@ -710,9 +725,10 @@ is
 </h4>
 <p>A <em>binomial</em> distribution is a discrete data distribution that
 represents the count of the number of successes given a number of
-trials. The formula specifies the probability of success
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
-and the variance field is used to specify the number of trials
+trials. The formula specifies the probability of success (with the
+‘identity’ link), the relative risk (with the ‘log’ link), or the log
+odds (with the ‘logit’ link) that the variable takes the value of 1. and
+the variance field is used to specify the number of trials
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>.
 Given a value of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
@@ -1123,18 +1139,32 @@ varies depending on the value of the predictor
 </div>
 </div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
       </div>
+
 </div>
+
+
+
       <footer><div class="copyright">
   <p></p>
 <p>Developed by <a href="https://www.rdatagen.net/" class="external-link">Keith Goldfeld</a>, Jacob Wujciak-Jens.</p>
 </div>
+
 <div class="pkgdown">
   <p></p>
 <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
       </footer>
 </div>
+
+
+
+
+
+
   </body>
 </html>
