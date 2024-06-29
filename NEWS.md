@@ -2,7 +2,7 @@
 
 ## New features
 * Added the ability to generate data from a empirical distribution by using new functions `genDataDensity` and `addDataDensity`.
-* The *binary* and *binomial* distributions can now accomodate a "log" link.
+* The *binary* and *binomial* distributions can now accomodate a "log" link. 
 
 ## Minor fix
 * `addCorGen` no longer requires all clusters to have the same size when using the *rho* and *corstr* arguments to define the correlation.
