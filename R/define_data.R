@@ -690,13 +690,17 @@ defSurv <- function(dtDefs = NULL,
     switch(newdist,
       binary = {
         .isValidArithmeticFormula(newform, defVars)
-        .isIdLogit(link)
+        .isIdLogLogit(link)
       },
-      beta = ,
-      binomial = {
+      beta = {
         .isValidArithmeticFormula(newform, defVars)
         .isValidArithmeticFormula(variance, defVars)
         .isIdLogit(link)
+      },
+      binomial = {
+        .isValidArithmeticFormula(newform, defVars)
+        .isValidArithmeticFormula(variance, defVars)
+        .isIdLogLogit(link)
       },
       noZeroPoisson = ,
       poisson = ,
@@ -902,6 +906,16 @@ defSurv <- function(dtDefs = NULL,
 #' @noRd
 .isIdLog <- function(link) {
   .isLink(link, c("identity", "log"))
+  invisible(link)
+}
+
+#' Is identity, log, logit?
+#'
+#' @param link link as string.
+#' @return Invisible, error if link not valid.
+#' @noRd
+.isIdLogLogit <- function(link) {
+  .isLink(link, c("identity", "log", "logit"))
   invisible(link)
 }
 

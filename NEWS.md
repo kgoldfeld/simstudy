@@ -1,7 +1,8 @@
 # simstudy (development version)
 
 ## New features
-* Added the ability to generate data from a empirical distribution by using new functions `genDataDensity` and `addDataDensity`.
+* Added the ability to generate data from an empirical distribution by using new functions `genDataDensity` and `addDataDensity`.
+* The *binary* and *binomial* distributions can now accommodate a "log" link. 
 
 ## Minor fix
 * `addCorGen` no longer requires all clusters to have the same size when using the *rho* and *corstr* arguments to define the correlation.
@@ -20,7 +21,7 @@ specific measurement time periods using vector.
 # simstudy 0.7.1
 
 ## Breaking Changes
-* `trtAssign` with `ratio=NULL` used to produce 0-index values but 1-indexed values if `ratio` was set. This was adjusted so now both versions produce 0-indexed values. This is a potentially breaking change for existing scripts that use the generated treatment values while assuming the old behavior (e.g. using hardcoded values to filter).
+* `trtAssign` with `ratio=NULL` used to produce 0-index values but 1-indexed values if `ratio` was set. This was adjusted so now both versions produce 0-indexed values. This is a potentially breaking change for existing scripts that use the generated treatment values while assuming the old behavior (e.g. using hard coded values to filter).
 
 ## New features
 * Function `logisticCoefs` determines the intercept and treatment/exposure 
