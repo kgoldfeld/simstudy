@@ -50,8 +50,9 @@
 .evalWith <- function(formula,
                       extVars,
                       dtSim = data.table(),
-                      n = nrow(dtSim)) {
-
+                      n = nrow(dtSim),
+                      envir = parent.frame()) {
+  
   if (missing(dtSim) && missing(n)) {
     n <- 1
   }
@@ -64,7 +65,7 @@
   }
 
   e <- list2env(extVars)
-
+  
   if (!missing(dtSim) && !is.null(dtSim)) {
     e$dtSim <- as.data.table(dtSim)
     # e$def_id <- names(dtSim)[[1]] # original, but incorrect
@@ -110,9 +111,11 @@
       res
     }
   }
-
+  
+  list2env(as.list(envir), envir = environment()) # added 20240718
+  
   parsedValues <- sapply(formula, evalFormula)
-
+  
   # If only a single formula with 1 rep is eval'ed output would be not be
   # matrix, so transpose for uniform output.
   if (!is.matrix(parsedValues)) {
