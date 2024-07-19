@@ -6,6 +6,7 @@
 
 ## Minor fix
 * `addCorGen` no longer requires all clusters to have the same size when using the *rho* and *corstr* arguments to define the correlation.
+* Fixed an issue that prevented functions defined outside the global namespace from being referenced in `defData`.
 
 # simstudy 0.8.0
 
