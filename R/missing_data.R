@@ -294,11 +294,11 @@ genMiss <- function(dtName, missDefs, idvars,
   if (!missDefs[, logit.link]) {
     # dtMissP[, eval(Expression) := dtName[, eval(Formula)]] # old data.table
     
-    dtMissP[, (ColName) := dtName[, .evalWith(Formula, .parseDotVars(Formula, envir), dtName)]]
+    dtMissP[, (ColName) := dtName[, .evalWith(Formula, .parseDotVars(Formula, envir), dtName, envir = envir)]]
   } else {
     # dtMissP[, eval(Expression) := dtName[, .log2Prob(eval(Formula))]] # old data.table
     
-    dtMissP[, (ColName) := dtName[, .log2Prob(.evalWith(Formula, .parseDotVars(Formula, envir), dtName))]]
+    dtMissP[, (ColName) := dtName[, .log2Prob(.evalWith(Formula, .parseDotVars(Formula, envir), dtName, envir = envir))]]
   }
   matMiss <- dtMissP[, idvars, with = FALSE]
   # matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1, dtMissP[,
