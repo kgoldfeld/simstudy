@@ -424,8 +424,11 @@
   var_dt <- strsplit(var_pr[[1]], "|", fixed = T)
   formDT <- as.data.table(do.call(rbind, var_dt))
   
-  ps <-
-    cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2]), envir = envir))
+  ps <- cumsum(.evalWith(
+    formula = unlist(formDT[, 2]), 
+    extVars = .parseDotVars(formDT[, 2]), 
+    envir = envir
+  ))
 
   if (!isTRUE(all.equal(max(ps), 1))) {
     valueError(origFormula,

@@ -50,37 +50,37 @@
 .evalWith <- function(formula,
                       extVars,
                       dtSim = data.table(),
-                      n = nrow(dtSim),
+                      .n = nrow(dtSim),
                       envir = parent.frame()) {
   
-  if (missing(dtSim) && missing(n)) {
-    n <- 1
+  if (missing(dtSim) && missing(.n)) {
+    .n <- 1
   }
 
-  if (!missing(dtSim) && !is.null(dtSim) && n != nrow(dtSim)) {
+  if (!missing(dtSim) && !is.null(dtSim) && .n != nrow(dtSim)) {
     stop(glue(
       "Both 'dtSim' and 'n' are set but are of different length: ",
-      "{nrow(dtSim)} != {n}"
+      "{nrow(dtSim)} != {.n}"
     ))
   }
-
+  
   e <- list2env(extVars)
   
   if (!missing(dtSim) && !is.null(dtSim)) {
     e$dtSim <- as.data.table(dtSim)
     # e$def_id <- names(dtSim)[[1]] # original, but incorrect
     e$def_id <- key(dtSim)
-    }
-
+  }
+  
   if (missing(dtSim) || is.null(dtSim)) {
-    e$dtSim <- genData(n)
+    e$dtSim <- genData(.n)
     e$def_id <- "id"
   }
   
   if (!is.null(e$formula2parse)) {
     stop("'formula2parse' is a reserved variable name!")
   }
-
+  
   evalFormula <- function(formula) {
     e$formula2parse <- formula
     
@@ -106,7 +106,7 @@
     } 
     
     if (length(res) == 1) {
-      rep(res, n)
+      rep(res, times = .n)
     } else {
       res
     }
