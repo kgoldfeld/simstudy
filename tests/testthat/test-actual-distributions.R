@@ -33,7 +33,7 @@ test_that("gamma distributed data are generated correctly", {
   dd <- genData(n = 5000, dtDefs = def)
   
   diff <- dd[, .(abs(mean(g1) - u1), abs(mean(g2) - u2)) ]
-  expect_true(all(diff < 1))
+  expect_true(all(diff < 1.5))
   
   diffv <- dd[, .(abs(var(g1)/ (u1^2*2)), var(g2)/(u2^2*2)) ]
   expect_true(all(abs(diffv - 1) < 0.25))

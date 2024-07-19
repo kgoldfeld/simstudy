@@ -960,6 +960,7 @@ genSpline <- function(dt, newvar, predictor, theta,
 #' @param keepEvents Indicator to retain original "events" columns. Defaults
 #' to FALSE.
 #' @param idName Name of id field in existing data set.
+#' @param envir Optional environment, defaults to current calling environment.
 #' @return Original data table with survival time
 #' @examples
 #' # Baseline data definitions

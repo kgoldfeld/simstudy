@@ -2,7 +2,7 @@
 title: "Targeted logistic model coefficients"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Logistic Model Simulation}
+  %\VignetteIndexEntry{Targeted logistic model coefficients}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

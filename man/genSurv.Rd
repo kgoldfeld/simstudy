@@ -13,7 +13,8 @@ genSurv(
   eventName = "event",
   typeName = "type",
   keepEvents = FALSE,
-  idName = "id"
+  idName = "id",
+  envir = parent.frame()
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ to "type", but will be ignored if timeName is NULL.}
 to FALSE.}
 
 \item{idName}{Name of id field in existing data set.}
+
+\item{envir}{Optional environment, defaults to current calling environment.}
 }
 \value{
 Original data table with survival time
