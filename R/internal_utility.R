@@ -114,7 +114,7 @@
   
   ### Get functions from calling environment - added 20240724
   
-  if (length(ls(envir)) != 0) {.  
+  if (length(ls(envir)) != 0) {  
     
     all_objects <- ls(envir)
     
