@@ -10,6 +10,11 @@ license: GPL-3.0-only
 title: 'simstudy: Simulation of Study Data'
 version: 0.8.0.9000
 doi: 10.21105/joss.02763
+identifiers:
+- type: doi
+  value: 10.32614/CRAN.package.simstudy
+- type: url
+  value: https://kgoldfeld.github.io/simstudy/dev/
 abstract: Simulates data sets in order to explore modeling techniques or better understand
   data generating processes. The user specifies a set of relationships between covariates,
   and generates data based on these specifications. The final data sets can represent
@@ -97,6 +102,7 @@ references:
     given-names: Toby
     orcid: https://orcid.org/0000-0002-3146-0865
   year: '2024'
+  doi: 10.32614/CRAN.package.data.table
 - type: software
   title: glue
   abstract: 'glue: Interpreted String Literals'
@@ -112,6 +118,7 @@ references:
     email: jenny@posit.co
     orcid: https://orcid.org/0000-0002-6983-2759
   year: '2024'
+  doi: 10.32614/CRAN.package.glue
 - type: software
   title: methods
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -122,6 +129,7 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2024'
+  doi: 10.32614/CRAN.package.methods
 - type: software
   title: mvnfast
   abstract: 'mvnfast: Fast Multivariate Normal and Student''s t Methods'
@@ -133,6 +141,7 @@ references:
     given-names: Matteo
     email: matteo.fasiolo@gmail.com
   year: '2024'
+  doi: 10.32614/CRAN.package.mvnfast
 - type: software
   title: Rcpp
   abstract: 'Rcpp: Seamless R and C++ Integration'
@@ -159,6 +168,7 @@ references:
   - family-names: Chambers
     given-names: John
   year: '2024'
+  doi: 10.32614/CRAN.package.Rcpp
 - type: software
   title: backports
   abstract: 'backports: Reimplementations of Functions Introduced Since R-3.0.0'
@@ -175,6 +185,7 @@ references:
     email: murdoch.duncan@gmail.com
   - name: R Core Team
   year: '2024'
+  doi: 10.32614/CRAN.package.backports
 - type: software
   title: fastglm
   abstract: 'fastglm: Fast and Stable Fitting of Generalized Linear Models using ''RcppEigen'''
@@ -186,6 +197,7 @@ references:
     given-names: Jared
     email: jaredhuling@gmail.com
   year: '2024'
+  doi: 10.32614/CRAN.package.fastglm
 - type: software
   title: covr
   abstract: 'covr: Test Coverage for Packages'
@@ -197,6 +209,7 @@ references:
     given-names: Jim
     email: james.f.hester@gmail.com
   year: '2024'
+  doi: 10.32614/CRAN.package.covr
 - type: software
   title: dplyr
   abstract: 'dplyr: A Grammar of Data Manipulation'
@@ -221,6 +234,7 @@ references:
     email: davis@posit.co
     orcid: https://orcid.org/0000-0003-4777-038X
   year: '2024'
+  doi: 10.32614/CRAN.package.dplyr
 - type: software
   title: formatR
   abstract: 'formatR: Format R Code Automatically'
@@ -233,6 +247,7 @@ references:
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
   year: '2024'
+  doi: 10.32614/CRAN.package.formatR
 - type: software
   title: gee
   abstract: 'gee: Generalized Estimation Equation Solver'
@@ -242,6 +257,7 @@ references:
   - family-names: Carey
     given-names: Vincent J
   year: '2024'
+  doi: 10.32614/CRAN.package.gee
 - type: software
   title: ggplot2
   abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
@@ -281,6 +297,7 @@ references:
     name-particle: van den
     orcid: https://orcid.org/0000-0002-9335-7468
   year: '2024'
+  doi: 10.32614/CRAN.package.ggplot2
 - type: software
   title: grid
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -291,6 +308,7 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2024'
+  doi: 10.32614/CRAN.package.grid
 - type: software
   title: gridExtra
   abstract: 'gridExtra: Miscellaneous Functions for "Grid" Graphics'
@@ -301,6 +319,7 @@ references:
     given-names: Baptiste
     email: baptiste.auguie@gmail.com
   year: '2024'
+  doi: 10.32614/CRAN.package.gridExtra
 - type: software
   title: hedgehog
   abstract: 'hedgehog: Property-Based Testing'
@@ -312,6 +331,7 @@ references:
     given-names: Huw
     email: huw.campbell@gmail.com
   year: '2024'
+  doi: 10.32614/CRAN.package.hedgehog
 - type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
@@ -324,6 +344,7 @@ references:
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
   year: '2024'
+  doi: 10.32614/CRAN.package.knitr
 - type: software
   title: magrittr
   abstract: 'magrittr: A Forward-Pipe Operator for R'
@@ -338,6 +359,7 @@ references:
     given-names: Hadley
     email: hadley@rstudio.com
   year: '2024'
+  doi: 10.32614/CRAN.package.magrittr
 - type: software
   title: Matrix
   abstract: 'Matrix: Sparse and Dense Matrix Classes and Methods'
@@ -356,6 +378,7 @@ references:
     given-names: Mikael
     orcid: https://orcid.org/0000-0002-3542-2938
   year: '2024'
+  doi: 10.32614/CRAN.package.Matrix
 - type: software
   title: mgcv
   abstract: 'mgcv: Mixed GAM Computation Vehicle with Automatic Smoothness Estimation'
@@ -366,6 +389,7 @@ references:
     given-names: Simon
     email: simon.wood@r-project.org
   year: '2024'
+  doi: 10.32614/CRAN.package.mgcv
 - type: software
   title: ordinal
   abstract: 'ordinal: Regression Models for Ordinal Data'
@@ -377,6 +401,7 @@ references:
     given-names: Rune Haubo Bojesen
     email: rune.haubo@gmail.com
   year: '2024'
+  doi: 10.32614/CRAN.package.ordinal
 - type: software
   title: pracma
   abstract: 'pracma: Practical Numerical Math Functions'
@@ -387,6 +412,7 @@ references:
     given-names: Hans W.
     email: hwborchers@googlemail.com
   year: '2024'
+  doi: 10.32614/CRAN.package.pracma
 - type: software
   title: rmarkdown
   abstract: 'rmarkdown: Dynamic Documents for R'
@@ -430,6 +456,7 @@ references:
     email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
   year: '2024'
+  doi: 10.32614/CRAN.package.rmarkdown
 - type: software
   title: scales
   abstract: 'scales: Scale Functions for Visualization'
@@ -447,6 +474,7 @@ references:
   - family-names: Seidel
     given-names: Dana
   year: '2024'
+  doi: 10.32614/CRAN.package.scales
 - type: software
   title: splines
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -457,6 +485,7 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2024'
+  doi: 10.32614/CRAN.package.splines
 - type: software
   title: survival
   abstract: 'survival: Survival Analysis'
@@ -468,6 +497,7 @@ references:
     given-names: Terry M
     email: therneau.terry@mayo.edu
   year: '2024'
+  doi: 10.32614/CRAN.package.survival
 - type: software
   title: testthat
   abstract: 'testthat: Unit Testing for R'
@@ -479,6 +509,7 @@ references:
     given-names: Hadley
     email: hadley@posit.co
   year: '2024'
+  doi: 10.32614/CRAN.package.testthat
 - type: software
   title: gtsummary
   abstract: 'gtsummary: Presentation-Ready Data Summary and Analytic Result Tables'
@@ -506,6 +537,24 @@ references:
     given-names: Emily C.
     orcid: https://orcid.org/0000-0002-1402-4498
   year: '2024'
+  doi: 10.32614/CRAN.package.gtsummary
+- type: software
+  title: broom.helpers
+  abstract: 'broom.helpers: Helpers for Model Coefficients Tibbles'
+  notes: Suggests
+  url: https://larmarange.github.io/broom.helpers/
+  repository: https://CRAN.R-project.org/package=broom.helpers
+  authors:
+  - family-names: Larmarange
+    given-names: Joseph
+    email: joseph@larmarange.net
+    orcid: https://orcid.org/0000-0001-7097-700X
+  - family-names: Sjoberg
+    given-names: Daniel D.
+    email: danield.sjoberg@gmail.com
+    orcid: https://orcid.org/0000-0003-0862-2018
+  year: '2024'
+  doi: 10.32614/CRAN.package.broom.helpers
 - type: software
   title: survminer
   abstract: 'survminer: Drawing Survival Curves using ''ggplot2'''
@@ -523,6 +572,7 @@ references:
     given-names: Przemyslaw
     email: przemyslaw.biecek@gmail.com
   year: '2024'
+  doi: 10.32614/CRAN.package.survminer
 - type: software
   title: katex
   abstract: 'katex: Rendering Math to HTML, ''MathML'', or R-Documentation Format'
@@ -535,6 +585,7 @@ references:
     email: jeroen@berkeley.edu
     orcid: https://orcid.org/0000-0002-4035-0289
   year: '2024'
+  doi: 10.32614/CRAN.package.katex
 - type: software
   title: dirmult
   abstract: 'dirmult: Estimation in Dirichlet-Multinomial Distribution'
@@ -545,6 +596,7 @@ references:
     given-names: Torben
     email: tvede@math.aau.dk
   year: '2024'
+  doi: 10.32614/CRAN.package.dirmult
 - type: software
   title: rms
   abstract: 'rms: Regression Modeling Strategies'
@@ -556,6 +608,7 @@ references:
     given-names: Frank E
     email: fh@fharrell.com
   year: '2024'
+  doi: 10.32614/CRAN.package.rms
 - type: software
   title: pbv
   abstract: 'pbv: Probabilities for Bivariate Normal Distribution'
@@ -567,8 +620,6 @@ references:
     given-names: Alexander
     orcid: https://orcid.org/0000-0002-8226-3132
   year: '2024'
+  doi: 10.32614/CRAN.package.pbv
   version: '>= 0.4-22'
-identifiers:
-- type: url
-  value: https://kgoldfeld.github.io/simstudy/dev/
 
