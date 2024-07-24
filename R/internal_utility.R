@@ -112,7 +112,25 @@
     }
   }
   
-  list2env(as.list(envir), envir = environment()) # added 20240718
+  ### Get functions from calling environment - added 20240724
+  
+  if (length(ls(envir)) != 0) {.  
+    
+    all_objects <- ls(envir)
+    
+    function_objects <- all_objects[
+      sapply(
+        all_objects,
+        function(obj) {
+          is.function(get(obj, envir = envir))
+        })
+    ]
+    
+    functions_list <- mget(function_objects, envir = envir)
+    list2env(functions_list, envir = environment())
+  }
+  
+  ####
   
   parsedValues <- sapply(formula, evalFormula)
   

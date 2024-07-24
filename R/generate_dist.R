@@ -298,10 +298,10 @@
       " two probabilities."
     ))
   }
-
+  
   parsedProbs <-
     .evalWith(formulas, .parseDotVars(formulas, envir), dtSim, n, envir)
-
+  
   if (link == "logit") {
     parsedProbs <- exp(parsedProbs)
     parsedProbs <- parsedProbs / (1 + rowSums(parsedProbs))

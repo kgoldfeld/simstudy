@@ -57,6 +57,7 @@ Suggests:
     survival,
     testthat,
     gtsummary,
+    broom.helpers,
     survminer,
     katex,
     dirmult,
