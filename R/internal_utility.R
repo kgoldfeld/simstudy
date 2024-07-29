@@ -50,36 +50,37 @@
 .evalWith <- function(formula,
                       extVars,
                       dtSim = data.table(),
-                      n = nrow(dtSim)) {
-
-  if (missing(dtSim) && missing(n)) {
-    n <- 1
+                      .n = nrow(dtSim),
+                      envir = parent.frame()) {
+  
+  if (missing(dtSim) && missing(.n)) {
+    .n <- 1
   }
 
-  if (!missing(dtSim) && !is.null(dtSim) && n != nrow(dtSim)) {
+  if (!missing(dtSim) && !is.null(dtSim) && .n != nrow(dtSim)) {
     stop(glue(
       "Both 'dtSim' and 'n' are set but are of different length: ",
-      "{nrow(dtSim)} != {n}"
+      "{nrow(dtSim)} != {.n}"
     ))
   }
-
+  
   e <- list2env(extVars)
-
+  
   if (!missing(dtSim) && !is.null(dtSim)) {
     e$dtSim <- as.data.table(dtSim)
     # e$def_id <- names(dtSim)[[1]] # original, but incorrect
     e$def_id <- key(dtSim)
-    }
-
+  }
+  
   if (missing(dtSim) || is.null(dtSim)) {
-    e$dtSim <- genData(n)
+    e$dtSim <- genData(.n)
     e$def_id <- "id"
   }
   
   if (!is.null(e$formula2parse)) {
     stop("'formula2parse' is a reserved variable name!")
   }
-
+  
   evalFormula <- function(formula) {
     e$formula2parse <- formula
     
@@ -105,14 +106,34 @@
     } 
     
     if (length(res) == 1) {
-      rep(res, n)
+      rep(res, times = .n)
     } else {
       res
     }
   }
-
+  
+  ### Get functions from calling environment - added 20240724
+  
+  if (length(ls(envir)) != 0) {  
+    
+    all_objects <- ls(envir)
+    
+    function_objects <- all_objects[
+      sapply(
+        all_objects,
+        function(obj) {
+          is.function(get(obj, envir = envir))
+        })
+    ]
+    
+    functions_list <- mget(function_objects, envir = envir)
+    list2env(functions_list, envir = e)
+  }
+  
+  ####
+  
   parsedValues <- sapply(formula, evalFormula)
-
+  
   # If only a single formula with 1 rep is eval'ed output would be not be
   # matrix, so transpose for uniform output.
   if (!is.matrix(parsedValues)) {

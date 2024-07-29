@@ -2,7 +2,7 @@ Type: Package
 Package: simstudy
 Title: Simulation of Study Data
 Version: 0.8.0.9000
-Date: 2024-05-14
+Date: 2024-07-19
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",
@@ -57,6 +57,7 @@ Suggests:
     survival,
     testthat,
     gtsummary,
+    broom.helpers,
     survminer,
     katex,
     dirmult,

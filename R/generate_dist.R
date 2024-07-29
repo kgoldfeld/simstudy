@@ -216,7 +216,7 @@
 
 .getBetaMean <- function(dtSim, formula, link, n = nrow(dtSim),
                          envir = parent.frame()) {
-  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n, envir)
   if (link == "logit") {
     mean <- 1 / (1 + exp(-mean))
   }
@@ -228,7 +228,7 @@
 .genbeta <- function(n, formula, precision, link = "identity", dtSim, envir) {
   mean <- .getBetaMean(dtSim, formula, link, n, envir)
 
-  d <- .evalWith(precision, .parseDotVars(precision, envir), dtSim, n)
+  d <- .evalWith(precision, .parseDotVars(precision, envir), dtSim, n, envir)
 
   sr <- betaGetShapes(mean = mean, precision = d)
   new <- stats::rbeta(n, shape = sr$shape1, shape2 = sr$shape2)
@@ -250,8 +250,8 @@
                            link,
                            n = nrow(dtSim),
                            envir = parent.frame()) {
-  size <- .evalWith(size, .parseDotVars(size, envir), dtSim, n)
-  p <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  size <- .evalWith(size, .parseDotVars(size, envir), dtSim, n, envir)
+  p <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n, envir)
 
   if (link == "log") {
     p <- exp(p)
@@ -298,10 +298,10 @@
       " two probabilities."
     ))
   }
-
+  
   parsedProbs <-
-    .evalWith(formulas, .parseDotVars(formulas, envir), dtSim, n)
-
+    .evalWith(formulas, .parseDotVars(formulas, envir), dtSim, n, envir)
+  
   if (link == "logit") {
     parsedProbs <- exp(parsedProbs)
     parsedProbs <- parsedProbs / (1 + rowSums(parsedProbs))
@@ -340,7 +340,7 @@
 
 .gendeterm <- function(n, formula, link, dtSim, envir) {
   
-  new <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  new <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n, envir)
 
   if (link == "log") {
     new <- exp(new)
@@ -365,7 +365,7 @@
   
   var_vec <- unlist(lapply(arg_l, function(a) a[[1]]))
   arg_list <- lapply(arg_l, 
-    function(a) .evalWith(a[[2]], .parseDotVars( a[[2]], envir ), dtSim, n)
+    function(a) .evalWith(a[[2]], .parseDotVars( a[[2]], envir ), dtSim, n, envir)
   )
   names(arg_list) <- var_vec
   assertNotInVector("n", names(arg_list))
@@ -381,7 +381,7 @@
 # @param formula String that specifies the mean (lambda)
 # @return A data.frame column with the updated simulated data
 .genexp <- function(n, formula, link = "identity", dtSim, envir) {
-  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n, envir)
   if (link == "log") {
     mean <- exp(mean)
   }
@@ -398,7 +398,7 @@
 # @return A data.frame column with the updated simulated data
 
 .getGammaMean <- function(dtSim, formula, link, n = nrow(dtSim), envir) {
-  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n, envir)
   if (link == "log") {
     mean <- exp(mean)
   }
@@ -408,7 +408,7 @@
 
 .gengamma <- function(n, formula, dispersion, link = "identity", dtSim, envir) {
   mean <- .getGammaMean(dtSim, formula, link, n, envir)
-  d <- .evalWith(dispersion, .parseDotVars(dispersion, envir), dtSim, n)
+  d <- .evalWith(dispersion, .parseDotVars(dispersion, envir), dtSim, n, envir)
 
   sr <- gammaGetShapeRate(mean = mean, dispersion = d)
   new <- stats::rgamma(n, shape = sr$shape, rate = sr$rate)
@@ -417,13 +417,18 @@
 }
 
 .genmixture <- function(n, formula, dtSim, envir) {
+  
   origFormula <- formula
   formula <- .rmWS(formula)
   var_pr <- strsplit(formula, "+", fixed = T)
   var_dt <- strsplit(var_pr[[1]], "|", fixed = T)
   formDT <- as.data.table(do.call(rbind, var_dt))
-  ps <-
-    cumsum(.evalWith(unlist(formDT[, 2]), .parseDotVars(formDT[, 2], envir)))
+  
+  ps <- cumsum(.evalWith(
+    formula = unlist(formDT[, 2]), 
+    extVars = .parseDotVars(formDT[, 2]), 
+    envir = envir
+  ))
 
   if (!isTRUE(all.equal(max(ps), 1))) {
     valueError(origFormula,
@@ -444,7 +449,7 @@
   u <- stats::runif(n)
   dvars$interval <- findInterval(u, ps, rightmost.closed = TRUE) + 1
 
-  .evalWith(interval_formula, dvars, dtSim, n)
+  .evalWith(interval_formula, dvars, dtSim, n, envir)
 }
 
 # Internal function called by .generate - returns negative binomial data
@@ -455,7 +460,7 @@
 
 .getNBmean <- function(dtSim, formula, link, n = nrow(dtSim),
                        envir = parent.frame()) {
-  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n, envir)
   if (link == "log") {
     mean <- exp(mean)
   }
@@ -486,12 +491,14 @@
                            formula,
                            n = nrow(dtSim),
                            envir = parent.frame()) {
-  .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  
+  .evalWith(formula, .parseDotVars(formula, envir), dtSim, n, envir)
 }
 
 .gennorm <- function(n, formula, variance, link, dtSim, envir) {
   mean <- .getNormalMean(dtSim, formula, n, envir)
-  v <- .evalWith(variance, .parseDotVars(variance, envir), dtSim, n)
+  v <- .evalWith(variance, .parseDotVars(variance, envir), dtSim, n, envir) 
+    # added envir 20240718
 
   return(stats::rnorm(n, mean, sqrt(v)))
 }
@@ -505,7 +512,7 @@
 # @return A data.frame column with the updated simulated data
 
 .getPoissonMean <- function(dtSim, formula, link, n = nrow(dtSim), envir = parent.frame()) {
-  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n, envir)
 
   if (link == "log") {
     mean <- exp(mean)
@@ -570,7 +577,7 @@
     )
   }
   
-  parsedRange <- .evalWith(range, .parseDotVars(range, envir), dtSim, n)
+  parsedRange <- .evalWith(range, .parseDotVars(range, envir), dtSim, n, envir)
 
   r_min <- parsedRange[, 1]
   r_max <- parsedRange[, 2]
@@ -644,7 +651,7 @@
 
 # Internal function called by .generate - returns cluster size data
 
-.genclustsize <- function(n, formula, variance = 0,  envir) { 
+.genclustsize <- function(n, formula, variance = 0,  envir = parent.frame()) { 
   
   if (!requireNamespace("dirmult", quietly = TRUE)) {
     stop(
@@ -654,8 +661,8 @@
     )
   }
   
-  formula <- .evalWith(formula, .parseDotVars(formula, envir))[1]
-  variance <- .evalWith(variance, .parseDotVars(variance, envir))[1]
+  formula <- .evalWith(formula, .parseDotVars(formula, envir), envir = envir)[1]
+  variance <- .evalWith(variance, .parseDotVars(variance, envir), envir = envir)[1]
   
   assertInteger(formula = formula)
   assertAtLeast(formula = formula, minVal = 1)

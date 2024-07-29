@@ -110,25 +110,25 @@ genMiss <- function(dtName, missDefs, idvars,
   fmiss <- NULL
   formula <- NULL
 
-
   includesLags <- FALSE
 
   data.table::setkeyv(dtName, idvars)
   tmDefs <- data.table::copy(missDefs)
 
   if (!repeated) {
+    
     dtMiss <- dtName[, c(idvars), with = FALSE]
     # names(dtMiss) <- c(idvars) # removed 2017919 - possible error in CRAN check
 
     for (i in (1:nrow(tmDefs))) {
       dtTemp <- data.table::copy(dtName)
-      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ], envir) # changed envir
+      mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ], envir = envir) # changed envir
       vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
 
       dtMiss <- cbind(dtMiss, vec1)
     }
   } else { # repeated
-
+    
     includesLags <- .checkLags(tmDefs[, formula])
 
     if (includesLags) {
@@ -143,23 +143,24 @@ genMiss <- function(dtName, missDefs, idvars,
     data.table::setnames(dtMiss, colnames)
 
     nPeriods <- dtMiss[, max(period)] + 1
-
     for (i in (1:nrow(tmDefs))) {
       if (tmDefs[i, baseline]) {
         dtTemp <- dtName[period == 0]
         mat1 <- .genMissDataMat(
-          dtName[period == 0], dtTemp,
-          idvars, tmDefs[i, ]
+          dtName = dtName[period == 0], 
+          dtTemp = dtTemp,
+          idvars = idvars, 
+          missDefs = tmDefs[i, ], 
+          envir = envir
         )
         vec1 <- addPeriods(mat1, nPeriods, idvars)[, tmDefs[i, varname],
           with = FALSE
         ]
-
         dtMiss <- cbind(dtMiss, vec1)
       } else { # not just baseline can be missing
 
         dtTemp <- data.table::copy(dtName)
-        mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ])
+        mat1 <- .genMissDataMat(dtName, dtTemp, idvars, tmDefs[i, ], envir = envir)
         vec1 <- mat1[, tmDefs[i, varname], with = FALSE]
         dtMiss <- cbind(dtMiss, vec1)
 
@@ -284,7 +285,7 @@ genMiss <- function(dtName, missDefs, idvars,
   varname <- NULL
   logit.link <- NULL
   formula <- NULL
-
+  
   dtMissP <- dtTemp[, idvars, with = FALSE]
 
   Expression <- parse(text = as.character(missDefs[, varname]))
@@ -294,11 +295,12 @@ genMiss <- function(dtName, missDefs, idvars,
   if (!missDefs[, logit.link]) {
     # dtMissP[, eval(Expression) := dtName[, eval(Formula)]] # old data.table
     
-    dtMissP[, (ColName) := dtName[, .evalWith(Formula, .parseDotVars(Formula, envir), dtName)]]
+    dtMissP[, (ColName) := dtName[, .evalWith(Formula, .parseDotVars(Formula, envir), dtName, envir = envir)]]
   } else {
     # dtMissP[, eval(Expression) := dtName[, .log2Prob(eval(Formula))]] # old data.table
     
-    dtMissP[, (ColName) := dtName[, .log2Prob(.evalWith(Formula, .parseDotVars(Formula, envir), dtName))]]
+    .logitp <- .evalWith(Formula, .parseDotVars(Formula, envir), dtName, envir = envir)
+    dtMissP[, (ColName) := dtName[, .log2Prob(.logitp)]]
   }
   matMiss <- dtMissP[, idvars, with = FALSE]
   # matMiss[, eval(Expression) := stats::rbinom(nrow(dtMissP), 1, dtMissP[,
