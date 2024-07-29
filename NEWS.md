@@ -1,4 +1,4 @@
-# simstudy (development version)
+# simstudy 0.8.1
 
 ## New features
 * Added the ability to generate data from an empirical distribution by using new functions `genDataDensity` and `addDataDensity`.
