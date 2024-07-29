@@ -1,8 +1,8 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.8.0.9000
-Date: 2024-07-19
+Version: 0.8.1
+Date: 2024-07-29
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",
@@ -69,4 +69,4 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

@@ -1,7 +1,7 @@
-## Submission 20240514
+## Submission 20240729
 
-This is a submission of version 0.8.0
+This is a submission of version 0.8.1
 
-Developed with R Version 4.4.0
+Developed with R Version 4.4.1
 
 I did not get any notes from check_win_devel.
