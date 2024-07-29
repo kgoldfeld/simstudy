@@ -127,7 +127,7 @@
     ]
     
     functions_list <- mget(function_objects, envir = envir)
-    list2env(functions_list, envir = environment())
+    list2env(functions_list, envir = e)
   }
   
   ####
