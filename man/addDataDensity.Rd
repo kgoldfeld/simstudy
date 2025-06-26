@@ -4,18 +4,21 @@
 \alias{addDataDensity}
 \title{Add data from a density defined by a vector of integers}
 \usage{
-addDataDensity(dtOld, dataDist, varname, uselimits = FALSE)
+addDataDensity(dtOld, dataDist, varname, uselimits = FALSE, na.rm = TRUE)
 }
 \arguments{
 \item{dtOld}{Name of data table that is to be updated.}
 
-\item{dataDist}{Vector that defines the desired density.}
+\item{dataDist}{Numeric vector. Defines the desired density.}
 
-\item{varname}{Name of variable name.}
+\item{varname}{Character. Name of the variable.}
 
-\item{uselimits}{Indicator to use minimum and maximum of input data vector as 
-limits for sampling. Defaults to FALSE, in which case a smoothed density that
-extends beyond the limits is used.}
+\item{uselimits}{Logical. If TRUE, the minimum and maximum of the input data 
+vector are used as limits for sampling. Defaults to FALSE, in which case a 
+smoothed density that extends beyond these limits is used.}
+
+\item{na.rm}{Logical. If TRUE (default), missing values in `dataDist` are 
+removed. If FALSE, the data will retain the same proportion of missing values.}
 }
 \value{
 A data table with the generated data.

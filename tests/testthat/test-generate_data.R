@@ -920,7 +920,6 @@ test_that("addDataDensity works", {
     def <- defData(varname = "x1", formula = 5, dist = "poisson")
     
     dd <- genData(10000, def)
-    dd <- genData(10000, def)
     dd <- addDataDensity(dd, data_dist, varname = "x2")
     
     dd[]
@@ -968,6 +967,27 @@ test_that("genDataDensity works", {
   
   kstest <- mean(sapply(1:200, function(x) compare()) < .05)
   expect_lt(kstest, 0.05)
+  
+  ### Testing na.rm
+  
+  f.na <- function(data_dist) {
+    
+    dd <- genDataDensity(10000, data_dist, varname = "x1", uselimits = TRUE, na.rm = FALSE)
+    dd[]
+    
+  }
+  
+  
+  compare3 <- function() {
+    ints <- rpois(50, rpois(1, 8))
+    pmiss <- rbeta(1, 1, 9)
+    ints[rbinom(50, 1, pmiss) == 1] <- NA
+    dx <- f.na(ints)
+    dx[, mean(is.na(x1))]
+  }
+  
+  expect_equal(mean(sapply(1:100, function(x) compare3())), 0.10, tolerance = .04)
+  
   
 })
 

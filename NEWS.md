@@ -1,5 +1,10 @@
 # simstudy (development version)
 
+## New features
+
+* Added an argument `na.rm` to the functions `genDataDensity` and `addDataDensity`. If set to `FALSE`,
+  the generated data will include missing values at the same rate as the distribution data.
+
 # simstudy 0.8.1
 
 ## New features
