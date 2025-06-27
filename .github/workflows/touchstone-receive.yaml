@@ -7,7 +7,7 @@ jobs:
       config: ${{ steps.read_touchstone_config.outputs.config }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
            fetch-depth: 0
 
@@ -34,7 +34,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
            fetch-depth: 0
       - name: Set up git user
@@ -66,7 +66,7 @@ jobs:
         shell: Rscript {0}
       - name: Checkout benchmarking repo
         if: ${{ matrix.config.benchmarking_repo != ''}}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: ${{ matrix.config.benchmarking_repo }}
           ref: ${{ matrix.config.benchmarking_ref }}
@@ -76,20 +76,20 @@ jobs:
       - name: Save PR number
         run: |
           echo ${{ github.event.number }} > ./touchstone/pr-comment/NR
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: visual-benchmarks
           path: touchstone/plots/
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         with:
           name: results
           path: touchstone/pr-comment
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v4
         with:
           name: results
       - name: comment PR
         run: cat touchstone/pr-comment/info.txt
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: pr
           path: touchstone/pr-comment/
