@@ -1178,31 +1178,33 @@ genSynthetic <- function(dtFrom, n = nrow(dtFrom),
 
 #' @title Generate data from a density defined by a vector of integers
 #' @description Data are generated from an a density defined by a vector of integers
-#' @param n Number of samples to draw from the density.
-#' @param dataDist Vector that defines the desired density
-#' @param varname Name of variable name
-#' @param uselimits Indicator to use minimum and maximum of input data vector as 
-#' limits for sampling. Defaults to FALSE, in which case a smoothed density that
-#' extends beyond the limits is used.
-#' @param id A string specifying the field that serves as the record id. The
+#' @param n Integer. Number of samples to draw from the density.
+#' @param dataDist Numeric vector. Defines the desired density.
+#' @param varname Character. Name of the variable.
+#' @param uselimits Logical. If TRUE, the minimum and maximum of the input data 
+#' vector are used as limits for sampling. Defaults to FALSE, in which case a 
+#' smoothed density that extends beyond these limits is used.
+#' @param id Character. A string specifying the field that serves as the record ID. The
 #' default field is "id".
+#' @param na.rm Logical. If TRUE (default), missing values in `dataDist` are 
+#' removed. If FALSE, the data will retain the same proportion of missing values.
 #' @return A data table with the generated data
 #' @examples
-#' data_dist <- data_dist <- c(1, 2, 2, 3, 4, 4, 4, 5, 6, 6, 7, 7, 7, 8, 9, 10, 10)
+#' data_dist <- c(1, 2, 2, 3, 4, 4, 4, 5, 6, 6, 7, 7, 7, 8, 9, 10, 10)
 #' 
 #' genDataDensity(500, data_dist, varname = "x1", id = "id")
 #' genDataDensity(500, data_dist, varname = "x1", uselimits = TRUE, id = "id")
 #' @export
 #' @concept generate_data
 
-genDataDensity <- function(n, dataDist, varname, uselimits = FALSE, id = "id") {
+genDataDensity <- function(n, dataDist, varname, uselimits = FALSE, id = "id", na.rm = TRUE) {
   
   assertNotMissing(n = missing(n), dataDist = missing(dataDist), varname = missing(varname))
   
   dataDist <- round(dataDist, 0)
 
   .dd <- genData(n, id = id)
-  addDataDensity(.dd, dataDist, varname, uselimits)[]
+  addDataDensity(.dd, dataDist, varname, uselimits, na.rm = na.rm)[]
   
 }
 

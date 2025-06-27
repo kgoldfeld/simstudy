@@ -527,11 +527,13 @@ addSynthetic <- function(dtOld, dtFrom,
 #' @title Add data from a density defined by a vector of integers
 #' @description Data are generated from an a density defined by a vector of integers.
 #' @param dtOld Name of data table that is to be updated.
-#' @param dataDist Vector that defines the desired density.
-#' @param varname Name of variable name.
-#' @param uselimits Indicator to use minimum and maximum of input data vector as 
-#' limits for sampling. Defaults to FALSE, in which case a smoothed density that
-#' extends beyond the limits is used.
+#' @param dataDist Numeric vector. Defines the desired density.
+#' @param varname Character. Name of the variable.
+#' @param uselimits Logical. If TRUE, the minimum and maximum of the input data 
+#' vector are used as limits for sampling. Defaults to FALSE, in which case a 
+#' smoothed density that extends beyond these limits is used.
+#' @param na.rm Logical. If TRUE (default), missing values in `dataDist` are 
+#' removed. If FALSE, the data will retain the same proportion of missing values.
 #' @return A data table with the generated data.
 #' @examples
 #' def <- defData(varname = "x1", formula = 5, dist = "poisson")
@@ -545,7 +547,7 @@ addSynthetic <- function(dtOld, dtFrom,
 #' @concept generate_data
 #' 
 #' 
-addDataDensity <- function(dtOld, dataDist, varname, uselimits = FALSE) {
+addDataDensity <- function(dtOld, dataDist, varname, uselimits = FALSE, na.rm = TRUE) {
   
   assertNotMissing(dtOld = missing(dtOld), dataDist = missing(dataDist), varname = missing(varname))
   assertClass(dtOld = dtOld, class = "data.table")
@@ -555,9 +557,12 @@ addDataDensity <- function(dtOld, dataDist, varname, uselimits = FALSE) {
   dataDist <- round(dataDist, 0)
   
   if (uselimits) {
-    density_est <- stats::density(dataDist, n = 10000, from = min(dataDist), to = max(dataDist))
+    density_est <- 
+      stats::density(dataDist, n = 10000, from = min(dataDist, na.rm = TRUE), 
+                     to = max(dataDist, na.rm = TRUE), na.rm = TRUE)
   } else {
-    density_est <- stats::density(dataDist, n = 10000)
+    density_est <- 
+      stats::density(dataDist, n = 10000, na.rm = TRUE)
   }
   
   x <- density_est$x
@@ -570,6 +575,15 @@ addDataDensity <- function(dtOld, dataDist, varname, uselimits = FALSE) {
   # Sample from the x values according to the probabilities
   
   .x <- sample(x, size = nrow(dtOld), replace = TRUE, prob = probabilities)
+  
+  # If na.rm is not TRUE, then generate missing values based on proportion
+  # observed in dataDist
+  
+  if (na.rm == FALSE) {
+    prop.missing <- sum(is.na(dataDist)) / length(dataDist)
+    is.missing <- stats::rbinom(length(.x), 1, prop.missing)
+    .x[is.missing == 1] <- NA
+  }
   
   dtOld[, (varname) := .x]
   dtOld[]

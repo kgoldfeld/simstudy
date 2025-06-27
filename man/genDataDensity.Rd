@@ -4,21 +4,31 @@
 \alias{genDataDensity}
 \title{Generate data from a density defined by a vector of integers}
 \usage{
-genDataDensity(n, dataDist, varname, uselimits = FALSE, id = "id")
+genDataDensity(
+  n,
+  dataDist,
+  varname,
+  uselimits = FALSE,
+  id = "id",
+  na.rm = TRUE
+)
 }
 \arguments{
-\item{n}{Number of samples to draw from the density.}
+\item{n}{Integer. Number of samples to draw from the density.}
 
-\item{dataDist}{Vector that defines the desired density}
+\item{dataDist}{Numeric vector. Defines the desired density.}
 
-\item{varname}{Name of variable name}
+\item{varname}{Character. Name of the variable.}
 
-\item{uselimits}{Indicator to use minimum and maximum of input data vector as 
-limits for sampling. Defaults to FALSE, in which case a smoothed density that
-extends beyond the limits is used.}
+\item{uselimits}{Logical. If TRUE, the minimum and maximum of the input data 
+vector are used as limits for sampling. Defaults to FALSE, in which case a 
+smoothed density that extends beyond these limits is used.}
 
-\item{id}{A string specifying the field that serves as the record id. The
+\item{id}{Character. A string specifying the field that serves as the record ID. The
 default field is "id".}
+
+\item{na.rm}{Logical. If TRUE (default), missing values in `dataDist` are 
+removed. If FALSE, the data will retain the same proportion of missing values.}
 }
 \value{
 A data table with the generated data
@@ -27,7 +37,7 @@ A data table with the generated data
 Data are generated from an a density defined by a vector of integers
 }
 \examples{
-data_dist <- data_dist <- c(1, 2, 2, 3, 4, 4, 4, 5, 6, 6, 7, 7, 7, 8, 9, 10, 10)
+data_dist <- c(1, 2, 2, 3, 4, 4, 4, 5, 6, 6, 7, 7, 7, 8, 9, 10, 10)
 
 genDataDensity(500, data_dist, varname = "x1", id = "id")
 genDataDensity(500, data_dist, varname = "x1", uselimits = TRUE, id = "id")
