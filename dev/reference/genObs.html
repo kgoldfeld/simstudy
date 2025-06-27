@@ -157,15 +157,15 @@ missing data</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          id    x1    x2    x3     u     m</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     1     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     0     0     0     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2     0     0     0     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3     0     0     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     1     0     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     0     1     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     0     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     0     0     1     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996     0     1     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997     0     1     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998     1     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996     0     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997     0     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998     0     0     0     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999     0     0     0     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000     0     1     0     1     0</span>
 <span class="r-in"><span></span></span>
@@ -174,19 +174,19 @@ missing data</p>
 <span class="r-in"><span><span class="va">dtObs</span> <span class="op">&lt;-</span> <span class="fu">genObs</span><span class="op">(</span><span class="va">dtAct</span>, <span class="va">missMat</span>, idvars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dtObs</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          id     m     u        x1         x2        x3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;num&gt;      &lt;num&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     1    NA        NA 21.2886294 18.900350</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2     1    NA 22.641531 20.9883677 23.041397</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3     1    NA 39.298018 40.4673572 41.135329</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     1    NA        NA 19.6008298 19.188551</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     1    NA 41.304851         NA 39.279532</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996     1    NA 20.956998         NA 19.156316</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997     1    NA 39.511118         NA        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998     0    NA        NA -0.2668746  1.483042</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999     1    NA 40.595105 42.1371482 40.038236</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000     0    NA  2.429684         NA  0.716800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          id     m     u         x1         x2         x3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt; &lt;int&gt; &lt;int&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     1    NA 17.1661367 20.8383957 20.0615940</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2     0    NA  0.6276502  0.3794982 -0.2374385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3     0    NA  1.9410362  0.1180233 -1.9132918</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     0    NA 19.2127189 18.7326903 18.7449801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     1    NA 19.3449707 20.3654118         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996     1    NA 41.2886294 38.9003498 42.3162857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997     0    NA 20.9883677 23.0413971 19.5383268</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998     0    NA  0.4673572  1.1353294 -3.0981135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999     1    NA 39.6008298 39.1885511 39.4920356</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000     1    NA 21.4509763         NA 20.5039990</span>
 </code></pre></div>
     </div>
   </div>
@@ -201,7 +201,7 @@ missing data</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
       </footer></div>

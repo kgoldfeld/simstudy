@@ -99,7 +99,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addDataDensity</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">dataDist</span>, <span class="va">varname</span>, uselimits <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addDataDensity</span><span class="op">(</span><span class="va">dtOld</span>, <span class="va">dataDist</span>, <span class="va">varname</span>, uselimits <span class="op">=</span> <span class="cn">FALSE</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -111,17 +111,22 @@
 
 
 <dt id="arg-datadist">dataDist<a class="anchor" aria-label="anchor" href="#arg-datadist"></a></dt>
-<dd><p>Vector that defines the desired density.</p></dd>
+<dd><p>Numeric vector. Defines the desired density.</p></dd>
 
 
 <dt id="arg-varname">varname<a class="anchor" aria-label="anchor" href="#arg-varname"></a></dt>
-<dd><p>Name of variable name.</p></dd>
+<dd><p>Character. Name of the variable.</p></dd>
 
 
 <dt id="arg-uselimits">uselimits<a class="anchor" aria-label="anchor" href="#arg-uselimits"></a></dt>
-<dd><p>Indicator to use minimum and maximum of input data vector as
-limits for sampling. Defaults to FALSE, in which case a smoothed density that
-extends beyond the limits is used.</p></dd>
+<dd><p>Logical. If TRUE, the minimum and maximum of the input data
+vector are used as limits for sampling. Defaults to FALSE, in which case a
+smoothed density that extends beyond these limits is used.</p></dd>
+
+
+<dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
+<dd><p>Logical. If TRUE (default), missing values in `dataDist` are
+removed. If FALSE, the data will retain the same proportion of missing values.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -152,7 +157,7 @@ extends beyond the limits is used.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
       </footer></div>

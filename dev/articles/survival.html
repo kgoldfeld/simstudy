@@ -728,14 +728,10 @@ values used to generate the data:</p>
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/span&gt;"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;log(HR)&lt;/strong&gt;&lt;/span&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;">
-<span class="gt_from_md"><strong>log(HR)</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;/span&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;">
-<span class="gt_from_md"><strong>95% CI</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/span&gt;"><span class="gt_from_md"><strong>p-value</strong></span></th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="estimate"><span class="gt_from_md"><strong>log(HR)</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="conf.low"><span class="gt_from_md"><strong>95% CI</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="p.value"><span class="gt_from_md"><strong>p-value</strong></span></th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
@@ -751,10 +747,8 @@ values used to generate the data:</p>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr>
 </tbody>
-<tfoot class="gt_footnotes"><tr>
-<td class="gt_footnote" colspan="4">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span> <span class="gt_from_md">HR = Hazard Ratio, CI = Confidence Interval</span>
-</td>
+<tfoot class="gt_sourcenotes"><tr>
+<td class="gt_sourcenote" colspan="4"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, HR = Hazard Ratio</span></td>
     </tr></tfoot>
 </table>
 </div>
@@ -788,19 +782,19 @@ approach.</p>
 <span></span>
 <span><span class="va">dtSurv</span></span></code></pre></div>
 <pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
-<span><span class="co">##          id    x1    x2  censor event_1 event_2</span></span>
-<span><span class="co">##       &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;</span></span>
-<span><span class="co">##    1:     1     0     1  39.655  17.777  23.618</span></span>
-<span><span class="co">##    2:     2     1     0 101.140  24.092  32.411</span></span>
-<span><span class="co">##    3:     3     1     0  13.181  40.485  36.503</span></span>
-<span><span class="co">##    4:     4     0     0  26.969  18.084  45.124</span></span>
-<span><span class="co">##    5:     5     0     1  15.320  14.174  37.962</span></span>
-<span><span class="co">##   ---                                          </span></span>
-<span><span class="co">##  997:   997     0     0   7.035  16.535  28.583</span></span>
-<span><span class="co">##  998:   998     0     0  25.293  19.838  51.290</span></span>
-<span><span class="co">##  999:   999     0     0  45.005  14.887  29.274</span></span>
-<span><span class="co">## 1000:  1000     1     0  11.105  15.367   7.779</span></span>
-<span><span class="co">## 1001:  1001     1     0  69.181  24.303  18.322</span></span></code></pre>
+<span><span class="co">##          id    x1    x2 censor event_1 event_2</span></span>
+<span><span class="co">##       &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;num&gt;   &lt;num&gt;   &lt;num&gt;</span></span>
+<span><span class="co">##    1:     1     1     1 44.018  17.925  20.241</span></span>
+<span><span class="co">##    2:     2     0     0 29.017  11.424   7.903</span></span>
+<span><span class="co">##    3:     3     0     0 31.842  27.955  18.843</span></span>
+<span><span class="co">##    4:     4     0     1 13.551  12.496  38.107</span></span>
+<span><span class="co">##    5:     5     1     0 21.030  38.528  13.098</span></span>
+<span><span class="co">##   ---                                         </span></span>
+<span><span class="co">##  997:   997     1     0 69.116  20.604  14.638</span></span>
+<span><span class="co">##  998:   998     0     1 28.159  13.339  51.655</span></span>
+<span><span class="co">##  999:   999     1     1 45.234  15.032  45.905</span></span>
+<span><span class="co">## 1000:  1000     1     1 38.102  18.098  29.745</span></span>
+<span><span class="co">## 1001:  1001     0     0 55.448  16.488  31.665</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addCompRisk.html">addCompRisk</a></span><span class="op">(</span><span class="va">dtSurv</span>, events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"event_1"</span>, <span class="st">"event_2"</span>, <span class="st">"censor"</span><span class="op">)</span>, </span>
 <span>            timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span>
@@ -809,17 +803,17 @@ approach.</p>
 <span><span class="co">## Index: &lt;type&gt;</span></span>
 <span><span class="co">##          id    x1    x2   time event    type</span></span>
 <span><span class="co">##       &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;num&gt; &lt;num&gt;  &lt;char&gt;</span></span>
-<span><span class="co">##    1:     1     0     1 17.777     1 event_1</span></span>
-<span><span class="co">##    2:     2     1     0 24.092     1 event_1</span></span>
-<span><span class="co">##    3:     3     1     0 13.181     0  censor</span></span>
-<span><span class="co">##    4:     4     0     0 18.084     1 event_1</span></span>
-<span><span class="co">##    5:     5     0     1 14.174     1 event_1</span></span>
+<span><span class="co">##    1:     1     1     1 17.925     1 event_1</span></span>
+<span><span class="co">##    2:     2     0     0  7.903     2 event_2</span></span>
+<span><span class="co">##    3:     3     0     0 18.843     2 event_2</span></span>
+<span><span class="co">##    4:     4     0     1 12.496     1 event_1</span></span>
+<span><span class="co">##    5:     5     1     0 13.098     2 event_2</span></span>
 <span><span class="co">##   ---                                       </span></span>
-<span><span class="co">##  997:   997     0     0  7.035     0  censor</span></span>
-<span><span class="co">##  998:   998     0     0 19.838     1 event_1</span></span>
-<span><span class="co">##  999:   999     0     0 14.887     1 event_1</span></span>
-<span><span class="co">## 1000:  1000     1     0  7.779     2 event_2</span></span>
-<span><span class="co">## 1001:  1001     1     0 18.322     2 event_2</span></span></code></pre>
+<span><span class="co">##  997:   997     1     0 14.638     2 event_2</span></span>
+<span><span class="co">##  998:   998     0     1 13.339     1 event_1</span></span>
+<span><span class="co">##  999:   999     1     1 15.032     1 event_1</span></span>
+<span><span class="co">## 1000:  1000     1     1 18.098     1 event_1</span></span>
+<span><span class="co">## 1001:  1001     0     0 16.488     1 event_1</span></span></code></pre>
 <p>The competing risk data can be plotted using the cumulative incidence
 functions (rather than the survival curves):</p>
 <p><img src="survival_files/figure-html/unnamed-chunk-11-1.png" width="624"></p>
@@ -833,17 +827,17 @@ steps:</p>
 <span><span class="co">## Index: &lt;type&gt;</span></span>
 <span><span class="co">##         id    x1    x2   time event    type</span></span>
 <span><span class="co">##      &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;num&gt; &lt;num&gt;  &lt;char&gt;</span></span>
-<span><span class="co">##   1:     1     0     1 11.929     1 event_1</span></span>
-<span><span class="co">##   2:     2     0     0 20.427     1 event_1</span></span>
-<span><span class="co">##   3:     3     1     1 14.487     2 event_2</span></span>
-<span><span class="co">##   4:     4     1     0 12.219     2 event_2</span></span>
-<span><span class="co">##   5:     5     1     1 16.602     1 event_1</span></span>
+<span><span class="co">##   1:     1     1     0  2.706     2 event_2</span></span>
+<span><span class="co">##   2:     2     0     0 19.337     2 event_2</span></span>
+<span><span class="co">##   3:     3     0     1 13.779     2 event_2</span></span>
+<span><span class="co">##   4:     4     0     1 19.577     1 event_1</span></span>
+<span><span class="co">##   5:     5     1     1 17.407     2 event_2</span></span>
 <span><span class="co">##  ---                                       </span></span>
-<span><span class="co">##  97:    97     1     1 17.890     2 event_2</span></span>
-<span><span class="co">##  98:    98     1     0 15.838     2 event_2</span></span>
-<span><span class="co">##  99:    99     1     1 20.176     1 event_1</span></span>
-<span><span class="co">## 100:   100     0     0 20.244     1 event_1</span></span>
-<span><span class="co">## 101:   101     1     0 14.887     1 event_1</span></span></code></pre>
+<span><span class="co">##  97:    97     1     0 14.614     2 event_2</span></span>
+<span><span class="co">##  98:    98     0     0 17.425     1 event_1</span></span>
+<span><span class="co">##  99:    99     1     0 12.129     2 event_2</span></span>
+<span><span class="co">## 100:   100     0     0  9.518     1 event_1</span></span>
+<span><span class="co">## 101:   101     0     0 15.204     1 event_1</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="introducing-non-proportional-hazards">Introducing non-proportional hazards<a class="anchor" aria-label="anchor" href="#introducing-non-proportional-hazards"></a>
@@ -900,23 +894,23 @@ involved, and has not been implemented at this time.)</p>
 rate:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">coxph</span><span class="op">(</span>formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
-<div id="eiwwkhukjn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eiwwkhukjn table {
+<div id="lflzysztvv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lflzysztvv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#eiwwkhukjn thead, #eiwwkhukjn tbody, #eiwwkhukjn tfoot, #eiwwkhukjn tr, #eiwwkhukjn td, #eiwwkhukjn th {
+#lflzysztvv thead, #lflzysztvv tbody, #lflzysztvv tfoot, #lflzysztvv tr, #lflzysztvv td, #lflzysztvv th {
   border-style: none;
 }
 
-#eiwwkhukjn p {
+#lflzysztvv p {
   margin: 0;
   padding: 0;
 }
 
-#eiwwkhukjn .gt_table {
+#lflzysztvv .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -942,12 +936,12 @@ rate:</p>
   border-left-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_caption {
+#lflzysztvv .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#eiwwkhukjn .gt_title {
+#lflzysztvv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -959,7 +953,7 @@ rate:</p>
   border-bottom-width: 0;
 }
 
-#eiwwkhukjn .gt_subtitle {
+#lflzysztvv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -971,7 +965,7 @@ rate:</p>
   border-top-width: 0;
 }
 
-#eiwwkhukjn .gt_heading {
+#lflzysztvv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -983,13 +977,13 @@ rate:</p>
   border-right-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_bottom_border {
+#lflzysztvv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_col_headings {
+#lflzysztvv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1004,7 +998,7 @@ rate:</p>
   border-right-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_col_heading {
+#lflzysztvv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1024,7 +1018,7 @@ rate:</p>
   overflow-x: hidden;
 }
 
-#eiwwkhukjn .gt_column_spanner_outer {
+#lflzysztvv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1036,15 +1030,15 @@ rate:</p>
   padding-right: 4px;
 }
 
-#eiwwkhukjn .gt_column_spanner_outer:first-child {
+#lflzysztvv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eiwwkhukjn .gt_column_spanner_outer:last-child {
+#lflzysztvv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eiwwkhukjn .gt_column_spanner {
+#lflzysztvv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1056,11 +1050,11 @@ rate:</p>
   width: 100%;
 }
 
-#eiwwkhukjn .gt_spanner_row {
+#lflzysztvv .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#eiwwkhukjn .gt_group_heading {
+#lflzysztvv .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1086,7 +1080,7 @@ rate:</p>
   text-align: left;
 }
 
-#eiwwkhukjn .gt_empty_group_heading {
+#lflzysztvv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1101,15 +1095,15 @@ rate:</p>
   vertical-align: middle;
 }
 
-#eiwwkhukjn .gt_from_md > :first-child {
+#lflzysztvv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eiwwkhukjn .gt_from_md > :last-child {
+#lflzysztvv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eiwwkhukjn .gt_row {
+#lflzysztvv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1128,7 +1122,7 @@ rate:</p>
   overflow-x: hidden;
 }
 
-#eiwwkhukjn .gt_stub {
+#lflzysztvv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1141,7 +1135,7 @@ rate:</p>
   padding-right: 5px;
 }
 
-#eiwwkhukjn .gt_stub_row_group {
+#lflzysztvv .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1155,15 +1149,15 @@ rate:</p>
   vertical-align: top;
 }
 
-#eiwwkhukjn .gt_row_group_first td {
+#lflzysztvv .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#eiwwkhukjn .gt_row_group_first th {
+#lflzysztvv .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#eiwwkhukjn .gt_summary_row {
+#lflzysztvv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1173,16 +1167,16 @@ rate:</p>
   padding-right: 5px;
 }
 
-#eiwwkhukjn .gt_first_summary_row {
+#lflzysztvv .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_first_summary_row.thick {
+#lflzysztvv .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#eiwwkhukjn .gt_last_summary_row {
+#lflzysztvv .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1192,7 +1186,7 @@ rate:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_grand_summary_row {
+#lflzysztvv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1202,7 +1196,7 @@ rate:</p>
   padding-right: 5px;
 }
 
-#eiwwkhukjn .gt_first_grand_summary_row {
+#lflzysztvv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1212,7 +1206,7 @@ rate:</p>
   border-top-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_last_grand_summary_row_top {
+#lflzysztvv .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1222,11 +1216,11 @@ rate:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_striped {
+#lflzysztvv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eiwwkhukjn .gt_table_body {
+#lflzysztvv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1235,7 +1229,7 @@ rate:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_footnotes {
+#lflzysztvv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1249,7 +1243,7 @@ rate:</p>
   border-right-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_footnote {
+#lflzysztvv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1258,7 +1252,7 @@ rate:</p>
   padding-right: 5px;
 }
 
-#eiwwkhukjn .gt_sourcenotes {
+#lflzysztvv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1272,7 +1266,7 @@ rate:</p>
   border-right-color: #D3D3D3;
 }
 
-#eiwwkhukjn .gt_sourcenote {
+#lflzysztvv .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1280,85 +1274,81 @@ rate:</p>
   padding-right: 5px;
 }
 
-#eiwwkhukjn .gt_left {
+#lflzysztvv .gt_left {
   text-align: left;
 }
 
-#eiwwkhukjn .gt_center {
+#lflzysztvv .gt_center {
   text-align: center;
 }
 
-#eiwwkhukjn .gt_right {
+#lflzysztvv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eiwwkhukjn .gt_font_normal {
+#lflzysztvv .gt_font_normal {
   font-weight: normal;
 }
 
-#eiwwkhukjn .gt_font_bold {
+#lflzysztvv .gt_font_bold {
   font-weight: bold;
 }
 
-#eiwwkhukjn .gt_font_italic {
+#lflzysztvv .gt_font_italic {
   font-style: italic;
 }
 
-#eiwwkhukjn .gt_super {
+#lflzysztvv .gt_super {
   font-size: 65%;
 }
 
-#eiwwkhukjn .gt_footnote_marks {
+#lflzysztvv .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#eiwwkhukjn .gt_asterisk {
+#lflzysztvv .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#eiwwkhukjn .gt_indent_1 {
+#lflzysztvv .gt_indent_1 {
   text-indent: 5px;
 }
 
-#eiwwkhukjn .gt_indent_2 {
+#lflzysztvv .gt_indent_2 {
   text-indent: 10px;
 }
 
-#eiwwkhukjn .gt_indent_3 {
+#lflzysztvv .gt_indent_3 {
   text-indent: 15px;
 }
 
-#eiwwkhukjn .gt_indent_4 {
+#lflzysztvv .gt_indent_4 {
   text-indent: 20px;
 }
 
-#eiwwkhukjn .gt_indent_5 {
+#lflzysztvv .gt_indent_5 {
   text-indent: 25px;
 }
 
-#eiwwkhukjn .katex-display {
+#lflzysztvv .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#eiwwkhukjn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lflzysztvv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/span&gt;"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;log(HR)&lt;/strong&gt;&lt;/span&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;">
-<span class="gt_from_md"><strong>log(HR)</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;/span&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;">
-<span class="gt_from_md"><strong>95% CI</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/span&gt;"><span class="gt_from_md"><strong>p-value</strong></span></th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="estimate"><span class="gt_from_md"><strong>log(HR)</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="conf.low"><span class="gt_from_md"><strong>95% CI</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="p.value"><span class="gt_from_md"><strong>p-value</strong></span></th>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="label" class="gt_row gt_left">x</td>
@@ -1366,10 +1356,8 @@ rate:</p>
 <td headers="conf.low" class="gt_row gt_center">-0.88, -0.50</td>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr></tbody>
-<tfoot class="gt_footnotes"><tr>
-<td class="gt_footnote" colspan="4">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span> <span class="gt_from_md">HR = Hazard Ratio, CI = Confidence Interval</span>
-</td>
+<tfoot class="gt_sourcenotes"><tr>
+<td class="gt_sourcenote" colspan="4"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, HR = Hazard Ratio</span></td>
     </tr></tfoot>
 </table>
 </div>
@@ -1383,8 +1371,8 @@ so the model is apparently reasonable:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        chisq df    p</span></span>
-<span><span class="co">## x       2.61  1 0.11</span></span>
-<span><span class="co">## GLOBAL  2.61  1 0.11</span></span></code></pre>
+<span><span class="co">## x       2.01  1 0.16</span></span>
+<span><span class="co">## GLOBAL  2.01  1 0.16</span></span></code></pre>
 <p><br></p>
 <p><strong>Non-constant/non-proportional hazard ratio</strong></p>
 <p>In this next case, the risk of death when
@@ -1416,23 +1404,23 @@ relationship over time, the Cox proportional hazards model gives an
 estimate of the log hazard ratio quite close to -0.70:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coxfit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dd</span><span class="op">)</span></span></code></pre></div>
-<div id="mwzpgwcgvd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mwzpgwcgvd table {
+<div id="lzbpcxhlpu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lzbpcxhlpu table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mwzpgwcgvd thead, #mwzpgwcgvd tbody, #mwzpgwcgvd tfoot, #mwzpgwcgvd tr, #mwzpgwcgvd td, #mwzpgwcgvd th {
+#lzbpcxhlpu thead, #lzbpcxhlpu tbody, #lzbpcxhlpu tfoot, #lzbpcxhlpu tr, #lzbpcxhlpu td, #lzbpcxhlpu th {
   border-style: none;
 }
 
-#mwzpgwcgvd p {
+#lzbpcxhlpu p {
   margin: 0;
   padding: 0;
 }
 
-#mwzpgwcgvd .gt_table {
+#lzbpcxhlpu .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1458,12 +1446,12 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-left-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_caption {
+#lzbpcxhlpu .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mwzpgwcgvd .gt_title {
+#lzbpcxhlpu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1475,7 +1463,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-bottom-width: 0;
 }
 
-#mwzpgwcgvd .gt_subtitle {
+#lzbpcxhlpu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1487,7 +1475,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-top-width: 0;
 }
 
-#mwzpgwcgvd .gt_heading {
+#lzbpcxhlpu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1499,13 +1487,13 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-right-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_bottom_border {
+#lzbpcxhlpu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_col_headings {
+#lzbpcxhlpu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1520,7 +1508,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-right-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_col_heading {
+#lzbpcxhlpu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1540,7 +1528,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   overflow-x: hidden;
 }
 
-#mwzpgwcgvd .gt_column_spanner_outer {
+#lzbpcxhlpu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1552,15 +1540,15 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   padding-right: 4px;
 }
 
-#mwzpgwcgvd .gt_column_spanner_outer:first-child {
+#lzbpcxhlpu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mwzpgwcgvd .gt_column_spanner_outer:last-child {
+#lzbpcxhlpu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mwzpgwcgvd .gt_column_spanner {
+#lzbpcxhlpu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1572,11 +1560,11 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   width: 100%;
 }
 
-#mwzpgwcgvd .gt_spanner_row {
+#lzbpcxhlpu .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mwzpgwcgvd .gt_group_heading {
+#lzbpcxhlpu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1602,7 +1590,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   text-align: left;
 }
 
-#mwzpgwcgvd .gt_empty_group_heading {
+#lzbpcxhlpu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1617,15 +1605,15 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   vertical-align: middle;
 }
 
-#mwzpgwcgvd .gt_from_md > :first-child {
+#lzbpcxhlpu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mwzpgwcgvd .gt_from_md > :last-child {
+#lzbpcxhlpu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mwzpgwcgvd .gt_row {
+#lzbpcxhlpu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1644,7 +1632,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   overflow-x: hidden;
 }
 
-#mwzpgwcgvd .gt_stub {
+#lzbpcxhlpu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1657,7 +1645,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   padding-right: 5px;
 }
 
-#mwzpgwcgvd .gt_stub_row_group {
+#lzbpcxhlpu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1671,15 +1659,15 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   vertical-align: top;
 }
 
-#mwzpgwcgvd .gt_row_group_first td {
+#lzbpcxhlpu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mwzpgwcgvd .gt_row_group_first th {
+#lzbpcxhlpu .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mwzpgwcgvd .gt_summary_row {
+#lzbpcxhlpu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1689,16 +1677,16 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   padding-right: 5px;
 }
 
-#mwzpgwcgvd .gt_first_summary_row {
+#lzbpcxhlpu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_first_summary_row.thick {
+#lzbpcxhlpu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mwzpgwcgvd .gt_last_summary_row {
+#lzbpcxhlpu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1708,7 +1696,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_grand_summary_row {
+#lzbpcxhlpu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1718,7 +1706,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   padding-right: 5px;
 }
 
-#mwzpgwcgvd .gt_first_grand_summary_row {
+#lzbpcxhlpu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1728,7 +1716,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-top-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_last_grand_summary_row_top {
+#lzbpcxhlpu .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1738,11 +1726,11 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_striped {
+#lzbpcxhlpu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mwzpgwcgvd .gt_table_body {
+#lzbpcxhlpu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1751,7 +1739,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_footnotes {
+#lzbpcxhlpu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1765,7 +1753,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-right-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_footnote {
+#lzbpcxhlpu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1774,7 +1762,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   padding-right: 5px;
 }
 
-#mwzpgwcgvd .gt_sourcenotes {
+#lzbpcxhlpu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1788,7 +1776,7 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   border-right-color: #D3D3D3;
 }
 
-#mwzpgwcgvd .gt_sourcenote {
+#lzbpcxhlpu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1796,96 +1784,90 @@ estimate of the log hazard ratio quite close to -0.70:</p>
   padding-right: 5px;
 }
 
-#mwzpgwcgvd .gt_left {
+#lzbpcxhlpu .gt_left {
   text-align: left;
 }
 
-#mwzpgwcgvd .gt_center {
+#lzbpcxhlpu .gt_center {
   text-align: center;
 }
 
-#mwzpgwcgvd .gt_right {
+#lzbpcxhlpu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mwzpgwcgvd .gt_font_normal {
+#lzbpcxhlpu .gt_font_normal {
   font-weight: normal;
 }
 
-#mwzpgwcgvd .gt_font_bold {
+#lzbpcxhlpu .gt_font_bold {
   font-weight: bold;
 }
 
-#mwzpgwcgvd .gt_font_italic {
+#lzbpcxhlpu .gt_font_italic {
   font-style: italic;
 }
 
-#mwzpgwcgvd .gt_super {
+#lzbpcxhlpu .gt_super {
   font-size: 65%;
 }
 
-#mwzpgwcgvd .gt_footnote_marks {
+#lzbpcxhlpu .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mwzpgwcgvd .gt_asterisk {
+#lzbpcxhlpu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mwzpgwcgvd .gt_indent_1 {
+#lzbpcxhlpu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mwzpgwcgvd .gt_indent_2 {
+#lzbpcxhlpu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mwzpgwcgvd .gt_indent_3 {
+#lzbpcxhlpu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mwzpgwcgvd .gt_indent_4 {
+#lzbpcxhlpu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mwzpgwcgvd .gt_indent_5 {
+#lzbpcxhlpu .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mwzpgwcgvd .katex-display {
+#lzbpcxhlpu .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mwzpgwcgvd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lzbpcxhlpu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/span&gt;"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;log(HR)&lt;/strong&gt;&lt;/span&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;">
-<span class="gt_from_md"><strong>log(HR)</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;/span&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;">
-<span class="gt_from_md"><strong>95% CI</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/span&gt;"><span class="gt_from_md"><strong>p-value</strong></span></th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="estimate"><span class="gt_from_md"><strong>log(HR)</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="conf.low"><span class="gt_from_md"><strong>95% CI</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="p.value"><span class="gt_from_md"><strong>p-value</strong></span></th>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="label" class="gt_row gt_left">x</td>
-<td headers="estimate" class="gt_row gt_center">-0.72</td>
-<td headers="conf.low" class="gt_row gt_center">-0.91, -0.52</td>
+<td headers="estimate" class="gt_row gt_center">-0.62</td>
+<td headers="conf.low" class="gt_row gt_center">-0.81, -0.42</td>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr></tbody>
-<tfoot class="gt_footnotes"><tr>
-<td class="gt_footnote" colspan="4">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span> <span class="gt_from_md">HR = Hazard Ratio, CI = Confidence Interval</span>
-</td>
+<tfoot class="gt_sourcenotes"><tr>
+<td class="gt_sourcenote" colspan="4"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, HR = Hazard Ratio</span></td>
     </tr></tfoot>
 </table>
 </div>
@@ -1895,9 +1877,9 @@ make us question the appropriateness of the model. Since
 we would be wise to see if we can improve on the model.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##        chisq df      p</span></span>
-<span><span class="co">## x       9.26  1 0.0023</span></span>
-<span><span class="co">## GLOBAL  9.26  1 0.0023</span></span></code></pre>
+<pre><code><span><span class="co">##        chisq df     p</span></span>
+<span><span class="co">## x       6.42  1 0.011</span></span>
+<span><span class="co">## GLOBAL  6.42  1 0.011</span></span></code></pre>
 <p>We might be able to see from the plot where proportionality diverges,
 in which case we can split the data set into two parts at the identified
 time point. (In many cases, the transition point or points won’t be so
@@ -1908,23 +1890,23 @@ splitting the data at day 150, we get the desired estimates:</p>
 <span>                 episode<span class="op">=</span> <span class="st">"tgroup"</span>, id<span class="op">=</span><span class="st">"newid"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">coxfit2</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">tstart</span>, <span class="va">time</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span><span class="op">:</span><span class="fu">strata</span><span class="op">(</span><span class="va">tgroup</span><span class="op">)</span>, data<span class="op">=</span><span class="va">dd2</span><span class="op">)</span></span></code></pre></div>
-<div id="eqdtogdyct" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eqdtogdyct table {
+<div id="tqdhpsxhaf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tqdhpsxhaf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#eqdtogdyct thead, #eqdtogdyct tbody, #eqdtogdyct tfoot, #eqdtogdyct tr, #eqdtogdyct td, #eqdtogdyct th {
+#tqdhpsxhaf thead, #tqdhpsxhaf tbody, #tqdhpsxhaf tfoot, #tqdhpsxhaf tr, #tqdhpsxhaf td, #tqdhpsxhaf th {
   border-style: none;
 }
 
-#eqdtogdyct p {
+#tqdhpsxhaf p {
   margin: 0;
   padding: 0;
 }
 
-#eqdtogdyct .gt_table {
+#tqdhpsxhaf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1950,12 +1932,12 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-left-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_caption {
+#tqdhpsxhaf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#eqdtogdyct .gt_title {
+#tqdhpsxhaf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1967,7 +1949,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-bottom-width: 0;
 }
 
-#eqdtogdyct .gt_subtitle {
+#tqdhpsxhaf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1979,7 +1961,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-top-width: 0;
 }
 
-#eqdtogdyct .gt_heading {
+#tqdhpsxhaf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1991,13 +1973,13 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-right-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_bottom_border {
+#tqdhpsxhaf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_col_headings {
+#tqdhpsxhaf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2012,7 +1994,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-right-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_col_heading {
+#tqdhpsxhaf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2032,7 +2014,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   overflow-x: hidden;
 }
 
-#eqdtogdyct .gt_column_spanner_outer {
+#tqdhpsxhaf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2044,15 +2026,15 @@ splitting the data at day 150, we get the desired estimates:</p>
   padding-right: 4px;
 }
 
-#eqdtogdyct .gt_column_spanner_outer:first-child {
+#tqdhpsxhaf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eqdtogdyct .gt_column_spanner_outer:last-child {
+#tqdhpsxhaf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eqdtogdyct .gt_column_spanner {
+#tqdhpsxhaf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2064,11 +2046,11 @@ splitting the data at day 150, we get the desired estimates:</p>
   width: 100%;
 }
 
-#eqdtogdyct .gt_spanner_row {
+#tqdhpsxhaf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#eqdtogdyct .gt_group_heading {
+#tqdhpsxhaf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2094,7 +2076,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   text-align: left;
 }
 
-#eqdtogdyct .gt_empty_group_heading {
+#tqdhpsxhaf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2109,15 +2091,15 @@ splitting the data at day 150, we get the desired estimates:</p>
   vertical-align: middle;
 }
 
-#eqdtogdyct .gt_from_md > :first-child {
+#tqdhpsxhaf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eqdtogdyct .gt_from_md > :last-child {
+#tqdhpsxhaf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eqdtogdyct .gt_row {
+#tqdhpsxhaf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2136,7 +2118,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   overflow-x: hidden;
 }
 
-#eqdtogdyct .gt_stub {
+#tqdhpsxhaf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2149,7 +2131,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   padding-right: 5px;
 }
 
-#eqdtogdyct .gt_stub_row_group {
+#tqdhpsxhaf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2163,15 +2145,15 @@ splitting the data at day 150, we get the desired estimates:</p>
   vertical-align: top;
 }
 
-#eqdtogdyct .gt_row_group_first td {
+#tqdhpsxhaf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#eqdtogdyct .gt_row_group_first th {
+#tqdhpsxhaf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#eqdtogdyct .gt_summary_row {
+#tqdhpsxhaf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2181,16 +2163,16 @@ splitting the data at day 150, we get the desired estimates:</p>
   padding-right: 5px;
 }
 
-#eqdtogdyct .gt_first_summary_row {
+#tqdhpsxhaf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_first_summary_row.thick {
+#tqdhpsxhaf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#eqdtogdyct .gt_last_summary_row {
+#tqdhpsxhaf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2200,7 +2182,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_grand_summary_row {
+#tqdhpsxhaf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2210,7 +2192,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   padding-right: 5px;
 }
 
-#eqdtogdyct .gt_first_grand_summary_row {
+#tqdhpsxhaf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2220,7 +2202,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-top-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_last_grand_summary_row_top {
+#tqdhpsxhaf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2230,11 +2212,11 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_striped {
+#tqdhpsxhaf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eqdtogdyct .gt_table_body {
+#tqdhpsxhaf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2243,7 +2225,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_footnotes {
+#tqdhpsxhaf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2257,7 +2239,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-right-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_footnote {
+#tqdhpsxhaf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2266,7 +2248,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   padding-right: 5px;
 }
 
-#eqdtogdyct .gt_sourcenotes {
+#tqdhpsxhaf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2280,7 +2262,7 @@ splitting the data at day 150, we get the desired estimates:</p>
   border-right-color: #D3D3D3;
 }
 
-#eqdtogdyct .gt_sourcenote {
+#tqdhpsxhaf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2288,85 +2270,81 @@ splitting the data at day 150, we get the desired estimates:</p>
   padding-right: 5px;
 }
 
-#eqdtogdyct .gt_left {
+#tqdhpsxhaf .gt_left {
   text-align: left;
 }
 
-#eqdtogdyct .gt_center {
+#tqdhpsxhaf .gt_center {
   text-align: center;
 }
 
-#eqdtogdyct .gt_right {
+#tqdhpsxhaf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eqdtogdyct .gt_font_normal {
+#tqdhpsxhaf .gt_font_normal {
   font-weight: normal;
 }
 
-#eqdtogdyct .gt_font_bold {
+#tqdhpsxhaf .gt_font_bold {
   font-weight: bold;
 }
 
-#eqdtogdyct .gt_font_italic {
+#tqdhpsxhaf .gt_font_italic {
   font-style: italic;
 }
 
-#eqdtogdyct .gt_super {
+#tqdhpsxhaf .gt_super {
   font-size: 65%;
 }
 
-#eqdtogdyct .gt_footnote_marks {
+#tqdhpsxhaf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#eqdtogdyct .gt_asterisk {
+#tqdhpsxhaf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#eqdtogdyct .gt_indent_1 {
+#tqdhpsxhaf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#eqdtogdyct .gt_indent_2 {
+#tqdhpsxhaf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#eqdtogdyct .gt_indent_3 {
+#tqdhpsxhaf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#eqdtogdyct .gt_indent_4 {
+#tqdhpsxhaf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#eqdtogdyct .gt_indent_5 {
+#tqdhpsxhaf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#eqdtogdyct .katex-display {
+#tqdhpsxhaf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#eqdtogdyct div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#tqdhpsxhaf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/span&gt;"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;log(HR)&lt;/strong&gt;&lt;/span&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;">
-<span class="gt_from_md"><strong>log(HR)</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;/span&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;">
-<span class="gt_from_md"><strong>95% CI</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;span class='gt_from_md'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/span&gt;"><span class="gt_from_md"><strong>p-value</strong></span></th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="estimate"><span class="gt_from_md"><strong>log(HR)</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="conf.low"><span class="gt_from_md"><strong>95% CI</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="p.value"><span class="gt_from_md"><strong>p-value</strong></span></th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
@@ -2377,21 +2355,19 @@ splitting the data at day 150, we get the desired estimates:</p>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    x * tgroup=1</td>
-<td headers="estimate" class="gt_row gt_center">-1.3</td>
-<td headers="conf.low" class="gt_row gt_center">-1.7, -0.94</td>
+<td headers="estimate" class="gt_row gt_center">-0.94</td>
+<td headers="conf.low" class="gt_row gt_center">-1.3, -0.60</td>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    x * tgroup=2</td>
-<td headers="estimate" class="gt_row gt_center">-0.40</td>
-<td headers="conf.low" class="gt_row gt_center">-0.65, -0.16</td>
-<td headers="p.value" class="gt_row gt_center">0.001</td>
+<td headers="estimate" class="gt_row gt_center">-0.44</td>
+<td headers="conf.low" class="gt_row gt_center">-0.68, -0.20</td>
+<td headers="p.value" class="gt_row gt_center"></td>
 </tr>
 </tbody>
-<tfoot class="gt_footnotes"><tr>
-<td class="gt_footnote" colspan="4">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height: 0;"><sup>1</sup></span> <span class="gt_from_md">HR = Hazard Ratio, CI = Confidence Interval</span>
-</td>
+<tfoot class="gt_sourcenotes"><tr>
+<td class="gt_sourcenote" colspan="4"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, HR = Hazard Ratio</span></td>
     </tr></tfoot>
 </table>
 </div>
@@ -2400,8 +2376,8 @@ appropriateness of the model:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                  chisq df    p</span></span>
-<span><span class="co">## x:strata(tgroup)  0.57  2 0.75</span></span>
-<span><span class="co">## GLOBAL            0.57  2 0.75</span></span></code></pre>
+<span><span class="co">## x:strata(tgroup)  3.75  2 0.15</span></span>
+<span><span class="co">## GLOBAL            3.75  2 0.15</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="generating-parameters-for-survival-distribution">Generating parameters for survival distribution<a class="anchor" aria-label="anchor" href="#generating-parameters-for-survival-distribution"></a>
@@ -2455,7 +2431,7 @@ number of points may be provided):</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
       </footer>
