@@ -941,9 +941,41 @@ test_that("addDataDensity works", {
 
   expect_lte(dp[, round(mean(p.tails), 2)], 0.05)
   expect_lt(dp[, mean(p.value <= .05)], 0.05)
+  
+  
+  ###
+  
+  f.na <- function(data_dist, narm) {
+    
+    def <- defData(varname = "x1", formula = 5, dist = "poisson")
+    
+    dd <- genData(10000, def)
+    dd <- addDataDensity(dd, data_dist, varname = "x2", uselimits = TRUE, na.rm = narm)
+    
+    dd[]
+    
+  }
+  
+  compare3 <- function() {
+    ints <- rpois(50, rpois(1, 8))
+    pmiss <- rbeta(1, 1, 9)
+    ints[rbinom(50, 1, pmiss) == 1] <- NA
+    dx <- f.na(ints, narm = FALSE)
+    dx[, mean(is.na(x2))]
+  }
+  
+  expect_equal(mean(sapply(1:100, function(x) compare3())), 0.10, tolerance = .04)
+  
+  compare4 <- function() {
+    ints <- rpois(50, rpois(1, 8))
+    pmiss <- rbeta(1, 1, 9)
+    ints[rbinom(50, 1, pmiss) == 1] <- NA
+    dx <- f.na(ints, narm = TRUE)
+    dx[, mean(is.na(x2))]
+  }
+  
+  expect_equal(mean(sapply(1:100, function(x) compare4())), 0.0, tolerance = 0)
  
-  
-  
 })
 
 test_that("genDataDensity works", {
@@ -970,23 +1002,32 @@ test_that("genDataDensity works", {
   
   ### Testing na.rm
   
-  f.na <- function(data_dist) {
+  f.na <- function(data_dist, narm) {
     
-    dd <- genDataDensity(10000, data_dist, varname = "x1", uselimits = TRUE, na.rm = FALSE)
+    dd <- genDataDensity(10000, data_dist, varname = "x1", uselimits = TRUE, na.rm = narm)
     dd[]
     
   }
-  
   
   compare3 <- function() {
     ints <- rpois(50, rpois(1, 8))
     pmiss <- rbeta(1, 1, 9)
     ints[rbinom(50, 1, pmiss) == 1] <- NA
-    dx <- f.na(ints)
+    dx <- f.na(ints, narm = FALSE)
     dx[, mean(is.na(x1))]
   }
   
   expect_equal(mean(sapply(1:100, function(x) compare3())), 0.10, tolerance = .04)
+  
+  compare4 <- function() {
+    ints <- rpois(50, rpois(1, 8))
+    pmiss <- rbeta(1, 1, 9)
+    ints[rbinom(50, 1, pmiss) == 1] <- NA
+    dx <- f.na(ints, narm = TRUE)
+    dx[, mean(is.na(x1))]
+  }
+  
+  expect_equal(mean(sapply(1:100, function(x) compare4())), 0, tolerance = 0)
   
   
 })
