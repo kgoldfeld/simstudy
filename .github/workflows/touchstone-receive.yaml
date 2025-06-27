@@ -9,17 +9,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-           fetch-depth: 0
+          fetch-depth: 0
 
       - id: read_touchstone_config
         run: |
-          content=`cat ./touchstone/config.json`
-          # the following lines are only required for multi line json
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          # end of optional handling for multi line json
-          echo "config=$content" >> "$GITHUB_OUTPUT"
+          echo "config=$(cat ./touchstone/config.json)" >> "$GITHUB_OUTPUT"
   build:
     needs: prepare
     runs-on: ${{ matrix.config.os }}
