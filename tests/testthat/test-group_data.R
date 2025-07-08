@@ -552,8 +552,8 @@ test_that("trtStepWedge handles lag period error correctly", {
   
   skip_on_cran()
   
-  W <- max(2, rpois(1,4))
-  L <- max(2, rpois(1,4))
+  W <- max(3, rpois(1,5))
+  L <- max(1, rpois(1,4))
   S <- max(1, rpois(1,3))
   E <- rpois(1, 2)
   LAG <- max(3, rpois(1,4))
@@ -561,7 +561,7 @@ test_that("trtStepWedge handles lag period error correctly", {
   K <- max(2, rpois(1, 4)) 
   
   nClust <- W * K
-  nPer <- W * L + S - 1
+  nPer <- W * L - 1
   
   defc <- 
     defData(
@@ -585,9 +585,11 @@ test_that("Returns correct number of rows and new group column", {
   
   skip_on_cran()
   
-  dt <- genData(100)
+  N <- max(100, rpois(1, 200))
+  
+  dt <- genData(N)
   result <- trtAssign(dt, nTrt = 3, balanced = TRUE)
-  expect_equal(nrow(result), 100)
+  expect_equal(nrow(result), N)
   expect_true("trtGrp" %in% names(result))
   expect_type(result$trtGrp, "integer")
 })
@@ -622,6 +624,9 @@ test_that("Balanced assignment with stratification respects strata", {
 })
 
 test_that("Group name is respected when grpName is specified", {
+  
+  skip_on_cran()
+  
   dt <- genData(100)
   result <- trtAssign(dt, nTrt = 3, balanced = TRUE, grpName = "arm")
   expect_true("arm" %in% names(result))
@@ -629,6 +634,9 @@ test_that("Group name is respected when grpName is specified", {
 })
 
 test_that("balanced assignment honors ratio", {
+  
+  skip_on_cran()
+  
   G <- max(3, rpois(1, 4))
   ratio <- pmax(1, rpois(G, 2))
   dt <- genData(1000)
@@ -641,20 +649,20 @@ test_that("balanced assignment honors ratio", {
 
 ### This generates some errors!
 
-# test_that("Unbalanced assignment honors ratio", {
-#   
-#   skip_on_cran()
-#   
-#   G <- max(3, rpois(1, 4))
-#   ratio <- pmax(1, rpois(G, 1))
-#   dt <- genData(1000)
-#   
-#   result <- trtAssign(dt, nTrt = G, balanced = FALSE, ratio = ratio, grpName = "arm")
-#   prop <- result[, .(p =.N/1000), keyby = arm][, p]
-#   x <- abs(prop - ratio/sum(ratio))
-#   x
-#   expect_true(all(x < 0.05)) 
-# })
+test_that("Unbalanced assignment honors ratio", {
+
+  skip_on_cran()
+
+  G <- max(3, rpois(1, 4))
+  ratio <- pmax(1, rpois(G, 1))
+  dt <- genData(1000)
+
+  result <- trtAssign(dt, nTrt = G, balanced = FALSE, ratio = ratio, grpName = "arm")
+  prop <- result[, .(p =.N/1000), keyby = arm][, p]
+  x <- abs(prop - ratio/sum(ratio))
+  expect_true(all(x < 0.05))
+  
+})
 
 test_that("Binary group coding returns 0/1", {
   
@@ -684,6 +692,116 @@ test_that("Throws error when ratio length does not match nTrt", {
   dt <- genData(100)
   expect_error(trtAssign(dt, nTrt = 3, balanced = TRUE, ratio = ratio), 
       glue::glue("nTrt not equal to {length(ratio)}!"))
+})
+
+test_that("Single formula returns 0/1 group when balanced = TRUE", {
+  
+  skip_on_cran()
+  
+  def <- defData(varname = "x", dist = "binary", formula = 0.5)
+  dt <- genData(100, def)
+  
+  dt_out <- trtAssign(dt, nTrt = 2, grpName = "trt")
+  expect_true(all(dt_out$trt %in% c(0, 1)))
+})
+
+test_that("Single formula returns 0/1 group when balanced = FALSE", {
+  
+  skip_on_cran()
+  
+  def <- defData(varname = "x", dist = "binary", formula = 0.5)
+  dt <- genData(100, def)
+  
+  dt_out <- trtAssign(dt, nTrt = 2, balance = FALSE, grpName = "trt")
+  expect_true(all(dt_out$trt %in% c(0, 1)))
+})
+
+# trtObserve <-----
+
+test_that("Function returns expected output columns", {
+  
+  skip_on_cran()
+  
+  def <- defData(varname = "x1", dist = "binary", formula = .5)
+  def <- defData(def, varname = "x2", dist = "binary", formula = "-1 + 2 * x1", link = "logit")
+  dt <- genData(100, def)
+  
+  formulas <- c("-1 + x1 + x2", "0 + x1 - x2")
+  dt_out <- trtObserve(dt, formulas, logit.link = TRUE, grpName = "group")
+  
+  expect_true("group" %in% colnames(dt_out))
+  expect_type(dt_out$group, "integer")
+  expect_true(all(dt_out$group %in% 1:3))  # since there are 2 formulas, 3 groups
+  
+})
+
+test_that("Output changes when using identity vs. logit link", {
+  
+  skip_on_cran()
+  
+  def <- defData(varname = "x1", dist = "binary", formula = .5)
+  dt <- genData(1000, def)
+  formulas <- c("0.2 + 0.1 * x1", "0.5 - 0.2 * x1")
+  
+  out_logit <- trtObserve(dt, formulas, logit.link = TRUE, grpName = "grp")
+  out_identity <- trtObserve(dt, formulas, logit.link = FALSE, grpName = "grp")
+
+  prop_logit <- prop.table(table(out_logit$grp))
+  prop_identity <- prop.table(table(out_identity$grp)) 
+  
+  # Check that the two group assignment distributions are not too similar
+  # We'll check that the absolute difference in group proportions is sufficiently large
+  diff <- abs(prop_logit - prop_identity[names(prop_logit)])  # align by group labels
+  expect_true(any(diff > 0.05))  # Threshold can be adjusted
+})
+
+test_that("Group name already in dt triggers error", {
+  
+  skip_on_cran()
+  
+  def <- defData(varname = "x1", dist = "binary", formula = .5)
+  dt <- genData(100, def)
+  dt[, exposure := 1]  # preexisting column
+  
+  formulas <- c("x1")
+  expect_error(trtObserve(dt, formulas, grpName = "exposure"),
+               "Group name has previously been defined in data table")
+})
+
+test_that("Missing data.table triggers error", {
+  
+  skip_on_cran()
+  
+  expect_error(trtObserve(formulas = c("1")), "Data table argument is missing")
+  
+})
+
+test_that("Single formula returns 0/1 group", {
+  
+  skip_on_cran()
+  
+  def <- defData(varname = "x", dist = "binary", formula = 0.5)
+  dt <- genData(100, def)
+  
+  dt_out <- trtObserve(dt, formulas = "0.5 * x", logit.link = FALSE, grpName = "trt")
+  expect_true(all(dt_out$trt %in% c(0, 1)))
+})
+
+test_that("Rough distribution of group assignments for balanced formulas", {
+  
+  skip_on_cran()
+  
+  G <- max(3, rpois(1, 5))
+  
+  def <- defData(varname = "x", dist = "binary", formula = .5)
+  dt <- genData(3000, def)
+  formulas <- rep(1/G, G)  # logit of 0 = probability 0.5 before normalization
+  
+  dt_out <- trtObserve(dt, formulas = formulas, logit.link = FALSE, grpName = "grp")
+  
+  prop_table <- prop.table(table(dt_out$grp))
+  expect_true(all(abs(prop_table - 1/G) < 0.025))  # roughly equal
+  
 })
 
  

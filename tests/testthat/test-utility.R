@@ -27,6 +27,17 @@ test_that("cat probs are generated correctly", {
   })
 })
 
+test_that("catProbs returns same result as genCatFormula and throws warning", {
+  expect_warning(
+    result1 <- catProbs(0.2, 0.3, 0.5, n = 0),
+    regexp = "genCatFormula"
+  )
+  
+  result2 <- genCatFormula(0.2, 0.3, 0.5, n = 0)
+  
+  expect_identical(result1, result2)
+})
+
 test_that("probabilities (vector) are adjusted as documented.", {
   skip_on_cran()
   forall(gen.and_then(gen.element(2:15), function(n) {
