@@ -313,7 +313,7 @@ test_that("genDummy throws errors.", {
   expect_error(genDummy(dd, sep = ".", replace = FALSE), class = "simstudy::missingArgument")
 
   # Check if data table exists
-  expect_error(genDummy(d, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::dtNotExist")
+  expect_error(genDummy(.d, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::dtNotExist")
   # expect_error(genDummy(d, varname = "rx", sep = ".", replace = FALSE), class = "simstudy::dtDoesNotExist")
 
   # Check if varname exists

@@ -647,9 +647,9 @@ trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
     ))
   }
 
-  if ((nPer) < (startPer + (nWaves - 1) * lenWaves + 1)) {
+  if ((nPer) < (startPer + (nWaves - 1) * (lenWaves + lag) + 1)) {
     stop(paste(
-      "Design requires", (startPer + (nWaves - 1) * lenWaves + 1),
+      "Design requires", (startPer + (nWaves - 1) * (lenWaves + lag) + 1),
       "periods but only", nPer, "generated."
     ))
   }

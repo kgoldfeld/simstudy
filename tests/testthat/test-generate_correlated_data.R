@@ -374,12 +374,19 @@ test_that("Basic Functionality Test", {
 test_that("Distribution Test", {
   def <- defData(varname = "xNorm", formula = 8, variance = 4, dist = "normal")
   def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
+  def <- defData(def, varname = "xUniform1", formula = "3;8", dist = "uniform")
+  def <- defData(def, varname = "xPois1", formula = 8, dist = "poisson")
+  def <- defData(def, varname = "xNB1", formula = 4, variance = 1, dist = "negBinomial")
   
   dt <- genCorFlex(500, def, rho = .3, corstr = "cs")
   
   expect_equal(mean(dt$xNorm), 8, tolerance = 0.5)
   expect_equal(var(dt$xNorm),  4, tolerance = 0.5)
   expect_equal(mean(dt$xGamma1), 15, tolerance = 0.5)
+  expect_equal(mean(dt$xUniform1), 5.5, tolerance = 0.5)
+  expect_equal(mean(dt$xPois1), 8, tolerance = 0.5)
+  expect_equal(mean(dt$xNB1), 4, tolerance = 0.5)
+  
   
 })
 
@@ -393,3 +400,289 @@ test_that("Correlation Structure Test", {
   expect_equal(cor_matrix, matrix(c(1, .3, .3, 1), 2, 2),
                tolerance = .15, check.attributes = FALSE)
 })
+
+test_that("Correlation Structure Test for tau", {
+  def <- defData(varname = "xPois1", formula = 7, dist = "poisson")
+  def <- defData(def, varname = "xPois2", formula = 15, dist = "poisson")
+  
+  dt <- genCorFlex(1000, def, tau = .3, corstr = "cs")
+  obs_cor <- cor(dt[, -"id"])[1,2]
+  
+  expect_equal(obs_cor, sin(.3 * pi/2), tolerance = .1)
+})
+
+test_that("Character error for formula", {
+  # Create a definition with a non-numeric formula to trigger the warning
+  def <- data.table::data.table(
+    varname = c("xNorm", "xInvalid"),
+    formula = c(3, "invalid"),
+    variance = c(4, 2),
+    dist = c("normal", "gamma")
+  )
+  
+  expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"), "Non-scalar values in definitions")
+})
+
+test_that("NA error for formula", {
+  # Create a definition with a non-numeric formula to trigger the warning
+  def <- data.table::data.table(
+    varname = c("xNorm", "xInvalid"),
+    formula = c(3, NA),
+    variance = c(4, 2),
+    dist = c("normal", "gamma")
+  )
+  
+  expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"), "Non-scalar values in definitions")
+})
+
+test_that("Distribution type error for dist", {
+  # Create a definition with a non-numeric formula to trigger the warning
+  def <- data.table::data.table(
+    varname = c("xNorm", "xInvalid"),
+    formula = c(3, 8),
+    variance = c(4, 2),
+    dist = c("normal", "invalid")
+  )
+  
+  expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"), 
+    "Only implemented for the following distributions: binary, uniform, normal, poisson, gamma, and negative binomial")
+})
+
+# addCorFlex <-----
+
+test_that("addCorFlex handles invalid distribution", {
+  dt <- data.table(id = 1:10)
+  defs <- data.table(varname = "A", formula = "1", dist = "invalid", variance = 1)
+  expect_error(addCorFlex(dt, defs, rho = .4, corstr = "cs"), 
+    "Only implemented for the following distributions: binary, normal, poisson, gamma, and negative binomial")
+})
+
+test_that("addCorFlex generates data with correct dimensions", {
+  
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(500, def)
+  
+  defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), 
+          dist = c("normal", "poisson"), variance = c(1, 1), link = c("identity", "identity"))
+  result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+  expect_equal(nrow(result), 500)
+  expect_equal(ncol(result), 5)
+})
+
+test_that("addCorFlex generates data with specified correlation structure", {
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(1000, def)
+  
+  defs <- data.table(varname = c("A", "B", "C"), formula = c(1, 2, 0), 
+    dist = c("normal", "normal", "normal"), variance = c(1, 1, 3), 
+    link = c("identity", "identity", "idendity"))
+  result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+  obs_matrix <- cor(result[, .SD, .SDcols = c("A", "B", "C")])
+  cor_matrix <- genCorMat(3, rho = .4)
+  expect_equal(cor_matrix, obs_matrix, tolerance = .1, check.attributes = FALSE)
+})
+
+# test_that("addCorFlex generates data with specified correlation matrix", {
+#   dt <- data.table(id = 1:10)
+#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+#   cor_matrix <- matrix(c(1, .5, .5, 1), nrow = 2)
+#   result <- addCorFlex(dt, defs, corMatrix = cor_matrix)
+#   generated_cor_matrix <- cor(result[, .SD, .SDcols = -1])
+#   expect_true(all(abs(generated_cor_matrix[upper.tri(generated_cor_matrix)]) > .4))
+# })
+# 
+# test_that("addCorFlex handles tau parameter correctly", {
+#   dt <- data.table(id = 1:10)
+#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+#   result <- addCorFlex(dt, defs, tau = .3, corstr = "cs")
+#   cor_matrix <- cor(result[, .SD, .SDcols = -1])
+#   expect_true(all(abs(cor_matrix[upper.tri(cor_matrix)]) > .2))
+# })
+# 
+# test_that("addCorFlex generates data with correct column names", {
+#   dt <- data.table(id = 1:10)
+#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+#   expect_true(all(c("A", "B") %in% names(result)))
+# })
+# 
+# test_that("addCorFlex maintains original data columns", {
+#   dt <- data.table(id = 1:10, original_col = rnorm(10))
+#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+#   expect_true("original_col" %in% names(result))
+# })
+# 
+# test_that("addCorFlex handles empty data table", {
+#   dt <- data.table()
+#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+#   expect_equal(nrow(result), )
+#   expect_equal(ncol(result), 2)
+# })
+# 
+# test_that("addCorFlex handles single row data table", {
+#   dt <- data.table(id = 1)
+#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+#   expect_equal(nrow(result), 1)
+#   expect_equal(ncol(result), 3)
+# })
+# 
+# test_that("addCorFlex handles single variable definition", {
+#   dt <- data.table(id = 1:10)
+#   defs <- data.table(varname = "A", formula = "1", dist = "normal", variance = 1)
+#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+#   expect_equal(nrow(result), 10)
+#   expect_equal(ncol(result), 2)
+#   expect_true("A" %in% names(result))
+# })
+
+# genCorGen <-----
+
+test_that("genCorGen handles invalid distribution", {
+  expect_error(genCorGen(
+      100, nvars = 3, params1 = 5, dist = "invalid", rho = .7, 
+      corstr = "cs"),
+    "Distribution not properly specified.")
+})
+
+test_that("genCorGen handles non-numeric params1", {
+  expect_error(genCorGen(100, nvars = 3, params1 = "non-numeric", 
+                         dist = "poisson", rho = .7, corstr = "cs"),
+               "Parameters must be numeric")
+})
+
+test_that("genCorGen handles non-numeric params2", {
+  expect_error(genCorGen(100, nvars = 3, params1 = 5, params2 = "non-numeric", dist = "gamma", rho = .7, corstr = "cs"),
+               "Parameters must be numeric")
+})
+
+test_that("genCorGen handles too many parameter vectors for poisson", {
+  expect_error(genCorGen(100, nvars = 3, params1 = 5, params2 = 2, dist = "poisson", rho = .7, corstr = "cs"),
+               "Too many parameter vectors")
+})
+
+test_that("genCorGen handles too few parameter vectors for gamma", {
+  expect_error(genCorGen(100, nvars = 3, params1 = 5, dist = "gamma", rho = .7, corstr = "cs"),
+               "Too few parameter vectors")
+})
+
+test_that("genCorGen handles mismatched length of params1", {
+  expect_error(genCorGen(100, nvars = 3, params1 = c(5, 6), dist = "poisson", rho = .7, corstr = "cs"),
+               "Length of vector 1 = 2, not equal to number of correlated variables: 3")
+})
+
+test_that("genCorGen handles mismatched length of params2", {
+  expect_error(genCorGen(100, nvars = 3, params1 = 5, params2 = c(2, 3), dist = "gamma", rho = .7, corstr = "cs"),
+               "Length of vector 2 = 2, not equal to number of correlated variables: 3")
+})
+
+test_that("genCorGen handles invalid method", {
+  expect_error(genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", method = "invalid"),
+               "invalid is not a valid method")
+})
+
+test_that("genCorGen handles method ep for non-binary data", {
+  expect_error(genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", method = "ep"),
+               "Method `ep` applies only to binary data generation")
+})
+
+test_that("genCorGen generates data with correct dimensions", {
+  result <- genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs")
+  expect_equal(nrow(result), 300)
+  expect_equal(ncol(result), 3)
+})
+
+test_that("genCorGen generates data in wide format", {
+  result <- genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE)
+  expect_equal(nrow(result), 100)
+  expect_equal(ncol(result), 4)
+})
+
+test_that("genCorGen assigns custom column names", {
+  result <- genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE, cnames = "a, b, c")
+  expect_equal(names(result), c("id", "a", "b", "c"))
+})
+
+test_that("genCorGen assigns custom column names when wide is not TRUE", {
+  result <- genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", cnames = "x")
+  expect_equal(names(result), c("id", "period", "x"))
+})
+
+test_that("genCorGen assigns custom id name", {
+  result <- genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", idname = "custom_id")
+  expect_true("custom_id" %in% names(result))
+})
+
+test_that("genCorGen generates data with specified correlation structure", {
+  result <- genCorGen(1000, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE)
+  cor_matrix <- cor(result[, .SD, .SDcols = -1])
+  expect_equal(cor_matrix, genCorMat(3, rep(.7, 3)), tolerance = .1, check.attributes = FALSE)
+})
+
+test_that("genCorGen generates data with specified correlation matrix", {
+  cor_matrix <- genCorMat(3)
+  result <- genCorGen(1000, nvars = 3, params1 = 5, dist = "poisson", corMatrix = cor_matrix, wide = TRUE)
+  obs_cor <- cor(result[, .SD, .SDcols = -1])
+  expect_equal(cor_matrix, obs_cor, tolerance = .1, check.attributes = FALSE)
+})
+
+test_that("number of parameters adjusted", {
+  cor_matrix <- genCorMat(3)
+  result <- genCorGen(1000, nvars = 3, params1 = c(5, 2, 1), params2 = 4, dist = "normal", 
+      corMatrix = cor_matrix, wide = TRUE)
+  obs_cor <- cor(result[, .SD, .SDcols = -1])
+  expect_equal(cor_matrix, obs_cor, tolerance = .1, check.attributes = FALSE)
+})
+
+test_that("All distributions work", {
+  means <- c(.3, .2, .1)
+  dd <- genCorGen(1000, nvars = 3, params1 = means, dist = "binary", 
+            rho = .3, corstr = "cs", wide = TRUE)
+  obs_mean <- apply(dd[,-1], 2, mean)
+  expect_equal(obs_mean, means, tolerance = .1, check.attributes = FALSE)
+  
+  lower <- c(4, 2, 6)
+  upper <- c(11, 11, 11)
+  averages <- (lower + upper) / 2
+  
+  dd <- genCorGen(1000, nvars = 3, params1 = lower, params2= upper, 
+                  dist = "uniform", 
+                  rho = .3, corstr = "cs", wide = TRUE)
+  obs_mean <- apply(dd[,-1], 2, mean)
+  expect_equal(obs_mean, averages, tolerance = .1, check.attributes = FALSE)
+  
+  means <- c(4, 6, 1)
+  dd <- genCorGen(1000, nvars = 3, params1 = means, params2= 1, 
+                  dist = "negBinomial", 
+                  rho = .3, corstr = "cs", wide = TRUE)
+  obs_mean <- apply(dd[,-1], 2, mean)
+  expect_equal(obs_mean, means, tolerance = .1, check.attributes = FALSE)
+  
+  means <- c(4, 6, 1)
+  dd <- genCorGen(1000, nvars = 3, params1 = means, params2= 1, 
+                  dist = "gamma", 
+                  rho = .3, corstr = "cs", wide = TRUE)
+  obs_mean <- apply(dd[,-1], 2, mean)
+  expect_equal(obs_mean, means, tolerance = .1, check.attributes = FALSE)
+  
+})
+
+test_that("ep method work", {
+  means <- c(.3, .2, .1)
+  rho <- .3
+  dd <- genCorGen(1000, nvars = 3, params1 = means, dist = "binary", 
+                  rho = rho, corstr = "cs", wide = TRUE, method = "ep")
+  obs_mean <- apply(dd[,-1], 2, mean)
+  obs_cor <- cor(dd[, .SD, .SDcols = -1])
+  cor_matrix <- genCorMat(3, rho = rho)
+  
+  expect_equal(obs_mean, means, tolerance = .1, check.attributes = FALSE)
+  expect_equal(obs_cor, cor_matrix, tolerance = .1, check.attributes = FALSE)
+  
+})
+
+
