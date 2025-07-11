@@ -16,6 +16,36 @@ test_that("assertNotEqual works.", {
   expect_error(assertNotEqual(x = 1, val = 1, class = "simstudy::equal"))
 })
 
+test_that("assertNotNull does not throw an error when all variables are not null", {
+  skip_on_cran()
+  var1 <- 1
+  var2 <- "test"
+  var3 <- list(a = 1, b = 2)
+  
+  expect_silent(assertNotNull(var1 = var1, var2 = var2, var3 = var3))
+})
+
+test_that("assertNotNull throws an error when any variable is null", {
+  skip_on_cran()
+  var1 <- 1
+  var2 <- NULL
+  var3 <- list(a = 1, b = 2)
+  
+  expect_error(assertNotNull(var1 = var1, var2 = var2, var3 = var3), 
+               "var2 should not be NULL!")
+})
+
+test_that("assertNotNull throws an error when multiple variables are null", {
+  skip_on_cran()
+  var1 <- NULL
+  var2 <- NULL
+  var3 <- list(a = 1, b = 2)
+  
+  expect_error(assertNotNull(var1 = var1, var2 = var2, var3 = var3), 
+               "var1 and var2 should not be NULL!")
+})
+
+
 test_that("assertAtLeast works.", {
   skip_on_cran()
   
