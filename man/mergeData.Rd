@@ -2,22 +2,25 @@
 % Please edit documentation in R/utility.R
 \name{mergeData}
 \alias{mergeData}
-\title{Merge two data tables}
+\title{Merge two data.tables without modifying inputs}
 \usage{
-mergeData(dt1, dt2, idvars)
+mergeData(dt1, dt2, idvars, na.rm = TRUE)
 }
 \arguments{
-\item{dt1}{Name of first data.table}
+\item{dt1}{First data.table}
 
-\item{dt2}{Name of second data.table}
+\item{dt2}{Second data.table}
 
-\item{idvars}{Vector of string names to merge on}
+\item{idvars}{Character vector of column names to merge by}
+
+\item{na.rm}{Logical. If TRUE, performs an inner join (removing unmatched rows). 
+If FALSE, performs a full outer join.}
 }
 \value{
-A new data table that merges dt2 with dt1
+A new merged data.table with the original key of dt1 preserved
 }
 \description{
-Merge two data tables
+Merge two data.tables without modifying inputs
 }
 \examples{
 def1 <- defData(varname = "x", formula = 0, variance = 1)

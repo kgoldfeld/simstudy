@@ -293,12 +293,14 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
   return(vars)
 }
 
-#' Merge two data tables
+#' Merge two data.tables without modifying inputs
 #'
-#' @param dt1 Name of first data.table
-#' @param dt2 Name of second data.table
-#' @param idvars Vector of string names to merge on
-#' @return A new data table that merges dt2 with dt1
+#' @param dt1 First data.table
+#' @param dt2 Second data.table
+#' @param idvars Character vector of column names to merge by
+#' @param na.rm Logical. If TRUE, performs an inner join (removing unmatched rows). 
+#'              If FALSE, performs a full outer join.
+#' @return A new merged data.table with the original key of dt1 preserved
 #' @examples
 #' def1 <- defData(varname = "x", formula = 0, variance = 1)
 #' def1 <- defData(varname = "xcat", formula = ".3;.2", dist = "categorical")
@@ -313,15 +315,29 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
 #' dtMerge
 #' @export
 #' @concept utility
-mergeData <- function(dt1, dt2, idvars) {
-  oldkey <- data.table::key(dt1)
-
-  setkeyv(dt1, idvars)
-  setkeyv(dt2, idvars)
-
-  dtmerge <- dt1[dt2]
+mergeData <- function(dt1, dt2, idvars, na.rm = TRUE) {
+  stopifnot(is.data.table(dt1), is.data.table(dt2))
+  stopifnot(all(idvars %in% names(dt1)), all(idvars %in% names(dt2)))
+  
+  .dt1 <- data.table::copy(dt1)
+  .dt2 <- data.table::copy(dt2)
+  
+  oldkey <- data.table::key(dt1)  # original key, unmodified
+  
+  data.table::setkeyv(.dt1, idvars)
+  data.table::setkeyv(.dt2, idvars)
+  
+  join_type <- if (na.rm) FALSE else TRUE
+  dtmerge <- data.table::merge.data.table(.dt1, .dt2, by = idvars, all = join_type)
+  
   data.table::setkeyv(dtmerge, oldkey)
-
+  
+  if (!is.null(oldkey)) {
+    keycols <- oldkey[oldkey %in% names(dtmerge)]
+    othercols <- setdiff(names(dtmerge), keycols)
+    setcolorder(dtmerge, c(keycols, othercols))
+  }
+  
   return(dtmerge[])
 }
 

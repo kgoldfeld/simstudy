@@ -519,6 +519,8 @@ create_test_data <- function() {
 
 # Test that the function runs without errors for valid inputs
 test_that("viewSplines runs without errors for valid inputs", {
+  skip_on_cran()
+  
   test_data <- create_test_data()
   expect_error(viewSplines(test_data$knots, degree = 2, test_data$theta), NA)
 })
@@ -526,6 +528,8 @@ test_that("viewSplines runs without errors for valid inputs", {
 
 # Test that the function returns a ggplot object
 test_that("viewSplines returns a ggplot object", {
+  skip_on_cran()
+  
   test_data <- create_test_data()
   p <- viewSplines(test_data$knots, degree = 2, test_data$theta)
   expect_s3_class(p, "ggplot")
@@ -533,6 +537,8 @@ test_that("viewSplines returns a ggplot object", {
 
 # Test that the plot data is as expected
 test_that("viewSplines generates correct plot data", {
+  skip_on_cran()
+  
   test_data <- create_test_data()
   p <- viewSplines(test_data$knots, degree = 2, test_data$theta)
   
@@ -549,3 +555,590 @@ test_that("viewSplines generates correct plot data", {
   expect_true(all(plot_data$y >= 0 & plot_data$y <= 1))
 })
 
+# mergeData -----
+
+test_that("mergeData basic functionality works", {
+  
+  skip_on_cran()
+  
+  # Setup test data
+  dt1 <- data.table(
+    id = 1:5,
+    x = letters[1:5],
+    value1 = 10:14
+  )
+  
+  dt2 <- data.table(
+    id = c(1, 3, 5, 6),
+    y = LETTERS[1:4],
+    value2 = 20:23
+  )
+  
+  # Test inner join (na.rm = TRUE, default)
+  result_inner <- mergeData(dt1, dt2, "id", na.rm = TRUE)
+  
+  expect_equal(nrow(result_inner), 3)  # Only matching rows
+  expect_equal(result_inner$id, c(1, 3, 5))
+  expect_true(all(c("x", "y", "value1", "value2") %in% names(result_inner)))
+  expect_false(any(is.na(result_inner$value1)))
+  expect_false(any(is.na(result_inner$value2)))
+})
+
+test_that("mergeData outer join works", {
+  
+  skip_on_cran()
+  
+  # Setup test data
+  dt1 <- data.table(
+    id = 1:3,
+    x = letters[1:3]
+  )
+  
+  dt2 <- data.table(
+    id = c(2, 3, 4),
+    y = LETTERS[1:3]
+  )
+  
+  # Test outer join (na.rm = FALSE)
+  result_outer <- mergeData(dt1, dt2, "id", na.rm = FALSE)
+  
+  expect_equal(nrow(result_outer), 4)  # All unique ids: 1,2,3,4
+  expect_equal(sort(result_outer$id), 1:4)
+  expect_true(is.na(result_outer[id == 1, y]))  # id=1 only in dt1
+  expect_true(is.na(result_outer[id == 4, x]))  # id=4 only in dt2
+})
+
+test_that("mergeData preserves original keys", {
+  # Setup test data with keys
+  dt1 <- data.table(
+    id = 1:3,
+    category = c("A", "B", "A"),
+    value1 = 10:12
+  )
+  setkey(dt1, category, id)
+  original_key <- key(dt1)
+  
+  dt2 <- data.table(
+    category = c("A", "B", "C"),
+    value2 = 20:22
+  )
+  
+  result <- mergeData(dt1, dt2, "category")
+  
+  # Check that original key is preserved
+  expect_equal(key(result), original_key)
+  
+  # Check column order - key columns should come first
+  expected_order <- c("category", "id", "value1", "value2")
+  expect_equal(names(result), expected_order)
+})
+
+test_that("mergeData doesn't modify input data.tables", {
+  
+  skip_on_cran()
+  # Setup test data
+  dt1 <- data.table(
+    id = 1:3,
+    x = letters[1:3]
+  )
+  setkey(dt1, x)
+  
+  dt2 <- data.table(
+    id = 2:4,
+    y = LETTERS[1:3]
+  )
+  setkey(dt2, y)
+  
+  # Store original states
+  dt1_original <- copy(dt1)
+  dt2_original <- copy(dt2)
+  dt1_key_original <- key(dt1)
+  dt2_key_original <- key(dt2)
+  
+  # Perform merge
+  result <- mergeData(dt1, dt2, "id")
+  
+  # Check that originals are unchanged
+  expect_equal(dt1, dt1_original)
+  expect_equal(dt2, dt2_original)
+  expect_equal(key(dt1), dt1_key_original)
+  expect_equal(key(dt2), dt2_key_original)
+})
+
+# negbinomGetSizeProb -----
+
+test_that("negbinomGetSizeProb basic functionality works", {
+  mean <- 5
+  dispersion <- 0.5
+  
+  result <- negbinomGetSizeProb(mean, dispersion)
+  
+  # Check return type and structure
+  expect_type(result, "list")
+  expect_named(result, c("size", "prob"))
+  expect_type(result$size, "double")
+  expect_type(result$prob, "double")
+  expect_length(result$size, 1)
+  expect_length(result$prob, 1)
+})
+
+test_that("negbinomGetSizeProb mathematical relationships are correct", {
+  mean <- 10
+  dispersion <- 0.3
+  
+  result <- negbinomGetSizeProb(mean, dispersion)
+  
+  # Expected variance based on simstudy parameterization
+  expected_variance <- mean + (mean^2) * dispersion
+  
+  # Check size calculation: size = mean^2 / (variance - mean)
+  expected_size <- (mean^2) / (expected_variance - mean)
+  expect_equal(result$size, expected_size, tolerance = 1e-10)
+  
+  # Check prob calculation: prob = mean / variance
+  expected_prob <- mean / expected_variance
+  expect_equal(result$prob, expected_prob, tolerance = 1e-10)
+  
+  # Verify negative binomial parameterization relationships
+  # For neg binom with size and prob: mean = size * (1-prob) / prob
+  nb_mean <- result$size * (1 - result$prob) / result$prob
+  expect_equal(nb_mean, mean, tolerance = 1e-10)
+  
+  # For neg binom with size and prob: variance = size * (1-prob) / prob^2
+  nb_variance <- result$size * (1 - result$prob) / (result$prob^2)
+  expect_equal(nb_variance, expected_variance, tolerance = 1e-10)
+})
+
+# updateDef -----
+
+test_that("updateDef basic parameter updates work", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defs <- defData(varname = "x", formula = 0, variance = 3, dist = "normal")
+  defs <- defData(defs, varname = "y", formula = "2 + 3*x", variance = 1, dist = "normal")
+  
+  # Test updating formula
+  updated <- updateDef(dtDefs = defs, changevar = "y", newformula = "x + 5")
+  expect_equal(updated[varname == "y", formula], "x + 5")
+  expect_equal(updated[varname == "x", formula], "0")  # Unchanged
+  
+  # Test updating variance
+  updated <- updateDef(dtDefs = defs, changevar = "x", newvariance = 5)
+  expect_equal(updated[varname == "x", variance], "5")
+  
+  # Test updating distribution
+  updated <- updateDef(dtDefs = defs, changevar = "y", newdist = "poisson")
+  expect_equal(updated[varname == "y", dist], "poisson")
+  
+  # Test updating link
+  updated <- updateDef(dtDefs = defs, changevar = "y", newlink = "log")
+  expect_equal(updated[varname == "y", link], "log")
+})
+
+test_that("updateDef multiple parameter updates work", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defs <- defData(varname = "x", formula = 0, variance = 3, dist = "normal")
+  defs <- defData(defs, varname = "y", formula = "2 + 3*x", variance = 1, dist = "normal")
+  
+  # Test updating multiple parameters at once
+  updated <- updateDef(dtDefs = defs, changevar = "y", 
+                       newformula = "x + 10", newvariance = 2, 
+                       newdist = "poisson", newlink = "log")
+  
+  expect_equal(updated[varname == "y", formula], "x + 10")
+  expect_equal(updated[varname == "y", variance], "2")
+  expect_equal(updated[varname == "y", dist], "poisson")
+  expect_equal(updated[varname == "y", link], "log")
+})
+
+test_that("updateDef remove functionality works", {
+  skip_on_cran()
+  
+  # Create test definition table with 3 variables
+  defs <- defData(varname = "a", formula = 0, variance = 1, dist = "normal")
+  defs <- defData(defs, varname = "w", formula = 0, variance = 3, dist = "normal")
+  defs <- defData(defs, varname = "x", formula = "1 + w", variance = 1, dist = "normal")
+  defs <- defData(defs, varname = "z", formula = 4, variance = 1, dist = "normal")
+  
+  original_nrow <- nrow(defs)
+  
+  # Test removing first variable
+  updated <- updateDef(dtDefs = defs, changevar = "a", remove = TRUE)
+  
+  expect_equal(nrow(updated), original_nrow - 1)
+  expect_false("a" %in% updated$varname)
+  expect_true(all(c("w", "x", "z") %in% updated$varname))
+  
+  # Test removing middle variable
+  updated <- updateDef(dtDefs = defs, changevar = "x", remove = TRUE)
+  
+  expect_equal(nrow(updated), original_nrow - 1)
+  expect_false("x" %in% updated$varname)
+  expect_true(all(c("w", "z") %in% updated$varname))
+  
+  # Test removing last variable
+  updated <- updateDef(dtDefs = defs, changevar = "z", remove = TRUE)
+  expect_equal(nrow(updated), original_nrow - 1)
+  expect_false("z" %in% updated$varname)
+  expect_true(all(c("w", "x") %in% updated$varname))
+})
+
+test_that("updateDef doesn't modify original table", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defs <- defData(varname = "x", formula = 0, variance = 3, dist = "normal")
+  defs <- defData(defs, varname = "y", formula = "2 + 3*x", variance = 1, dist = "normal")
+  
+  # Store original state
+  original_defs <- copy(defs)
+  
+  # Update definition
+  updated <- updateDef(dtDefs = defs, changevar = "y", newformula = "x + 5")
+  
+  # Check that original is unchanged
+  expect_equal(defs, original_defs)
+  expect_false(updated[varname == "y", formula] == defs[varname == "y", formula])
+})
+
+test_that("updateDef error handling works", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defs <- defData(varname = "x", formula = 0, variance = 3, dist = "normal")
+  defs <- defData(defs, varname = "y", formula = "2 + 3*x", variance = 1, dist = "normal")
+  
+  # Test error when variable doesn't exist
+  expect_error(
+    updateDef(dtDefs = defs, changevar = "nonexistent", newformula = "0"),
+    "Variable nonexistent not in definition table"
+  )
+  
+  # Test error when definition table doesn't exist
+  expect_error(
+    updateDef(dtDefs = nonexistent_table, changevar = "x", newformula = "0"),
+    "Data definition does not exist"
+  )
+})
+
+test_that("updateDef handles single variable table", {
+  skip_on_cran()
+  
+  # Create single variable definition
+  defs <- defData(varname = "x", formula = 0, variance = 3, dist = "normal")
+  
+  # Test updating the single variable
+  updated <- updateDef(dtDefs = defs, changevar = "x", newformula = 5, newvariance = 2)
+  
+  expect_equal(nrow(updated), 1)
+  expect_equal(updated[varname == "x", formula], "5")
+  expect_equal(updated[varname == "x", variance], "2")
+  
+  # Test removing the single variable (should result in empty table)
+  updated <- updateDef(dtDefs = defs, changevar = "x", remove = TRUE)
+  expect_equal(nrow(updated), 0)
+})
+
+test_that("updateDef handles updating first variable", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defs <- defData(varname = "x", formula = 0, variance = 3, dist = "normal")
+  defs <- defData(defs, varname = "y", formula = "2 + 3*x", variance = 1, dist = "normal")
+  
+  # Update the first variable (rowvar == 1, triggers prevVars <- "")
+  updated <- updateDef(dtDefs = defs, changevar = "x", newformula = 5, newvariance = 2)
+  
+  expect_equal(updated[varname == "x", formula], "5")
+  expect_equal(updated[varname == "x", variance], "2")
+  expect_equal(updated[varname == "y", formula], "2 + 3*x")  # Unchanged
+})
+
+# updateDefAdd -----
+
+test_that("updateDefAdd basic parameter updates work", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defsA <- defDataAdd(varname = "a", formula = "w + x + z", variance = 2, dist = "normal")
+  defsA <- defDataAdd(defsA, varname = "b", formula = "5", variance = 1, dist = "poisson")
+  
+  # Test updating formula
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "a", newformula = "w + z")
+  expect_equal(updated[varname == "a", formula], "w + z")
+  expect_equal(updated[varname == "b", formula], "5")  # Unchanged
+  
+  # Test updating variance
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "a", newvariance = 3)
+  expect_equal(updated[varname == "a", variance], 3)
+  
+  # Test updating distribution
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "b", newdist = "normal")
+  expect_equal(updated[varname == "b", dist], "normal")
+  
+  # Test updating link
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "a", newlink = "log")
+  expect_equal(updated[varname == "a", link], "log")
+})
+
+test_that("updateDefAdd multiple parameter updates work", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defsA <- defDataAdd(varname = "a", formula = "w + x", variance = 2, dist = "normal")
+  
+  # Test updating multiple parameters at once
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "a", 
+                          newformula = "w + x + z", newvariance = 1, 
+                          newdist = "poisson", newlink = "log")
+  
+  expect_equal(updated[varname == "a", formula], "w + x + z")
+  expect_equal(updated[varname == "a", variance], 1)
+  expect_equal(updated[varname == "a", dist], "poisson")
+  expect_equal(updated[varname == "a", link], "log")
+})
+
+test_that("updateDefAdd remove functionality works", {
+  skip_on_cran()
+  
+  # Create test definition table with multiple variables
+  defsA <- defDataAdd(varname = "a", formula = "w + x", variance = 2, dist = "normal")
+  defsA <- defDataAdd(defsA, varname = "b", formula = "5", variance = 1, dist = "poisson")
+  defsA <- defDataAdd(defsA, varname = "c", formula = "a + b", variance = 1, dist = "normal")
+  
+  original_nrow <- nrow(defsA)
+  
+  # Test removing middle variable
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "b", remove = TRUE)
+  
+  expect_equal(nrow(updated), original_nrow - 1)
+  expect_false("b" %in% updated$varname)
+  expect_true(all(c("a", "c") %in% updated$varname))
+  
+  # Test removing last variable
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "c", remove = TRUE)
+  expect_equal(nrow(updated), original_nrow - 1)
+  expect_false("c" %in% updated$varname)
+  expect_true(all(c("a", "b") %in% updated$varname))
+})
+
+test_that("updateDefAdd doesn't modify original table", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defsA <- defDataAdd(varname = "a", formula = "w + x", variance = 2, dist = "normal")
+  
+  # Store original state
+  original_defsA <- copy(defsA)
+  
+  # Update definition
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "a", newformula = "w + x + z")
+  
+  # Check that original is unchanged
+  expect_equal(defsA, original_defsA)
+  expect_false(updated[varname == "a", formula] == defsA[varname == "a", formula])
+})
+
+test_that("updateDefAdd error handling works", {
+  skip_on_cran()
+  
+  # Create test definition table
+  defsA <- defDataAdd(varname = "a", formula = "w + x", variance = 2, dist = "normal")
+  
+  # Test error when variable doesn't exist
+  expect_error(
+    updateDefAdd(dtDefs = defsA, changevar = "nonexistent", newformula = "0"),
+    "Variable nonexistent not in definition table"
+  )
+  
+  # Test error when definition table doesn't exist
+  expect_error(
+    updateDefAdd(dtDefs = nonexistent_table, changevar = "a", newformula = "0"),
+    "Data definition does not exist"
+  )
+})
+
+test_that("updateDefAdd handles single variable table", {
+  skip_on_cran()
+  
+  # Create single variable definition
+  defsA <- defDataAdd(varname = "a", formula = "w + x", variance = 2, dist = "normal")
+  
+  # Test updating the single variable
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "a", newformula = "w", newvariance = 1)
+  
+  expect_equal(nrow(updated), 1)
+  expect_equal(updated[varname == "a", formula], "w")
+  expect_equal(updated[varname == "a", variance], 1)
+  
+  # Test removing the single variable (should result in empty table)
+  updated <- updateDefAdd(dtDefs = defsA, changevar = "a", remove = TRUE)
+  expect_equal(nrow(updated), 0)
+})
+
+# viewBasis -----
+
+test_that("viewBasis returns ggplot object", {
+  skip_on_cran()
+  skip_if_not_installed("ggplot2")
+  
+  knots <- c(0.25, 0.50, 0.75)
+  
+  # Test with degree 1
+  plot1 <- viewBasis(knots, degree = 1)
+  expect_s3_class(plot1, "ggplot")
+  
+  # Test with degree 2
+  plot2 <- viewBasis(knots, degree = 2)
+  expect_s3_class(plot2, "ggplot")
+  
+  # Test with degree 3
+  plot3 <- viewBasis(knots, degree = 3)
+  expect_s3_class(plot3, "ggplot")
+})
+
+test_that("viewBasis handles different knot configurations", {
+  skip_on_cran()
+  skip_if_not_installed("ggplot2")
+  
+  # Test with single knot
+  plot1 <- viewBasis(knots = 0.5, degree = 1)
+  expect_s3_class(plot1, "ggplot")
+  
+  # Test with multiple knots
+  plot2 <- viewBasis(knots = c(0.2, 0.4, 0.6, 0.8), degree = 2)
+  expect_s3_class(plot2, "ggplot")
+  
+  # Test with knots at boundaries
+  plot3 <- viewBasis(knots = c(0.1, 0.9), degree = 1)
+  expect_s3_class(plot3, "ggplot")
+})
+
+test_that("viewBasis plot has expected structure", {
+  skip_on_cran()
+  skip_if_not_installed("ggplot2")
+  
+  knots <- c(0.25, 0.75)
+  degree <- 2
+  plot <- viewBasis(knots, degree)
+  
+  # Check that plot has data
+  expect_true(nrow(plot$data) > 0)
+  
+  # Check expected number of basis functions
+  # Should be length(knots) + degree + 1 = 2 + 2 + 1 = 5
+  expected_basis_count <- length(knots) + degree + 1
+  actual_basis_count <- length(unique(plot$data$basis))
+  expect_equal(actual_basis_count, expected_basis_count)
+  
+  # Check x values are in [0,1] range
+  expect_true(all(plot$data$x >= 0))
+  expect_true(all(plot$data$x <= 1))
+  
+  # Check that all basis functions have same number of x points
+  basis_counts <- table(plot$data$basis)
+  expect_true(all(basis_counts == basis_counts[1]))
+})
+
+test_that("viewBasis scale breaks include knots", {
+  skip_on_cran()
+  skip_if_not_installed("ggplot2")
+  
+  knots <- c(0.3, 0.7)
+  plot <- viewBasis(knots, degree = 1)
+  
+  # Extract x-axis breaks
+  x_breaks <- plot$scales$scales[[1]]$breaks
+  
+  # Should include 0, all knots, and 1
+  expected_breaks <- c(0, knots, 1)
+  expect_setequal(x_breaks, expected_breaks)
+})
+
+
+test_that("viewBasis error handling for missing ggplot2", {
+  skip_on_cran()
+  
+  # Mock the requireNamespace function to return FALSE
+  with_mocked_bindings(
+    requireNamespace = function(...) FALSE,
+    .package = "base",
+    {
+      expect_error(
+        viewBasis(knots = 0.5, degree = 1),
+        "Package \"ggplot2\" must be installed to use this function"
+      )
+    }
+  )
+})
+
+test_that("viewBasis handles edge cases", {
+  skip_on_cran()
+  skip_if_not_installed("ggplot2")
+  
+  # Test with minimum valid degree
+  plot1 <- viewBasis(knots = 0.5, degree = 1)
+  expect_s3_class(plot1, "ggplot")
+  
+  # Test with many knots
+  many_knots <- seq(0.1, 0.9, by = 0.1)
+  plot2 <- viewBasis(knots = many_knots, degree = 1)
+  expect_s3_class(plot2, "ggplot")
+  
+  # Verify correct number of basis functions for many knots case
+  expected_count <- length(many_knots) + 1 + 1  # length(knots) + degree + 1
+  actual_count <- length(unique(plot2$data$basis))
+  expect_equal(actual_count, expected_count)
+  
+  # Test with no internal knots (empty knots vector)
+  plot3 <- viewBasis(knots = numeric(0), degree = 2)
+  expect_s3_class(plot3, "ggplot")
+  expected_count_empty <- 0 + 2 + 1  # length(knots) + degree + 1
+  actual_count_empty <- length(unique(plot3$data$basis))
+  expect_equal(actual_count_empty, expected_count_empty)
+})
+
+test_that("viewBasis plot theme settings", {
+  skip_on_cran()
+  skip_if_not_installed("ggplot2")
+  
+  plot <- viewBasis(knots = c(0.3, 0.7), degree = 2)
+  
+  # Check that theme exists and has legend position setting
+  expect_true(!is.null(plot$theme))
+  expect_true("legend.position" %in% names(plot$theme))
+  
+  # Check that x-scale limits are set to [0,1]
+  x_scale <- NULL
+  for (scale in plot$scales$scales) {
+    if ("x" %in% scale$aesthetics) {
+      x_scale <- scale
+      break
+    }
+  }
+  expect_true(!is.null(x_scale))
+  expect_equal(x_scale$limits, c(0, 1))
+})
+
+test_that("viewBasis consistency across calls", {
+  skip_on_cran()
+  skip_if_not_installed("ggplot2")
+  
+  knots <- c(0.2, 0.8)
+  degree <- 2
+  
+  # Generate same plot twice
+  plot1 <- viewBasis(knots, degree)
+  plot2 <- viewBasis(knots, degree)
+  
+  # Should have identical data structure
+  expect_equal(dim(plot1$data), dim(plot2$data))
+  expect_equal(names(plot1$data), names(plot2$data))
+  expect_equal(plot1$data$x, plot2$data$x)
+  expect_equal(plot1$data$basis, plot2$data$basis)
+  # Values should be identical (deterministic function)
+  expect_equal(plot1$data$value, plot2$data$value)
+})
