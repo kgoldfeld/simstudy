@@ -1142,3 +1142,222 @@ test_that("viewBasis consistency across calls", {
   # Values should be identical (deterministic function)
   expect_equal(plot1$data$value, plot2$data$value)
 })
+
+# addCompRisk -----
+
+test_that("addCompRisk basic functionality works", {
+  skip_on_cran()
+  
+  # Create test data
+  dt <- data.table(
+    id = 1:5,
+    event1 = c(10, 5, 15, 8, 12),
+    event2 = c(8, 12, 10, 15, 6),
+    event3 = c(20, 18, 5, 25, 30)
+  )
+  
+  result <- addCompRisk(dt, events = c("event1", "event2", "event3"), 
+                        timeName = "time")
+  
+  # Check basic structure
+  expect_true(is.data.table(result))
+  expect_true("time" %in% names(result))
+  expect_true("event" %in% names(result))
+  expect_true("type" %in% names(result))
+  expect_equal(nrow(result), 5)
+  
+  # Check that time is minimum of all events
+  expect_equal(result$time, c(8, 5, 5, 8, 6))  # min for each row
+  
+  # Check that event indicates which event occurred first (1-indexed)
+  expect_equal(result$event, c(2, 1, 3, 1, 2))  # which.min for each row
+  
+  # Check that type matches the event names
+  expect_equal(result$type, c("event2", "event1", "event3", "event1", "event2"))
+})
+
+test_that("addCompRisk handles censoring correctly", {
+  skip_on_cran()
+  
+  # Create test data
+  dt <- data.table(
+    id = 1:4,
+    event1 = c(10, 5, 15, 8),
+    event2 = c(8, 12, 10, 15),
+    censor = c(20, 3, 5, 25)  # censor occurs first for id=2 and id=3
+  )
+  
+  result <- addCompRisk(dt, events = c("event1", "event2", "censor"), 
+                        timeName = "time", censorName = "censor")
+  
+  # Check that censored events have event = 0
+  expect_equal(result[id == 2, event], 0)  # censor time = 3 is minimum
+  expect_equal(result[id == 3, event], 0)  # censor time = 5 equals event2
+  
+  # Check that non-censored events have event > 0
+  expect_true(result[id == 1, event] > 0)
+  expect_true(result[id == 4, event] > 0)
+  
+  # Check that type is correct for censored observations
+  expect_equal(result[id == 2, type], "censor")
+  expect_equal(result[id == 3, type], "censor")
+})
+
+test_that("addCompRisk keepEvents parameter works", {
+  skip_on_cran()
+  
+  # Create test data
+  dt <- data.table(
+    id = 1:3,
+    event1 = c(10, 5, 15),
+    event2 = c(8, 12, 10)
+  )
+  
+  # Test keepEvents = FALSE (default)
+  result1 <- addCompRisk(dt, events = c("event1", "event2"), 
+                         timeName = "time", keepEvents = FALSE)
+  expect_false("event1" %in% names(result1))
+  expect_false("event2" %in% names(result1))
+  
+  # Test keepEvents = TRUE
+  result2 <- addCompRisk(dt, events = c("event1", "event2"), 
+                         timeName = "time", keepEvents = TRUE)
+  expect_true("event1" %in% names(result2))
+  expect_true("event2" %in% names(result2))
+  expect_true("time" %in% names(result2))
+})
+
+test_that("addCompRisk custom column names work", {
+  skip_on_cran()
+  
+  # Create test data
+  dt <- data.table(
+    id = 1:3,
+    event1 = c(10, 5, 15),
+    event2 = c(8, 12, 10)
+  )
+  
+  result <- addCompRisk(dt, events = c("event1", "event2"), 
+                        timeName = "survival_time", 
+                        eventName = "outcome", 
+                        typeName = "outcome_type")
+  
+  expect_true("survival_time" %in% names(result))
+  expect_true("outcome" %in% names(result))
+  expect_true("outcome_type" %in% names(result))
+  expect_false("time" %in% names(result))
+  expect_false("event" %in% names(result))
+  expect_false("type" %in% names(result))
+})
+
+test_that("addCompRisk custom idName works", {
+  skip_on_cran()
+  
+  # Create test data with different id column name
+  dt <- data.table(
+    subject_id = 1:3,
+    event1 = c(10, 5, 15),
+    event2 = c(8, 12, 10)
+  )
+  
+  result <- addCompRisk(dt, events = c("event1", "event2"), 
+                        timeName = "time", idName = "subject_id")
+  
+  expect_true("subject_id" %in% names(result))
+  expect_false("id" %in% names(result))
+  expect_equal(result$subject_id, c(1, 2, 3))
+})
+
+test_that("addCompRisk doesn't modify original data", {
+  skip_on_cran()
+  
+  # Create test data
+  dt <- data.table(
+    id = 1:3,
+    event1 = c(10, 5, 15),
+    event2 = c(8, 12, 10)
+  )
+  
+  original_dt <- copy(dt)
+  
+  result <- addCompRisk(dt, events = c("event1", "event2"), 
+                        timeName = "time")
+  
+  # Original data should be unchanged
+  expect_equal(dt, original_dt)
+  expect_true(nrow(result) == nrow(dt))
+  expect_false("time" %in% names(dt))
+})
+
+test_that("addCompRisk handles ties correctly", {
+  skip_on_cran()
+  
+  # Create test data with ties
+  dt <- data.table(
+    id = 1:3,
+    event1 = c(10, 5, 8),
+    event2 = c(10, 12, 8),  # Ties with event1 for id=1 and id=3
+    event3 = c(15, 5, 10)   # Tie with event1 for id=2
+  )
+  
+  result <- addCompRisk(dt, events = c("event1", "event2", "event3"), 
+                        timeName = "time")
+  
+  # Check that minimum time is correct
+  expect_equal(result$time, c(10, 5, 8))
+  
+  # Check that first occurring event is selected in case of ties
+  # which.min returns the first occurrence
+  expect_equal(result$event, c(1, 1, 1))  # event1 comes first in ties
+  expect_equal(result$type, c("event1", "event1", "event1"))
+})
+
+test_that("addCompRisk error handling works", {
+  skip_on_cran()
+  
+  # Create test data
+  dt <- data.table(
+    id = 1:3,
+    event1 = c(10, 5, 15),
+    event2 = c(8, 12, 10)
+  )
+  
+  # Test missing required arguments
+  expect_error(addCompRisk(events = c("event1", "event2"), timeName = "time"))
+  expect_error(addCompRisk(dt, timeName = "time"))
+  expect_error(addCompRisk(dt, events = c("event1", "event2")))
+  
+  # Test insufficient events
+  expect_error(addCompRisk(dt, events = "event1", timeName = "time"))
+  
+  # Test non-existent event columns
+  expect_error(addCompRisk(dt, events = c("event1", "nonexistent"), timeName = "time"))
+  
+  # Test non-existent id column
+  expect_error(addCompRisk(dt, events = c("event1", "event2"), timeName = "time", idName = "nonexistent"))
+  
+  # Test conflicting column names
+  dt_conflict <- copy(dt)
+  dt_conflict[, event := 1]  # Add conflicting column
+  expect_error(addCompRisk(dt_conflict, events = c("event1", "event2"), timeName = "time"))
+})
+
+test_that("addCompRisk handles single row data", {
+  skip_on_cran()
+  
+  # Create single row test data
+  dt <- data.table(
+    id = 1,
+    event1 = 10,
+    event2 = 8,
+    event3 = 12
+  )
+  
+  result <- addCompRisk(dt, events = c("event1", "event2", "event3"), 
+                        timeName = "time")
+  
+  expect_equal(nrow(result), 1)
+  expect_equal(result$time, 8)
+  expect_equal(result$event, 2)
+  expect_equal(result$type, "event2")
+})
