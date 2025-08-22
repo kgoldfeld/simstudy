@@ -142,3 +142,84 @@ test_that("log odds are converted correctly.", {
   expect_equal(.log2Prob(logOdds), prob)
   expect_equal(.log2Prob(rep(logOdds, 5)), rep(prob, 5))
 })
+
+# .buildCorMat ----
+
+test_that(".buildCorMat handles dimension mismatch and asymmetric matrices", {
+  skip_on_cran()
+  
+  # Test 1: Dimension mismatch - nvars doesn't match correlation matrix size
+  # Create a 3x3 correlation matrix but specify nvars = 4
+  corMatrix_3x3 <- matrix(c(1, 0.5, 0.3,
+                            0.5, 1, 0.4,
+                            0.3, 0.4, 1), nrow = 3)
+  
+  expect_error(
+    simstudy:::.buildCorMat(nvars = 4, corMatrix = corMatrix_3x3, corstr = "cs", rho = 0.5),
+    "Length of mean vector mismatched with correlation matrix"
+  )
+  
+  # Test another dimension mismatch case
+  corMatrix_2x2 <- matrix(c(1, 0.6, 0.6, 1), nrow = 2)
+  
+  expect_error(
+    simstudy:::.buildCorMat(nvars = 3, corMatrix = corMatrix_2x2, corstr = "ar1", rho = 0.7),
+    "Length of mean vector mismatched with correlation matrix"
+  )
+  
+  # Test 2: Non-symmetric correlation matrix
+  # Create an asymmetric matrix
+  asymmetric_matrix <- matrix(c(1, 0.5, 0.3,
+                                0.6, 1, 0.4,  # Note: 0.6 != 0.5
+                                0.3, 0.4, 1), nrow = 3)
+  
+  expect_error(
+    simstudy:::.buildCorMat(nvars = 3, corMatrix = asymmetric_matrix, corstr = "cs", rho = 0.5),
+    "Correlation matrix not symmetric"
+  )
+  
+  # Test another asymmetric case
+  asymmetric_matrix2 <- matrix(c(1, 0.2, 0.7, 1), nrow = 2)  # 0.7 in [1,2] but 0.2 in [2,1]
+  
+  expect_error(
+    simstudy:::.buildCorMat(nvars = 2, corMatrix = asymmetric_matrix2, corstr = "ar1", rho = 0.3),
+    "Correlation matrix not symmetric"
+  )
+})
+
+test_that(".buildCorMat works correctly with valid inputs", {
+  skip_on_cran()
+  
+  # Test that valid correlation matrices work correctly
+  valid_corMatrix <- matrix(c(1, 0.5, 0.3,
+                              0.5, 1, 0.4,
+                              0.3, 0.4, 1), nrow = 3)
+  
+  expect_silent(result1 <- simstudy:::.buildCorMat(
+    nvars = 3, 
+    corMatrix = valid_corMatrix, 
+    corstr = "cs", 
+    rho = 0.5
+  ))
+  expect_identical(result1, valid_corMatrix)
+  
+  # Test with NULL correlation matrix - should generate based on corstr
+  expect_silent(result2 <- simstudy:::.buildCorMat(
+    nvars = 3, 
+    corMatrix = NULL, 
+    corstr = "cs", 
+    rho = 0.6
+  ))
+  expect_true(is.matrix(result2))
+  expect_equal(dim(result2), c(3, 3))
+  
+  # Test ar1 structure generation
+  expect_silent(result3 <- simstudy:::.buildCorMat(
+    nvars = 4, 
+    corMatrix = NULL, 
+    corstr = "ar1", 
+    rho = 0.7
+  ))
+  expect_true(is.matrix(result3))
+  expect_equal(dim(result3), c(4, 4))
+})

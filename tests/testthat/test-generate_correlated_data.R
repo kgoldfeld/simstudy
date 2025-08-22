@@ -1512,4 +1512,152 @@ test_that("addCorGen works with negBinomial distribution", {
   expect_true(all(result$V2 >= 0))
 })
 
+# Some extra
+
+test_that("addCorGen correlation matrix dimension validation errors", {
+  skip_on_cran()
+  
+  # Test 1: List of correlation matrices with wrong dimensions
+  # Create grouped data with specific cluster sizes
+  cluster_sizes <- c(3, 2, 4)
+  dt_varying <- data.table(
+    id = rep(1:3, cluster_sizes),
+    lambda = rep(runif(3, 1, 3), cluster_sizes),
+    mu = rep(runif(3, 1, 5), cluster_sizes),
+    sigma = rep(runif(3, 0.5, 2), cluster_sizes)
+  )
+  
+  # Create list of correlation matrices with WRONG dimensions
+  corMat_list_wrong <- list(
+    # Should be 3x3 for cluster 1 (size 3), but provide 2x2
+    matrix(c(1, 0.6, 0.6, 1), nrow = 2),
+    # Should be 2x2 for cluster 2 (size 2), but provide 3x3
+    matrix(c(1, 0.5, 0.3,
+             0.5, 1, 0.4,
+             0.3, 0.4, 1), nrow = 3),
+    # Should be 4x4 for cluster 3 (size 4), but provide 2x2
+    matrix(c(1, 0.4, 0.4, 1), nrow = 2)
+  )
+  
+  # This should trigger: "Dimensions of correlation matrices in corMatrix not equal to cluster sizes!"
+  expect_error(
+    addCorGen(
+      dtOld = dt_varying,
+      idvar = "id",
+      corMatrix = corMat_list_wrong,
+      dist = "poisson",
+      param1 = "lambda"
+    ),
+    "Dimensions of correlation matrices in corMatrix not equal to cluster sizes!"
+  )
+  
+  # Test 2: Single correlation matrix with wrong dimensions for grouped data
+  # Create grouped data where all clusters have the same size
+  dt_same_size <- data.table(
+    id = rep(1:3, each = 3),  # 3 clusters, each with 3 observations
+    lambda = rep(runif(3, 1, 3), each = 3),
+    mu = rep(runif(3, 1, 5), each = 3)
+  )
+  
+  # Provide a correlation matrix with wrong dimensions (2x2 instead of 3x3)
+  corMat_wrong <- matrix(c(1, 0.5, 0.5, 1), nrow = 2)
+  
+  # This should trigger: "Dimensions of corMatrix not equal to cluster sizes!"
+  expect_error(
+    addCorGen(
+      dtOld = dt_same_size,
+      idvar = "id",
+      corMatrix = corMat_wrong,
+      dist = "poisson", 
+      param1 = "lambda"
+    ),
+    "Dimensions of corMatrix not equal to cluster sizes!"
+  )
+})
+
+test_that("addCorGen grouped data with different nvars scenarios", {
+  skip_on_cran()
+  
+  # Test the case where grouped data has different cluster sizes (same_nvar = FALSE)
+  # This should trigger the "else" branch in the genCorMat call
+  
+  cluster_sizes <- c(2, 3, 4, 2)  # Different sizes
+  dt_different <- data.table(
+    id = rep(1:4, cluster_sizes),
+    lambda = rep(runif(4, 1, 3), cluster_sizes),
+    mu = rep(runif(4, 1, 5), cluster_sizes),
+    sigma = rep(runif(4, 0.5, 2), cluster_sizes)
+  )
+  
+  # Test with rho and corstr (no corMatrix provided)
+  # This should use the different cluster sizes path
+  expect_silent(result1 <- addCorGen(
+    dtOld = dt_different,
+    idvar = "id",
+    rho = 0.6,
+    corstr = "cs",
+    dist = "poisson",
+    param1 = "lambda"
+  ))
+  
+  expect_true(is.data.table(result1))
+  expect_equal(nrow(result1), nrow(dt_different))
+  expect_true("X" %in% names(result1))
+  
+  # Verify each cluster has the expected number of observations
+  cluster_counts <- dt_different[, .N, by = id]
+  result_counts <- result1[, .N, by = id]
+  expect_equal(cluster_counts$N, result_counts$N)
+  expect_equal(cluster_counts$N, cluster_sizes)
+  
+  # Test the same scenario with ar1 correlation structure
+  expect_silent(result2 <- addCorGen(
+    dtOld = dt_different,
+    idvar = "id", 
+    rho = 0.4,
+    corstr = "ar1",
+    dist = "normal",
+    param1 = "mu",
+    param2 = "sigma"
+  ))
+  
+  expect_true(is.data.table(result2))
+  expect_equal(nrow(result2), nrow(dt_different))
+})
+
+test_that("addCorGen grouped data with same cluster sizes", {
+  skip_on_cran()
+  
+  # Test the case where grouped data has same cluster sizes (same_nvar = TRUE) 
+  # This should trigger the "if (same_nvar)" branch
+  
+  dt_same <- data.table(
+    id = rep(1:4, each = 3),  # 4 clusters, each with exactly 3 observations
+    lambda = rep(runif(4, 1, 3), each = 3),
+    prob = rep(runif(4, 0.2, 0.8), each = 3)
+  )
+  
+  # Test with rho and corstr (no corMatrix provided)
+  # This should use the same cluster size path: genCorMat(nvars = counts[1], ...)
+  expect_silent(result <- addCorGen(
+    dtOld = dt_same,
+    idvar = "id",
+    rho = 0.7,
+    corstr = "cs", 
+    dist = "binary",
+    param1 = "prob"
+  ))
+  
+  expect_true(is.data.table(result))
+  expect_equal(nrow(result), nrow(dt_same))
+  expect_true("X" %in% names(result))
+  expect_true(all(result$X %in% c(0, 1)))
+  
+  # Verify all clusters have the same size
+  cluster_counts <- dt_same[, .N, by = id]
+  expect_true(all(cluster_counts$N == 3))
+  result_counts <- result[, .N, by = id] 
+  expect_equal(cluster_counts$N, result_counts$N)
+})
+
 
