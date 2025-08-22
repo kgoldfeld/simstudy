@@ -22,6 +22,80 @@ test_that("Correlation boundaries for binary variables are correct", {
 
 # .genBinEP ----
 
+test_that(".genBinEP handles non-positive definite correlation matrices", {
+  skip_on_cran()
+  
+  # Test with tcorr as a correlation matrix that could become non-PD
+  n <- 20
+  p <- rep(0.3, 5)  # 5 periods
+  
+  # Create a correlation matrix that might cause issues
+  tcorr <- matrix(0.9, nrow = 5, ncol = 5)
+  diag(tcorr) <- 1
+  
+  expect_silent(result1 <- simstudy:::.genBinEP(n, p, tcorr))
+  expect_true(is.data.table(result1))
+  expect_equal(nrow(result1), n * length(p))
+  
+  # Test with a correlation matrix that's more likely to become non-PD
+  # Create a matrix with very high correlations that might not be PD
+  p2 <- rep(0.4, 6)  # 6 periods
+  tcorr2 <- matrix(0.95, nrow = 6, ncol = 6)
+  diag(tcorr2) <- 1
+  
+  expect_silent(result2 <- simstudy:::.genBinEP(n, p2, tcorr2))
+  expect_true(is.data.table(result2))
+  expect_equal(nrow(result2), n * length(p2))
+  
+  # Test with a correlation matrix designed to potentially need nearPD correction
+  p3 <- rep(0.2, 8)  # 8 periods
+  tcorr3 <- matrix(0.98, nrow = 8, ncol = 8)
+  diag(tcorr3) <- 1
+  
+  expect_silent(result3 <- simstudy:::.genBinEP(n, p3, tcorr3))
+  expect_true(is.data.table(result3))
+  expect_equal(nrow(result3), n * length(p3))
+  expect_true(all(c("id", "seq", "X", "period", "seqid") %in% names(result3)))
+  expect_true(all(result3$X %in% c(0, 1)))  # Should be binary outcomes
+})
+
+# Test with correlation matrices that are more likely to need nearPD correction
+test_that(".genBinEP works with correlation matrices that may become non-PD", {
+  skip_on_cran()
+  
+  # Create a correlation matrix that's close to being singular
+  # This is more likely to trigger the nearPD correction
+  n <- 15
+  p <- rep(0.25, 10)  # 10 periods
+  
+  # Create a correlation matrix with a pattern that might cause numerical issues
+  tcorr <- matrix(0.97, nrow = 10, ncol = 10)
+  diag(tcorr) <- 1
+  # Add some variation to make it more realistic but potentially problematic
+  tcorr[1:5, 6:10] <- 0.99
+  tcorr[6:10, 1:5] <- 0.99
+  
+  expect_silent(result <- simstudy:::.genBinEP(n, p, tcorr))
+  expect_true(is.data.table(result))
+  expect_equal(nrow(result), n * length(p))
+  
+  # Test with an even more problematic correlation structure
+  # Create a matrix where some correlations are very close to perfect
+  p2 <- rep(0.3, 12)  # 12 periods
+  tcorr2 <- matrix(0.85, nrow = 12, ncol = 12)
+  diag(tcorr2) <- 1
+  # Make some correlations extremely high
+  for(i in 1:11) {
+    tcorr2[i, i+1] <- 0.995
+    tcorr2[i+1, i] <- 0.995
+  }
+  
+  expect_silent(result2 <- simstudy:::.genBinEP(n, p2, tcorr2))
+  expect_true(is.data.table(result2))
+  expect_equal(nrow(result2), n * length(p2))
+})
+
+# blockExchangeMat ----
 
 test_that("blockExchangeMat works", {
   skip_on_cran()
@@ -74,6 +148,64 @@ test_that("blockExchangeMat errors correctly.", {
   expect_error(blockExchangeMat(ninds = 3, nperiods =  2, rho_w = c(0.8, .7,.6), rho_b = 0.7, rho_a = c(.4, .3), pattern = "cohort", nclusters = 3), class = "simstudy::lengthMismatch")
 })
 
+test_that("blockExchangeMat handles different ninds configurations", {
+  skip_on_cran()
+  
+  # Test case 1: length(ninds) == nclusters
+  # Each cluster has a different sample size, but constant across periods within cluster
+  expect_silent(blockExchangeMat(
+    ninds = c(3, 5), 
+    nperiods = 4, 
+    rho_w = 0.7, 
+    rho_b = 0.4, 
+    nclusters = 2
+  ))
+  
+  # Test case 1 with cohort pattern
+  expect_silent(blockExchangeMat(
+    ninds = c(3, 5, 4), 
+    nperiods = 3, 
+    rho_w = 0.6, 
+    rho_b = 0.3, 
+    rho_a = 0.5,
+    pattern = "cohort",
+    nclusters = 3
+  ))
+
+  # Test case 2: length(ninds) == nclusters * nperiods (cross-sectional only)
+  # Sample size varies by both cluster and period
+  expect_silent(blockExchangeMat(
+    ninds = c(2, 3, 4, 5, 1, 6), # 2 clusters, 3 periods each = 6 values
+    nperiods = 3, 
+    rho_w = 0.8, 
+    rho_b = 0.5, 
+    nclusters = 2
+  ))
+  
+  # Test case 2 with varying correlation parameters
+  expect_silent(blockExchangeMat(
+    ninds = c(3, 4, 2, 1, 5, 3, 2, 4), # 2 clusters, 4 periods each = 8 values
+    nperiods = 4, 
+    rho_w = c(0.7, 0.6), 
+    rho_b = c(0.4, 0.3), 
+    nclusters = 2
+  ))
+  
+  # Verify the error for cohort pattern with varying ninds across periods
+  expect_error(
+    blockExchangeMat(
+      ninds = c(3, 4, 2, 1), # 2 clusters, 2 periods each = 4 values
+      nperiods = 2, 
+      rho_w = 0.7, 
+      rho_b = 0.4,
+      rho_a = 0.5,
+      pattern = "cohort",
+      nclusters = 2
+    ),
+    "The number of individuals per period must be constant across periods with a cohort design"
+  )
+})
+
 ###
 
 test_that("blockDecayMat works", {
@@ -118,6 +250,80 @@ test_that("blockDecayMat errors correctly.", {
   expect_error(blockDecayMat(ninds = c(3, 2, 4, 3), nperiods =  2, rho_w = 0.8, r=.5, nclusters = 3))
   expect_error(blockDecayMat(ninds = 3, nperiods =  2, rho_w = c(0.8, .7), r=.3, nclusters = 3), class = "simstudy::lengthMismatch")
   expect_error(blockDecayMat(ninds = 3, nperiods =  2, rho_w = c(0.8, .7,.6), r = c(0.7,.6), nclusters = 3), class = "simstudy::lengthMismatch")
+})
+
+test_that("blockDecayMat handles different ninds configurations", {
+  skip_on_cran()
+  
+  # Test case 1: length(ninds) == nclusters
+  # Each cluster has a different sample size, but constant across periods within cluster
+  expect_silent(blockDecayMat(
+    ninds = c(3, 5), 
+    nperiods = 4, 
+    rho_w = 0.7, 
+    r = 0.8,
+    nclusters = 2
+  ))
+  
+  # Test case 1 with cohort pattern
+  expect_silent(blockDecayMat(
+    ninds = c(3, 5, 4), 
+    nperiods = 3, 
+    rho_w = 0.6, 
+    r = 0.7,
+    pattern = "cohort",
+    nclusters = 3
+  ))
+  
+  # Test case 1 with varying correlation parameters per cluster
+  expect_silent(blockDecayMat(
+    ninds = c(4, 6), 
+    nperiods = 3, 
+    rho_w = c(0.7, 0.5), 
+    r = c(0.8, 0.6),
+    nclusters = 2
+  ))
+  
+  # Test case 2: length(ninds) == nclusters * nperiods (cross-sectional only)
+  # Sample size varies by both cluster and period
+  expect_silent(blockDecayMat(
+    ninds = c(2, 3, 4, 5, 1, 6), # 2 clusters, 3 periods each = 6 values
+    nperiods = 3, 
+    rho_w = 0.8, 
+    r = 0.7,
+    nclusters = 2
+  ))
+  
+  # Test case 2 with varying correlation parameters
+  expect_silent(blockDecayMat(
+    ninds = c(3, 4, 2, 1, 5, 3, 2, 4), # 2 clusters, 4 periods each = 8 values
+    nperiods = 4, 
+    rho_w = c(0.7, 0.6), 
+    r = c(0.8, 0.5),
+    nclusters = 2
+  ))
+  
+  # Test case 2 with single correlation parameters applied to all clusters
+  expect_silent(blockDecayMat(
+    ninds = c(2, 4, 3, 1, 2, 5), # 2 clusters, 3 periods each = 6 values
+    nperiods = 3, 
+    rho_w = 0.6, 
+    r = 0.9,
+    nclusters = 2
+  ))
+  
+  # Verify the error for cohort pattern with varying ninds across periods
+  expect_error(
+    blockDecayMat(
+      ninds = c(3, 4, 2, 1), # 2 clusters, 2 periods each = 4 values
+      nperiods = 2, 
+      rho_w = 0.7, 
+      r = 0.8,
+      pattern = "cohort",
+      nclusters = 2
+    ),
+    "The number of individuals per period must be constant across periods with a cohort design"
+  )
 })
 
 ###
@@ -450,6 +656,150 @@ test_that("Distribution type error for dist", {
 
 # addCorFlex <-----
 
+create_test_defs <- function(distributions = c("normal"), varnames = c("X1")) {
+  defs <- data.table(
+    varname = varnames,
+    formula = rep("1", length(varnames)),
+    dist = distributions,
+    variance = rep(1, length(varnames)),
+    link = rep("identity", length(varnames))
+  )
+  return(defs)
+}
+
+# Test suite for addCorFlex function
+test_that("addCorFlex basic functionality works", {
+  # Create test data
+  dt <- genData(10)
+  defs <- create_test_defs(varnames = c("X1", "X2"))
+  
+  # Test basic execution
+  result <- addCorFlex(dt, defs, rho = 0.5)
+  
+  # Basic checks
+  expect_s3_class(result, "data.table")
+  expect_equal(nrow(result), 10)
+  expect_true("X1" %in% names(result))
+  expect_true("id" %in% names(result))
+})
+
+test_that("addCorFlex parameter validation works", {
+  dt <- data.table(5)
+  
+  # Test unsupported distribution error
+  invalid_defs <- data.table(
+    varname = "X1",
+    formula = "0",
+    dist = "beta",  # unsupported distribution
+    variance = 1,
+    link = "identity"
+  )
+  
+  expect_error(
+    addCorFlex(dt, invalid_defs),
+    "Only implemented for the following distributions"
+  )
+})
+
+test_that("addCorFlex works with different correlation structures", {
+  dt <- genData(5)
+  defs <- create_test_defs(c("normal", "normal"), c("X1", "X2"))
+  
+  # Test compound symmetry structure
+  result_cs <- addCorFlex(dt, defs, rho = 0.3, corstr = "cs")
+  expect_s3_class(result_cs, "data.table")
+  expect_equal(ncol(result_cs), 3)  # id + X1 + X2
+  
+  # Test autoregressive structure
+  result_ar1 <- addCorFlex(dt, defs, rho = 0.3, corstr = "ar1")
+  expect_s3_class(result_ar1, "data.table")
+  expect_equal(ncol(result_ar1), 3)
+})
+
+test_that("addCorFlex works with tau parameter", {
+  dt <- genData(5)
+  defs <- create_test_defs()
+  
+  # Test with tau parameter (should override rho)
+  result <- addCorFlex(dt, defs, rho = 0.5, tau = 0.3)
+  
+  expect_s3_class(result, "data.table")
+  expect_equal(nrow(result), 5)
+})
+
+test_that("addCorFlex works with correlation matrix", {
+  dt <- genData(5)
+  defs <- create_test_defs(c("normal", "normal"), c("X1", "X2"))
+  
+  # Create a valid correlation matrix
+  corMatrix <- matrix(c(1, 0.4, 0.4, 1), nrow = 2)
+  
+  result <- addCorFlex(dt, defs, corMatrix = corMatrix)
+  
+  expect_s3_class(result, "data.table")
+  expect_equal(ncol(result), 3)
+})
+
+test_that("addCorFlex works with normal distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs("normal", "norm_var")
+  
+  result <- addCorFlex(dt, defs, rho = 0.2)
+  
+  expect_s3_class(result, "data.table")
+  expect_true("norm_var" %in% names(result))
+  expect_equal(nrow(result), 10)
+  expect_true(is.numeric(result$norm_var))
+})
+
+test_that("addCorFlex works with binary distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs("binary", "bin_var")
+  
+  result <- addCorFlex(dt, defs, rho = 0.3)
+  
+  expect_s3_class(result, "data.table")
+  expect_true("bin_var" %in% names(result))
+  expect_true(all(result$bin_var %in% c(0, 1)))
+})
+
+test_that("addCorFlex works with poisson distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs("poisson", "pois_var")
+  
+  result <- addCorFlex(dt, defs, rho = 0.4)
+  
+  expect_s3_class(result, "data.table")
+  expect_true("pois_var" %in% names(result))
+  expect_true(all(result$pois_var >= 0))
+  expect_true(all(result$pois_var == floor(result$pois_var)))  # integers
+})
+
+test_that("addCorFlex works with gamma distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs(distributions = "gamma", varnames = "gamma_var")
+  
+  result <- addCorFlex(dt, defs, rho = 0.1)
+  
+  expect_s3_class(result, "data.table")
+  expect_true("gamma_var" %in% names(result))
+  expect_true(all(result$gamma_var > 0))  # gamma values are positive
+})
+
+test_that("addCorFlex works with negative binomial distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs("negBinomial", "nb_var")
+  
+  result <- addCorFlex(dt, defs, rho = 0.2)
+  
+  expect_s3_class(result, "data.table")
+  expect_true("nb_var" %in% names(result))
+  expect_true(all(result$nb_var >= 0))
+  expect_true(all(result$nb_var == floor(result$nb_var)))  # integers
+})
+
+## Old tests
+
 test_that("addCorFlex handles invalid distribution", {
   dt <- data.table(id = 1:10)
   defs <- data.table(varname = "A", formula = "1", dist = "invalid", variance = 1)
@@ -482,6 +832,85 @@ test_that("addCorFlex generates data with specified correlation structure", {
   obs_matrix <- cor(result[, .SD, .SDcols = c("A", "B", "C")])
   cor_matrix <- genCorMat(3, rho = .4)
   expect_equal(cor_matrix, obs_matrix, tolerance = .1, check.attributes = FALSE)
+})
+
+test_that("addCorFlex works with multiple variables of different distributions", {
+  dt <- genData(10)
+  defs <- data.table(
+    varname = c("norm_var", "bin_var", "pois_var"),
+    formula = c("0", ".5", "1"),
+    dist = c("normal", "binary", "poisson"),
+    variance = c(1, 0, 0),
+    link = c("identity", "identity", "identity")
+  )
+  
+  result <- addCorFlex(dt, defs, rho = 0.3)
+  
+  expect_s3_class(result, "data.table")
+  expect_equal(ncol(result), 4)  # id + 3 variables
+  expect_true(all(c("norm_var", "bin_var", "pois_var") %in% names(result)))
+})
+
+test_that("addCorFlex preserves original data columns", {
+  
+  samp_letter <- sample(letters, 5, replace = TRUE)
+  samp_num <- sample(1:1000, 5, replace = TRUE)
+  
+  
+  defs <- 
+    defData(varname = "existing_var", formula = "..samp_letter", dist = "nonrandom") |>
+    defData(varname = "numeric_var", formula = "..samp_num", dist = "nonrandom")
+  
+  dt <- genData(5, defs)
+  
+  defs <- create_test_defs("normal", "new_var")
+  
+  result <- addCorFlex(dt, defs, rho = 0.1)
+  
+  expect_true(all(c("id", "existing_var", "numeric_var") %in% names(result)))
+  expect_equal(result$existing_var, samp_letter)
+  expect_equal(result$numeric_var, samp_num)
+})
+
+test_that("addCorFlex handles edge cases for correlation coefficients", {
+  dt <- genData(5)
+  defs <- create_test_defs()
+  
+  # Test rho = 0 (no correlation)
+  result_zero <- addCorFlex(dt, defs, rho = 0)
+  expect_s3_class(result_zero, "data.table")
+  
+  # Test rho = 1 (perfect positive correlation)
+  result_one <- addCorFlex(dt, defs, rho = 1)
+  expect_s3_class(result_one, "data.table")
+  
+  # Test rho = -1 (perfect negative correlation)
+  result_neg_one <- addCorFlex(dt, defs, rho = -1)
+  expect_s3_class(result_neg_one, "data.table")
+})
+
+test_that("addCorFlex works with custom environment", {
+  dt <- genData(5)
+  defs <- create_test_defs()
+  
+  # Create custom environment
+  custom_env <- new.env()
+  
+  result <- addCorFlex(dt, defs, rho = 0.2, envir = custom_env)
+  
+  expect_s3_class(result, "data.table")
+  expect_equal(nrow(result), 5)
+})
+
+test_that("addCorFlex with single variable", {
+  dt <- genData(10)
+  defs <- create_test_defs("normal", "single_var")
+  
+  result <- addCorFlex(dt, defs, rho = 0.5)
+  
+  expect_s3_class(result, "data.table")
+  expect_equal(ncol(result), 2)  # id + single_var
+  expect_true("single_var" %in% names(result))
 })
 
 # test_that("addCorFlex generates data with specified correlation matrix", {
@@ -683,6 +1112,404 @@ test_that("ep method work", {
   expect_equal(obs_mean, means, tolerance = .1, check.attributes = FALSE)
   expect_equal(obs_cor, cor_matrix, tolerance = .1, check.attributes = FALSE)
   
+})
+
+#### addCorGen
+
+# Test suite for addCorGen function
+# This assumes you're using testthat framework
+
+library(testthat)
+library(data.table)
+
+# Helper function to create sample data
+create_sample_data <- function(n = 10, grouped = FALSE) {
+  if (!grouped) {
+    # Ungrouped data (one row per id)
+    dt <- data.table(
+      id = 1:n,
+      mu = runif(n, 1, 5),
+      sigma = runif(n, 0.5, 2),
+      prob = runif(n, 0.2, 0.8),
+      lambda = runif(n, 1, 3),
+      min_val = runif(n, 0, 1),
+      max_val = runif(n, 2, 5)
+    )
+  } else {
+    # Grouped data (multiple rows per id)
+    cluster_sizes <- sample(2:5, n, replace = TRUE)
+    dt <- data.table(
+      id = rep(1:n, cluster_sizes),
+      mu = rep(runif(n, 1, 5), cluster_sizes),
+      sigma = rep(runif(n, 0.5, 2), cluster_sizes),
+      prob = rep(runif(n, 0.2, 0.8), cluster_sizes),
+      lambda = rep(runif(n, 1, 3), cluster_sizes)
+    )
+  }
+  return(dt)
+}
+
+# Test 1: Basic functionality tests
+test_that("addCorGen basic functionality works", {
+  dt <- create_sample_data(5)
+  
+  # Test normal distribution
+  result <- addCorGen(
+    dtOld = dt, 
+    idvar = "id", 
+    nvars = 3, 
+    rho = 0.5, 
+    corstr = "cs",
+    dist = "normal", 
+    param1 = "mu", 
+    param2 = "sigma"
+  )
+  
+  expect_true(is.data.table(result))
+  expect_equal(nrow(result), nrow(dt))
+  expect_equal(ncol(result), ncol(dt) + 3)
+  expect_true(all(c("V1", "V2", "V3") %in% names(result)))
+})
+
+# Test 2: Argument validation tests
+test_that("addCorGen validates arguments correctly", {
+  dt <- create_sample_data(5)
+  
+  # Missing required arguments
+  expect_error(addCorGen(idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", param1 = "mu"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal"))
+  
+  # Invalid distribution
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "invalid", param1 = "mu"))
+  
+  # Invalid method
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", method = "invalid"))
+  
+  # Non-data.table input
+  expect_error(addCorGen(dtOld = data.frame(id = 1:5, mu = 1:5), idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
+  
+  # Missing columns
+  expect_error(addCorGen(dtOld = dt, idvar = "missing_col", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "missing_param", param2 = "sigma"))
+})
+
+# Test 3: Parameter validation for different distributions
+test_that("addCorGen validates parameters for different distributions", {
+  dt <- create_sample_data(5)
+  
+  # Too many parameters for poisson
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "poisson", param1 = "lambda", param2 = "sigma"))
+  
+  # Too many parameters for binary
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "binary", param1 = "prob", param2 = "sigma"))
+  
+  # Too few parameters for gamma
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "gamma", param1 = "mu"))
+  
+  # Too few parameters for normal
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
+  
+  # EP method only for binary
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", method = "ep"))
+})
+
+# Test 4: Wide format (ungrouped data) tests
+test_that("addCorGen works with wide format (ungrouped data)", {
+  dt <- create_sample_data(5)
+  
+  # Test all distributions with wide format
+  # Poisson
+  result_pois <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "poisson", param1 = "lambda")
+  expect_equal(nrow(result_pois), nrow(dt))
+  expect_equal(ncol(result_pois), ncol(dt) + 3)
+  
+  # Binary
+  result_bin <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "binary", param1 = "prob")
+  expect_equal(nrow(result_bin), nrow(dt))
+  expect_true(all(result_bin$V1 %in% c(0, 1)))
+  
+  # Gamma
+  result_gamma <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "gamma", param1 = "mu", param2 = "sigma")
+  expect_equal(nrow(result_gamma), nrow(dt))
+  expect_true(all(result_gamma$V1 > 0))
+  
+  # Uniform
+  result_unif <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "uniform", param1 = "min_val", param2 = "max_val")
+  expect_equal(nrow(result_unif), nrow(dt))
+  
+  # Normal
+  result_norm <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(nrow(result_norm), nrow(dt))
+})
+
+# Test 5: Long format (grouped data) tests
+test_that("addCorGen works with long format (grouped data)", {
+  dt <- create_sample_data(5, grouped = TRUE)
+  
+  # Test with grouped data
+  result <- addCorGen(dtOld = dt, idvar = "id", rho = 0.6, corstr = "ar1", dist = "poisson", param1 = "lambda")
+  
+  expect_equal(nrow(result), nrow(dt))
+  expect_equal(ncol(result), ncol(dt) + 1)
+  expect_true("X" %in% names(result))
+  
+  # Check that each group has correlated values
+  cluster_counts <- dt[, .N, by = id]
+  result_counts <- result[, .N, by = id]
+  expect_equal(cluster_counts$N, result_counts$N)
+})
+
+# Test 6: Correlation structure tests
+test_that("addCorGen works with different correlation structures", {
+  dt <- create_sample_data(5)
+  
+  # Compound symmetry
+  result_cs <- addCorGen(dtOld = dt, idvar = "id", nvars = 4, rho = 0.3, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(ncol(result_cs), ncol(dt) + 4)
+  
+  # Autoregressive
+  result_ar1 <- addCorGen(dtOld = dt, idvar = "id", nvars = 4, rho = 0.3, corstr = "ar1", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(ncol(result_ar1), ncol(dt) + 4)
+})
+
+# Test 7: Custom correlation matrix tests
+test_that("addCorGen works with custom correlation matrices", {
+  dt <- create_sample_data(5)
+  
+  # Single correlation matrix for wide format
+  corMat <- matrix(c(1, 0.5, 0.3, 
+                     0.5, 1, 0.2, 
+                     0.3, 0.2, 1), nrow = 3)
+  
+  result <- addCorGen(dtOld = dt, idvar = "id", corMatrix = corMat, dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(ncol(result), ncol(dt) + 3)
+  
+  # # Test with grouped data and single correlation matrix
+  # dt_grouped <- create_sample_data(3, grouped = TRUE)
+  # # Convert to grouped format with same cluster size
+  # 
+  # 
+  # corMat_grouped <- matrix(c(1, 0.5, 0.3, 
+  #                            0.5, 1, 0.2, 
+  #                            0.3, 0.2, 1), nrow = 3)
+  # 
+  # result <- addCorGen(dtOld = dt_grouped, idvar = "id", corMatrix = corMat_grouped, 
+  #                     dist = "normal", param1 = "mu", param2 = "sigma")
+  # expect_equal(ncol(result), ncol(dt_grouped) + 1)
+  
+  # This should work for grouped data with equal cluster sizes
+  # Note: You might need to adjust this test based on your actual data structure
+})
+
+# Test 7a: List of correlation matrices for grouped data with varying cluster sizes
+test_that("addCorGen works with list of correlation matrices for varying cluster sizes", {
+  # Create grouped data with different cluster sizes
+  cluster_sizes <- c(2, 3, 4)  # Different sizes for each cluster
+  dt_varying <- data.table(
+    id = rep(1:3, cluster_sizes),
+    mu = rep(runif(3, 1, 5), cluster_sizes),
+    sigma = rep(runif(3, 0.5, 2), cluster_sizes),
+    lambda = rep(runif(3, 1, 3), cluster_sizes),
+    prob = rep(runif(3, 0.2, 0.8), cluster_sizes)
+  )
+  
+  # Create list of correlation matrices matching cluster sizes
+  corMat_list <- list(
+    # 2x2 matrix for cluster 1 (size 2)
+    matrix(c(1, 0.6, 0.6, 1), nrow = 2),
+    # 3x3 matrix for cluster 2 (size 3)  
+    matrix(c(1, 0.5, 0.3,
+             0.5, 1, 0.4,
+             0.3, 0.4, 1), nrow = 3),
+    # 4x4 matrix for cluster 3 (size 4)
+    matrix(c(1, 0.4, 0.3, 0.2,
+             0.4, 1, 0.5, 0.3,
+             0.3, 0.5, 1, 0.4,
+             0.2, 0.3, 0.4, 1), nrow = 4)
+  )
+  
+  # Test with list of correlation matrices
+  result_list <- addCorGen(
+    dtOld = dt_varying,
+    idvar = "id",
+    corMatrix = corMat_list,
+    dist = "poisson",
+    param1 = "lambda"
+  )
+  
+  expect_equal(nrow(result_list), nrow(dt_varying))
+  expect_equal(ncol(result_list), ncol(dt_varying) + 1)
+  expect_true("X" %in% names(result_list))
+  
+  # Check that each cluster has the expected number of observations
+  cluster_counts <- dt_varying[, .N, by = id]
+  result_counts <- result_list[, .N, by = id]
+  expect_equal(cluster_counts$N, result_counts$N)
+  expect_equal(cluster_counts$N, cluster_sizes)
+})
+
+# Test 8: Custom column names tests
+test_that("addCorGen works with custom column names", {
+  dt <- create_sample_data(5)
+  
+  # Wide format with custom names
+  result_wide <- addCorGen(
+    dtOld = dt, 
+    idvar = "id", 
+    nvars = 3, 
+    rho = 0.4, 
+    corstr = "cs", 
+    dist = "normal", 
+    param1 = "mu", 
+    param2 = "sigma",
+    cnames = "var1, var2, var3"
+  )
+  
+  expect_true(all(c("var1", "var2", "var3") %in% names(result_wide)))
+  
+  # Long format with custom name
+  dt_grouped <- create_sample_data(5, grouped = TRUE)
+  result_long <- addCorGen(
+    dtOld = dt_grouped, 
+    idvar = "id", 
+    rho = 0.4, 
+    corstr = "cs", 
+    dist = "poisson", 
+    param1 = "lambda",
+    cnames = "custom_var"
+  )
+  
+  expect_true("custom_var" %in% names(result_long))
+})
+
+# Test 9: Custom column names validation
+test_that("addCorGen validates custom column names correctly", {
+  dt <- create_sample_data(5)
+  dt_grouped <- create_sample_data(5, grouped = TRUE)
+  
+  # Wrong number of names for wide format
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.4, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", cnames = "var1, var2"))
+  
+  # Too many names for long format
+  expect_error(addCorGen(dtOld = dt_grouped, idvar = "id", rho = 0.4, corstr = "cs", dist = "poisson", param1 = "lambda", cnames = "var1, var2"))
+})
+
+# Test 10: Method-specific tests
+test_that("addCorGen EP method works correctly", {
+  dt <- create_sample_data(5)
+  
+  # EP method only works with binary
+  result_ep <- addCorGen(
+    dtOld = dt, 
+    idvar = "id", 
+    nvars = 3, 
+    rho = 0.4, 
+    corstr = "cs", 
+    dist = "binary", 
+    param1 = "prob",
+    method = "ep"
+  )
+  
+  expect_equal(nrow(result_ep), nrow(dt))
+  expect_true(all(result_ep$V1 %in% c(0, 1)))
+  expect_true(all(result_ep$V2 %in% c(0, 1)))
+  expect_true(all(result_ep$V3 %in% c(0, 1)))
+})
+
+# Test 11: Edge cases and boundary conditions
+test_that("addCorGen handles edge cases", {
+  dt <- create_sample_data(2)
+  
+  # Minimum nvars
+  result_min <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(ncol(result_min), ncol(dt) + 2)
+  
+  # High correlation
+  result_high_cor <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = 0.99, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(nrow(result_high_cor), nrow(dt))
+  
+  # Negative correlation
+  result_neg_cor <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = -0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(nrow(result_neg_cor), nrow(dt))
+})
+
+# Test 12: Missing correlation parameters for wide format
+test_that("addCorGen requires correlation parameters for wide format", {
+  dt <- create_sample_data(5)
+  
+  # Missing nvars, rho, corstr and no corMatrix
+  expect_error(addCorGen(dtOld = dt, idvar = "id", dist = "normal", param1 = "mu", param2 = "sigma"))
+  
+  # Missing some correlation parameters
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, dist = "normal", param1 = "mu", param2 = "sigma"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
+})
+
+# Test 13: Missing correlation parameters for long format
+test_that("addCorGen requires correlation parameters for long format", {
+  dt <- create_sample_data(5, grouped = TRUE)
+  
+  # Missing rho, corstr and no corMatrix
+  expect_error(addCorGen(dtOld = dt, idvar = "id", dist = "poisson", param1 = "lambda"))
+  
+  # Missing some correlation parameters
+  expect_error(addCorGen(dtOld = dt, idvar = "id", rho = 0.5, dist = "poisson", param1 = "lambda"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", corstr = "cs", dist = "poisson", param1 = "lambda"))
+})
+
+# Test 14: Data integrity tests
+test_that("addCorGen preserves original data", {
+  dt <- create_sample_data(5)
+  original_cols <- names(dt)
+  
+  result <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  
+  # Original columns should be preserved
+  expect_true(all(original_cols %in% names(result)))
+  
+  # Original values should be unchanged
+  for (col in original_cols) {
+    expect_equal(dt[[col]], result[[col]])
+  }
+})
+
+# Test 15: Return type and structure tests
+test_that("addCorGen returns correct data structure", {
+  dt <- create_sample_data(5)
+  
+  result <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  
+  # Should return data.table
+  expect_s3_class(result, "data.table")
+  
+  # Should have correct number of rows
+  expect_equal(nrow(result), nrow(dt))
+  
+  # Should have additional columns
+  expect_gt(ncol(result), ncol(dt))
+})
+
+# Test 16: negBinomial distribution test
+test_that("addCorGen works with negBinomial distribution", {
+  dt <- create_sample_data(5)
+  
+  result <- addCorGen(
+    dtOld = dt, 
+    idvar = "id", 
+    nvars = 2, 
+    rho = 0.5, 
+    corstr = "cs", 
+    dist = "negBinomial", 
+    param1 = "mu", 
+    param2 = "sigma"
+  )
+  
+  expect_equal(nrow(result), nrow(dt))
+  expect_equal(ncol(result), ncol(dt) + 2)
+  expect_true(all(result$V1 >= 0))
+  expect_true(all(result$V2 >= 0))
 })
 
 
