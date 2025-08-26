@@ -382,7 +382,7 @@ gen_link_logit <- gen.no.shrink(gen.element(c("identity", "logit")))
 # Lookup Table ----
 #   This data.table is used in generating complete data definitions. New
 #   Distributios need to be added here to to be included in testing.
-reg <- data.table()
+reg <- data.table::data.table()
 reg$name <- sort(simstudy:::.getDists()[1:14])  # changed for CI issue
 reg$formula <- character()
 reg$variance <- "gen_var"
@@ -424,7 +424,7 @@ gen_dists <-
 gen_def_dt <-
   function(n) {
     gen.map(function(list) {
-      dt <- as.data.table(list)
+      dt <- data.table::as.data.table(list)
       names(dt) <- c("varname", "dist")
       dt$formula <- character()
       dt$variance <- character()
