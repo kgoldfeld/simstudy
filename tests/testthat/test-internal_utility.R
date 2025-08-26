@@ -80,7 +80,7 @@ test_that("probabilities (matrix) are adjusted as documented.", {
 # .getDists ----
 test_that("number of Dists is up to date.", {
   skip_on_cran()
-  expect_length(simstudy:::.getDists(), 17).  # Changed for CI issue
+  expect_length(simstudy:::.getDists(), 17)  # Changed for CI issue
 })
 
 # .isFormulaScalar ----

@@ -383,7 +383,7 @@ gen_link_logit <- gen.no.shrink(gen.element(c("identity", "logit")))
 #   This data.table is used in generating complete data definitions. New
 #   Distributios need to be added here to to be included in testing.
 reg <- data.table()
-reg$name <- sort(simstudy:::.getDists()[1:14]).  # changed for CI issue
+reg$name <- sort(simstudy:::.getDists()[1:14])  # changed for CI issue
 reg$formula <- character()
 reg$variance <- "gen_var"
 reg$link <- "gen_id"
