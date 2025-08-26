@@ -1,3 +1,3 @@
-.onLoad <- function(libname, pkgname) {
+.onLoad <- function(libname, pkgname) { # nocov start
   backports::import(pkgname)
-}
+} # nocov end

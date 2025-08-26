@@ -715,12 +715,12 @@ viewBasis <- function(knots, degree) {
 #' @concept utility
 viewSplines <- function(knots, degree, theta) {
   
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) { # nocov start
     stop(
       "Package \"ggplot2\" must be installed to use this function.",
       call. = FALSE
     )
-  }
+  } # nocov end
 
   # 'declare'
 
@@ -805,7 +805,7 @@ survGetParams <- function(points) {
     upper = c(Inf, Inf)
   )
   
-  if (optim_results$convergence !=0) stop("Optimization did not converge")
+  if (optim_results$convergence !=0) stop("Optimization did not converge") # nocov
   
   return(optim_results$par)
 }
@@ -837,12 +837,12 @@ survGetParams <- function(points) {
 survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1, 
                           limits = NULL) {
   
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) { # nocov start
     stop(
       "Package \"ggplot2\" must be installed to use this function.",
       call. = FALSE
     )
-  }
+  } # nocov end
   
   assertNotMissing(formula = missing(formula), shape = missing(shape))
   assertPositive(shape)

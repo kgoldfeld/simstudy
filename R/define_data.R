@@ -824,7 +824,7 @@ defSurv <- function(dtDefs = NULL,
   if (length(range) != 2) {
     stop(
       paste(
-        "Formula for unifrom distributions must have",
+        "Formula for uniform distributions must have",
         "the format: 'min;max' See ?distributions"
       )
     )

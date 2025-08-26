@@ -1661,3 +1661,28 @@ test_that("addCorGen grouped data with same cluster sizes", {
 })
 
 
+
+test_that("addCorGen can generate clustered data with list of cor matrices usin ep", {
+  skip_on_cran()
+  
+  def <-
+    defData(varname = "xbase", formula = .3, variance = .5, dist = "beta") |>
+    defData(varname = "n", formula = 3, dist = "noZeroPoisson")
+  
+  dd <- genData(5, def, id = "cid")
+  
+  cMats <- genCorMat(nvars = dd$n, rho = .5, corstr = "cs", nclusters = nrow(dd))
+  
+  dx <- genCluster(dd, "cid", "n", "id")
+  
+  ## Specify with nvars, rho, and corstr
+  
+  expect_silent(
+    addCorGen(
+      dtOld = dx, idvar = "cid", corMatrix = cMats, 
+      dist = "binary", param1 = "xbase", method = "ep"
+    )
+  )
+})
+
+
