@@ -51,4 +51,14 @@ jobs:
           extra-packages: |
             rcmdcheck
             hedgehogqa/r-hedgehog
+            
+      # Insert quick load test here
+      
+      - name: Run package load test
+        run: |
+          Rscript -e 'library(simstudy)'
+          Rscript -e 'packageVersion("simstudy")'
+          
+      # original last line
+      
       - uses: r-lib/actions/check-r-package@v2
