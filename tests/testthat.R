@@ -22,8 +22,10 @@ tryCatch({
   quit(status = 1)
 })
 
-cat("About to run test_check...\n")
-test_check("simstudy")
+cat("About to run tests directly...\n")
+# test_check("simstudy")
+# Use test_dir instead of test_check to avoid reloading the package
+test_dir("testthat", reporter = "summary")
 
 
 
