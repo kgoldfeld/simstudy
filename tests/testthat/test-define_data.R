@@ -289,15 +289,15 @@ test_that("'mixture' formula checked correctly", {
   gen_mix_form <- gen.choice(gen_mix_vForm, gen_mix_scalar)
 
   forall(gen_mix_form, function(f) {
-    expect_silent(.checkMixture(f))
+    expect_silent(simstudy:::.checkMixture(f))
   })
 })
 
 test_that(".checkMixture throws errors.", {
   skip_on_cran()
   
-  expect_error(.checkMixture("nr | .5 + a "), "same amount")
-  expect_error(.checkMixture("nr | be"), "Probabilities can only be")
+  expect_error(simstudy:::.checkMixture("nr | .5 + a "), "same amount")
+  expect_error(simstudy:::.checkMixture("nr | be"), "Probabilities can only be")
 })
 
 # .checkCategorical ----
@@ -305,14 +305,14 @@ test_that("'categorical' formula checked correctly", {
   skip_on_cran()
   
   forall(gen_cat_probs, function(f) {
-    expect_silent(.checkCategorical(genCatFormula(f)))
+    expect_silent(simstudy:::.checkCategorical(genCatFormula(f)))
   })
 })
 
 test_that(".checkCategorical throws errors.", {
   skip_on_cran()
   
-  expect_error(.checkCategorical("1"), "two numeric")
+  expect_error(simstudy:::.checkCategorical("1"), "two numeric")
 })
 
 # .checkUniform ----
@@ -337,8 +337,8 @@ test_that(".checkCategorical throws errors.", {
 test_that(".checkUniform throws errors.", {
   skip_on_cran()
   
-  expect_error(.checkUniform(""), "format")
-  expect_error(.checkUniform("1;2;3"), "format")
+  expect_error(simstudy:::.checkUniform(""), "format")
+  expect_error(simstudy:::.checkUniform("1;2;3"), "format")
 })
 
 # .isLink ----
@@ -371,10 +371,10 @@ test_that("utility functions work", {
   expect_equal(simstudy:::.isDotArr(names), c(FALSE, FALSE, TRUE, TRUE))
   expect_equal(simstudy:::.rmDots(names), res)
   expect_equal(simstudy:::.rmWS(" ab  c      d \n\t e "), "abcde")
-  expect_equal(.splitFormula("nosplit"), "nosplit")
-  expect_vector(.splitFormula("a;split"))
-  expect_equal(.splitFormula("a;split"), c("a", "split"))
-  expect_equal(.splitFormula(";split"), c("", "split"))
+  expect_equal(simstudy:::.splitFormula("nosplit"), "nosplit")
+  expect_vector(simstudy:::.splitFormula("a;split"))
+  expect_equal(simstudy:::.splitFormula("a;split"), c("a", "split"))
+  expect_equal(simstudy:::.splitFormula(";split"), c("", "split"))
 })
 
 test_that("defRepeat works.", {
