@@ -53,16 +53,26 @@ jobs:
             hedgehogqa/r-hedgehog
             
       ### Debugging to see if error is on load ...
-            
-      # ✅ Install your package manually before trying to load it
-      - name: Install package from source
-        run: R CMD INSTALL .
-
-      # ✅ Run quick load test
-      - name: Run package load test
+      
+      # # ✅ Install your package manually before trying to load it
+      # - name: Install package from source
+      #   run: Rscript -e 'install.packages(".", repos = NULL, type = "source")'
+      # 
+      # # ✅ Run quick load test
+      # - name: Run package load test
+      #   run: |
+      #     Rscript -e 'library(simstudy)'
+      #     Rscript -e 'packageVersion("simstudy")'
+      
+      - name: Run tests individually
         run: |
-          Rscript -e 'library(simstudy)'
-          Rscript -e 'packageVersion("simstudy")'
+          set -e
+          for f in tests/testthat/test-*.R; do
+            echo ">>> Running $f"
+            Rscript -e "testthat::test_file('$f')"
+          done
 
       # 🧪 Now run the full check
       - uses: r-lib/actions/check-r-package@v2
+      
+      
