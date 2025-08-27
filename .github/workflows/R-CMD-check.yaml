@@ -27,8 +27,6 @@ jobs:
           - {os: windows-latest, r: 'oldrel'}
           - {os: macos-latest, r: 'release'}  # Commented out due to C++ init issue
           - {os: macos-latest, r: 'oldrel'}   # Commented out due to C++ init issue
-          # - {os: macos-13, r: 'release'}        # Using Intel macOS instead
-          # - {os: macos-13, r: 'oldrel'}         # Using Intel macOS instead
           - {os: ubuntu-22.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest"}
           - {os: ubuntu-22.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest"}
           
@@ -67,14 +65,24 @@ jobs:
       - name: Install package from source
         run: Rscript -e 'install.packages(".", repos = NULL, type = "source")'
       
-      - name: Run tests individually
-        shell: bash
+      - name: Run tests individually (R)
         run: |
-          set -e
-          for f in tests/testthat/test-*.R; do
-            echo ">>> Running $f"
-            Rscript -e "library(simstudy); testthat::test_file('$f')"
-          done
+          library(simstudy)   # make sure the package is loaded
+          library(testthat)
+          test_files <- list.files("tests/testthat", pattern = "^test.*\\.[rR]$", full.names = TRUE)
+          for (f in test_files) {
+            cat(">>> Running", f, "\n")
+            tryCatch({
+              testthat::test_file(f)
+              cat("Completed:", f, "\n")
+          }, error = function(e) {
+          cat("Error in", f, ":", e$message, "\n")
+          stop(e)
+          })
+        }
+        shell: Rscript {0}
+
+
 
       # 🧪 Now run the full check
       - uses: r-lib/actions/check-r-package@v2
