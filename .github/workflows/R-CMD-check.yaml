@@ -50,18 +50,6 @@ jobs:
             rcmdcheck
             hedgehogqa/r-hedgehog
             
-      ### Debugging to see if error is on load ...
-      
-      # # ✅ Install your package manually before trying to load it
-      # - name: Install package from source
-      #   run: Rscript -e 'install.packages(".", repos = NULL, type = "source")'
-      # 
-      # # ✅ Run quick load test
-      # - name: Run package load test
-      #   run: |
-      #     Rscript -e 'library(simstudy)'
-      #     Rscript -e 'packageVersion("simstudy")'
-      
       - name: Install package from source
         run: Rscript -e 'install.packages(".", repos = NULL, type = "source")'
       
@@ -75,12 +63,13 @@ jobs:
             tryCatch({
               testthat::test_file(f)
               cat("Completed:", f, "\n")
-          }, error = function(e) {
-          cat("Error in", f, ":", e$message, "\n")
-          stop(e)
-          })
-        }
-        shell: Rscript {0}
+            }, error = function(e) {
+              cat("Error in", f, ":", e$message, "\n")
+              stop(e)
+            })
+          }
+    
+  shell: Rscript {0}
 
 
 
