@@ -72,7 +72,7 @@ jobs:
           set -e
           for f in tests/testthat/test-*.R; do
             echo ">>> Running $f"
-            Rscript -e "testthat::test_file('$f')"
+            Rscript -e "library(simstudy); testthat::test_file('$f')"
           done
 
       # 🧪 Now run the full check
