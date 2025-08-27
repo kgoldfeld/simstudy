@@ -1,6 +1,8 @@
 library(testthat)
-library(simstudy)
+# library(simstudy)
 library(data.table)
+
+devtools::load_all()
 
 test_that("conditions have correct class.", {
   skip_on_cran()

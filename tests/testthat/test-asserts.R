@@ -2,6 +2,8 @@ library(testthat)
 library(simstudy)
 library(data.table)
 
+devtools::load_all()
+
 test_that("assertNotMissing works.", {
   skip_on_cran()
   

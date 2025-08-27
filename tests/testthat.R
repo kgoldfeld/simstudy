@@ -1,6 +1,6 @@
 library(testthat)
-library(hedgehog)
 library(simstudy)
+library(hedgehog)
 
 # data.table::setDTthreads(2) # added before 2025.08.26 to solve CRAN issue
 
