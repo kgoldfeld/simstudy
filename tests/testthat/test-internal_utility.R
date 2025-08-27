@@ -9,11 +9,11 @@ test_that("dotVars are parsed correctly.", {
   extVar2 <- 42
   res <- list(..extVar1 = 23, ..extVar2 = 42)
 
-  expect_equal(.parseDotVars("a + ..extVar1 | b + ..extVar2"), res)
-  expect_equal(.parseDotVars(c("a + ..extVar1", "b + ..extVar2")), res)
-  expect_equal(length(.parseDotVars("a + b")), 0)
+  expect_equal(simstudy:::.parseDotVars("a + ..extVar1 | b + ..extVar2"), res)
+  expect_equal(simstudy:::.parseDotVars(c("a + ..extVar1", "b + ..extVar2")), res)
+  expect_equal(length(simstudy:::.parseDotVars("a + b")), 0)
 
-  expect_error(.parseDotVars("..extVar12"))
+  expect_error(simstudy:::.parseDotVars("..extVar12"))
 })
 
 test_that("variables from different environments are parsed correctly.", {
@@ -26,8 +26,8 @@ test_that("variables from different environments are parsed correctly.", {
   res <- list(..extVar1 = 23, ..extVar2 = 42, ..extVar3 = 7)
 
   with(env2, {
-    expect_equal(.parseDotVars("a + ..extVar1 | b + ..extVar2 * ..extVar3"), res)
-    expect_equal(.parseDotVars(c("a + ..extVar1 * ..extVar2", "b + ..extVar3")), res)
+    expect_equal(simstudy:::.parseDotVars("a + ..extVar1 | b + ..extVar2 * ..extVar3"), res)
+    expect_equal(simstudy:::.parseDotVars(c("a + ..extVar1 * ..extVar2", "b + ..extVar3")), res)
   })
 })
 
@@ -37,8 +37,8 @@ test_that("evalWith throws errors.", {
   df <- data.frame()
   ext <- list(formula2parse = 2)
 
-  expect_error(.evalWith("", ext), "reserved variable")
-  expect_error(.evalWith("", list(), df, 10), "different length")
+  expect_error(simstudy:::.evalWith("", ext), "reserved variable")
+  expect_error(simstudy:::.evalWith("", list(), df, 10), "different length")
 })
 
 test_that("evalWith output length is correct.", {
@@ -46,8 +46,8 @@ test_that("evalWith output length is correct.", {
   df <- data.frame(a = rep.int(5, 5))
   ext <- list(..ev = 2)
 
-  expect_equal(length(.evalWith("a + ..ev", ext, df, 5)), 5)
-  expect_equal(length(.evalWith("a + ..ev", ext, dtSim = df)), 5)
+  expect_equal(length(simstudy:::.evalWith("a + ..ev", ext, df, 5)), 5)
+  expect_equal(length(simstudy:::.evalWith("a + ..ev", ext, dtSim = df)), 5)
 })
 
 test_that("evalWith output is Matrix.", {
@@ -55,10 +55,10 @@ test_that("evalWith output is Matrix.", {
   df <- data.frame(a = rep.int(5, 5))
   ext <- list(..ev = 2)
 
-  expect_is(.evalWith("a + ..ev", ext, df, 5), "matrix")
-  expect_is(.evalWith("a + ..ev", ext, df), "matrix")
-  expect_is(.evalWith(c("a + ..ev", "..ev * 2"), ext, df), "matrix")
-  expect_is(.evalWith("..ev * 2", ext), "matrix")
+  expect_is(simstudy:::.evalWith("a + ..ev", ext, df, 5), "matrix")
+  expect_is(simstudy:::.evalWith("a + ..ev", ext, df), "matrix")
+  expect_is(simstudy:::.evalWith(c("a + ..ev", "..ev * 2"), ext, df), "matrix")
+  expect_is(simstudy:::.evalWith("..ev * 2", ext), "matrix")
 })
 
 # .adjustProbs ----
@@ -71,13 +71,13 @@ test_that("probabilities (matrix) are adjusted as documented.", {
   }), function(p) {
     over <- p / .9
     under <- p / 1.1
-    expect_warning(.adjustProbs(over), class = "simstudy::valueWarning")
-    expect_warning(.adjustProbs(under), class = "simstudy::valueWarning")
-    expect_error(.adjustProbs(under * -1), class = "simstudy::valueError")
-    expect_equal(mean(rowSums(.adjustProbs(under))), 1)
-    expect_equal(mean(rowSums(.adjustProbs(over))), 1)
-    expect_equal(dim(.adjustProbs(over)), dim(over))
-    expect_equal(dim(.adjustProbs(under)), dim(under) + c(0, 1))
+    expect_warning(simstudy:::.adjustProbs(over), class = "simstudy::valueWarning")
+    expect_warning(simstudy:::.adjustProbs(under), class = "simstudy::valueWarning")
+    expect_error(simstudy:::.adjustProbs(under * -1), class = "simstudy::valueError")
+    expect_equal(mean(rowSums(simstudy:::.adjustProbs(under))), 1)
+    expect_equal(mean(rowSums(simstudy:::.adjustProbs(over))), 1)
+    expect_equal(dim(simstudy:::.adjustProbs(over)), dim(over))
+    expect_equal(dim(simstudy:::.adjustProbs(under)), dim(under) + c(0, 1))
   })
 })
 
@@ -90,12 +90,12 @@ test_that("number of Dists is up to date.", {
 # .isFormulaScalar ----
 test_that("isFormularScalar works correctly.", {
   skip_on_cran()
-  expect_true(.isFormulaScalar("5 + 3"))
-  expect_true(.isFormulaScalar(5 + 3))
+  expect_true(simstudy:::.isFormulaScalar("5 + 3"))
+  expect_true(simstudy:::.isFormulaScalar(5 + 3))
 
-  expect_false(.isFormulaScalar("a + 3"))
-  expect_false(.isFormulaScalar("a;3"))
-  expect_false(.isFormulaScalar(data.frame(a = "asd")))
+  expect_false(simstudy:::.isFormulaScalar("a + 3"))
+  expect_false(simstudy:::.isFormulaScalar("a;3"))
+  expect_false(simstudy:::.isFormulaScalar(data.frame(a = "asd")))
 })
 
 # .isValidVarName ----
@@ -104,13 +104,13 @@ test_that("var names are validated correctly.", {
   validNames <- c("var1", "name", "name2", "var1")
   wrongNames <- c("...", "..1", "..5")
 
-  expect_true(all(.isValidVarName(validNames)))
-  expect_true(all(.isValidVarName(validNames[1:3], unique = TRUE)))
-  expect_true(all(.isValidVarName(wrongNames, allowReserved = TRUE, unique = TRUE)))
+  expect_true(all(simstudy:::.isValidVarName(validNames)))
+  expect_true(all(simstudy:::.isValidVarName(validNames[1:3], unique = TRUE)))
+  expect_true(all(simstudy:::.isValidVarName(wrongNames, allowReserved = TRUE, unique = TRUE)))
 
-  expect_false(all(.isValidVarName(wrongNames)))
-  expect_false(all(.isValidVarName(c(validNames, wrongNames))))
-  expect_false(all(.isValidVarName(validNames, unique = TRUE)))
+  expect_false(all(simstudy:::.isValidVarName(wrongNames)))
+  expect_false(all(simstudy:::.isValidVarName(c(validNames, wrongNames))))
+  expect_false(all(simstudy:::.isValidVarName(validNames, unique = TRUE)))
 })
 
 # .isError ----
@@ -119,22 +119,22 @@ test_that("errors are detected correctly.", {
   err <- try(nonVar + 4, silent = TRUE)
   noErr <- try(3 + 5, silent = TRUE)
 
-  expect_true(.isError(err))
-  expect_false(.isError(noErr))
-  expect_false(.isError(5))
-  expect_false(.isError("ab"))
+  expect_true(simstudy:::.isError(err))
+  expect_false(simstudy:::.isError(noErr))
+  expect_false(simstudy:::.isError(5))
+  expect_false(simstudy:::.isError("ab"))
 })
 
 # .hasValue ----
 test_that("hasValue works.", {
   skip_on_cran()
-  expect_true(.hasValue("value"))
-  expect_true((function(x) .hasValue(x))(5))
-  expect_true((function(x) .hasValue(x))(NA))
-  expect_false(.hasValue())
-  expect_false((function(x) .hasValue(x))())
-  expect_false((function(x) .hasValue(x))(NULL))
-  expect_false(.hasValue(NULL))
+  expect_true(simstudy:::.hasValue("value"))
+  expect_true((function(x) simstudy:::.hasValue(x))(5))
+  expect_true((function(x) simstudy:::.hasValue(x))(NA))
+  expect_false(simstudy:::.hasValue())
+  expect_false((function(x) simstudy:::.hasValue(x))())
+  expect_false((function(x) simstudy:::.hasValue(x))(NULL))
+  expect_false(simstudy:::.hasValue(NULL))
 })
 
 # .log2Prob ----
@@ -143,8 +143,8 @@ test_that("log odds are converted correctly.", {
   prob <- 0.2
   logOdds <- log(0.25)
 
-  expect_equal(.log2Prob(logOdds), prob)
-  expect_equal(.log2Prob(rep(logOdds, 5)), rep(prob, 5))
+  expect_equal(simstudy:::.log2Prob(logOdds), prob)
+  expect_equal(simstudy:::.log2Prob(rep(logOdds, 5)), rep(prob, 5))
 })
 
 # .buildCorMat ----

@@ -4,7 +4,7 @@ library(data.table)
 
 # genCatFormula ----
 roundTrip <- function(args) {
-  as.numeric(.splitFormula(do.call(genCatFormula, as.list(args))))
+  as.numeric(simstudy:::.splitFormula(do.call(genCatFormula, as.list(args))))
 }
 
 test_that("probabilities stay the same after genCatFormula", {
@@ -367,7 +367,7 @@ test_that("iccRE returns correct variances for Poisson distribution", {
   targetICC <- seq(.05, .20, by = .01)
   lambda <- 30
   result <- iccRE(targetICC, "poisson", lambda = lambda)
-  expected <- unlist(lapply(targetICC, function(x) .findPoisVar(x, lambda)))
+  expected <- unlist(lapply(targetICC, function(x) simstudy:::.findPoisVar(x, lambda)))
   expect_equal(result, expected)
 })
 

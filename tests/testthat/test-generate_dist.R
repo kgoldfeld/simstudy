@@ -5,21 +5,21 @@ library(data.table)
 # .gencat ----
 test_that(".gencat throws errors", {
   skip_on_cran()
-  expect_error(.gencat(
+  expect_error(simstudy:::.gencat(
     n = n,
     formula = "1;",
     variance = NULL,
     link = "identity",
     envir = emptyenv()
   ), "two probabilities")
-  expect_error(.gencat(
+  expect_error(simstudy:::.gencat(
     n = n,
     formula = "1; ",
     variance = NULL,
     link = "identity",
     envir = emptyenv()
   ), "two probabilities")
-  expect_error(.gencat(
+  expect_error(simstudy:::.gencat(
     n = 10,
     formula = ".5;.5",
     variance = "a;",
@@ -30,21 +30,21 @@ test_that(".gencat throws errors", {
 
 test_that("categorical data is generated as expected.", {
   skip_on_cran()
-  expect_type(.gencat(
+  expect_type(simstudy:::.gencat(
     n = 10,
     formula = genCatFormula(n = 3),
     variance = "a;b;c",
     link = "identity",
     envir = emptyenv()
   ), "character")
-  expect_type(.gencat(
+  expect_type(simstudy:::.gencat(
     n = 10,
     formula = genCatFormula(n = 3),
     variance = "a;2;c",
     link = "identity",
     envir = emptyenv()
   ), "character")
-  expect_true(is.numeric(.gencat(
+  expect_true(is.numeric(simstudy:::.gencat(
     n = 10,
     formula = genCatFormula(n = 3),
     variance = "1;2;3",
@@ -61,10 +61,10 @@ test_that("unif data is generated as expected.", {
 
   dt <- genData(n, def)
   dterr <- genData(n - 5, def)
-  expect_error(.genunif(n, "test;test2", dterr, environment()), "Length mismatch")
-  expect_length(.genunif(n, "test;test2", dt, environment()), n)
-  expect_true(all(!is.na(.genunif(n, "test;test2", dt, environment()))))
-  expect_length(.genunif(n, "1.3;100.2", dt, environment()), n)
+  expect_error(simstudy:::.genunif(n, "test;test2", dterr, environment()), "Length mismatch")
+  expect_length(simstudy:::.genunif(n, "test;test2", dt, environment()), n)
+  expect_true(all(!is.na(simstudy:::.genunif(n, "test;test2", dt, environment()))))
+  expect_length(simstudy:::.genunif(n, "1.3;100.2", dt, environment()), n)
 })
 
 test_that("'uniform' formula checked correctly", {
@@ -102,9 +102,9 @@ test_that("unifInt data is generated as expected.", {
   dt <- genData(n, def)
   dt$test2 <- ceiling(dt$test2)
 
-  expect_length(.genUnifInt(n, "test;test2", dt, environment()), n)
-  expect_true(all(!is.na(.genUnifInt(n, "test;test2", dt, environment()))))
-  expect_length(.genUnifInt(n, "1;100", dt, environment()), n)
+  expect_length(simstudy:::.genUnifInt(n, "test;test2", dt, environment()), n)
+  expect_true(all(!is.na(simstudy:::.genUnifInt(n, "test;test2", dt, environment()))))
+  expect_length(simstudy:::.genUnifInt(n, "1;100", dt, environment()), n)
 })
 
 test_that("'uniformInt' formula checked correctly", {
@@ -117,11 +117,11 @@ test_that("'uniformInt' formula checked correctly", {
       x
     }),
     function(x) {
-      expect_silent(.genUnifInt(x$n, x$range, NULL, environment()))
+      expect_silent(simstudy:::.genUnifInt(x$n, x$range, NULL, environment()))
     }
   )
 
-  expect_error(.genUnifInt(3, "1.1;2.4", NULL, environment()), "must be integer")
+  expect_error(simstudy:::.genUnifInt(3, "1.1;2.4", NULL, environment()), "must be integer")
 })
 
 # .genmixture ----
@@ -151,9 +151,9 @@ test_that("treatment assignment data is generated as expected.",{
   def <- defData(varname = "grp", formula = .5, dist = "binary")
   dt <- genData(n, def)
   
-  expect_silent(.genAssign(dt, balanced = "identity", strata = 0, grpName = "rx", ratio = "1;1"))
-  expect_silent(.genAssign(dt, balanced = "identity", strata = "grp", grpName = "rx", ratio = "1;1"))
-  expect_silent(.genAssign(dt, balanced = "identity", strata = "grp", grpName = "rx", ratio = 4))
+  expect_silent(simstudy:::.genAssign(dt, balanced = "identity", strata = 0, grpName = "rx", ratio = "1;1"))
+  expect_silent(simstudy:::.genAssign(dt, balanced = "identity", strata = "grp", grpName = "rx", ratio = "1;1"))
+  expect_silent(simstudy:::.genAssign(dt, balanced = "identity", strata = "grp", grpName = "rx", ratio = 4))
   }
 )
 

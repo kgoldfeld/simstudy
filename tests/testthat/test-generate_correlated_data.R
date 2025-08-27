@@ -2,7 +2,7 @@ library(testthat)
 library(simstudy)
 library(data.table)
 
-# .checkBoundsBin ----
+# checkBoundsBin ----
 
 test_that("Correlation boundaries for binary variables are correct", {
   skip_on_cran()
@@ -10,12 +10,12 @@ test_that("Correlation boundaries for binary variables are correct", {
   p1 <- .5
   p2 <- .8
 
-  expect_error(checkBoundsBin(p1, p2, d = .9))
-  expect_error(checkBoundsBin(p1, p2, d = -.6))
+  expect_error(simstudy:::checkBoundsBin(p1, p2, d = .9))
+  expect_error(simstudy:::checkBoundsBin(p1, p2, d = -.6))
 
-  expect_silent(checkBoundsBin(p1, p2, -0.4))
-  expect_silent(checkBoundsBin(p1, p2, 0.3))
-  expect_silent(checkBoundsBin(p1, p2, 0.2))
+  expect_silent(simstudy:::checkBoundsBin(p1, p2, -0.4))
+  expect_silent(simstudy:::checkBoundsBin(p1, p2, 0.3))
+  expect_silent(simstudy:::checkBoundsBin(p1, p2, 0.2))
 })
 
 # .findRhoBin ----

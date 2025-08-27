@@ -77,22 +77,22 @@ test_that("strata codes are added as expected.", {
 
   data <- genData(330, def)
 
-  expect_equal(range(.addStrataCode(data, "male")$.stratum), c(1, 2))
-  expect_equal(range(.addStrataCode(data, c("male", "over65"))$.stratum), c(1, 4))
-  expect_equal(.addStrataCode(data, "male")[, .SD, .SDcols = !".stratum"], data)
-  expect_error(.addStrataCode(data, ""))
+  expect_equal(range(simstudy:::.addStrataCode(data, "male")$.stratum), c(1, 2))
+  expect_equal(range(simstudy:::.addStrataCode(data, c("male", "over65"))$.stratum), c(1, 4))
+  expect_equal(simstudy:::.addStrataCode(data, "male")[, .SD, .SDcols = !".stratum"], data)
+  expect_error(simstudy:::.addStrataCode(data, ""))
 })
 
-# .stratSamp ----
+# simstudy:::.stratSamp ----
 test_that("stratified samples are drawn correctly.", {
   skip_on_cran()
-  expect_length(.stratSamp(1, 2), 1)
-  expect_length(.stratSamp(2, 4), 2)
-  expect_length(.stratSamp(50, 3), 50)
-  expect_gte(table(.stratSamp(148, 2, c(1, 2)))[1], 49)
-  expect_gte(table(.stratSamp(148, 2, c(1, 2)))[2], 98)
-  expect_true(all(table(.stratSamp(150, 2, c(1, 2))) == c(50, 100)))
-  expect_equal(range(.stratSamp(50, 3)), c(1, 3))
+  expect_length(simstudy:::.stratSamp(1, 2), 1)
+  expect_length(simstudy:::.stratSamp(2, 4), 2)
+  expect_length(simstudy:::.stratSamp(50, 3), 50)
+  expect_gte(table(simstudy:::.stratSamp(148, 2, c(1, 2)))[1], 49)
+  expect_gte(table(simstudy:::.stratSamp(148, 2, c(1, 2)))[2], 98)
+  expect_true(all(table(simstudy:::.stratSamp(150, 2, c(1, 2))) == c(50, 100)))
+  expect_equal(range(simstudy:::.stratSamp(50, 3)), c(1, 3))
 })
 
 # genCluster <----

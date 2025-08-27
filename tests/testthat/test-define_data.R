@@ -93,7 +93,7 @@ test_that("Valid normal distribution passes with variance", {
 
 test_that("Valid gamma distribution passes with variance", {
   skip_on_cran()
-  expect_invisible(.simstudy:::.evalDef(
+  expect_invisible(simstudy:::.evalDef(
     newvar = "x_gamma",
     newform = "3 + y",
     newdist = "gamma",
@@ -104,7 +104,7 @@ test_that("Valid gamma distribution passes with variance", {
 
 test_that("Valid negBinomial distribution passes with variance", {
   skip_on_cran()
-  expect_invisible(.simstudy:::.evalDef(
+  expect_invisible(simstudy:::.evalDef(
     newvar = "x_negBinom",
     newform = "3 + y",
     newdist = "negBinomial",
@@ -116,7 +116,7 @@ test_that("Valid negBinomial distribution passes with variance", {
 test_that("Fails when variable already exists in defVars", {
   skip_on_cran()
   expect_error(
-    .evalDef(
+    simstudy:::.evalDef(
       newvar = "y",
       newform = "1",
       newdist = "normal",
@@ -131,7 +131,7 @@ test_that("Fails when newvar starts with '..'", {
   skip_on_cran()
   
   expect_error(
-    .evalDef(
+    simstudy:::.evalDef(
       newvar = "..badname",
       newform = "1",
       newdist = "normal",
@@ -146,7 +146,7 @@ test_that("Unknown distribution throws error", {
   skip_on_cran()
   
   expect_error(
-    .evalDef(
+    simstudy:::.evalDef(
       newvar = "x",
       newform = "1",
       newdist = "madeUpDist",
@@ -161,7 +161,7 @@ test_that("Valid categorical definition passes", {
   skip_on_cran()
   
   expect_invisible(
-    .evalDef(
+    simstudy:::.evalDef(
       newvar = "catVar",
       newform = "1;1;1",
       newdist = "categorical",
@@ -174,7 +174,7 @@ test_that("Valid mixture definition passes", {
   skip_on_cran()
   
   expect_invisible(
-    .evalDef(
+    simstudy:::.evalDef(
       newvar = "mixVar",
       newform = "x1|.5 + x2|.5",
       newdist = "mixture",
@@ -187,7 +187,7 @@ test_that("Valid uniformInt distribution passes", {
   skip_on_cran()
   
   expect_invisible(
-    .evalDef(
+    simstudy:::.evalDef(
       newvar = "uInt",
       newform = "5;10",
       newdist = "uniformInt",
@@ -200,7 +200,7 @@ test_that("Valid clusterSize distribution passes", {
   skip_on_cran()
   
   expect_invisible(
-    .evalDef(
+    simstudy:::.evalDef(
       newvar = "cs",
       newform = "5",
       newdist = "clusterSize",
@@ -214,7 +214,7 @@ test_that("Valid beta distribution passes with logit link", {
   skip_on_cran()
   
   expect_invisible(
-    .evalDef(
+    simstudy:::.evalDef(
       newvar = "betaVar",
       newform = "2 + y",
       newdist = "beta",
@@ -228,13 +228,13 @@ test_that("Valid beta distribution passes with logit link", {
 test_that(".evalDef throws errors correctly.", {
   skip_on_cran()
   
-  expect_error(.simstudy:::.evalDef(newvar = 1, "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::wrongType")
-  expect_error(.simstudy:::.evalDef(newvar = c("a", "b"), "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::lengthMismatch")
-  expect_error(.simstudy:::.evalDef(newvar = "varname", "1 + 2", "not valid", 0, "identiy", ""), class = "simstudy::optionInvalid")
-  expect_error(.simstudy:::.evalDef("..varname", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
-  expect_error(.simstudy:::.evalDef("varname", 3, "normal", 0, "identity", "varname"), class = "simstudy::alreadyDefined")
-  expect_error(.simstudy:::.evalDef("varname", 3, "normal", 0, "identity"), class = "simstudy::missingArgument")
-  expect_warning(.simstudy:::.evalDef("2", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
+  expect_error(simstudy:::.evalDef(newvar = 1, "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::wrongType")
+  expect_error(simstudy:::.evalDef(newvar = c("a", "b"), "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::lengthMismatch")
+  expect_error(simstudy:::.evalDef(newvar = "varname", "1 + 2", "not valid", 0, "identiy", ""), class = "simstudy::optionInvalid")
+  expect_error(simstudy:::.evalDef("..varname", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
+  expect_error(simstudy:::.evalDef("varname", 3, "normal", 0, "identity", "varname"), class = "simstudy::alreadyDefined")
+  expect_error(simstudy:::.evalDef("varname", 3, "normal", 0, "identity"), class = "simstudy::missingArgument")
+  expect_warning(simstudy:::.evalDef("2", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
 })
 
 #.isValidArithmeticFormula ----

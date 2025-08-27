@@ -131,11 +131,11 @@ test_that("LAG() usage is detected correctly.", {
   hasLag <- c("a + 5 | LAG(3) - 4", " 4 + 3 ", "LAG(x)")
   noLag <- c("a +5", "3 + 1", "log(3) + b")
 
-  expect_true(.checkLags(hasLag))
-  expect_true(.checkLags(hasLag[1]))
+  expect_true(simstudy:::.checkLags(hasLag))
+  expect_true(simstudy:::.checkLags(hasLag[1]))
 
-  expect_false(.checkLags(noLag))
-  expect_false(.checkLags(noLag[1]))
+  expect_false(simstudy:::.checkLags(noLag))
+  expect_false(simstudy:::.checkLags(noLag[1]))
 })
 
 # .addLags ----
@@ -149,10 +149,10 @@ test_that(".addLags throws errors.", {
   reservedName <- copy(dataLong)
   reservedName$.rx1 <- reservedName$rx
 
-  expect_error(.addLags(data, ok), "not longitudinal")
-  expect_error(.addLags(dataLong, doubleErr), "Repeated lag term")
-  expect_error(.addLags(dataLong, notFound), "not in data table")
-  expect_error(.addLags(reservedName, ok), "do not use")
+  expect_error(simstudy:::.addLags(data, ok), "not longitudinal")
+  expect_error(simstudy:::.addLags(dataLong, doubleErr), "Repeated lag term")
+  expect_error(simstudy:::.addLags(dataLong, notFound), "not in data table")
+  expect_error(simstudy:::.addLags(reservedName, ok), "do not use")
 })
 
 test_that("LAGS are added as expected.", {
@@ -183,7 +183,7 @@ test_that("LAGS are added as expected.", {
   lagNames <- c(".rx1", ".tx1")
   lagForms <- c("-2 + 1.5 * .rx1", "-2.1 + 1.3 * .tx1")
 
-  expect_equal(.addLags(dataLong, c(origForm, noLAG)), list(dataAfter, c(lagForms, noLAG), lagNames))
+  expect_equal(simstudy:::.addLags(dataLong, c(origForm, noLAG)), list(dataAfter, c(lagForms, noLAG), lagNames))
 })
 
 # Some extra tests for genMiss
