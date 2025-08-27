@@ -1,6 +1,5 @@
 library(testthat)
 library(hedgehog)
-library(simstudy)
 
 # data.table::setDTthreads(2) # added before 2025.08.26 to solve CRAN issue
 
@@ -9,15 +8,28 @@ library(simstudy)
 
 # Set threading based on environment ... Added 2025.08.26 to solve CRAN issue
 
-if (identical(Sys.getenv("CI"), "true") || 
-    identical(Sys.getenv("GITHUB_ACTIONS"), "true") ||
-    Sys.info()["sysname"] == "Darwin") {
-  # Single thread for CI or macOS to avoid C++ initialization issues
-  data.table::setDTthreads(1)
-} else {
-  # Multi-threading for local development
-  data.table::setDTthreads(2)
-}
+# if (identical(Sys.getenv("CI"), "true") || 
+#     identical(Sys.getenv("GITHUB_ACTIONS"), "true") ||
+#     Sys.info()["sysname"] == "Darwin") {
+#   # Single thread for CI or macOS to avoid C++ initialization issues
+#   data.table::setDTthreads(1)
+# } else {
+#   # Multi-threading for local development
+#   data.table::setDTthreads(2)
+# }
+
+# Set environment variables BEFORE loading simstudy
+Sys.setenv("R_DATATABLE_NUM_THREADS" = "1")
+Sys.setenv("OMP_NUM_THREADS" = "1")
+Sys.setenv("MKL_NUM_THREADS" = "1")
+
+# Set options before loading simstudy
+options(datatable.num.threads = 1)
+
+library(simstudy)
+
+# Also set it after loading
+data.table::setDTthreads(1)
 
 test_check("simstudy")
 
