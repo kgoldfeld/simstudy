@@ -22,7 +22,7 @@ test_that("defData throws errors", {
 
 test_that("Valid binary definition passes silently", {
   skip_on_cran()
-  expect_invisible(.evalDef(
+  expect_invisible(simstudy:::.evalDef(
     newvar = "x_bin",
     newform = "0.5 + y",
     newdist = "binary",
@@ -34,7 +34,7 @@ test_that("Valid binary definition passes silently", {
 
 test_that("Valid binomial definition passes silently", {
   skip_on_cran()
-  expect_invisible(.evalDef(
+  expect_invisible(simstudy:::.evalDef(
     newvar = "x_binom",
     newform = "0.5 + y",
     newdist = "binomial",
@@ -46,7 +46,7 @@ test_that("Valid binomial definition passes silently", {
 
 test_that("Valid poisson definition passes silently", {
   skip_on_cran()
-  expect_invisible(.evalDef(
+  expect_invisible(simstudy:::.evalDef(
     newvar = "x_pois",
     newform = "0.5 + y",
     newdist = "poisson",
@@ -58,7 +58,7 @@ test_that("Valid poisson definition passes silently", {
 
 test_that("Valid no zero poisson definition passes silently", {
   skip_on_cran()
-  expect_invisible(.evalDef(
+  expect_invisible(simstudy:::.evalDef(
     newvar = "x_no0pois",
     newform = "0.5 + y",
     newdist = "noZeroPoisson",
@@ -70,7 +70,7 @@ test_that("Valid no zero poisson definition passes silently", {
 
 test_that("Valid no zero poisson definition passes silently", {
   skip_on_cran()
-  expect_invisible(.evalDef(
+  expect_invisible(simstudy:::.evalDef(
     newvar = "x_nonrandom",
     newform = "0.5 + y",
     newdist = "nonrandom",
@@ -82,7 +82,7 @@ test_that("Valid no zero poisson definition passes silently", {
 
 test_that("Valid normal distribution passes with variance", {
   skip_on_cran()
-  expect_invisible(.evalDef(
+  expect_invisible(simstudy:::.evalDef(
     newvar = "x_norm",
     newform = "3 + y",
     newdist = "normal",
@@ -93,7 +93,7 @@ test_that("Valid normal distribution passes with variance", {
 
 test_that("Valid gamma distribution passes with variance", {
   skip_on_cran()
-  expect_invisible(.evalDef(
+  expect_invisible(.simstudy:::.evalDef(
     newvar = "x_gamma",
     newform = "3 + y",
     newdist = "gamma",
@@ -104,7 +104,7 @@ test_that("Valid gamma distribution passes with variance", {
 
 test_that("Valid negBinomial distribution passes with variance", {
   skip_on_cran()
-  expect_invisible(.evalDef(
+  expect_invisible(.simstudy:::.evalDef(
     newvar = "x_negBinom",
     newform = "3 + y",
     newdist = "negBinomial",
@@ -228,13 +228,13 @@ test_that("Valid beta distribution passes with logit link", {
 test_that(".evalDef throws errors correctly.", {
   skip_on_cran()
   
-  expect_error(.evalDef(newvar = 1, "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::wrongType")
-  expect_error(.evalDef(newvar = c("a", "b"), "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::lengthMismatch")
-  expect_error(.evalDef(newvar = "varname", "1 + 2", "not valid", 0, "identiy", ""), class = "simstudy::optionInvalid")
-  expect_error(.evalDef("..varname", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
-  expect_error(.evalDef("varname", 3, "normal", 0, "identity", "varname"), class = "simstudy::alreadyDefined")
-  expect_error(.evalDef("varname", 3, "normal", 0, "identity"), class = "simstudy::missingArgument")
-  expect_warning(.evalDef("2", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
+  expect_error(.simstudy:::.evalDef(newvar = 1, "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::wrongType")
+  expect_error(.simstudy:::.evalDef(newvar = c("a", "b"), "1 + 2", "normal", 0, "identiy", ""), class = "simstudy::lengthMismatch")
+  expect_error(.simstudy:::.evalDef(newvar = "varname", "1 + 2", "not valid", 0, "identiy", ""), class = "simstudy::optionInvalid")
+  expect_error(.simstudy:::.evalDef("..varname", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
+  expect_error(.simstudy:::.evalDef("varname", 3, "normal", 0, "identity", "varname"), class = "simstudy::alreadyDefined")
+  expect_error(.simstudy:::.evalDef("varname", 3, "normal", 0, "identity"), class = "simstudy::missingArgument")
+  expect_warning(.simstudy:::.evalDef("2", 3, "normal", 0, "identity", ""), class = "simstudy::valueError")
 })
 
 #.isValidArithmeticFormula ----
@@ -253,14 +253,14 @@ test_that("g.a.e. formula checked correctly.", {
     })
 
   forall(gen_gae, function(x) {
-    expect_silent(.isValidArithmeticFormula(x$formula, x$defVars))
+    expect_silent(simstudy:::.isValidArithmeticFormula(x$formula, x$defVars))
   })
 })
 
 test_that("Invalid arithmetic expression triggers stop()", {
   skip_on_cran()
   expect_error(
-    .isValidArithmeticFormula("5 + * 2", defVars = character()),
+    simstudy:::.isValidArithmeticFormula("5 + * 2", defVars = character()),
     regexp = "Equation: '5 \\+ \\* 2' not in proper form"
   )
 })
@@ -268,11 +268,11 @@ test_that("Invalid arithmetic expression triggers stop()", {
 test_that(".isValidArithmeticFormula throws errors correctly.", {
   skip_on_cran()
   
-  expect_error(.isValidArithmeticFormula(""), class = "simstudy::noValue")
-  expect_error(.isValidArithmeticFormula("a;3"), class = "simstudy::valueError")
-  expect_error(.isValidArithmeticFormula("1+3-"), class = "simstudy::valueError")
-  expect_error(.isValidArithmeticFormula("..log(3)", ""), class = "simstudy::valueError")
-  expect_error(.isValidArithmeticFormula("a + 3", ""), class = "simstudy::notDefined")
+  expect_error(simstudy:::.isValidArithmeticFormula(""), class = "simstudy::noValue")
+  expect_error(simstudy:::.isValidArithmeticFormula("a;3"), class = "simstudy::valueError")
+  expect_error(simstudy:::.isValidArithmeticFormula("1+3-"), class = "simstudy::valueError")
+  expect_error(simstudy:::.isValidArithmeticFormula("..log(3)", ""), class = "simstudy::valueError")
+  expect_error(simstudy:::.isValidArithmeticFormula("a + 3", ""), class = "simstudy::notDefined")
 })
 
 # .checkMixture ----
@@ -347,15 +347,15 @@ test_that(".checkUniform throws errors.", {
 test_that("'link' checked as expected", {
   skip_on_cran()
   
-  expect_silent(.isIdLog("identity"))
-  expect_silent(.isIdLog("log"))
-  expect_silent(.isIdLogit("identity"))
-  expect_silent(.isIdLogit("logit"))
+  expect_silent(simstudy:::.isIdLog("identity"))
+  expect_silent(simstudy:::.isIdLog("log"))
+  expect_silent(simstudy:::.isIdLogit("identity"))
+  expect_silent(simstudy:::.isIdLogit("logit"))
 
-  expect_error(.isIdLog("what"), "Invalid link")
-  expect_error(.isIdLogit("no"), "Invalid link")
-  expect_error(.isIdLog(""), "Invalid link")
-  expect_error(.isIdLogit(""), "Invalid link")
+  expect_error(simstudy:::.isIdLog("what"), "Invalid link")
+  expect_error(simstudy:::.isIdLogit("no"), "Invalid link")
+  expect_error(simstudy:::.isIdLog(""), "Invalid link")
+  expect_error(simstudy:::.isIdLogit(""), "Invalid link")
 })
 
 # .rmDots ----
@@ -368,9 +368,9 @@ test_that("utility functions work", {
   names <- c("..as", "..bs", "..cs[4]", "..ds[x]")
   res <- c("as", "bs", "cs[4]", "ds[x]")
 
-  expect_equal(.isDotArr(names), c(FALSE, FALSE, TRUE, TRUE))
-  expect_equal(.rmDots(names), res)
-  expect_equal(.rmWS(" ab  c      d \n\t e "), "abcde")
+  expect_equal(simstudy:::.isDotArr(names), c(FALSE, FALSE, TRUE, TRUE))
+  expect_equal(simstudy:::.rmDots(names), res)
+  expect_equal(simstudy:::.rmWS(" ab  c      d \n\t e "), "abcde")
   expect_equal(.splitFormula("nosplit"), "nosplit")
   expect_vector(.splitFormula("a;split"))
   expect_equal(.splitFormula("a;split"), c("a", "split"))

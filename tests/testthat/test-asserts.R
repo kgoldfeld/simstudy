@@ -307,17 +307,17 @@ test_that("ensureOption works", {
   skip_on_cran()
   
   expect_equal(suppressWarnings(
-    ensureOption(opt = "b", options = letters[4:7], default = "d"),
+    simstudy:::ensureOption(opt = "b", options = letters[4:7], default = "d"),
     classes = "simstudy::optionInvalid"
   ), "d")
 
   expect_equal(suppressWarnings(
-    ensureOption(opt = "e", options = letters[4:7], default = "d"),
+    simstudy:::ensureOption(opt = "e", options = letters[4:7], default = "d"),
     classes = "simstudy::optionInvalid"
   ), "e")
 
   expect_equal(suppressWarnings(
-    ensureOption(opt = 1, options = 2:4, default = 2),
+    simstudy:::ensureOption(opt = 1, options = 2:4, default = 2),
     classes = "simstudy::optionInvalid"
   ), 2)
 })
