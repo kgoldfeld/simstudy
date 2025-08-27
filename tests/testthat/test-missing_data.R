@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # defMiss ----
 test_that("defMiss produces correct output", {
   varname <- "test"

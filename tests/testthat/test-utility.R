@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # genCatFormula ----
 roundTrip <- function(args) {
   as.numeric(.splitFormula(do.call(genCatFormula, as.list(args))))

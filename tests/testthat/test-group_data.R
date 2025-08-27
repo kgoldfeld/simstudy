@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # addPariods
 test_that("addPeriods works", {
   skip_on_cran()

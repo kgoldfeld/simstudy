@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # genSurv -----
 
 test_that("genSurv runs OK", {

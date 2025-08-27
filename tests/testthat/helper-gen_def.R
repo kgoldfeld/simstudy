@@ -1,3 +1,5 @@
+library(simstudy)
+library(data.table)
 library(hedgehog, pos = 3)
 # Generators:
 #   This file implements helper functions and generators used in property based

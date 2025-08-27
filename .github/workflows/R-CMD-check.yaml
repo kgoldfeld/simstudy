@@ -68,6 +68,7 @@ jobs:
         run: Rscript -e 'install.packages(".", repos = NULL, type = "source")'
       
       - name: Run tests individually
+        shell: bash
         run: |
           set -e
           for f in tests/testthat/test-*.R; do

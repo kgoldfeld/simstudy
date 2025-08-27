@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 test_that("conditions have correct class.", {
   skip_on_cran()
   expect_error(stop(condition(c("error", "custom_Error"), "This is a custom error")),

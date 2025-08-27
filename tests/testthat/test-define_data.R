@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 library(hedgehog)
 freeze_eval <- names(.GlobalEnv)
 

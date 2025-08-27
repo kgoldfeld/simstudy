@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 test_that("assertNotMissing works.", {
   skip_on_cran()
   

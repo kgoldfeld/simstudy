@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # .gencat ----
 test_that(".gencat throws errors", {
   skip_on_cran()

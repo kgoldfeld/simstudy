@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # addCondition ----
 test_that("addCondition throws errors.", {
   skip_on_cran()
@@ -352,7 +356,7 @@ test_that("addMultiFac throws appropriate errors", {
                "Number of levels does not match factors")
   
   # Test error: default column names already exist
-  DT_with_var1 <- copy(DT)
+  DT_with_var1 <- data.table::copy(DT)
   DT_with_var1[, Var1 := 1]
   expect_error(addMultiFac(DT_with_var1, nFactors = 2), 
                "Default column name\\(s\\) already in use")

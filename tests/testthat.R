@@ -31,7 +31,11 @@ library(simstudy)
 # Also set it after loading
 data.table::setDTthreads(1)
 
-test_check("simstudy")
+
+
+## One file at a time
+# test_check("simstudy") # original 
+testthat::test_dir("tests/testthat", stop_on_failure = TRUE, load_helpers = TRUE)
 
 ## Debugging
 

@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # .parseDotVars ----
 test_that("dotVars are parsed correctly.", {
   skip_on_cran()

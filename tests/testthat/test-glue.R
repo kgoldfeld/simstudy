@@ -1,3 +1,9 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+library(glue)
+
+
 test_that("Blocks are collapsed as expected.", {
   skip_on_cran()
   nums <- 1:3

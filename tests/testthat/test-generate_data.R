@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # genData ----
 test_that("data is generated as expected", {
   skip_on_cran()
