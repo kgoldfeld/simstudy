@@ -64,6 +64,9 @@ jobs:
       #     Rscript -e 'library(simstudy)'
       #     Rscript -e 'packageVersion("simstudy")'
       
+      - name: Install package from source
+        run: Rscript -e 'install.packages(".", repos = NULL, type = "source")'
+      
       - name: Run tests individually
         run: |
           set -e
