@@ -1,6 +1,7 @@
 library(testthat)
 library(simstudy)
 library(data.table)
+library(glue)
 
 test_that("assertNotMissing works.", {
   skip_on_cran()
@@ -266,18 +267,18 @@ test_that("assertInDataTable works.", {
 test_that("ensureLength works.", {
   skip_on_cran()
   
-  expect_length(ensureLength(a = c(1, 2, 3), n = 3), 3)
-  expect_length(ensureLength(a = "5", n = 5), 5)
-  expect_length(ensureLength(a = list(a = 5), n = 5), 5)
-  expect_error(ensureLength(a = c(1, 2, 3), n = 5), class = "simstudy::lengthMismatch")
+  expect_length(simstudy:::ensureLength(a = c(1, 2, 3), n = 3), 3)
+  expect_length(simstudy:::ensureLength(a = "5", n = 5), 5)
+  expect_length(simstudy:::ensureLength(a = list(a = 5), n = 5), 5)
+  expect_error(simstudy:::ensureLength(a = c(1, 2, 3), n = 5), class = "simstudy::lengthMismatch")
 })
 
 test_that("ensureMatrix works", {
   skip_on_cran()
   
-  expect_error(ensureMatrix(data.frame("a")), class = "simpleError")
-  expect_is(ensureMatrix(c(1, 2, 3, 4)), "matrix")
-  expect_is(ensureMatrix(matrix(1:25, 5)), "matrix")
+  expect_error(simstudy:::ensureMatrix(data.frame("a")), class = "simpleError")
+  expect_is(simstudy:::ensureMatrix(c(1, 2, 3, 4)), "matrix")
+  expect_is(simstudy:::ensureMatrix(matrix(1:25, 5)), "matrix")
 })
 
 test_that("assertPositiveSemiDefinite works.", {
@@ -332,8 +333,8 @@ test_that("assertInRange works", {
 test_that("dots2args works.", {
   skip_on_cran()
   
-  expect_error(dots2argNames(), class = "simpleError")
-  expect_error(dots2argNames(a = 3, 2), class = "simpleError")
-  expect_silent(dots2argNames(a = 3, b = 4))
-  expect_equal(dots2argNames(a = 3, b = 4), list(args = list(a = 3, b = 4), names = c("a", "b")))
+  expect_error(simstudy:::dots2argNames(), class = "simpleError")
+  expect_error(simstudy:::dots2argNames(a = 3, 2), class = "simpleError")
+  expect_silent(simstudy:::dots2argNames(a = 3, b = 4))
+  expect_equal(simstudy:::dots2argNames(a = 3, b = 4), list(args = list(a = 3, b = 4), names = c("a", "b")))
 })
