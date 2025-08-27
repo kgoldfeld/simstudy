@@ -1,6 +1,9 @@
 #' @keywords internal
 #' @import glue
+#' @import Rcpp
 "_PACKAGE"
+
+# @import Rcpp was added to address new CI issues (2025.08.27)
 
 # The following block is used by usethis to automatically manage
 # roxygen namespace tags. Modify with care!
