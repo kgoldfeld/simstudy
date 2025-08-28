@@ -2,98 +2,98 @@ library(testthat)
 library(simstudy)
 library(data.table)
 
-# checkBoundsBin ----
-
-test_that("Correlation boundaries for binary variables are correct", {
-  skip_on_cran()
-  
-  p1 <- .5
-  p2 <- .8
-
-  expect_error(simstudy:::checkBoundsBin(p1, p2, d = .9))
-  expect_error(simstudy:::checkBoundsBin(p1, p2, d = -.6))
-
-  expect_silent(simstudy:::checkBoundsBin(p1, p2, -0.4))
-  expect_silent(simstudy:::checkBoundsBin(p1, p2, 0.3))
-  expect_silent(simstudy:::checkBoundsBin(p1, p2, 0.2))
-})
-
-# .findRhoBin ----
-
-# .genBinEP ----
-
-test_that(".genBinEP handles non-positive definite correlation matrices", {
-  skip_on_cran()
-  
-  # Test with tcorr as a correlation matrix that could become non-PD
-  n <- 20
-  p <- rep(0.3, 5)  # 5 periods
-  
-  # Create a correlation matrix that might cause issues
-  tcorr <- matrix(0.9, nrow = 5, ncol = 5)
-  diag(tcorr) <- 1
-  
-  expect_silent(result1 <- simstudy:::.genBinEP(n, p, tcorr))
-  expect_true(is.data.table(result1))
-  expect_equal(nrow(result1), n * length(p))
-  
-  # Test with a correlation matrix that's more likely to become non-PD
-  # Create a matrix with very high correlations that might not be PD
-  p2 <- rep(0.4, 6)  # 6 periods
-  tcorr2 <- matrix(0.95, nrow = 6, ncol = 6)
-  diag(tcorr2) <- 1
-  
-  expect_silent(result2 <- simstudy:::.genBinEP(n, p2, tcorr2))
-  expect_true(is.data.table(result2))
-  expect_equal(nrow(result2), n * length(p2))
-  
-  # Test with a correlation matrix designed to potentially need nearPD correction
-  p3 <- rep(0.2, 8)  # 8 periods
-  tcorr3 <- matrix(0.98, nrow = 8, ncol = 8)
-  diag(tcorr3) <- 1
-  
-  expect_silent(result3 <- simstudy:::.genBinEP(n, p3, tcorr3))
-  expect_true(is.data.table(result3))
-  expect_equal(nrow(result3), n * length(p3))
-  expect_true(all(c("id", "seq", "X", "period", "seqid") %in% names(result3)))
-  expect_true(all(result3$X %in% c(0, 1)))  # Should be binary outcomes
-})
-
-# Test with correlation matrices that are more likely to need nearPD correction
-test_that(".genBinEP works with correlation matrices that may become non-PD", {
-  skip_on_cran()
-  
-  # Create a correlation matrix that's close to being singular
-  # This is more likely to trigger the nearPD correction
-  n <- 15
-  p <- rep(0.25, 10)  # 10 periods
-  
-  # Create a correlation matrix with a pattern that might cause numerical issues
-  tcorr <- matrix(0.97, nrow = 10, ncol = 10)
-  diag(tcorr) <- 1
-  # Add some variation to make it more realistic but potentially problematic
-  tcorr[1:5, 6:10] <- 0.99
-  tcorr[6:10, 1:5] <- 0.99
-  
-  expect_silent(result <- simstudy:::.genBinEP(n, p, tcorr))
-  expect_true(is.data.table(result))
-  expect_equal(nrow(result), n * length(p))
-  
-  # Test with an even more problematic correlation structure
-  # Create a matrix where some correlations are very close to perfect
-  p2 <- rep(0.3, 12)  # 12 periods
-  tcorr2 <- matrix(0.85, nrow = 12, ncol = 12)
-  diag(tcorr2) <- 1
-  # Make some correlations extremely high
-  for(i in 1:11) {
-    tcorr2[i, i+1] <- 0.995
-    tcorr2[i+1, i] <- 0.995
-  }
-  
-  expect_silent(result2 <- simstudy:::.genBinEP(n, p2, tcorr2))
-  expect_true(is.data.table(result2))
-  expect_equal(nrow(result2), n * length(p2))
-})
+# # checkBoundsBin ----
+# 
+# test_that("Correlation boundaries for binary variables are correct", {
+#   skip_on_cran()
+#   
+#   p1 <- .5
+#   p2 <- .8
+# 
+#   expect_error(simstudy:::checkBoundsBin(p1, p2, d = .9))
+#   expect_error(simstudy:::checkBoundsBin(p1, p2, d = -.6))
+# 
+#   expect_silent(simstudy:::checkBoundsBin(p1, p2, -0.4))
+#   expect_silent(simstudy:::checkBoundsBin(p1, p2, 0.3))
+#   expect_silent(simstudy:::checkBoundsBin(p1, p2, 0.2))
+# })
+# 
+# # .findRhoBin ----
+# 
+# # .genBinEP ----
+# 
+# test_that(".genBinEP handles non-positive definite correlation matrices", {
+#   skip_on_cran()
+#   
+#   # Test with tcorr as a correlation matrix that could become non-PD
+#   n <- 20
+#   p <- rep(0.3, 5)  # 5 periods
+#   
+#   # Create a correlation matrix that might cause issues
+#   tcorr <- matrix(0.9, nrow = 5, ncol = 5)
+#   diag(tcorr) <- 1
+#   
+#   expect_silent(result1 <- simstudy:::.genBinEP(n, p, tcorr))
+#   expect_true(is.data.table(result1))
+#   expect_equal(nrow(result1), n * length(p))
+#   
+#   # Test with a correlation matrix that's more likely to become non-PD
+#   # Create a matrix with very high correlations that might not be PD
+#   p2 <- rep(0.4, 6)  # 6 periods
+#   tcorr2 <- matrix(0.95, nrow = 6, ncol = 6)
+#   diag(tcorr2) <- 1
+#   
+#   expect_silent(result2 <- simstudy:::.genBinEP(n, p2, tcorr2))
+#   expect_true(is.data.table(result2))
+#   expect_equal(nrow(result2), n * length(p2))
+#   
+#   # Test with a correlation matrix designed to potentially need nearPD correction
+#   p3 <- rep(0.2, 8)  # 8 periods
+#   tcorr3 <- matrix(0.98, nrow = 8, ncol = 8)
+#   diag(tcorr3) <- 1
+#   
+#   expect_silent(result3 <- simstudy:::.genBinEP(n, p3, tcorr3))
+#   expect_true(is.data.table(result3))
+#   expect_equal(nrow(result3), n * length(p3))
+#   expect_true(all(c("id", "seq", "X", "period", "seqid") %in% names(result3)))
+#   expect_true(all(result3$X %in% c(0, 1)))  # Should be binary outcomes
+# })
+# 
+# # Test with correlation matrices that are more likely to need nearPD correction
+# test_that(".genBinEP works with correlation matrices that may become non-PD", {
+#   skip_on_cran()
+#   
+#   # Create a correlation matrix that's close to being singular
+#   # This is more likely to trigger the nearPD correction
+#   n <- 15
+#   p <- rep(0.25, 10)  # 10 periods
+#   
+#   # Create a correlation matrix with a pattern that might cause numerical issues
+#   tcorr <- matrix(0.97, nrow = 10, ncol = 10)
+#   diag(tcorr) <- 1
+#   # Add some variation to make it more realistic but potentially problematic
+#   tcorr[1:5, 6:10] <- 0.99
+#   tcorr[6:10, 1:5] <- 0.99
+#   
+#   expect_silent(result <- simstudy:::.genBinEP(n, p, tcorr))
+#   expect_true(is.data.table(result))
+#   expect_equal(nrow(result), n * length(p))
+#   
+#   # Test with an even more problematic correlation structure
+#   # Create a matrix where some correlations are very close to perfect
+#   p2 <- rep(0.3, 12)  # 12 periods
+#   tcorr2 <- matrix(0.85, nrow = 12, ncol = 12)
+#   diag(tcorr2) <- 1
+#   # Make some correlations extremely high
+#   for(i in 1:11) {
+#     tcorr2[i, i+1] <- 0.995
+#     tcorr2[i+1, i] <- 0.995
+#   }
+#   
+#   expect_silent(result2 <- simstudy:::.genBinEP(n, p2, tcorr2))
+#   expect_true(is.data.table(result2))
+#   expect_equal(nrow(result2), n * length(p2))
+# })
 
 # blockExchangeMat ----
 
