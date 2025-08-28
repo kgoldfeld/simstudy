@@ -1572,7 +1572,7 @@ test_that("addCorGen correlation matrix dimension validation errors", {
 #     ),
 #     "Dimensions of corMatrix not equal to cluster sizes!"
 #   )
-# })
+})
 # 
 # test_that("addCorGen grouped data with different nvars scenarios", {
 #   skip_on_cran()
