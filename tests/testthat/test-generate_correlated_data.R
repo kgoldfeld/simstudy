@@ -37,6 +37,7 @@ test_that(".genBinEP handles non-positive definite correlation matrices", {
 
   # Test with a correlation matrix that's more likely to become non-PD
   # Create a matrix with very high correlations that might not be PD
+  
   p2 <- rep(0.4, 6)  # 6 periods
   tcorr2 <- matrix(0.95, nrow = 6, ncol = 6)
   diag(tcorr2) <- 1
