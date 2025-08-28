@@ -1168,347 +1168,347 @@ test_that("addCorGen basic functionality works", {
   expect_true(all(c("V1", "V2", "V3") %in% names(result)))
 })
 
-# # Test 2: Argument validation tests
-# test_that("addCorGen validates arguments correctly", {
-#   dt <- create_sample_data(5)
-# 
-#   # Missing required arguments
-#   expect_error(addCorGen(idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", param1 = "mu"))
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal"))
-# 
-#   # Invalid distribution
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "invalid", param1 = "mu"))
-# 
-#   # Invalid method
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", method = "invalid"))
-# 
-#   # Non-data.table input
-#   expect_error(addCorGen(dtOld = data.frame(id = 1:5, mu = 1:5), idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
-# 
-#   # Missing columns
-#   expect_error(addCorGen(dtOld = dt, idvar = "missing_col", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "missing_param", param2 = "sigma"))
-# })
-# 
-# # Test 3: Parameter validation for different distributions
-# test_that("addCorGen validates parameters for different distributions", {
-#   dt <- create_sample_data(5)
-# 
-#   # Too many parameters for poisson
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "poisson", param1 = "lambda", param2 = "sigma"))
-# 
-#   # Too many parameters for binary
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "binary", param1 = "prob", param2 = "sigma"))
-# 
-#   # Too few parameters for gamma
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "gamma", param1 = "mu"))
-# 
-#   # Too few parameters for normal
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
-# 
-#   # EP method only for binary
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", method = "ep"))
-# })
-# 
-# # Test 4: Wide format (ungrouped data) tests
-# test_that("addCorGen works with wide format (ungrouped data)", {
-#   dt <- create_sample_data(5)
-# 
-#   # Test all distributions with wide format
-#   # Poisson
-#   result_pois <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "poisson", param1 = "lambda")
-#   expect_equal(nrow(result_pois), nrow(dt))
-#   expect_equal(ncol(result_pois), ncol(dt) + 3)
-# 
-#   # Binary
-#   result_bin <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "binary", param1 = "prob")
-#   expect_equal(nrow(result_bin), nrow(dt))
-#   expect_true(all(result_bin$V1 %in% c(0, 1)))
-# 
-#   # Gamma
-#   result_gamma <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "gamma", param1 = "mu", param2 = "sigma")
-#   expect_equal(nrow(result_gamma), nrow(dt))
-#   expect_true(all(result_gamma$V1 > 0))
-# 
-#   # Uniform
-#   result_unif <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "uniform", param1 = "min_val", param2 = "max_val")
-#   expect_equal(nrow(result_unif), nrow(dt))
-# 
-#   # Normal
-#   result_norm <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
-#   expect_equal(nrow(result_norm), nrow(dt))
-# })
-# 
-# # Test 5: Long format (grouped data) tests
-# test_that("addCorGen works with long format (grouped data)", {
-#   dt <- create_sample_data(5, grouped = TRUE)
-# 
-#   # Test with grouped data
-#   result <- addCorGen(dtOld = dt, idvar = "id", rho = 0.6, corstr = "ar1", dist = "poisson", param1 = "lambda")
-# 
-#   expect_equal(nrow(result), nrow(dt))
-#   expect_equal(ncol(result), ncol(dt) + 1)
-#   expect_true("X" %in% names(result))
-# 
-#   # Check that each group has correlated values
-#   cluster_counts <- dt[, .N, by = id]
-#   result_counts <- result[, .N, by = id]
-#   expect_equal(cluster_counts$N, result_counts$N)
-# })
-# 
-# # Test 6: Correlation structure tests
-# test_that("addCorGen works with different correlation structures", {
-#   dt <- create_sample_data(5)
-# 
-#   # Compound symmetry
-#   result_cs <- addCorGen(dtOld = dt, idvar = "id", nvars = 4, rho = 0.3, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
-#   expect_equal(ncol(result_cs), ncol(dt) + 4)
-# 
-#   # Autoregressive
-#   result_ar1 <- addCorGen(dtOld = dt, idvar = "id", nvars = 4, rho = 0.3, corstr = "ar1", dist = "normal", param1 = "mu", param2 = "sigma")
-#   expect_equal(ncol(result_ar1), ncol(dt) + 4)
-# })
-# 
-# # Test 7: Custom correlation matrix tests
-# test_that("addCorGen works with custom correlation matrices", {
-#   dt <- create_sample_data(5)
-# 
-#   # Single correlation matrix for wide format
-#   corMat <- matrix(c(1, 0.5, 0.3,
-#                      0.5, 1, 0.2,
-#                      0.3, 0.2, 1), nrow = 3)
-# 
-#   result <- addCorGen(dtOld = dt, idvar = "id", corMatrix = corMat, dist = "normal", param1 = "mu", param2 = "sigma")
-#   expect_equal(ncol(result), ncol(dt) + 3)
-# 
-#   # # Test with grouped data and single correlation matrix
-#   # dt_grouped <- create_sample_data(3, grouped = TRUE)
-#   # # Convert to grouped format with same cluster size
-#   #
-#   #
-#   # corMat_grouped <- matrix(c(1, 0.5, 0.3,
-#   #                            0.5, 1, 0.2,
-#   #                            0.3, 0.2, 1), nrow = 3)
-#   #
-#   # result <- addCorGen(dtOld = dt_grouped, idvar = "id", corMatrix = corMat_grouped,
-#   #                     dist = "normal", param1 = "mu", param2 = "sigma")
-#   # expect_equal(ncol(result), ncol(dt_grouped) + 1)
-# 
-#   # This should work for grouped data with equal cluster sizes
-#   # Note: You might need to adjust this test based on your actual data structure
-# })
-# 
-# # Test 7a: List of correlation matrices for grouped data with varying cluster sizes
-# test_that("addCorGen works with list of correlation matrices for varying cluster sizes", {
-#   # Create grouped data with different cluster sizes
-#   cluster_sizes <- c(2, 3, 4)  # Different sizes for each cluster
-#   dt_varying <- data.table(
-#     id = rep(1:3, cluster_sizes),
-#     mu = rep(runif(3, 1, 5), cluster_sizes),
-#     sigma = rep(runif(3, 0.5, 2), cluster_sizes),
-#     lambda = rep(runif(3, 1, 3), cluster_sizes),
-#     prob = rep(runif(3, 0.2, 0.8), cluster_sizes)
-#   )
-# 
-#   # Create list of correlation matrices matching cluster sizes
-#   corMat_list <- list(
-#     # 2x2 matrix for cluster 1 (size 2)
-#     matrix(c(1, 0.6, 0.6, 1), nrow = 2),
-#     # 3x3 matrix for cluster 2 (size 3)
-#     matrix(c(1, 0.5, 0.3,
-#              0.5, 1, 0.4,
-#              0.3, 0.4, 1), nrow = 3),
-#     # 4x4 matrix for cluster 3 (size 4)
-#     matrix(c(1, 0.4, 0.3, 0.2,
-#              0.4, 1, 0.5, 0.3,
-#              0.3, 0.5, 1, 0.4,
-#              0.2, 0.3, 0.4, 1), nrow = 4)
-#   )
-# 
-#   # Test with list of correlation matrices
-#   result_list <- addCorGen(
-#     dtOld = dt_varying,
-#     idvar = "id",
-#     corMatrix = corMat_list,
-#     dist = "poisson",
-#     param1 = "lambda"
-#   )
-# 
-#   expect_equal(nrow(result_list), nrow(dt_varying))
-#   expect_equal(ncol(result_list), ncol(dt_varying) + 1)
-#   expect_true("X" %in% names(result_list))
-# 
-#   # Check that each cluster has the expected number of observations
-#   cluster_counts <- dt_varying[, .N, by = id]
-#   result_counts <- result_list[, .N, by = id]
-#   expect_equal(cluster_counts$N, result_counts$N)
-#   expect_equal(cluster_counts$N, cluster_sizes)
-# })
-# 
-# # Test 8: Custom column names tests
-# test_that("addCorGen works with custom column names", {
-#   dt <- create_sample_data(5)
-# 
-#   # Wide format with custom names
-#   result_wide <- addCorGen(
-#     dtOld = dt,
-#     idvar = "id",
-#     nvars = 3,
-#     rho = 0.4,
-#     corstr = "cs",
-#     dist = "normal",
-#     param1 = "mu",
-#     param2 = "sigma",
-#     cnames = "var1, var2, var3"
-#   )
-# 
-#   expect_true(all(c("var1", "var2", "var3") %in% names(result_wide)))
-# 
-#   # Long format with custom name
-#   dt_grouped <- create_sample_data(5, grouped = TRUE)
-#   result_long <- addCorGen(
-#     dtOld = dt_grouped,
-#     idvar = "id",
-#     rho = 0.4,
-#     corstr = "cs",
-#     dist = "poisson",
-#     param1 = "lambda",
-#     cnames = "custom_var"
-#   )
-# 
-#   expect_true("custom_var" %in% names(result_long))
-# })
-# 
-# # Test 9: Custom column names validation
-# test_that("addCorGen validates custom column names correctly", {
-#   dt <- create_sample_data(5)
-#   dt_grouped <- create_sample_data(5, grouped = TRUE)
-# 
-#   # Wrong number of names for wide format
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.4, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", cnames = "var1, var2"))
-# 
-#   # Too many names for long format
-#   expect_error(addCorGen(dtOld = dt_grouped, idvar = "id", rho = 0.4, corstr = "cs", dist = "poisson", param1 = "lambda", cnames = "var1, var2"))
-# })
-# 
-# # Test 10: Method-specific tests
-# test_that("addCorGen EP method works correctly", {
-#   dt <- create_sample_data(5)
-# 
-#   # EP method only works with binary
-#   result_ep <- addCorGen(
-#     dtOld = dt,
-#     idvar = "id",
-#     nvars = 3,
-#     rho = 0.4,
-#     corstr = "cs",
-#     dist = "binary",
-#     param1 = "prob",
-#     method = "ep"
-#   )
-# 
-#   expect_equal(nrow(result_ep), nrow(dt))
-#   expect_true(all(result_ep$V1 %in% c(0, 1)))
-#   expect_true(all(result_ep$V2 %in% c(0, 1)))
-#   expect_true(all(result_ep$V3 %in% c(0, 1)))
-# })
-# 
-# # Test 11: Edge cases and boundary conditions
-# test_that("addCorGen handles edge cases", {
-#   dt <- create_sample_data(2)
-# 
-#   # Minimum nvars
-#   result_min <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
-#   expect_equal(ncol(result_min), ncol(dt) + 2)
-# 
-#   # High correlation
-#   result_high_cor <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = 0.99, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
-#   expect_equal(nrow(result_high_cor), nrow(dt))
-# 
-#   # Negative correlation
-#   result_neg_cor <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = -0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
-#   expect_equal(nrow(result_neg_cor), nrow(dt))
-# })
-# 
-# # Test 12: Missing correlation parameters for wide format
-# test_that("addCorGen requires correlation parameters for wide format", {
-#   dt <- create_sample_data(5)
-# 
-#   # Missing nvars, rho, corstr and no corMatrix
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", dist = "normal", param1 = "mu", param2 = "sigma"))
-# 
-#   # Missing some correlation parameters
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, dist = "normal", param1 = "mu", param2 = "sigma"))
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
-# })
-# 
-# # Test 13: Missing correlation parameters for long format
-# test_that("addCorGen requires correlation parameters for long format", {
-#   dt <- create_sample_data(5, grouped = TRUE)
-# 
-#   # Missing rho, corstr and no corMatrix
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", dist = "poisson", param1 = "lambda"))
-# 
-#   # Missing some correlation parameters
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", rho = 0.5, dist = "poisson", param1 = "lambda"))
-#   expect_error(addCorGen(dtOld = dt, idvar = "id", corstr = "cs", dist = "poisson", param1 = "lambda"))
-# })
-# 
-# # Test 14: Data integrity tests
-# test_that("addCorGen preserves original data", {
-#   dt <- create_sample_data(5)
-#   original_cols <- names(dt)
-# 
-#   result <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
-# 
-#   # Original columns should be preserved
-#   expect_true(all(original_cols %in% names(result)))
-# 
-#   # Original values should be unchanged
-#   for (col in original_cols) {
-#     expect_equal(dt[[col]], result[[col]])
-#   }
-# })
-# 
-# # Test 15: Return type and structure tests
-# test_that("addCorGen returns correct data structure", {
-#   dt <- create_sample_data(5)
-# 
-#   result <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
-# 
-#   # Should return data.table
-#   expect_s3_class(result, "data.table")
-# 
-#   # Should have correct number of rows
-#   expect_equal(nrow(result), nrow(dt))
-# 
-#   # Should have additional columns
-#   expect_gt(ncol(result), ncol(dt))
-# })
-# 
-# # Test 16: negBinomial distribution test
-# test_that("addCorGen works with negBinomial distribution", {
-#   dt <- create_sample_data(5)
-# 
-#   result <- addCorGen(
-#     dtOld = dt,
-#     idvar = "id",
-#     nvars = 2,
-#     rho = 0.5,
-#     corstr = "cs",
-#     dist = "negBinomial",
-#     param1 = "mu",
-#     param2 = "sigma"
-#   )
-# 
-#   expect_equal(nrow(result), nrow(dt))
-#   expect_equal(ncol(result), ncol(dt) + 2)
-#   expect_true(all(result$V1 >= 0))
-#   expect_true(all(result$V2 >= 0))
-# })
-# 
+# Test 2: Argument validation tests
+test_that("addCorGen validates arguments correctly", {
+  dt <- create_sample_data(5)
+
+  # Missing required arguments
+  expect_error(addCorGen(idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", param1 = "mu"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal"))
+
+  # Invalid distribution
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "invalid", param1 = "mu"))
+
+  # Invalid method
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", method = "invalid"))
+
+  # Non-data.table input
+  expect_error(addCorGen(dtOld = data.frame(id = 1:5, mu = 1:5), idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
+
+  # Missing columns
+  expect_error(addCorGen(dtOld = dt, idvar = "missing_col", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "missing_param", param2 = "sigma"))
+})
+
+# Test 3: Parameter validation for different distributions
+test_that("addCorGen validates parameters for different distributions", {
+  dt <- create_sample_data(5)
+
+  # Too many parameters for poisson
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "poisson", param1 = "lambda", param2 = "sigma"))
+
+  # Too many parameters for binary
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "binary", param1 = "prob", param2 = "sigma"))
+
+  # Too few parameters for gamma
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "gamma", param1 = "mu"))
+
+  # Too few parameters for normal
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu"))
+
+  # EP method only for binary
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", method = "ep"))
+})
+
+# Test 4: Wide format (ungrouped data) tests
+test_that("addCorGen works with wide format (ungrouped data)", {
+  dt <- create_sample_data(5)
+
+  # Test all distributions with wide format
+  # Poisson
+  result_pois <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "poisson", param1 = "lambda")
+  expect_equal(nrow(result_pois), nrow(dt))
+  expect_equal(ncol(result_pois), ncol(dt) + 3)
+
+  # Binary
+  result_bin <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "binary", param1 = "prob")
+  expect_equal(nrow(result_bin), nrow(dt))
+  expect_true(all(result_bin$V1 %in% c(0, 1)))
+
+  # Gamma
+  result_gamma <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "gamma", param1 = "mu", param2 = "sigma")
+  expect_equal(nrow(result_gamma), nrow(dt))
+  expect_true(all(result_gamma$V1 > 0))
+
+  # Uniform
+  result_unif <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "uniform", param1 = "min_val", param2 = "max_val")
+  expect_equal(nrow(result_unif), nrow(dt))
+
+  # Normal
+  result_norm <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(nrow(result_norm), nrow(dt))
+})
+
+# Test 5: Long format (grouped data) tests
+test_that("addCorGen works with long format (grouped data)", {
+  dt <- create_sample_data(5, grouped = TRUE)
+
+  # Test with grouped data
+  result <- addCorGen(dtOld = dt, idvar = "id", rho = 0.6, corstr = "ar1", dist = "poisson", param1 = "lambda")
+
+  expect_equal(nrow(result), nrow(dt))
+  expect_equal(ncol(result), ncol(dt) + 1)
+  expect_true("X" %in% names(result))
+
+  # Check that each group has correlated values
+  cluster_counts <- dt[, .N, by = id]
+  result_counts <- result[, .N, by = id]
+  expect_equal(cluster_counts$N, result_counts$N)
+})
+
+# Test 6: Correlation structure tests
+test_that("addCorGen works with different correlation structures", {
+  dt <- create_sample_data(5)
+
+  # Compound symmetry
+  result_cs <- addCorGen(dtOld = dt, idvar = "id", nvars = 4, rho = 0.3, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(ncol(result_cs), ncol(dt) + 4)
+
+  # Autoregressive
+  result_ar1 <- addCorGen(dtOld = dt, idvar = "id", nvars = 4, rho = 0.3, corstr = "ar1", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(ncol(result_ar1), ncol(dt) + 4)
+})
+
+# Test 7: Custom correlation matrix tests
+test_that("addCorGen works with custom correlation matrices", {
+  dt <- create_sample_data(5)
+
+  # Single correlation matrix for wide format
+  corMat <- matrix(c(1, 0.5, 0.3,
+                     0.5, 1, 0.2,
+                     0.3, 0.2, 1), nrow = 3)
+
+  result <- addCorGen(dtOld = dt, idvar = "id", corMatrix = corMat, dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(ncol(result), ncol(dt) + 3)
+
+  # # Test with grouped data and single correlation matrix
+  # dt_grouped <- create_sample_data(3, grouped = TRUE)
+  # # Convert to grouped format with same cluster size
+  #
+  #
+  # corMat_grouped <- matrix(c(1, 0.5, 0.3,
+  #                            0.5, 1, 0.2,
+  #                            0.3, 0.2, 1), nrow = 3)
+  #
+  # result <- addCorGen(dtOld = dt_grouped, idvar = "id", corMatrix = corMat_grouped,
+  #                     dist = "normal", param1 = "mu", param2 = "sigma")
+  # expect_equal(ncol(result), ncol(dt_grouped) + 1)
+
+  # This should work for grouped data with equal cluster sizes
+  # Note: You might need to adjust this test based on your actual data structure
+})
+
+# Test 7a: List of correlation matrices for grouped data with varying cluster sizes
+test_that("addCorGen works with list of correlation matrices for varying cluster sizes", {
+  # Create grouped data with different cluster sizes
+  cluster_sizes <- c(2, 3, 4)  # Different sizes for each cluster
+  dt_varying <- data.table(
+    id = rep(1:3, cluster_sizes),
+    mu = rep(runif(3, 1, 5), cluster_sizes),
+    sigma = rep(runif(3, 0.5, 2), cluster_sizes),
+    lambda = rep(runif(3, 1, 3), cluster_sizes),
+    prob = rep(runif(3, 0.2, 0.8), cluster_sizes)
+  )
+
+  # Create list of correlation matrices matching cluster sizes
+  corMat_list <- list(
+    # 2x2 matrix for cluster 1 (size 2)
+    matrix(c(1, 0.6, 0.6, 1), nrow = 2),
+    # 3x3 matrix for cluster 2 (size 3)
+    matrix(c(1, 0.5, 0.3,
+             0.5, 1, 0.4,
+             0.3, 0.4, 1), nrow = 3),
+    # 4x4 matrix for cluster 3 (size 4)
+    matrix(c(1, 0.4, 0.3, 0.2,
+             0.4, 1, 0.5, 0.3,
+             0.3, 0.5, 1, 0.4,
+             0.2, 0.3, 0.4, 1), nrow = 4)
+  )
+
+  # Test with list of correlation matrices
+  result_list <- addCorGen(
+    dtOld = dt_varying,
+    idvar = "id",
+    corMatrix = corMat_list,
+    dist = "poisson",
+    param1 = "lambda"
+  )
+
+  expect_equal(nrow(result_list), nrow(dt_varying))
+  expect_equal(ncol(result_list), ncol(dt_varying) + 1)
+  expect_true("X" %in% names(result_list))
+
+  # Check that each cluster has the expected number of observations
+  cluster_counts <- dt_varying[, .N, by = id]
+  result_counts <- result_list[, .N, by = id]
+  expect_equal(cluster_counts$N, result_counts$N)
+  expect_equal(cluster_counts$N, cluster_sizes)
+})
+
+# Test 8: Custom column names tests
+test_that("addCorGen works with custom column names", {
+  dt <- create_sample_data(5)
+
+  # Wide format with custom names
+  result_wide <- addCorGen(
+    dtOld = dt,
+    idvar = "id",
+    nvars = 3,
+    rho = 0.4,
+    corstr = "cs",
+    dist = "normal",
+    param1 = "mu",
+    param2 = "sigma",
+    cnames = "var1, var2, var3"
+  )
+
+  expect_true(all(c("var1", "var2", "var3") %in% names(result_wide)))
+
+  # Long format with custom name
+  dt_grouped <- create_sample_data(5, grouped = TRUE)
+  result_long <- addCorGen(
+    dtOld = dt_grouped,
+    idvar = "id",
+    rho = 0.4,
+    corstr = "cs",
+    dist = "poisson",
+    param1 = "lambda",
+    cnames = "custom_var"
+  )
+
+  expect_true("custom_var" %in% names(result_long))
+})
+
+# Test 9: Custom column names validation
+test_that("addCorGen validates custom column names correctly", {
+  dt <- create_sample_data(5)
+  dt_grouped <- create_sample_data(5, grouped = TRUE)
+
+  # Wrong number of names for wide format
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.4, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma", cnames = "var1, var2"))
+
+  # Too many names for long format
+  expect_error(addCorGen(dtOld = dt_grouped, idvar = "id", rho = 0.4, corstr = "cs", dist = "poisson", param1 = "lambda", cnames = "var1, var2"))
+})
+
+# Test 10: Method-specific tests
+test_that("addCorGen EP method works correctly", {
+  dt <- create_sample_data(5)
+
+  # EP method only works with binary
+  result_ep <- addCorGen(
+    dtOld = dt,
+    idvar = "id",
+    nvars = 3,
+    rho = 0.4,
+    corstr = "cs",
+    dist = "binary",
+    param1 = "prob",
+    method = "ep"
+  )
+
+  expect_equal(nrow(result_ep), nrow(dt))
+  expect_true(all(result_ep$V1 %in% c(0, 1)))
+  expect_true(all(result_ep$V2 %in% c(0, 1)))
+  expect_true(all(result_ep$V3 %in% c(0, 1)))
+})
+
+# Test 11: Edge cases and boundary conditions
+test_that("addCorGen handles edge cases", {
+  dt <- create_sample_data(2)
+
+  # Minimum nvars
+  result_min <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(ncol(result_min), ncol(dt) + 2)
+
+  # High correlation
+  result_high_cor <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = 0.99, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(nrow(result_high_cor), nrow(dt))
+
+  # Negative correlation
+  result_neg_cor <- addCorGen(dtOld = dt, idvar = "id", nvars = 2, rho = -0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+  expect_equal(nrow(result_neg_cor), nrow(dt))
+})
+
+# Test 12: Missing correlation parameters for wide format
+test_that("addCorGen requires correlation parameters for wide format", {
+  dt <- create_sample_data(5)
+
+  # Missing nvars, rho, corstr and no corMatrix
+  expect_error(addCorGen(dtOld = dt, idvar = "id", dist = "normal", param1 = "mu", param2 = "sigma"))
+
+  # Missing some correlation parameters
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, dist = "normal", param1 = "mu", param2 = "sigma"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", nvars = 3, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma"))
+})
+
+# Test 13: Missing correlation parameters for long format
+test_that("addCorGen requires correlation parameters for long format", {
+  dt <- create_sample_data(5, grouped = TRUE)
+
+  # Missing rho, corstr and no corMatrix
+  expect_error(addCorGen(dtOld = dt, idvar = "id", dist = "poisson", param1 = "lambda"))
+
+  # Missing some correlation parameters
+  expect_error(addCorGen(dtOld = dt, idvar = "id", rho = 0.5, dist = "poisson", param1 = "lambda"))
+  expect_error(addCorGen(dtOld = dt, idvar = "id", corstr = "cs", dist = "poisson", param1 = "lambda"))
+})
+
+# Test 14: Data integrity tests
+test_that("addCorGen preserves original data", {
+  dt <- create_sample_data(5)
+  original_cols <- names(dt)
+
+  result <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+
+  # Original columns should be preserved
+  expect_true(all(original_cols %in% names(result)))
+
+  # Original values should be unchanged
+  for (col in original_cols) {
+    expect_equal(dt[[col]], result[[col]])
+  }
+})
+
+# Test 15: Return type and structure tests
+test_that("addCorGen returns correct data structure", {
+  dt <- create_sample_data(5)
+
+  result <- addCorGen(dtOld = dt, idvar = "id", nvars = 3, rho = 0.5, corstr = "cs", dist = "normal", param1 = "mu", param2 = "sigma")
+
+  # Should return data.table
+  expect_s3_class(result, "data.table")
+
+  # Should have correct number of rows
+  expect_equal(nrow(result), nrow(dt))
+
+  # Should have additional columns
+  expect_gt(ncol(result), ncol(dt))
+})
+
+# Test 16: negBinomial distribution test
+test_that("addCorGen works with negBinomial distribution", {
+  dt <- create_sample_data(5)
+
+  result <- addCorGen(
+    dtOld = dt,
+    idvar = "id",
+    nvars = 2,
+    rho = 0.5,
+    corstr = "cs",
+    dist = "negBinomial",
+    param1 = "mu",
+    param2 = "sigma"
+  )
+
+  expect_equal(nrow(result), nrow(dt))
+  expect_equal(ncol(result), ncol(dt) + 2)
+  expect_true(all(result$V1 >= 0))
+  expect_true(all(result$V2 >= 0))
+})
+
 # # Some extra
 # 
 # test_that("addCorGen correlation matrix dimension validation errors", {
