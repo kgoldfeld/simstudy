@@ -5,6 +5,7 @@
 "_PACKAGE"
 
 # @import Rcpp was added to address new CI issues (2025.08.27)
+# @importFrom pbv pbvnorm was added to address CI issues (2025..08.28)
 
 # The following block is used by usethis to automatically manage
 # roxygen namespace tags. Modify with care!
