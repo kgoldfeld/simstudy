@@ -1114,63 +1114,60 @@ test_that("All distributions work", {
 # 
 # })
 
-# #### addCorGen
-# 
-# # Test suite for addCorGen function
-# # This assumes you're using testthat framework
-# 
-# library(testthat)
-# library(data.table)
-# 
-# # Helper function to create sample data
-# create_sample_data <- function(n = 10, grouped = FALSE) {
-#   if (!grouped) {
-#     # Ungrouped data (one row per id)
-#     dt <- data.table(
-#       id = 1:n,
-#       mu = runif(n, 1, 5),
-#       sigma = runif(n, 0.5, 2),
-#       prob = runif(n, 0.2, 0.8),
-#       lambda = runif(n, 1, 3),
-#       min_val = runif(n, 0, 1),
-#       max_val = runif(n, 2, 5)
-#     )
-#   } else {
-#     # Grouped data (multiple rows per id)
-#     cluster_sizes <- sample(2:5, n, replace = TRUE)
-#     dt <- data.table(
-#       id = rep(1:n, cluster_sizes),
-#       mu = rep(runif(n, 1, 5), cluster_sizes),
-#       sigma = rep(runif(n, 0.5, 2), cluster_sizes),
-#       prob = rep(runif(n, 0.2, 0.8), cluster_sizes),
-#       lambda = rep(runif(n, 1, 3), cluster_sizes)
-#     )
-#   }
-#   return(dt)
-# }
-# 
-# # Test 1: Basic functionality tests
-# test_that("addCorGen basic functionality works", {
-#   dt <- create_sample_data(5)
-# 
-#   # Test normal distribution
-#   result <- addCorGen(
-#     dtOld = dt,
-#     idvar = "id",
-#     nvars = 3,
-#     rho = 0.5,
-#     corstr = "cs",
-#     dist = "normal",
-#     param1 = "mu",
-#     param2 = "sigma"
-#   )
-# 
-#   expect_true(is.data.table(result))
-#   expect_equal(nrow(result), nrow(dt))
-#   expect_equal(ncol(result), ncol(dt) + 3)
-#   expect_true(all(c("V1", "V2", "V3") %in% names(result)))
-# })
-# 
+#### addCorGen
+
+# Test suite for addCorGen function
+# This assumes you're using testthat framework
+
+# Helper function to create sample data
+create_sample_data <- function(n = 10, grouped = FALSE) {
+  if (!grouped) {
+    # Ungrouped data (one row per id)
+    dt <- data.table(
+      id = 1:n,
+      mu = runif(n, 1, 5),
+      sigma = runif(n, 0.5, 2),
+      prob = runif(n, 0.2, 0.8),
+      lambda = runif(n, 1, 3),
+      min_val = runif(n, 0, 1),
+      max_val = runif(n, 2, 5)
+    )
+  } else {
+    # Grouped data (multiple rows per id)
+    cluster_sizes <- sample(2:5, n, replace = TRUE)
+    dt <- data.table(
+      id = rep(1:n, cluster_sizes),
+      mu = rep(runif(n, 1, 5), cluster_sizes),
+      sigma = rep(runif(n, 0.5, 2), cluster_sizes),
+      prob = rep(runif(n, 0.2, 0.8), cluster_sizes),
+      lambda = rep(runif(n, 1, 3), cluster_sizes)
+    )
+  }
+  return(dt)
+}
+
+# Test 1: Basic functionality tests
+test_that("addCorGen basic functionality works", {
+  dt <- create_sample_data(5)
+
+  # Test normal distribution
+  result <- addCorGen(
+    dtOld = dt,
+    idvar = "id",
+    nvars = 3,
+    rho = 0.5,
+    corstr = "cs",
+    dist = "normal",
+    param1 = "mu",
+    param2 = "sigma"
+  )
+
+  expect_true(is.data.table(result))
+  expect_equal(nrow(result), nrow(dt))
+  expect_equal(ncol(result), ncol(dt) + 3)
+  expect_true(all(c("V1", "V2", "V3") %in% names(result)))
+})
+
 # # Test 2: Argument validation tests
 # test_that("addCorGen validates arguments correctly", {
 #   dt <- create_sample_data(5)
