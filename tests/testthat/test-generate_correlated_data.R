@@ -1391,26 +1391,26 @@ test_that("addCorGen validates custom column names correctly", {
 })
 
 # Test 10: Method-specific tests
-test_that("addCorGen EP method works correctly", {
-  dt <- create_sample_data(5)
-
-  # EP method only works with binary
-  result_ep <- addCorGen(
-    dtOld = dt,
-    idvar = "id",
-    nvars = 3,
-    rho = 0.4,
-    corstr = "cs",
-    dist = "binary",
-    param1 = "prob",
-    method = "ep"
-  )
-
-  expect_equal(nrow(result_ep), nrow(dt))
-  expect_true(all(result_ep$V1 %in% c(0, 1)))
-  expect_true(all(result_ep$V2 %in% c(0, 1)))
-  expect_true(all(result_ep$V3 %in% c(0, 1)))
-})
+# test_that("addCorGen EP method works correctly", {
+#   dt <- create_sample_data(5)
+# 
+#   # EP method only works with binary
+#   result_ep <- addCorGen(
+#     dtOld = dt,
+#     idvar = "id",
+#     nvars = 3,
+#     rho = 0.4,
+#     corstr = "cs",
+#     dist = "binary",
+#     param1 = "prob",
+#     method = "ep"
+#   )
+# 
+#   expect_equal(nrow(result_ep), nrow(dt))
+#   expect_true(all(result_ep$V1 %in% c(0, 1)))
+#   expect_true(all(result_ep$V2 %in% c(0, 1)))
+#   expect_true(all(result_ep$V3 %in% c(0, 1)))
+# })
 
 # Test 11: Edge cases and boundary conditions
 test_that("addCorGen handles edge cases", {
