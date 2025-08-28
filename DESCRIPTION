@@ -35,7 +35,8 @@ Imports:
     mvnfast,
     Rcpp,
     backports,
-    fastglm
+    fastglm,
+    pbv (>= 0.5.47)
 Suggests: 
     covr,
     dplyr,
