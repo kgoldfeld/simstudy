@@ -1003,10 +1003,10 @@ test_that("genCorGen handles mismatched length of params1", {
                "Length of vector 1 = 2, not equal to number of correlated variables: 3")
 })
 
-# test_that("genCorGen handles mismatched length of params2", {
-#   expect_error(genCorGen(100, nvars = 3, params1 = 5, params2 = c(2, 3), dist = "gamma", rho = .7, corstr = "cs"),
-#                "Length of vector 2 = 2, not equal to number of correlated variables: 3")
-# })
+test_that("genCorGen handles mismatched length of params2", {
+  expect_error(genCorGen(100, nvars = 3, params1 = 5, params2 = c(2, 3), dist = "gamma", rho = .7, corstr = "cs"),
+               "Length of vector 2 = 2, not equal to number of correlated variables: 3")
+})
 
 test_that("genCorGen handles invalid method", {
   expect_error(genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", method = "invalid"),
