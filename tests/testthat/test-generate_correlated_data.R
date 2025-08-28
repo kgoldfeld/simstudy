@@ -1516,63 +1516,64 @@ test_that("addCorGen works with negBinomial distribution", {
 test_that("addCorGen correlation matrix dimension validation errors", {
   skip_on_cran()
 
-  # Test 1: List of correlation matrices with wrong dimensions
-  # Create grouped data with specific cluster sizes
-  cluster_sizes <- c(3, 2, 4)
-  dt_varying <- data.table(
-    id = rep(1:3, cluster_sizes),
-    lambda = rep(runif(3, 1, 3), cluster_sizes),
-    mu = rep(runif(3, 1, 5), cluster_sizes),
-    sigma = rep(runif(3, 0.5, 2), cluster_sizes)
+  # # Test 1: List of correlation matrices with wrong dimensions
+  # # Create grouped data with specific cluster sizes
+  # cluster_sizes <- c(3, 2, 4)
+  # dt_varying <- data.table(
+  #   id = rep(1:3, cluster_sizes),
+  #   lambda = rep(runif(3, 1, 3), cluster_sizes),
+  #   mu = rep(runif(3, 1, 5), cluster_sizes),
+  #   sigma = rep(runif(3, 0.5, 2), cluster_sizes)
+  # )
+  # 
+  # # Create list of correlation matrices with WRONG dimensions
+  # corMat_list_wrong <- list(
+  #   # Should be 3x3 for cluster 1 (size 3), but provide 2x2
+  #   matrix(c(1, 0.6, 0.6, 1), nrow = 2),
+  #   # Should be 2x2 for cluster 2 (size 2), but provide 3x3
+  #   matrix(c(1, 0.5, 0.3,
+  #            0.5, 1, 0.4,
+  #            0.3, 0.4, 1), nrow = 3),
+  #   # Should be 4x4 for cluster 3 (size 4), but provide 2x2
+  #   matrix(c(1, 0.4, 0.4, 1), nrow = 2)
+  # )
+  # 
+  # # This should trigger: "Dimensions of correlation matrices in corMatrix not equal to cluster sizes!"
+  # expect_error(
+  #   addCorGen(
+  #     dtOld = dt_varying,
+  #     idvar = "id",
+  #     corMatrix = corMat_list_wrong,
+  #     dist = "poisson",
+  #     param1 = "lambda"
+  #   ),
+  #   "Dimensions of correlation matrices in corMatrix not equal to cluster sizes!"
+  # )
+
+  # Test 2: Single correlation matrix with wrong dimensions for grouped data
+  # Create grouped data where all clusters have the same size
+  dt_same_size <- data.table(
+    id = rep(1:3, each = 3),  # 3 clusters, each with 3 observations
+    lambda = rep(runif(3, 1, 3), each = 3),
+    mu = rep(runif(3, 1, 5), each = 3)
   )
 
-  # Create list of correlation matrices with WRONG dimensions
-  corMat_list_wrong <- list(
-    # Should be 3x3 for cluster 1 (size 3), but provide 2x2
-    matrix(c(1, 0.6, 0.6, 1), nrow = 2),
-    # Should be 2x2 for cluster 2 (size 2), but provide 3x3
-    matrix(c(1, 0.5, 0.3,
-             0.5, 1, 0.4,
-             0.3, 0.4, 1), nrow = 3),
-    # Should be 4x4 for cluster 3 (size 4), but provide 2x2
-    matrix(c(1, 0.4, 0.4, 1), nrow = 2)
-  )
+  # Provide a correlation matrix with wrong dimensions (2x2 instead of 3x3)
+  corMat_wrong <- matrix(c(1, 0.5, 0.5, 1), nrow = 2)
 
-  # This should trigger: "Dimensions of correlation matrices in corMatrix not equal to cluster sizes!"
+  # This should trigger: "Dimensions of corMatrix not equal to cluster sizes!"
   expect_error(
     addCorGen(
-      dtOld = dt_varying,
+      dtOld = dt_same_size,
       idvar = "id",
-      corMatrix = corMat_list_wrong,
+      corMatrix = corMat_wrong,
       dist = "poisson",
       param1 = "lambda"
     ),
-    "Dimensions of correlation matrices in corMatrix not equal to cluster sizes!"
+    "Dimensions of corMatrix not equal to cluster sizes!"
   )
-
-#   # Test 2: Single correlation matrix with wrong dimensions for grouped data
-#   # Create grouped data where all clusters have the same size
-#   dt_same_size <- data.table(
-#     id = rep(1:3, each = 3),  # 3 clusters, each with 3 observations
-#     lambda = rep(runif(3, 1, 3), each = 3),
-#     mu = rep(runif(3, 1, 5), each = 3)
-#   )
-# 
-#   # Provide a correlation matrix with wrong dimensions (2x2 instead of 3x3)
-#   corMat_wrong <- matrix(c(1, 0.5, 0.5, 1), nrow = 2)
-# 
-#   # This should trigger: "Dimensions of corMatrix not equal to cluster sizes!"
-#   expect_error(
-#     addCorGen(
-#       dtOld = dt_same_size,
-#       idvar = "id",
-#       corMatrix = corMat_wrong,
-#       dist = "poisson",
-#       param1 = "lambda"
-#     ),
-#     "Dimensions of corMatrix not equal to cluster sizes!"
-#   )
 })
+
 # 
 # test_that("addCorGen grouped data with different nvars scenarios", {
 #   skip_on_cran()
