@@ -6,7 +6,7 @@ library(data.table)
 # 
 # test_that("Correlation boundaries for binary variables are correct", {
 #   skip_on_cran()
-#   
+# 
 #   p1 <- .5
 #   p2 <- .8
 # 
@@ -17,9 +17,7 @@ library(data.table)
 #   expect_silent(simstudy:::checkBoundsBin(p1, p2, 0.3))
 #   expect_silent(simstudy:::checkBoundsBin(p1, p2, 0.2))
 # })
-# 
-# # .findRhoBin ----
-# 
+
 # # .genBinEP ----
 # 
 # test_that(".genBinEP handles non-positive definite correlation matrices", {
@@ -1624,41 +1622,41 @@ test_that("addCorGen works with negBinomial distribution", {
 #   expect_true(is.data.table(result2))
 #   expect_equal(nrow(result2), nrow(dt_different))
 # })
-
-test_that("addCorGen grouped data with same cluster sizes", {
-  skip_on_cran()
-
-  # Test the case where grouped data has same cluster sizes (same_nvar = TRUE)
-  # This should trigger the "if (same_nvar)" branch
-
-  dt_same <- data.table(
-    id = rep(1:4, each = 3),  # 4 clusters, each with exactly 3 observations
-    lambda = rep(runif(4, 1, 3), each = 3),
-    prob = rep(runif(4, 0.2, 0.8), each = 3)
-  )
-
-  # Test with rho and corstr (no corMatrix provided)
-  # This should use the same cluster size path: genCorMat(nvars = counts[1], ...)
-  expect_silent(result <- addCorGen(
-    dtOld = dt_same,
-    idvar = "id",
-    rho = 0.7,
-    corstr = "cs",
-    dist = "binary",
-    param1 = "prob"
-  ))
-
-  expect_true(is.data.table(result))
-  expect_equal(nrow(result), nrow(dt_same))
-  expect_true("X" %in% names(result))
-  expect_true(all(result$X %in% c(0, 1)))
-
-  # Verify all clusters have the same size
-  cluster_counts <- dt_same[, .N, by = id]
-  expect_true(all(cluster_counts$N == 3))
-  result_counts <- result[, .N, by = id]
-  expect_equal(cluster_counts$N, result_counts$N)
-})
+# 
+# test_that("addCorGen grouped data with same cluster sizes", {
+#   skip_on_cran()
+# 
+#   # Test the case where grouped data has same cluster sizes (same_nvar = TRUE)
+#   # This should trigger the "if (same_nvar)" branch
+# 
+#   dt_same <- data.table(
+#     id = rep(1:4, each = 3),  # 4 clusters, each with exactly 3 observations
+#     lambda = rep(runif(4, 1, 3), each = 3),
+#     prob = rep(runif(4, 0.2, 0.8), each = 3)
+#   )
+# 
+#   # Test with rho and corstr (no corMatrix provided)
+#   # This should use the same cluster size path: genCorMat(nvars = counts[1], ...)
+#   expect_silent(result <- addCorGen(
+#     dtOld = dt_same,
+#     idvar = "id",
+#     rho = 0.7,
+#     corstr = "cs",
+#     dist = "binary",
+#     param1 = "prob"
+#   ))
+# 
+#   expect_true(is.data.table(result))
+#   expect_equal(nrow(result), nrow(dt_same))
+#   expect_true("X" %in% names(result))
+#   expect_true(all(result$X %in% c(0, 1)))
+# 
+#   # Verify all clusters have the same size
+#   cluster_counts <- dt_same[, .N, by = id]
+#   expect_true(all(cluster_counts$N == 3))
+#   result_counts <- result[, .N, by = id]
+#   expect_equal(cluster_counts$N, result_counts$N)
+# })
 
 # 
 # 
