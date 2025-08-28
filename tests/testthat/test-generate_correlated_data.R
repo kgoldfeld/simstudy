@@ -912,61 +912,61 @@ test_that("addCorFlex with single variable", {
   expect_true("single_var" %in% names(result))
 })
 
-# test_that("addCorFlex generates data with specified correlation matrix", {
-#   dt <- data.table(id = 1:10)
-#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
-#   cor_matrix <- matrix(c(1, .5, .5, 1), nrow = 2)
-#   result <- addCorFlex(dt, defs, corMatrix = cor_matrix)
-#   generated_cor_matrix <- cor(result[, .SD, .SDcols = -1])
-#   expect_true(all(abs(generated_cor_matrix[upper.tri(generated_cor_matrix)]) > .4))
-# })
+test_that("addCorFlex generates data with specified correlation matrix", {
+  dt <- data.table(id = 1:10)
+  defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+  cor_matrix <- matrix(c(1, .5, .5, 1), nrow = 2)
+  result <- addCorFlex(dt, defs, corMatrix = cor_matrix)
+  generated_cor_matrix <- cor(result[, .SD, .SDcols = -1])
+  expect_true(all(abs(generated_cor_matrix[upper.tri(generated_cor_matrix)]) > .4))
+})
 
-# test_that("addCorFlex handles tau parameter correctly", {
-#   dt <- data.table(id = 1:10)
-#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
-#   result <- addCorFlex(dt, defs, tau = .3, corstr = "cs")
-#   cor_matrix <- cor(result[, .SD, .SDcols = -1])
-#   expect_true(all(abs(cor_matrix[upper.tri(cor_matrix)]) > .2))
-# })
+test_that("addCorFlex handles tau parameter correctly", {
+  dt <- data.table(id = 1:10)
+  defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+  result <- addCorFlex(dt, defs, tau = .3, corstr = "cs")
+  cor_matrix <- cor(result[, .SD, .SDcols = -1])
+  expect_true(all(abs(cor_matrix[upper.tri(cor_matrix)]) > .2))
+})
 
-# test_that("addCorFlex generates data with correct column names", {
-#   dt <- data.table(id = 1:10)
-#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
-#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
-#   expect_true(all(c("A", "B") %in% names(result)))
-# })
+test_that("addCorFlex generates data with correct column names", {
+  dt <- data.table(id = 1:10)
+  defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+  result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+  expect_true(all(c("A", "B") %in% names(result)))
+})
 
-# test_that("addCorFlex maintains original data columns", {
-#   dt <- data.table(id = 1:10, original_col = rnorm(10))
-#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
-#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
-#   expect_true("original_col" %in% names(result))
-# })
+test_that("addCorFlex maintains original data columns", {
+  dt <- data.table(id = 1:10, original_col = rnorm(10))
+  defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+  result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+  expect_true("original_col" %in% names(result))
+})
 
-# test_that("addCorFlex handles empty data table", {
-#   dt <- data.table()
-#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
-#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
-#   expect_equal(nrow(result), )
-#   expect_equal(ncol(result), 2)
-# })
+test_that("addCorFlex handles empty data table", {
+  dt <- data.table()
+  defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+  result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+  expect_equal(nrow(result), )
+  expect_equal(ncol(result), 2)
+})
 
-# test_that("addCorFlex handles single row data table", {
-#   dt <- data.table(id = 1)
-#   defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
-#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
-#   expect_equal(nrow(result), 1)
-#   expect_equal(ncol(result), 3)
-# })
+test_that("addCorFlex handles single row data table", {
+  dt <- data.table(id = 1)
+  defs <- data.table(varname = c("A", "B"), formula = c("1", "2"), dist = c("normal", "poisson"), variance = c(1, 1))
+  result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+  expect_equal(nrow(result), 1)
+  expect_equal(ncol(result), 3)
+})
 
-# test_that("addCorFlex handles single variable definition", {
-#   dt <- data.table(id = 1:10)
-#   defs <- data.table(varname = "A", formula = "1", dist = "normal", variance = 1)
-#   result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
-#   expect_equal(nrow(result), 10)
-#   expect_equal(ncol(result), 2)
-#   expect_true("A" %in% names(result))
-# })
+test_that("addCorFlex handles single variable definition", {
+  dt <- data.table(id = 1:10)
+  defs <- data.table(varname = "A", formula = "1", dist = "normal", variance = 1)
+  result <- addCorFlex(dt, defs, rho = .4, corstr = "cs")
+  expect_equal(nrow(result), 10)
+  expect_equal(ncol(result), 2)
+  expect_true("A" %in% names(result))
+})
 
 # genCorGen <-----
 
