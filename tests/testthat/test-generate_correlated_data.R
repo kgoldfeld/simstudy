@@ -2,9 +2,6 @@ library(testthat)
 library(simstudy)
 library(data.table)
 
-# cat("\npbv version:", as.character(packageVersion("pbv")), "\n")
-# cat("pbv functions:", paste(getNamespaceExports("pbv"), collapse=", "), "\n")
-
 # checkBoundsBin ----
 
 test_that("Correlation boundaries for binary variables are correct", {
