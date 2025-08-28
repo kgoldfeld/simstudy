@@ -64,7 +64,7 @@ Suggests:
     rms
 LinkingTo: 
     Rcpp, 
-    pbv (>= 0.4-22),
+    pbv (>= 0.5.47),
     fastglm
 VignetteBuilder: 
     knitr
