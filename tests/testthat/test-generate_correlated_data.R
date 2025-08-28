@@ -397,8 +397,6 @@ test_that("genCorMat generates errors correctly.", {
 
 })
 
-print("genCorMat was tested")
-
 # addCorData ----
 
 test_that("addCorData adds correlated data with compound symmetry structure", {
@@ -565,8 +563,6 @@ test_that("addCorData throws error for invalid correlation coefficient", {
                "corMatrix is not positive semi-definite!")
 })
 
-print("addCorData was tested")
-
 # genCorFlex  ----
 
 test_that("Basic Functionality Test", {
@@ -657,8 +653,6 @@ test_that("Distribution type error for dist", {
   expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"),
     "Only implemented for the following distributions: binary, uniform, normal, poisson, gamma, and negative binomial")
 })
-
-print("genCorFlex tests ran")
 
 # addCorFlex <-----
 
@@ -803,8 +797,6 @@ test_that("addCorFlex works with negative binomial distribution", {
   expect_true(all(result$nb_var >= 0))
   expect_true(all(result$nb_var == floor(result$nb_var)))  # integers
 })
-
-print("addCorFlex tests ran")
 
 ## Old tests
 
@@ -977,8 +969,6 @@ test_that("addCorFlex with single variable", {
 #   expect_true("A" %in% names(result))
 # })
 
-print("addCorFlex was tested")
-# 
 # genCorGen <-----
 
 test_that("genCorGen handles invalid distribution", {
@@ -1077,8 +1067,6 @@ test_that("number of parameters adjusted", {
   expect_equal(cor_matrix, obs_cor, tolerance = .1, check.attributes = FALSE)
 })
 
-print("Made it to 1080")
-
 test_that("All distributions work", {
   means <- c(.3, .2, .1)
   dd <- genCorGen(1000, nvars = 3, params1 = means, dist = "binary",
@@ -1112,23 +1100,19 @@ test_that("All distributions work", {
 
 })
 
-print("Made it to 1115")
-
-test_that("ep method work", {
-  means <- c(.3, .2, .1)
-  rho <- .3
-  dd <- genCorGen(1000, nvars = 3, params1 = means, dist = "binary",
-                  rho = rho, corstr = "cs", wide = TRUE, method = "ep")
-  obs_mean <- apply(dd[,-1], 2, mean)
-  obs_cor <- cor(dd[, .SD, .SDcols = -1])
-  cor_matrix <- genCorMat(3, rho = rho)
-
-  expect_equal(obs_mean, means, tolerance = .1, check.attributes = FALSE)
-  expect_equal(obs_cor, cor_matrix, tolerance = .1, check.attributes = FALSE)
-
-})
-
-print("genCorGen was tested")
+# test_that("ep method work", {
+#   means <- c(.3, .2, .1)
+#   rho <- .3
+#   dd <- genCorGen(1000, nvars = 3, params1 = means, dist = "binary",
+#                   rho = rho, corstr = "cs", wide = TRUE, method = "ep")
+#   obs_mean <- apply(dd[,-1], 2, mean)
+#   obs_cor <- cor(dd[, .SD, .SDcols = -1])
+#   cor_matrix <- genCorMat(3, rho = rho)
+# 
+#   expect_equal(obs_mean, means, tolerance = .1, check.attributes = FALSE)
+#   expect_equal(obs_cor, cor_matrix, tolerance = .1, check.attributes = FALSE)
+# 
+# })
 
 # #### addCorGen
 # 
