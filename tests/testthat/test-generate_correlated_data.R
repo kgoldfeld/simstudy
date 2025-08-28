@@ -328,8 +328,6 @@ test_that("blockDecayMat handles different ninds configurations", {
 
 ###
 
-print("genCorMat")
-
 test_that("genCorMat works", {
 
   skip_on_cran()
@@ -399,409 +397,415 @@ test_that("genCorMat generates errors correctly.", {
 
 })
 
-print("stop here")
+print("genCorMat was tested")
 
-# # addCorData ----
-# 
-# test_that("addCorData adds correlated data with compound symmetry structure", {
-# 
-#   skip_on_cran()
-# 
-#   mu <- rnorm(3, mean = c(3, 8, 15))
-#   sigma <- rgamma(3, 1.5, 1)
-#   rho <- rbeta(1, 20, 10)
-# 
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
-#   dt <- genData(500, def)
-# 
-# 
-# 
-#   dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, rho = rho, corstr = "cs")
-# 
-#   expect_true(all(c("V1", "V2", "V3") %in% colnames(dtAdd)))
-#   expect_equal(nrow(dtAdd), 500)
-#   expect_equal(
-#     round(cor(dtAdd[, .(V1, V2, V3)]), 2),
-#     matrix(c(1, rho, rho, rho, 1, rho, rho, rho, 1), nrow = 3),
-#     tolerance = .15,
-#     check.attributes = FALSE
-#   )
-# })
-# 
-# test_that("addCorData adds correlated data with AR1 structure", {
-# 
-#   mu <- rnorm(3, mean = c(3, 8, 15))
-#   sigma <- rgamma(3, 1.5, 1)
-#   rho <- rbeta(1, 20, 10)
-# 
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
-#   dt <- genData(500, def)
-# 
-#   dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, rho = rho, corstr = "ar1")
-# 
-#   expect_true(all(c("V1", "V2", "V3") %in% colnames(dtAdd)))
-#   expect_equal(nrow(dtAdd), 500)
-#   expect_equal(
-#     round(cor(dtAdd[, .(V1, V2, V3)]), 2),
-#     matrix(c(1, rho, rho^2, rho, 1, rho, rho^2, rho, 1), nrow = 3),
-#     tolerance = .15,
-#     check.attributes = FALSE
-#   )
-# })
-# 
-# test_that("addCorData adds correlated data with custom correlation matrix", {
-# 
-#   mu <- rnorm(3, mean = c(3, 8, 15))
-#   sigma <- rgamma(3, 1.5, 1)
-#   corMat <- genCorMat(3)
-# 
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
-#   dt <- genData(500, def)
-# 
-#   dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, corMatrix = corMat)
-# 
-#   expect_true(all(c("V1", "V2", "V3") %in% colnames(dtAdd)))
-#   expect_equal(nrow(dtAdd), 500)
-#   expect_equal(
-#     round(cor(dtAdd[, .(V1, V2, V3)]), 2),
-#     corMat,
-#     tolerance = .15,
-#     check.attributes = FALSE
-#   )
-# })
-# 
-# test_that("addCorData handles different sigma values", {
-# 
-#   mu <- rnorm(3, mean = c(3, 8, 15))
-#   sigma <- rgamma(3, 1.5, 1)
-#   rho <- rbeta(1, 20, 10)
-# 
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
-#   dt <- genData(500, def)
-# 
-#   dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, rho = rho, corstr = "cs",
-#                       cnames = c("X1", "X2", "X3"))
-# 
-#   expect_true(all(c("X1", "X2", "X3") %in% colnames(dtAdd)))
-#   expect_equal(nrow(dtAdd), 500)
-#   expect_equal(round(sd(dtAdd$X1), 1), sigma[1], tolerance = 0.2)
-#   expect_equal(round(sd(dtAdd$X2), 1), sigma[2], tolerance = 0.2)
-#   expect_equal(round(sd(dtAdd$X3), 1), sigma[3], tolerance = 0.2)
-# })
-# 
-# test_that("addCorData handles constant sigma value", {
-# 
-#   mu <- rnorm(3, mean = c(3, 8, 15))
-#   sigma <- rgamma(1, 1.5, 1)
-#   rho <- rbeta(1, 20, 10)
-# 
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
-#   dt <- genData(250, def)
-# 
-#   dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, rho = .7, corstr = "cs")
-# 
-#   expect_true(all(c("V1", "V2", "V3") %in% colnames(dtAdd)))
-#   expect_equal(nrow(dtAdd), 250)
-#   expect_equal(round(sd(dtAdd$V1), 1), sigma, tolerance = 0.2)
-#   expect_equal(round(sd(dtAdd$V2), 1), sigma, tolerance = 0.2)
-#   expect_equal(round(sd(dtAdd$V3), 1), sigma, tolerance = 0.2)
-# })
-# 
-# test_that("addCorData handles constant sigma value", {
-# 
-#   mu <- rnorm(3, mean = c(3, 8, 15))
-#   sigma <- rgamma(2, 1.5, 1)
-#   rho <- rbeta(1, 20, 10)
-# 
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
-#   dt <- genData(250, def)
-# 
-#   expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, rho = rho, corstr = "cs"),
-#                "Improper number of standard deviations")
-# 
-# })
-# 
-# test_that("addCorData throws error for mismatched cnames length", {
-# 
-#   mu <- rnorm(3, mean = c(3, 8, 15))
-#   sigma <- rgamma(1, 1.5, 1)
-#   rho <- rbeta(1, 20, 10)
-# 
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
-#   dt <- genData(250, def)
-# 
-#   expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, rho = .7, corstr = "cs",
-#                           cnames = c("X1", "X2")), "Invalid number of variable names")
-# 
-# })
-# 
-# test_that("addCorData throws error for invalid correlation matrix", {
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   dt <- genData(250, def)
-# 
-#   mu <- c(3, 8, 15)
-#   sigma <- c(1, 2, 3)
-#   invalid_corMat <- matrix(c(1, .2, .8, .2, 1, .6, .8, .6, .5), nrow = 3)  # Not positive semi-definite
-# 
-#   expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, corMatrix = invalid_corMat),
-#                "Correlation matrix not positive definite")
-# })
-# 
-# test_that("addCorData throws error for invalid correlation coefficient", {
-#   def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
-#   dt <- genData(250, def)
-# 
-#   mu <- c(3, 8, 15)
-#   sigma <- c(1, 2, 3)
-# 
-#   expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, rho = 1.5, corstr = "cs"),
-#                "corMatrix is not positive semi-definite!")
-#   expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, rho = -1.5, corstr = "cs"),
-#                "corMatrix is not positive semi-definite!")
-# })
-# 
-# # genCorFlex  ----
-# 
-# test_that("Basic Functionality Test", {
-# 
-#   def <- defData(varname = "xNorm", formula = 3 , variance = 4, dist = "normal")
-#   def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
-#   def <- defData(def, varname = "xBin", formula = .5, dist = "binary")
-# 
-#   dt <- genCorFlex(100, def, rho = .3, corstr = "cs")
-# 
-#   expect_equal(nrow(dt), 100)
-#   expect_equal(ncol(dt), 4) # 3 variables + 1 id column
-# })
-# 
-# test_that("Distribution Test", {
-#   def <- defData(varname = "xNorm", formula = 8, variance = 4, dist = "normal")
-#   def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
-#   def <- defData(def, varname = "xUniform1", formula = "3;8", dist = "uniform")
-#   def <- defData(def, varname = "xPois1", formula = 8, dist = "poisson")
-#   def <- defData(def, varname = "xNB1", formula = 4, variance = 1, dist = "negBinomial")
-# 
-#   dt <- genCorFlex(500, def, rho = .3, corstr = "cs")
-# 
-#   expect_equal(mean(dt$xNorm), 8, tolerance = 0.5)
-#   expect_equal(var(dt$xNorm),  4, tolerance = 0.5)
-#   expect_equal(mean(dt$xGamma1), 15, tolerance = 0.5)
-#   expect_equal(mean(dt$xUniform1), 5.5, tolerance = 0.5)
-#   expect_equal(mean(dt$xPois1), 8, tolerance = 0.5)
-#   expect_equal(mean(dt$xNB1), 4, tolerance = 0.5)
-# 
-# 
-# })
-# 
-# test_that("Correlation Structure Test", {
-#   def <- defData(varname = "xNorm", formula = 7, variance = 4, dist = "normal")
-#   def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
-# 
-#   dt <- genCorFlex(500, def, rho = .3, corstr = "cs")
-# 
-#   cor_matrix <- cor(dt[, -"id"])
-#   expect_equal(cor_matrix, matrix(c(1, .3, .3, 1), 2, 2),
-#                tolerance = .15, check.attributes = FALSE)
-# })
-# 
-# test_that("Correlation Structure Test for tau", {
-#   def <- defData(varname = "xPois1", formula = 7, dist = "poisson")
-#   def <- defData(def, varname = "xPois2", formula = 15, dist = "poisson")
-# 
-#   dt <- genCorFlex(1000, def, tau = .3, corstr = "cs")
-#   obs_cor <- cor(dt[, -"id"])[1,2]
-# 
-#   expect_equal(obs_cor, sin(.3 * pi/2), tolerance = .1)
-# })
-# 
-# test_that("Character error for formula", {
-#   # Create a definition with a non-numeric formula to trigger the warning
-#   def <- data.table::data.table(
-#     varname = c("xNorm", "xInvalid"),
-#     formula = c(3, "invalid"),
-#     variance = c(4, 2),
-#     dist = c("normal", "gamma")
-#   )
-# 
-#   expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"), "Non-scalar values in definitions")
-# })
-# 
-# test_that("NA error for formula", {
-#   # Create a definition with a non-numeric formula to trigger the warning
-#   def <- data.table::data.table(
-#     varname = c("xNorm", "xInvalid"),
-#     formula = c(3, NA),
-#     variance = c(4, 2),
-#     dist = c("normal", "gamma")
-#   )
-# 
-#   expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"), "Non-scalar values in definitions")
-# })
-# 
-# test_that("Distribution type error for dist", {
-#   # Create a definition with a non-numeric formula to trigger the warning
-#   def <- data.table::data.table(
-#     varname = c("xNorm", "xInvalid"),
-#     formula = c(3, 8),
-#     variance = c(4, 2),
-#     dist = c("normal", "invalid")
-#   )
-# 
-#   expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"),
-#     "Only implemented for the following distributions: binary, uniform, normal, poisson, gamma, and negative binomial")
-# })
-# 
-# # addCorFlex <-----
-# 
-# create_test_defs <- function(distributions = c("normal"), varnames = c("X1")) {
-#   defs <- data.table(
-#     varname = varnames,
-#     formula = rep("1", length(varnames)),
-#     dist = distributions,
-#     variance = rep(1, length(varnames)),
-#     link = rep("identity", length(varnames))
-#   )
-#   return(defs)
-# }
-# 
-# # Test suite for addCorFlex function
-# test_that("addCorFlex basic functionality works", {
-#   # Create test data
-#   dt <- genData(10)
-#   defs <- create_test_defs(varnames = c("X1", "X2"))
-# 
-#   # Test basic execution
-#   result <- addCorFlex(dt, defs, rho = 0.5)
-# 
-#   # Basic checks
-#   expect_s3_class(result, "data.table")
-#   expect_equal(nrow(result), 10)
-#   expect_true("X1" %in% names(result))
-#   expect_true("id" %in% names(result))
-# })
-# 
-# test_that("addCorFlex parameter validation works", {
-#   dt <- data.table(5)
-# 
-#   # Test unsupported distribution error
-#   invalid_defs <- data.table(
-#     varname = "X1",
-#     formula = "0",
-#     dist = "beta",  # unsupported distribution
-#     variance = 1,
-#     link = "identity"
-#   )
-# 
-#   expect_error(
-#     addCorFlex(dt, invalid_defs),
-#     "Only implemented for the following distributions"
-#   )
-# })
-# 
-# test_that("addCorFlex works with different correlation structures", {
-#   dt <- genData(5)
-#   defs <- create_test_defs(c("normal", "normal"), c("X1", "X2"))
-# 
-#   # Test compound symmetry structure
-#   result_cs <- addCorFlex(dt, defs, rho = 0.3, corstr = "cs")
-#   expect_s3_class(result_cs, "data.table")
-#   expect_equal(ncol(result_cs), 3)  # id + X1 + X2
-# 
-#   # Test autoregressive structure
-#   result_ar1 <- addCorFlex(dt, defs, rho = 0.3, corstr = "ar1")
-#   expect_s3_class(result_ar1, "data.table")
-#   expect_equal(ncol(result_ar1), 3)
-# })
-# 
-# test_that("addCorFlex works with tau parameter", {
-#   dt <- genData(5)
-#   defs <- create_test_defs()
-# 
-#   # Test with tau parameter (should override rho)
-#   result <- addCorFlex(dt, defs, rho = 0.5, tau = 0.3)
-# 
-#   expect_s3_class(result, "data.table")
-#   expect_equal(nrow(result), 5)
-# })
-# 
-# test_that("addCorFlex works with correlation matrix", {
-#   dt <- genData(5)
-#   defs <- create_test_defs(c("normal", "normal"), c("X1", "X2"))
-# 
-#   # Create a valid correlation matrix
-#   corMatrix <- matrix(c(1, 0.4, 0.4, 1), nrow = 2)
-# 
-#   result <- addCorFlex(dt, defs, corMatrix = corMatrix)
-# 
-#   expect_s3_class(result, "data.table")
-#   expect_equal(ncol(result), 3)
-# })
-# 
-# test_that("addCorFlex works with normal distribution", {
-#   dt <- genData(10)
-#   defs <- create_test_defs("normal", "norm_var")
-# 
-#   result <- addCorFlex(dt, defs, rho = 0.2)
-# 
-#   expect_s3_class(result, "data.table")
-#   expect_true("norm_var" %in% names(result))
-#   expect_equal(nrow(result), 10)
-#   expect_true(is.numeric(result$norm_var))
-# })
-# 
-# test_that("addCorFlex works with binary distribution", {
-#   dt <- genData(10)
-#   defs <- create_test_defs("binary", "bin_var")
-# 
-#   result <- addCorFlex(dt, defs, rho = 0.3)
-# 
-#   expect_s3_class(result, "data.table")
-#   expect_true("bin_var" %in% names(result))
-#   expect_true(all(result$bin_var %in% c(0, 1)))
-# })
-# 
-# test_that("addCorFlex works with poisson distribution", {
-#   dt <- genData(10)
-#   defs <- create_test_defs("poisson", "pois_var")
-# 
-#   result <- addCorFlex(dt, defs, rho = 0.4)
-# 
-#   expect_s3_class(result, "data.table")
-#   expect_true("pois_var" %in% names(result))
-#   expect_true(all(result$pois_var >= 0))
-#   expect_true(all(result$pois_var == floor(result$pois_var)))  # integers
-# })
-# 
-# test_that("addCorFlex works with gamma distribution", {
-#   dt <- genData(10)
-#   defs <- create_test_defs(distributions = "gamma", varnames = "gamma_var")
-# 
-#   result <- addCorFlex(dt, defs, rho = 0.1)
-# 
-#   expect_s3_class(result, "data.table")
-#   expect_true("gamma_var" %in% names(result))
-#   expect_true(all(result$gamma_var > 0))  # gamma values are positive
-# })
-# 
-# test_that("addCorFlex works with negative binomial distribution", {
-#   dt <- genData(10)
-#   defs <- create_test_defs("negBinomial", "nb_var")
-# 
-#   result <- addCorFlex(dt, defs, rho = 0.2)
-# 
-#   expect_s3_class(result, "data.table")
-#   expect_true("nb_var" %in% names(result))
-#   expect_true(all(result$nb_var >= 0))
-#   expect_true(all(result$nb_var == floor(result$nb_var)))  # integers
-# })
-# 
+# addCorData ----
+
+test_that("addCorData adds correlated data with compound symmetry structure", {
+
+  skip_on_cran()
+
+  mu <- rnorm(3, mean = c(3, 8, 15))
+  sigma <- rgamma(3, 1.5, 1)
+  rho <- rbeta(1, 20, 10)
+
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(500, def)
+
+
+
+  dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, rho = rho, corstr = "cs")
+
+  expect_true(all(c("V1", "V2", "V3") %in% colnames(dtAdd)))
+  expect_equal(nrow(dtAdd), 500)
+  expect_equal(
+    round(cor(dtAdd[, .(V1, V2, V3)]), 2),
+    matrix(c(1, rho, rho, rho, 1, rho, rho, rho, 1), nrow = 3),
+    tolerance = .15,
+    check.attributes = FALSE
+  )
+})
+
+test_that("addCorData adds correlated data with AR1 structure", {
+
+  mu <- rnorm(3, mean = c(3, 8, 15))
+  sigma <- rgamma(3, 1.5, 1)
+  rho <- rbeta(1, 20, 10)
+
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(500, def)
+
+  dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, rho = rho, corstr = "ar1")
+
+  expect_true(all(c("V1", "V2", "V3") %in% colnames(dtAdd)))
+  expect_equal(nrow(dtAdd), 500)
+  expect_equal(
+    round(cor(dtAdd[, .(V1, V2, V3)]), 2),
+    matrix(c(1, rho, rho^2, rho, 1, rho, rho^2, rho, 1), nrow = 3),
+    tolerance = .15,
+    check.attributes = FALSE
+  )
+})
+
+test_that("addCorData adds correlated data with custom correlation matrix", {
+
+  mu <- rnorm(3, mean = c(3, 8, 15))
+  sigma <- rgamma(3, 1.5, 1)
+  corMat <- genCorMat(3)
+
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(500, def)
+
+  dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, corMatrix = corMat)
+
+  expect_true(all(c("V1", "V2", "V3") %in% colnames(dtAdd)))
+  expect_equal(nrow(dtAdd), 500)
+  expect_equal(
+    round(cor(dtAdd[, .(V1, V2, V3)]), 2),
+    corMat,
+    tolerance = .15,
+    check.attributes = FALSE
+  )
+})
+
+test_that("addCorData handles different sigma values", {
+
+  mu <- rnorm(3, mean = c(3, 8, 15))
+  sigma <- rgamma(3, 1.5, 1)
+  rho <- rbeta(1, 20, 10)
+
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(500, def)
+
+  dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, rho = rho, corstr = "cs",
+                      cnames = c("X1", "X2", "X3"))
+
+  expect_true(all(c("X1", "X2", "X3") %in% colnames(dtAdd)))
+  expect_equal(nrow(dtAdd), 500)
+  expect_equal(round(sd(dtAdd$X1), 1), sigma[1], tolerance = 0.2)
+  expect_equal(round(sd(dtAdd$X2), 1), sigma[2], tolerance = 0.2)
+  expect_equal(round(sd(dtAdd$X3), 1), sigma[3], tolerance = 0.2)
+})
+
+test_that("addCorData handles constant sigma value", {
+
+  mu <- rnorm(3, mean = c(3, 8, 15))
+  sigma <- rgamma(1, 1.5, 1)
+  rho <- rbeta(1, 20, 10)
+
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(250, def)
+
+  dtAdd <- addCorData(dt, "myID", mu = mu, sigma = sigma, rho = .7, corstr = "cs")
+
+  expect_true(all(c("V1", "V2", "V3") %in% colnames(dtAdd)))
+  expect_equal(nrow(dtAdd), 250)
+  expect_equal(round(sd(dtAdd$V1), 1), sigma, tolerance = 0.2)
+  expect_equal(round(sd(dtAdd$V2), 1), sigma, tolerance = 0.2)
+  expect_equal(round(sd(dtAdd$V3), 1), sigma, tolerance = 0.2)
+})
+
+test_that("addCorData handles constant sigma value", {
+
+  mu <- rnorm(3, mean = c(3, 8, 15))
+  sigma <- rgamma(2, 1.5, 1)
+  rho <- rbeta(1, 20, 10)
+
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(250, def)
+
+  expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, rho = rho, corstr = "cs"),
+               "Improper number of standard deviations")
+
+})
+
+test_that("addCorData throws error for mismatched cnames length", {
+
+  mu <- rnorm(3, mean = c(3, 8, 15))
+  sigma <- rgamma(1, 1.5, 1)
+  rho <- rbeta(1, 20, 10)
+
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  def <- defData(def, varname = "xNorm", formula = "xUni * 2", dist = "normal", variance = 8)
+  dt <- genData(250, def)
+
+  expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, rho = .7, corstr = "cs",
+                          cnames = c("X1", "X2")), "Invalid number of variable names")
+
+})
+
+test_that("addCorData throws error for invalid correlation matrix", {
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  dt <- genData(250, def)
+
+  mu <- c(3, 8, 15)
+  sigma <- c(1, 2, 3)
+  invalid_corMat <- matrix(c(1, .2, .8, .2, 1, .6, .8, .6, .5), nrow = 3)  # Not positive semi-definite
+
+  expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, corMatrix = invalid_corMat),
+               "Correlation matrix not positive definite")
+})
+
+test_that("addCorData throws error for invalid correlation coefficient", {
+  def <- defData(varname = "xUni", dist = "uniform", formula = "10;20", id = "myID")
+  dt <- genData(250, def)
+
+  mu <- c(3, 8, 15)
+  sigma <- c(1, 2, 3)
+
+  expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, rho = 1.5, corstr = "cs"),
+               "corMatrix is not positive semi-definite!")
+  expect_error(addCorData(dt, "myID", mu = mu, sigma = sigma, rho = -1.5, corstr = "cs"),
+               "corMatrix is not positive semi-definite!")
+})
+
+print("addCorData was tested")
+
+# genCorFlex  ----
+
+test_that("Basic Functionality Test", {
+
+  def <- defData(varname = "xNorm", formula = 3 , variance = 4, dist = "normal")
+  def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
+  def <- defData(def, varname = "xBin", formula = .5, dist = "binary")
+
+  dt <- genCorFlex(100, def, rho = .3, corstr = "cs")
+
+  expect_equal(nrow(dt), 100)
+  expect_equal(ncol(dt), 4) # 3 variables + 1 id column
+})
+
+test_that("Distribution Test", {
+  def <- defData(varname = "xNorm", formula = 8, variance = 4, dist = "normal")
+  def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
+  def <- defData(def, varname = "xUniform1", formula = "3;8", dist = "uniform")
+  def <- defData(def, varname = "xPois1", formula = 8, dist = "poisson")
+  def <- defData(def, varname = "xNB1", formula = 4, variance = 1, dist = "negBinomial")
+
+  dt <- genCorFlex(500, def, rho = .3, corstr = "cs")
+
+  expect_equal(mean(dt$xNorm), 8, tolerance = 0.5)
+  expect_equal(var(dt$xNorm),  4, tolerance = 0.5)
+  expect_equal(mean(dt$xGamma1), 15, tolerance = 0.5)
+  expect_equal(mean(dt$xUniform1), 5.5, tolerance = 0.5)
+  expect_equal(mean(dt$xPois1), 8, tolerance = 0.5)
+  expect_equal(mean(dt$xNB1), 4, tolerance = 0.5)
+
+
+})
+
+test_that("Correlation Structure Test", {
+  def <- defData(varname = "xNorm", formula = 7, variance = 4, dist = "normal")
+  def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
+
+  dt <- genCorFlex(500, def, rho = .3, corstr = "cs")
+
+  cor_matrix <- cor(dt[, -"id"])
+  expect_equal(cor_matrix, matrix(c(1, .3, .3, 1), 2, 2),
+               tolerance = .15, check.attributes = FALSE)
+})
+
+test_that("Correlation Structure Test for tau", {
+  def <- defData(varname = "xPois1", formula = 7, dist = "poisson")
+  def <- defData(def, varname = "xPois2", formula = 15, dist = "poisson")
+
+  dt <- genCorFlex(1000, def, tau = .3, corstr = "cs")
+  obs_cor <- cor(dt[, -"id"])[1,2]
+
+  expect_equal(obs_cor, sin(.3 * pi/2), tolerance = .1)
+})
+
+test_that("Character error for formula", {
+  # Create a definition with a non-numeric formula to trigger the warning
+  def <- data.table::data.table(
+    varname = c("xNorm", "xInvalid"),
+    formula = c(3, "invalid"),
+    variance = c(4, 2),
+    dist = c("normal", "gamma")
+  )
+
+  expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"), "Non-scalar values in definitions")
+})
+
+test_that("NA error for formula", {
+  # Create a definition with a non-numeric formula to trigger the warning
+  def <- data.table::data.table(
+    varname = c("xNorm", "xInvalid"),
+    formula = c(3, NA),
+    variance = c(4, 2),
+    dist = c("normal", "gamma")
+  )
+
+  expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"), "Non-scalar values in definitions")
+})
+
+test_that("Distribution type error for dist", {
+  # Create a definition with a non-numeric formula to trigger the warning
+  def <- data.table::data.table(
+    varname = c("xNorm", "xInvalid"),
+    formula = c(3, 8),
+    variance = c(4, 2),
+    dist = c("normal", "invalid")
+  )
+
+  expect_error(genCorFlex(100, def, rho = .3, corstr = "cs"),
+    "Only implemented for the following distributions: binary, uniform, normal, poisson, gamma, and negative binomial")
+})
+
+print("genCorFlex tests ran")
+
+# addCorFlex <-----
+
+create_test_defs <- function(distributions = c("normal"), varnames = c("X1")) {
+  defs <- data.table(
+    varname = varnames,
+    formula = rep("1", length(varnames)),
+    dist = distributions,
+    variance = rep(1, length(varnames)),
+    link = rep("identity", length(varnames))
+  )
+  return(defs)
+}
+
+# Test suite for addCorFlex function
+test_that("addCorFlex basic functionality works", {
+  # Create test data
+  dt <- genData(10)
+  defs <- create_test_defs(varnames = c("X1", "X2"))
+
+  # Test basic execution
+  result <- addCorFlex(dt, defs, rho = 0.5)
+
+  # Basic checks
+  expect_s3_class(result, "data.table")
+  expect_equal(nrow(result), 10)
+  expect_true("X1" %in% names(result))
+  expect_true("id" %in% names(result))
+})
+
+test_that("addCorFlex parameter validation works", {
+  dt <- data.table(5)
+
+  # Test unsupported distribution error
+  invalid_defs <- data.table(
+    varname = "X1",
+    formula = "0",
+    dist = "beta",  # unsupported distribution
+    variance = 1,
+    link = "identity"
+  )
+
+  expect_error(
+    addCorFlex(dt, invalid_defs),
+    "Only implemented for the following distributions"
+  )
+})
+
+test_that("addCorFlex works with different correlation structures", {
+  dt <- genData(5)
+  defs <- create_test_defs(c("normal", "normal"), c("X1", "X2"))
+
+  # Test compound symmetry structure
+  result_cs <- addCorFlex(dt, defs, rho = 0.3, corstr = "cs")
+  expect_s3_class(result_cs, "data.table")
+  expect_equal(ncol(result_cs), 3)  # id + X1 + X2
+
+  # Test autoregressive structure
+  result_ar1 <- addCorFlex(dt, defs, rho = 0.3, corstr = "ar1")
+  expect_s3_class(result_ar1, "data.table")
+  expect_equal(ncol(result_ar1), 3)
+})
+
+test_that("addCorFlex works with tau parameter", {
+  dt <- genData(5)
+  defs <- create_test_defs()
+
+  # Test with tau parameter (should override rho)
+  result <- addCorFlex(dt, defs, rho = 0.5, tau = 0.3)
+
+  expect_s3_class(result, "data.table")
+  expect_equal(nrow(result), 5)
+})
+
+test_that("addCorFlex works with correlation matrix", {
+  dt <- genData(5)
+  defs <- create_test_defs(c("normal", "normal"), c("X1", "X2"))
+
+  # Create a valid correlation matrix
+  corMatrix <- matrix(c(1, 0.4, 0.4, 1), nrow = 2)
+
+  result <- addCorFlex(dt, defs, corMatrix = corMatrix)
+
+  expect_s3_class(result, "data.table")
+  expect_equal(ncol(result), 3)
+})
+
+test_that("addCorFlex works with normal distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs("normal", "norm_var")
+
+  result <- addCorFlex(dt, defs, rho = 0.2)
+
+  expect_s3_class(result, "data.table")
+  expect_true("norm_var" %in% names(result))
+  expect_equal(nrow(result), 10)
+  expect_true(is.numeric(result$norm_var))
+})
+
+test_that("addCorFlex works with binary distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs("binary", "bin_var")
+
+  result <- addCorFlex(dt, defs, rho = 0.3)
+
+  expect_s3_class(result, "data.table")
+  expect_true("bin_var" %in% names(result))
+  expect_true(all(result$bin_var %in% c(0, 1)))
+})
+
+test_that("addCorFlex works with poisson distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs("poisson", "pois_var")
+
+  result <- addCorFlex(dt, defs, rho = 0.4)
+
+  expect_s3_class(result, "data.table")
+  expect_true("pois_var" %in% names(result))
+  expect_true(all(result$pois_var >= 0))
+  expect_true(all(result$pois_var == floor(result$pois_var)))  # integers
+})
+
+test_that("addCorFlex works with gamma distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs(distributions = "gamma", varnames = "gamma_var")
+
+  result <- addCorFlex(dt, defs, rho = 0.1)
+
+  expect_s3_class(result, "data.table")
+  expect_true("gamma_var" %in% names(result))
+  expect_true(all(result$gamma_var > 0))  # gamma values are positive
+})
+
+test_that("addCorFlex works with negative binomial distribution", {
+  dt <- genData(10)
+  defs <- create_test_defs("negBinomial", "nb_var")
+
+  result <- addCorFlex(dt, defs, rho = 0.2)
+
+  expect_s3_class(result, "data.table")
+  expect_true("nb_var" %in% names(result))
+  expect_true(all(result$nb_var >= 0))
+  expect_true(all(result$nb_var == floor(result$nb_var)))  # integers
+})
+
+print("addCorFlex tests ran")
+
 # ## Old tests
 # 
 # test_that("addCorFlex handles invalid distribution", {
