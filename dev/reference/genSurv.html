@@ -190,11 +190,10 @@ to FALSE.</p></dd>
 <span class="r-in"><span><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sdef</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;varname&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       varname formula               scale               shape transition</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;  &lt;char&gt;              &lt;char&gt;              &lt;char&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: censorTime       0                  80                   1          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: censorTime       0                  80                   1          0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Baseline data definitions</span></span></span>
 <span class="r-in"><span></span></span>
@@ -206,14 +205,14 @@ to FALSE.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       id    x1    x2   grp censorTime survTime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;      &lt;num&gt;    &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1     0     0     41.984    8.365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2     0     0     0     33.613    0.068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3     0     0     1     16.175   63.289</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     4     1     1     0    336.267   14.453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     5     1     1     1     45.571   12.858</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     6     1     0     1    145.082    2.107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id    x1    x2   grp survTime censorTime</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1     0     0    5.009     59.099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2     0     0     0   34.043      0.532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3     0     0     1   10.109    101.262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     4     1     1     0  113.537     85.093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     5     1     1     1    6.355     92.199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     6     1     0     1   20.233     15.106</span>
 </code></pre></div>
     </div>
   </div>

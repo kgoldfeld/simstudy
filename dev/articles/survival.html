@@ -192,11 +192,10 @@ membership.</p>
 <span><span class="va">sdef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/defSurv.html">defSurv</a></span><span class="op">(</span><span class="va">sdef</span>, varname <span class="op">=</span> <span class="st">"censorTime"</span>, scale <span class="op">=</span> <span class="fl">80</span>, shape <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sdef</span></span></code></pre></div>
-<pre><code><span><span class="co">## Key: &lt;varname&gt;</span></span>
-<span><span class="co">##       varname formula               scale               shape transition</span></span>
+<pre><code><span><span class="co">##       varname formula               scale               shape transition</span></span>
 <span><span class="co">##        &lt;char&gt;  &lt;char&gt;              &lt;char&gt;              &lt;char&gt;      &lt;num&gt;</span></span>
-<span><span class="co">## 1: censorTime       0                  80                   1          0</span></span>
-<span><span class="co">## 2:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5          0</span></span></code></pre>
+<span><span class="co">## 1:   survTime  1.5*x1 grp*50 + (1-grp)*25 grp*1 + (1-grp)*1.5          0</span></span>
+<span><span class="co">## 2: censorTime       0                  80                   1          0</span></span></code></pre>
 <p>The data are generated with calls to <code>genData</code> and
 <code>genSurv</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -207,14 +206,14 @@ membership.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
-<span><span class="co">##       id    x1   grp censorTime survTime</span></span>
-<span><span class="co">##    &lt;int&gt; &lt;int&gt; &lt;int&gt;      &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">## 1:     1     0     0     42.923    9.875</span></span>
-<span><span class="co">## 2:     2     0     1     77.166   17.338</span></span>
-<span><span class="co">## 3:     3     0     1    143.773  142.939</span></span>
-<span><span class="co">## 4:     4     1     1    181.853   16.470</span></span>
-<span><span class="co">## 5:     5     1     0    210.939  108.276</span></span>
-<span><span class="co">## 6:     6     0     1     34.096    8.122</span></span></code></pre>
+<span><span class="co">##       id    x1   grp survTime censorTime</span></span>
+<span><span class="co">##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;num&gt;      &lt;num&gt;</span></span>
+<span><span class="co">## 1:     1     0     0   49.126     14.729</span></span>
+<span><span class="co">## 2:     2     0     1   48.229     27.742</span></span>
+<span><span class="co">## 3:     3     0     1   89.858    228.703</span></span>
+<span><span class="co">## 4:     4     1     1   25.361    118.098</span></span>
+<span><span class="co">## 5:     5     1     0   56.409    325.796</span></span>
+<span><span class="co">## 6:     6     0     1   21.310     12.995</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A comparison of survival by group and x1</span></span>
 <span></span>
@@ -222,10 +221,10 @@ membership.</p>
 <pre><code><span><span class="co">## Key: &lt;grp, x1&gt;</span></span>
 <span><span class="co">##      grp    x1    V1</span></span>
 <span><span class="co">##    &lt;int&gt; &lt;int&gt; &lt;num&gt;</span></span>
-<span><span class="co">## 1:     0     0 149.2</span></span>
-<span><span class="co">## 2:     0     1  23.4</span></span>
-<span><span class="co">## 3:     1     0  46.3</span></span>
-<span><span class="co">## 4:     1     1  12.2</span></span></code></pre>
+<span><span class="co">## 1:     0     0 141.6</span></span>
+<span><span class="co">## 2:     0     1  19.5</span></span>
+<span><span class="co">## 3:     1     0  51.6</span></span>
+<span><span class="co">## 4:     1     1  11.5</span></span></code></pre>
 <p>Observed survival times and censoring indicators can be generated
 using the competing risk functionality and specifying a censoring
 variable:</p>
@@ -236,14 +235,14 @@ variable:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dtSurv</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
-<span><span class="co">##       id    x1   grp censorTime survTime obsTime status       type</span></span>
-<span><span class="co">##    &lt;int&gt; &lt;int&gt; &lt;int&gt;      &lt;num&gt;    &lt;num&gt;   &lt;num&gt;  &lt;num&gt;     &lt;char&gt;</span></span>
-<span><span class="co">## 1:     1     0     1     92.368   49.071  49.071      1   survTime</span></span>
-<span><span class="co">## 2:     2     1     0     45.801   25.639  25.639      1   survTime</span></span>
-<span><span class="co">## 3:     3     1     1    278.210    4.045   4.045      1   survTime</span></span>
-<span><span class="co">## 4:     4     0     0     12.663   13.325  12.663      0 censorTime</span></span>
-<span><span class="co">## 5:     5     0     0     26.531  323.764  26.531      0 censorTime</span></span>
-<span><span class="co">## 6:     6     1     0     23.514    0.157   0.157      1   survTime</span></span></code></pre>
+<span><span class="co">##       id    x1   grp survTime censorTime obsTime status       type</span></span>
+<span><span class="co">##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;num&gt;      &lt;num&gt;   &lt;num&gt;  &lt;num&gt;     &lt;char&gt;</span></span>
+<span><span class="co">## 1:     1     0     1   57.730     78.513  57.730      1   survTime</span></span>
+<span><span class="co">## 2:     2     1     0    5.707    124.698   5.707      1   survTime</span></span>
+<span><span class="co">## 3:     3     1     1   38.798     29.006  29.006      0 censorTime</span></span>
+<span><span class="co">## 4:     4     0     0    7.872     17.986   7.872      1   survTime</span></span>
+<span><span class="co">## 5:     5     0     0   23.873    150.881  23.873      1   survTime</span></span>
+<span><span class="co">## 6:     6     1     0    2.099      4.176   2.099      1   survTime</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># estimate proportion of censoring by x1 and group</span></span>
 <span></span>
@@ -251,9 +250,9 @@ variable:</p>
 <pre><code><span><span class="co">## Key: &lt;grp, x1&gt;</span></span>
 <span><span class="co">##      grp    x1    V1</span></span>
 <span><span class="co">##    &lt;int&gt; &lt;int&gt; &lt;num&gt;</span></span>
-<span><span class="co">## 1:     0     0  0.71</span></span>
-<span><span class="co">## 2:     0     1  0.10</span></span>
-<span><span class="co">## 3:     1     0  0.44</span></span>
+<span><span class="co">## 1:     0     0  0.48</span></span>
+<span><span class="co">## 2:     0     1  0.19</span></span>
+<span><span class="co">## 3:     1     0  0.33</span></span>
 <span><span class="co">## 4:     1     1  0.13</span></span></code></pre>
 <p>Here is a Kaplan-Meier plot of the data by the four groups:</p>
 <p><img src="survival_files/figure-html/unnamed-chunk-6-1.png" width="624"></p>
@@ -736,14 +735,14 @@ values used to generate the data:</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="label" class="gt_row gt_left">x1</td>
-<td headers="estimate" class="gt_row gt_center">1.5</td>
-<td headers="conf.low" class="gt_row gt_center">1.2, 1.8</td>
+<td headers="estimate" class="gt_row gt_center">1.3</td>
+<td headers="conf.low" class="gt_row gt_center">1.0, 1.6</td>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">x2</td>
-<td headers="estimate" class="gt_row gt_center">-0.89</td>
-<td headers="conf.low" class="gt_row gt_center">-1.1, -0.64</td>
+<td headers="estimate" class="gt_row gt_center">-0.82</td>
+<td headers="conf.low" class="gt_row gt_center">-1.1, -0.57</td>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr>
 </tbody>
@@ -782,19 +781,19 @@ approach.</p>
 <span></span>
 <span><span class="va">dtSurv</span></span></code></pre></div>
 <pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
-<span><span class="co">##          id    x1    x2 censor event_1 event_2</span></span>
-<span><span class="co">##       &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;num&gt;   &lt;num&gt;   &lt;num&gt;</span></span>
-<span><span class="co">##    1:     1     1     1 44.018  17.925  20.241</span></span>
-<span><span class="co">##    2:     2     0     0 29.017  11.424   7.903</span></span>
-<span><span class="co">##    3:     3     0     0 31.842  27.955  18.843</span></span>
-<span><span class="co">##    4:     4     0     1 13.551  12.496  38.107</span></span>
-<span><span class="co">##    5:     5     1     0 21.030  38.528  13.098</span></span>
+<span><span class="co">##          id    x1    x2 event_1 event_2 censor</span></span>
+<span><span class="co">##       &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;num&gt;   &lt;num&gt;  &lt;num&gt;</span></span>
+<span><span class="co">##    1:     1     1     1  20.580  21.335 32.249</span></span>
+<span><span class="co">##    2:     2     0     0  15.441  10.069 12.795</span></span>
+<span><span class="co">##    3:     3     0     0  16.244  44.746 33.273</span></span>
+<span><span class="co">##    4:     4     0     1   9.041  18.339 54.840</span></span>
+<span><span class="co">##    5:     5     1     0  15.509  48.698 26.304</span></span>
 <span><span class="co">##   ---                                         </span></span>
-<span><span class="co">##  997:   997     1     0 69.116  20.604  14.638</span></span>
-<span><span class="co">##  998:   998     0     1 28.159  13.339  51.655</span></span>
-<span><span class="co">##  999:   999     1     1 45.234  15.032  45.905</span></span>
-<span><span class="co">## 1000:  1000     1     1 38.102  18.098  29.745</span></span>
-<span><span class="co">## 1001:  1001     0     0 55.448  16.488  31.665</span></span></code></pre>
+<span><span class="co">##  997:   997     1     0  29.679  17.158 29.725</span></span>
+<span><span class="co">##  998:   998     0     1  13.473  20.445 76.634</span></span>
+<span><span class="co">##  999:   999     1     1  20.888  15.910 79.379</span></span>
+<span><span class="co">## 1000:  1000     1     1  19.022  21.678 49.250</span></span>
+<span><span class="co">## 1001:  1001     0     0  21.982  18.561 58.893</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtSurv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addCompRisk.html">addCompRisk</a></span><span class="op">(</span><span class="va">dtSurv</span>, events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"event_1"</span>, <span class="st">"event_2"</span>, <span class="st">"censor"</span><span class="op">)</span>, </span>
 <span>            timeName <span class="op">=</span> <span class="st">"time"</span>, censorName <span class="op">=</span> <span class="st">"censor"</span><span class="op">)</span></span>
@@ -803,17 +802,17 @@ approach.</p>
 <span><span class="co">## Index: &lt;type&gt;</span></span>
 <span><span class="co">##          id    x1    x2   time event    type</span></span>
 <span><span class="co">##       &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;num&gt; &lt;num&gt;  &lt;char&gt;</span></span>
-<span><span class="co">##    1:     1     1     1 17.925     1 event_1</span></span>
-<span><span class="co">##    2:     2     0     0  7.903     2 event_2</span></span>
-<span><span class="co">##    3:     3     0     0 18.843     2 event_2</span></span>
-<span><span class="co">##    4:     4     0     1 12.496     1 event_1</span></span>
-<span><span class="co">##    5:     5     1     0 13.098     2 event_2</span></span>
+<span><span class="co">##    1:     1     1     1 20.580     1 event_1</span></span>
+<span><span class="co">##    2:     2     0     0 10.069     2 event_2</span></span>
+<span><span class="co">##    3:     3     0     0 16.244     1 event_1</span></span>
+<span><span class="co">##    4:     4     0     1  9.041     1 event_1</span></span>
+<span><span class="co">##    5:     5     1     0 15.509     1 event_1</span></span>
 <span><span class="co">##   ---                                       </span></span>
-<span><span class="co">##  997:   997     1     0 14.638     2 event_2</span></span>
-<span><span class="co">##  998:   998     0     1 13.339     1 event_1</span></span>
-<span><span class="co">##  999:   999     1     1 15.032     1 event_1</span></span>
-<span><span class="co">## 1000:  1000     1     1 18.098     1 event_1</span></span>
-<span><span class="co">## 1001:  1001     0     0 16.488     1 event_1</span></span></code></pre>
+<span><span class="co">##  997:   997     1     0 17.158     2 event_2</span></span>
+<span><span class="co">##  998:   998     0     1 13.473     1 event_1</span></span>
+<span><span class="co">##  999:   999     1     1 15.910     2 event_2</span></span>
+<span><span class="co">## 1000:  1000     1     1 19.022     1 event_1</span></span>
+<span><span class="co">## 1001:  1001     0     0 18.561     2 event_2</span></span></code></pre>
 <p>The competing risk data can be plotted using the cumulative incidence
 functions (rather than the survival curves):</p>
 <p><img src="survival_files/figure-html/unnamed-chunk-11-1.png" width="624"></p>
@@ -827,17 +826,17 @@ steps:</p>
 <span><span class="co">## Index: &lt;type&gt;</span></span>
 <span><span class="co">##         id    x1    x2   time event    type</span></span>
 <span><span class="co">##      &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;num&gt; &lt;num&gt;  &lt;char&gt;</span></span>
-<span><span class="co">##   1:     1     1     0  2.706     2 event_2</span></span>
-<span><span class="co">##   2:     2     0     0 19.337     2 event_2</span></span>
-<span><span class="co">##   3:     3     0     1 13.779     2 event_2</span></span>
-<span><span class="co">##   4:     4     0     1 19.577     1 event_1</span></span>
-<span><span class="co">##   5:     5     1     1 17.407     2 event_2</span></span>
+<span><span class="co">##   1:     1     1     0  4.641     0  censor</span></span>
+<span><span class="co">##   2:     2     0     0 15.421     1 event_1</span></span>
+<span><span class="co">##   3:     3     0     1 14.629     1 event_1</span></span>
+<span><span class="co">##   4:     4     0     1 15.403     1 event_1</span></span>
+<span><span class="co">##   5:     5     1     1 20.851     1 event_1</span></span>
 <span><span class="co">##  ---                                       </span></span>
-<span><span class="co">##  97:    97     1     0 14.614     2 event_2</span></span>
-<span><span class="co">##  98:    98     0     0 17.425     1 event_1</span></span>
-<span><span class="co">##  99:    99     1     0 12.129     2 event_2</span></span>
-<span><span class="co">## 100:   100     0     0  9.518     1 event_1</span></span>
-<span><span class="co">## 101:   101     0     0 15.204     1 event_1</span></span></code></pre>
+<span><span class="co">##  97:    97     1     0 15.650     2 event_2</span></span>
+<span><span class="co">##  98:    98     0     0 20.353     2 event_2</span></span>
+<span><span class="co">##  99:    99     1     0 21.974     2 event_2</span></span>
+<span><span class="co">## 100:   100     0     0  7.428     2 event_2</span></span>
+<span><span class="co">## 101:   101     0     0 16.215     2 event_2</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="introducing-non-proportional-hazards">Introducing non-proportional hazards<a class="anchor" aria-label="anchor" href="#introducing-non-proportional-hazards"></a>
@@ -1352,8 +1351,8 @@ rate:</p>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="label" class="gt_row gt_left">x</td>
-<td headers="estimate" class="gt_row gt_center">-0.69</td>
-<td headers="conf.low" class="gt_row gt_center">-0.88, -0.50</td>
+<td headers="estimate" class="gt_row gt_center">-0.78</td>
+<td headers="conf.low" class="gt_row gt_center">-0.98, -0.59</td>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr></tbody>
 <tfoot class="gt_sourcenotes"><tr>
@@ -1371,8 +1370,8 @@ so the model is apparently reasonable:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        chisq df    p</span></span>
-<span><span class="co">## x       2.01  1 0.16</span></span>
-<span><span class="co">## GLOBAL  2.01  1 0.16</span></span></code></pre>
+<span><span class="co">## x      0.966  1 0.33</span></span>
+<span><span class="co">## GLOBAL 0.966  1 0.33</span></span></code></pre>
 <p><br></p>
 <p><strong>Non-constant/non-proportional hazard ratio</strong></p>
 <p>In this next case, the risk of death when
@@ -1862,8 +1861,8 @@ estimate of the log hazard ratio quite close to -0.70:</p>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="label" class="gt_row gt_left">x</td>
-<td headers="estimate" class="gt_row gt_center">-0.62</td>
-<td headers="conf.low" class="gt_row gt_center">-0.81, -0.42</td>
+<td headers="estimate" class="gt_row gt_center">-0.78</td>
+<td headers="conf.low" class="gt_row gt_center">-0.97, -0.59</td>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr></tbody>
 <tfoot class="gt_sourcenotes"><tr>
@@ -1878,8 +1877,8 @@ we would be wise to see if we can improve on the model.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        chisq df     p</span></span>
-<span><span class="co">## x       6.42  1 0.011</span></span>
-<span><span class="co">## GLOBAL  6.42  1 0.011</span></span></code></pre>
+<span><span class="co">## x       17.4  1 3e-05</span></span>
+<span><span class="co">## GLOBAL  17.4  1 3e-05</span></span></code></pre>
 <p>We might be able to see from the plot where proportionality diverges,
 in which case we can split the data set into two parts at the identified
 time point. (In many cases, the transition point or points won’t be so
@@ -2355,15 +2354,15 @@ splitting the data at day 150, we get the desired estimates:</p>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    x * tgroup=1</td>
-<td headers="estimate" class="gt_row gt_center">-0.94</td>
-<td headers="conf.low" class="gt_row gt_center">-1.3, -0.60</td>
+<td headers="estimate" class="gt_row gt_center">-1.5</td>
+<td headers="conf.low" class="gt_row gt_center">-1.8, -1.1</td>
 <td headers="p.value" class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    x * tgroup=2</td>
-<td headers="estimate" class="gt_row gt_center">-0.44</td>
-<td headers="conf.low" class="gt_row gt_center">-0.68, -0.20</td>
-<td headers="p.value" class="gt_row gt_center"></td>
+<td headers="estimate" class="gt_row gt_center">-0.40</td>
+<td headers="conf.low" class="gt_row gt_center">-0.65, -0.15</td>
+<td headers="p.value" class="gt_row gt_center">0.002</td>
 </tr>
 </tbody>
 <tfoot class="gt_sourcenotes"><tr>
@@ -2375,9 +2374,9 @@ splitting the data at day 150, we get the desired estimates:</p>
 appropriateness of the model:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cox.zph</span><span class="op">(</span><span class="va">coxfit2</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                  chisq df    p</span></span>
-<span><span class="co">## x:strata(tgroup)  3.75  2 0.15</span></span>
-<span><span class="co">## GLOBAL            3.75  2 0.15</span></span></code></pre>
+<pre><code><span><span class="co">##                  chisq df   p</span></span>
+<span><span class="co">## x:strata(tgroup)  1.02  2 0.6</span></span>
+<span><span class="co">## GLOBAL            1.02  2 0.6</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="generating-parameters-for-survival-distribution">Generating parameters for survival distribution<a class="anchor" aria-label="anchor" href="#generating-parameters-for-survival-distribution"></a>
