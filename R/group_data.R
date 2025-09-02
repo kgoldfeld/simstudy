@@ -557,7 +557,7 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 
   dtmatrix <- cbind(dtmatrix, 1 - apply(dtmatrix, 1, sum))
 
-  grpExp <- .Call(`_simstudy_matMultinom`, dtmatrix, PACKAGE = "simstudy")
+  grpExp <- .Call(`_simstudy_matMultinom`, abs(dtmatrix), PACKAGE = "simstudy")
 
   dtnew <- cbind(dt[, .SD, .SDcols = key(dt)], grpExp)
   data.table::setkeyv(dtnew, key(dt))
@@ -647,9 +647,9 @@ trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
     ))
   }
 
-  if ((nPer) < (startPer + (nWaves - 1) * lenWaves + 1)) {
+  if ((nPer) < (startPer + (nWaves - 1) * (lenWaves + lag) + 1)) {
     stop(paste(
-      "Design requires", (startPer + (nWaves - 1) * lenWaves + 1),
+      "Design requires", (startPer + (nWaves - 1) * (lenWaves + lag) + 1),
       "periods but only", nPer, "generated."
     ))
   }

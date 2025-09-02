@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 test_that("beta distributed data are generated correctly", {
   skip_on_cran()
   

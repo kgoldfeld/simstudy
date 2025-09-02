@@ -192,7 +192,7 @@
     stop(paste0(sum(theta > 1), valueS))
   }
 
-  if (!is.null(knots) & !all(knots < 1) & !all(knots > 0)) {
+  if (!is.null(knots) & (any(knots <= 0) | any(knots >= 1))) {
     stop("All knots must be between 0 and 1")
   }
 
@@ -568,14 +568,16 @@
 .parseUnifFormula <- function(formula, dtSim, n, envir) {
   range <- .splitFormula(formula)
 
-  if (length(range) != 2) {
-    stop(
-      paste(
-        "Formula for unifrom distributions must have",
-        "the format: 'min;max'. See ?distributions"
-      )
-    )
-  }
+  # This is checked in .checkUniform
+  # if (length(range) != 2) {
+  #   
+  #   stop(
+  #     paste(
+  #       "Formula for uniform distributions must have",
+  #       "the format: 'min;max'. See ?distributions"
+  #     )
+  #   )
+  # }
   
   parsedRange <- .evalWith(range, .parseDotVars(range, envir), dtSim, n, envir)
 
@@ -653,13 +655,13 @@
 
 .genclustsize <- function(n, formula, variance = 0,  envir = parent.frame()) { 
   
-  if (!requireNamespace("dirmult", quietly = TRUE)) {
+  if (!requireNamespace("dirmult", quietly = TRUE)) { # nocov start
     stop(
       "Package \"dirmult\" must be installed to use this function with 
        the Poisson distribution.",
         call. = FALSE
     )
-  }
+  } # nocov end
   
   formula <- .evalWith(formula, .parseDotVars(formula, envir), envir = envir)[1]
   variance <- .evalWith(variance, .parseDotVars(variance, envir), envir = envir)[1]

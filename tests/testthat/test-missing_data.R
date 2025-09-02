@@ -1,3 +1,7 @@
+library(testthat)
+library(simstudy)
+library(data.table)
+
 # defMiss ----
 test_that("defMiss produces correct output", {
   varname <- "test"
@@ -127,11 +131,11 @@ test_that("LAG() usage is detected correctly.", {
   hasLag <- c("a + 5 | LAG(3) - 4", " 4 + 3 ", "LAG(x)")
   noLag <- c("a +5", "3 + 1", "log(3) + b")
 
-  expect_true(.checkLags(hasLag))
-  expect_true(.checkLags(hasLag[1]))
+  expect_true(simstudy:::.checkLags(hasLag))
+  expect_true(simstudy:::.checkLags(hasLag[1]))
 
-  expect_false(.checkLags(noLag))
-  expect_false(.checkLags(noLag[1]))
+  expect_false(simstudy:::.checkLags(noLag))
+  expect_false(simstudy:::.checkLags(noLag[1]))
 })
 
 # .addLags ----
@@ -145,10 +149,10 @@ test_that(".addLags throws errors.", {
   reservedName <- copy(dataLong)
   reservedName$.rx1 <- reservedName$rx
 
-  expect_error(.addLags(data, ok), "not longitudinal")
-  expect_error(.addLags(dataLong, doubleErr), "Repeated lag term")
-  expect_error(.addLags(dataLong, notFound), "not in data table")
-  expect_error(.addLags(reservedName, ok), "do not use")
+  expect_error(simstudy:::.addLags(data, ok), "not longitudinal")
+  expect_error(simstudy:::.addLags(dataLong, doubleErr), "Repeated lag term")
+  expect_error(simstudy:::.addLags(dataLong, notFound), "not in data table")
+  expect_error(simstudy:::.addLags(reservedName, ok), "do not use")
 })
 
 test_that("LAGS are added as expected.", {
@@ -179,7 +183,117 @@ test_that("LAGS are added as expected.", {
   lagNames <- c(".rx1", ".tx1")
   lagForms <- c("-2 + 1.5 * .rx1", "-2.1 + 1.3 * .tx1")
 
-  expect_equal(.addLags(dataLong, c(origForm, noLAG)), list(dataAfter, c(lagForms, noLAG), lagNames))
+  expect_equal(simstudy:::.addLags(dataLong, c(origForm, noLAG)), list(dataAfter, c(lagForms, noLAG), lagNames))
+})
+
+# Some extra tests for genMiss
+
+test_that("genMiss handles LAG formulas in repeated case", {
+  skip_on_cran()
+  
+  # Create a longitudinal dataset with a variable that can be lagged
+  def1 <- defData(varname = "rx", dist = "binary", formula = 0.5)
+  def1 <- defData(def1, "x1", dist = "normal", formula = "20 + 10*rx", variance = 2)
+  def1 <- defData(def1, "x2", dist = "normal", formula = "15 + 5*rx", variance = 1)
+  
+  dtAct <- genData(100, def1)
+  
+  # Add periods to create longitudinal data
+  dtTime <- addPeriods(dtAct, nPeriods = 4)
+  
+  # Add a time-varying variable that changes over periods
+  defLong <- defDataAdd(varname = "trt", dist = "binary", formula = "0.3 + 0.1*period")
+  dtTime <- addColumns(defLong, dtTime)
+  
+  # Create missing data definitions that use LAG functions
+  # This should trigger the includesLags condition
+  defMlong <- defMiss(
+    varname = "x1", 
+    formula = "0.2 + 0.1*LAG(trt)", 
+    logit.link = TRUE,
+    baseline = FALSE, 
+    monotonic = FALSE
+  )
+  
+  defMlong <- defMiss(
+    defMlong,
+    varname = "x2", 
+    formula = "0.15 + 0.05*LAG(rx)", 
+    logit.link = TRUE,
+    baseline = FALSE, 
+    monotonic = FALSE
+  )
+  
+  # This should trigger the includesLags = TRUE condition and execute the uncovered lines
+  expect_silent(
+    missMatLong <- genMiss(
+      dtTime, 
+      defMlong, 
+      idvars = "id", 
+      repeated = TRUE, 
+      periodvar = "period"
+    )
+  )
+  
+  # Verify the result is a valid missing data matrix
+  expect_true(is.data.table(missMatLong))
+  expect_true("id" %in% names(missMatLong))
+  expect_true("period" %in% names(missMatLong))
+  expect_true("x1" %in% names(missMatLong))
+  expect_true("x2" %in% names(missMatLong))
+  expect_true(all(missMatLong$x1 %in% c(0, 1)))
+  expect_true(all(missMatLong$x2 %in% c(0, 1)))
+  expect_equal(nrow(missMatLong), nrow(dtTime))
+})
+
+test_that("genMiss with LAG formulas and baseline = TRUE", {
+  skip_on_cran()
+  
+  # Test the combination of LAG formulas with baseline missingness
+  def1 <- defData(varname = "grp", dist = "binary", formula = 0.4)
+  def1 <- defData(def1, "y1", dist = "normal", formula = "10 + 5*grp", variance = 2)
+  
+  dtAct <- genData(80, def1)
+  dtTime <- addPeriods(dtAct, nPeriods = 5)
+  
+  # Add a time-varying covariate
+  defLong <- defDataAdd(varname = "status", dist = "binary", formula = "0.2 + 0.1*period + 0.1*grp")
+  dtTime <- addColumns(defLong, dtTime)
+  
+  # Mix baseline and LAG-based missingness
+  defMlong <- defMiss(
+    varname = "y1", 
+    formula = "0.25", 
+    baseline = TRUE
+  )
+  
+  defMlong <- defMiss(
+    defMlong,
+    varname = "status", 
+    formula = "0.1 + 0.2*LAG(grp)", 
+    logit.link = TRUE,
+    baseline = FALSE, 
+    monotonic = FALSE
+  )
+  
+  # This should still trigger the LAG processing
+  expect_silent(
+    missMatLong <- genMiss(
+      dtTime, 
+      defMlong, 
+      idvars = "id", 
+      repeated = TRUE, 
+      periodvar = "period"
+    )
+  )
+  
+  # Verify the results
+  expect_true(is.data.table(missMatLong))
+  expect_equal(nrow(missMatLong), nrow(dtTime))
+  
+  # Check that baseline missingness works correctly (y1 should be same across periods)
+  baseline_check <- missMatLong[, .(consistent = length(unique(y1)) == 1), by = id]
+  expect_true(all(baseline_check$consistent))
 })
 
 # genObs ----

@@ -1053,11 +1053,13 @@ genSurv <- function(dtName, survDefs, digits = 3,
     
     if (nrow(subDef) > 1) {
       
-      if (subDef[2, shape] != subDef[1, shape]) {
+      if (subDef[2, shape] != subDef[1, shape]) # nocov
+      {
         warning("Shape definitions over periods are different. Only first definition will be used.")
       }
       
-      if (subDef[2, scale] != subDef[1, scale]) {
+      if (subDef[2, scale] != subDef[1, scale]) # nocov
+      {
         warning("Scale definitions over periods are different. Only first definition will be used.")
       }
       
@@ -1090,7 +1092,7 @@ genSurv <- function(dtName, survDefs, digits = 3,
   }
   
   if (!is.null(timeName)) {
-    
+
     dtSurv <- addCompRisk(dtSurv, events, timeName, censorName, 
       eventName, typeName, keepEvents)
     

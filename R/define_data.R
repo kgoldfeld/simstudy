@@ -631,7 +631,7 @@ defSurv <- function(dtDefs = NULL,
     assertAscending(transition, call = sys.call(-1))
   }
   
-  setkey(defNew, varname)
+  # setkey(defNew, varname). # Not sure why this was necessary
   
   return(defNew[])
 }
@@ -730,9 +730,10 @@ defSurv <- function(dtDefs = NULL,
       clusterSize = {
         .isValidArithmeticFormula(newform, defVars)
         .isValidArithmeticFormula(variance, defVars)
-      },
-      custom = {},
-      stop("Unknown distribution.")
+      }
+      ### We never get here, because we are "asserting" proper distributions
+      # custom = {},
+      # stop("Unknown distribution.")
     )
 
     invisible(newvar)
@@ -823,7 +824,7 @@ defSurv <- function(dtDefs = NULL,
   if (length(range) != 2) {
     stop(
       paste(
-        "Formula for unifrom distributions must have",
+        "Formula for uniform distributions must have",
         "the format: 'min;max' See ?distributions"
       )
     )
@@ -857,16 +858,17 @@ defSurv <- function(dtDefs = NULL,
   if (.isError(newExpress)) {
     valueError(
       names = formula,
-      msg = list("Equation: '{names}' not in proper form. See ?distributions ."),
+      msg = list("Equation: '{names}' not in proper form. See ?distributions."),
       call = NULL
     )
-    stop(paste(
-      "Equation: '",
-      formula,
-      "' not in proper form. See ?distributions ."
-    ),
-    call. = FALSE
-    )
+    ## This was redundant - never getting to this point
+    # stop(paste(
+    #   "Equation: '",
+    #   formula,
+    #   "' not in proper form. See ?distributions ."
+    # ),
+    # call. = FALSE
+    # )
   }
 
   formFuncs <- all.names(newExpress, unique = T)

@@ -49,4 +49,31 @@ jobs:
           extra-packages: |
             rcmdcheck
             hedgehogqa/r-hedgehog
+            
+      # In case we need to debug, and run each test separately
+            
+      # - name: Install package from source
+      #   run: Rscript -e 'install.packages(".", repos = NULL, type = "source")'
+      # 
+      # - name: Run tests individually (R)
+      #   run: |
+      #     library(simstudy)   # make sure the package is loaded
+      #     library(testthat)
+      #     test_files <- list.files("tests/testthat", pattern = "^test.*\\.[rR]$", full.names = TRUE)
+      #     for (f in test_files) {
+      #       cat(">>> Running", f, "\n")
+      #       tryCatch({
+      #         testthat::test_file(f)
+      #         cat("Completed:", f, "\n")
+      #       }, error = function(e) {
+      #         cat("Error in", f, ":", e$message, "\n")
+      #         stop(e)
+      #       })
+      #     }
+      #   shell: Rscript {0}
+
+      # 🧪 Now run the full check
+      
       - uses: r-lib/actions/check-r-package@v2
+      
+      

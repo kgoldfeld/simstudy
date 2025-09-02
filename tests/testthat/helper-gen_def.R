@@ -1,4 +1,7 @@
+library(simstudy)
+library(data.table)
 library(hedgehog, pos = 3)
+
 # Generators:
 #   This file implements helper functions and generators used in property based
 #   testing using the hedgehog package. Generators do not just return one value
@@ -8,7 +11,8 @@ library(hedgehog, pos = 3)
 #   usecase or intent is not clear from the generator naming.
 
 # General Generators ----
-distributions <- .getDists()[1:14]
+
+distributions <- simstudy:::.getDists()[1:14]         # changed to fix CI error
 gen_dist <- gen.no.shrink(gen.element(distributions))
 
 # beta dist variance
@@ -382,8 +386,8 @@ gen_link_logit <- gen.no.shrink(gen.element(c("identity", "logit")))
 # Lookup Table ----
 #   This data.table is used in generating complete data definitions. New
 #   Distributios need to be added here to to be included in testing.
-reg <- data.table()
-reg$name <- sort(.getDists()[1:14])
+reg <- data.table::data.table()
+reg$name <- sort(simstudy:::.getDists()[1:14])  # changed for CI issue
 reg$formula <- character()
 reg$variance <- "gen_var"
 reg$link <- "gen_id"
@@ -424,7 +428,7 @@ gen_dists <-
 gen_def_dt <-
   function(n) {
     gen.map(function(list) {
-      dt <- as.data.table(list)
+      dt <- data.table::as.data.table(list)
       names(dt) <- c("varname", "dist")
       dt$formula <- character()
       dt$variance <- character()
