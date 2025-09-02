@@ -191,7 +191,7 @@
 
     stop(paste0(sum(theta > 1), valueS))
   }
-  
+
   if (!is.null(knots) & (any(knots <= 0) | any(knots >= 1))) {
     stop("All knots must be between 0 and 1")
   }
