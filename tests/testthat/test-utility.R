@@ -1408,6 +1408,30 @@ test_that("grouped() preserves variable names correctly", {
   expect_named(result, c("my_var", "another_var"))
 })
 
+test_that("grouped() preserves variable names correctly when specified in call", {
+  
+  another_var <- c(2, 3, 4)
+  
+  result1 <- grouped(my_var = c(1,2,3), another_var = c(2,3,4))
+  result2 <- grouped(my_var = c(1,2,3), another_var)
+  
+  expect_named(result1, c("my_var", "another_var"))
+  expect_named(result2, c("my_var", "another_var"))
+  
+  
+})
+
+test_that("grouped() works with numeric vectors of length 1", {
+  x <- 5
+  y <- 10
+  
+  result <- grouped(x, y)
+  
+  expect_s3_class(result, "grouped_params")
+  expect_equal(length(result$x), 1)
+  expect_equal(length(result$y), 1)
+})
+
 # Test scenario_list() function
 test_that("scenario_list() works with only regular parameters", {
   a <- c(1, 2)
@@ -1521,16 +1545,6 @@ test_that("scenario_list() returns list of named vectors", {
   expect_named(result[[1]], c("a", "scenario"))
 })
 
-test_that("grouped() works with numeric vectors of length 1", {
-  x <- 5
-  y <- 10
-  
-  result <- grouped(x, y)
-  
-  expect_s3_class(result, "grouped_params")
-  expect_equal(length(result$x), 1)
-  expect_equal(length(result$y), 1)
-})
 
 test_that("scenario_list() handles edge case of single value", {
   a <- 1
@@ -1540,4 +1554,18 @@ test_that("scenario_list() handles edge case of single value", {
   expect_equal(length(result), 1)
   expect_equal(unname(result[[1]]["a"]), 1)
   expect_equal(unname(result[[1]]["scenario"]), 1)
+})
+
+test_that("scenario_list() preserves variable names correctly when specified in call", {
+  
+  result <- scenario_list(a = c(1,2,3), b = c(3,4), grouped(x = c(3,4), y = c(5,6)))
+  expect_true(all(sapply(result, function(x) all(c("a", "b", "x", "y") %in% names(x)))))
+  
+  y <- c(5, 6)
+  b <- c(3, 4)
+  result <- scenario_list(a = c(1,2,3), b, grouped(x = c(3,4), y))
+  expect_true(all(sapply(result, function(x) all(c("a", "b", "x", "y") %in% names(x)))))
+  
+  
+  
 })

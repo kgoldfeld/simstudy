@@ -20,8 +20,24 @@ grouped <- function(...) {
   
   nargs <- as.list(substitute(list(...)))[-1]
   args <- list(...)
-  names(args) <- sapply(nargs, deparse)
   
+  # set the argument names based on how they were passed
+  
+  arg_names <- names(args)
+  
+  if (is.null(arg_names)) {
+    # No names provided, use deparsed expressions
+    names(args) <- sapply(nargs, deparse)
+  } else {
+    # Some or all arguments are named
+    # Use provided names, but fill in missing ones with deparsed expressions
+    unnamed <- arg_names == ""
+    if (any(unnamed)) {
+      arg_names[unnamed] <- sapply(nargs[unnamed], deparse)
+    }
+    names(args) <- arg_names
+  }
+
   # Check that all arguments have the same length
   
   arg_lengths <- sapply(args, length)
@@ -62,7 +78,23 @@ scenario_list <- function(...) {
   
   nargs <- as.list(substitute(list(...)))[-1]
   args <- list(...)
-  names(args) <- sapply(nargs, deparse)
+  
+  # set the argument names based on how they were passed
+  
+  arg_names <- names(args)
+
+  if (is.null(arg_names)) {
+    # No names provided, use deparsed expressions
+    names(args) <- sapply(nargs, deparse)
+  } else {
+    # Some or all arguments are named
+    # Use provided names, but fill in missing ones with deparsed expressions
+    unnamed <- arg_names == ""
+    if (any(unnamed)) {
+      arg_names[unnamed] <- sapply(nargs[unnamed], deparse)
+    }
+    names(args) <- arg_names
+  }
   
   # separate regular and grouped parameters
   
