@@ -4,11 +4,14 @@
 \alias{scenario_list}
 \title{Create list of parameter scenarios}
 \usage{
-scenario_list(...)
+scenario_list(..., each = 1)
 }
 \arguments{
 \item{...}{Named arguments defining parameters. Arguments may be regular
 vectors or \code{grouped_params} objects created with \code{\link{grouped}}.}
+
+\item{each}{Integer representing the number of replications for each scenario
+or set of parameters.}
 }
 \value{
 A list of scenarios, where each element is a named vector of parameter
@@ -24,7 +27,7 @@ s1 <- scenario_list(a = 1:2, b = c("x", "y"))
 
 # Grouped parameters
 g <- grouped(x = 1:2, y = c(10, 20))
-s2 <- scenario_list(a = c("low", "high"), g)
+s2 <- scenario_list(a = c("low", "high"), g, each = 3)
 
 # Inspect first few scenarios
 head(s1)

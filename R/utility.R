@@ -57,6 +57,8 @@ grouped <- function(...) {
 #' regular parameters and preserving grouped parameters that must vary together.
 #' @param ... Named arguments defining parameters. Arguments may be regular 
 #' vectors or `grouped_params` objects created with \code{\link{grouped}}.
+#' @param each Integer representing the number of replications for each scenario
+#' or set of parameters.
 #' @return A list of scenarios, where each element is a named vector of parameter 
 #' values with an added element `scenario` giving the scenario index.
 #' @examples
@@ -65,7 +67,7 @@ grouped <- function(...) {
 #'
 #' # Grouped parameters
 #' g <- grouped(x = 1:2, y = c(10, 20))
-#' s2 <- scenario_list(a = c("low", "high"), g)
+#' s2 <- scenario_list(a = c("low", "high"), g, each = 3)
 #' 
 #' # Inspect first few scenarios
 #' head(s1)
@@ -74,7 +76,7 @@ grouped <- function(...) {
 #' @export
 #' @concept utility
 #' @md
-scenario_list <- function(...) {
+scenario_list <- function(..., each = 1) {
   
   nargs <- as.list(substitute(list(...)))[-1]
   args <- list(...)
@@ -141,7 +143,9 @@ scenario_list <- function(...) {
   }
   
   argmat$scenario <- seq_len(nrow(argmat))
-  return(asplit(argmat, MARGIN = 1))
+  scenarios <- asplit(argmat, MARGIN = 1)
+  
+  return(rep(scenarios, each = each))
 }
 
 #' Generate Mixture Formula
