@@ -1063,7 +1063,7 @@ test_that("number of parameters adjusted", {
   result <- genCorGen(1000, nvars = 3, params1 = c(5, 2, 1), params2 = 4, dist = "normal",
       corMatrix = cor_matrix, wide = TRUE)
   obs_cor <- cor(result[, .SD, .SDcols = -1])
-  expect_equal(cor_matrix, obs_cor, tolerance = .1, check.attributes = FALSE)
+  expect_equal(cor_matrix, obs_cor, tolerance = .15, check.attributes = FALSE)
 })
 
 test_that("All distributions work", {

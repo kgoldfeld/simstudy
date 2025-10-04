@@ -20,8 +20,7 @@ knitr::opts_chunk$set(
 library(simstudy)
 library(data.table)
 library(parallel)
-library(lme4)
-# library(lmerTest) # This is needed as well
+library(lmerTest) 
 ```
 
 ## Introduction
