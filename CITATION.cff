@@ -640,4 +640,21 @@ references:
     email: fh@fharrell.com
   year: '2025'
   doi: 10.32614/CRAN.package.rms
+- type: software
+  title: lmerTest
+  abstract: 'lmerTest: Tests in Linear Mixed Effects Models'
+  notes: Suggests
+  url: https://github.com/runehaubo/lmerTestR
+  repository: https://CRAN.R-project.org/package=lmerTest
+  authors:
+  - family-names: Kuznetsova
+    given-names: Alexandra
+  - family-names: Bruun Brockhoff
+    given-names: Per
+    email: perbb@dtu.dk
+  - family-names: Haubo Bojesen Christensen
+    given-names: Rune
+    email: Rune.Haubo@gmail.com
+  year: '2025'
+  doi: 10.32614/CRAN.package.lmerTest
 
