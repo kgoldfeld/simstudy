@@ -58,7 +58,7 @@ grouped <- function(...) {
 #' @param ... Named arguments defining parameters. Arguments may be regular 
 #' vectors or `grouped_params` objects created with \code{\link{grouped}}.
 #' @param each Integer representing the number of replications for each scenario
-#' or set of parameters.
+#' or set of parameters. Defaults to 1.
 #' @return A list of scenarios, where each element is a named vector of parameter 
 #' values with an added element `scenario` giving the scenario index.
 #' @examples
