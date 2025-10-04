@@ -21,6 +21,7 @@ library(simstudy)
 library(data.table)
 library(parallel)
 library(lme4)
+library(lmerTest)
 ```
 
 ## Introduction
