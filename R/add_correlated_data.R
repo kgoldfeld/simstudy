@@ -57,18 +57,20 @@
 #' round(cor(dtAdd[, .(V1, V2, V3)]), 2)
 #' @concept correlated
 #' @export
-addCorData <- function(dtOld, idname = "id", mu, sigma, corMatrix = NULL,
+addCorData <- function(dtOld, idname, mu, sigma, corMatrix = NULL,
                        rho, corstr = "ind", cnames = NULL) {
   # addCorData will produce odd results if `idname` appears multiple times in
   # `dtOld`. Thus, we check and omit a warning.
-  if (length(unique(dtOld[, idname])) != nrow(dtOld)) {
+  
+  if (length(unique(dtOld[, get(idname)])) != nrow(dtOld)) {
     valueWarning(
       names = c("dtOld"),
-      msg = "`idname` appears multiple times in `dtOld`. Check results."
+      msg = paste(idname, "appears multiple times in data table. Please check results.")
     )
   }
 
   # dtName must contain id for now
+  
   dtTemp <- copy(dtOld)
   data.table::setkeyv(dtTemp, idname)
 

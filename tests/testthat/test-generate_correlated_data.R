@@ -410,7 +410,7 @@ test_that("addCorData emits warning if `idname` appears multiple times", {
 
   expect_warning(
     addCorData(dt, "id", mu = mu, sigma = sigma, corMat = corMat),
-    "`idname` appears multiple times in `dtOld`. Check results."
+    "id appears multiple times in data table. Please check results."
   )
 })
 
