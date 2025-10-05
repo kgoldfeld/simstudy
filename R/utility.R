@@ -40,13 +40,7 @@ grouped <- function(...) {
 
   # Check that all arguments have the same length
   
-  arg_lengths <- sapply(args, length)
-  
-  if (length(unique(arg_lengths)) > 1) {
-    length_info <- paste(names(args), "=", arg_lengths, collapse = ", ")
-    stop("All arguments in grouped() must have the same length.\n",
-         "Lengths of variables: ", length_info, call. = FALSE)
-  }
+  if (length(args) > 1) do.call(assertLengthEqual, args)
   
   structure(args, class = "grouped_params")
 }
@@ -116,9 +110,11 @@ scenario_list <- function(..., each = 1) {
   
   if (any(duplicated(all_names))) {
     dup_names <- unique(all_names[duplicated(all_names)])
-    stop("Variable(s) included more than once: ", 
-         paste(dup_names, collapse = ", "), 
-         call. = FALSE)
+    valueError(
+      names = dup_names,
+      msg = list(glue::glue("Variable(s) included more than once: {toString(dup_names)}")),
+      call = NULL
+    )
   }
   
   # work on non-grouped variables

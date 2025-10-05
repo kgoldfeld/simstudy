@@ -1385,7 +1385,7 @@ test_that("grouped() errors when lengths don't match", {
   
   expect_error(
     grouped(x, y),
-    "All arguments in grouped\\(\\) must have the same length"
+    "x and y should be of equal length!"
   )
 })
 
@@ -1569,3 +1569,4 @@ test_that("scenario_list() preserves variable names correctly when specified in 
   
   
 })
+
