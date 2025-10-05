@@ -1,3 +1,149 @@
+#' Mark parameters as grouped
+#'
+#' @description Utility function to combine several vectors of equal length into 
+#' a grouped parameter object. This allows parameters that should vary together 
+#' across scenarios to be treated as a unit in \code{\link{scenario_list}}.
+#' @param ... One or more vectors of equal length to be grouped together.
+#' Each argument will be named according to the symbol provided.
+#' @return An object of class `grouped_params`, essentially a named list 
+#' where all elements have the same length.
+#' @examples
+#' # Define two grouped parameters of equal length
+#' g <- grouped(x = 1:3, y = c(10, 20, 30))
+#' g
+#' @seealso \code{\link{scenario_list}} for generating scenario combinations 
+#' that make use of grouped parameters.
+#' @export
+#' @concept utility
+#' @md
+grouped <- function(...) {
+  
+  nargs <- as.list(substitute(list(...)))[-1]
+  args <- list(...)
+  
+  # set the argument names based on how they were passed
+  
+  arg_names <- names(args)
+  
+  if (is.null(arg_names)) {
+    # No names provided, use deparsed expressions
+    names(args) <- sapply(nargs, deparse)
+  } else {
+    # Some or all arguments are named
+    # Use provided names, but fill in missing ones with deparsed expressions
+    unnamed <- arg_names == ""
+    if (any(unnamed)) {
+      arg_names[unnamed] <- sapply(nargs[unnamed], deparse)
+    }
+    names(args) <- arg_names
+  }
+
+  # Check that all arguments have the same length
+  
+  if (length(args) > 1) do.call(assertLengthEqual, args)
+  
+  structure(args, class = "grouped_params")
+}
+
+#' Create list of parameter scenarios
+#'
+#' @description Generates a list of scenarios by expanding combinations of 
+#' regular parameters and preserving grouped parameters that must vary together.
+#' @param ... Named arguments defining parameters. Arguments may be regular 
+#' vectors or `grouped_params` objects created with \code{\link{grouped}}.
+#' @param each Integer representing the number of replications for each scenario
+#' or set of parameters. Defaults to 1.
+#' @return A list of scenarios, where each element is a named vector of parameter 
+#' values with an added element `scenario` giving the scenario index.
+#' @examples
+#' # Regular parameters
+#' s1 <- scenario_list(a = 1:2, b = c("x", "y"))
+#'
+#' # Grouped parameters
+#' g <- grouped(x = 1:2, y = c(10, 20))
+#' s2 <- scenario_list(a = c("low", "high"), g, each = 3)
+#' 
+#' # Inspect first few scenarios
+#' head(s1)
+#' head(s2)
+#' @seealso \code{\link{grouped}} for creating grouped parameter objects.
+#' @export
+#' @concept utility
+#' @md
+scenario_list <- function(..., each = 1) {
+  
+  nargs <- as.list(substitute(list(...)))[-1]
+  args <- list(...)
+  
+  # set the argument names based on how they were passed
+  
+  arg_names <- names(args)
+
+  if (is.null(arg_names)) {
+    # No names provided, use deparsed expressions
+    names(args) <- sapply(nargs, deparse)
+  } else {
+    # Some or all arguments are named
+    # Use provided names, but fill in missing ones with deparsed expressions
+    unnamed <- arg_names == ""
+    if (any(unnamed)) {
+      arg_names[unnamed] <- sapply(nargs[unnamed], deparse)
+    }
+    names(args) <- arg_names
+  }
+  
+  # separate regular and grouped parameters
+  
+  is_grouped <- sapply(args, function(x) inherits(x, "grouped_params"))
+  
+  regular <- args[!is_grouped]
+  grouped_list <- args[is_grouped]
+  
+  # check for duplicates
+  
+  all_names <- names(regular)
+  
+  for (i in seq_along(grouped_list)) {
+    grouped_names <- names(unclass(grouped_list[[i]]))
+    all_names <- c(all_names, grouped_names)
+  }
+  
+  if (any(duplicated(all_names))) {
+    dup_names <- unique(all_names[duplicated(all_names)])
+    valueError(
+      names = dup_names,
+      msg = list(glue::glue("Variable(s) included more than once: {toString(dup_names)}")),
+      call = NULL
+    )
+  }
+  
+  # work on non-grouped variables
+  
+  if (length(regular) > 0) {
+    argmat <- expand.grid(regular)
+  } else {
+    argmat <- NULL
+  }
+  
+  # work on grouped variables
+  
+  if (length(grouped_list) > 0) {
+    for (i in seq_along(grouped_list)) {
+      grouped_df <- as.data.frame(unclass(grouped_list[[i]]))
+      if (is.null(argmat)) {
+        argmat <- grouped_df
+      } else {
+        argmat <- merge(argmat, grouped_df)
+      }
+    }
+  }
+  
+  argmat$scenario <- seq_len(nrow(argmat))
+  scenarios <- asplit(argmat, MARGIN = 1)
+  
+  return(rep(scenarios, each = each))
+}
+
 #' Generate Mixture Formula
 #'
 #' @description Generates a mixture formula from a vector of variable names and

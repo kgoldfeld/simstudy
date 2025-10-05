@@ -4,12 +4,14 @@
 
 * Added an argument `na.rm` to the functions `genDataDensity` and `addDataDensity`. If set to `FALSE`,
   the generated data will include missing values at the same rate as the distribution data.
+* Added new functions `grouped()` and `scenario_list()` to support the creation of parameter
+  scenarios. `grouped()` allows multiple variables to be treated as a unit when defining scenarios,
+  and `scenario_list()` generates lists of parameter combinations while respecting grouped variables.
   
 ## Minor fixes
 
 * Added testthat tests to provide 100% code coverage
 * Fixed some minor bugs
-
 
 # simstudy 0.8.1
 
@@ -274,3 +276,4 @@ performance has been dramatically improved.
 # simstudy 0.1.1
 
 * This is the first submission of simstudy, so there is no news yet!
+

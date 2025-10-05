@@ -1365,3 +1365,208 @@ test_that("addCompRisk handles single row data", {
   expect_equal(result$event, 2)
   expect_equal(result$type, "event2")
 })
+
+# Test grouped() function
+test_that("grouped() creates proper structure with names", {
+  x <- c(1, 2, 3)
+  y <- c(4, 5, 6)
+  
+  result <- grouped(x, y)
+  
+  expect_s3_class(result, "grouped_params")
+  expect_named(result, c("x", "y"))
+  expect_equal(result$x, x)
+  expect_equal(result$y, y)
+})
+
+test_that("grouped() errors when lengths don't match", {
+  x <- c(1, 2, 3)
+  y <- c(4, 5)  # Different length
+  
+  expect_error(
+    grouped(x, y),
+    "x and y should be of equal length!"
+  )
+})
+
+test_that("grouped() works with single argument", {
+  x <- c(1, 2, 3)
+  
+  result <- grouped(x)
+  
+  expect_s3_class(result, "grouped_params")
+  expect_named(result, "x")
+  expect_equal(result$x, x)
+})
+
+test_that("grouped() preserves variable names correctly", {
+  my_var <- c(1, 2, 3)
+  another_var <- c(4, 5, 6)
+  
+  result <- grouped(my_var, another_var)
+  
+  expect_named(result, c("my_var", "another_var"))
+})
+
+test_that("grouped() preserves variable names correctly when specified in call", {
+  
+  another_var <- c(2, 3, 4)
+  
+  result1 <- grouped(my_var = c(1,2,3), another_var = c(2,3,4))
+  result2 <- grouped(my_var = c(1,2,3), another_var)
+  
+  expect_named(result1, c("my_var", "another_var"))
+  expect_named(result2, c("my_var", "another_var"))
+  
+  
+})
+
+test_that("grouped() works with numeric vectors of length 1", {
+  x <- 5
+  y <- 10
+  
+  result <- grouped(x, y)
+  
+  expect_s3_class(result, "grouped_params")
+  expect_equal(length(result$x), 1)
+  expect_equal(length(result$y), 1)
+})
+
+# Test scenario_list() function
+test_that("scenario_list() works with only regular parameters", {
+  a <- c(1, 2)
+  b <- c(10, 20)
+  
+  result <- scenario_list(a, b)
+  
+  expect_equal(length(result), 4)  # 2 * 2 = 4 scenarios
+  expect_named(result[[1]], c("a", "b", "scenario"))
+})
+
+test_that("scenario_list() works with only grouped parameters", {
+  x <- c(1, 2, 3)
+  y <- c(4, 5, 6)
+  
+  result <- scenario_list(grouped(x, y))
+  
+  expect_equal(length(result), 3)  # 3 rows (not expanded)
+  expect_named(result[[1]], c("x", "y", "scenario"))
+})
+
+test_that("scenario_list() works with both regular and grouped parameters", {
+  a <- c(1, 2)
+  b <- c(10, 20)
+  x <- c(3, 4, 5)
+  y <- c(6, 7, 8)
+  
+  result <- scenario_list(a, b, grouped(x, y))
+  
+  expect_equal(length(result), 12)  # (2 * 2) * 3 = 12 scenarios
+  expect_named(result[[1]], c("a", "b", "x", "y", "scenario"))
+})
+
+test_that("scenario_list() works with multiple grouped() calls", {
+  a <- c(1, 2)
+  x <- c(3, 4, 5)
+  y <- c(6, 7, 8)
+  q1 <- c(3.4, 2.3)
+  q2 <- c(3.1, 4.3)
+  
+  result <- scenario_list(a, grouped(x, y), grouped(q1, q2))
+  
+  expect_equal(length(result), 12)  # 2 * 3 * 2 = 12 scenarios
+  expect_named(result[[1]], c("a", "x", "y", "q1", "q2", "scenario"))
+})
+
+test_that("scenario_list() errors on duplicate variable names", {
+  a <- c(1, 2)
+  x <- c(3, 4)
+  
+  expect_error(
+    scenario_list(a, x, grouped(x)),
+    "Variable\\(s\\) included more than once: x"
+  )
+})
+
+test_that("scenario_list() errors on duplicates across groups", {
+  x <- c(1, 2, 3)
+  y <- c(4, 5, 6)
+  
+  expect_error(
+    scenario_list(grouped(x, y), grouped(x)),
+    "Variable\\(s\\) included more than once: x"
+  )
+})
+
+test_that("scenario_list() errors on multiple duplicates", {
+  a <- c(1, 2)
+  x <- c(3, 4)
+  
+  expect_error(
+    scenario_list(a, x, grouped(a, x)),
+    "Variable\\(s\\) included more than once: a, x"
+  )
+})
+
+test_that("scenario_list() preserves correct values in scenarios", {
+  a <- c(1, 2)
+  x <- c(10, 20)
+  y <- c(100, 200)
+  
+  result <- scenario_list(a, grouped(x, y))
+  
+  # Check first scenario
+  expect_equal(unname(result[[1]][1]), 1)
+  expect_equal(unname(result[[1]][2]), 10)
+  expect_equal(unname(result[[1]][[3]]), 100)
+  
+  # Check last scenario
+  expect_equal(unname(result[[4]][1]), 2)
+  expect_equal(unname(result[[4]][2]), 20)
+  expect_equal(unname(result[[4]][[3]]), 200)
+})
+
+test_that("scenario_list() assigns sequential scenario numbers", {
+  a <- c(1, 2, 3)
+  b <- c(10, 20)
+  
+  result <- scenario_list(a, b)
+  
+  scenarios <- sapply(result, function(x) x["scenario"])
+  expect_equal(unname(scenarios), 1:6)
+})
+
+test_that("scenario_list() returns list of named vectors", {
+  a <- c(1, 2)
+  
+  result <- scenario_list(a)
+  
+  expect_type(result, "list")
+  expect_named(result[[1]], c("a", "scenario"))
+})
+
+
+test_that("scenario_list() handles edge case of single value", {
+  a <- 1
+  
+  result <- scenario_list(a)
+  
+  expect_equal(length(result), 1)
+  expect_equal(unname(result[[1]]["a"]), 1)
+  expect_equal(unname(result[[1]]["scenario"]), 1)
+})
+
+test_that("scenario_list() preserves variable names correctly when specified in call", {
+  
+  result <- scenario_list(a = c(1,2,3), b = c(3,4), grouped(x = c(3,4), y = c(5,6)))
+  expect_true(all(sapply(result, function(x) all(c("a", "b", "x", "y") %in% names(x)))))
+  
+  y <- c(5, 6)
+  b <- c(3, 4)
+  result <- scenario_list(a = c(1,2,3), b, grouped(x = c(3,4), y))
+  expect_true(all(sapply(result, function(x) all(c("a", "b", "x", "y") %in% names(x)))))
+  
+  
+  
+})
+
