@@ -11,7 +11,7 @@ scenario_list(..., each = 1)
 vectors or \code{grouped_params} objects created with \code{\link{grouped}}.}
 
 \item{each}{Integer representing the number of replications for each scenario
-or set of parameters.}
+or set of parameters. Defaults to 1.}
 }
 \value{
 A list of scenarios, where each element is a named vector of parameter
