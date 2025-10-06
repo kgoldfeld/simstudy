@@ -1,7 +1,7 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.8.1.9000
+Version: 0.9.0
 Date: 2025-10-05
 Authors@R: 
     c(person(given = "Keith",
@@ -72,4 +72,3 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 RoxygenNote: 7.3.3
-

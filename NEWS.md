@@ -1,4 +1,4 @@
-# simstudy (development version)
+# simstudy 0.9.0
 
 ## New features
 
