@@ -59,7 +59,18 @@
 #' @export
 addCorData <- function(dtOld, idname, mu, sigma, corMatrix = NULL,
                        rho, corstr = "ind", cnames = NULL) {
+  # addCorData will produce odd results if `idname` appears multiple times in
+  # `dtOld`. Thus, we check and omit a warning.
+  
+  if (length(unique(dtOld[, get(idname)])) != nrow(dtOld)) {
+    valueWarning(
+      names = c("dtOld"),
+      msg = paste(idname, "appears multiple times in data table. Please check results.")
+    )
+  }
+
   # dtName must contain id for now
+  
   dtTemp <- copy(dtOld)
   data.table::setkeyv(dtTemp, idname)
 

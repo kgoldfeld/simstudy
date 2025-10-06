@@ -398,6 +398,22 @@ test_that("genCorMat generates errors correctly.", {
 
 # addCorData ----
 
+test_that("addCorData emits warning if `idname` appears multiple times", {
+  tdef <- defData(varname = "grp", dist = "binary", formula = 0.5, id = "id")
+
+  dt <- genData(500, tdef)
+  dt <- rbind(dt, dt)
+
+  mu <- rnorm(3, mean = c(3, 8, 15))
+  sigma <- rgamma(3, 1.5, 1)
+  corMat <- genCorMat(3)
+
+  expect_warning(
+    addCorData(dt, "id", mu = mu, sigma = sigma, corMat = corMat),
+    "id appears multiple times in data table. Please check results."
+  )
+})
+
 test_that("addCorData adds correlated data with compound symmetry structure", {
 
   skip_on_cran()
