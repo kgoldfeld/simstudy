@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -48,6 +48,9 @@
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/framework.html">Framework for repeated simulations</a>
     </li>
     <li>
       <a href="../articles/logisticCoefs.html">Targeted logistic model coefficients</a>
@@ -176,54 +179,54 @@ means in the vector mu.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          id       V1        V2       V3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1 3.187099 10.558281 15.65874</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2 2.652683  7.793236 16.40572</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3 3.921587 11.177416 19.46366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4 3.968115  9.618889 15.48945</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5 3.129555  8.113490 13.11778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1 1.916677  7.757074 14.27253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2 4.050262  8.437462 15.40863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3 4.213073 10.506273 20.85371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4 3.273890 10.538799 17.32416</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5 2.277470  7.527803 12.02371</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996 1.553517  4.139324 10.54947</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997 3.084290  7.966858 15.72537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998 4.278067  8.317735 19.44643</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999 2.425239  6.008262 13.97734</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000 3.901372  8.382401 14.45666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996 3.884086 10.527082 16.25926</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997 3.291662  6.878752 15.52653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998 3.675540  9.156428 18.98782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999 3.064628  5.729347 16.10881</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000 3.396324  8.167362 14.20209</span>
 <span class="r-in"><span><span class="va">dtcor2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          id       V1       V2        V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt;    &lt;num&gt;    &lt;num&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1 4.327344 5.057118 15.071292</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2 2.441576 6.249117 12.912647</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3 2.400894 7.907194 13.866811</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4 1.683221 5.947965 11.040929</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5 0.506367 4.634667  9.618313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          id       V1        V2       V3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1 1.434526 10.638850 12.90710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2 3.688735 10.542666 19.22236</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3 4.739764  8.660715 17.35989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4 3.171097  8.833131 16.50428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5 2.891700  8.491296 13.76842</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996 1.932159 7.930175 12.620801</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997 3.048837 9.450562 15.362907</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998 3.410602 5.333275 13.205202</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999 3.479042 5.746235 15.073017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000 2.360636 7.973820 12.279591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  996:   996 3.351541  7.919003 15.17333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  997:   997 2.865899  9.738079 17.07419</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  998:   998 2.404324 11.875803 17.07040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  999:   999 2.634460  4.532410 13.98190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1000:  1000 1.564944  9.248632 13.21610</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">dtcor1</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       V1    V2    V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V1 0.885 1.274 1.817</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V2 1.274 3.898 3.844</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V3 1.817 3.844 8.423</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V1 0.985 1.470 2.085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V2 1.470 4.310 4.513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V3 2.085 4.513 9.105</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dtcor1</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      V1   V2   V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.69 0.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.69 1.00 0.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.67 0.67 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.71 0.70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.71 1.00 0.72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.70 0.72 1.00</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">dtcor2</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       V1    V2    V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V1 0.956 0.383 2.237</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.383 3.959 3.400</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V3 2.237 3.400 8.214</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.002 0.318 2.287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.318 3.740 3.096</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V3 2.287 3.096 8.169</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dtcor2</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, <span class="va">V3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     V1  V2  V3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.0 0.2 0.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.2 1.0 0.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.8 0.6 1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      V1   V2   V3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V1 1.00 0.16 0.80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V2 0.16 1.00 0.56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> V3 0.80 0.56 1.00</span>
 </code></pre></div>
     </div>
   </div>
@@ -238,7 +241,7 @@ means in the vector mu.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
       </footer></div>

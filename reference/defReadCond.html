@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -48,6 +48,9 @@
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/framework.html">Framework for repeated simulations</a>
     </li>
     <li>
       <a href="../articles/logisticCoefs.html">Targeted logistic model coefficients</a>
@@ -149,17 +152,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          id     x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt; &lt;int&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1996:  1996     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1997:  1997     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1998:  1998     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1999:  1999     3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2000:  2000     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1997:  1997     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1998:  1998     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1999:  1999     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2000:  2000     3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Add column based on</span></span></span>
 <span class="r-in"><span></span></span>
@@ -169,25 +172,25 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          id     y     x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt; &lt;int&gt; &lt;int&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     1     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2     0     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     0     3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     0     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:     1     1     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:     2     1     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:     3     1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:     4     1     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:     5     1     3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1996:  1996     0     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1997:  1997     1     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1998:  1998     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1999:  1999     1     3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2000:  2000     1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1996:  1996     1     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1997:  1997     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1998:  1998     1     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1999:  1999     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2000:  2000     1     3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">x</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;x&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        x        V1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1 0.3982143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2 0.6072727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3 0.8243902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1 0.3957219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2 0.6067961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3 0.8260163</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tfcsv1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">tfcsv2</span><span class="op">)</span></span></span>
@@ -205,7 +208,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
       </footer></div>

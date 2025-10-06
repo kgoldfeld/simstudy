@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -48,6 +48,9 @@
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/framework.html">Framework for repeated simulations</a>
     </li>
     <li>
       <a href="../articles/logisticCoefs.html">Targeted logistic model coefficients</a>
@@ -94,7 +97,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.8.1" id="simstudy-081">simstudy 0.8.1<a class="anchor" aria-label="anchor" href="#simstudy-081"></a></h2>
+<h2 class="page-header" data-toc-text="0.9.0" id="simstudy-090">simstudy 0.9.0<a class="anchor" aria-label="anchor" href="#simstudy-090"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-9-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-9-0"></a></h3>
+<ul><li>Added an argument <code>na.rm</code> to the functions <code>genDataDensity</code> and <code>addDataDensity</code>. If set to <code>FALSE</code>, the generated data will include missing values at the same rate as the distribution data.</li>
+<li>Added new functions <code><a href="../reference/grouped.html">grouped()</a></code> and <code><a href="../reference/scenario_list.html">scenario_list()</a></code> to support the creation of parameter scenarios. <code><a href="../reference/grouped.html">grouped()</a></code> allows multiple variables to be treated as a unit when defining scenarios, and <code><a href="../reference/scenario_list.html">scenario_list()</a></code> generates lists of parameter combinations while respecting grouped variables.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-fixes-0-9-0">Minor fixes<a class="anchor" aria-label="anchor" href="#minor-fixes-0-9-0"></a></h3>
+<ul><li>Added testthat tests to provide 100% code coverage</li>
+<li>Fixed some minor bugs</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.8.1" id="simstudy-081">simstudy 0.8.1<small>2024-07-29</small><a class="anchor" aria-label="anchor" href="#simstudy-081"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-8-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-8-1"></a></h3>
 <ul><li>Added the ability to generate data from an empirical distribution by using new functions <code>genDataDensity</code> and <code>addDataDensity</code>.</li>
@@ -382,7 +398,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
       </footer></div>

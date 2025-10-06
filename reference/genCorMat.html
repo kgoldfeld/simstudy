@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -48,6 +48,9 @@
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/framework.html">Framework for repeated simulations</a>
     </li>
     <li>
       <a href="../articles/logisticCoefs.html">Targeted logistic model coefficients</a>
@@ -171,9 +174,9 @@ each cluster will have correlation matrices with the same autocorrelation.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2  0.1  1.0</span>
 <span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]        [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.00000000  0.34882294 -0.04048001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.34882294  1.00000000 -0.03448154</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.04048001 -0.03448154  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.00000000 -0.08843007 -0.19069177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.08843007  1.00000000 -0.06935815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.19069177 -0.06935815  1.00000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="op">-</span><span class="fl">.2</span>, <span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.5</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
@@ -182,11 +185,11 @@ each cluster will have correlation matrices with the same autocorrelation.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2  0.2  1.0  0.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.1  0.5  0.2  1.0</span>
 <span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]        [,2]        [,3]         [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.000000000 -0.03444972 -0.21452382 -0.005877583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.034449723  1.00000000  0.12050698 -0.144038321</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.214523816  0.12050698  1.00000000 -0.043593674</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] -0.005877583 -0.14403832 -0.04359367  1.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]         [,2]        [,3]         [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.00000000  0.125438169 -0.09578247  0.236384120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.12543817  1.000000000 -0.02890101 -0.005119921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.09578247 -0.028901015  1.00000000 -0.108327495</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.23638412 -0.005119921 -0.10832750  1.000000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, cors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span>, corstr <span class="op">=</span> <span class="st">"structured"</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
@@ -196,10 +199,10 @@ each cluster will have correlation matrices with the same autocorrelation.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.1  0.2  0.3  1.0</span>
 <span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, corstr <span class="op">=</span> <span class="st">"arx"</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           [,1]      [,2]      [,3]      [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.0000000 0.4718393 0.2530470 0.1303249</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.4718393 1.0000000 0.4718393 0.2530470</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.2530470 0.4718393 1.0000000 0.4718393</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 0.1303249 0.2530470 0.4718393 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.0000000 0.2800697 0.2371498 0.1652609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.2800697 1.0000000 0.2800697 0.2371498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.2371498 0.2800697 1.0000000 0.2800697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 0.1652609 0.2371498 0.2800697 1.0000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">genCorMat</span><span class="op">(</span>nvars <span class="op">=</span> <span class="fl">4</span>, rho <span class="op">=</span> <span class="fl">.4</span>, corstr <span class="op">=</span> <span class="st">"cs"</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
@@ -249,7 +252,7 @@ each cluster will have correlation matrices with the same autocorrelation.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
       </footer></div>

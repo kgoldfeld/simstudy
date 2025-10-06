@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -65,6 +65,9 @@
     </li>
     <li>
       <a href="../articles/double_dot_extension.html">Dynamic Data Definition</a>
+    </li>
+    <li>
+      <a href="../articles/framework.html">Framework for repeated simulations</a>
     </li>
     <li>
       <a href="../articles/logisticCoefs.html">Targeted logistic model coefficients</a>
@@ -342,19 +345,19 @@ created and the outcome data are generated in the last step.</p>
 <span></span>
 <span><span class="va">dd</span></span></code></pre></div>
 <pre><code><span><span class="co">## Key: &lt;id&gt;</span></span>
-<span><span class="co">##        cluster period     ceffect     m timeID startTrt   trt    id          Y</span></span>
-<span><span class="co">##          &lt;int&gt;  &lt;int&gt;       &lt;num&gt; &lt;num&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt; &lt;int&gt;      &lt;num&gt;</span></span>
-<span><span class="co">##     1:       1      0  0.62775229    15      1        4     0     1  1.5236098</span></span>
-<span><span class="co">##     2:       1      0  0.62775229    15      1        4     0     2  0.9863920</span></span>
-<span><span class="co">##     3:       1      0  0.62775229    15      1        4     0     3 -0.1232112</span></span>
-<span><span class="co">##     4:       1      0  0.62775229    15      1        4     0     4  2.0901759</span></span>
-<span><span class="co">##     5:       1      0  0.62775229    15      1        4     0     5 -2.3404034</span></span>
+<span><span class="co">##        cluster timeID period     ceffect     m startTrt   trt    id          Y</span></span>
+<span><span class="co">##          &lt;int&gt;  &lt;int&gt;  &lt;int&gt;       &lt;num&gt; &lt;num&gt;    &lt;num&gt; &lt;num&gt; &lt;int&gt;      &lt;num&gt;</span></span>
+<span><span class="co">##     1:       1      1      0  0.62775229    15        4     0     1  1.5236098</span></span>
+<span><span class="co">##     2:       1      1      0  0.62775229    15        4     0     2  0.9863920</span></span>
+<span><span class="co">##     3:       1      1      0  0.62775229    15        4     0     3 -0.1232112</span></span>
+<span><span class="co">##     4:       1      1      0  0.62775229    15        4     0     4  2.0901759</span></span>
+<span><span class="co">##     5:       1      1      0  0.62775229    15        4     0     5 -2.3404034</span></span>
 <span><span class="co">##    ---                                                                        </span></span>
-<span><span class="co">## 10796:      30     23 -0.09828129    15    720       20     1 10796  1.9167998</span></span>
-<span><span class="co">## 10797:      30     23 -0.09828129    15    720       20     1 10797  5.9206722</span></span>
-<span><span class="co">## 10798:      30     23 -0.09828129    15    720       20     1 10798  4.1182178</span></span>
-<span><span class="co">## 10799:      30     23 -0.09828129    15    720       20     1 10799  4.5691583</span></span>
-<span><span class="co">## 10800:      30     23 -0.09828129    15    720       20     1 10800  3.6557608</span></span></code></pre>
+<span><span class="co">## 10796:      30    720     23 -0.09828129    15       20     1 10796  1.9167998</span></span>
+<span><span class="co">## 10797:      30    720     23 -0.09828129    15       20     1 10797  5.9206722</span></span>
+<span><span class="co">## 10798:      30    720     23 -0.09828129    15       20     1 10798  4.1182178</span></span>
+<span><span class="co">## 10799:      30    720     23 -0.09828129    15       20     1 10799  4.5691583</span></span>
+<span><span class="co">## 10800:      30    720     23 -0.09828129    15       20     1 10800  3.6557608</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dSum</span> <span class="op">&lt;-</span> <span class="va">dd</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">cluster</span>, <span class="va">period</span>, <span class="va">trt</span>, <span class="va">startTrt</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
@@ -385,7 +388,7 @@ created and the outcome data are generated in the last step.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
       </footer>
