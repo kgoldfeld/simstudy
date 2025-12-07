@@ -1,6 +1,6 @@
 # simstudy (development version)
 
-* Minor fix in `genCorMat` to address an issue where very small rounding differences 
+* Minor fix in `genCorMat` that addresses an issue where very small rounding differences 
 could make correlation matrices appear non-symmetric, preventing some data generation. 
 Matrices are now always properly symmetrized.
 
