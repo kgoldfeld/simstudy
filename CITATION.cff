@@ -8,7 +8,7 @@ message: 'To cite package "simstudy" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'simstudy: Simulation of Study Data'
-version: 0.8.1.9000
+version: 0.9.0.9000
 doi: 10.21105/joss.02763
 identifiers:
 - type: doi
@@ -54,7 +54,7 @@ preferred-citation:
 repository: https://CRAN.R-project.org/package=simstudy
 repository-code: https://github.com/kgoldfeld/simstudy
 url: https://kgoldfeld.github.io/simstudy/
-date-released: '2024-07-29'
+date-released: '2025-12-07'
 contact:
 - family-names: Goldfeld
   given-names: Keith
@@ -352,7 +352,7 @@ references:
   title: hedgehog
   abstract: 'hedgehog: Property-Based Testing'
   notes: Suggests
-  url: https://hedgehog.qa
+  url: https://github.com/hedgehogqa
   repository: https://CRAN.R-project.org/package=hedgehog
   authors:
   - family-names: Campbell
