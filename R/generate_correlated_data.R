@@ -658,6 +658,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     }
   }
   
+  cm <- ( cm + t(cm)) / 2   # ensure symmetry even with rounding errors - fixes CRAN error
   cm
   
 }
