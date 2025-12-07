@@ -1,5 +1,9 @@
 # simstudy (development version)
 
+* Minor fix in `genCorMat` to address an issue where very small rounding differences 
+could make correlation matrices appear non-symmetric, preventing some data generation. 
+Matrices are now always properly symmetrized.
+
 # simstudy 0.9.0
 
 ## New features
