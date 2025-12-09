@@ -401,7 +401,7 @@ create a table or a figure.</p>
 <span></span>
 <span><span class="va">reject</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">model_fits</span>, <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="fu">summarize</span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">power</span> <span class="op">&lt;-</span> <span class="va">reject</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>power <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">reject</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">delta</span>, <span class="va">npat</span>, <span class="va">svar</span>, <span class="va">ivar</span>, <span class="va">scenario</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<p><img src="framework_files/figure-html/power_plot-1.png" width="672"></p>
+<p><img src="framework_files/figure-html/power_plot-1.png" class="r-plt" width="672"></p>
 </div>
   </div>
 
@@ -420,7 +420,7 @@ create a table or a figure.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
 </div>
 
       </footer>
