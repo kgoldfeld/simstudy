@@ -507,6 +507,12 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
   assertLength(corstr = corstr, length = 1)
   assertOption(corstr = corstr, options = c("cs", "ar1", "arx", "structured"))
   
+  # ensure symmetry even with rounding errors - fixes CRAN error
+  
+  .ensureSym <- function(cm) {
+    ( cm + t(cm)) / 2
+  }
+  
   .randMat <- function(nvars) {
     
     posDef <- FALSE
@@ -530,7 +536,9 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     }
     
     assertPositiveSemiDefinite(corMat = cm)
-    cm
+    
+    .ensureSym(cm)
+    
   }
   
   .structCors <- function(x) {
@@ -549,7 +557,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     cm <- .buildCorMat(nvars = nvars, corMatrix = NULL, corstr, rho)
     assertPositiveSemiDefinite(corMat = cm)
     
-    cm
+    .ensureSym(cm)
     
   }
   
@@ -561,7 +569,8 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     
     cm <- cmLower + cmUpper
     diag(cm) <- 1
-    cm
+    
+    .ensureSym(cm)
   }
   
   .corMat <- function(nvars, cors) {
@@ -570,7 +579,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     cm <- .fillCor(nvars, cors)
     assertPositiveSemiDefinite(corMat = cm)
     
-    cm
+    .ensureSym(cm)
     
   }
   
@@ -588,7 +597,7 @@ genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters =
     }
     
     assertPositiveSemiDefinite(corMat = cm)
-    cm
+    .ensureSym(cm)
     
   }
   
