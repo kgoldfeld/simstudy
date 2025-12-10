@@ -116,7 +116,7 @@ dd
 ## Contributing & Support
 
 If you find a bug or need help, please file an issue with a
-<a href="https://www.tidyverse.org/help/" target="_blank">reprex</a> on
+<a href="https://tidyverse.org/help/" target="_blank">reprex</a> on
 <a href="https://github.com/kgoldfeld/simstudy/issues"
 target="_blank">Github</a>. We are happy to accept contributions to
 simstudy. More information on how to propose changes or fix bugs can be

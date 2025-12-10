@@ -63,7 +63,7 @@ dd
 
 ## Contributing & Support
 
-If you find a bug or need help, please file an issue with a [reprex](https://www.tidyverse.org/help/){target="_blank"} on [Github](https://github.com/kgoldfeld/simstudy/issues){target="_blank"}. We are happy to accept contributions to simstudy. More information on how to propose changes or fix bugs can be found [here](https://kgoldfeld.github.io/simstudy/CONTRIBUTING.html){target="_blank"}.
+If you find a bug or need help, please file an issue with a [reprex](https://tidyverse.org/help/){target="_blank"} on [Github](https://github.com/kgoldfeld/simstudy/issues){target="_blank"}. We are happy to accept contributions to simstudy. More information on how to propose changes or fix bugs can be found [here](https://kgoldfeld.github.io/simstudy/CONTRIBUTING.html){target="_blank"}.
 
 ## Code of Conduct
 
