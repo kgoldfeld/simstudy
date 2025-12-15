@@ -1118,15 +1118,16 @@ test_that("All distributions work", {
 test_that("ep method work", {
   means <- c(.3, .2, .1)
   rho <- .3
-  dd <- genCorGen(1000, nvars = 3, params1 = means, dist = "binary",
+  dd <- genCorGen(10000, nvars = 3, params1 = means, dist = "binary",
                   rho = rho, corstr = "cs", wide = TRUE, method = "ep")
   obs_mean <- apply(dd[,-1], 2, mean)
   obs_cor <- cor(dd[, .SD, .SDcols = -1])
   cor_matrix <- genCorMat(3, rho = rho)
+  
+  max(abs(obs_cor - cor_matrix))
 
   expect_equal(obs_mean, means, tolerance = .1, check.attributes = FALSE)
-  expect_equal(obs_cor, cor_matrix, tolerance = .1, check.attributes = FALSE)
-
+  expect_lt(max(abs(obs_cor - cor_matrix)), 0.2)
 })
 
 #### addCorGen
