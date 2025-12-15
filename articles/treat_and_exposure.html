@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -179,7 +179,7 @@ category (not blood pressure)</em></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtAssign.html">trtAssign</a></span><span class="op">(</span><span class="va">dtstudy</span>, n <span class="op">=</span> <span class="fl">3</span>, balanced <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"rxGrp"</span><span class="op">)</span></span></code></pre></div>
 <p><em>Comparison of three treatment assignment mechanisms</em>
-<img src="treat_and_exposure_files/figure-html/unnamed-chunk-6-1.png" width="384"></p>
+<img src="treat_and_exposure_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="384"></p>
 </div>
 <div class="section level2">
 <h2 id="assigned-treatment-using-trtassign-distribution-in-defdata">Assigned treatment using <em>trtAssign</em> distribution in
@@ -245,7 +245,7 @@ gender and age:</p>
 <code class="sourceCode R"><span><span class="va">formula1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-2 + 2*male - .5*over65"</span>, <span class="st">"-1 + 2*male + .5*over65"</span><span class="op">)</span></span>
 <span><span class="va">dtExp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula1</span>, logit.link <span class="op">=</span> <span class="cn">TRUE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></span></code></pre></div>
 <p>Here are the exposure distributions by gender and age:</p>
-<p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-10-1.png" width="624"></p>
+<p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="624"></p>
 <p>Here is a second case of three exposures where the exposure is
 independent of any covariates. Note that specifying the formula as
 <code>c(.35, .45)</code> is the same as specifying it is
@@ -255,7 +255,7 @@ the identity link is used:</p>
 <code class="sourceCode R"><span><span class="va">formula2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.45</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dtExp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trtObserve.html">trtObserve</a></span><span class="op">(</span><span class="va">dtstudy</span>, formulas <span class="op">=</span> <span class="va">formula2</span>, logit.link <span class="op">=</span> <span class="cn">FALSE</span>, grpName <span class="op">=</span> <span class="st">"exposure"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-12-1.png" width="624"></p>
+<p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="624"></p>
 </div>
 <div class="section level2">
 <h2 id="stepped-wedge-design">Stepped-wedge design<a class="anchor" aria-label="anchor" href="#stepped-wedge-design"></a>
@@ -369,7 +369,7 @@ created and the outcome data are generated in the last step.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#b8cce4"</span>, <span class="st">"#4e81ba"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.grid <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<p><img src="treat_and_exposure_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="700"></p>
 </div>
   </div>
 
@@ -388,7 +388,7 @@ created and the outcome data are generated in the last step.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
 </div>
 
       </footer>
