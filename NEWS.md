@@ -1,3 +1,5 @@
+# simstudy (development version)
+
 # simstudy 0.9.1
 
 * Minor fix in `genCorMat` that addresses an issue where very small rounding differences 
