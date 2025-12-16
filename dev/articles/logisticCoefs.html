@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.9.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.9.1.9000</span>
       </span>
     </div>
 
@@ -254,13 +254,13 @@ the desired target.</p>
 <div class="section level4">
 <h4 id="finding-the-intercept">Finding the intercept<a class="anchor" aria-label="anchor" href="#finding-the-intercept"></a>
 </h4>
-<p>Where did those two intercepts come from? The <a href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5" target="_blank" class="external-link">paper</a> by Peter Austin describes an iterative
+<p>Where did those two intercepts come from? The <a href="https://link.springer.com/article/10.1186/s12874-023-01836-5" target="_blank" class="external-link">paper</a> by Peter Austin describes an iterative
 bisection procedure that takes a distribution of covariates and a set of
 coefficients to identify the intercept coefficient that yields the
 target marginal proportion or prevalence.</p>
 <p>The general idea of the algorithm is to try out series of different
 intercepts in an intelligent way that ends up at the right spot. (If you
-want the details for the algorithm, take a look at the <a href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5" target="_blank" class="external-link">paper</a>.) The starting search range is pre-defined
+want the details for the algorithm, take a look at the <a href="https://link.springer.com/article/10.1186/s12874-023-01836-5" target="_blank" class="external-link">paper</a>.) The starting search range is pre-defined
 (we’ve used -10 to 10 for the intercept), and we start with an value of
 0 for the initial intercept and simulate a large data set (the paper
 uses 1 million observations, but 100,000 seems to work just fine) and
