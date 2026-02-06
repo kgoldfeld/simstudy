@@ -1,4 +1,7 @@
-# simstudy (development version)
+# simstudy (0.9.2)
+
+* A minor fix in a unit test for correlated matrices that was failing on CRAN due to
+tolerance error.
 
 # simstudy 0.9.1
 
