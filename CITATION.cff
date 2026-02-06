@@ -8,7 +8,7 @@ message: 'To cite package "simstudy" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'simstudy: Simulation of Study Data'
-version: 0.9.0.9000
+version: 0.9.2
 doi: 10.21105/joss.02763
 identifiers:
 - type: doi
@@ -54,7 +54,7 @@ preferred-citation:
 repository: https://CRAN.R-project.org/package=simstudy
 repository-code: https://github.com/kgoldfeld/simstudy
 url: https://kgoldfeld.github.io/simstudy/
-date-released: '2025-12-07'
+date-released: '2026-02-06'
 contact:
 - family-names: Goldfeld
   given-names: Keith
@@ -76,7 +76,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
+  year: '2026'
   version: '>= 4.1.0'
 - type: software
   title: data.table
@@ -97,11 +97,14 @@ references:
     email: asrini@pm.me
   - family-names: Gorecki
     given-names: Jan
+    email: j.gorecki@wit.edu.pl
   - family-names: Chirico
     given-names: Michael
+    email: michaelchirico4@gmail.com
     orcid: https://orcid.org/0000-0003-0787-087X
   - family-names: Hocking
     given-names: Toby
+    email: toby.hocking@r-project.org
     orcid: https://orcid.org/0000-0002-3146-0865
   - family-names: Schwendinger
     given-names: Benjamin
@@ -110,7 +113,7 @@ references:
     given-names: Ivan
     email: ikrylov@disroot.org
     orcid: https://orcid.org/0000-0002-0172-3812
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.data.table
 - type: software
   title: glue
@@ -126,7 +129,7 @@ references:
     given-names: Jennifer
     email: jenny@posit.co
     orcid: https://orcid.org/0000-0002-6983-2759
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.glue
 - type: software
   title: methods
@@ -137,7 +140,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
+  year: '2026'
 - type: software
   title: mvnfast
   abstract: 'mvnfast: Fast Multivariate Normal and Student''s t Methods'
@@ -148,7 +151,7 @@ references:
   - family-names: Fasiolo
     given-names: Matteo
     email: matteo.fasiolo@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.mvnfast
 - type: software
   title: Rcpp
@@ -183,7 +186,7 @@ references:
     orcid: https://orcid.org/0000-0001-8316-9503
   - family-names: Chambers
     given-names: John
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.Rcpp
 - type: software
   title: backports
@@ -200,7 +203,7 @@ references:
     given-names: Duncan
     email: murdoch.duncan@gmail.com
   - name: R Core Team
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.backports
 - type: software
   title: fastglm
@@ -212,7 +215,7 @@ references:
   - family-names: Huling
     given-names: Jared
     email: jaredhuling@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.fastglm
 - type: software
   title: pbv
@@ -224,7 +227,7 @@ references:
   - family-names: Robitzsch
     given-names: Alexander
     orcid: https://orcid.org/0000-0002-8226-3132
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.pbv
   version: '>= 0.5.47'
 - type: software
@@ -237,7 +240,7 @@ references:
   - family-names: Hester
     given-names: Jim
     email: james.f.hester@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.covr
 - type: software
   title: dplyr
@@ -262,7 +265,7 @@ references:
     given-names: Davis
     email: davis@posit.co
     orcid: https://orcid.org/0000-0003-4777-038X
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.dplyr
 - type: software
   title: formatR
@@ -275,7 +278,7 @@ references:
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.formatR
 - type: software
   title: gee
@@ -285,7 +288,7 @@ references:
   authors:
   - family-names: Carey
     given-names: Vincent J
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.gee
 - type: software
   title: ggplot2
@@ -325,7 +328,7 @@ references:
     given-names: Teun
     name-particle: van den
     orcid: https://orcid.org/0000-0002-9335-7468
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.ggplot2
 - type: software
   title: grid
@@ -336,7 +339,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
+  year: '2026'
 - type: software
   title: gridExtra
   abstract: 'gridExtra: Miscellaneous Functions for "Grid" Graphics'
@@ -346,7 +349,7 @@ references:
   - family-names: Auguie
     given-names: Baptiste
     email: baptiste.auguie@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.gridExtra
 - type: software
   title: hedgehog
@@ -358,7 +361,7 @@ references:
   - family-names: Campbell
     given-names: Huw
     email: huw.campbell@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.hedgehog
 - type: software
   title: knitr
@@ -371,7 +374,7 @@ references:
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.knitr
 - type: software
   title: magrittr
@@ -386,7 +389,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.magrittr
 - type: software
   title: Matrix
@@ -405,7 +408,7 @@ references:
   - family-names: Jagan
     given-names: Mikael
     orcid: https://orcid.org/0000-0002-3542-2938
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.Matrix
 - type: software
   title: mgcv
@@ -416,7 +419,7 @@ references:
   - family-names: Wood
     given-names: Simon
     email: simon.wood@r-project.org
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.mgcv
 - type: software
   title: ordinal
@@ -428,7 +431,7 @@ references:
   - family-names: Christensen
     given-names: Rune Haubo Bojesen
     email: rune.haubo@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.ordinal
 - type: software
   title: pracma
@@ -439,7 +442,7 @@ references:
   - family-names: Borchers
     given-names: Hans W.
     email: hwborchers@googlemail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.pracma
 - type: software
   title: rmarkdown
@@ -483,7 +486,7 @@ references:
     given-names: Richard
     email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.rmarkdown
 - type: software
   title: scales
@@ -501,7 +504,7 @@ references:
     orcid: https://orcid.org/0000-0002-5147-4711
   - family-names: Seidel
     given-names: Dana
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.scales
 - type: software
   title: splines
@@ -512,7 +515,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2025'
+  year: '2026'
 - type: software
   title: survival
   abstract: 'survival: Survival Analysis'
@@ -523,7 +526,7 @@ references:
   - family-names: Therneau
     given-names: Terry M
     email: therneau.terry@mayo.edu
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.survival
 - type: software
   title: testthat
@@ -535,7 +538,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.testthat
 - type: software
   title: gtsummary
@@ -567,7 +570,7 @@ references:
   - family-names: Zabor
     given-names: Emily C.
     orcid: https://orcid.org/0000-0002-1402-4498
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.gtsummary
 - type: software
   title: broom.helpers
@@ -584,7 +587,7 @@ references:
     given-names: Daniel D.
     email: danield.sjoberg@gmail.com
     orcid: https://orcid.org/0000-0003-0862-2018
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.broom.helpers
 - type: software
   title: survminer
@@ -602,7 +605,7 @@ references:
   - family-names: Biecek
     given-names: Przemyslaw
     email: przemyslaw.biecek@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.survminer
 - type: software
   title: katex
@@ -615,7 +618,7 @@ references:
     given-names: Jeroen
     email: jeroenooms@gmail.com
     orcid: https://orcid.org/0000-0002-4035-0289
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.katex
 - type: software
   title: dirmult
@@ -626,7 +629,7 @@ references:
   - family-names: Tvedebrink
     given-names: Torben
     email: tvede@math.aau.dk
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.dirmult
 - type: software
   title: rms
@@ -638,7 +641,7 @@ references:
   - family-names: Harrell Jr
     given-names: Frank E
     email: fh@fharrell.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.rms
 - type: software
   title: lmerTest
@@ -651,10 +654,10 @@ references:
     given-names: Alexandra
   - family-names: Bruun Brockhoff
     given-names: Per
-    email: perbb@dtu.dk
   - family-names: Haubo Bojesen Christensen
     given-names: Rune
     email: Rune.Haubo@gmail.com
-  year: '2025'
+    orcid: https://orcid.org/0000-0002-4494-3399
+  year: '2026'
   doi: 10.32614/CRAN.package.lmerTest
 
