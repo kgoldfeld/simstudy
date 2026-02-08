@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simstudy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.2</span>
       </span>
     </div>
 
@@ -158,7 +158,7 @@ regions defined by those thresholds (there will be
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 distinct regions) represents the probability of each possible response
 tied to that region.</p>
-<p><img src="ordinal_files/figure-html/threshold-1.png" class="r-plt" width="504"></p>
+<p><img src="ordinal_files/figure-html/threshold-1.png" class="r-plt" alt="" width="504"></p>
 <div class="section level2">
 <h2 id="comparing-response-distributions-of-different-populations">Comparing response distributions of different populations<a class="anchor" aria-label="anchor" href="#comparing-response-distributions-of-different-populations"></a>
 </h2>
@@ -177,10 +177,10 @@ effectively does is create a greater probability of a lower outcome for
 the unexposed group.</p>
 <pre><code><span><span class="co">## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
-<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">## <span style="color: #555555;">This warning is displayed once per session.</span></span></span>
 <span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="ordinal_files/figure-html/plotB-1.png" class="r-plt" width="504"></p>
+<p><img src="ordinal_files/figure-html/plotB-1.png" class="r-plt" alt="" width="504"></p>
 </div>
 <div class="section level2">
 <h2 id="the-cumulative-proportional-odds-model">The cumulative proportional odds model<a class="anchor" aria-label="anchor" href="#the-cumulative-proportional-odds-model"></a>
@@ -282,7 +282,7 @@ is</p>
 <p>A plot of the modeled cumulative probabilities (the lines) shows that
 the proportionality assumption fit the observed data (the points) quite
 well.</p>
-<p><img src="ordinal_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="576"></p>
+<p><img src="ordinal_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="non-proportional-odds">Non-proportional odds<a class="anchor" aria-label="anchor" href="#non-proportional-odds"></a>
@@ -296,7 +296,7 @@ the figure below, the rightward shift of the threshold to the left
 varies for each threshold (0.4 units for the first threshold, 0.0 for
 the second, and 1.7 for the last), which violates the underlying
 assumption of proportionality:</p>
-<p><img src="ordinal_files/figure-html/plotNP-1.png" class="r-plt" width="504"></p>
+<p><img src="ordinal_files/figure-html/plotNP-1.png" class="r-plt" alt="" width="504"></p>
 <p>It is possible to generate data under these assumptions using the
 <code>npVar</code> and <code>npAdj</code> arguments. <code>npVar</code>
 indicates the variable(s) for which the non-proportional assumption is
@@ -330,7 +330,7 @@ assumption along with the observed cumulative proportions. Since the
 model imposes a consistent shift of each threshold, the observed points
 no longer lie along the prediction line, indicating a violation of the
 proportional odds assumption:</p>
-<p><img src="ordinal_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="576"></p>
+<p><img src="ordinal_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="correlated-multivariate-ordinal-data">Correlated multivariate ordinal data<a class="anchor" aria-label="anchor" href="#correlated-multivariate-ordinal-data"></a>
@@ -381,12 +381,12 @@ specified correlations as expected:</p>
 <p>However, the marginal probability distributions of each item match
 quite closely with the specified probabilities:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
 <span><span class="va">dProp</span> <span class="op">&lt;-</span> <span class="va">dM</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">variable</span><span class="op">]</span></span>
 <span><span class="va">dProp</span><span class="op">[</span>, <span class="va">response</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># observed probabilities</span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>, value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>, value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Key: &lt;variable&gt;</span></span>
 <span><span class="co">##    variable       1       2       3</span></span>
 <span><span class="co">##      &lt;fctr&gt; &lt;table&gt; &lt;table&gt; &lt;table&gt;</span></span>
@@ -421,12 +421,12 @@ distributions are unaffected:</p>
 <span><span class="co">## q4 0.05 0.10 0.31 1.00 0.29</span></span>
 <span><span class="co">## q5 0.02 0.03 0.11 0.29 1.00</span></span></code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">dX</span>, id.vars <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
 <span><span class="va">dProp</span> <span class="op">&lt;-</span> <span class="va">dM</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">variable</span><span class="op">]</span></span>
 <span><span class="va">dProp</span><span class="op">[</span>, <span class="va">response</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># probabilities</span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>, value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">dProp</span>, <span class="va">variable</span> <span class="op">~</span> <span class="va">response</span>, value.var <span class="op">=</span> <span class="st">"V1"</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Key: &lt;variable&gt;</span></span>
 <span><span class="co">##    variable       1       2       3</span></span>
 <span><span class="co">##      &lt;fctr&gt; &lt;table&gt; &lt;table&gt; &lt;table&gt;</span></span>
