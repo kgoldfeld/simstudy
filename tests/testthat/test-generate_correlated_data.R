@@ -593,6 +593,7 @@ test_that("Basic Functionality Test", {
 })
 
 test_that("Distribution Test", {
+  set.seed(1000)
   def <- defData(varname = "xNorm", formula = 8, variance = 4, dist = "normal")
   def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
   def <- defData(def, varname = "xUniform1", formula = "3;8", dist = "uniform")
@@ -612,10 +613,11 @@ test_that("Distribution Test", {
 })
 
 test_that("Correlation Structure Test", {
+  set.seed(123)
   def <- defData(varname = "xNorm", formula = 7, variance = 4, dist = "normal")
   def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
 
-  dt <- genCorFlex(500, def, rho = .3, corstr = "cs")
+  dt <- genCorFlex(2500, def, rho = .3, corstr = "cs")
 
   cor_matrix <- cor(dt[, -"id"])
   expect_equal(cor_matrix, matrix(c(1, .3, .3, 1), 2, 2),
@@ -623,16 +625,18 @@ test_that("Correlation Structure Test", {
 })
 
 test_that("Correlation Structure Test for tau", {
+  set.seed(123)
   def <- defData(varname = "xPois1", formula = 7, dist = "poisson")
   def <- defData(def, varname = "xPois2", formula = 15, dist = "poisson")
 
-  dt <- genCorFlex(1000, def, tau = .3, corstr = "cs")
+  dt <- genCorFlex(2500, def, tau = .3, corstr = "cs")
   obs_cor <- cor(dt[, -"id"])[1,2]
 
   expect_equal(obs_cor, sin(.3 * pi/2), tolerance = .1)
 })
 
 test_that("Character error for formula", {
+  set.seed(123)
   # Create a definition with a non-numeric formula to trigger the warning
   def <- data.table::data.table(
     varname = c("xNorm", "xInvalid"),
