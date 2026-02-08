@@ -617,7 +617,7 @@ test_that("Correlation Structure Test", {
   def <- defData(varname = "xNorm", formula = 7, variance = 4, dist = "normal")
   def <- defData(def, varname = "xGamma1", formula = 15, variance = 2, dist = "gamma")
 
-  dt <- genCorFlex(1000, def, rho = .3, corstr = "cs")
+  dt <- genCorFlex(2500, def, rho = .3, corstr = "cs")
 
   cor_matrix <- cor(dt[, -"id"])
   expect_equal(cor_matrix, matrix(c(1, .3, .3, 1), 2, 2),
@@ -629,7 +629,7 @@ test_that("Correlation Structure Test for tau", {
   def <- defData(varname = "xPois1", formula = 7, dist = "poisson")
   def <- defData(def, varname = "xPois2", formula = 15, dist = "poisson")
 
-  dt <- genCorFlex(1000, def, tau = .3, corstr = "cs")
+  dt <- genCorFlex(2500, def, tau = .3, corstr = "cs")
   obs_cor <- cor(dt[, -"id"])[1,2]
 
   expect_equal(obs_cor, sin(.3 * pi/2), tolerance = .1)
