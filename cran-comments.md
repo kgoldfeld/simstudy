@@ -1,17 +1,18 @@
-## Submission 20251215
+## Submission 2026-02-08
 
-This is a second resubmission for version 0.9.1
+This is a submission of version 0.9.2.
 
-Developed with R Version 4.5.2
+## Test environments
+* macOS (R 4.5.2)
+* win-builder (devel)
 
-The test failure reported on CRAN (MKL) was caused by a numerical rounding issue 
-leading to a non-symmetric correlation matrix. This has been fixed by ensuring 
-correlation matrices are properly symmetrized.
+## R CMD check results
+0 errors | 0 warnings | 0 notes
 
-In addition, fixed a unit test that incorrectly assumed exact agreement 
-between empirical and target correlation matrices. The test has been updated 
-to allow for expected Monte Carlo variability and BLAS/LAPACK–dependent 
-numerical differences, which should resolve the MKL-specific test failure.
+## Comments
+The test failure previously reported on CRAN (MKL) was due to Monte Carlo variability.
+The sample size was increased and a fixed random seed was added to reduce the
+chance of recurrence.
 
-Checks using devtools::check(remote = TRUE, manual = TRUE) and 
-devtools::check_win_devel() pass.
+All checks pass using devtools::check(remote = TRUE, manual = TRUE) and
+devtools::check_win_devel().
