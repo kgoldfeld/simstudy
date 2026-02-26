@@ -1,5 +1,8 @@
 # simstudy (development version)
 
+* A minor fix in `scenario_list` to allow the list to include mix of numerical
+and character data.
+
 # simstudy (0.9.2)
 
 * A minor fix in a unit test for correlated matrices that was failing on CRAN due to
