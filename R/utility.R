@@ -139,7 +139,8 @@ scenario_list <- function(..., each = 1) {
   }
   
   argmat$scenario <- seq_len(nrow(argmat))
-  scenarios <- asplit(argmat, MARGIN = 1)
+  scenarios <- split(x = argmat, f = seq_len(nrow(argmat)))
+  names(scenarios) <- NULL
   
   return(rep(scenarios, each = each))
 }
