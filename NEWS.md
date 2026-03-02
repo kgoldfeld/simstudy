@@ -1,7 +1,10 @@
 # simstudy (development version)
 
-* A minor fix in `scenario_list` to allow the list to include mix of numerical
-and character data.
+* scenario_list() return type change: now returns a list of 1-row 
+data.frames (instead of vectors) to support mixed numeric/character 
+scenario values without coercion. If you were transposing scenario 
+vectors for logging (e.g., data.table(t(argsvec), result)), 
+switch to data.table(argsvec, result). Vignettes updated.
 
 # simstudy (0.9.2)
 

@@ -14,8 +14,8 @@ vectors or \code{grouped_params} objects created with \code{\link{grouped}}.}
 or set of parameters. Defaults to 1.}
 }
 \value{
-A list of scenarios, where each element is a named vector of parameter
-values with an added element \code{scenario} giving the scenario index.
+A list of scenarios, where each element is a one-row data.frame
+of parameter values with an added element \code{scenario} giving the scenario index.
 }
 \description{
 Generates a list of scenarios by expanding combinations of
