@@ -53,8 +53,8 @@ grouped <- function(...) {
 #' vectors or `grouped_params` objects created with \code{\link{grouped}}.
 #' @param each Integer representing the number of replications for each scenario
 #' or set of parameters. Defaults to 1.
-#' @return A list of scenarios, where each element is a named vector of parameter 
-#' values with an added element `scenario` giving the scenario index.
+#' @return A list of scenarios, where each element is a one-row data.frame 
+#' of parameter values with an added element `scenario` giving the scenario index.
 #' @examples
 #' # Regular parameters
 #' s1 <- scenario_list(a = 1:2, b = c("x", "y"))
@@ -139,9 +139,10 @@ scenario_list <- function(..., each = 1) {
   }
   
   argmat$scenario <- seq_len(nrow(argmat))
-  scenarios <- asplit(argmat, MARGIN = 1)
-  
+  scenarios <- split(x = argmat, f = seq_len(nrow(argmat)))
+  names(scenarios) <- NULL
   return(rep(scenarios, each = each))
+  
 }
 
 #' Generate Mixture Formula

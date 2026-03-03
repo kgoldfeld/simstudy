@@ -185,7 +185,7 @@ Once the data have been collected, it is quite easy to summarize and create a ta
 
 ```{r, eval = FALSE}
 summarize <- function(m_fit) {
-  args <- data.table(t(m_fit[[1]]))
+  args <- data.table(m_fit[[1]])
   reject <- m_fit[[2]][term == "rx", p.value <= 0.05]
   cbind(args, reject)
 }

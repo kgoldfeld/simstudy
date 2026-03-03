@@ -1516,14 +1516,14 @@ test_that("scenario_list() preserves correct values in scenarios", {
   result <- scenario_list(a, grouped(x, y))
   
   # Check first scenario
-  expect_equal(unname(result[[1]][1]), 1)
-  expect_equal(unname(result[[1]][2]), 10)
-  expect_equal(unname(result[[1]][[3]]), 100)
+  expect_equal(result[[1]][1, 1], 1)
+  expect_equal(result[[1]][1, 2], 10)
+  expect_equal(result[[1]][[1, 3]], 100)
   
   # Check last scenario
-  expect_equal(unname(result[[4]][1]), 2)
-  expect_equal(unname(result[[4]][2]), 20)
-  expect_equal(unname(result[[4]][[3]]), 200)
+  expect_equal(result[[4]][1, 1], 2)
+  expect_equal(result[[4]][1, 2], 20)
+  expect_equal(result[[4]][1, 3], 200)
 })
 
 test_that("scenario_list() assigns sequential scenario numbers", {
@@ -1533,16 +1533,17 @@ test_that("scenario_list() assigns sequential scenario numbers", {
   result <- scenario_list(a, b)
   
   scenarios <- sapply(result, function(x) x["scenario"])
-  expect_equal(unname(scenarios), 1:6)
+  expect_equal(unname(unlist(scenarios)), seq(1:6))
+  
 })
 
-test_that("scenario_list() returns list of named vectors", {
+test_that("scenario_list() returns list of data.frames", {
   a <- c(1, 2)
   
   result <- scenario_list(a)
   
   expect_type(result, "list")
-  expect_named(result[[1]], c("a", "scenario"))
+  expect_s3_class(result[[1]], "data.frame")
 })
 
 
@@ -1552,8 +1553,8 @@ test_that("scenario_list() handles edge case of single value", {
   result <- scenario_list(a)
   
   expect_equal(length(result), 1)
-  expect_equal(unname(result[[1]]["a"]), 1)
-  expect_equal(unname(result[[1]]["scenario"]), 1)
+  expect_equal(result[[1]][["a"]], 1)
+  expect_equal(result[[1]][["scenario"]], 1)
 })
 
 test_that("scenario_list() preserves variable names correctly when specified in call", {
