@@ -123,8 +123,8 @@ or set of parameters. Defaults to 1.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of scenarios, where each element is a named vector of parameter
-values with an added element <code>scenario</code> giving the scenario index.</p>
+    <p>A list of scenarios, where each element is a one-row data.frame
+of parameter values with an added element <code>scenario</code> giving the scenario index.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -143,45 +143,45 @@ values with an added element <code>scenario</code> giving the scenario index.</p
 <span class="r-in"><span><span class="co"># Inspect first few scenarios</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        b scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      "1"      "x"      "1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a b scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 x        1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        b scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      "2"      "x"      "2" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a b scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2 x        2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        b scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      "1"      "y"      "3" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a b scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1 y        3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        b scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      "2"      "y"      "4" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a b scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2 y        4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">s2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        x        y scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    "low"      "1"     "10"      "1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     a x  y scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 low 1 10        1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        x        y scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    "low"      "1"     "10"      "1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     a x  y scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 low 1 10        1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        x        y scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    "low"      "1"     "10"      "1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     a x  y scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 low 1 10        1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        x        y scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   "high"      "1"     "10"      "2" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      a x  y scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 high 1 10        2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        x        y scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   "high"      "1"     "10"      "2" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      a x  y scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 high 1 10        2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        a        x        y scenario </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   "high"      "1"     "10"      "2" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      a x  y scenario</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 high 1 10        2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

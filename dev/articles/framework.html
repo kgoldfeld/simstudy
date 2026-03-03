@@ -228,88 +228,88 @@ be grouped when certain parameters should vary together.</p>
 <span><span class="co"># Independent parameters</span></span>
 <span><span class="fu"><a href="../reference/scenario_list.html">scenario_list</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##        a        b scenario </span></span>
-<span><span class="co">##      0.5      8.0      1.0 </span></span>
+<span><span class="co">##     a b scenario</span></span>
+<span><span class="co">## 1 0.5 8        1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]</span></span>
-<span><span class="co">##        a        b scenario </span></span>
-<span><span class="co">##      0.7      8.0      2.0 </span></span>
+<span><span class="co">##     a b scenario</span></span>
+<span><span class="co">## 2 0.7 8        2</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[3]]</span></span>
-<span><span class="co">##        a        b scenario </span></span>
-<span><span class="co">##      0.9      8.0      3.0 </span></span>
+<span><span class="co">##     a b scenario</span></span>
+<span><span class="co">## 3 0.9 8        3</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[4]]</span></span>
-<span><span class="co">##        a        b scenario </span></span>
-<span><span class="co">##      0.5     16.0      4.0 </span></span>
+<span><span class="co">##     a  b scenario</span></span>
+<span><span class="co">## 4 0.5 16        4</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[5]]</span></span>
-<span><span class="co">##        a        b scenario </span></span>
-<span><span class="co">##      0.7     16.0      5.0 </span></span>
+<span><span class="co">##     a  b scenario</span></span>
+<span><span class="co">## 5 0.7 16        5</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[6]]</span></span>
-<span><span class="co">##        a        b scenario </span></span>
-<span><span class="co">##      0.9     16.0      6.0</span></span></code></pre>
+<span><span class="co">##     a  b scenario</span></span>
+<span><span class="co">## 6 0.9 16        6</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Grouped parameters</span></span>
 <span><span class="fu"><a href="../reference/scenario_list.html">scenario_list</a></span><span class="op">(</span><span class="va">a</span>, <span class="fu"><a href="../reference/grouped.html">grouped</a></span><span class="op">(</span><span class="va">b</span>, <span class="va">d</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##        a        b        d scenario </span></span>
-<span><span class="co">##      0.5      8.0     12.0      1.0 </span></span>
+<span><span class="co">##     a b  d scenario</span></span>
+<span><span class="co">## 1 0.5 8 12        1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]</span></span>
-<span><span class="co">##        a        b        d scenario </span></span>
-<span><span class="co">##      0.7      8.0     12.0      2.0 </span></span>
+<span><span class="co">##     a b  d scenario</span></span>
+<span><span class="co">## 2 0.7 8 12        2</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[3]]</span></span>
-<span><span class="co">##        a        b        d scenario </span></span>
-<span><span class="co">##      0.9      8.0     12.0      3.0 </span></span>
+<span><span class="co">##     a b  d scenario</span></span>
+<span><span class="co">## 3 0.9 8 12        3</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[4]]</span></span>
-<span><span class="co">##        a        b        d scenario </span></span>
-<span><span class="co">##      0.5     16.0     18.0      4.0 </span></span>
+<span><span class="co">##     a  b  d scenario</span></span>
+<span><span class="co">## 4 0.5 16 18        4</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[5]]</span></span>
-<span><span class="co">##        a        b        d scenario </span></span>
-<span><span class="co">##      0.7     16.0     18.0      5.0 </span></span>
+<span><span class="co">##     a  b  d scenario</span></span>
+<span><span class="co">## 5 0.7 16 18        5</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[6]]</span></span>
-<span><span class="co">##        a        b        d scenario </span></span>
-<span><span class="co">##      0.9     16.0     18.0      6.0</span></span></code></pre>
+<span><span class="co">##     a  b  d scenario</span></span>
+<span><span class="co">## 6 0.9 16 18        6</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># With replications</span></span>
 <span><span class="fu"><a href="../reference/scenario_list.html">scenario_list</a></span><span class="op">(</span><span class="va">b</span>, <span class="va">d</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [[1]]</span></span>
-<span><span class="co">##        b        d scenario </span></span>
-<span><span class="co">##        8       12        1 </span></span>
+<span><span class="co">##   b  d scenario</span></span>
+<span><span class="co">## 1 8 12        1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]</span></span>
-<span><span class="co">##        b        d scenario </span></span>
-<span><span class="co">##        8       12        1 </span></span>
+<span><span class="co">##   b  d scenario</span></span>
+<span><span class="co">## 1 8 12        1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[3]]</span></span>
-<span><span class="co">##        b        d scenario </span></span>
-<span><span class="co">##       16       12        2 </span></span>
+<span><span class="co">##    b  d scenario</span></span>
+<span><span class="co">## 2 16 12        2</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[4]]</span></span>
-<span><span class="co">##        b        d scenario </span></span>
-<span><span class="co">##       16       12        2 </span></span>
+<span><span class="co">##    b  d scenario</span></span>
+<span><span class="co">## 2 16 12        2</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[5]]</span></span>
-<span><span class="co">##        b        d scenario </span></span>
-<span><span class="co">##        8       18        3 </span></span>
+<span><span class="co">##   b  d scenario</span></span>
+<span><span class="co">## 3 8 18        3</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[6]]</span></span>
-<span><span class="co">##        b        d scenario </span></span>
-<span><span class="co">##        8       18        3 </span></span>
+<span><span class="co">##   b  d scenario</span></span>
+<span><span class="co">## 3 8 18        3</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[7]]</span></span>
-<span><span class="co">##        b        d scenario </span></span>
-<span><span class="co">##       16       18        4 </span></span>
+<span><span class="co">##    b  d scenario</span></span>
+<span><span class="co">## 4 16 18        4</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[8]]</span></span>
-<span><span class="co">##        b        d scenario </span></span>
-<span><span class="co">##       16       18        4</span></span></code></pre>
+<span><span class="co">##    b  d scenario</span></span>
+<span><span class="co">## 4 16 18        4</span></span></code></pre>
 <p>The full simulation process iterates over each scenario, running many
 replications per combination. This can be done locally or distributed
 using a high-performance computing framework such as
@@ -394,7 +394,7 @@ replication:</p>
 create a table or a figure.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarize</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">m_fit</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">m_fit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">m_fit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">reject</span> <span class="op">&lt;-</span> <span class="va">m_fit</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">term</span> <span class="op">==</span> <span class="st">"rx"</span>, <span class="va">p.value</span> <span class="op">&lt;=</span> <span class="fl">0.05</span><span class="op">]</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">args</span>, <span class="va">reject</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
