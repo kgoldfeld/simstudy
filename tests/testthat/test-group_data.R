@@ -583,6 +583,174 @@ test_that("trtStepWedge handles lag period error correctly", {
   
 })
 
+test_that("trtStepWedge supports unequal wave sizes using pattern", {
+  
+  skip_on_cran()
+  
+  defc <- defData(
+    varname = "ceffect", formula = 0, variance = 0.10,
+    dist = "normal", id = "cluster"
+  )
+  
+  dc <- genData(13, defc)
+  dp <- addPeriods(dc, nPeriods = 24, idvars = "cluster")
+  
+  dx <- trtStepWedge(
+    dp,
+    clustID = "cluster",
+    nWaves = 4,
+    lenWaves = 6,
+    startPer = 1,
+    pattern = c(3, 3, 3, 4)
+  )
+  
+  starts <- unique(dx[, .(cluster, start_rx = period[rx == 1][1]), by = cluster])
+  
+  expect_equal(nrow(starts), 13)
+  
+  expect_equal(
+    starts[, .N, by = start_rx][order(start_rx)]$N,
+    c(3L, 3L, 3L, 4L)
+  )
+  
+  expect_equal(
+    starts[, sort(unique(start_rx))],
+    c(1, 7, 13, 19)
+  )
+})
+
+test_that("trtStepWedge errors when equal waves are impossible and pattern is NULL", {
+  
+  skip_on_cran()
+  
+  defc <- defData(
+    varname = "ceffect", formula = 0, variance = 0.10,
+    dist = "normal", id = "cluster"
+  )
+  
+  dc <- genData(13, defc)
+  dp <- addPeriods(dc, nPeriods = 24, idvars = "cluster")
+  
+  expect_error(
+    trtStepWedge(
+      dp,
+      clustID = "cluster",
+      nWaves = 4,
+      lenWaves = 6,
+      startPer = 1
+    ),
+    "Cannot create equal size waves"
+  )
+})
+
+test_that("trtStepWedge errors when pattern length does not equal nWaves", {
+  
+  skip_on_cran()
+  
+  defc <- defData(
+    varname = "ceffect", formula = 0, variance = 0.10,
+    dist = "normal", id = "cluster"
+  )
+  
+  dc <- genData(13, defc)
+  dp <- addPeriods(dc, nPeriods = 24, idvars = "cluster")
+  
+  expect_error(
+    trtStepWedge(
+      dp,
+      clustID = "cluster",
+      nWaves = 4,
+      lenWaves = 6,
+      startPer = 1,
+      pattern = c(3, 3, 7)
+    ),
+    "Length of pattern must equal nWaves"
+  )
+})
+
+test_that("trtStepWedge errors when pattern does not sum to number of clusters", {
+  
+  skip_on_cran()
+  
+  defc <- defData(
+    varname = "ceffect", formula = 0, variance = 0.10,
+    dist = "normal", id = "cluster"
+  )
+  
+  dc <- genData(13, defc)
+  dp <- addPeriods(dc, nPeriods = 24, idvars = "cluster")
+  
+  expect_error(
+    trtStepWedge(
+      dp,
+      clustID = "cluster",
+      nWaves = 4,
+      lenWaves = 6,
+      startPer = 1,
+      pattern = c(3, 3, 3, 3)
+    ),
+    "Sum of pattern must equal number of clusters"
+  )
+})
+
+test_that("trtStepWedge errors when pattern includes non-positive values", {
+  
+  skip_on_cran()
+  
+  defc <- defData(
+    varname = "ceffect", formula = 0, variance = 0.10,
+    dist = "normal", id = "cluster"
+  )
+  
+  dc <- genData(13, defc)
+  dp <- addPeriods(dc, nPeriods = 24, idvars = "cluster")
+  
+  expect_error(
+    trtStepWedge(
+      dp,
+      clustID = "cluster",
+      nWaves = 4,
+      lenWaves = 6,
+      startPer = 1,
+      pattern = c(3, 3, 7, 0)
+    ),
+    "All elements of pattern must be positive"
+  )
+})
+
+test_that("trtStepWedge retains default equal wave allocation when pattern is NULL", {
+  
+  skip_on_cran()
+  
+  defc <- defData(
+    varname = "ceffect", formula = 0, variance = 0.10,
+    dist = "normal", id = "cluster"
+  )
+  
+  dc <- genData(12, defc)
+  dp <- addPeriods(dc, nPeriods = 12, idvars = "cluster")
+  
+  dx <- trtStepWedge(
+    dp,
+    clustID = "cluster",
+    nWaves = 3,
+    lenWaves = 3,
+    startPer = 2
+  )
+  
+  starts <- unique(dx[, .(cluster, start_rx = period[rx == 1][1]), by = cluster])
+  
+  expect_equal(
+    starts[, .N, by = start_rx][order(start_rx)]$N,
+    c(4L, 4L, 4L)
+  )
+  
+  expect_equal(
+    starts[, sort(unique(start_rx))],
+    c(2, 5, 8)
+  )
+})
+
 # trtAssign <-----
 
 test_that("Returns correct number of rows and new group column", {

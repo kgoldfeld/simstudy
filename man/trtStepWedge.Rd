@@ -13,7 +13,8 @@ trtStepWedge(
   perName = "period",
   grpName = "rx",
   lag = 0,
-  xrName = "xr"
+  xrName = "xr",
+  pattern = NULL
 )
 }
 \arguments{
@@ -36,6 +37,10 @@ exposure group}
 
 \item{xrName}{string representing name of the field that
 indicates whether the cluster status is in transition status}
+
+\item{pattern}{integer vector giving the number of clusters assigned to each wave;
+must have length nWaves and sum to the total number of clusters. If NULL,
+clusters are allocated equally across waves.}
 }
 \value{
 A data.table with the added treatment assignment

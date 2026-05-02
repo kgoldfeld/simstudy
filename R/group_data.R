@@ -584,6 +584,9 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 #' @param lag integer representing length of transition period
 #' @param xrName string representing name of the field that
 #' indicates whether the cluster status is in transition status
+#' @param pattern integer vector giving the number of clusters assigned to each wave;
+#'   must have length nWaves and sum to the total number of clusters. If NULL,
+#'   clusters are allocated equally across waves.
 #'
 #' @return A data.table with the added treatment assignment
 #' @seealso \code{\link{trtObserve} \link{trtAssign}}
@@ -614,13 +617,13 @@ trtObserve <- function(dt, formulas, logit.link = FALSE, grpName = "trtGrp") {
 #' @concept group_data
 trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
                          startPer, perName = "period", grpName = "rx",
-                         lag = 0, xrName = "xr") {
+                         lag = 0, xrName = "xr", pattern = NULL) {
 
   # 'declare' vars created in data.table
   rx <- NULL
   period <- NULL
   xr <- NULL
-
+  
   if (lag == 0) xrName <- "xr" # override - will be deleted from dd
 
   if (missing(dtName)) {
@@ -638,15 +641,27 @@ trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
 
   nClust <- length(dd[, unique(get(clustID))])
   nPer <- length(dd[, unique(period)])
-  cPerWave <- nClust / nWaves
-
-  if (nClust %% nWaves != 0) {
-    stop(paste(
-      "Cannot create equal size waves with", nClust, "clusters and",
-      nWaves, "waves."
-    ))
+  
+  if (is.null(pattern)) {
+    if (nClust %% nWaves != 0) {
+      stop(paste(
+        "Cannot create equal size waves with", nClust, "clusters and",
+        nWaves, "waves. Specify pattern or adjust number of clusters."
+      ))
+    }
+    pattern <- rep(nClust / nWaves, nWaves)
+  } else {
+    if (length(pattern) != nWaves) {
+      stop("Length of pattern must equal nWaves.", call. = FALSE)
+    }
+    if (sum(pattern) != nClust) {
+      stop("Sum of pattern must equal number of clusters.", call. = FALSE)
+    }
+    if (any(pattern <= 0)) {
+      stop("All elements of pattern must be positive.", call. = FALSE)
+    }
   }
-
+  
   if ((nPer) < (startPer + (nWaves - 1) * (lenWaves + lag) + 1)) {
     stop(paste(
       "Design requires", (startPer + (nWaves - 1) * (lenWaves + lag) + 1),
@@ -654,7 +669,7 @@ trtStepWedge <- function(dtName, clustID, nWaves, lenWaves,
     ))
   }
 
-  startTrt <- rep((0:(nWaves - 1)) * lenWaves, each = cPerWave) + startPer
+  startTrt <- rep((0:(nWaves - 1)) * lenWaves, times = pattern) + startPer
   dstart <- data.table::data.table(cid = 1:nClust, startTrt)
   data.table::setnames(dstart, "cid", clustID)
   data.table::setkeyv(dstart, clustID)

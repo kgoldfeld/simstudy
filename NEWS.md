@@ -1,12 +1,22 @@
 # simstudy (development version)
 
+## New features
+
+* Added a `pattern` argument to `trtStepWedge()` to allow user-specified 
+allocation of clusters across treatment waves (e.g., `c(3, 3, 3, 4)` for 
+13 clusters and 4 waves). The vector must have length `nWaves` and sum 
+to the total number of clusters. Default behavior (equal allocation 
+when possible) is unchanged.
+
+## Minor fixes
+
 * scenario_list() return type change: now returns a list of 1-row 
 data.frames (instead of vectors) to support mixed numeric/character 
 scenario values without coercion. If you were transposing scenario 
 vectors for logging (e.g., data.table(t(argsvec), result)), 
 switch to data.table(argsvec, result). Vignettes updated.
 
-# simstudy (0.9.2)
+# simstudy 0.9.2
 
 * A minor fix in a unit test for correlated matrices that was failing on CRAN due to
 tolerance error.

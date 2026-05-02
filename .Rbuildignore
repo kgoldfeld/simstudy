@@ -27,3 +27,5 @@
 ^NEWS\.md$
 ^CRAN-SUBMISSION$
 ^revdep$
+^\.positai$
+^\.claude$
