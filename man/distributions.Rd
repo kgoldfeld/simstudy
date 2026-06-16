@@ -33,7 +33,7 @@ This help file describes the distributions used for data creation in
 }
 \details{
 For details about the statistical distributions please see
-\link[stats:Distributions]{stats::distributions}, any non-statistical distributions will be
+\link[stats:distributions]{stats::distributions}, any non-statistical distributions will be
 explained below. Required variables and expected pattern for each
 distribution can be found in this table:\tabular{lllll}{
    \strong{name} \tab \strong{formula} \tab \strong{format} \tab \strong{variance} \tab \strong{link} \cr

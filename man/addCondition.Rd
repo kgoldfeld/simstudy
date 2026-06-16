@@ -14,7 +14,7 @@ addCondition(condDefs, dtOld, newvar, envir = parent.frame())
 \item{newvar}{Name of new column to add}
 
 \item{envir}{Environment the data definitions are evaluated in.
-Defaults to \link[base:sys.parent]{base::parent.frame}.}
+Defaults to \link[base:parent.frame]{base::parent.frame}.}
 }
 \value{
 An updated data.table that contains the added simulated data

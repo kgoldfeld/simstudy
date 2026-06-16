@@ -282,6 +282,104 @@ genCluster <- function(dtClust,
   return(dt[])
 }
 
+#' @title Generate crossed data
+#'
+#' @description Create the Cartesian product of two or more data sets,
+#' preserving all variables from each input data set.
+#'
+#' @param ... Two or more data sets to be crossed. Each input may be a
+#'   `data.frame` or `data.table`.
+#' @param id Name of the crossed id field. Defaults to `"cross_id"`.
+#'
+#' @return A `data.table` containing all combinations of rows from the input
+#'   data sets. The crossed id is placed first and used as the key.
+#'
+#' @examples
+#' region_def <- defData(varname = "r_effect", formula = 0, variance = 1)
+#' mouse_def <- defData(varname = "m_effect", formula = 0, variance = 1)
+#' 
+#' dd_region <- genData(20, region_def, id = "region")
+#' dd_mouse  <- genData(8, mouse_def, id = "mouse")
+#'
+#' dd <- genCrossed(
+#'   dd_mouse,
+#'   dd_region,
+#'   id = "mouse_region_id"
+#' )
+#'
+#' @export
+#' @concept group_data
+genCrossed <- function(..., id = "cross_id") {
+  
+  # to "declare" variable 
+  
+  .cross_join_id <- NULL
+  
+  ####
+  
+  dts <- list(...)
+  
+  #### Check arguments
+  
+  if (length(dts) < 2) {
+    stop("at least two data sets must be provided", call. = FALSE)
+  }
+  
+  if (!is.character(id) || length(id) != 1) {
+    stop("argument 'id' must be a single character string", call. = FALSE)
+  }
+  
+  #### Convert inputs to data.tables without modifying originals
+  
+  dts <- lapply(dts, function(x) {
+    data.table::copy(data.table::as.data.table(x))
+  })
+  
+  #### Check for duplicate column names across inputs
+  
+  all_names <- unlist(lapply(dts, names), use.names = FALSE)
+  
+  dup_names <- unique(all_names[duplicated(all_names)])
+  
+  if (length(dup_names) > 0) {
+    stop(
+      "input data sets must not share column names: ",
+      paste(dup_names, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  
+  if (id %in% all_names) {
+    stop("argument 'id' already exists as a column name", call. = FALSE)
+  }
+  
+  #### Create Cartesian product
+  
+  for (i in seq_along(dts)) {
+    dts[[i]][, .cross_join_id := 1L]
+  }
+  
+  # Sequentially merge all data sets to create Cartesian product
+  
+  dt <- Reduce(
+    function(x, y) {
+      merge(x, y, by = ".cross_join_id", allow.cartesian = TRUE)
+    },
+    dts
+  )
+  
+  dt[, .cross_join_id := NULL]
+  
+  #### Add crossed id, move it to first column, and set key
+  
+  dt[, eval(id) := .I]
+  
+  data.table::setcolorder(dt, c(id, setdiff(names(dt), id)))
+  data.table::setkeyv(dt, id)
+  
+  return(dt[])
+}
+
 #' Generate event data using longitudinal data, and restrict output to time
 #' until the nth event.
 #'
