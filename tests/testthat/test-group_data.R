@@ -103,14 +103,16 @@ mergeData <- function(dtClust, dt, cLevelVar) {
 }
 
 test_that("genCluster handles missing arguments", {
-  skip_on_cran()
   
-  dtClust <- data.table(idSchool = 1:3, nClasses = c(2, 3, 4))
+  dtClust <- data.table::data.table(
+    idSchool = 1:2,
+    nClasses = c(2, 2)
+  )
   
-  expect_error(genCluster(), "argument 'dtClust' is missing")
-  expect_error(genCluster(dtClust), "argument 'cLevelVar' is missing")
-  expect_error(genCluster(dtClust, "idSchool"), "argument 'numIndsVar' is missing")
-  expect_error(genCluster(dtClust, "idSchool", "nClasses"), "argument 'level1ID' is missing")
+  expect_error(genCluster(), "missing with no default")
+  expect_error(genCluster(dtClust), "missing with no default")
+  expect_error(genCluster(dtClust, "idSchool"), "missing with no default")
+  expect_error(genCluster(dtClust, "idSchool", "nClasses"), "level1ID")
 })
 
 test_that("genCluster generates data with correct dimensions when numIndsVar is a column name", {
@@ -229,6 +231,168 @@ test_that("genCluster accepts numeric value for numIndsVar", {
   for (i in 1:nrow(dtClust)) {
     expect_equal(nrow(result[idSchool == dtClust$idSchool[i]]), N)
   }
+})
+
+test_that("genCluster creates within-cluster id when requested", {
+  
+  dtClust <- data.table::data.table(
+    idSchool = 1:2,
+    nClasses = c(3, 2)
+  )
+  
+  dt <- genCluster(
+    dtClust,
+    cLevelVar = "idSchool",
+    numIndsVar = "nClasses",
+    level1ID = "idClass",
+    withinClusterID = "classNum",
+    allLevel2 = FALSE
+  )
+  
+  expect_equal(nrow(dt), 5)
+  expect_true("classNum" %in% names(dt))
+  
+  expect_equal(dt$idClass, 1:5)
+  expect_equal(dt$classNum, c(1, 2, 3, 1, 2))
+  expect_equal(dt$idSchool, c(1, 1, 1, 2, 2))
+})
+
+test_that("genCluster creates within-cluster id with constant cluster size", {
+  
+  dtClust <- data.table::data.table(
+    idSchool = 1:3
+  )
+  
+  dt <- genCluster(
+    dtClust,
+    cLevelVar = "idSchool",
+    numIndsVar = 2,
+    level1ID = "idClass",
+    withinClusterID = "classNum",
+    allLevel2 = FALSE
+  )
+  
+  expect_equal(nrow(dt), 6)
+  expect_equal(dt$classNum, c(1, 2, 1, 2, 1, 2))
+  expect_equal(dt$idSchool, c(1, 1, 2, 2, 3, 3))
+})
+
+test_that("genCluster preserves within-cluster id when allLevel2 is TRUE", {
+  
+  dtClust <- data.table::data.table(
+    idSchool = 1:2,
+    nClasses = c(2, 3),
+    schoolType = c("A", "B")
+  )
+  
+  dt <- genCluster(
+    dtClust,
+    cLevelVar = "idSchool",
+    numIndsVar = "nClasses",
+    level1ID = "idClass",
+    withinClusterID = "classNum",
+    allLevel2 = TRUE
+  )
+  
+  expect_true("classNum" %in% names(dt))
+  expect_true("schoolType" %in% names(dt))
+  
+  expect_equal(dt[idSchool == 1, classNum], 1:2)
+  expect_equal(dt[idSchool == 2, classNum], 1:3)
+})
+
+test_that("genCluster remains backward compatible when withinClusterID is NULL", {
+  
+  dtClust <- data.table::data.table(
+    idSchool = 1:2,
+    nClasses = c(2, 2)
+  )
+  
+  dt <- genCluster(
+    dtClust,
+    cLevelVar = "idSchool",
+    numIndsVar = "nClasses",
+    level1ID = "idClass",
+    allLevel2 = FALSE
+  )
+  
+  expect_false("withinClusterID" %in% names(dt))
+  expect_equal(names(dt), c("idSchool", "idClass"))
+})
+
+test_that("genCluster errors when withinClusterID already exists in dtClust", {
+  
+  dtClust <- data.table::data.table(
+    idSchool = 1:2,
+    nClasses = c(2, 2),
+    classNum = c(10, 20)
+  )
+  
+  expect_error(
+    genCluster(
+      dtClust,
+      cLevelVar = "idSchool",
+      numIndsVar = "nClasses",
+      level1ID = "idClass",
+      withinClusterID = "classNum"
+    )
+  )
+})
+
+test_that("genCluster errors when withinClusterID is invalid", {
+  
+  dtClust <- data.table::data.table(
+    idSchool = 1:2,
+    nClasses = c(2, 2)
+  )
+  
+  expect_error(
+    genCluster(
+      dtClust,
+      cLevelVar = "idSchool",
+      numIndsVar = "nClasses",
+      level1ID = "idClass",
+      withinClusterID = c("classNum", "visitNum")
+    )
+  )
+  
+  expect_error(
+    genCluster(
+      dtClust,
+      cLevelVar = "idSchool",
+      numIndsVar = "nClasses",
+      level1ID = "idClass",
+      withinClusterID = 1
+    )
+  )
+})
+
+test_that("genCluster errors when withinClusterID duplicates existing id names", {
+  
+  dtClust <- data.table::data.table(
+    idSchool = 1:2,
+    nClasses = c(2, 2)
+  )
+  
+  expect_error(
+    genCluster(
+      dtClust,
+      cLevelVar = "idSchool",
+      numIndsVar = "nClasses",
+      level1ID = "idClass",
+      withinClusterID = "idSchool"
+    )
+  )
+  
+  expect_error(
+    genCluster(
+      dtClust,
+      cLevelVar = "idSchool",
+      numIndsVar = "nClasses",
+      level1ID = "idClass",
+      withinClusterID = "idClass"
+    )
+  )
 })
 
 # genNthEvent <-----

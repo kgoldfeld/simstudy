@@ -200,19 +200,25 @@ addPeriods <- function(dtName,
 }
 
 #' @title  Simulate clustered data
-#' @description Simulate data set that is one level down in a multilevel data context. The
-#' level "2" data set must contain a field that specifies the number of
-#' individual records in a particular cluster.
+#'
+#' @description Simulate data set that is one level down in a multilevel data
+#' context. The level "2" data set must contain a field that specifies the
+#' number of individual records in a particular cluster.
+#'
 #' @param dtClust Name of existing data set that contains the level "2" data
 #' @param cLevelVar Variable name (string) of cluster id in dtClust
-#' @param numIndsVar Variable name (string) of number of observations
-#' per cluster in dtClust. Can also be a single integer value that will
-#' be used for all clusters.
+#' @param numIndsVar Variable name (string) of number of observations per
+#' cluster in dtClust. Can also be a single integer value used for all clusters.
 #' @param level1ID Name of id field in new level "1" data set
+#' @param withinClusterID Optional name of an id field indexed within clusters.
+#' If specified, this variable is numbered from 1 to the number of generated
+#' observations within each cluster.
 #' @param allLevel2 Indicator: if set to TRUE (default), the returned data set
 #' includes all of the Level 2 data columns. If FALSE, the returned data set
 #' only includes the Levels 1 and 2 ids.
+#'
 #' @return A simulated data table with level "1" data
+#'
 #' @examples
 #' gen.school <- defData(
 #'   varname = "s0", dist = "normal",
@@ -223,7 +229,7 @@ addPeriods <- function(dtName,
 #'   dist = "noZeroPoisson", formula = 3
 #' )
 #'
-#' dtSchool <- genData(3, gen.school) #'
+#' dtSchool <- genData(3, gen.school)
 #' dtSchool
 #'
 #' dtClass <- genCluster(dtSchool,
@@ -237,25 +243,60 @@ addPeriods <- function(dtName,
 #'   numIndsVar = 3, level1ID = "idClass"
 #' )
 #' dtClass
+#'
+#' dtClass <- genCluster(dtSchool,
+#'   cLevelVar = "idSchool",
+#'   numIndsVar = 3,
+#'   level1ID = "idClass",
+#'   withinClusterID = "classNum"
+#' )
+#' dtClass
+#'
 #' @export
 #' @concept group_data
 genCluster <- function(dtClust,
                        cLevelVar,
                        numIndsVar,
                        level1ID,
+                       withinClusterID = NULL,
                        allLevel2 = TRUE) {
-
-  # 'declare' var
+  
+  # 'declare' vars
   id2 <- NULL
   n <- NULL
+  
+  #### Check arguments
+  
+  assertNotMissing(
+    dtClust = missing(dtClust),
+    cLevelVar = missing(cLevelVar),
+    numIndsVar = missing(numIndsVar),
+    level1ID = missing(level1ID)
+  )
+  
+  assertType(cLevelVar = cLevelVar, level1ID = level1ID, type = "character")
+  assertLength(cLevelVar = cLevelVar, level1ID = level1ID, length = 1)
+  
+  assertInDataTable(cLevelVar, dtClust)
+  assertNotInDataTable(level1ID, dtClust)
+  
+  if (is.character(numIndsVar)) {
+    assertLength(numIndsVar = numIndsVar, length = 1)
+    assertInDataTable(numIndsVar, dtClust)
+  } else {
+    assertNumeric(numIndsVar = numIndsVar)
+    assertLength(numIndsVar = numIndsVar, length = 1)
+  }
+  
+  if (!is.null(withinClusterID)) {
+    assertType(withinClusterID = withinClusterID, type = "character")
+    assertLength(withinClusterID = withinClusterID, length = 1)
+    assertNotInDataTable(withinClusterID, dtClust)
+    assertDifferent(withinClusterID = withinClusterID, level1ID = level1ID)
+  }
 
-  #### Check missing arguments
-  if (missing(dtClust)) stop("argument 'dtClust' is missing", call. = FALSE)
-  if (missing(cLevelVar)) stop("argument 'cLevelVar' is missing", call. = FALSE)
-  if (missing(numIndsVar)) stop("argument 'numIndsVar' is missing", call. = FALSE)
-  if (missing(level1ID)) stop("argument 'level1ID' is missing", call. = FALSE)
-
-
+  #### Generate clustered data
+  
   if (is.character(numIndsVar)) {
     dt <- dtClust[, list(
       id2 = get(cLevelVar),
@@ -267,18 +308,19 @@ genCluster <- function(dtClust,
       n = as.integer(numIndsVar)
     )][, list(id2 = rep(id2, n))]
   }
-
-  # dt <- dtClust[,list(id2 = get(cLevelVar),
-  #                     n = get(numIndsVar))][,list(id2 = rep(id2, n))]
-
+  
   dt[, eval(cLevelVar) := id2]
   dt[, id2 := NULL]
   dt[, eval(level1ID) := (1:.N)]
-
+  
+  if (!is.null(withinClusterID)) {
+    dt[, eval(withinClusterID) := seq_len(.N), by = cLevelVar]
+  }
+  
   if (allLevel2) dt <- mergeData(dtClust, dt, cLevelVar)
-
+  
   data.table::setkeyv(dt, level1ID)
-
+  
   return(dt[])
 }
 

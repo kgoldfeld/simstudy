@@ -12,7 +12,7 @@ addColumns(dtDefs, dtOld, envir = parent.frame())
 \item{dtOld}{Name of data table that is to be updated}
 
 \item{envir}{Environment the data definitions are evaluated in.
-Defaults to \link[base:sys.parent]{base::parent.frame}.}
+Defaults to \link[base:parent.frame]{base::parent.frame}.}
 }
 \value{
 an updated data.table that contains the added simulated data

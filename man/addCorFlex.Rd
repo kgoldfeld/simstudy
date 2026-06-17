@@ -36,7 +36,7 @@ matrix is not provided, then a structure and correlation coefficient rho must
 be specified.}
 
 \item{envir}{Environment the data definitions are evaluated in.
-Defaults to \link[base:sys.parent]{base::parent.frame}.}
+Defaults to \link[base:parent.frame]{base::parent.frame}.}
 }
 \value{
 data.table with added column(s) of correlated data

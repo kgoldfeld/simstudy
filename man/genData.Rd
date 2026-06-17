@@ -18,7 +18,7 @@ set id name with a warning (unless the old value is 'id'). If the
 id attribute in dtDefs is NULL will default to 'id'.}
 
 \item{envir}{Environment the data definitions are evaluated in.
-Defaults to \link[base:sys.parent]{base::parent.frame}.}
+Defaults to \link[base:parent.frame]{base::parent.frame}.}
 }
 \value{
 A data.table that contains the simulated data.
