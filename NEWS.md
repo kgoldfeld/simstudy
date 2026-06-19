@@ -6,6 +6,11 @@
   identifiers indexed within clusters (e.g., visit number within patient
   or patient number within clinic).
   
+* Added `genCrossed()` to support simulation of crossed data structures,
+complementing `genCluster()` for nested data generation. The function
+creates Cartesian products of two or more data sets and adds a unique
+crossed identifier.
+
 ## Update
 
 * scenario_list() return type change: now returns a list of 1-row 
