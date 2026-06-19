@@ -100,7 +100,12 @@
 <h2 class="page-header" data-toc-text="development version" id="simstudy-development-version">simstudy (development version)<a class="anchor" aria-label="anchor" href="#simstudy-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-feature-development-version">New feature<a class="anchor" aria-label="anchor" href="#new-feature-development-version"></a></h3>
-<ul><li>Added <code><a href="../reference/genCrossed.html">genCrossed()</a></code> to support simulation of crossed data structures, complementing <code><a href="../reference/genCluster.html">genCluster()</a></code> for nested data generation. The function creates Cartesian products of two or more data sets and adds a unique crossed identifier.</li>
+<ul><li><p>Added optional argument <code>withinClusterID</code> to <code><a href="../reference/genCluster.html">genCluster()</a></code> to generate identifiers indexed within clusters (e.g., visit number within patient or patient number within clinic).</p></li>
+<li><p>Added <code><a href="../reference/genCrossed.html">genCrossed()</a></code> to support simulation of crossed data structures, complementing <code><a href="../reference/genCluster.html">genCluster()</a></code> for nested data generation. The function creates Cartesian products of two or more data sets and adds a unique crossed identifier.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="update-development-version">Update<a class="anchor" aria-label="anchor" href="#update-development-version"></a></h3>
+<ul><li>scenario_list() return type change: now returns a list of 1-row data.frames (instead of vectors) to support mixed numeric/character scenario values without coercion. If you were transposing scenario vectors for logging (e.g., data.table(t(argsvec), result)), switch to data.table(argsvec, result). Vignettes updated.</li>
 </ul></div>
 </div>
     <div class="section level2">
