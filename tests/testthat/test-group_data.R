@@ -808,4 +808,118 @@ test_that("Rough distribution of group assignments for balanced formulas", {
   
 })
 
- 
+test_that("genCrossed creates Cartesian product of two data tables", {
+  
+  dt1 <- data.table::data.table(
+    mouse = 1:2,
+    condition = c(0, 1)
+  )
+  
+  dt2 <- data.table::data.table(
+    region = 1:3,
+    alpha = c(0.1, 0.2, 0.3)
+  )
+  
+  dx <- genCrossed(dt1, dt2, id = "mouse_region_id")
+  
+  expect_s3_class(dx, "data.table")
+  expect_equal(nrow(dx), 6)
+  expect_equal(names(dx), c(
+    "mouse_region_id",
+    "mouse",
+    "condition",
+    "region",
+    "alpha"
+  ))
+  
+  expect_equal(dx$mouse_region_id, 1:6)
+  expect_equal(data.table::key(dx), "mouse_region_id")
+})
+
+test_that("genCrossed creates Cartesian product of more than two data tables", {
+  
+  dt1 <- data.table::data.table(mouse = 1:2)
+  dt2 <- data.table::data.table(region = 1:3)
+  dt3 <- data.table::data.table(time = 1:4)
+  
+  dx <- genCrossed(dt1, dt2, dt3, id = "obs_id")
+  
+  expect_equal(nrow(dx), 2 * 3 * 4)
+  expect_equal(names(dx), c("obs_id", "mouse", "region", "time"))
+  expect_equal(dx$obs_id, 1:24)
+})
+
+test_that("genCrossed accepts data.frames", {
+  
+  dt1 <- data.frame(mouse = 1:2)
+  dt2 <- data.frame(region = 1:3)
+  
+  dx <- genCrossed(dt1, dt2, id = "cross_id")
+  
+  expect_s3_class(dx, "data.table")
+  expect_equal(nrow(dx), 6)
+}) 
+
+test_that("genCrossed does not modify input data tables", {
+  
+  dt1 <- data.table::data.table(mouse = 1:2)
+  dt2 <- data.table::data.table(region = 1:3)
+  
+  dt1_names <- names(dt1)
+  dt2_names <- names(dt2)
+  
+  dx <- genCrossed(dt1, dt2)
+  
+  expect_equal(names(dt1), dt1_names)
+  expect_equal(names(dt2), dt2_names)
+  expect_false(".cross_join_id" %in% names(dt1))
+  expect_false(".cross_join_id" %in% names(dt2))
+})
+
+test_that("genCrossed errors with fewer than two data sets", {
+  
+  dt1 <- data.table::data.table(mouse = 1:2)
+  
+  expect_error(
+    genCrossed(dt1),
+    "at least two data sets must be provided"
+  )
+})
+
+test_that("genCrossed errors when id is invalid", {
+  
+  dt1 <- data.table::data.table(mouse = 1:2)
+  dt2 <- data.table::data.table(region = 1:3)
+  
+  expect_error(
+    genCrossed(dt1, dt2, id = c("id1", "id2")),
+    "argument 'id' must be a single character string"
+  )
+  
+  expect_error(
+    genCrossed(dt1, dt2, id = 1),
+    "argument 'id' must be a single character string"
+  )
+})
+
+test_that("genCrossed errors when id already exists", {
+  
+  dt1 <- data.table::data.table(cross_id = 1:2)
+  dt2 <- data.table::data.table(region = 1:3)
+  
+  expect_error(
+    genCrossed(dt1, dt2, id = "cross_id"),
+    "argument 'id' already exists as a column name"
+  )
+})
+
+test_that("genCrossed errors when input data sets share column names", {
+  
+  dt1 <- data.table::data.table(id = 1:2, x = c(1, 2))
+  dt2 <- data.table::data.table(id = 1:3, y = c(3, 4, 5))
+  
+  expect_error(
+    genCrossed(dt1, dt2),
+    "input data sets must not share column names"
+  )
+})
