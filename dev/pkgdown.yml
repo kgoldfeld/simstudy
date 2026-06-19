@@ -1,4 +1,4 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0.9000
 pkgdown_sha: a6abe43ed48e58b1de42eba5e5541a5b6c46b46f
 articles:
@@ -16,4 +16,4 @@ articles:
   spline: spline.html
   survival: survival.html
   treat_and_exposure: treat_and_exposure.html
-last_built: 2026-03-03T03:32Z
+last_built: 2026-06-19T16:55Z
