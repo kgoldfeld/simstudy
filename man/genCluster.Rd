@@ -4,18 +4,28 @@
 \alias{genCluster}
 \title{Simulate clustered data}
 \usage{
-genCluster(dtClust, cLevelVar, numIndsVar, level1ID, allLevel2 = TRUE)
+genCluster(
+  dtClust,
+  cLevelVar,
+  numIndsVar,
+  level1ID,
+  withinClusterID = NULL,
+  allLevel2 = TRUE
+)
 }
 \arguments{
 \item{dtClust}{Name of existing data set that contains the level "2" data}
 
 \item{cLevelVar}{Variable name (string) of cluster id in dtClust}
 
-\item{numIndsVar}{Variable name (string) of number of observations
-per cluster in dtClust. Can also be a single integer value that will
-be used for all clusters.}
+\item{numIndsVar}{Variable name (string) of number of observations per
+cluster in dtClust. Can also be a single integer value used for all clusters.}
 
 \item{level1ID}{Name of id field in new level "1" data set}
+
+\item{withinClusterID}{Optional name of an id field indexed within clusters.
+If specified, this variable is numbered from 1 to the number of generated
+observations within each cluster.}
 
 \item{allLevel2}{Indicator: if set to TRUE (default), the returned data set
 includes all of the Level 2 data columns. If FALSE, the returned data set
@@ -25,9 +35,9 @@ only includes the Levels 1 and 2 ids.}
 A simulated data table with level "1" data
 }
 \description{
-Simulate data set that is one level down in a multilevel data context. The
-level "2" data set must contain a field that specifies the number of
-individual records in a particular cluster.
+Simulate data set that is one level down in a multilevel data
+context. The level "2" data set must contain a field that specifies the
+number of individual records in a particular cluster.
 }
 \examples{
 gen.school <- defData(
@@ -39,7 +49,7 @@ gen.school <- defData(gen.school,
   dist = "noZeroPoisson", formula = 3
 )
 
-dtSchool <- genData(3, gen.school) #'
+dtSchool <- genData(3, gen.school)
 dtSchool
 
 dtClass <- genCluster(dtSchool,
@@ -53,5 +63,14 @@ dtClass <- genCluster(dtSchool,
   numIndsVar = 3, level1ID = "idClass"
 )
 dtClass
+
+dtClass <- genCluster(dtSchool,
+  cLevelVar = "idSchool",
+  numIndsVar = 3,
+  level1ID = "idClass",
+  withinClusterID = "classNum"
+)
+dtClass
+
 }
 \concept{group_data}

@@ -464,3 +464,22 @@ equalError <- function(names, val, call = sys.call(-1), msg = "", ...) {
   )
   stop(c)
 }
+
+#' Variables not different error.
+#'
+#' @param names Names of the variables.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+notDifferentError <- function(names, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "{ names *} must be different!", msg
+  )
+  
+  c <- condition(
+    c("simstudy::notDifferent", "error"),
+    message, call, ...
+  )
+  stop(c)
+}

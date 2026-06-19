@@ -2,12 +2,16 @@
 
 ## New feature
 
+* Added optional argument `withinClusterID` to `genCluster()` to generate
+  identifiers indexed within clusters (e.g., visit number within patient
+  or patient number within clinic).
+  
 * Added `genCrossed()` to support simulation of crossed data structures,
 complementing `genCluster()` for nested data generation. The function
 creates Cartesian products of two or more data sets and adds a unique
 crossed identifier.
 
-# Update
+## Update
 
 * scenario_list() return type change: now returns a list of 1-row 
 data.frames (instead of vectors) to support mixed numeric/character 

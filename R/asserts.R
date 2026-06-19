@@ -66,6 +66,23 @@ assertNotEqual <- function(..., val, call = sys.call(-1), msg="") {
   }
 }
 
+#' Are arguments different?
+#'
+#' @description Checks if passed arguments have different values.
+#' @param ... Variables passed as named elements
+#'   e.g. var1 = var1, var2 = var2.
+#' @noRd
+assertDifferent <- function(..., call = sys.call(-1)) {
+  
+  dots <- dots2argNames(...)
+  
+  stopifnot(length(dots$args) == 2)
+  
+  if (identical(dots$args[[1]], dots$args[[2]])) {
+    notDifferentError(dots$names, call = call)
+  }
+}
+
 #' Is length correct?
 #'
 #' @description Checks if all passed vars are of length 'length'. Caveat:
