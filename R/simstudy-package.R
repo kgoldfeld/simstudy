@@ -38,6 +38,7 @@ NULL
 #' | binary          | probability for 1      | String or Number                         | NA             | identity, log, or logit |
 #' | binomial        | probability of success | String or Number                         | number of trials | identity, log, or logit |
 #' | categorical     | probabilities          | `p_1;p_2;..;p_n`                         | category labels: `a;b;c` , `50;130;20`| identity or logit |
+#' | clusterSize     | total N                | String or Number                         | dispersion     | identity          |
 #' | custom          | name of function       | String                                   | arguments      | identity          |
 #' | exponential     | mean (lambda)          | String or Number                         | NA             | identity or log   |
 #' | gamma           | mean                   | String or Number                         | dispersion value | identity or log   |
@@ -63,7 +64,7 @@ NULL
 #' def
 #' genData(5, def)
 #' @name distributions
-#' @aliases normal poisson noZeroPoisson binary binomial uniform categorical gamma beta negBinomial nonrandom exponential mixture
+#' @aliases normal poisson noZeroPoisson binary binomial uniform categorical clusterSize gamma beta negBinomial nonrandom exponential mixture
 #' @md
 NULL
 
