@@ -177,6 +177,45 @@ test_that("clusterSize data is generated as expected.", {
 })
 
 
+test_that("genData preserves clusterSize totals for both dispersion branches", {
+  for (dispersion in c(0, 0.05)) {
+    def <- defData(
+      varname = "size", formula = 103, variance = dispersion,
+      dist = "clusterSize"
+    )
+    dt <- genData(10, def)
+
+    expect_length(dt$size, 10)
+    expect_true(all(dt$size >= 0))
+    expect_equal(dt$size, floor(dt$size))
+    expect_equal(sum(dt$size), 103)
+    if (dispersion == 0) {
+      expect_lte(diff(range(dt$size)), 1)
+    }
+  }
+})
+
+test_that("addColumns preserves clusterSize totals and existing identifiers", {
+  clusters <- genData(10)
+
+  for (dispersion in c(0, 0.05)) {
+    def <- defDataAdd(
+      varname = "size", formula = 103, variance = dispersion,
+      dist = "clusterSize"
+    )
+    dt <- addColumns(def, clusters)
+
+    expect_identical(dt$id, clusters$id)
+    expect_length(dt$size, 10)
+    expect_true(all(dt$size >= 0))
+    expect_equal(dt$size, floor(dt$size))
+    expect_equal(sum(dt$size), 103)
+    if (dispersion == 0) {
+      expect_lte(diff(range(dt$size)), 1)
+    }
+  }
+})
+
 # .gencustom ----
 test_that("custom data is generated as expected.", {
   skip_on_cran()

@@ -1,5 +1,8 @@
 # simstudy (development version)
 
+* `clusterSize` now works after a standard installation: `dirmult` is a
+  required dependency rather than an optional suggestion (#257).
+
 ## New feature
 
 * Added optional argument `withinClusterID` to `genCluster()` to generate

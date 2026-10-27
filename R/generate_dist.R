@@ -655,14 +655,6 @@
 
 .genclustsize <- function(n, formula, variance = 0,  envir = parent.frame()) { 
   
-  if (!requireNamespace("dirmult", quietly = TRUE)) { # nocov start
-    stop(
-      "Package \"dirmult\" must be installed to use this function with 
-       the Poisson distribution.",
-        call. = FALSE
-    )
-  } # nocov end
-  
   formula <- .evalWith(formula, .parseDotVars(formula, envir), envir = envir)[1]
   variance <- .evalWith(variance, .parseDotVars(variance, envir), envir = envir)[1]
   

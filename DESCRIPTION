@@ -30,6 +30,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     data.table,
+    dirmult,
     glue,
     methods,
     mvnfast,
@@ -61,7 +62,6 @@ Suggests:
     broom.helpers,
     survminer,
     katex,
-    dirmult,
     rms,
     lmerTest
 LinkingTo: 
